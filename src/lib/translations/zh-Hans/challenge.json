@@ -1,0 +1,14 @@
+{
+    "title": "PhiZone 权限晋升测试",
+    "description": "为了访问 PhiZone 提供的所有功能，你须首先参加该测试。测试包含10道单选题和4道主观题。此外，你还需要向我们提供一张你制作的谱面，以便我们能够真正评估你的能力。",
+    "start": "开始",
+    "already_passed": "你已通过该测试！",
+    "objective": "客观题",
+    "subjective": "主观题",
+    "placeholder": "输入答案",
+    "time_up": "时间到！请刷新页面以重新作答。",
+    "CHALLENGE_INVALID_1": "你还未开始回答客观题，或答题时间已超过三十分钟！",
+    "CHALLENGE_INVALID_2": "你还未开始回答主观题，或答题时间已超过一小时！",
+    "CHALLENGE_FAILED": "你必须在客观题部分获得至少 20 分才能继续答题！",
+    "ANSWER_AWAITS_ASSESSING": "你的答卷正等待评估！"
+}

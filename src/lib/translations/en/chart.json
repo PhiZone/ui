@@ -1,0 +1,22 @@
+{
+    "chart": "Chart",
+    "file": "Chart File",
+    "level": "Level",
+    "difficulty": "Difficulty",
+    "description": "Description",
+    "ranked": "Ranked",
+    "notes": "Number of Notes",
+    "format": "Chart Format",
+    "score": "Total Score",
+    "rating": "Rating",
+    "arrangement": "Note Arrangement",
+    "feel": "Feel",
+    "vfx": "Visual Effects",
+    "innovativeness": "Innovativeness",
+    "concord": "Concord",
+    "event_part": "Event",
+    "song": "Song",
+    "charter": "Charter(s)",
+    "time": "Time",
+    "owner": "Owner"
+}

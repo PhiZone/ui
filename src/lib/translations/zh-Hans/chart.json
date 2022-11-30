@@ -1,0 +1,22 @@
+{
+    "chart": "谱面",
+    "file": "谱面文件",
+    "level": "等级",
+    "difficulty": "难度",
+    "description": "简介",
+    "ranked": "Ranked",
+    "notes": "物量",
+    "format": "谱面格式",
+    "score": "评价总分",
+    "rating": "评分",
+    "arrangement": "配置",
+    "feel": "手感",
+    "vfx": "视觉效果",
+    "innovativeness": "创新度",
+    "concord": "契合度",
+    "event_part": "活动",
+    "song": "曲目",
+    "charter": "谱师",
+    "time": "上传时间",
+    "owner": "所有者"
+}
