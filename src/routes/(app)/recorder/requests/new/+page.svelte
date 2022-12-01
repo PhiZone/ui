@@ -32,7 +32,7 @@
 		avatar: File | null = null,
 		status = Status.OK;
 
-	let challenge_colors = [
+	let challengeColors = [
 		{
 			id: 0,
 			text: "Rainbow",
@@ -168,7 +168,7 @@
 	}
 </script>
 
-<div class="bg-base-100">
+<div class="bg-base-200">
 	<div class="pt-32 flex justify-center">
 		<div class="w-3/4 max-w-6xl min-w-20">
 			<h1 class="text-4xl font-bold mb-6">{$t("recorder.new_request")}</h1>
@@ -182,20 +182,6 @@
 					>
 						<div class="flex">
 							<span class="w-32 px-4 place-self-center"
-								>{$t("recorder.chart")}</span
-							>
-							<input
-								type="file"
-								accept=".json, .pec"
-								class="mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn file:btn-outline file:bg-primary"
-								on:change={handleChart}
-							/>
-							<span class="place-self-center"
-								>{$t("recorder.chart_placeholder")}</span
-							>
-						</div>
-						<div class="flex">
-							<span class="w-32 px-4 place-self-center"
 								>{$t("recorder.song")}</span
 							>
 							<input
@@ -206,6 +192,20 @@
 							/>
 							<span class="place-self-center"
 								>{$t("recorder.song_placeholder")}</span
+							>
+						</div>
+						<div class="flex">
+							<span class="w-32 px-4 place-self-center"
+								>{$t("recorder.chart")}</span
+							>
+							<input
+								type="file"
+								accept=".json, .pec"
+								class="mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn file:btn-outline file:bg-primary"
+								on:change={handleChart}
+							/>
+							<span class="place-self-center"
+								>{$t("recorder.chart_placeholder")}</span
 							>
 						</div>
 						<div class="flex">
@@ -430,7 +430,7 @@
 									bind:value={challengeColor}
 									class="select select-bordered select-primary w-3/4 min-w-[180px]"
 								>
-									{#each challenge_colors as c}
+									{#each challengeColors as c}
 										<option value={c.id}>{c.text}</option>
 									{/each}
 								</select>

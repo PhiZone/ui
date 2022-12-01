@@ -23,11 +23,13 @@ export const POST: RequestHandler = async ({ request }) => {
     const resp = await api.auth.token(credentials);
     if (!resp.ok) {
         let err;
+        const respClone = resp.clone();
         try {
             err = await resp.json();
         } catch (e) {
-            err = await resp.text();
+            err = await respClone.text();
         }
+        console.log(err);
         return new Response(err, {
             status: resp.status,
         });

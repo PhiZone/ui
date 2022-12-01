@@ -27,6 +27,34 @@
 			console.log(await resp.json());
 		}
 	}
+
+let challengeColors = [
+	{
+		id: 0,
+		text: "Rainbow",
+		image: "https://res.phi.zone/static/challenge_rainbow.png",
+	},
+	{
+		id: 1,
+		text: "Gold",
+		image: "https://res.phi.zone/static/challenge_gold.png",
+	},
+	{
+		id: 2,
+		text: "Orange",
+		image: "https://res.phi.zone/static/challenge_orange.png",
+	},
+	{
+		id: 3,
+		text: "Blue",
+		image: "https://res.phi.zone/static/challenge_blue.png",
+	},
+	{
+		id: 4,
+		text: "Green",
+		image: "https://res.phi.zone/static/challenge_green.png",
+	},
+];
 </script>
 
 {#if status === Status.OK && content !== null}
@@ -56,8 +84,9 @@
 					bind:value={reply}
 				/>
 			</label>
-			<div class="modal-action">
-				<label for="recorder-manage-request" class="btn btn-primary test-lg" on:click={handleSubmit} on:keydown={handleSubmit}>{$t('common.submit')}</label>
+			<div class="modal-action btn-group btn-group-horizontal">
+				<label for="recorder-manage-request" class="btn btn-primary text-lg">{$t('common.back')}</label>
+				<label for="recorder-manage-request" class="btn btn-primary text-lg" on:click={handleSubmit} on:keydown={handleSubmit}>{$t('common.submit')}</label>
 			</div>
 		</div>
 	</div>
@@ -180,7 +209,7 @@
 									>
 								</p>
 							{/if}
-							{#if content.avatar}
+							{#if content.avatar && content.username}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.username")}</span
@@ -188,7 +217,7 @@
 									{content.username}
 								</p>
 							{/if}
-							{#if content.avatar}
+							{#if content.avatar && content.rks}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.rks")}</span
@@ -196,15 +225,15 @@
 									{content.rks}
 								</p>
 							{/if}
-							{#if content.avatar}
+							{#if content.avatar && content.challenge_color}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_color")}</span
 									>
-									{content.challenge_color}
+									{challengeColors[content.challenge_color].text}
 								</p>
 							{/if}
-							{#if content.avatar}
+							{#if content.avatar && content.challenge_difficulty}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_difficulty")}</span
@@ -218,6 +247,14 @@
 										>{$t("recorder.addition")}</span
 									>
 									{content.addition}
+								</p>
+							{/if}
+							{#if getUserPrivilege(user.type) >= 3}
+								<p class="min-w-fit">
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.requester")}</span
+									>
+									{content.user.username}
 								</p>
 							{/if}
 							<p>

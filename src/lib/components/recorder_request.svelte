@@ -17,35 +17,41 @@
 </script>
 
 <a href={`/recorder/requests/${id}`}>
-	<div class="card m-4 min-w-[895px] h-44 card-side bg-base-100 shadow-xl glass overflow-hidden">
-		<figure class="w-[40%]">
-			<img class="object-cover" src={illustration} alt="Illustration" />
+	<div
+		class="card m-4 min-w-[900px] h-44 card-side bg-base-100 shadow-xl glass overflow-hidden"
+	>
+		<figure class="min-w-[40%] max-w-[40%] h-44">
+			<img
+				class="object-cover w-full h-full"
+				src={illustration}
+				alt="Illustration"
+			/>
 		</figure>
 		<div class="card-body w-[60%]">
-			<h2 class="card-title text-2xl mb-3">
+			<h2 class="card-title text-2xl mb-3 min-w-fit">
 				{name}
-				<div class="ml-3 badge badge-lg badge-primary min-w-fit h-10 text-2xl">
+				<div class="ml-2 badge badge-lg badge-primary min-w-fit h-10 text-2xl">
 					{level}
 					{difficulty}
 				</div>
 			</h2>
-			<div class="flex items-center">
+			<div class="flex items-center min-w-fit">
 				{#if showUser}
-				<p>
-					<span class="badge badge-primary badge-outline mr-1"
-						>{$t("recorder.requester")}</span
-					>
-					{user.username}
-				</p>
+					<p class="min-w-fit">
+						<span class="badge badge-primary badge-outline mr-1"
+							>{$t("recorder.requester")}</span
+						>
+						{user.username}
+					</p>
 				{/if}
-				<p>
+				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("recorder.status")}</span
 					>
 					{$t(`recorder.status_${status}`)}
 				</p>
 				{#if replier}
-					<p>
+					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("recorder.replier")}</span
 						>
@@ -53,15 +59,15 @@
 					</p>
 				{/if}
 			</div>
-			<div class="flex items-center">
-				<p>
+			<div class="flex items-center min-w-fit">
+				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("recorder.requested_at")}</span
 					>
 					{parseDateTime(requested_at)}
 				</p>
 				{#if replied_at}
-					<p>
+					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("recorder.replied_at")}</span
 						>

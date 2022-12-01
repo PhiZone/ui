@@ -38,10 +38,10 @@
 	};
 </script>
 
-<div class="bg-base-100">
+<div class="bg-base-200">
 	<div class="pt-32 flex justify-center">
-		<div class="w-3/4 max-w-6xl min-w-20">
-			<h1 class="text-4xl font-bold mb-6">{$t(getUserPrivilege(user.type) >= 3 ? "recorder.manage" : "recorder.history")}</h1>
+		<div class="w-3/4 max-w-7xl min-w-20">
+			<h1 class="text-4xl font-bold mb-6">{$t(getUserPrivilege(user?.type) >= 3 ? "recorder.manage" : "recorder.history")}</h1>
 			<div class="py-4 min-w-fit">
 				{#if requests && requests.length > 0}
 					{#each requests as request}

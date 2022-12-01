@@ -10,7 +10,7 @@
 <svelte:head>
     <title>{$t('common.title')}</title>
 </svelte:head>
-<div class="hero min-h-screen" style="background-image: url(https://placeimg.com/1000/800/arch);">
+<div class="hero min-h-screen" style="background-image: url(https://api.ixiaowai.cn/api/api.php);">
     <div class="hero-overlay bg-opacity-60" />
     <div class="hero-content text-center">
         <div class="w">
