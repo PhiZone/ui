@@ -1,6 +1,6 @@
 import { ContentType } from '$lib/constants';
 
-export const API_BASE = 'https://api.phi.zone';
+export const API_BASE = 'https://devapi.phi.zone';
 
 interface SendOpts<T> {
     method: string;

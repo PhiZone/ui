@@ -23,7 +23,7 @@
     "note_size": "音符大小",
     "note_size_placeholder": "RPE 单位",
     "resolution": "画面尺寸",
-    "resolution_placeholder": "1440x1080 / ...",
+    "resolution_placeholder": "长宽比须在 4:3 ~ 16:9 之间（1440x1080 / ...）",
     "audio_option": "音频选项",
     "tip": "Tip",
     "audio_option_1": "在 RPE 内录，效果就是你在 RPE 里听到的",
@@ -41,7 +41,7 @@
     "ending_option": "录制结算动画",
     "requester": "申请人",
     "status": "状态",
-    "status_0": "等待接受",
+    "status_0": "等待处理",
     "status_1": "已接受，等待录制",
     "status_2": "已完成",
     "status_3": "已拒绝",
@@ -51,5 +51,9 @@
     "replied_at": "处理时间",
     "data_incomplete": "输入的信息不完整！",
     "data_invalid": "输入的信息不合法！",
-    "unknown_error": "发生了未知错误！"
+    "unknown_error": "发生了未知错误！",
+    "stat_status_0": "未受理",
+    "stat_status_1": "待录制",
+    "stat_status_2": "已完成",
+    "stat_status_3": "已拒绝"
 }

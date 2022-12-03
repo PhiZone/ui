@@ -51,5 +51,9 @@
     "replied_at": "Replied At",
     "data_incomplete": "The input data is incomplete!",
     "data_invalid": "The input data is invalid!",
-    "unknown_error": "An unknown error has occurred!"
+    "unknown_error": "An unknown error has occurred!",
+    "stat_status_0": "Waiting",
+    "stat_status_1": "Accepted",
+    "stat_status_2": "Finished",
+    "stat_status_3": "Rejected"
 }
