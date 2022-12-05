@@ -7,21 +7,22 @@
 	let username = "";
 	let email = "";
 	let password = "";
-	let confirm_password = "";
-	let email_err = "";
-	let username_err = "";
-	let password_err = "";
-	let error_msg = "";
+	let confirmPassword = "";
+	let emailErr = "";
+	let usernameErr = "";
+	let passwordErr = "";
+	let msg = "";
 
 	let status = Status.OK;
 
 	const register = async () => {
-		if (!username || !email || !password || !confirm_password) {
-			error_msg = $t("session.data_incomplete");
+		if (!username || !email || !password || !confirmPassword) {
+			msg = $t("session.data_incomplete");
 			return;
 		}
-		if (password != confirm_password) {
-			error_msg = $t("session.registration.passwords_differ");
+		if (password != confirmPassword) {
+			msg = $t("session.passwords_differ");
+			return;
 		}
 		status = Status.WAITING;
 		const resp = await POST("/auth/register", {
@@ -37,15 +38,15 @@
 			const errors = (await resp.json()).msg;
 			console.log(errors);
 			if (errors.email) {
-				email_err = $t(`session.registration.${errors.email[0]}`);
+				emailErr = $t(`session.registration.${errors.email[0]}`);
 			}
 			if (errors.username) {
-				username_err = $t(`session.registration.${errors.username[0]}`);
+				usernameErr = $t(`session.registration.${errors.username[0]}`);
 			}
 			if (errors.password) {
-				password_err = $t(`session.registration.${errors.password[0]}`);
+				passwordErr = $t(`session.registration.${errors.password[0]}`);
 			}
-			error_msg = $t("session.registration.correct_errors");
+			msg = $t("common.correct_errors");
 		}
 	};
 </script>
@@ -78,16 +79,16 @@
 						placeholder={$t("session.username")}
 						class="input input-bordered"
 						on:input={() => {
-							error_msg = "";
-							username_err = "";
+							msg = "";
+							usernameErr = "";
 						}}
 						bind:value={username}
 					/>
 					<div
-						class={username_err
+						class={usernameErr
 							? "tooltip tooltip-open tooltip-bottom tooltip-error"
 							: ""}
-						data-tip={username_err ? username_err : null}
+						data-tip={usernameErr ? usernameErr : null}
 					/>
 				</div>
 				<div class="form-control">
@@ -100,16 +101,16 @@
 						placeholder={$t("session.email")}
 						class="input input-bordered"
 						on:input={() => {
-							error_msg = "";
-							email_err = "";
+							msg = "";
+							emailErr = "";
 						}}
 						bind:value={email}
 					/>
 					<div
-						class={email_err
+						class={emailErr
 							? "tooltip tooltip-open tooltip-bottom tooltip-error"
 							: ""}
-						data-tip={email_err ? email_err : null}
+						data-tip={emailErr ? emailErr : null}
 					/>
 				</div>
 				<div class="form-control">
@@ -122,33 +123,33 @@
 						placeholder={$t("session.password")}
 						class="input input-bordered"
 						on:input={() => {
-							error_msg = "";
-							password_err = "";
+							msg = "";
+							passwordErr = "";
 						}}
 						bind:value={password}
 					/>
 					<div
-						class={password_err
+						class={passwordErr
 							? "tooltip tooltip-open tooltip-bottom tooltip-error"
 							: ""}
-						data-tip={password_err ? password_err : null}
+						data-tip={passwordErr ? passwordErr : null}
 					/>
 				</div>
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="label">
 						<span class="label-text"
-							>{$t("session.registration.confirm_password")}</span
+							>{$t("session.confirm_password")}</span
 						>
 					</label>
 					<input
 						type="password"
-						placeholder={$t("session.registration.confirm_password")}
+						placeholder={$t("session.confirm_password")}
 						class="input input-bordered"
 						on:input={() => {
-							error_msg = "";
+							msg = "";
 						}}
-						bind:value={confirm_password}
+						bind:value={confirmPassword}
 					/>
 				</div>
 				<div class="form-control">
@@ -168,10 +169,10 @@
 					</select>
 				</div>
 				<div class="form-control mt-6">
-					{#if error_msg}
+					{#if msg}
 						<div
 							class="tooltip tooltip-open tooltip-error"
-							data-tip={error_msg}
+							data-tip={msg}
 						>
 							<button class="btn btn-error">{$t("common.error")}</button>
 						</div>

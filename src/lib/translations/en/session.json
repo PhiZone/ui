@@ -3,6 +3,8 @@
     "email": "Email",
     "password": "Password",
     "data_incomplete": "You have something unfilled in the blanks!",
+    "confirm_password": "Confirm Password",
+    "passwords_differ": "The two passwords differ from each other!",
     "login": {
         "login": "Log In",
         "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
@@ -12,13 +14,10 @@
     "registration": {
         "register": "Register",
         "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
-        "confirm_password": "Confirm Password",
         "select_language": "Select Language",
-        "passwords_differ": "The two passwords differ from each other!",
         "USERNAME_INVALID": "This username is invalid!",
         "user with this Username already exists.": "This username has already been taken!",
         "user with this Email already exists.": "This email address has already been taken!",
-        "correct_errors": "Please correct the errors above!",
         "success": "You've successfully registered an account on PhiZone!"
     },
     "email_confirmation": {
@@ -28,5 +27,13 @@
         "activate": "Activate Account",
         "code_not_numeric": "The code must be a six-digit number!",
         "ACTIVATION_CODE_ERROR": "Your activation code is invalid or outdated!"
+    },
+    "password_reset": {
+        "password_reset": "Reset Password",
+        "password_reset_text1": "Please enter your email address.",
+        "password_reset_text2": "We've sent an email to your mailbox. Please click the link in the email so that you can reset your password.",
+        "password_reset_text3": "Please enter your new password.",
+        "new_password": "New Password",
+        "We couldn't find an account associated with that email. Please try a different e-mail address.": "We couldn't find an account associated with that email. Please try a different email address."
     }
 }

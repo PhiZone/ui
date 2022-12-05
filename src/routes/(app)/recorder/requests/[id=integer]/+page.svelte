@@ -145,6 +145,7 @@ let challengeColors = [
 									>{$t("common.download")}</a
 								>
 							</p>
+							{#if content.tip && content.charter && content.composer && content.illustrator}
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("recorder.charter")}</span
@@ -163,6 +164,7 @@ let challengeColors = [
 								>
 								{content.illustrator}
 							</p>
+							{/if}
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("recorder.note_size")}</span
@@ -187,7 +189,7 @@ let challengeColors = [
 								>
 								{content.total_score}
 							</p>
-							{#if content.tip}
+							{#if content.tip && content.charter && content.composer && content.illustrator}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.tip")}</span
@@ -225,7 +227,7 @@ let challengeColors = [
 									{content.rks}
 								</p>
 							{/if}
-							{#if content.avatar && content.challenge_color}
+							{#if content.avatar && content.challenge_color != null && content.challenge_color >= 0 && content.challenge_color <= 4}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_color")}</span

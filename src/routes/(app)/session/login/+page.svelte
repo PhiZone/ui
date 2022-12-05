@@ -74,7 +74,7 @@
                     />
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label class="label">
-                        <a href="/forgot-password" class="label-text-alt link link-hover">
+                        <a href="/session/password-reset" class="label-text-alt link link-hover">
                             {$t('session.login.forgot_password')}</a
                         >
                     </label>

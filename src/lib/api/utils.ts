@@ -1,6 +1,6 @@
 import { ContentType } from '$lib/constants';
 
-export const API_BASE = 'https://devapi.phi.zone';
+export const API_BASE = 'http://localhost:8000';
 
 interface SendOpts<T> {
     method: string;
@@ -15,7 +15,7 @@ function send<T>({ method, path, data, token, contentType }: SendOpts<T>) {
     const opts: RequestInit = { method, headers };
 
     if (data) {
-        if (contentType && contentType === ContentType.FORM_DATA) {
+        if (contentType && contentType === ContentType.FORM_DATA && data instanceof FormData) {
             opts.body = data;
         } else {
             headers.append('Content-Type', ContentType.JSON);

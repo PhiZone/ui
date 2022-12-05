@@ -53,5 +53,6 @@
     "votes": "Votes",
     "download": "Click to Download",
     "empty": "It's empty here...",
+    "correct_errors": "Please correct the errors above!",
     "session_required": "Please login / register an account first!"
 }

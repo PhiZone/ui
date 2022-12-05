@@ -3,6 +3,8 @@
     "email": "邮箱",
     "password": "密码",
     "data_incomplete": "请填写所有信息！",
+    "confirm_password": "确认密码",
+    "passwords_differ": "两次输入的密码不相同！",
     "login": {
         "login": "登录",
         "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
@@ -12,13 +14,10 @@
     "registration": {
         "register": "注册",
         "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
-        "confirm_password": "确认密码",
         "select_language": "选择语言",
-        "passwords_differ": "两次输入的密码不相同！",
         "USERNAME_INVALID": "该用户名不合法！",
         "user with this Username already exists.": "该用户名已被占用！",
         "user with this Email already exists.": "该邮箱已被占用！",
-        "correct_errors": "请改正以上错误信息！",
         "success": "你的 PhiZone 账号注册成功！"
     },
     "email_confirmation": {
@@ -28,5 +27,13 @@
         "activate": "激活账号",
         "code_not_numeric": "验证码须为六位数字！",
         "ACTIVATION_CODE_ERROR": "提供的验证码不合法或已过期！"
+    },
+    "password_reset": {
+        "password_reset": "重置密码",
+        "password_reset_text1": "请在下方输入你注册时输入的邮箱。",
+        "password_reset_text2": "一封邮件已发至你的邮箱！请点击邮件中的链接以继续。",
+        "password_reset_text3": "请在下方输入你希望为你的账户设置的新密码。",
+        "new_password": "新密码",
+        "We couldn't find an account associated with that email. Please try a different e-mail address.": "无法找到与该邮箱关联的账户。请尝试其他邮箱地址。"
     }
 }

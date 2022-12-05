@@ -21,7 +21,7 @@
     "difficulty": "谱面定级",
     "difficulty_holder": "13 / 14 / 15 / 16 / ? / ...",
     "note_size": "音符大小",
-    "note_size_placeholder": "RPE 单位",
+    "note_size_placeholder": "RPE 单位（默认 175）",
     "resolution": "画面尺寸",
     "resolution_placeholder": "长宽比须在 4:3 ~ 16:9 之间（1440x1080 / ...）",
     "audio_option": "音频选项",
