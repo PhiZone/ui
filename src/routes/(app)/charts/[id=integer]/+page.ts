@@ -4,11 +4,11 @@ import { Status } from '$lib/constants';
 
 export const load: import('./$types').PageLoad = async ({ params, parent }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`charts/${params.id}/?query_song=1&query_owner=1`, access_token);
+    const resp = await api.GET(`charts/${params.id}/?query_song=1&query_owner=1`, access_token, user);
     const json = await resp.json();
     console.log(json);
-    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token) : null;
-    const commentRes = await(await api.GET(`comments/?chart=${json.id}&order=id`, access_token)).json();
+    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token, user) : null;
+    const commentRes = await (await api.GET(`comments/?chart=${json.id}&order=id`, access_token, user)).json();
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Chart) : null,
@@ -18,5 +18,6 @@ export const load: import('./$types').PageLoad = async ({ params, parent }) => {
         previousComments: commentRes.previous,
         nextComments: commentRes.next,
         token: access_token,
+        user
     };
 };

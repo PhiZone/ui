@@ -16,8 +16,8 @@
         "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
         "select_language": "选择语言",
         "USERNAME_INVALID": "该用户名不合法！",
-        "user with this Username already exists.": "该用户名已被占用！",
-        "user with this Email already exists.": "该邮箱已被占用！",
+        "user with this username already exists.": "该用户名已被占用！",
+        "user with this email already exists.": "该邮箱已被占用！",
         "success": "你的 PhiZone 账号注册成功！"
     },
     "email_confirmation": {

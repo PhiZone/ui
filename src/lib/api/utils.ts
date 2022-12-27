@@ -1,3 +1,4 @@
+import type {User} from '$lib/models';
 import { ContentType } from '$lib/constants';
 
 export const API_BASE = 'http://localhost:8000';
@@ -7,10 +8,11 @@ interface SendOpts<T> {
     path: string;
     data?: T;
     token?: string;
+    user?: User;
     contentType?: string;
 }
 
-function send<T>({ method, path, data, token, contentType }: SendOpts<T>) {
+function send<T>({ method, path, data, token, user, contentType }: SendOpts<T>) {
     const headers = new Headers();
     const opts: RequestInit = { method, headers };
 
@@ -26,31 +28,34 @@ function send<T>({ method, path, data, token, contentType }: SendOpts<T>) {
     if (token) {
         headers.append('Authorization', `Bearer ${token}`);
     }
+    if (user) {
+        headers.append('Accept-Language', user.language.toLowerCase())
+    }
     console.log(path, data);
 
     return fetch(`${API_BASE}/${path}`, opts);
 }
 
-export function GET(path: string, token?: string) {
-    return send<undefined>({ method: 'GET', path, token });
+export function GET(path: string, token?: string, user?: User) {
+    return send<undefined>({ method: 'GET', path, token, user });
 }
 
-export function DELETE(path: string, token?: string) {
-    return send<undefined>({ method: 'DELETE', path, token });
+export function DELETE(path: string, token?: string, user?: User) {
+    return send<undefined>({ method: 'DELETE', path, token, user });
 }
 
-export function POST<T>(path: string, data: T, token?: string, contentType?: string) {
-    return send<T>({ method: 'POST', path, data, token, contentType });
+export function POST<T>(path: string, data: T, token?: string, user?: User, contentType?: string) {
+    return send<T>({ method: 'POST', path, data, token, user, contentType });
 }
 
-export function PUT<T>(path: string, data: T, token?: string) {
-    return send<T>({ method: 'PUT', path, data, token });
+export function PUT<T>(path: string, data: T, token?: string, user?: User) {
+    return send<T>({ method: 'PUT', path, data, token, user });
 }
 
-export function HEAD<T>(path: string, data: T, token?: string) {
-    return send<T>({ method: 'HEAD', path, data, token });
+export function HEAD<T>(path: string, data: T, token?: string, user?: User) {
+    return send<T>({ method: 'HEAD', path, data, token, user });
 }
 
-export function PATCH<T>(path: string, data: T, token?: string) {
-    return send<T>({ method: 'PATCH', path, data, token });
+export function PATCH<T>(path: string, data: T, token?: string, user?: User) {
+    return send<T>({ method: 'PATCH', path, data, token, user });
 }

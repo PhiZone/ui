@@ -14,6 +14,7 @@
 	import Song from "$lib/components/song.svelte";
 	import { browser } from "$app/environment";
 	import { Chart, registerables } from "chart.js";
+  import User from "$lib/components/user.svelte";
 	export let data: import("./$types").PageData;
 	$: ({
 		status,
@@ -24,6 +25,7 @@
 		previousComments,
 		nextComments,
 		token,
+		user
 	} = data);
 
 	let followed = false,
@@ -90,7 +92,7 @@
 					followee: content.owner.id,
 					operation: 0,
 				},
-				token
+				token, user
 			);
 			if (!resp.ok) {
 				console.log(await resp.json());
@@ -108,7 +110,7 @@
 					followee: content.owner.id,
 					operation: 1,
 				},
-				token
+				token, user
 			);
 			if (!resp.ok) {
 				console.log(await resp.json());
@@ -121,7 +123,7 @@
 			await api.POST(
 				`comments/`,
 				{ song: content.id, content: comment, language: locale.get() },
-				token
+				token, user
 			);
 			comment = "";
 			getComments(page);
@@ -133,7 +135,7 @@
 			isCommentLoaded = false;
 			const resp = await api.GET(
 				`comments/?song=${content.id}${page ? `&page=${page}` : ""}`,
-				token
+				token, user
 			);
 			const json = await resp.json();
 			comments = json.results;
@@ -255,7 +257,7 @@
 						{#if comments}
 							{#if isCommentLoaded}
 								{#each comments as comment}
-									<CommentCard {comment} {token} />
+									<CommentCard {comment} {token} {user} />
 								{/each}
 							{/if}
 
@@ -298,33 +300,7 @@
 		</div>
 		<div class="mx-4 w-80 form-control">
 			{#if typeof content.owner === "object"}
-				<div class="indicator my-4 w-full">
-					<span
-						class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-						>{$t("chart.owner")}</span
-					>
-					<div class="card flex-shrink-0 w-full shadow-2xl bg-base-100">
-						<div class="card-body py-3 px-4 items-center">
-							<div class="avatar items-center min-w-fit">
-								<div class="w-10 rounded-full">
-									<img src={content.owner.avatar} alt="Avatar" />
-								</div>
-								<p class="ml-2">{content.owner.username}</p>
-							</div>
-							{#if !followed}
-								<button
-									class="w-fit btn btn-outline btn-secondary glass text-sm"
-									on:click={follow}>{$t("user.follow")} {fans}</button
-								>
-							{:else}
-								<button
-									class="w-fit btn btn-outline btn-ghost text-sm"
-									on:click={unfollow}>{$t("user.unfollow")} {fans}</button
-								>
-							{/if}
-						</div>
-					</div>
-				</div>
+				<User {followed} user={content.owner} operator={user} {token}/>
 			{/if}
 			<div class="indicator my-4 w-full">
 				<span

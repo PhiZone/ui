@@ -4,7 +4,7 @@ import { Status } from '$lib/constants';
 
 export const load: import('./$types').PageLoad = async ({ params, parent }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`recorder/requests/${params.id}/`, access_token);
+    const resp = await api.GET(`recorder/requests/${params.id}/`, access_token, user);
     const json = await resp.json();
     console.log(json);
     return {

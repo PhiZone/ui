@@ -177,9 +177,9 @@ export function parseCharter(input: string) {
 export function convertLanguageCode(input: string) {
     const text = input.toLowerCase();
     if (text.startsWith('zh')) {
-        return text.endsWith('cn') || text.endsWith('hans') ? 'zh-Hans' : 'zh-Hant';
+        return text.endsWith('cn') || text.endsWith('sg') || text.endsWith('hans') ? 'zh-Hans' : 'zh-Hant';
     }
-    return input;
+    return input.split('-')[0];
 }
 
 export function parseDateTime(input: string) {

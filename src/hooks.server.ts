@@ -8,9 +8,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.access_token = cookies.access_token;
     event.locals.refresh_token = cookies.refresh_token;
 
-    if (cookies.access_token) {
-        const resp = await getUserDetail(cookies.access_token);
-        if (resp.ok) {
+    if (cookies.refresh_token) {
+        let resp;
+        if (cookies.access_token) {
+            resp = await getUserDetail(cookies.access_token);
+        }
+        if (resp?.ok) {
             event.locals.user = await resp.json();
             console.log('login success with language', event.locals.user.language.toString());
         } else if (

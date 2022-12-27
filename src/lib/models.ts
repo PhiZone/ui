@@ -128,3 +128,26 @@ export interface RecorderRequest {
     requested_at: string;
     replied_at: string | null;
 }
+
+export interface RecorderRequestError {
+    chart?: string[];
+    difficulty?: string[];
+    illustration?: string[];
+    level?: string[];
+    name?: string[];
+    note_size?: string[];
+    resolution?: string[];
+    song?: string[];
+    total_score?: string[];
+    charter?: string[];
+    illustrator?: string[];
+    composer?: string[];
+    audio_option?: string[];
+    tip?: string[];
+    avatar?: string[];
+    username?: string[];
+    rks?: string[];
+    challenge_color?: string[];
+    challenge_difficulty?: string[];
+    addition?: string[];
+}

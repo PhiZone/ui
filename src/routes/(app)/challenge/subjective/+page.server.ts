@@ -8,7 +8,7 @@ export const load: import('./$types').PageServerLoad = async ({ url, locals }) =
         {
             answers: answers,
         },
-        locals.access_token
+        locals.access_token, locals.user
     );
     if (resp.ok) {
         return {
@@ -22,6 +22,7 @@ export const load: import('./$types').PageServerLoad = async ({ url, locals }) =
             questions: null,
             error: (await resp.json()).error,
             access_token: locals.access_token,
+            user: locals.user
         };
     }
 };

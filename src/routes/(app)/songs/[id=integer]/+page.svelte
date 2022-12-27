@@ -21,6 +21,7 @@
 		previousComments,
 		nextComments,
 		token,
+		user
 	} = data);
 
 	let playerState = {
@@ -138,7 +139,7 @@
 					followee: content.owner.id,
 					operation: 0,
 				},
-				token
+				token, user
 			);
 			if (!resp.ok) {
 				console.log(await resp.json());
@@ -156,7 +157,7 @@
 					followee: content.owner.id,
 					operation: 1,
 				},
-				token
+				token, user
 			);
 			if (!resp.ok) {
 				console.log(await resp.json());
@@ -170,7 +171,7 @@
 		}
 		const resp = await api.GET(
 			`charts/?song=${content?.id}&order=owner&pagination=0`,
-			token
+			token, user
 		);
 		if (resp.ok) {
 			charts = await resp.json();
@@ -183,7 +184,7 @@
 			await api.POST(
 				`comments/`,
 				{ song: content.id, content: comment, language: locale.get() },
-				token
+				token, user
 			);
 			comment = "";
 			getComments(page);
@@ -195,7 +196,7 @@
 			isCommentLoaded = false;
 			const resp = await api.GET(
 				`comments/?song=${content.id}${page ? `&page=${page}` : ""}`,
-				token
+				token, user
 			);
 			const json = await resp.json();
 			comments = json.results;
@@ -414,7 +415,6 @@
 															tabindex="0"
 															class="btn btn-circle btn-sm rounded-full btn-secondary btn-outline glass flex items-center justify-center"
 															title={$t("song.volume")}
-															for=""
 															><svg
 																xmlns="http://www.w3.org/2000/svg"
 																class="w-[19px] h-[19px]"
@@ -542,7 +542,7 @@
 						{#if comments}
 							{#if isCommentLoaded}
 								{#each comments as comment}
-									<CommentCard {comment} {token} />
+									<CommentCard {comment} {token} {user} />
 								{/each}
 							{/if}
 

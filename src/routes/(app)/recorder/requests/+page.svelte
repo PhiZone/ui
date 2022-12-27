@@ -28,7 +28,7 @@
 	const getRequests = async (page?: number) => {
 		const resp = await api.GET(
 			`recorder/requests/${search}${search ? "&" : "?"}page=${page}`,
-			token
+			token, user
 		);
 		const json = await resp.json();
 		requests = json.results;

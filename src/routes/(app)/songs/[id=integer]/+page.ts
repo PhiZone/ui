@@ -4,12 +4,12 @@ import { Status } from '$lib/constants';
 
 export const load: import('./$types').PageLoad = async ({ params, parent }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`songs/${params.id}/?query_chart=1&query_owner=1`, access_token);
+    const resp = await api.GET(`songs/${params.id}/?query_chart=1&query_owner=1`, access_token, user);
     const json = await resp.json();
     console.log(json);
     console.log('Current User:', user ? user.username : 'Anonymous');
-    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token) : null;
-    const commentRes = await(await api.GET(`comments/?song=${json.id}&order=id`, access_token)).json();
+    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token, user) : null;
+    const commentRes = await(await api.GET(`comments/?song=${json.id}&order=id`, access_token, user)).json();
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Song) : null,
@@ -19,5 +19,6 @@ export const load: import('./$types').PageLoad = async ({ params, parent }) => {
         previousComments: commentRes.previous,
         nextComments: commentRes.next,
         token: access_token,
+        user
     };
 };

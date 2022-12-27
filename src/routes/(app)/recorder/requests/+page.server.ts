@@ -4,7 +4,7 @@ import { Status } from '$lib/constants';
 export const load: import('./$types').PageServerLoad = async ({ url, locals }) => {
     const resp = await api.GET(
         `recorder/requests/${url.search}`,
-        locals.access_token
+        locals.access_token, locals.user
     );
     const json = await resp.json();
     console.log(json.results);

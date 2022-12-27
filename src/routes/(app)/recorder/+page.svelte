@@ -35,7 +35,8 @@
 						></a
 					>
 					<a href="recorder/requests"
-						><button class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
+						><button
+							class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
 							>{getUserPrivilege(user.type) < 3
 								? $t("recorder.view_history")
 								: $t("recorder.manage")}</button

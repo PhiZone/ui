@@ -16,8 +16,8 @@
         "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
         "select_language": "Select Language",
         "USERNAME_INVALID": "This username is invalid!",
-        "user with this Username already exists.": "This username has already been taken!",
-        "user with this Email already exists.": "This email address has already been taken!",
+        "user with this username already exists.": "This username has already been taken!",
+        "user with this email already exists.": "This email address has already been taken!",
         "success": "You've successfully registered an account on PhiZone!"
     },
     "email_confirmation": {

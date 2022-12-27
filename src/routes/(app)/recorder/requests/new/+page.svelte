@@ -3,9 +3,10 @@
 	import * as api from "$lib/api";
 	import { ContentType, Status } from "$lib/constants";
 	import { goto } from "$app/navigation";
+	import type { RecorderRequestError } from "$lib/models";
 
 	export let data: import("./$types").PageData;
-	$: ({ access_token } = data);
+	$: ({ token, user } = data);
 
 	let errorMsg = "",
 		songName = "",
@@ -32,24 +33,7 @@
 		avatar: File | null = null,
 		status = Status.OK,
 		dataIncomplete = false,
-		songErr = "",
-		chartErr = "",
-		illustrationErr = "",
-		songNameErr = "",
-		levelErr = "",
-		difficultyErr = "",
-		noteSizeErr = "",
-		resolutionErr = "",
-		totalScoreErr = "",
-		composerErr = "",
-		charterErr = "",
-		illustratorErr = "",
-		tipErr = "",
-		avatarErr = "",
-		usernameErr = "",
-		rksErr = "",
-		challengeDifficultyErr = "",
-		additionErr = "";
+		error: RecorderRequestError;
 
 	let challengeColors = [
 		{
@@ -82,7 +66,7 @@
 	const handleChart = (
 		e: Event & { currentTarget: EventTarget & HTMLInputElement }
 	) => {
-		chartErr = "";
+		if (error?.chart) error.chart = [];
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files.length > 0) {
 			chart = target.files[0];
@@ -92,7 +76,7 @@
 	const handleSong = (
 		e: Event & { currentTarget: EventTarget & HTMLInputElement }
 	) => {
-		songErr = "";
+		if (error?.song) error.song = [];
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files.length > 0) {
 			song = target.files[0];
@@ -102,7 +86,7 @@
 	const handleIllustration = (
 		e: Event & { currentTarget: EventTarget & HTMLInputElement }
 	) => {
-		illustrationErr = "";
+		if (error?.illustration) error.illustration = [];
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files.length > 0) {
 			illustration = target.files[0];
@@ -117,7 +101,7 @@
 	const handleAvatar = (
 		e: Event & { currentTarget: EventTarget & HTMLInputElement }
 	) => {
-		avatarErr = "";
+		if (error?.avatar) error.avatar = [];
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files.length > 0) {
 			avatar = target.files[0];
@@ -181,13 +165,15 @@
 		const resp = await api.POST(
 			"recorder/requests/",
 			formData,
-			access_token,
+			token,
+			user,
 			ContentType.FORM_DATA
 		);
 		if (resp.ok) {
 			goto(`/recorder/requests`);
 		} else {
-			console.log(await resp.json());
+			error = await resp.json();
+			console.log(error);
 			if (resp.status == 400) {
 				errorMsg = "data_invalid";
 			} else {
@@ -219,16 +205,14 @@
 								accept=".mp3, .ogg, .oga"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!song && dataIncomplete) ||
-									(status == Status.ERROR && songErr)
+									(status == Status.ERROR && error.song)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleSong}
 							/>
-							{#if status == Status.ERROR && songErr}
-								<span class="place-self-center text-error"
-									>{$t(`recorder.error.${songErr}`)}</span
-								>
+							{#if status == Status.ERROR && error.song}
+								<span class="place-self-center text-error">{error.song}</span>
 							{:else}
 								<span class="place-self-center"
 									>{$t("recorder.song_placeholder")}</span
@@ -244,16 +228,14 @@
 								accept=".json"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!chart && dataIncomplete) ||
-									(status == Status.ERROR && chartErr)
+									(status == Status.ERROR && error.chart)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleChart}
 							/>
-							{#if status == Status.ERROR && chartErr}
-								<span class="place-self-center text-error"
-									>{$t(`recorder.error.${chartErr}`)}</span
-								>
+							{#if status == Status.ERROR && error.chart}
+								<span class="place-self-center text-error">{error.chart}</span>
 							{:else}
 								<span class="place-self-center"
 									>{$t("recorder.chart_placeholder")}</span
@@ -269,15 +251,15 @@
 								accept=".jpg, .jpeg, .png"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!illustration && dataIncomplete) ||
-									(status == Status.ERROR && illustrationErr)
+									(status == Status.ERROR && error.illustration)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleIllustration}
 							/>
-							{#if status == Status.ERROR && illustrationErr}
+							{#if status == Status.ERROR && error.illustration}
 								<span class="place-self-center text-error"
-									>{$t(`recorder.error.${illustrationErr}`)}</span
+									>{error.illustration}</span
 								>
 							{:else}
 								<span class="place-self-center"
@@ -285,106 +267,150 @@
 								>
 							{/if}
 						</div>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.name")}</span
-							>
-							{#if status == Status.ERROR && songNameErr}
-								<div
-									class="tooltip tooltip-open tooltip-bottom tooltip-error"
-									data-tip={$t(`recorder.${songNameErr}`)}
-								>
-									<input
-										type="text"
-										placeholder={$t("recorder.name")}
-										class="input input-bordered w-3/4 min-w-[180px] input-error"
-										bind:value={songName}
-									/>
-								</div>
-							{:else}
+						<div
+							class={status == Status.ERROR && error.name
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.name ? error.name : ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]">{$t("recorder.name")}</span>
 								<input
 									type="text"
 									placeholder={$t("recorder.name")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
-										!songName && dataIncomplete
+										(!songName && dataIncomplete) ||
+										(status == Status.ERROR && error.name)
 											? "input-error"
 											: "input-primary"
 									}`}
 									bind:value={songName}
 								/>
-							{/if}
-						</label>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.level")}</span
-							>
-							<input
-								type="text"
-								placeholder={$t("recorder.level_holder")}
-								class={`input input-bordered w-3/4 min-w-[180px] ${
-									!level && dataIncomplete ? "input-error" : "input-primary"
-								}`}
-								bind:value={level}
-							/>
-						</label>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.difficulty")}</span
-							>
-							<input
-								type="text"
-								placeholder={$t("recorder.difficulty_holder")}
-								class={`input input-bordered w-3/4 min-w-[180px] ${
-									!difficulty && dataIncomplete
-										? "input-error"
-										: "input-primary"
-								}`}
-								bind:value={difficulty}
-							/>
-						</label>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.note_size")}</span
-							>
-							<input
-								type="text"
-								placeholder={$t("recorder.note_size_placeholder")}
-								class={`input input-bordered w-3/4 min-w-[180px] ${
-									!noteSize && dataIncomplete ? "input-error" : "input-primary"
-								}`}
-								bind:value={noteSize}
-							/>
-						</label>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.resolution")}</span
-							>
-							<input
-								type="text"
-								placeholder={$t("recorder.resolution_placeholder")}
-								class={`input input-bordered w-3/4 min-w-[180px] ${
-									!resolution && dataIncomplete
-										? "input-error"
-										: "input-primary"
-								}`}
-								bind:value={resolution}
-							/>
-						</label>
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.total_score")}</span
-							>
-							<input
-								type="text"
-								placeholder={$t("recorder.total_score_placeholder")}
-								class={`input input-bordered w-3/4 min-w-[180px] ${
-									!totalScore && dataIncomplete
-										? "input-error"
-										: "input-primary"
-								}`}
-								bind:value={totalScore}
-							/>
-						</label>
+							</label>
+						</div>
+						<div
+							class={status == Status.ERROR && error.level
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.level
+								? error.level
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]">{$t("recorder.level")}</span>
+								<input
+									type="text"
+									placeholder={$t("recorder.level_holder")}
+									class={`input input-bordered w-3/4 min-w-[180px] ${
+										(!level && dataIncomplete) ||
+										(status == Status.ERROR && error.level)
+											? "input-error"
+											: "input-primary"
+									}`}
+									bind:value={level}
+								/>
+							</label>
+						</div>
+						<div
+							class={status == Status.ERROR && error.difficulty
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.difficulty
+								? error.difficulty
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]"
+									>{$t("recorder.difficulty")}</span
+								>
+								<input
+									type="text"
+									placeholder={$t("recorder.difficulty_holder")}
+									class={`input input-bordered w-3/4 min-w-[180px] ${
+										(!difficulty && dataIncomplete) ||
+										(status == Status.ERROR && error.difficulty)
+											? "input-error"
+											: "input-primary"
+									}`}
+									bind:value={difficulty}
+								/>
+							</label>
+						</div>
+						<div
+							class={status == Status.ERROR && error.note_size
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.note_size
+								? error.note_size
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]"
+									>{$t("recorder.note_size")}</span
+								>
+								<input
+									type="text"
+									placeholder={$t("recorder.note_size_placeholder")}
+									class={`input input-bordered w-3/4 min-w-[180px] ${
+										(!noteSize && dataIncomplete) ||
+										(status == Status.ERROR && error.note_size)
+											? "input-error"
+											: "input-primary"
+									}`}
+									bind:value={noteSize}
+								/>
+							</label>
+						</div>
+						<div
+							class={status == Status.ERROR && error.resolution
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.resolution
+								? error.resolution
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]"
+									>{$t("recorder.resolution")}</span
+								>
+								<input
+									type="text"
+									placeholder={$t("recorder.resolution_placeholder")}
+									class={`input input-bordered w-3/4 min-w-[180px] ${
+										(!resolution && dataIncomplete) ||
+										(status == Status.ERROR && error.resolution)
+											? "input-error"
+											: "input-primary"
+									}`}
+									bind:value={resolution}
+								/>
+							</label>
+						</div>
+						<div
+							class={status == Status.ERROR && error.total_score
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.total_score
+								? error.total_score
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]"
+									>{$t("recorder.total_score")}</span
+								>
+								<input
+									type="text"
+									placeholder={$t("recorder.total_score_placeholder")}
+									class={`input input-bordered w-3/4 min-w-[180px] ${
+										(!totalScore && dataIncomplete) ||
+										(status == Status.ERROR && error.total_score)
+											? "input-error"
+											: "input-primary"
+									}`}
+									bind:value={totalScore}
+								/>
+							</label>
+						</div>
 						<div class="flex">
 							<span class="w-32 px-4 place-self-center"
 								>{$t("recorder.audio_option")}</span
@@ -428,66 +454,106 @@
 							/>
 						</div>
 						{#if loadingOption}
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.composer")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.composer")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										loadingOption && !composer && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={composer}
-								/>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.charter")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.charter")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										loadingOption && !charter && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={charter}
-								/>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.illustrator")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.illustrator")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										loadingOption && !illustrator && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={illustrator}
-								/>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.tip")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.tip")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										loadingOption && !tip && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={tip}
-								/>
-							</label>
+							<div
+								class={status == Status.ERROR && error.composer
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.composer
+									? error.composer
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.composer")}</span
+									>
+									<input
+										type="text"
+										placeholder={$t("recorder.composer")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											loadingOption &&
+											((!composer && dataIncomplete) ||
+												(status == Status.ERROR && error.composer))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={composer}
+									/>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.charter
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.charter
+									? error.charter
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.charter")}</span
+									>
+									<input
+										type="text"
+										placeholder={$t("recorder.charter")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											loadingOption &&
+											((!charter && dataIncomplete) ||
+												(status == Status.ERROR && error.charter))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={charter}
+									/>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.illustrator
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.illustrator
+									? error.illustrator
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.illustrator")}</span
+									>
+									<input
+										type="text"
+										placeholder={$t("recorder.illustrator")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											loadingOption &&
+											((!illustrator && dataIncomplete) ||
+												(status == Status.ERROR && error.illustrator))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={illustrator}
+									/>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.tip
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.tip ? error.tip : ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]">{$t("recorder.tip")}</span>
+									<input
+										type="text"
+										placeholder={$t("recorder.tip")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											loadingOption &&
+											((!tip && dataIncomplete) ||
+												(status == Status.ERROR && error.tip))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={tip}
+									/>
+								</label>
+							</div>
 						{/if}
 						<div class="flex my-3">
 							<span class="w-32 px-4 place-self-center"
@@ -508,90 +574,150 @@
 									type="file"
 									accept=".jpg, .jpeg, .png"
 									class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-										endingOption && !avatar && dataIncomplete
+										(!song && dataIncomplete) ||
+										(status == Status.ERROR && error.avatar)
 											? "input-error file:btn-error"
 											: "input-primary file:btn-outline file:bg-primary"
 									}`}
 									on:change={handleAvatar}
 								/>
-								<span class="place-self-center"
-									>{$t("recorder.illustration_placeholder")}</span
-								>
+								{#if status == Status.ERROR && error.avatar}
+									<span class="place-self-center text-error"
+										>{error.avatar}</span
+									>
+								{:else}
+									<span class="place-self-center"
+										>{$t("recorder.illustration_placeholder")}</span
+									>
+								{/if}
 							</div>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.username")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.username")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										endingOption && !username && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={username}
-								/>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.rks")}</span
-								>
-								<input
-									type="text"
-									placeholder={(Math.random() * (16.12 - 12) + 12).toFixed(2)}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										endingOption && !rks && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={rks}
-								/>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.challenge_color")}</span
-								>
-								<select
-									bind:value={challengeColor}
-									class={`select select-bordered select-primary w-3/4 min-w-[180px] ${
-										endingOption &&
-										!(challengeColor >= 0 && challengeColor <= 4) &&
-										dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-								>
-									{#each challengeColors as c}
-										<option value={c.id}>{c.text}</option>
-									{/each}
-								</select>
-							</label>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px] max-w-[180px]"
-									>{$t("recorder.challenge_difficulty")}</span
-								>
-								<input
-									type="text"
-									placeholder={$t("recorder.challenge_difficulty")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										endingOption && !challengeDifficulty && dataIncomplete
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={challengeDifficulty}
-								/>
-							</label>
+							<div
+								class={status == Status.ERROR && error.username
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.username
+									? error.username
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.username")}</span
+									>
+									<input
+										type="text"
+										placeholder={$t("recorder.username")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											endingOption &&
+											((!username && dataIncomplete) ||
+												(status == Status.ERROR && error.username))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={username}
+									/>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.rks
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.rks ? error.rks : ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]">{$t("recorder.rks")}</span>
+									<input
+										type="text"
+										placeholder={(Math.random() * (16.12 - 12) + 12).toFixed(2)}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											endingOption &&
+											((!rks && dataIncomplete) ||
+												(status == Status.ERROR && error.rks))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={rks}
+									/>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.challenge_color
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.challenge_color
+									? error.challenge_color
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.challenge_color")}</span
+									>
+									<select
+										bind:value={challengeColor}
+										class={`select select-bordered select-primary w-3/4 min-w-[180px] ${
+											endingOption &&
+											((!(challengeColor >= 0 && challengeColor <= 4) &&
+												dataIncomplete) ||
+												(status == Status.ERROR && error.challenge_color))
+												? "input-error"
+												: "input-primary"
+										}`}
+									>
+										{#each challengeColors as c}
+											<option value={c.id}>{c.text}</option>
+										{/each}
+									</select>
+								</label>
+							</div>
+							<div
+								class={status == Status.ERROR && error.challenge_difficulty
+									? "tooltip tooltip-open tooltip-right tooltip-error"
+									: ""}
+								data-tip={status == Status.ERROR && error.challenge_difficulty
+									? error.challenge_difficulty
+									: ""}
+							>
+								<label class="input-group my-2">
+									<span class="w-1/4 min-w-[64px]"
+										>{$t("recorder.challenge_difficulty")}</span
+									>
+									<input
+										type="text"
+										placeholder={$t("recorder.challenge_difficulty")}
+										class={`input input-bordered w-3/4 min-w-[180px] ${
+											endingOption &&
+											((!challengeDifficulty && dataIncomplete) ||
+												(status == Status.ERROR && error.challenge_difficulty))
+												? "input-error"
+												: "input-primary"
+										}`}
+										bind:value={challengeDifficulty}
+									/>
+								</label>
+							</div>
 						{/if}
-						<label class="input-group my-2">
-							<span class="w-1/4 min-w-[64px] max-w-[180px]"
-								>{$t("recorder.addition")}</span
-							><textarea
-								class="textarea textarea-primary w-3/4 h-48"
-								placeholder={$t("recorder.addition_placeholder")}
-								bind:value={addition}
-							/>
-						</label>
+						<div
+							class={status == Status.ERROR && error.addition
+								? "tooltip tooltip-open tooltip-right tooltip-error"
+								: ""}
+							data-tip={status == Status.ERROR && error.addition
+								? error.addition
+								: ""}
+						>
+							<label class="input-group my-2">
+								<span class="w-1/4 min-w-[64px]">{$t("recorder.addition")}</span
+								><textarea
+									class={`textarea ${
+										endingOption &&
+										((!addition && dataIncomplete) ||
+											(status == Status.ERROR && error.addition))
+											? "textarea-error"
+											: "textarea-primary"
+									} w-3/4 h-48`}
+									placeholder={$t("recorder.addition_placeholder")}
+									bind:value={addition}
+								/>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>

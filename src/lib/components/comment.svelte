@@ -2,9 +2,11 @@
     import type { Comment, Reply } from '../models';
     import { t, locale } from '$lib/translations/config';
     import * as api from '$lib/api';
+  import type {User} from '$lib/models';
 
     export let comment: Comment;
     export let token: string;
+    export let user: User;
     let showReplies = false,
         likeID = comment.like,
         likes = comment.likes,
@@ -22,7 +24,7 @@
             {
                 comment: comment.id,
             },
-            token
+            token, user
         );
         const json = await resp.json();
         likeID = json.id;
@@ -32,13 +34,13 @@
         likes--;
         const path = `likes/${likeID}/`;
         likeID = null;
-        api.DELETE(path, token);
+        api.DELETE(path, token, user);
     };
 
     const getReplies = async (page?: number) => {
         const resp = await api.GET(
             `replies/?comment=${comment.id}${page ? `&page=${page}` : ''}`,
-            token
+            token, user
         );
         const json = await resp.json();
         replies = json.results;
@@ -52,7 +54,7 @@
             await api.POST(
                 `replies/`,
                 { comment: comment.id, content: reply, language: locale.get() },
-                token
+                token, user
             );
             reply = '';
             getReplies(page);

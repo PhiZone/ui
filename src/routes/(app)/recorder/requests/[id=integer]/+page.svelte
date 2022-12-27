@@ -20,7 +20,7 @@
 		const resp = await api.PATCH(`recorder/requests/${content?.id}/`, {
 			'attitude': requestStatus,
 			'reply': reply
-		}, token);
+		}, token, user);
 		if (resp.ok) {
 			window.location.href = `/recorder/requests/${content?.id}`
 		} else {
