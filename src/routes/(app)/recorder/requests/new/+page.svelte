@@ -205,13 +205,13 @@
 								accept=".mp3, .ogg, .oga"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!song && dataIncomplete) ||
-									(status == Status.ERROR && error.song)
+									(status == Status.ERROR && error?.song)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleSong}
 							/>
-							{#if status == Status.ERROR && error.song}
+							{#if status == Status.ERROR && error?.song}
 								<span class="place-self-center text-error">{error.song}</span>
 							{:else}
 								<span class="place-self-center"
@@ -228,13 +228,13 @@
 								accept=".json"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!chart && dataIncomplete) ||
-									(status == Status.ERROR && error.chart)
+									(status == Status.ERROR && error?.chart)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleChart}
 							/>
-							{#if status == Status.ERROR && error.chart}
+							{#if status == Status.ERROR && error?.chart}
 								<span class="place-self-center text-error">{error.chart}</span>
 							{:else}
 								<span class="place-self-center"
@@ -251,13 +251,13 @@
 								accept=".jpg, .jpeg, .png"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!illustration && dataIncomplete) ||
-									(status == Status.ERROR && error.illustration)
+									(status == Status.ERROR && error?.illustration)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
 								}`}
 								on:change={handleIllustration}
 							/>
-							{#if status == Status.ERROR && error.illustration}
+							{#if status == Status.ERROR && error?.illustration}
 								<span class="place-self-center text-error"
 									>{error.illustration}</span
 								>
@@ -268,10 +268,10 @@
 							{/if}
 						</div>
 						<div
-							class={status == Status.ERROR && error.name
+							class={status == Status.ERROR && error?.name
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.name ? error.name : ""}
+							data-tip={status == Status.ERROR && error?.name ? error.name : ""}
 						>
 							<label class="input-group my-2">
 								<span class="w-1/4 min-w-[64px]">{$t("recorder.name")}</span>
@@ -280,7 +280,7 @@
 									placeholder={$t("recorder.name")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!songName && dataIncomplete) ||
-										(status == Status.ERROR && error.name)
+										(status == Status.ERROR && error?.name)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -289,10 +289,10 @@
 							</label>
 						</div>
 						<div
-							class={status == Status.ERROR && error.level
+							class={status == Status.ERROR && error?.level
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.level
+							data-tip={status == Status.ERROR && error?.level
 								? error.level
 								: ""}
 						>
@@ -303,7 +303,7 @@
 									placeholder={$t("recorder.level_holder")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!level && dataIncomplete) ||
-										(status == Status.ERROR && error.level)
+										(status == Status.ERROR && error?.level)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -312,10 +312,10 @@
 							</label>
 						</div>
 						<div
-							class={status == Status.ERROR && error.difficulty
+							class={status == Status.ERROR && error?.difficulty
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.difficulty
+							data-tip={status == Status.ERROR && error?.difficulty
 								? error.difficulty
 								: ""}
 						>
@@ -328,7 +328,7 @@
 									placeholder={$t("recorder.difficulty_holder")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!difficulty && dataIncomplete) ||
-										(status == Status.ERROR && error.difficulty)
+										(status == Status.ERROR && error?.difficulty)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -337,10 +337,10 @@
 							</label>
 						</div>
 						<div
-							class={status == Status.ERROR && error.note_size
+							class={status == Status.ERROR && error?.note_size
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.note_size
+							data-tip={status == Status.ERROR && error?.note_size
 								? error.note_size
 								: ""}
 						>
@@ -353,7 +353,7 @@
 									placeholder={$t("recorder.note_size_placeholder")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!noteSize && dataIncomplete) ||
-										(status == Status.ERROR && error.note_size)
+										(status == Status.ERROR && error?.note_size)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -362,10 +362,10 @@
 							</label>
 						</div>
 						<div
-							class={status == Status.ERROR && error.resolution
+							class={status == Status.ERROR && error?.resolution
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.resolution
+							data-tip={status == Status.ERROR && error?.resolution
 								? error.resolution
 								: ""}
 						>
@@ -378,7 +378,7 @@
 									placeholder={$t("recorder.resolution_placeholder")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!resolution && dataIncomplete) ||
-										(status == Status.ERROR && error.resolution)
+										(status == Status.ERROR && error?.resolution)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -387,10 +387,10 @@
 							</label>
 						</div>
 						<div
-							class={status == Status.ERROR && error.total_score
+							class={status == Status.ERROR && error?.total_score
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.total_score
+							data-tip={status == Status.ERROR && error?.total_score
 								? error.total_score
 								: ""}
 						>
@@ -403,7 +403,7 @@
 									placeholder={$t("recorder.total_score_placeholder")}
 									class={`input input-bordered w-3/4 min-w-[180px] ${
 										(!totalScore && dataIncomplete) ||
-										(status == Status.ERROR && error.total_score)
+										(status == Status.ERROR && error?.total_score)
 											? "input-error"
 											: "input-primary"
 									}`}
@@ -455,10 +455,10 @@
 						</div>
 						{#if loadingOption}
 							<div
-								class={status == Status.ERROR && error.composer
+								class={status == Status.ERROR && error?.composer
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.composer
+								data-tip={status == Status.ERROR && error?.composer
 									? error.composer
 									: ""}
 							>
@@ -472,7 +472,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											loadingOption &&
 											((!composer && dataIncomplete) ||
-												(status == Status.ERROR && error.composer))
+												(status == Status.ERROR && error?.composer))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -481,10 +481,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.charter
+								class={status == Status.ERROR && error?.charter
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.charter
+								data-tip={status == Status.ERROR && error?.charter
 									? error.charter
 									: ""}
 							>
@@ -498,7 +498,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											loadingOption &&
 											((!charter && dataIncomplete) ||
-												(status == Status.ERROR && error.charter))
+												(status == Status.ERROR && error?.charter))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -507,10 +507,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.illustrator
+								class={status == Status.ERROR && error?.illustrator
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.illustrator
+								data-tip={status == Status.ERROR && error?.illustrator
 									? error.illustrator
 									: ""}
 							>
@@ -524,7 +524,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											loadingOption &&
 											((!illustrator && dataIncomplete) ||
-												(status == Status.ERROR && error.illustrator))
+												(status == Status.ERROR && error?.illustrator))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -533,10 +533,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.tip
+								class={status == Status.ERROR && error?.tip
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.tip ? error.tip : ""}
+								data-tip={status == Status.ERROR && error?.tip ? error.tip : ""}
 							>
 								<label class="input-group my-2">
 									<span class="w-1/4 min-w-[64px]">{$t("recorder.tip")}</span>
@@ -546,7 +546,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											loadingOption &&
 											((!tip && dataIncomplete) ||
-												(status == Status.ERROR && error.tip))
+												(status == Status.ERROR && error?.tip))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -575,13 +575,13 @@
 									accept=".jpg, .jpeg, .png"
 									class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 										(!song && dataIncomplete) ||
-										(status == Status.ERROR && error.avatar)
+										(status == Status.ERROR && error?.avatar)
 											? "input-error file:btn-error"
 											: "input-primary file:btn-outline file:bg-primary"
 									}`}
 									on:change={handleAvatar}
 								/>
-								{#if status == Status.ERROR && error.avatar}
+								{#if status == Status.ERROR && error?.avatar}
 									<span class="place-self-center text-error"
 										>{error.avatar}</span
 									>
@@ -592,10 +592,10 @@
 								{/if}
 							</div>
 							<div
-								class={status == Status.ERROR && error.username
+								class={status == Status.ERROR && error?.username
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.username
+								data-tip={status == Status.ERROR && error?.username
 									? error.username
 									: ""}
 							>
@@ -609,7 +609,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											endingOption &&
 											((!username && dataIncomplete) ||
-												(status == Status.ERROR && error.username))
+												(status == Status.ERROR && error?.username))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -618,10 +618,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.rks
+								class={status == Status.ERROR && error?.rks
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.rks ? error.rks : ""}
+								data-tip={status == Status.ERROR && error?.rks ? error.rks : ""}
 							>
 								<label class="input-group my-2">
 									<span class="w-1/4 min-w-[64px]">{$t("recorder.rks")}</span>
@@ -631,7 +631,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											endingOption &&
 											((!rks && dataIncomplete) ||
-												(status == Status.ERROR && error.rks))
+												(status == Status.ERROR && error?.rks))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -640,10 +640,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.challenge_color
+								class={status == Status.ERROR && error?.challenge_color
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.challenge_color
+								data-tip={status == Status.ERROR && error?.challenge_color
 									? error.challenge_color
 									: ""}
 							>
@@ -657,7 +657,7 @@
 											endingOption &&
 											((!(challengeColor >= 0 && challengeColor <= 4) &&
 												dataIncomplete) ||
-												(status == Status.ERROR && error.challenge_color))
+												(status == Status.ERROR && error?.challenge_color))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -669,10 +669,10 @@
 								</label>
 							</div>
 							<div
-								class={status == Status.ERROR && error.challenge_difficulty
+								class={status == Status.ERROR && error?.challenge_difficulty
 									? "tooltip tooltip-open tooltip-right tooltip-error"
 									: ""}
-								data-tip={status == Status.ERROR && error.challenge_difficulty
+								data-tip={status == Status.ERROR && error?.challenge_difficulty
 									? error.challenge_difficulty
 									: ""}
 							>
@@ -686,7 +686,7 @@
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											endingOption &&
 											((!challengeDifficulty && dataIncomplete) ||
-												(status == Status.ERROR && error.challenge_difficulty))
+												(status == Status.ERROR && error?.challenge_difficulty))
 												? "input-error"
 												: "input-primary"
 										}`}
@@ -696,10 +696,10 @@
 							</div>
 						{/if}
 						<div
-							class={status == Status.ERROR && error.addition
+							class={status == Status.ERROR && error?.addition
 								? "tooltip tooltip-open tooltip-right tooltip-error"
 								: ""}
-							data-tip={status == Status.ERROR && error.addition
+							data-tip={status == Status.ERROR && error?.addition
 								? error.addition
 								: ""}
 						>
@@ -709,7 +709,7 @@
 									class={`textarea ${
 										endingOption &&
 										((!addition && dataIncomplete) ||
-											(status == Status.ERROR && error.addition))
+											(status == Status.ERROR && error?.addition))
 											? "textarea-error"
 											: "textarea-primary"
 									} w-3/4 h-48`}
