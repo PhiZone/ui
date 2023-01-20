@@ -1,7 +1,7 @@
 import * as cookie from 'cookie';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { getUserDetail } from '$lib/api/userDetail';
-import { API_BASE } from '$lib/constants';
+import { API_BASE, LOCAL_API_BASE } from '$lib/constants';
 
 export const handle = (async ({ event, resolve }) => {
     const cookies = cookie.parse(event.request.headers.get('cookie') || '');
@@ -38,7 +38,7 @@ export const handle = (async ({ event, resolve }) => {
 export const handleFetch = (({ request, fetch }) => {
     if (request.url.startsWith(API_BASE)) {
         request = new Request(
-            request.url.replace(API_BASE, 'http://localhost:8000'),
+            request.url.replace(API_BASE, LOCAL_API_BASE),
             request
         );
     }

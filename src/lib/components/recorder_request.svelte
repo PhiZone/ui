@@ -30,9 +30,7 @@
 		<div class="card-body w-[70%]">
 			<h2 class="card-title text-2xl mb-3 min-w-fit">
 				{name}
-				<button
-					class="btn btn-secondary btn-sm text-2xl no-animation"
-				>
+				<button class="btn btn-secondary btn-sm text-2xl no-animation">
 					{level}
 					{difficulty}
 				</button>
