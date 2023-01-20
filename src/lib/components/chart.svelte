@@ -43,8 +43,10 @@
 					{#if chart.charter}
 						{#each parseRichText(chart.charter) as t}
 							{#if t.id > 0}
-								<a data-sveltekit-preload-data href={`/users/${t.id}`} class="text-accent hover:underline"
-									>{t.text}</a
+								<a
+									data-sveltekit-preload-data
+									href={`/users/${t.id}`}
+									class="text-accent hover:underline">{t.text}</a
 								>
 							{:else}
 								{t.text}

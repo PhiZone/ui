@@ -11,7 +11,11 @@
 	const grade = getGrade(record.score, record.full_combo);
 </script>
 
-<a data-sveltekit-preload-data class="w-fit h-fit" href={`/records/${record.id}`}>
+<a
+	data-sveltekit-preload-data
+	class="w-fit h-fit"
+	href={`/records/${record.id}`}
+>
 	<div
 		class={`card m-1 w-[288px] ${
 			typeof record.player == "object" ? "h-40" : "h-36"
@@ -111,7 +115,11 @@
 		<div class="absolute right-2 bottom-2 form-control justify-end">
 			<p class="text-right player">
 				{#if typeof record.player == "object"}
-					<a data-sveltekit-preload-data href={`/users/${record.player.id}`} class="hover:underline">
+					<a
+						data-sveltekit-preload-data
+						href={`/users/${record.player.id}`}
+						class="hover:underline"
+					>
 						{$t(record.player.username)}
 					</a>
 					@

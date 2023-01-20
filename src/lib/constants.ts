@@ -1,5 +1,6 @@
 export const API_BASE = import.meta.env.VITE_API_BASE;
 export const LOCAL_API_BASE = import.meta.env.VITE_LOCAL_API_BASE;
+export const RES_BASE = import.meta.env.VITE_RES_BASE;
 export const PAGINATION_PER_PAGE = 12
 
 export const USER_LEVELS = [

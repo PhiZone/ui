@@ -1,4 +1,4 @@
-import { USER_LEVELS } from "./constants";
+import { LOCAL_API_BASE, RES_BASE, USER_LEVELS } from "./constants";
 
 export function POST(endpoint: string, data: unknown, language?: string) {
     return fetch(endpoint, {
@@ -224,7 +224,7 @@ export function getCompressedImage(input: string | undefined) {
     if (input.endsWith(".jpeg")) {
         return input.replace(".jpeg", ".comp.webp")
     }
-    return input;
+    return input.replace(LOCAL_API_BASE, RES_BASE);
 }
 
 export function getUserColor(type: string | undefined) {

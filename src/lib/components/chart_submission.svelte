@@ -7,7 +7,10 @@
 	let song = submission.song ? submission.song : submission.song_upload;
 </script>
 
-<a data-sveltekit-preload-data href={`/studio/chart-submissions/${submission.id}`}>
+<a
+	data-sveltekit-preload-data
+	href={`/studio/chart-submissions/${submission.id}`}
+>
 	<div
 		class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg glass"
 	>
