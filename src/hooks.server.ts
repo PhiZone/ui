@@ -15,7 +15,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
         if (resp?.ok) {
             event.locals.user = await resp.json();
-            console.log('login success with language', event.locals.user.language.toString());
         } else if (
             cookies.refresh_token &&
             !event.url.pathname.startsWith('/session') &&
@@ -25,7 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             return await new Response(null, {
                 status: 303,
                 headers: {
-                    location: `/session/refresh?redirect=${event.url.pathname}${event.url.search}`,
+                    location: `/session/refresh?redirect=${encodeURIComponent(event.url.pathname + event.url.search)}`,
                 },
             });
         } else {

@@ -18,8 +18,8 @@
 			msg = $t("session.data_incomplete");
 			return;
 		}
-		status = Status.WAITING;
-		const resp = await api.POST("password_reset/", { email });
+		status = Status.RETRIEVING;
+		const resp = await api.POST("/password_reset/", { email });
 		if (resp.ok) {
 			status = Status.OK;
 		} else {
@@ -27,7 +27,7 @@
 			const json = await resp.json();
 			console.log(json);
 			if (json.email) {
-				emailErr = $t(`session.password_reset.${json.email[0]}`);
+				emailErr = json.email[0];
 			}
 			msg = $t("common.correct_errors");
 		}
@@ -44,8 +44,11 @@
 			status = Status.ERROR;
 			return;
 		}
-		status = Status.WAITING;
-		const resp = await api.POST("password_reset/confirm/", { token, password });
+		status = Status.SENDING;
+		const resp = await api.POST("/password_reset/confirm/", {
+			token,
+			password,
+		});
 		if (resp.ok) {
 			goto("/session/login?s=1");
 		} else {
@@ -55,9 +58,15 @@
 	};
 </script>
 
+<svelte:head>
+	<title
+		>{$t("session.password_reset.password_reset")} | {$t("common.title")}</title
+	>
+</svelte:head>
+
 <div class="hero min-h-screen bg-base-200">
 	<div class="hero-content text-center">
-		<div class="max-w-4xl">
+		<div class="w-[400px] max-w-7xl">
 			<h1 class="text-5xl font-bold">
 				{$t("session.password_reset.password_reset")}
 			</h1>
@@ -76,25 +85,25 @@
 							type="email"
 							placeholder={$t("session.email")}
 							class={`input input-bordered input-lg ${
-								status == Status.ERROR ? "input-error" : "input-info"
+								status === Status.ERROR ? "input-error" : "input-info"
 							} w-full max-w-xs text-center glass`}
 							on:input={() => {
 								msg = "";
 								emailErr = "";
-								status = Status.INPUT_REQUIRED;
+								status = Status.WAITING;
 							}}
 							bind:value={email}
 						/>
 					</div>
 					<div class="mt-6">
-						{#if status == Status.ERROR}
+						{#if status === Status.ERROR}
 							<div
 								class="tooltip tooltip-open tooltip-bottom tooltip-error"
 								data-tip={msg}
 							>
 								<button class="btn btn-error">{$t("common.error")}</button>
 							</div>
-						{:else if status == Status.WAITING}
+						{:else if status === Status.SENDING}
 							<button class={`btn btn-outline btn-ghost btn-disabled glass`}
 								>{$t("common.waiting")}</button
 							>
@@ -116,47 +125,52 @@
 				<p class="py-6">
 					{$t("session.password_reset.password_reset_text3")}
 				</p>
-				<input
-					type="password"
-					class={`input input-bordered input-lg my-2 ${
-						status == Status.ERROR
-							? "input-error"
-							: confirmPassword && password == confirmPassword
-							? "input-success"
-							: "input-info"
-					} w-full max-w-xs text-center glass`}
-					placeholder={$t("session.password_reset.new_password")}
-					bind:value={password}
-					on:input={() => {
-						status = Status.INPUT_REQUIRED;
-						msg = "";
-					}}
-				/>
-				<input
-					type="password"
-					class={`input input-bordered input-lg my-2 ${
-						status == Status.ERROR
-							? "input-error"
-							: password && password == confirmPassword
-							? "input-success"
-							: "input-info"
-					} w-full max-w-xs text-center glass`}
-					placeholder={$t("session.confirm_password")}
-					bind:value={confirmPassword}
-					on:input={() => {
-						status = Status.INPUT_REQUIRED;
-						msg = "";
-					}}
-				/>
+				<form>
+					<input type="email" autocomplete="username" class="hidden" />
+					<input
+						type="password"
+						autocomplete="new-password"
+						class={`input input-bordered input-lg my-2 ${
+							status === Status.ERROR
+								? "input-error"
+								: confirmPassword && password == confirmPassword
+								? "input-success"
+								: "input-info"
+						} w-full max-w-xs text-center glass`}
+						placeholder={$t("session.password_reset.new_password")}
+						bind:value={password}
+						on:input={() => {
+							status = Status.WAITING;
+							msg = "";
+						}}
+					/>
+					<input
+						type="password"
+						autocomplete="new-password"
+						class={`input input-bordered input-lg my-2 ${
+							status === Status.ERROR
+								? "input-error"
+								: password && password == confirmPassword
+								? "input-success"
+								: "input-info"
+						} w-full max-w-xs text-center glass`}
+						placeholder={$t("session.confirm_password")}
+						bind:value={confirmPassword}
+						on:input={() => {
+							status = Status.WAITING;
+							msg = "";
+						}}
+					/>
+				</form>
 				<div class="mt-6">
-					{#if status == Status.ERROR}
+					{#if status === Status.ERROR}
 						<div
 							class="tooltip tooltip-open tooltip-bottom tooltip-error"
 							data-tip={msg}
 						>
 							<button class="btn btn-error">{$t("common.error")}</button>
 						</div>
-					{:else if status == Status.WAITING}
+					{:else if status === Status.RETRIEVING}
 						<button class={`btn btn-outline btn-ghost btn-disabled glass`}
 							>{$t("common.waiting")}</button
 						>
@@ -176,6 +190,6 @@
 
 <style>
 	* {
-		font-family: "Saira", sans-serif;
+		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
 </style>

@@ -1,17 +1,12 @@
-<script>
-    import '../../app.css';
-    import Navbar from '$lib/components/navbar.svelte';
-    import Footer from '$lib/components/footer.svelte';
-    import { page } from '$app/stores';
+<script lang="ts">
+	import "../../app.css";
+	import Navbar from "$lib/components/navbar.svelte";
+	import Footer from "$lib/components/footer.svelte";
 
-    const user = $page.data.user;
+	export let data: import("./$types").LayoutData;
+	$: ({ user, backupUser } = data);
 </script>
 
-<Navbar {user} />
+<Navbar user={user ? user : backupUser} />
 <slot />
-<!-- <select bind:value="{$locale}">
-  {#each $locales as value}
-    <option value="{value}">{$t(`lang.${value}`)}</option>
-  {/each}
-</select> -->
-<Footer />
+<Footer user={user ? user : backupUser} />

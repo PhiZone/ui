@@ -1,13 +1,20 @@
 <script lang="ts">
 	import { Status } from "$lib/constants";
 	import { t } from "$lib/translations/config";
-	import { getUserPrivilege, parseDateTime } from "$lib/utils";
+	import {
+		getCompressedImage,
+		getUserLevel,
+		getUserPrivilege,
+		parseDateTime,
+	} from "$lib/utils";
 	import { onMount } from "svelte";
-	import * as api from '$lib/api';
+	import * as api from "$lib/api";
 
 	export let data: import("./$types").PageData;
-	$: ({ status, content, error, token, user } = data);
+	$: ({ status, content, error, access_token, user } = data);
+
 	let requestStatus: number, reply: string | null;
+
 	onMount(() => {
 		if (status === Status.OK && content) {
 			requestStatus = content.status;
@@ -16,52 +23,65 @@
 			console.log(error);
 		}
 	});
+
 	const handleSubmit = async () => {
-		const resp = await api.PATCH(`recorder/requests/${content?.id}/`, {
-			'attitude': requestStatus,
-			'reply': reply
-		}, token, user);
+		const resp = await api.PATCH(
+			`/recorder/requests/${content?.id}/`,
+			{
+				attitude: requestStatus,
+				reply: reply,
+			},
+			access_token,
+			user
+		);
 		if (resp.ok) {
-			window.location.href = `/recorder/requests/${content?.id}`
+			window.location.href = `/recorder/requests/${content?.id}`;
 		} else {
 			console.log(await resp.json());
 		}
-	}
+	};
 
-let challengeColors = [
-	{
-		id: 0,
-		text: "Rainbow",
-		image: "https://res.phi.zone/static/challenge_rainbow.png",
-	},
-	{
-		id: 1,
-		text: "Gold",
-		image: "https://res.phi.zone/static/challenge_gold.png",
-	},
-	{
-		id: 2,
-		text: "Orange",
-		image: "https://res.phi.zone/static/challenge_orange.png",
-	},
-	{
-		id: 3,
-		text: "Blue",
-		image: "https://res.phi.zone/static/challenge_blue.png",
-	},
-	{
-		id: 4,
-		text: "Green",
-		image: "https://res.phi.zone/static/challenge_green.png",
-	},
-];
+	let challengeColors = [
+		{
+			id: 0,
+			text: "Rainbow",
+			image: "https://res.phi.zone/static/challenge_rainbow.png",
+		},
+		{
+			id: 1,
+			text: "Gold",
+			image: "https://res.phi.zone/static/challenge_gold.png",
+		},
+		{
+			id: 2,
+			text: "Orange",
+			image: "https://res.phi.zone/static/challenge_orange.png",
+		},
+		{
+			id: 3,
+			text: "Blue",
+			image: "https://res.phi.zone/static/challenge_blue.png",
+		},
+		{
+			id: 4,
+			text: "Green",
+			image: "https://res.phi.zone/static/challenge_green.png",
+		},
+	];
 </script>
+
+<svelte:head>
+	<title
+		>{$t("recorder.request")} - {content?.name} [{content?.level}{content?.difficulty}]
+		| {$t("common.title")}</title
+	>
+</svelte:head>
 
 {#if status === Status.OK && content !== null}
 	<input type="checkbox" id="recorder-manage-request" class="modal-toggle" />
 	<div class="modal">
-		<div class="modal-box">
-			<h3 class="font-bold text-lg">{$t("recorder.reply")}</h3>
+		<div class="modal-box bg-base-100">
+			<h3 class="font-bold text-lg">{$t("recorder.reply_v")}</h3>
 			<label class="input-group my-2">
 				<span class="w-1/4 min-w-[64px] max-w-[180px]"
 					>{$t("recorder.status")}</span
@@ -70,9 +90,9 @@ let challengeColors = [
 					bind:value={requestStatus}
 					class="select select-primary w-full max-w-xs"
 				>
-					<option value="1">{$t("recorder.status_1")}</option>
-					<option value="2">{$t("recorder.status_2")}</option>
-					<option value="3">{$t("recorder.status_3")}</option>
+					<option value="1">{$t("recorder.statuses.1")}</option>
+					<option value="2">{$t("recorder.statuses.2")}</option>
+					<option value="3">{$t("recorder.statuses.3")}</option>
 				</select>
 			</label>
 			<label class="input-group my-2">
@@ -80,90 +100,120 @@ let challengeColors = [
 					>{$t("recorder.reply")}</span
 				><textarea
 					class="textarea textarea-primary w-full max-w-xs h-48"
-					placeholder={$t("recorder.reply")}
+					placeholder={$t("write_reply")}
 					bind:value={reply}
 				/>
 			</label>
 			<div class="modal-action btn-group btn-group-horizontal">
-				<label for="recorder-manage-request" class="btn btn-primary text-lg">{$t('common.back')}</label>
-				<label for="recorder-manage-request" class="btn btn-primary text-lg" on:click={handleSubmit} on:keydown={handleSubmit}>{$t('common.submit')}</label>
+				<label
+					for="recorder-manage-request"
+					class="btn btn-primary btn-outline text-lg">{$t("common.back")}</label
+				>
+				<label
+					for="recorder-manage-request"
+					class="btn btn-primary btn-outline text-lg"
+					on:click={handleSubmit}
+					on:keyup>{$t("common.submit")}</label
+				>
 			</div>
 		</div>
 	</div>
-	<div class="bg-base-200 py-24 px-12 justify-center flex">
+	<div class="bg-base-200 page py-24 px-12 justify-center flex">
 		<div class="mx-4 min-w-[540px] max-w-[1400px] main-width">
 			<div class="indicator w-full my-4">
 				<span
 					class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-					>{$t("recorder.request")}</span
+					>{$t("recorder.req")}</span
 				>
-				<div class="card flex-shrink-0 w-full shadow-2xl bg-base-100">
+				<div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
 					<div class="card-body py-10">
-						<div class="text-5xl py-3 flex items-center">
+						<div class="text-5xl py-3 flex font-bold gap-4 items-center">
 							{content.name}
-							<div
-								class="ml-3 badge badge-lg badge-primary min-w-fit h-10 text-2xl"
-							>
+							<button class="btn btn-secondary btn-sm text-2xl no-animation">
 								{content.level}
 								{content.difficulty}
-							</div>
+							</button>
 						</div>
 						<div>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.chart")}</span
+									>{$t("common.form.song_name")}</span
+								>
+								{content.name}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("common.form.chart_level")}</span
+								>
+								{content.level}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("common.form.chart_difficulty_1")}</span
+								>
+								{content.difficulty}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("common.form.chart")}</span
 								>
 								<a
 									href={content.chart}
 									target="_blank"
 									rel="noreferrer"
 									class="hover:underline underline-offset-2"
-									>{$t("common.download")}</a
+									download
 								>
+									{$t("common.download")}
+								</a>
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.song")}</span
+									>{$t("common.form.audio")}</span
 								>
 								<a
 									href={content.song}
 									target="_blank"
 									rel="noreferrer"
 									class="hover:underline underline-offset-2"
-									>{$t("common.download")}</a
+									download
 								>
+									{$t("common.download")}
+								</a>
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.illustration")}</span
+									>{$t("common.form.illustration")}</span
 								>
 								<a
 									href={content.illustration}
 									target="_blank"
 									rel="noreferrer"
 									class="hover:underline underline-offset-2"
-									>{$t("common.download")}</a
+									download
 								>
+									{$t("common.download")}
+								</a>
 							</p>
 							{#if content.tip && content.charter && content.composer && content.illustrator}
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.charter")}</span
-								>
-								{content.charter}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.composer")}</span
-								>
-								{content.composer}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.illustrator")}</span
-								>
-								{content.illustrator}
-							</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("common.form.charter")}</span
+									>
+									{content.charter}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("common.form.composer")}</span
+									>
+									{content.composer}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("common.form.illustrator")}</span
+									>
+									{content.illustrator}
+								</p>
 							{/if}
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
@@ -227,7 +277,7 @@ let challengeColors = [
 									{content.rks}
 								</p>
 							{/if}
-							{#if content.avatar && content.challenge_color != null && content.challenge_color >= 0 && content.challenge_color <= 4}
+							{#if content.avatar && content.challenge_color !== null && content.challenge_color >= 0 && content.challenge_color <= 4}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_color")}</span
@@ -261,31 +311,25 @@ let challengeColors = [
 							{/if}
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.status")}</span
-								>
-								{$t(`recorder.status_${content.status}`)}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("recorder.requested_at")}</span
 								>
 								{parseDateTime(content.requested_at)}
 							</p>
-							{#if content.reply && content.replier && content.replied_at}
-								<p>
-									<span class="badge badge-primary badge-outline mr-1"
-										>{$t("recorder.replied_at")}</span
-									>
-									{parseDateTime(content.replied_at)}
-								</p>
-							{/if}
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("recorder.status")}</span
+								>
+								{$t(`recorder.statuses.${content.status}`)}
+							</p>
 						</div>
 						{#if getUserPrivilege(user.type) >= 3}
-						<label
-							for="recorder-manage-request"
-							class="btn btn-primary text-lg w-32"
-							>{$t("recorder.reply")}</label
-						>
+							<div class="card-actions flex items-center justify-end">
+								<label
+									for="recorder-manage-request"
+									class="btn btn-primary btn-outline glass text-lg w-32"
+									>{$t("recorder.reply")}</label
+								>
+							</div>
 						{/if}
 					</div>
 				</div>
@@ -297,20 +341,57 @@ let challengeColors = [
 						>{$t("recorder.reply")}</span
 					>
 					<div
-						class="card card-side w-full bg-base-100 border border-base-300 shadow-xl"
+						class="card card-side w-full bg-base-100 border border-base-300 shadow-lg"
 					>
-						<figure>
+						<figure class="w-1/6 min-w-fit">
 							<div
-								class="avatar items-center min-w-fit flex-col border-r border-base-300 px-6 py-3"
+								class="relative inline-flex items-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
 							>
-								<div class="w-16 rounded-full">
-									<img src={content.replier.avatar} alt="Avatar" />
+								<div
+									class={`w-[72px] rounded-full overflow-hidden border-[3px] border-opacity-80 ${
+										content.replier.type == "admin"
+											? "border-indigo-500"
+											: user.type == "volunteer"
+											? "border-emerald-500"
+											: user.type == "qualified"
+											? "border-sky-500"
+											: "border-neutral-500"
+									}`}
+								>
+									<a href={`/users/${content.replier.id}`}>
+										<img
+											class="object-fill"
+											src={getCompressedImage(content.replier.avatar)}
+											alt="Avatar"
+										/>
+									</a>
 								</div>
-								<p class="text-lg">{content.replier.username}</p>
+								<a href={`/users/${content.user.id}`}>
+									<p class="text-lg text-center max-w-[120px] break-all">
+										{content.replier.username}
+									</p>
+								</a>
+								<div class="flex gap-1 aspect-[21/5]">
+									<span class="badge badge-sm font-bold"
+										>LV{getUserLevel(content.replier.exp)}</span
+									>
+									{#if content.replier.tag}
+										<span class="badge badge-sm badge-accent"
+											>{content.replier.tag}</span
+										>
+									{/if}
+								</div>
 							</div>
 						</figure>
-						<div class="card-body">
-							<p>{content.reply}</p>
+						<div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
+							<p class="w-full content text-lg">
+								{content.reply}
+							</p>
+							<div class="card-actions mt-4 flex justify-between items-center">
+								<p class="text-sm opacity-70">
+									{parseDateTime(content.replied_at)}
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -321,7 +402,7 @@ let challengeColors = [
 
 <style>
 	* {
-		font-family: "Saira", sans-serif;
+		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
 
 	.main-width {

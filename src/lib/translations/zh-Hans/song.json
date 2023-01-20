@@ -1,15 +1,16 @@
 {
     "song": "曲目",
     "name": "曲目名称",
-    "chapter": "章节",
-    "charts": "包含谱面",
+    "chapter": "相关章节",
     "composer": "曲师",
+    "edition": "版本",
     "illustration": "曲绘",
     "illustrator": "画师",
     "lyrics": "歌词",
     "bpm": "BPM",
+    "offset": "延迟参考值",
     "duration": "时长",
-    "original": "原创作品",
+    "original": "原创",
     "accessibility": "开放度",
     "public": "公开",
     "public_tip": "该曲接受任何谱面投递。",
@@ -25,5 +26,7 @@
     "play": "播放",
     "pause": "暂停",
     "fast_forward": "快进",
-    "volume": "音量"
+    "volume": "音量",
+    "show_charts": "展开谱面列表",
+    "hide_charts": "收起谱面列表"
 }

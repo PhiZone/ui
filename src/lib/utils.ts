@@ -1,10 +1,14 @@
-export function POST(endpoint: string, data: unknown) {
+import { USER_LEVELS } from "./constants";
+
+export function POST(endpoint: string, data: unknown, language?: string) {
     return fetch(endpoint, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(data || {}),
         headers: {
             'Content-Type': 'application/json',
+            'User-Agent': 'PhiZoneRegularAccess',
+            'Accept-Language': (language ? language : convertLanguageCode(window.navigator.language)).toLowerCase()
         },
     });
 }
@@ -125,16 +129,17 @@ export function parseLyrics(input: string) {
     return lyrics;
 }
 
-export function parseCharter(input: string) {
-    const result = input.matchAll(/\[PZUser:([0-9]+):([^\]]+)\]/g);
+export function parseRichText(input: string) {
+    const result = input.matchAll(new RegExp(`\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]`, 'g'));
     let element = result.next();
-    const charter = [];
+    const rich = [];
     while (element.value) {
-        charter.push({
+        rich.push({
             index: element.value.index,
             text: element.value[0],
-            id: element.value[1],
-            nickname: element.value[2],
+            type: element.value[1],
+            id: element.value[2],
+            display: element.value[3],
             length: element.value[0].length,
         });
         if (element.done) {
@@ -142,31 +147,35 @@ export function parseCharter(input: string) {
         }
         element = result.next();
     }
-    const array = [];
-    if (charter.length === 0) {
+    const array: { type?: string, id: number, text: string }[] = [];
+    if (rich.length === 0) {
         array.push({
+            type: undefined,
             id: 0,
             text: input,
         });
         return array;
     }
     let i = 0;
-    for (let j = 0; i < input.length && j < charter.length; j++) {
-        if (i < charter[j].index) {
+    for (let j = 0; i < input.length && j < rich.length; j++) {
+        if (i < rich[j].index) {
             array.push({
+                type: undefined,
                 id: 0,
-                text: input.substring(i, charter[j].index),
+                text: input.substring(i, rich[j].index),
             });
-            i = charter[j].index;
+            i = rich[j].index;
         }
         array.push({
-            id: charter[j].id,
-            text: charter[j].nickname,
+            type: rich[j].type,
+            id: rich[j].id,
+            text: rich[j].display,
         });
-        i += charter[j].length;
+        i += rich[j].length;
     }
     if (i < input.length - 1) {
         array.push({
+            type: undefined,
             id: 0,
             text: input.substring(i),
         });
@@ -184,5 +193,84 @@ export function convertLanguageCode(input: string) {
 
 export function parseDateTime(input: string) {
     const date = new Date(input);
-    return date.toLocaleString()
+    return date.toLocaleString();
+}
+
+export function parseMonthAndDay(input: string) {
+    const date = new Date(input);
+    return date.toLocaleDateString(undefined, {
+        month: "long", day: "numeric"
+    });
+}
+
+export function getPath(input: string) {
+    const url = new URL(input);
+    return url.pathname + url.search;
+}
+
+export function getCompressedImage(input: string | undefined) {
+    if (!input) {
+        return "";
+    }
+    if (input.endsWith(".webp")) {
+        return input.replace(".webp", ".comp.webp")
+    }
+    if (input.endsWith(".png")) {
+        return input.replace(".png", ".comp.webp")
+    }
+    if (input.endsWith(".jpg")) {
+        return input.replace(".jpg", ".comp.webp")
+    }
+    if (input.endsWith(".jpeg")) {
+        return input.replace(".jpeg", ".comp.webp")
+    }
+    return input;
+}
+
+export function getUserColor(type: string | undefined) {
+    switch (type) {
+        case 'banned':
+            return "stone-800";
+        case 'member':
+            return "neutral-500";
+        case 'qualified':
+            return "teal-500";
+        case 'volunteer':
+            return "emerald-500";
+        case 'admin':
+            return "indigo-500";
+        default:
+            return "neutral-500";
+    }
+}
+
+export function getUserLevel(exp: number) {
+    for (let i = 0; i < USER_LEVELS.length; ++i) {
+        if (exp < USER_LEVELS[i].exp) {
+            return USER_LEVELS[i].level - 1;
+        }
+    }
+    return USER_LEVELS[USER_LEVELS.length - 1].level;
+}
+
+export function getGrade(score: number, fullCombo: boolean) {
+    if (score === 1000000) {
+        return "P";
+    }
+    if (score >= 960000 || fullCombo) {
+        return "V";
+    }
+    if (score >= 920000) {
+        return "S";
+    }
+    if (score >= 880000) {
+        return "A";
+    }
+    if (score >= 820000) {
+        return "B";
+    }
+    if (score >= 700000) {
+        return "C";
+    }
+    return "F";
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { parseLatex } from '$lib/utils';
+    import { getCompressedImage, parseLatex } from '$lib/utils';
     import { math } from 'mathlifier';
     import { t } from '$lib/translations/config';
 
@@ -85,8 +85,8 @@
 <div class="indicator">
     <span class="indicator-item indicator-start badge badge-secondary text-xl">{obj.q.qid}</span>
 </div>
-<div class="card w-full bg-base-100 shadow-xl">
-    <div class="card-body whitespace-pre-line">
+<div class="card w-full bg-base-100 shadow-lg">
+    <div class="card-body content">
         <div class="pb-2 text-xl">
             {#each parseLatex(obj.q.text) as e}
                 {#if e.latex}
@@ -120,7 +120,7 @@
                             {#if c.image}
                                 <img
                                     class="rounded-3xl w-1/3 h-1/3"
-                                    src={c.image}
+                                    src={getCompressedImage(c.image)}
                                     alt="Choice"
                                 />
                             {/if}

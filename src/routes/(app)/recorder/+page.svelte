@@ -8,6 +8,10 @@
 	let array = [0, 1, 2, 3];
 </script>
 
+<svelte:head>
+	<title>{$t("recorder.request")} | {$t("common.title")}</title>
+</svelte:head>
+
 <div class="hero min-h-screen bg-base-200">
 	<div class="hero-content">
 		<div class="w-5/6 form-control text-center">
@@ -19,8 +23,8 @@
 			{#if status === Status.OK && content}
 				<div class="stats stats-horizontal shadow">
 					{#each array as i}
-						<div class="stat">
-							<div class="stat-title">{$t(`recorder.stat_status_${i}`)}</div>
+						<div class="stat min-w-fit w-[16vw] max-w-[250px]">
+							<div class="stat-title">{$t(`recorder.stat_statuses.${i}`)}</div>
 							<div class="stat-value">{content.status[i]}</div>
 						</div>
 					{/each}
@@ -30,7 +34,7 @@
 				{#if user}
 					<a href="recorder/requests/new"
 						><button
-							class="btn btn-secondary text-lg btn-xl btn-outline glass mr-3"
+							class="btn btn-primary text-lg btn-xl btn-outline glass mr-3"
 							>{$t("recorder.new_request")}</button
 						></a
 					>
@@ -52,6 +56,6 @@
 
 <style>
 	* {
-		font-family: "Saira", sans-serif;
+		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
 </style>

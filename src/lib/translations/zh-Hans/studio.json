@@ -1,0 +1,71 @@
+{
+    "homepage": "主页",
+    "description": "在这里，为 Phigros 谱面二创社区助力。",
+    "upload_song": "上传曲目",
+    "upload_chart": "上传谱面",
+    "open_drawer": "显示侧边栏",
+    "close_drawer": "隐藏侧边栏",
+    "song_submissions": "曲目稿件",
+    "song_submission": "曲目稿件",
+    "chart_submissions": "谱面稿件",
+    "chart_submission": "谱面稿件",
+    "collaborations": "合作邀请",
+    "collaboration": "合作邀请",
+    "admissions": "收录申请",
+    "admission": "收录申请",
+    "submission": {
+        "status": "状态",
+        "overall_status": "总状态",
+        "statuses": {
+            "0": "待处理",
+            "1": "已通过",
+            "2": "已退回"
+        },
+        "volunteer_statuses": {
+            "0": "审核中",
+            "1": "已通过",
+            "2": "已退回"
+        },
+        "bi_statuses": {
+            "false": "未通过",
+            "true": "已通过"
+        },
+        "accessibilities": {
+            "0": "公开",
+            "1": "需审核",
+            "2": "私有"
+        },
+        "volunteer_status": "审核状态",
+        "collab_status": "合作状态",
+        "adm_status": "收录状态",
+        "uploaded_at": "上传时间",
+        "approved_at": "通过时间",
+        "reply": "回复",
+        "reply_v": "回复",
+        "edition_placeholder": "特指（剪辑后的）音源出处（如 Arcaea Edit / 自剪 / 原版 ...）",
+        "bpm_placeholder": "若 BPM 变化，按“最低BPM~最高BPM (主要BPM)”格式填写，注意空格，所有符号须为半角",
+        "offset_placeholder": "以毫秒为单位，取值范围应在 ±30000/BPM 内（暂时以 RPE 播放窗口为准）",
+        "preview_start": "预览开始时间",
+        "preview_end": "预览结束时间",
+        "preview_placeholder": "用于游玩器内预览播放，须以 mm:ss 格式填写（如 01:14）",
+        "chapters": "收录章节",
+        "uploader": "上传者",
+        "volunteer_vote": "志愿者投票",
+        "score": "评分",
+        "message": "留言",
+        "write_message": "对这张谱面进行评价",
+        "song_type": "曲目类型",
+        "add_charter": "关联谱师",
+        "your_id": "你的 ID",
+        "charter_placeholder": "仅整数；对应用户须已认证",
+        "optional": "（选填）"
+    },
+    "request": {
+        "accept": "接受",
+        "reject": "拒绝",
+        "accepted": "已接受",
+        "rejected": "已拒绝",
+        "sent": "发出的请求",
+        "received": "收到的请求"
+    }
+}

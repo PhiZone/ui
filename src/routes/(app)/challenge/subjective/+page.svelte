@@ -65,7 +65,7 @@
 		formData.append("chart_level", chart.level?.toString());
 		formData.append("chart_difficulty", chart.difficulty?.toString());
 		const resp = await api.POST(
-			"answers/",
+			"/answers/",
 			formData,
 			access_token,
 			user,
@@ -79,12 +79,16 @@
 	}
 </script>
 
-<div class="bg-base-200">
+<svelte:head>
+	<title>{$t("challenge.title")} - {$t("challenge.subjective")} | {$t("common.title")}</title>
+</svelte:head>
+
+<div class="bg-base-200 page">
 	{#if status === Status.OK}
 		<div
-			class="card fixed top-[100px] right-3 px-6 py-3 bg-base-100 shadow-xl z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
+			class="card fixed top-[100px] right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
 		>
-			<div class="flex flex-col">
+			<div class="flex form-control">
 				<span
 					class={`countdown font-mono text-5xl ${
 						min == 0 ? "text-red-600" : ""
@@ -94,7 +98,7 @@
 				</span>
 				min
 			</div>
-			<div class="flex flex-col">
+			<div class="flex form-control">
 				<span
 					class={`countdown font-mono text-5xl ${
 						min == 0 ? "text-red-600" : ""
@@ -130,10 +134,10 @@
 					on:click={handleSubmit}>{$t("common.submit")}</button
 				>
 			{:else}
-				<div class="text-center py-[30vh]">
-					<p class="text-lg text-red-600 my-8">{$t(`challenge.${error}`)}</p>
+				<div class="text-center">
+					<p class="text-lg text-red-600 my-8">{error}</p>
 					<a href="/challenge"
-						><button class="btn btn-primary text-lg">{$t("common.back")}</button
+						><button class="btn btn-primary btn-outline text-lg">{$t("common.back")}</button
 						></a
 					>
 				</div>
@@ -144,6 +148,6 @@
 
 <style>
 	* {
-		font-family: "Saira", sans-serif;
+		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
 </style>

@@ -2,14 +2,15 @@
     "song": "Song",
     "name": "Song Name",
     "chapter": "Chapter",
-    "charts": "Charts",
     "composer": "Composer",
+    "edition": "Edition",
     "illustration": "Illustration",
     "illustrator": "Illustrator",
     "lyrics": "Lyrics",
     "bpm": "BPM",
+    "offset": "Offset Ref.",
     "duration": "Duration",
-    "original": "Original Work",
+    "original": "Original",
     "accessibility": "Accessibility",
     "public": "Public",
     "public_tip": "This song accepts any chart admission.",
@@ -25,5 +26,7 @@
     "play": "Play",
     "pause": "Pause",
     "fast_forward": "Fast Forward",
-    "volume": "Volume"
+    "volume": "Volume",
+    "show_charts": "Display Charts",
+    "hide_charts": "Collapse"
 }

@@ -1,23 +1,26 @@
 import * as api from '$lib/api';
 import type { Chart } from '$lib/models';
 import { Status } from '$lib/constants';
+import { error } from '@sveltejs/kit';
 
-export const load: import('./$types').PageLoad = async ({ params, parent }) => {
+export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`charts/${params.id}/?query_song=1&query_owner=1`, access_token, user);
+    // const resp = await api.GET(`/charts/${params.id}/?query_song=1&query_owner=1&query_levels=1&query_relation=1`, access_token, user, fetch);
+    const resp = await api.GET(`/charts/${params.id}/?query_song=1&query_owner=1&query_player=1&query_relation=1`, access_token, user, fetch);
+    if (!resp.ok) {
+        throw error(resp.status, resp.statusText);
+    }
     const json = await resp.json();
-    console.log(json);
-    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token, user) : null;
-    const commentRes = await (await api.GET(`comments/?chart=${json.id}&order=id`, access_token, user)).json();
+    let commentRes;
+    try {
+        commentRes = await (await api.GET(`/comments/?chart=${json.id}&order=-like_count`, access_token, user, fetch)).json();
+    } catch (e) {
+        console.log(e);
+    }
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Chart) : null,
         error: resp.ok ? null : json.error,
-        userRelation: relationResp ? await relationResp.json() : null,
-        comments: commentRes.results,
-        previousComments: commentRes.previous,
-        nextComments: commentRes.next,
-        token: access_token,
-        user
+        commentRes,
     };
 };

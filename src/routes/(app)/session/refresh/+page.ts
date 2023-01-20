@@ -8,7 +8,6 @@ export const prerender = false;
 export const load: import('./$types').PageLoad = async ({ parent, fetch, url }) => {
     if (browser) {
         const { refresh_token } = await parent();
-        console.log('r2', refresh_token);
         const resp = await fetch('/auth/refresh', {
             method: 'POST',
             headers: {
@@ -24,14 +23,14 @@ export const load: import('./$types').PageLoad = async ({ parent, fetch, url }) 
             const detail = await resp.json();
             try {
                 if (detail.msg.error === Error.INVALID_GRANT) {
-                    goto('/session/login' + url.search);
+                    goto("/session/login" + url.search);
                 } else {
                     console.log('error', detail);
                     throw error(400, detail);
                 }
             } catch (e) {
                 console.log('error', detail);
-                goto('/session/login' + url.search);
+                goto("/session/login" + url.search);
             }
         }
     }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { User } from "$lib/models";
 	import { t } from "$lib/translations/config";
-	import { parseDateTime } from "$lib/utils";
+	import { getCompressedImage, parseDateTime } from "$lib/utils";
 
 	export let id: number,
 		name: string,
@@ -11,29 +11,31 @@
 		status: number,
 		showUser: boolean,
 		user: User,
-		replier: User,
+		replier: User | null,
 		requested_at: string,
-		replied_at: string;
+		replied_at: string | null;
 </script>
 
 <a href={`/recorder/requests/${id}`}>
 	<div
-		class="card m-4 min-w-[900px] h-44 card-side bg-base-100 shadow-xl glass overflow-hidden"
+		class="card min-w-[900px] h-44 card-side bg-base-100 shadow-lg glass overflow-hidden"
 	>
-		<figure class="min-w-[40%] max-w-[40%] h-44">
+		<figure class="min-w-[30%] max-w-[30%] h-44">
 			<img
 				class="object-cover w-full h-full"
-				src={illustration}
+				src={getCompressedImage(illustration)}
 				alt="Illustration"
 			/>
 		</figure>
-		<div class="card-body w-[60%]">
+		<div class="card-body w-[70%]">
 			<h2 class="card-title text-2xl mb-3 min-w-fit">
 				{name}
-				<div class="ml-2 badge badge-lg badge-primary min-w-fit h-10 text-2xl">
+				<button
+					class="btn btn-secondary btn-sm text-2xl no-animation"
+				>
 					{level}
 					{difficulty}
-				</div>
+				</button>
 			</h2>
 			<div class="flex items-center min-w-fit">
 				{#if showUser}
@@ -48,7 +50,7 @@
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("recorder.status")}</span
 					>
-					{$t(`recorder.status_${status}`)}
+					{$t(`recorder.statuses.${status}`)}
 				</p>
 				{#if replier}
 					<p class="min-w-fit">

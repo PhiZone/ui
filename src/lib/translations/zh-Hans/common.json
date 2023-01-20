@@ -1,16 +1,19 @@
 {
     "title": "PhiZone",
-    "search_placeholder": "搜索曲目、用户、讨论······",
+    "search_placeholder": "搜索章节、曲目、用户……",
+    "chapters": "章节",
     "songs": "曲目",
     "users": "用户",
     "charts": "谱面",
     "discussions": "讨论",
+    "search": "搜索",
+    "studio": "创作中心",
+    "settings": "设置",
     "navbar": {
         "apps": "应用",
+        "recorder": "谱面录制",
         "privilege_escalation": "权限晋升",
-        "studio": "创作中心",
-        "studio_inaccessible": "请先完成 PhiZone 权限晋升测试以使用此功能！",
-        "settings": "设置",
+        "studio_inaccessible": "请先完成 PhiZone 权限晋升测试以使用该功能！",
         "logout": "登出"
     },
     "footer": {
@@ -43,16 +46,61 @@
     "colon": "：",
     "description": "简介",
     "comments": "评论",
+    "comment": "评论",
     "write_comment": "写一条评论",
     "send": "发送",
     "replies": "回复",
+    "reply": "回复",
     "write_reply": "写一条回复",
+    "reply_to": "回复 ",
     "text_too_long": "文本超长！",
     "input_null": "输入为空！",
     "vote": "投票",
+    "vote_v": "投票",
     "votes": "投票",
-    "download": "点击下载",
+    "download": "下载",
     "empty": "空空如也……",
     "correct_errors": "请改正以上错误信息！",
-    "session_required": "请先注册 / 登录！"
+    "session_required": "请先注册 / 登录！",
+    "loading": "加载中……",
+    "lang": {
+        "en": "英语",
+        "zh-Hans": "简体中文",
+        "zh-Hant": "繁体中文",
+        "ja": "日语"
+    },
+    "source": "来源",
+    "all": "查看全部 »",
+    "anonymous": "[ 匿名 ]",
+    "records": "游玩记录",
+    "form": {
+        "audio": "曲目文件",
+        "chart": "谱面文件",
+        "illustration": "曲绘文件",
+        "song_name": "曲目名称",
+        "chart_level": "谱面等级",
+        "chart_difficulty_1": "谱面定级",
+        "chart_difficulty_2": "谱面定数",
+        "composer": "曲师名义",
+        "charter": "谱师名义",
+        "charter_preview": "谱师名义预览",
+        "illustrator": "画师名义",
+        "tips": {
+            "audio": "10MB 或更小的 MP3 / OGG / OGA",
+            "image": "6MB 或更小的 JPG / JPEG / PNG",
+            "chart": "仅支持 PE / RPE 创作的谱面",
+            "illustration": "6MB 或更小的 JPG / JPEG / PNG，长宽比须为 16:9，分辨率不得低于 960×540",
+            "chart_level": "EZ / HD / IN / AT / SP / ……"
+        }
+    },
+    "profile": "用户资料",
+    "fetch": "获取",
+    "unavailable": "该功能暂未开放！",
+    "error_msg": "错误信息：",
+    "errors": {
+        "400": "你的请求有误",
+        "401": "请先注册 / 登录",
+        "403": "你无权访问该页面",
+        "404": "你所请求的资源不存在"
+    }
 }

@@ -1,4 +1,36 @@
 {
+    "user": "User",
+    "id": "User ID",
+    "avatar": "Avatar",
+    "username": "Username",
     "follow": "Follow",
-    "unfollow": "Unfollow"
+    "unfollow": "Unfollow",
+    "exp": "Experience",
+    "rks": "RKS",
+    "bio": "Bio",
+    "gender": "Gender",
+    "gender_0": "Unset",
+    "gender_1": "Male",
+    "gender_2": "Female",
+    "tag": "Tag",
+    "language": "Language",
+    "last_login": "Last Login",
+    "date_joined": "Date Jonied",
+    "date_of_birth": "Birthday",
+    "type": "Type",
+    "types": {
+        "admin": "Admin",
+        "volunteer": "Volunteer",
+        "qualified": "Qualified",
+        "member": "Member",
+        "banned": "Banned"
+    },
+    "following": "Following",
+    "fans": "Fans",
+    "starred": "Starred Charts",
+    "charts": "Charts Created",
+    "songs": "Songs Uploaded",
+    "comments": "Comments Posted",
+    "recent_records": "Recent Play Records",
+    "best_records": "Best Play Records"
 }

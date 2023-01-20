@@ -1,3 +1,4 @@
+import { ContentType } from '$lib/constants';
 import { POST } from './utils';
 
 export interface RegisterOpts {
@@ -8,15 +9,15 @@ export interface RegisterOpts {
 }
 
 export function register(opts: RegisterOpts) {
-    return POST('register/', opts);
+    return POST("/register/", opts);
 }
 
 export interface ActivateOpts {
     code: string;
 }
 
-export function activate(opts: ActivateOpts) {
-    return POST('activate/', opts);
+export function activate(opts: ActivateOpts, fetch?: Function) {
+    return POST("/activate/", opts, undefined, undefined, ContentType.JSON, fetch);
 }
 
 export interface TokenPwdOpts {
@@ -36,8 +37,8 @@ export interface TokenTokenOpts {
 
 export type TokenOpts = TokenPwdOpts | TokenTokenOpts;
 
-export function token(opts: TokenOpts) {
-    return POST('auth/token/', opts);
+export function token(opts: TokenOpts, fetch?: Function) {
+    return POST("/auth/token/", opts, undefined, undefined, ContentType.JSON, fetch);
 }
 
 export interface RevokeTokenOpts {
@@ -46,6 +47,6 @@ export interface RevokeTokenOpts {
     token: string;
 }
 
-export function revokeToken(opts: RevokeTokenOpts) {
-    return POST('auth/revoke-token/', opts);
+export function revokeToken(opts: RevokeTokenOpts, fetch?: Function) {
+    return POST("/auth/revoke-token/", opts, undefined, undefined, ContentType.JSON, fetch);
 }

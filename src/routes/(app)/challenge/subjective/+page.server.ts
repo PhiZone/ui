@@ -1,14 +1,14 @@
-import { Status } from '$lib/constants';
+import { ContentType, Status } from '$lib/constants';
 import * as api from '$lib/api';
 
-export const load: import('./$types').PageServerLoad = async ({ url, locals }) => {
+export const load: import('./$types').PageServerLoad = async ({ url, locals, fetch }) => {
     const answers = url.searchParams.get('answers');
     const resp = await api.POST(
-        'challenge/',
+        "/challenge/",
         {
             answers: answers,
         },
-        locals.access_token, locals.user
+        locals.access_token, locals.user, ContentType.JSON, fetch
     );
     if (resp.ok) {
         return {
@@ -20,7 +20,7 @@ export const load: import('./$types').PageServerLoad = async ({ url, locals }) =
         return {
             status: Status.ERROR,
             questions: null,
-            error: (await resp.json()).error,
+            error: (await resp.json()).detail,
             access_token: locals.access_token,
             user: locals.user
         };

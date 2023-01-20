@@ -1,24 +1,26 @@
 import * as api from '$lib/api';
 import type { Song } from '$lib/models';
 import { Status } from '$lib/constants';
+import { error } from '@sveltejs/kit';
 
-export const load: import('./$types').PageLoad = async ({ params, parent }) => {
+export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`songs/${params.id}/?query_chart=1&query_owner=1`, access_token, user);
+    const resp = await api.GET(`/songs/${params.id}/?query_chapters=1&query_uploader=1&query_relation=1`, access_token, user, fetch);
+    if (!resp.ok) {
+        throw error(resp.status, resp.statusText);
+    }
     const json = await resp.json();
-    console.log(json);
     console.log('Current User:', user ? user.username : 'Anonymous');
-    const relationResp = user ? await api.GET(`relations/?followee=${json.owner.id}&follower=${user.id}`, access_token, user) : null;
-    const commentRes = await(await api.GET(`comments/?song=${json.id}&order=id`, access_token, user)).json();
+    let commentRes;
+    try {
+        commentRes = await (await api.GET(`/comments/?song=${json.id}&order=-like_count`, access_token, user, fetch)).json();
+    } catch (e) {
+        console.log(e);
+    }
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Song) : null,
         error: resp.ok ? null : json.error,
-        userRelation: relationResp ? await relationResp.json() : null,
-        comments: commentRes.results,
-        previousComments: commentRes.previous,
-        nextComments: commentRes.next,
-        token: access_token,
-        user
+        commentRes
     };
 };

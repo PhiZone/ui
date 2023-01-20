@@ -7,7 +7,7 @@ export const load: import('./$types').PageLoad = async ({ parent }) => {
     if (!user) {
         status = 2;
     }
-    if (user && getUserPrivilege(user.type?.toString()) != 1) {
+    if (user && getUserPrivilege(user.type) != 1) {
         status = 1;
     }
     return {

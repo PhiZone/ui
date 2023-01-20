@@ -21,12 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
     };
     const resp = await api.auth.token(credentials);
     if (!resp.ok) {
-        let err;
-        try {
-            err = await resp.json();
-        } catch (e) {
-            err = await resp.text();
-        }
+        const err = await resp.json();
         return new Response(
             JSON.stringify({
                 code: resp.status,
@@ -44,7 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
             headers: setTokens(result.access_token, result.refresh_token),
         });
     } catch (e) {
-        console.log(await resp.text());
+        console.log(resp.status, e);
         return new Response(null, {
             status: 500,
         });

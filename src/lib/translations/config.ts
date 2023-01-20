@@ -31,8 +31,8 @@ const config = {
         },
         {
             locale: 'en',
-            key: 'search',
-            loader: async () => (await import('./en/search.json')).default,
+            key: 'chapter',
+            loader: async () => (await import('./en/chapter.json')).default,
         },
         {
             locale: 'en',
@@ -53,6 +53,21 @@ const config = {
             locale: 'en',
             key: 'recorder',
             loader: async () => (await import('./en/recorder.json')).default,
+        },
+        {
+            locale: 'en',
+            key: 'notification',
+            loader: async () => (await import('./en/notification.json')).default,
+        },
+        {
+            locale: 'en',
+            key: 'record',
+            loader: async () => (await import('./en/record.json')).default,
+        },
+        {
+            locale: 'en',
+            key: 'studio',
+            loader: async () => (await import('./en/studio.json')).default,
         },
         {
             locale: 'zh-Hans',
@@ -76,8 +91,8 @@ const config = {
         },
         {
             locale: 'zh-Hans',
-            key: 'search',
-            loader: async () => (await import('./zh-Hans/search.json')).default,
+            key: 'chapter',
+            loader: async () => (await import('./zh-Hans/chapter.json')).default,
         },
         {
             locale: 'zh-Hans',
@@ -99,9 +114,24 @@ const config = {
             key: 'recorder',
             loader: async () => (await import('./zh-Hans/recorder.json')).default,
         },
+        {
+            locale: 'zh-Hans',
+            key: 'notification',
+            loader: async () => (await import('./zh-Hans/notification.json')).default,
+        },
+        {
+            locale: 'zh-Hans',
+            key: 'record',
+            loader: async () => (await import('./zh-Hans/record.json')).default,
+        },
+        {
+            locale: 'zh-Hans',
+            key: 'studio',
+            loader: async () => (await import('./zh-Hans/studio.json')).default,
+        },
     ],
 };
 
 export const { t, locale, locales, loading, loadTranslations } = new i18n(config);
 
-loading.subscribe(($loading) => $loading && console.log('Loading translations...'));
+loading.subscribe(($loading) => $loading);

@@ -6,9 +6,5 @@
     "objective": "客观题",
     "subjective": "主观题",
     "placeholder": "输入答案",
-    "time_up": "时间到！请刷新页面以重新作答。",
-    "CHALLENGE_INVALID_1": "你还未开始回答客观题，或答题时间已超过三十分钟！",
-    "CHALLENGE_INVALID_2": "你还未开始回答主观题，或答题时间已超过一小时！",
-    "CHALLENGE_FAILED": "你必须在客观题部分获得至少 20 分才能继续答题！",
-    "ANSWER_AWAITS_ASSESSING": "你的答卷正等待评估！"
+    "time_up": "时间到！请刷新页面以重新作答。"
 }

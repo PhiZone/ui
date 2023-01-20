@@ -5,37 +5,46 @@
 	import { Status } from "$lib/constants";
 	import { t } from "$lib/translations/config";
 	import { onMount } from "svelte";
+	import { page } from "$app/stores";
 
 	export let data: import("./$types").PageData;
 	$: ({ status, msg, code } = data);
 
-	let input = "";
+	let input = "",
+		redirect = $page.url.searchParams.get("redirect");
 
 	onMount(() => {
 		if (code) {
 			input = code;
 		}
+		if (status === Status.OK && browser) {
+			goto(redirect ? redirect : "/session/login");
+		}
 	});
 
-	if (status == Status.OK && browser) {
-		goto("/session/login?s=1");
-	}
-
 	const handleClick = async () => {
-		status = Status.WAITING;
-        let code = input;
+		status = Status.SENDING;
+		let code = input;
 		if (code?.length != 6) {
 			return;
 		}
 		const resp = await api.auth.activate({ code });
 		if (resp.ok) {
-			goto("/session/login?s=1");
+			goto(redirect ? redirect : "/session/login");
 		} else {
 			status = Status.ERROR;
-			msg = (await resp.json()).error;
+			msg = (await resp.json()).detail;
 		}
 	};
 </script>
+
+<svelte:head>
+	<title
+		>{$t("session.email_confirmation.email_confirmation")} | {$t(
+			"common.title"
+		)}</title
+	>
+</svelte:head>
 
 <div class="hero min-h-screen bg-base-200">
 	<div class="hero-content text-center">
@@ -49,7 +58,7 @@
 			<input
 				type="text"
 				class={`input input-bordered input-lg ${
-					status == Status.ERROR
+					status === Status.ERROR
 						? "input-error"
 						: input?.length == 6
 						? "input-success"
@@ -58,25 +67,25 @@
 				placeholder={$t("session.email_confirmation.code")}
 				bind:value={input}
 				on:input={() => {
-					status = Status.INPUT_REQUIRED;
+					status = Status.WAITING;
 					if (!/^\d+$/.test(input) || input?.length > 6) {
 						status = Status.ERROR;
 						msg = "code_not_numeric";
 					}
 					if (input?.length == 0) {
-						status = Status.INPUT_REQUIRED;
+						status = Status.WAITING;
 					}
 				}}
 			/>
 			<div class="mt-6">
-				{#if status == Status.ERROR}
+				{#if status === Status.ERROR}
 					<div
 						class="tooltip tooltip-open tooltip-bottom tooltip-error"
-						data-tip={$t(`session.email_confirmation.${msg}`)}
+						data-tip={msg}
 					>
 						<button class="btn btn-error">{$t("common.error")}</button>
 					</div>
-				{:else if status == Status.WAITING}
+				{:else if status === Status.SENDING}
 					<button class={`btn btn-outline btn-ghost btn-disabled glass`}
 						>{$t("common.waiting")}</button
 					>
@@ -96,6 +105,6 @@
 
 <style>
 	* {
-		font-family: "Saira", sans-serif;
+		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
 </style>

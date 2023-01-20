@@ -4,14 +4,17 @@
 	import { convertLanguageCode } from "$lib/utils";
 	import { browser } from "$app/environment";
 
+	let language;
 	try {
 		const user = $page.data.user;
-		locale.set(user.language.toString());
-		console.log("Language:", locale.get(), "(from user data)");
+		language = user.language.toString();
+		locale.set(language);
+		console.log("Language:", language, "(from user data)");
 	} catch (error) {
 		if (browser) {
-			locale.set(convertLanguageCode(window.navigator.language));
-			console.log("Language:", locale.get(), "(from nagivator)");
+			language = convertLanguageCode(window.navigator.language);
+			locale.set(language);
+			console.log("Language:", language, "(from nagivator)");
 		}
 	}
 </script>

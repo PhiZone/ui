@@ -2,7 +2,7 @@ import { GET } from '$lib/api';
 import { Status } from '$lib/constants';
 
 export const load: import('./$types').PageServerLoad = async ({ locals }) => {
-    const resp = await GET('challenge/', locals.access_token);
+    const resp = await GET('/challenge/', locals.access_token, locals.user, fetch);
     if (resp.ok) {
         return {
             status: Status.OK,
@@ -13,7 +13,7 @@ export const load: import('./$types').PageServerLoad = async ({ locals }) => {
         return {
             status: Status.ERROR,
             questions: null,
-            error: (await resp.json()).error,
+            error: (await resp.json()).detail,
         };
     }
 };

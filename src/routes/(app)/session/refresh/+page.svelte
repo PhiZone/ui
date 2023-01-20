@@ -1,3 +1,6 @@
+<svelte:head>
+	<title>Redirection | PhiZone</title>
+</svelte:head>
 <div class="hero min-h-screen bg-base-200">
     <div class="hero-content text-center">
         <div class="max-w-md">
@@ -8,7 +11,7 @@
 </div>
 
 <style>
-    * {
-        font-family: 'Saira', sans-serif;
-    }
+	* {
+		font-family: "Saira", "Noto Sans SC", sans-serif;
+	}
 </style>

@@ -6,9 +6,5 @@
     "objective": "Objective Questions",
     "subjective": "Subjective Questions",
     "placeholder": "Answer here",
-    "time_up": "Time is up! Please refresh the page to restart the challenge.",
-    "CHALLENGE_INVALID_1": "You have not yet started the objective part, or have exceeded the time limit of 30 minutes!",
-    "CHALLENGE_INVALID_2": "You have not yet started the subjective part, or have exceeded the time limit of 1 hour!",
-    "CHALLENGE_FAILED": "You must score at least 20 on the objective part in order to continue!",
-    "ANSWER_AWAITS_ASSESSING": "You have an answer sheet awaiting assessing!"
+    "time_up": "Time is up! Please refresh the page to restart the challenge."
 }
