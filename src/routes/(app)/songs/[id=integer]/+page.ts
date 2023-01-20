@@ -13,7 +13,8 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
     console.log('Current User:', user ? user.username : 'Anonymous');
     let commentRes;
     try {
-        commentRes = await (await api.GET(`/comments/?song=${json.id}&order=-like_count`, access_token, user, fetch)).json();
+        if (json.comment_count > 0)
+            commentRes = await (await api.GET(`/comments/?song=${json.id}&order=-like_count`, access_token, user, fetch)).json();
     } catch (e) {
         console.log(e);
     }

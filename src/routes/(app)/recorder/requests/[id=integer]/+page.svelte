@@ -257,8 +257,10 @@
 										target="_blank"
 										rel="noreferrer"
 										class="hover:underline underline-offset-2"
-										>{$t("common.download")}</a
+										download
 									>
+										{$t("common.download")}
+									</a>
 								</p>
 							{/if}
 							{#if content.avatar && content.username}
@@ -358,7 +360,10 @@
 											: "border-neutral-500"
 									}`}
 								>
-									<a href={`/users/${content.replier.id}`}>
+									<a
+										data-sveltekit-preload-data
+										href={`/users/${content.replier.id}`}
+									>
 										<img
 											class="object-fill"
 											src={getCompressedImage(content.replier.avatar)}
@@ -366,7 +371,10 @@
 										/>
 									</a>
 								</div>
-								<a href={`/users/${content.user.id}`}>
+								<a
+									data-sveltekit-preload-data
+									href={`/users/${content.user.id}`}
+								>
 									<p class="text-lg text-center max-w-[120px] break-all">
 										{content.replier.username}
 									</p>

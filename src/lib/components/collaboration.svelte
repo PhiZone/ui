@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from "$lib/translations/config";
 	import * as api from "$lib/api";
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 	import { page } from "$app/stores";
 	import type { Collaboration, User } from "$lib/models";
 	import UserCard from "$lib/components/user.svelte";
@@ -92,6 +92,9 @@
 				class="btn btn-primary btn-outline"
 				on:click={() => {
 					goto(`/studio/chart-submissions/${getChart(collaboration)?.id}`);
+				}}
+				on:pointerenter={() => {
+					preloadData(`/studio/chart-submissions/${getChart(collaboration)?.id}`);
 				}}
 			>
 				<svg

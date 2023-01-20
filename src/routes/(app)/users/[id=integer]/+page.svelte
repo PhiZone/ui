@@ -264,17 +264,24 @@
 								<h2 class="text-3xl font-bold w-full">
 									{$t("user.charts")}
 								</h2>
-								<a class="min-w-fit" href={`/charts?owner=${content.id}`}>
-									<button class="btn btn-sm btn-primary btn-outline">
-										{$t("common.all")}
-									</button>
-								</a>
+								{#if charts.length > 0}
+									<a
+										data-sveltekit-preload-data
+										class="min-w-fit"
+										href={`/charts?owner=${content.id}`}
+									>
+										<button class="btn btn-sm btn-primary btn-outline">
+											{$t("common.all")}
+										</button>
+									</a>
+								{/if}
 							</div>
 							{#if charts.length > 0}
 								<ul class="menu bg-base-100 w-full border border-base-300">
 									{#each charts as chart}
 										<li>
 											<a
+												data-sveltekit-preload-data
 												href={`/charts/${chart.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
@@ -299,6 +306,7 @@
 													{#each parseRichText(chart.charter) as t}
 														{#if t.id > 0}
 															<a
+																data-sveltekit-preload-data
 																href={`/users/${t.id}`}
 																class="text-accent hover:underline">{t.text}</a
 															>
@@ -337,24 +345,29 @@
 								<h2 class="text-3xl font-bold w-full">
 									{$t("user.songs")}
 								</h2>
-								<a class="min-w-fit" href={`/songs?owner=${content.id}`}>
-									<button class="btn btn-sm btn-primary btn-outline">
-										{$t("common.all")}
-									</button>
-								</a>
+								{#if songs.length > 0}
+									<a
+										data-sveltekit-preload-data
+										class="min-w-fit"
+										href={`/songs?owner=${content.id}`}
+									>
+										<button class="btn btn-sm btn-primary btn-outline">
+											{$t("common.all")}
+										</button>
+									</a>
+								{/if}
 							</div>
 							{#if songs.length > 0}
 								<ul class="menu bg-base-100 w-full border border-base-300">
 									{#each songs as song}
 										<li>
 											<a
+												data-sveltekit-preload-data
 												href={`/songs/${song.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
 												<div class="w-1/2">
-													<div
-														class="text-xl font-bold"
-													>
+													<div class="text-xl font-bold">
 														{song.name}
 														{#if song.original}
 															<div class="ml-1 badge badge-lg badge-secondary">
@@ -364,9 +377,7 @@
 													</div>
 												</div>
 												<div class="w-5/12">
-													<div
-														class="text-lg"
-													>
+													<div class="text-lg">
 														{song.composer}
 													</div>
 												</div>
@@ -400,11 +411,17 @@
 								<h2 class="text-3xl font-bold w-full">
 									{$t("user.recent_records")}
 								</h2>
-								<a class="min-w-fit" href={`/records?player=${content.id}`}>
-									<button class="btn btn-sm btn-primary btn-outline">
-										{$t("common.all")}
-									</button>
-								</a>
+								{#if recentRecords.length > 0}
+									<a
+										data-sveltekit-preload-data
+										class="min-w-fit"
+										href={`/records?player=${content.id}`}
+									>
+										<button class="btn btn-sm btn-primary btn-outline">
+											{$t("common.all")}
+										</button>
+									</a>
+								{/if}
 							</div>
 							{#if recentRecords.length > 0}
 								<div class="grid-result">
@@ -421,14 +438,17 @@
 								<h2 class="text-3xl font-bold w-full">
 									{$t("user.best_records")}
 								</h2>
-								<a
-									class="min-w-fit"
-									href={`/records?player=${content.id}&order=-rks`}
-								>
-									<button class="btn btn-sm btn-primary btn-outline">
-										{$t("common.all")}
-									</button>
-								</a>
+								{#if bestRecords.length > 0}
+									<a
+										data-sveltekit-preload-data
+										class="min-w-fit"
+										href={`/records?player=${content.id}&order=-rks`}
+									>
+										<button class="btn btn-sm btn-primary btn-outline">
+											{$t("common.all")}
+										</button>
+									</a>
+								{/if}
 							</div>
 							{#if bestRecords.length > 0}
 								<div class="grid-result">

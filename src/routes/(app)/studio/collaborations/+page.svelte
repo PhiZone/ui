@@ -4,7 +4,7 @@
 	import { Status } from "$lib/constants";
 	import Pagination from "$lib/components/pagination.svelte";
 	import type { Collaboration } from "$lib/models";
-	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
+	import { afterNavigate, beforeNavigate, goto, preloadData } from "$app/navigation";
 	import { page } from "$app/stores";
 	import CollaborationCard from "$lib/components/collaboration.svelte";
 	export let data: import("./$types").PageData;
@@ -62,6 +62,9 @@
 						class="btn btn-primary btn-outline"
 						on:click={() => {
 							goto("/studio/collaborations/");
+						}}
+						on:pointerenter={() => {
+							preloadData("/studio/collaborations/");
 						}}>{$t("studio.request.received")}</button
 					>
 				{:else}
@@ -69,6 +72,9 @@
 						class="btn btn-primary btn-outline"
 						on:click={() => {
 							goto("/studio/collaborations/?sent=1");
+						}}
+						on:pointerenter={() => {
+							preloadData("/studio/collaborations/?sent=1");
 						}}>{$t("studio.request.sent")}</button
 					>
 				{/if}

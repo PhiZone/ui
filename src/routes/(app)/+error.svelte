@@ -19,7 +19,9 @@
 			{#if showMsg}
 				<p class="text-2xl">{$t(`common.errors.${$page.status}`)}</p>
 			{/if}
-			<p class="text-lg">{$t("common.error_msg")}{$page.error?.message}</p>
+			{#if $page.error?.message}
+				<p class="text-lg">{$t("common.error_msg")}{$page.error?.message}</p>
+			{/if}
 		</div>
 	</div>
 </div>

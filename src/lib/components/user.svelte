@@ -70,7 +70,7 @@
 			mini ? "flex-row gap-8 justify-between" : ""
 		} items-center`}
 	>
-		<a href={`/users/${user.id}`}>
+		<a data-sveltekit-preload-data href={`/users/${user.id}`}>
 			<div class="avatar flex items-center min-w-fit">
 				<div
 					class={`w-12 rounded-full border-[3px] border-opacity-80 ${

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from "$lib/translations/config";
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { getCompressedImage, getUserPrivilege } from "$lib/utils";
 	import type { User } from "$lib/models";
@@ -15,8 +15,10 @@
 >
 	<div class="navbar-start">
 		<img src="/favicon.ico" alt="logo" class="logo" />
-		<a class="title normal-case font-extrabold text-xl" href="/"
-			>{$t("common.title")}</a
+		<a
+			data-sveltekit-preload-data
+			class="title normal-case font-extrabold text-xl"
+			href="/">{$t("common.title")}</a
 		>
 		<div class="dropdown">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
@@ -39,18 +41,33 @@
 				tabindex="-1"
 				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 			>
-				<li><a href="/chapters">{$t("common.chapters")}</a></li>
-				<li><a href="/songs">{$t("common.songs")}</a></li>
-				<li><a href="/charts">{$t("common.charts")}</a></li>
-				<li><a href="/records">{$t("common.records")}</a></li>
-				<!-- <li><a href="/apps">{$t("common.navbar.apps")}</a></li>
-				<li><a href="/discussions">{$t("common.discussions")}</a></li> -->
+				<li>
+					<a data-sveltekit-preload-data href="/chapters"
+						>{$t("common.chapters")}</a
+					>
+				</li>
+				<li>
+					<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
+				</li>
+				<li>
+					<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a
+					>
+				</li>
+				<li>
+					<a data-sveltekit-preload-data href="/records"
+						>{$t("common.records")}</a
+					>
+				</li>
+				<!-- <li><a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a></li>
+				<li><a data-sveltekit-preload-data href="/discussions">{$t("common.discussions")}</a></li> -->
 				<li class="rounded-full">
-					<a href="/recorder">{$t("common.navbar.recorder")}</a>
+					<a data-sveltekit-preload-data href="/recorder"
+						>{$t("common.navbar.recorder")}</a
+					>
 				</li>
 				<!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
 					<li>
-						<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
+						<a data-sveltekit-preload-data href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
 					</li>
 				{/if} -->
 			</ul>
@@ -64,34 +81,50 @@
 				on:click={() => {
 					openDrawer = !openDrawer;
 				}}
-				on:keyup>{openDrawer ? $t("studio.close_drawer") : $t("studio.open_drawer")}</label
+				on:keyup
+				>{openDrawer
+					? $t("studio.close_drawer")
+					: $t("studio.open_drawer")}</label
 			>
 		{/if}
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal rounded-full p-0">
-			<li><a href="/chapters">{$t("common.chapters")}</a></li>
-			<li><a href="/songs">{$t("common.songs")}</a></li>
-			<li><a href="/charts">{$t("common.charts")}</a></li>
-			<li><a href="/records">{$t("common.records")}</a></li>
+			<li>
+				<a data-sveltekit-preload-data href="/chapters"
+					>{$t("common.chapters")}</a
+				>
+			</li>
+			<li>
+				<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
+			</li>
+			<li>
+				<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a>
+			</li>
+			<li>
+				<a data-sveltekit-preload-data href="/records">{$t("common.records")}</a
+				>
+			</li>
 			<!-- <li class="rounded-full">
-				<a href="/apps">{$t("common.navbar.apps")}</a>
+				<a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a>
 			</li>
 			<li class="rounded-full">
-				<a href="/discussions">{$t("common.discussions")}</a>
+				<a data-sveltekit-preload-data href="/discussions">{$t("common.discussions")}</a>
 			</li> -->
 			<li>
-				<a href="/recorder">{$t("common.navbar.recorder")}</a>
+				<a data-sveltekit-preload-data href="/recorder"
+					>{$t("common.navbar.recorder")}</a
+				>
 			</li>
 			<!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
 				<li class="rounded-full">
-					<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
+					<a data-sveltekit-preload-data href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
 				</li>
 			{/if} -->
 		</ul>
 	</div>
 	<div class="navbar-end">
-		<a href="/search">
+		<a data-sveltekit-preload-data href="/search">
 			<button class="btn btn-ghost btn-circle">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +143,7 @@
 		>
 		{#if showUser}
 			{#if user}
-				<a href="/me/notifications">
+				<a data-sveltekit-preload-data href="/me/notifications">
 					<button class="btn btn-ghost btn-circle">
 						<div class="indicator">
 							<svg
@@ -150,7 +183,11 @@
 						}`}
 					>
 						<div class="w-12 rounded-full">
-							<img src={getCompressedImage(user.avatar)} alt="avatar" class="bg-white" />
+							<img
+								src={getCompressedImage(user.avatar)}
+								alt="avatar"
+								class="bg-white"
+							/>
 						</div>
 					</label>
 					<ul
@@ -158,7 +195,11 @@
 						class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 					>
 						<li>
-							<a class="justify-between" href={`/users/${user.id}`}>
+							<a
+								data-sveltekit-preload-data
+								class="justify-between"
+								href={`/users/${user.id}`}
+							>
 								{user.username}
 								<!-- <span class="badge">{userDetail.tag}</span> -->
 							</a>
@@ -174,13 +215,21 @@
 							</li>
 						{:else}
 							<li>
-								<a href="/studio">{$t("common.studio")}</a>
+								<a data-sveltekit-preload-data href="/studio"
+									>{$t("common.studio")}</a
+								>
 							</li>
 						{/if}
 						<li>
-							<a href="/me/settings">{$t("common.settings")}</a>
+							<a data-sveltekit-preload-data href="/me/settings"
+								>{$t("common.settings")}</a
+							>
 						</li>
-						<li><a href="/auth/logout">{$t("common.navbar.logout")}</a></li>
+						<li>
+							<a data-sveltekit-preload-data href="/auth/logout"
+								>{$t("common.navbar.logout")}</a
+							>
+						</li>
 					</ul>
 				</div>
 			{:else}
@@ -189,12 +238,18 @@
 						class="btn btn-outline btn-secondary glass"
 						on:click={async () => {
 							goto("/session/register");
+						}}
+						on:pointerenter={async () => {
+							preloadData("/session/register");
 						}}>{$t("session.registration.register")}</button
 					>
 					<button
 						class="btn btn-outline btn-primary glass"
 						on:click={async () => {
 							goto("/session/login");
+						}}
+						on:pointerenter={async () => {
+							preloadData("/session/login");
 						}}>{$t("session.login.login")}</button
 					>
 				</div>

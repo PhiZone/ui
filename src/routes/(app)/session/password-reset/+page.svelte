@@ -50,7 +50,7 @@
 			password,
 		});
 		if (resp.ok) {
-			goto("/session/login?s=1");
+			goto("/session/login");
 		} else {
 			status = Status.ERROR;
 			msg = (await resp.json()).error;

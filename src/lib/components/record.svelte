@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 	import type { User, Record, Chart } from "$lib/models";
 	import { t } from "$lib/translations/config";
 	import { getCompressedImage, getGrade, parseDateTime } from "$lib/utils";
@@ -11,7 +11,7 @@
 	const grade = getGrade(record.score, record.full_combo);
 </script>
 
-<a class="w-fit h-fit" href={`/records/${record.id}`}>
+<a data-sveltekit-preload-data class="w-fit h-fit" href={`/records/${record.id}`}>
 	<div
 		class={`card m-1 w-[288px] ${
 			typeof record.player == "object" ? "h-40" : "h-36"
@@ -54,6 +54,14 @@
 									: "#"
 							);
 						}}
+						on:pointerenter={() => {
+							preloadData(
+								typeof record.chart === "object" &&
+									typeof record.chart.song === "object"
+									? `/songs/${record.chart.song.id}`
+									: "#"
+							);
+						}}
 					>
 						{record.chart.song.name}
 					</button>
@@ -61,6 +69,15 @@
 						class="btn btn-secondary btn-xs text-sm no-animation"
 						on:click={() => {
 							goto(
+								`/charts/${
+									typeof record.chart === "object"
+										? record.chart.id
+										: record.chart
+								}`
+							);
+						}}
+						on:pointerenter={() => {
+							preloadData(
 								`/charts/${
 									typeof record.chart === "object"
 										? record.chart.id
@@ -94,7 +111,7 @@
 		<div class="absolute right-2 bottom-2 form-control justify-end">
 			<p class="text-right player">
 				{#if typeof record.player == "object"}
-					<a href={`/users/${record.player.id}`} class="hover:underline">
+					<a data-sveltekit-preload-data href={`/users/${record.player.id}`} class="hover:underline">
 						{$t(record.player.username)}
 					</a>
 					@

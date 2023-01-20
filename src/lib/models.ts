@@ -4,6 +4,7 @@ export interface User {
     date_joined: string;
     date_of_birth: null | string;
     exp: number;
+    extra?: UserExtra;
     fans: number;
     following: number;
     gender: number;
@@ -19,8 +20,17 @@ export interface User {
     username: string;
 }
 
+export interface UserExtra {
+    best_records?: Record[];
+    charts?: Chart[];
+    comments: Comment[];
+    recent_records?: Record[];
+    songs?: Song[];
+}
+
 export interface Chapter {
     accessibility: number;
+    comment_count: number;
     description: null | string;
     events_incl: string[];
     id: number;
@@ -29,7 +39,7 @@ export interface Chapter {
     like: number | null;
     like_count: number;
     owner: number | User;
-    songs: Song[];
+    songs: number | Song[];
     subtitle: string;
     time: string;
     title: string;
@@ -45,6 +55,7 @@ export interface Song {
     bpm: string;
     chapters: number | Chapter[];
     charts: number | Chart[];
+    comment_count: number;
     composer: string;
     description: null | string;
     duration: string;
@@ -72,6 +83,7 @@ export interface Chart {
     at_event: boolean;
     chart: null | string;
     charter: null | string;
+    comment_count: number;
     description: string;
     difficulty: number;
     event_part: null | number;

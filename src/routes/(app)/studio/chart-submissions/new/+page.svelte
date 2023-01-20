@@ -67,7 +67,11 @@
 			return;
 		}
 		newCharterStatus = Status.RETRIEVING;
-		const resp = await api.GET(`/users/${newCharterId}/?query_relation=1`, access_token, user);
+		const resp = await api.GET(
+			`/users/${newCharterId}/?query_relation=1`,
+			access_token,
+			user
+		);
 		if (resp.ok) {
 			newCharter = await resp.json();
 			newCharterStatus = Status.OK;
@@ -143,7 +147,9 @@
 	<div class="modal-box bg-base-100 form-control gap-3">
 		<div class="flex gap-3 items-center">
 			<h3 class="font-bold text-lg">{$t("studio.submission.add_charter")}</h3>
-			<p class="opacity-80">({$t("studio.submission.your_id")}{$t("common.colon")}{user.id})</p>
+			<p class="opacity-80">
+				({$t("studio.submission.your_id")}{$t("common.colon")}{user.id})
+			</p>
 		</div>
 		<label
 			for="studio-charter"
@@ -439,6 +445,7 @@
 									{#each parseRichText(charter) as t}
 										{#if t.id > 0}
 											<a
+												data-sveltekit-preload-data
 												href={`/users/${t.id}`}
 												class="text-accent hover:underline"
 												target="_blank"
@@ -494,7 +501,9 @@
 											? "textarea-error"
 											: "textarea-primary"
 									} w-3/4 h-28`}
-									placeholder={$t("common.description")}{$t("studio.submission.optional")}
+									placeholder="{$t('common.description')}{$t(
+										'studio.submission.optional'
+									)}"
 									bind:value={description}
 								/>
 							</label>

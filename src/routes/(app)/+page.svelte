@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 	import { t } from "$lib/translations/config";
 
 	let searchText = "",
@@ -17,10 +17,7 @@
 	<title>{$t("common.title")}</title>
 </svelte:head>
 
-<div
-	class="hero min-h-screen"
-	style="background-image: url(/background.webp);"
->
+<div class="hero min-h-screen" style="background-image: url(/background.webp);">
 	<div class="hero-overlay bg-opacity-70" />
 	<div class="w-5/6 max-w-4xl form-control text-center text-neutral-content">
 		<img class="logo" src="/favicon.ico" alt="logo" />
@@ -91,6 +88,15 @@
 										}`
 									);
 								}
+							}
+						}}
+						on:pointerenter={() => {
+							if (!error && searchText) {
+								preloadData(
+									`/search?type=${searchType}${
+										searchText ? `&name=${searchText}` : ""
+									}`
+								);
 							}
 						}}
 					>

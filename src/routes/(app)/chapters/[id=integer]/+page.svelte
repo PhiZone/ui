@@ -62,7 +62,9 @@
 			commentStatus = Status.RETRIEVING;
 			comments = null;
 			const resp = await api.GET(
-				`/comments/?chapter=${content.id}&order=-like_count${page ? `&page=${page}` : ""}`,
+				`/comments/?chapter=${content.id}&order=-like_count${
+					page ? `&page=${page}` : ""
+				}`,
 				access_token,
 				user
 			);
@@ -86,16 +88,22 @@
 {#if status === Status.OK && content !== null}
 	<input type="checkbox" id="illustration" class="modal-toggle" />
 	<div class="modal">
-		<div class="modal-box bg-base-100 p-0 w-[80vw] max-w-[1800px] h-fit">
+		<div class="modal-box bg-base-100 p-0 w-[59vw] max-w-[1600px]">
 			<label
 				for="illustration"
 				class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
 				>✕</label
 			>
-			<span
-				class="badge badge-secondary absolute left-2 bottom-2"
-				>{content.illustrator}</span
-			>
+			<div class="absolute left-2 bottom-2">
+				<div class="btn-group btn-group-horizontal">
+					<button class="btn btn-secondary btn-xs text-base no-animation">
+						{$t("chapter.illustrator")}
+					</button>
+					<button class="btn btn-xs text-base no-animation">
+						{content.illustrator}
+					</button>
+				</div>
+			</div>
 			<img
 				src={content.illustration}
 				alt="Illustration"
@@ -113,7 +121,9 @@
 				<h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">
 					{content.title}
 				</h1>
-				<h2 class="text-4xl text-neutral-content font-bold drop-shadow-lg mb-6">
+				<h2
+					class="text-4xl text-neutral-content font-bold drop-shadow-lg mt-3 mb-6"
+				>
 					{content.subtitle}
 				</h2>
 				<p class="text-xl text-neutral-content mb-6 content">
@@ -160,19 +170,18 @@
 					>
 					<div class="card w-full bg-base-100 shadow-lg">
 						<div class="card-body">
-							{#if songStatus === Status.OK && songs}
-								{#if songs.length > 0}
-									<ul class="menu bg-base-100 min-w-fit w-full">
+							{#if songStatus === Status.OK}
+								{#if songs && songs.length > 0}
+									<ul class="menu bg-base-100 w-full">
 										{#each songs as song}
-											<li>
+											<li class="overflow-hidden">
 												<a
+													data-sveltekit-preload-data
 													href={`/songs/${song.id}`}
 													class="w-full h-[82px] flex px-5"
 												>
 													<div class="w-1/2">
-														<div
-															class="text-xl font-bold whitespace-nowrap overflow-hidden text-ellipsis"
-														>
+														<div class="text-xl font-bold">
 															{song.name}
 															{#if song.original}
 																<div
@@ -183,9 +192,7 @@
 															{/if}
 														</div>
 													</div>
-													<div
-														class="w-5/12 text-lg whitespace-nowrap overflow-hidden text-ellipsis"
-													>
+													<div class="w-5/12 text-lg">
 														{song.composer}
 													</div>
 													<div
@@ -254,21 +261,25 @@
 									}}>{$t("common.send")}</button
 								>
 							</div>
-							{#if commentStatus === Status.OK && comments}
-								{#each comments as comment}
-									<Comment {comment} token={access_token} {user} />
-								{/each}
+							{#if commentStatus === Status.OK}
+								{#if comments && comments.length > 0}
+									{#each comments as comment}
+										<Comment {comment} token={access_token} {user} />
+									{/each}
+									<Pagination
+										bind:previous={previousComments}
+										bind:next={nextComments}
+										bind:results={comments}
+										bind:count={commentCount}
+										bind:page={commentPageCount}
+										bind:status
+										token={access_token}
+										{user}
+									/>
+								{:else}
+									<p class="py-3 text-center">{$t("common.empty")}</p>
+								{/if}
 							{/if}
-							<Pagination
-								bind:previous={previousComments}
-								bind:next={nextComments}
-								bind:results={comments}
-								bind:count={commentCount}
-								bind:page={commentPageCount}
-								bind:status
-								token={access_token}
-								{user}
-							/>
 						</div>
 					</div>
 				</div>

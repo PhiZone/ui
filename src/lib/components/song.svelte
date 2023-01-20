@@ -32,7 +32,7 @@
 </script>
 
 <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
-	<a href={`/songs/${song.id}`}>
+	<a data-sveltekit-preload-data href={`/songs/${song.id}`}>
 		<figure class="h-[180px] relative">
 			<img
 				src={getCompressedImage(song.illustration)}
@@ -86,42 +86,42 @@
 			<p />
 			<div class="card-actions flex items-center justify-end">
 				{#if easyCount}
-					<a href={`/charts?song=${song.id}&level=EZ`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}&level=EZ`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							EZ ({easyCount})
 						</button>
 					</a>
 				{/if}
 				{#if hardCount}
-					<a href={`/charts?song=${song.id}&level=HD`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}&level=HD`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							HD ({hardCount})
 						</button>
 					</a>
 				{/if}
 				{#if insaneCount}
-					<a href={`/charts?song=${song.id}&level=IN`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}&level=IN`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							IN ({insaneCount})
 						</button>
 					</a>
 				{/if}
 				{#if anotherCount}
-					<a href={`/charts?song=${song.id}&level=AT`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}&level=AT`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							AT ({anotherCount})
 						</button>
 					</a>
 				{/if}
 				{#if specialCount}
-					<a href={`/charts?song=${song.id}&level=SP`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}&level=SP`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							SP ({specialCount})
 						</button>
 					</a>
 				{/if}
 				{#if otherCount}
-					<a href={`/charts?song=${song.id}`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							OTH ({otherCount})
 						</button>

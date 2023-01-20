@@ -7,19 +7,21 @@ export const load: import('./$types').PageLoad = async ({ parent, url, fetch }) 
     const type = parseInt(url.searchParams.get('type') || '0') % 3;
     const name = url.searchParams.get('name');
     const paths = ['chapters', 'songs', 'users', 'discussions'];
-    const resp = await api.GET(
-        `/${paths[type]}/${url.search}${url.search ? '&' : '?'}title=${name}&query_chart=1&query_owner=1&query_relation=1`, access_token, user, fetch
-    );
-    if (!resp.ok) {
-        throw error(resp.status, resp.statusText);
+    let resp, json;
+    if (name) {
+        resp = await api.GET(
+            `/${paths[type]}/${url.search}${url.search ? '&' : '?'}title=${name}&query_chart=1&query_owner=1&query_relation=1`, access_token, user, fetch
+        );
+        if (!resp.ok) {
+            throw error(resp.status, resp.statusText);
+        }
+        json = await resp.json();
     }
-    const json = await resp.json();
-    console.log(json.results);
     return {
-        status: resp.ok ? Status.OK : Status.ERROR,
+        status: resp && resp.ok ? Status.OK : Status.ERROR,
         type,
         name,
-        content: resp.ok ? json : null,
-        error: resp.ok ? null : json.error
+        content: resp && resp.ok ? json : null,
+        error: resp && resp.ok ? null : resp ? json.error : null,
     };
 };

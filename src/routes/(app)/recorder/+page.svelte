@@ -32,13 +32,13 @@
 			{/if}
 			<div class="mt-3 flex justify-center">
 				{#if user}
-					<a href="recorder/requests/new"
+					<a data-sveltekit-preload-data href="recorder/requests/new"
 						><button
 							class="btn btn-primary text-lg btn-xl btn-outline glass mr-3"
 							>{$t("recorder.new_request")}</button
 						></a
 					>
-					<a href="recorder/requests"
+					<a data-sveltekit-preload-data href="recorder/requests"
 						><button
 							class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
 							>{getUserPrivilege(user.type) < 3

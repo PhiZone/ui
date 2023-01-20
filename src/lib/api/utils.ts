@@ -24,6 +24,8 @@ function send<T>({ method, path, data, token, user, contentType, func }: SendOpt
             headers.append('Content-Type', ContentType.JSON);
             opts.body = JSON.stringify(data);
         }
+    } else {
+        headers.append('Content-Type', ContentType.FORM_DATA);
     }
     let l = locale.get();
     headers.append('Accept-Language', (user ? user.language : l ? l : convertLanguageCode(window.navigator.language)).toLowerCase());

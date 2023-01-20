@@ -42,7 +42,7 @@
         "approved_at": "Approved At",
         "reply": "Reply",
         "reply_v": "Reply",
-        "edition_placeholder": "Especially refers to song's origin (e.g. Arcaea Edit / Self-Edited / Original ...)",
+        "edition_placeholder": "Especially refers to song's origin (e.g. Arcaea Ver. / Self-Edited / Original ...)",
         "bpm_placeholder": "If BPM changes, fill in according to the format of \"min~max (main)\"",
         "offset_placeholder": "In milliseconds, within the range of ±30000/BPM (shall prevail the playback window in RPE)",
         "preview_start": "Start Time of Preview",

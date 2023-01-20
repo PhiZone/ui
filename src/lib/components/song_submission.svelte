@@ -6,7 +6,7 @@
 	export let submission: SongSubmission;
 </script>
 
-<a href={`/studio/song-submissions/${submission.id}`}>
+<a data-sveltekit-preload-data href={`/studio/song-submissions/${submission.id}`}>
 	<div
 		class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg glass"
 	>

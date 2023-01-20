@@ -42,7 +42,7 @@
         "approved_at": "通过时间",
         "reply": "回复",
         "reply_v": "回复",
-        "edition_placeholder": "特指（剪辑后的）音源出处（如 Arcaea Edit / 自剪 / 原版 ...）",
+        "edition_placeholder": "特指（剪辑后的）音源出处（如 Arcaea Ver. / 自剪 / 原版 ...）",
         "bpm_placeholder": "若 BPM 变化，按“最低BPM~最高BPM (主要BPM)”格式填写，注意空格，所有符号须为半角",
         "offset_placeholder": "以毫秒为单位，取值范围应在 ±30000/BPM 内（暂时以 RPE 播放窗口为准）",
         "preview_start": "预览开始时间",

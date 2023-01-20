@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 	import Comment from "$lib/components/comment.svelte";
 	import Like from "$lib/components/like.svelte";
 	import { t } from "$lib/translations/config";
@@ -39,7 +39,7 @@
 										: "border-neutral-500"
 								}`}
 							>
-								<a href={`/users/${content.user.id}`}>
+								<a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
 									<img
 										class="object-fill"
 										src={getCompressedImage(content.user.avatar)}
@@ -47,7 +47,7 @@
 									/>
 								</a>
 							</div>
-							<a href={`/users/${content.user.id}`}>
+							<a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
 								<p class="text-lg text-center max-w-[120px] break-all">
 									{content.user.username}
 								</p>
@@ -87,6 +87,9 @@
 										class="btn btn-sm btn-primary btn-outline"
 										on:click={() => {
 											goto(`/comments/${content?.comment}`);
+										}}
+										on:pointerenter={() => {
+											preloadData(`/comments/${content?.comment}`);
 										}}
 									>
 										<svg

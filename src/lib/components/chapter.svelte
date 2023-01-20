@@ -4,11 +4,18 @@
 	import { getCompressedImage } from "$lib/utils";
 	import Like from "./like.svelte";
 
-	export let chapter: Chapter, token: string, user: User, fixedHeight = false;
+	export let chapter: Chapter,
+		token: string,
+		user: User,
+		fixedHeight = false;
 </script>
 
-<div class={`card w-80 ${fixedHeight ? "h-[460px]" : ""} bg-base-100 shadow-lg glass overflow-hidden`}>
-	<a href={`/chapters/${chapter.id}`}>
+<div
+	class={`card w-80 ${
+		fixedHeight ? "h-[460px]" : ""
+	} bg-base-100 shadow-lg glass overflow-hidden`}
+>
+	<a data-sveltekit-preload-data href={`/chapters/${chapter.id}`}>
 		<figure class="h-[180px]">
 			<img
 				src={getCompressedImage(chapter.illustration)}
@@ -37,11 +44,13 @@
 					>{chapter.owner.username}
 				</p>
 			{/if}
-			<p class="content description grow-0">
-				<span class="badge badge-primary badge-outline mr-1"
-					>{$t("chapter.description")}</span
-				>{chapter.description}
-			</p>
+			{#if chapter.description}
+				<p class="content description grow-0">
+					<span class="badge badge-primary badge-outline mr-1"
+						>{$t("chapter.description")}</span
+					>{chapter.description}
+				</p>
+			{/if}
 			<p />
 			<div class="card-actions flex items-center justify-end">
 				<div

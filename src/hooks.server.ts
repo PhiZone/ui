@@ -1,8 +1,9 @@
 import * as cookie from 'cookie';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { getUserDetail } from '$lib/api/userDetail';
+import { API_BASE } from '$lib/constants';
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle = (async ({ event, resolve }) => {
     const cookies = cookie.parse(event.request.headers.get('cookie') || '');
     console.log(event.url.href);
     event.locals.access_token = cookies.access_token;
@@ -32,4 +33,14 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     }
     return await resolve(event);
-};
+}) satisfies Handle;
+
+export const handleFetch = (({ request, fetch }) => {
+    if (request.url.startsWith(API_BASE)) {
+        request = new Request(
+            request.url.replace(API_BASE, 'http://localhost:8000'),
+            request
+        );
+    }
+    return fetch(request);
+}) satisfies HandleFetch;

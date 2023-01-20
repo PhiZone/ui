@@ -167,7 +167,9 @@
 			commentStatus = Status.RETRIEVING;
 			comments = null;
 			const resp = await api.GET(
-				`/comments/?song=${content.id}&order=-like_count${page ? `&page=${page}` : ""}`,
+				`/comments/?song=${content.id}&order=-like_count${
+					page ? `&page=${page}` : ""
+				}`,
 				access_token,
 				user
 			);
@@ -526,6 +528,7 @@
 													{#each charts as chart}
 														<li class="border border-base-300">
 															<a
+																data-sveltekit-preload-data
 																href={`/charts/${chart.id}`}
 																class="w-full h-[82px] flex px-5"
 															>
@@ -542,6 +545,7 @@
 																		{#each parseRichText(chart.charter) as t}
 																			{#if t.id > 0}
 																				<a
+																					data-sveltekit-preload-data
 																					href={`/users/${t.id}`}
 																					class="text-accent hover:underline"
 																					>{t.text}</a
@@ -628,21 +632,25 @@
 								}}>{$t("common.send")}</button
 							>
 						</div>
-						{#if commentStatus === Status.OK && comments}
-							{#each comments as comment}
-								<Comment {comment} token={access_token} {user} />
-							{/each}
+						{#if commentStatus === Status.OK}
+							{#if comments && comments.length > 0}
+								{#each comments as comment}
+									<Comment {comment} token={access_token} {user} />
+								{/each}
+								<Pagination
+									previous={previousComments}
+									next={nextComments}
+									bind:results={comments}
+									bind:count={commentCount}
+									bind:page={pageCount}
+									bind:status={commentStatus}
+									token={access_token}
+									{user}
+								/>
+							{:else}
+								<p class="py-3 text-center">{$t("common.empty")}</p>
+							{/if}
 						{/if}
-						<Pagination
-							previous={previousComments}
-							next={nextComments}
-							bind:results={comments}
-							bind:count={commentCount}
-							bind:page={pageCount}
-							bind:status={commentStatus}
-							token={access_token}
-							{user}
-						/>
 					</div>
 				</div>
 			</div>

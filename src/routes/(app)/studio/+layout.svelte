@@ -28,11 +28,11 @@
 	<div class="pt-[72px] drawer-side border-r">
 		<label for="studio-sidebar" class="drawer-overlay" />
 		<ul class="menu p-4 min-w-fit w-72 bg-base-100 text-base-content">
-			<li><a href="/studio">{$t("studio.homepage")}</a></li>
-			<li><a href="/studio/song-submissions">{$t("studio.song_submissions")}</a></li>
-			<li><a href="/studio/chart-submissions">{$t("studio.chart_submissions")}</a></li>
-			<li><a href="/studio/collaborations">{$t("studio.collaborations")}</a></li>
-			<!-- <li><a href="/studio/admissions">{$t("studio.admissions")}</a></li> -->
+			<li><a data-sveltekit-preload-data href="/studio">{$t("studio.homepage")}</a></li>
+			<li><a data-sveltekit-preload-data href="/studio/song-submissions">{$t("studio.song_submissions")}</a></li>
+			<li><a data-sveltekit-preload-data href="/studio/chart-submissions">{$t("studio.chart_submissions")}</a></li>
+			<li><a data-sveltekit-preload-data href="/studio/collaborations">{$t("studio.collaborations")}</a></li>
+			<!-- <li><a data-sveltekit-preload-data href="/studio/admissions">{$t("studio.admissions")}</a></li> -->
 		</ul>
 	</div>
 </div>

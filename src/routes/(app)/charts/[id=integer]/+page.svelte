@@ -445,6 +445,7 @@
 										{#each parseRichText(content.charter) as t}
 											{#if t.id > 0}
 												<a
+													data-sveltekit-preload-data
 													href={`/users/${t.id}`}
 													class="text-accent hover:underline">{t.text}</a
 												>
@@ -588,21 +589,25 @@
 								}}>{$t("common.send")}</button
 							>
 						</div>
-						{#if commentStatus === Status.OK && comments}
-							{#each comments as comment}
-								<Comment {comment} token={access_token} {user} />
-							{/each}
+						{#if commentStatus === Status.OK}
+							{#if comments && comments.length > 0}
+								{#each comments as comment}
+									<Comment {comment} token={access_token} {user} />
+								{/each}
+								<Pagination
+									bind:previous={previousComments}
+									bind:next={nextComments}
+									bind:results={comments}
+									bind:count={commentCount}
+									bind:page
+									bind:status
+									token={access_token}
+									{user}
+								/>
+							{:else}
+								<p class="py-3 text-center">{$t("common.empty")}</p>
+							{/if}
 						{/if}
-						<Pagination
-							bind:previous={previousComments}
-							bind:next={nextComments}
-							bind:results={comments}
-							bind:count={commentCount}
-							bind:page
-							bind:status
-							token={access_token}
-							{user}
-						/>
 					</div>
 				</div>
 			</div>

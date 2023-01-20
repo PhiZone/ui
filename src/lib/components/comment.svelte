@@ -7,7 +7,7 @@
 	import Pagination from "./pagination.svelte";
 	import { Status } from "$lib/constants";
 	import { getCompressedImage, getUserLevel, parseDateTime } from "$lib/utils";
-	import { goto } from "$app/navigation";
+	import { goto, preloadData } from "$app/navigation";
 
 	export let comment: Comment,
 		token: string,
@@ -28,7 +28,9 @@
 	const getReplies = async (page?: number) => {
 		status = Status.RETRIEVING;
 		const resp = await api.GET(
-			`/replies/?comment=${comment.id}&order=-like_count${page ? `&page=${page}` : ""}`,
+			`/replies/?comment=${comment.id}&order=-like_count${
+				page ? `&page=${page}` : ""
+			}`,
 			token,
 			user
 		);
@@ -79,7 +81,9 @@
 	class="modal-toggle"
 />
 <div class="modal">
-	<div class="modal-box bg-base-100 max-h-[90vh] min-w-[70vw] w-[75vw] max-w-[1800px]">
+	<div
+		class="modal-box bg-base-100 max-h-[90vh] min-w-[70vw] w-[75vw] max-w-[1800px]"
+	>
 		<label
 			for={`comment-${comment.id}-replies`}
 			class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
@@ -114,6 +118,9 @@
 								class="avatar items-center w-1/6 min-w-fit whitespace-nowrap overflow-hidden text-ellipsis"
 								on:click={() => {
 									goto(`/users/${reply.user.id}`);
+								}}
+								on:pointerenter={() => {
+									preloadData(`/users/${reply.user.id}`);
 								}}
 								on:keyup
 							>
@@ -191,7 +198,7 @@
 			<div
 				class="relative inline-flex items-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
 			>
-				<a href={`/users/${comment.user.id}`}>
+				<a data-sveltekit-preload-data href={`/users/${comment.user.id}`}>
 					<div
 						class={`w-[72px] rounded-full overflow-hidden border-[3px] border-opacity-80 ${
 							comment.user.type == "admin"
@@ -210,7 +217,7 @@
 						/>
 					</div>
 				</a>
-				<a href={`/users/${comment.user.id}`}>
+				<a data-sveltekit-preload-data href={`/users/${comment.user.id}`}>
 					<p class="text-lg text-center max-w-[120px] break-all">
 						{comment.user.username}
 					</p>
@@ -276,6 +283,9 @@
 						class="btn btn-sm btn-primary btn-outline"
 						on:click={() => {
 							goto(source);
+						}}
+						on:pointerenter={() => {
+							preloadData(source);
 						}}
 					>
 						<svg

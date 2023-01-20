@@ -84,12 +84,14 @@
 						<!-- svelte-ignore a11y-label-has-associated-control -->
 						<label class="label flex justify-between">
 							<a
+								data-sveltekit-preload-data
 								href="/session/password-reset"
 								class="label-text-alt link link-hover"
 							>
 								{$t("session.login.forgot_password")}</a
 							>
 							<a
+								data-sveltekit-preload-data
 								href="/session/register"
 								class="label-text-alt link link-hover"
 							>

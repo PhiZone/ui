@@ -37,6 +37,7 @@
 				{#each parseRichText(notification.message) as t}
 					{#if t.type}
 						<a
+							data-sveltekit-preload-data
 							href={`${types.get(t.type)}/${t.id}`}
 							class="text-accent hover:underline"
 							target="_blank"
