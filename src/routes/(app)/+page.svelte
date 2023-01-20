@@ -19,7 +19,7 @@
 
 <div
 	class="hero min-h-screen"
-	style="background-image: url(https://api.ixiaowai.cn/api/api.php);"
+	style="background-image: url(/background.webp);"
 >
 	<div class="hero-overlay bg-opacity-70" />
 	<div class="w-5/6 max-w-4xl form-control text-center text-neutral-content">
