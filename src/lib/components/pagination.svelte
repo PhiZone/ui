@@ -49,7 +49,7 @@
 				}}
 				on:pointerenter={() => {
 					if (previous) {
-						preloadData(previous);
+						// preloadData(previous);
 					}
 				}}>«</button
 			>
@@ -70,7 +70,7 @@
 				}}
 				on:pointerenter={() => {
 					if (next) {
-						preloadData(next);
+						// preloadData(next);
 					}
 				}}>»</button
 			>

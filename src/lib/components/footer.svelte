@@ -16,21 +16,21 @@
 		<span class="footer-title text-lg"
 			>{$t("common.footer.internal_links")}</span
 		>
-		<a data-sveltekit-preload-data href="/" class="link link-hover">{$t("common.footer.home")}</a>
-		<a data-sveltekit-preload-data href="/about" class="link link-hover">{$t("common.footer.about")}</a>
-		<a data-sveltekit-preload-data href="/feedback" class="link link-hover"
+		<a href="/" class="link link-hover">{$t("common.footer.home")}</a>
+		<a href="/about" class="link link-hover">{$t("common.footer.about")}</a>
+		<a href="/feedback" class="link link-hover"
 			>{$t("common.footer.feedback")}</a
 		>
 	</div>
 	<div>
 		<span class="footer-title text-lg">{$t("common.footer.legal")}</span>
-		<a data-sveltekit-preload-data href="/legal/terms-of-use" class="link link-hover"
+		<a href="/legal/terms-of-use" class="link link-hover"
 			>{$t("common.footer.terms_of_use")}</a
 		>
-		<a data-sveltekit-preload-data href="/legal/privacy-policy" class="link link-hover"
+		<a href="/legal/privacy-policy" class="link link-hover"
 			>{$t("common.footer.privacy_policy")}</a
 		>
-		<a data-sveltekit-preload-data href="/legal/cookie-policy" class="link link-hover"
+		<a href="/legal/cookie-policy" class="link link-hover"
 			>{$t("common.footer.cookie_policy")}</a
 		>
 	</div> -->
@@ -50,7 +50,7 @@
 				rel="noreferrer"
 				class="link link-hover">{$t("common.footer.phigrim")}</a
 			> -->
-			<!-- <a data-sveltekit-preload-data href="/" class="link link-hover">{$t("common.footer.phifans")}</a> -->
+			<!-- <a href="/" class="link link-hover">{$t("common.footer.phifans")}</a> -->
 		</div>
 		<div>
 			<span class="footer-title text-lg">{$t("common.footer.contact")}</span>
@@ -66,7 +66,7 @@
 					/></svg
 				>
 				<a
-					data-sveltekit-preload-data
+					
 					class="ml-2 link link-hover"
 					href="mailto:{email_address}">{email_address}</a
 				>
@@ -102,7 +102,7 @@
 						></svg
 					></a
 				>
-				<!-- <a data-sveltekit-preload-data href="/"
+				<!-- <a href="/"
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
@@ -114,7 +114,7 @@
 					/></svg
 				></a
 			>
-			<a data-sveltekit-preload-data href="/"
+			<a href="/"
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"

@@ -3,7 +3,7 @@ import type { RecorderRequest } from '$lib/models';
 import { Status } from '$lib/constants';
 import { error } from '@sveltejs/kit';
 
-export const load: import('./$types').PageLoad = async ({ params, parent,fetch }) => {
+export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
     const { user, access_token } = await parent();
     const resp = await api.GET(`/recorder/requests/${params.id}/`, access_token, user, fetch);
     if (!resp.ok) {

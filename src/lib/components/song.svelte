@@ -32,7 +32,7 @@
 </script>
 
 <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
-	<a data-sveltekit-preload-data href={`/songs/${song.id}`}>
+	<a href={`/songs/${song.id}`}>
 		<figure class="h-[180px] relative">
 			<img
 				src={getCompressedImage(song.illustration)}
@@ -87,7 +87,7 @@
 			<div class="card-actions flex items-center justify-end">
 				{#if easyCount}
 					<a
-						data-sveltekit-preload-data
+						
 						href={`/charts?song=${song.id}&level=EZ`}
 					>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
@@ -97,7 +97,7 @@
 				{/if}
 				{#if hardCount}
 					<a
-						data-sveltekit-preload-data
+						
 						href={`/charts?song=${song.id}&level=HD`}
 					>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
@@ -107,7 +107,7 @@
 				{/if}
 				{#if insaneCount}
 					<a
-						data-sveltekit-preload-data
+						
 						href={`/charts?song=${song.id}&level=IN`}
 					>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
@@ -117,7 +117,7 @@
 				{/if}
 				{#if anotherCount}
 					<a
-						data-sveltekit-preload-data
+						
 						href={`/charts?song=${song.id}&level=AT`}
 					>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
@@ -127,7 +127,7 @@
 				{/if}
 				{#if specialCount}
 					<a
-						data-sveltekit-preload-data
+						
 						href={`/charts?song=${song.id}&level=SP`}
 					>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
@@ -136,7 +136,7 @@
 					</a>
 				{/if}
 				{#if otherCount}
-					<a data-sveltekit-preload-data href={`/charts?song=${song.id}`}>
+					<a href={`/charts?song=${song.id}`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							OTH ({otherCount})
 						</button>

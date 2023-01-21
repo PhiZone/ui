@@ -16,7 +16,7 @@
 			<h1 class="text-5xl font-bold">{$t("challenge.title")}</h1>
 			{#if status == 0}
 				<p class="py-6 text-lg">{$t("challenge.description")}</p>
-				<a data-sveltekit-preload-data href="/challenge/objective"
+				<a href="/challenge/objective"
 					><button class="btn btn-primary btn-outline text-xl glass"
 						>{$t("challenge.start")}</button
 					></a

@@ -104,7 +104,7 @@
 						<div class="text-5xl py-3 flex font-bold gap-4 items-center">
 							{#if content.song}
 								<a
-									data-sveltekit-preload-data
+									
 									class="hover:underline"
 									href={`/songs/${content.song.id}`}
 									target="_blank"
@@ -114,7 +114,7 @@
 								</a>
 							{:else}
 								<a
-									data-sveltekit-preload-data
+									
 									class="hover:underline"
 									href={`/studio/song-submissions/${content.song_upload?.id}`}
 									target="_blank"
@@ -162,7 +162,7 @@
 								{#each parseRichText(content.charter) as t}
 									{#if t.id > 0}
 										<a
-											data-sveltekit-preload-data
+											
 											href={`/users/${t.id}`}
 											class="text-accent hover:underline"
 											target="_blank"

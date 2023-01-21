@@ -15,7 +15,7 @@
 		fixedHeight ? "h-[460px]" : ""
 	} bg-base-100 shadow-lg glass overflow-hidden`}
 >
-	<a data-sveltekit-preload-data href={`/chapters/${chapter.id}`}>
+	<a href={`/chapters/${chapter.id}`}>
 		<figure class="h-[180px]">
 			<img
 				src={getCompressedImage(chapter.illustration)}

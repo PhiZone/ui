@@ -133,11 +133,11 @@
 						}}
 						on:pointerenter={() => {
 							if (!searchError && searchText) {
-								preloadData(
-									`/search?type=${searchType}${
-										searchText ? `&name=${searchText}` : ""
-									}`
-								);
+								// preloadData(
+								// 	`/search?type=${searchType}${
+								// 		searchText ? `&name=${searchText}` : ""
+								// 	}`
+								// );
 							}
 						}}
 					>

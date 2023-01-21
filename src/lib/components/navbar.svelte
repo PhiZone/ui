@@ -13,7 +13,7 @@
 <div
 	class="navbar shadow-lg bg-base-100 bg-opacity-50 backdrop-blur-lg text-base"
 >
-	<div class="navbar-start">
+	<div class="navbar-start z-20">
 		<img src="/favicon.ico" alt="logo" class="logo" />
 		<a
 			data-sveltekit-preload-data
@@ -42,24 +42,19 @@
 				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 			>
 				<li>
-					<a data-sveltekit-preload-data href="/chapters"
-						>{$t("common.chapters")}</a
-					>
+					<a href="/chapters">{$t("common.chapters")}</a>
 				</li>
 				<li>
-					<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
+					<a href="/songs">{$t("common.songs")}</a>
 				</li>
 				<li>
-					<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a
-					>
+					<a href="/charts">{$t("common.charts")}</a>
 				</li>
 				<li>
-					<a data-sveltekit-preload-data href="/records"
-						>{$t("common.records")}</a
-					>
+					<a href="/records">{$t("common.records")}</a>
 				</li>
-				<!-- <li><a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a></li>
-				<li><a data-sveltekit-preload-data href="/discussions">{$t("common.discussions")}</a></li> -->
+				<!-- <li><a href="/apps">{$t("common.navbar.apps")}</a></li>
+				<li><a href="/discussions">{$t("common.discussions")}</a></li> -->
 				<li class="rounded-full">
 					<a data-sveltekit-preload-data href="/recorder"
 						>{$t("common.navbar.recorder")}</a
@@ -67,7 +62,7 @@
 				</li>
 				<!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
 					<li>
-						<a data-sveltekit-preload-data href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
+						<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
 					</li>
 				{/if} -->
 			</ul>
@@ -91,25 +86,22 @@
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal rounded-full p-0">
 			<li>
-				<a data-sveltekit-preload-data href="/chapters"
-					>{$t("common.chapters")}</a
-				>
+				<a href="/chapters">{$t("common.chapters")}</a>
 			</li>
 			<li>
-				<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
+				<a href="/songs">{$t("common.songs")}</a>
 			</li>
 			<li>
-				<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a>
+				<a href="/charts">{$t("common.charts")}</a>
 			</li>
 			<li>
-				<a data-sveltekit-preload-data href="/records">{$t("common.records")}</a
-				>
+				<a href="/records">{$t("common.records")}</a>
 			</li>
 			<!-- <li class="rounded-full">
-				<a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a>
+				<a href="/apps">{$t("common.navbar.apps")}</a>
 			</li>
 			<li class="rounded-full">
-				<a data-sveltekit-preload-data href="/discussions">{$t("common.discussions")}</a>
+				<a href="/discussions">{$t("common.discussions")}</a>
 			</li> -->
 			<li>
 				<a data-sveltekit-preload-data href="/recorder"
@@ -118,7 +110,7 @@
 			</li>
 			<!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
 				<li class="rounded-full">
-					<a data-sveltekit-preload-data href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
+					<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
 				</li>
 			{/if} -->
 		</ul>
@@ -143,7 +135,7 @@
 		>
 		{#if showUser}
 			{#if user}
-				<a data-sveltekit-preload-data href="/me/notifications">
+				<a href="/me/notifications">
 					<button class="btn btn-ghost btn-circle">
 						<div class="indicator">
 							<svg
@@ -195,11 +187,7 @@
 						class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 					>
 						<li>
-							<a
-								data-sveltekit-preload-data
-								class="justify-between"
-								href={`/users/${user.id}`}
-							>
+							<a class="justify-between" href={`/users/${user.id}`}>
 								{user.username}
 								<!-- <span class="badge">{userDetail.tag}</span> -->
 							</a>
@@ -221,14 +209,10 @@
 							</li>
 						{/if}
 						<li>
-							<a data-sveltekit-preload-data href="/me/settings"
-								>{$t("common.settings")}</a
-							>
+							<a href="/me/settings">{$t("common.settings")}</a>
 						</li>
 						<li>
-							<a data-sveltekit-preload-data href="/auth/logout"
-								>{$t("common.navbar.logout")}</a
-							>
+							<a href="/auth/logout">{$t("common.navbar.logout")}</a>
 						</li>
 					</ul>
 				</div>
@@ -240,7 +224,7 @@
 							goto("/session/register");
 						}}
 						on:pointerenter={async () => {
-							preloadData("/session/register");
+							// preloadData("/session/register");
 						}}>{$t("session.registration.register")}</button
 					>
 					<button
@@ -249,7 +233,7 @@
 							goto("/session/login");
 						}}
 						on:pointerenter={async () => {
-							preloadData("/session/login");
+							// preloadData("/session/login");
 						}}>{$t("session.login.login")}</button
 					>
 				</div>

@@ -175,7 +175,7 @@
 										{#each songs as song}
 											<li class="overflow-hidden">
 												<a
-													data-sveltekit-preload-data
+													
 													href={`/songs/${song.id}`}
 													class="w-full h-[82px] flex px-5"
 												>

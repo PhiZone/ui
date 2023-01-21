@@ -63,7 +63,7 @@
 							goto("/studio/collaborations/");
 						}}
 						on:pointerenter={() => {
-							preloadData("/studio/collaborations/");
+							// preloadData("/studio/collaborations/");
 						}}>{$t("studio.request.received")}</button
 					>
 				{:else}
@@ -73,7 +73,7 @@
 							goto("/studio/collaborations/?sent=1");
 						}}
 						on:pointerenter={() => {
-							preloadData("/studio/collaborations/?sent=1");
+							// preloadData("/studio/collaborations/?sent=1");
 						}}>{$t("studio.request.sent")}</button
 					>
 				{/if}

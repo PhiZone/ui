@@ -361,7 +361,7 @@
 									}`}
 								>
 									<a
-										data-sveltekit-preload-data
+										
 										href={`/users/${content.replier.id}`}
 									>
 										<img
@@ -372,7 +372,7 @@
 									</a>
 								</div>
 								<a
-									data-sveltekit-preload-data
+									
 									href={`/users/${content.user.id}`}
 								>
 									<p class="text-lg text-center max-w-[120px] break-all">
