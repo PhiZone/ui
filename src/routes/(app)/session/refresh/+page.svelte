@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { ContentType, Error } from "$lib/constants";
+	import { t } from "$lib/translations/config";
+	import { Error } from "$lib/constants";
 	import { error } from "@sveltejs/kit";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
@@ -34,13 +35,14 @@
 </script>
 
 <svelte:head>
-	<title>Redirection | PhiZone</title>
+	<title>{$t("session.redirecting")} | {$t("common.title")}</title>
 </svelte:head>
+
 <div class="hero min-h-screen bg-base-200">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
-			<h1 class="text-5xl font-bold my-4">Redirecting...</h1>
-			<p class="text-lg py-6">Please wait while you're being redirected.</p>
+			<h1 class="text-5xl font-bold my-4">{$t("session.redirecting")}</h1>
+			<p class="text-lg py-6">{$t("session.redirection_description")}</p>
 		</div>
 	</div>
 </div>
