@@ -19,7 +19,6 @@
 	onMount(() => {
 		pageStatus = status;
 		if (status === Status.OK) {
-			console.log("content:", content);
 			requests = content.results;
 			requestCount = content.count;
 			previousRequests = content.previous;

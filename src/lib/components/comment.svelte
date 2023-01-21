@@ -10,7 +10,7 @@
 	import { goto, preloadData } from "$app/navigation";
 
 	export let comment: Comment,
-		token: string,
+		token: string | undefined,
 		user: User,
 		showUser = true,
 		showSource = false;
@@ -39,7 +39,6 @@
 		replies = json.results;
 		previousReplies = json.previous;
 		nextReplies = json.next;
-		console.log(json);
 		status = Status.OK;
 	};
 
@@ -177,7 +176,6 @@
 						</div>
 					</li>
 				{/each}
-			{/if}
 			<Pagination
 				bind:previous={previousReplies}
 				bind:next={nextReplies}
@@ -188,6 +186,7 @@
 				{token}
 				{user}
 			/>
+			{/if}
 		</ul>
 	</div>
 </div>

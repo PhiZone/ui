@@ -77,7 +77,7 @@
 		);
 		if (!resp.ok) {
 			const json = await resp.json();
-			followError = json.error;
+			followError = json.detail;
 			console.log(json);
 			isFollowing = true;
 			fans++;

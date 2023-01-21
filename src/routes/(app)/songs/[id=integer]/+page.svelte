@@ -48,8 +48,7 @@
 			if (content.lyrics) {
 				lyrics = parseLyrics(content.lyrics);
 			}
-			console.log("audio ready with duration", duration, "and lyrics", lyrics);
-			console.log(comments);
+			// console.log("audio ready with duration", duration, "and lyrics", lyrics);
 		}
 		if (commentRes) {
 			comments = commentRes.results;
@@ -67,14 +66,14 @@
 			r = lyrics.length - 1,
 			m = (l + r) >> 1;
 		while (l < r) {
-			console.log(
-				l,
-				r,
-				m,
-				lyrics[m].time,
-				playerState.currentTime,
-				lyrics[m + 1].time
-			);
+			// console.log(
+			// 	l,
+			// 	r,
+			// 	m,
+			// 	lyrics[m].time,
+			// 	playerState.currentTime,
+			// 	lyrics[m + 1].time
+			// );
 			if (
 				lyrics[m].time <= playerState.currentTime &&
 				lyrics[m + 1].time > playerState.currentTime
@@ -89,7 +88,7 @@
 		}
 		lyricsIndex = m;
 		line = lyrics[lyricsIndex].line;
-		console.log("lyrics synced", lyrics[m]);
+		// console.log("lyrics synced", lyrics[m]);
 	};
 
 	let timer: NodeJS.Timeout;
@@ -145,7 +144,8 @@
 		);
 		if (resp.ok) {
 			charts = await resp.json();
-			console.log(charts);
+		} else {
+			console.log(await resp.json());
 		}
 	};
 
@@ -178,7 +178,6 @@
 			commentCount = json.count;
 			previousComments = json.previous;
 			nextComments = json.next;
-			console.log(json);
 			commentStatus = Status.OK;
 		}
 	};

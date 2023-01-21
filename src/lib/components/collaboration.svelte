@@ -7,7 +7,7 @@
 	import UserCard from "$lib/components/user.svelte";
 	import { getCompressedImage } from "$lib/utils";
 
-	export let collaboration: Collaboration, token: string, user: User;
+	export let collaboration: Collaboration, token: string | undefined, user: User;
 
 	const getChart = (collaboration: Collaboration) => {
 		if (typeof collaboration.chart == "object") {

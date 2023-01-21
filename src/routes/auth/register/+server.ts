@@ -10,7 +10,6 @@ export const POST: RequestHandler = async ({ request }) => {
         } catch (e) {
             err = await respClone.text();
         }
-        console.log(resp.status);
         return new Response(
             JSON.stringify({
                 code: resp.status,
@@ -21,7 +20,6 @@ export const POST: RequestHandler = async ({ request }) => {
             }
         );
     }
-    console.log(resp.status);
     return new Response(null, {
         status: 303,
         headers: {

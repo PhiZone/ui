@@ -10,7 +10,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
         throw error(resp.status, resp.statusText);
     }
     const json = await resp.json();
-    console.log('Current User:', user ? user.username : 'Anonymous');
+    
     let songRes, commentRes;
     try {
         if (json.songs > 0)
@@ -23,7 +23,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Chapter) : null,
-        error: resp.ok ? null : json.error,
+        error: resp.ok ? null : json.detail,
         songRes, commentRes
     };
 };

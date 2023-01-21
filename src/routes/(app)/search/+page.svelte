@@ -6,20 +6,33 @@
 	import { Status } from "$lib/constants";
 	import { onMount } from "svelte";
 	import Chapter from "$lib/components/chapter.svelte";
+	import {
+		afterNavigate,
+		beforeNavigate,
+		goto,
+		preloadData,
+	} from "$app/navigation";
 
 	export let data: import("./$types").PageData;
 	$: ({ status, type, name, content, error, access_token, user } = data);
 	let results: any,
-		count: number,
+		count: number | null,
 		page = 1,
 		pageStatus = Status.RETRIEVING,
-		previous: string,
-		next: string,
+		previous: string | null,
+		next: string | null,
 		searchType: string | null = null,
 		searchText: string | null,
 		searchError = "";
 
-	onMount(() => {
+	beforeNavigate(() => {
+		results = null;
+		count = null;
+		previous = null;
+		next = null;
+	});
+
+	const callback = () => {
 		pageStatus = status;
 		searchType = type.toString();
 		searchText = name;
@@ -28,11 +41,14 @@
 			count = content.count;
 			previous = content.previous;
 			next = content.next;
+		} else {
+			console.log("status", status);
+			console.log("error", error);
 		}
-		console.log("status", status);
-		console.log("content", content);
-		console.log("error", error);
-	});
+	};
+
+	onMount(callback);
+	afterNavigate(callback);
 
 	const handleSearchType = (
 		e: Event & { currentTarget: EventTarget & HTMLSelectElement }
@@ -107,10 +123,21 @@
 									searchError = "input_null";
 								} else {
 									pageStatus = Status.RETRIEVING;
-									window.location.href = `/search?type=${searchType}${
-										searchText ? `&name=${searchText}` : ""
-									}`;
+									goto(
+										`/search?type=${searchType}${
+											searchText ? `&name=${searchText}` : ""
+										}`
+									);
 								}
+							}
+						}}
+						on:pointerenter={() => {
+							if (!searchError && searchText) {
+								preloadData(
+									`/search?type=${searchType}${
+										searchText ? `&name=${searchText}` : ""
+									}`
+								);
 							}
 						}}
 					>
@@ -133,7 +160,7 @@
 		</div>
 	</div>
 	{#if pageStatus === Status.OK && results}
-		{#if results.length > 0}
+		{#if results.length > 0 && count}
 			<div class="px-32 result">
 				{#each results as result}
 					<div class="min-w-fit">

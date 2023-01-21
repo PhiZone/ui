@@ -11,11 +11,10 @@ export const load: import('./$types').PageServerLoad = async ({ url, locals, fet
         throw error(resp.status, resp.statusText);
     }
     const json = await resp.json();
-    console.log(json.results);
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         search: url.search,
         content: resp.ok ? json : null,
-        error: resp.ok ? null : json.error
+        error: resp.ok ? null : json.detail
     };
 };

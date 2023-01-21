@@ -1,7 +1,6 @@
 import * as api from '$lib/api';
 import type { User } from '$lib/models';
 import { Status } from '$lib/constants';
-import { getUserPrivilege } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 
 export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
@@ -11,11 +10,10 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
         throw error(resp.status, resp.statusText);
     }
     const json = await resp.json();
-    console.log(json);
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as User) : null,
-        error: resp.ok ? null : json.error,
+        error: resp.ok ? null : json.detail,
         charts: resp.ok && json.extra.charts ? json.extra.charts : null,
         songs: resp.ok && json.extra.songs ? json.extra.songs : null,
         recentRecords: resp.ok && json.extra.recent_records ? json.extra.recent_records : null,

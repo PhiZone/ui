@@ -20,7 +20,6 @@
 	const callback = () => {
 		pageStatus = status;
 		if (status === Status.OK) {
-			console.log("content:", content);
 			collaborations = content.results;
 			collaborationCount = content.count;
 			previousCollaborations = content.previous;

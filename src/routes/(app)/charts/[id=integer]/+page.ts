@@ -21,7 +21,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Chart) : null,
-        error: resp.ok ? null : json.error,
+        error: resp.ok ? null : json.detail,
         commentRes,
     };
 };

@@ -4,7 +4,7 @@
 	import { getCompressedImage, parseRichText } from "$lib/utils";
 	import Like from "./like.svelte";
 
-	export let chart: Chart, token: string, user: User;
+	export let chart: Chart, token: string | undefined, user: User;
 </script>
 
 {#if typeof chart.song == "object"}

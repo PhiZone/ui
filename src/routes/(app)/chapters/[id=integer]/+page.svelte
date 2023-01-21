@@ -73,7 +73,6 @@
 			commentCount = json.count;
 			previousComments = json.previous;
 			nextComments = json.next;
-			console.log(json);
 			commentStatus = Status.OK;
 		}
 	};

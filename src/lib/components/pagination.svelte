@@ -4,6 +4,7 @@
 	import type { User } from "$lib/models";
 	import { getPath } from "$lib/utils";
 	import { t } from "$lib/translations/config";
+  import { preloadData } from "$app/navigation";
 
 	export let previous: string | null,
 		next: string | null,
@@ -11,7 +12,7 @@
 		count: number,
 		status: Status,
 		page: number,
-		token: string,
+		token: string | undefined,
 		user: User;
 
 	const get = async (url: string) => {
@@ -27,7 +28,6 @@
 		previous = json.previous;
 		next = json.next;
 		results = json.results;
-		console.log(results);
 		status = Status.OK;
 	};
 </script>
@@ -46,6 +46,11 @@
 						get(previous);
 						--page;
 					}
+				}}
+				on:pointerenter={() => {
+					if (previous) {
+						preloadData(previous);
+					}
 				}}>«</button
 			>
 			<button class="btn btn-primary w-32 text-lg glass btn-active btn-disabled"
@@ -61,6 +66,11 @@
 					if (next) {
 						get(next);
 						++page;
+					}
+				}}
+				on:pointerenter={() => {
+					if (next) {
+						preloadData(next);
 					}
 				}}>»</button
 			>

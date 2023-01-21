@@ -4,7 +4,7 @@
 	import { convertDuration, getCompressedImage } from "$lib/utils";
 	import Like from "./like.svelte";
 
-	export let song: Song, token: string, user: User;
+	export let song: Song, token: string | undefined, user: User;
 
 	let easyCount = song.levels.find((e) => {
 			return e.level === "EZ";

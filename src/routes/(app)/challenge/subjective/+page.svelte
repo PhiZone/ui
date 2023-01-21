@@ -18,8 +18,6 @@
 		goto("/challenge");
 	}
 
-	console.log("subjective_questions:", questions);
-
 	let min = 59,
 		sec = 59;
 
@@ -46,11 +44,9 @@
 			.sort((a, b) => b.id - a.id)
 			.forEach((e) => {
 				if (e().text) {
-					console.log(e().text);
 					texts.push(e().text);
 				} else {
 					chart = e().chart;
-					console.log(chart);
 				}
 			});
 		let formData = new FormData();

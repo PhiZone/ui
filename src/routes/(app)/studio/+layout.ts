@@ -9,5 +9,5 @@ export const load: import('./$types').LayoutLoad = async ({ parent }) => {
     if (user && getUserPrivilege(user.type) < 2) {
         throw error(403, 'Forbidden');
     }
-    console.log('Current User:', user ? user.username : 'Anonymous');
+    
 };

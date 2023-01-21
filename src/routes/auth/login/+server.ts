@@ -35,7 +35,6 @@ export const POST: RequestHandler = async ({ request }) => {
         });
     }
     const result: AuthLoginResult = await resp.json();
-    console.log('success');
     return new Response(null, {
         status: 200,
         headers: setTokens(result.access_token, result.refresh_token),

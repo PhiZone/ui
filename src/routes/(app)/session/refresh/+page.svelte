@@ -1,13 +1,48 @@
+<script lang="ts">
+	import { onMount } from "svelte";
+	import { ContentType, Error } from "$lib/constants";
+	import { error } from "@sveltejs/kit";
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { POST } from "$lib/utils";
+
+	export let data: import("./$types").PageData;
+	$: ({ refresh_token } = data);
+
+	onMount(async () => {
+		const resp = await POST("/auth/refresh", {
+			refresh_token,
+		});
+		if (resp.ok) {
+			const redirect = $page.url.searchParams.get("redirect");
+			goto(redirect ? redirect : "/");
+		} else {
+			const detail = await resp.json();
+			try {
+				if (detail.msg.error === Error.INVALID_GRANT) {
+					goto("/session/login" + $page.url.search);
+				} else {
+					console.log("error", detail);
+					throw error(400, detail);
+				}
+			} catch (e) {
+				console.log("error", detail);
+				goto("/session/login" + $page.url.search);
+			}
+		}
+	});
+</script>
+
 <svelte:head>
 	<title>Redirection | PhiZone</title>
 </svelte:head>
 <div class="hero min-h-screen bg-base-200">
-    <div class="hero-content text-center">
-        <div class="max-w-md">
-            <h1 class="text-5xl font-bold my-4">Redirecting...</h1>
-            <p class="text-lg py-6">Please wait while you're being redirected.</p>
-        </div>
-    </div>
+	<div class="hero-content text-center">
+		<div class="max-w-md">
+			<h1 class="text-5xl font-bold my-4">Redirecting...</h1>
+			<p class="text-lg py-6">Please wait while you're being redirected.</p>
+		</div>
+	</div>
 </div>
 
 <style>

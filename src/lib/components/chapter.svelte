@@ -5,7 +5,7 @@
 	import Like from "./like.svelte";
 
 	export let chapter: Chapter,
-		token: string,
+		token: string | undefined,
 		user: User,
 		fixedHeight = false;
 </script>

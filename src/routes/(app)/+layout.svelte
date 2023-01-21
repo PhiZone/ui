@@ -4,9 +4,9 @@
 	import Footer from "$lib/components/footer.svelte";
 
 	export let data: import("./$types").LayoutData;
-	$: ({ user, backupUser } = data);
+	$: ({ user, backupUser, refresh_token } = data);
 </script>
 
-<Navbar user={user ? user : backupUser} />
+<Navbar user={refresh_token ? user ? user : backupUser : undefined} />
 <slot />
-<Footer user={user ? user : backupUser} />
+<Footer user={refresh_token ? user ? user : backupUser : undefined} />

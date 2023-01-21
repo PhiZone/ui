@@ -17,7 +17,6 @@
 		nextRecords: string;
 
 	onMount(() => {
-		console.log("Status:", status);
 		recordStatus = status;
 		if (status === Status.OK) {
 			records = content.results;

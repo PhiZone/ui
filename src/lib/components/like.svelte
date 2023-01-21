@@ -7,7 +7,7 @@
 		likes: number,
 		type: string,
 		target: number,
-		token: string,
+		token: string | undefined,
 		user: User,
 		css: string;
 

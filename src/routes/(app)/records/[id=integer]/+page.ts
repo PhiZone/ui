@@ -15,6 +15,6 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? (json as Record) : null,
         grade: resp.ok ? getGrade(json.score, json.full_combo) : null,
-        error: resp.ok ? null : json.error,
+        error: resp.ok ? null : json.detail,
     };
 };

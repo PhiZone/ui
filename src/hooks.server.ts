@@ -11,7 +11,7 @@ export const handle = (async ({ event, resolve }) => {
 
     if (cookies.refresh_token) {
         let resp;
-        if (cookies.access_token) {
+        if (cookies.access_token && !event.url.pathname.startsWith('/session') && !event.url.pathname.startsWith('/auth')) {
             resp = await getUserDetail(cookies.access_token);
         }
         if (resp?.ok) {
@@ -28,9 +28,11 @@ export const handle = (async ({ event, resolve }) => {
                     location: `/session/refresh?redirect=${encodeURIComponent(event.url.pathname + event.url.search)}`,
                 },
             });
-        } else {
-            console.log('not logged in');
         }
+    } else {
+        event.locals.user = undefined;
+        event.locals.access_token = undefined;
+        event.locals.refresh_token = undefined;
     }
     return await resolve(event);
 }) satisfies Handle;

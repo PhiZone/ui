@@ -4,9 +4,9 @@
 // for information about these interfaces
 declare namespace App {
     interface Locals {
-        access_token: string;
-        refresh_token: string;
-        user: import('@sveltejs/kit/types/private').JSONObject;
+        access_token: string | undefined;
+        refresh_token: string | undefined;
+        user: import('@sveltejs/kit/types/private').JSONObject | undefined;
     }
     // interface Platform {}
     // interface Session {}

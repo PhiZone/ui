@@ -22,6 +22,6 @@ export const load: import('./$types').PageLoad = async ({ parent, url, fetch }) 
         type,
         name,
         content: resp && resp.ok ? json : null,
-        error: resp && resp.ok ? null : resp ? json.error : null,
+        error: resp && resp.ok ? null : resp ? json.detail : null,
     };
 };

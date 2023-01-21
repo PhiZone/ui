@@ -9,7 +9,6 @@
 	export let data;
 	$: ({ status, questions, error } = data);
 
-	console.log("objective_questions:", questions);
 	console.log("error:", error);
 
 	let min = 29,
@@ -44,7 +43,6 @@
 		getChoices
 			.sort((a, b) => b.id - a.id)
 			.forEach((e) => {
-				console.log(e().choice);
 				choices.push(e().choice);
 			});
 		goto(`subjective?answers=${choices.toString()}`);

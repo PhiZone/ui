@@ -6,7 +6,7 @@
 
 	export let user: User,
 		operator: User,
-		token: string,
+		token: string | undefined,
 		mini = false,
 		fixedHeight = false,
 		showButton = true;
@@ -53,7 +53,7 @@
 		);
 		if (!resp.ok) {
 			const json = await resp.json();
-			error = json.error;
+			error = json.detail;
 			console.log(json);
 			isFollowing = true;
 			fans++;

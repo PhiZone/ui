@@ -18,7 +18,6 @@
 	onMount(() => {
 		pageStatus = status;
 		if (status === Status.OK) {
-			console.log("content:", content);
 			submissions = content.results;
 			submissionCount = content.count;
 			previousSubmissions = content.previous;

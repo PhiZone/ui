@@ -15,7 +15,6 @@
 		nextCharts: string;
 
 	onMount(() => {
-		console.log("Status:", status);
 		chartStatus = status;
 		if (status === Status.OK) {
 			charts = content.results;

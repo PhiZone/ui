@@ -82,7 +82,7 @@
 			const reader = new FileReader();
 			reader.readAsDataURL(illustration);
 			reader.onload = () => {
-				console.log(reader.result);
+				// console.log(reader.result);
 			};
 		}
 	};
