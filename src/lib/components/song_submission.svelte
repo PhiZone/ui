@@ -7,7 +7,7 @@
 </script>
 
 <a
-	data-sveltekit-preload-data
+	
 	href={`/studio/song-submissions/${submission.id}`}
 >
 	<div

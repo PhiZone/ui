@@ -8,7 +8,7 @@
 </script>
 
 <a
-	data-sveltekit-preload-data
+	
 	href={`/studio/chart-submissions/${submission.id}`}
 >
 	<div

@@ -527,7 +527,7 @@
 													{#each charts as chart}
 														<li class="border border-base-300">
 															<a
-																data-sveltekit-preload-data
+																
 																href={`/charts/${chart.id}`}
 																class="w-full h-[82px] flex px-5"
 															>
@@ -544,7 +544,7 @@
 																		{#each parseRichText(chart.charter) as t}
 																			{#if t.id > 0}
 																				<a
-																					data-sveltekit-preload-data
+																					
 																					href={`/users/${t.id}`}
 																					class="text-accent hover:underline"
 																					>{t.text}</a

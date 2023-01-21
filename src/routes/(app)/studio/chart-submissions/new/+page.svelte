@@ -445,7 +445,7 @@
 									{#each parseRichText(charter) as t}
 										{#if t.id > 0}
 											<a
-												data-sveltekit-preload-data
+												
 												href={`/users/${t.id}`}
 												class="text-accent hover:underline"
 												target="_blank"

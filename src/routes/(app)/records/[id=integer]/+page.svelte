@@ -12,7 +12,7 @@
 	<title>{$t("record.record")} | {$t("common.title")}</title>
 </svelte:head>
 
-{#if status === Status.OK && content !== null && typeof content.chart.song === "object" && grade !== null}
+{#if status === Status.OK && content !== null && typeof content.chart === "object" && typeof content.chart.song === "object" && grade !== null}
 	<div class="bg-base-200 page py-24 px-12 justify-center flex">
 		<div class="mx-4 min-w-fit max-w-xl main-width">
 			<div class="indicator w-full my-4">
@@ -98,13 +98,15 @@
 					<User user={content.player} operator={user} token={access_token} />
 				</div>
 			{/if}
-			<div class="indicator my-4 w-full">
-				<span
-					class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-					>{$t("chart.chart")}</span
-				>
-				<Chart chart={content.chart} token={access_token} {user} />
-			</div>
+			{#if content.chart && typeof content.chart === "object"}
+				<div class="indicator my-4 w-full">
+					<span
+						class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+						>{$t("chart.chart")}</span
+					>
+					<Chart chart={content.chart} token={access_token} {user} />
+				</div>
+			{/if}
 		</div>
 	</div>
 {/if}

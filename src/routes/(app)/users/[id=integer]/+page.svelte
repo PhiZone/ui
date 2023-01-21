@@ -266,7 +266,7 @@
 								</h2>
 								{#if charts.length > 0}
 									<a
-										data-sveltekit-preload-data
+										
 										class="min-w-fit"
 										href={`/charts?owner=${content.id}`}
 									>
@@ -281,7 +281,7 @@
 									{#each charts as chart}
 										<li>
 											<a
-												data-sveltekit-preload-data
+												
 												href={`/charts/${chart.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
@@ -306,7 +306,7 @@
 													{#each parseRichText(chart.charter) as t}
 														{#if t.id > 0}
 															<a
-																data-sveltekit-preload-data
+																
 																href={`/users/${t.id}`}
 																class="text-accent hover:underline">{t.text}</a
 															>
@@ -347,7 +347,7 @@
 								</h2>
 								{#if songs.length > 0}
 									<a
-										data-sveltekit-preload-data
+										
 										class="min-w-fit"
 										href={`/songs?owner=${content.id}`}
 									>
@@ -362,7 +362,7 @@
 									{#each songs as song}
 										<li>
 											<a
-												data-sveltekit-preload-data
+												
 												href={`/songs/${song.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
@@ -413,7 +413,7 @@
 								</h2>
 								{#if recentRecords.length > 0}
 									<a
-										data-sveltekit-preload-data
+										
 										class="min-w-fit"
 										href={`/records?player=${content.id}`}
 									>
@@ -440,7 +440,7 @@
 								</h2>
 								{#if bestRecords.length > 0}
 									<a
-										data-sveltekit-preload-data
+										
 										class="min-w-fit"
 										href={`/records?player=${content.id}&order=-rks`}
 									>
