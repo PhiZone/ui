@@ -22,13 +22,9 @@ export const POST: RequestHandler = async ({ request }) => {
     const resp = await api.auth.token(credentials);
     if (!resp.ok) {
         const err = await resp.json();
-        return new Response(
-            JSON.stringify({
-                code: resp.status,
-                msg: err,
-            }),
+        return new Response(JSON.stringify(err),
             {
-                status: 400,
+                status: resp.status,
             }
         );
     }

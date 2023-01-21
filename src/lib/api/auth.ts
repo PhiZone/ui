@@ -8,8 +8,8 @@ export interface RegisterOpts {
     language?: 'en' | 'zh-Hans' | 'zh-Hant' | 'ja';
 }
 
-export function register(opts: RegisterOpts) {
-    return POST("/register/", opts);
+export function register(opts: RegisterOpts, fetch?: Function, language?: string) {
+    return POST("/register/", opts, undefined, undefined, ContentType.JSON, fetch, language);
 }
 
 export interface ActivateOpts {

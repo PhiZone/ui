@@ -1,4 +1,4 @@
-import { LOCAL_API_BASE, RES_BASE, USER_LEVELS } from "./constants";
+import { ContentType, LOCAL_API_BASE, RES_BASE, USER_LEVELS } from "./constants";
 
 export function POST(endpoint: string, data: unknown, language?: string) {
     return fetch(endpoint, {
@@ -6,9 +6,7 @@ export function POST(endpoint: string, data: unknown, language?: string) {
         credentials: 'include',
         body: JSON.stringify(data || {}),
         headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'PhiZoneRegularAccess',
-            'Accept-Language': (language ? language : convertLanguageCode(window.navigator.language)).toLowerCase()
+            'Accept-Language': language ? language : convertLanguageCode(window.navigator.language)
         },
     });
 }

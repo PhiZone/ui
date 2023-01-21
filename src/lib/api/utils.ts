@@ -11,9 +11,10 @@ interface SendOpts<T> {
     user?: User;
     contentType?: ContentType;
     func?: Function;
+    language?: string;
 }
 
-function send<T>({ method, path, data, token, user, contentType, func }: SendOpts<T>) {
+function send<T>({ method, path, data, token, user, contentType, func, language }: SendOpts<T>) {
     const headers = new Headers();
     const opts: RequestInit = { method, headers };
 
@@ -28,7 +29,7 @@ function send<T>({ method, path, data, token, user, contentType, func }: SendOpt
         headers.append('Content-Type', ContentType.FORM_DATA);
     }
     let l = locale.get();
-    headers.append('Accept-Language', (user ? user.language : l ? l : convertLanguageCode(window.navigator.language)).toLowerCase());
+    headers.append('Accept-Language', language ? language : user ? user.language : l ? l : convertLanguageCode(window.navigator.language));
     headers.append('User-Agent', 'PhiZoneRegularAccess');
     if (token) {
         headers.append('Authorization', `Bearer ${token}`);
@@ -42,26 +43,26 @@ function send<T>({ method, path, data, token, user, contentType, func }: SendOpt
     }
 }
 
-export function GET(path: string, token?: string, user?: User, func?: Function) {
-    return send<undefined>({ method: 'GET', path, token, user, func });
+export function GET(path: string, token?: string, user?: User, func?: Function, language?: string) {
+    return send<undefined>({ method: 'GET', path, token, user, func, language });
 }
 
-export function DELETE(path: string, token?: string, user?: User, func?: Function) {
-    return send<undefined>({ method: 'DELETE', path, token, user, func });
+export function DELETE(path: string, token?: string, user?: User, func?: Function, language?: string) {
+    return send<undefined>({ method: 'DELETE', path, token, user, func, language });
 }
 
-export function POST<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function) {
-    return send<T>({ method: 'POST', path, data, token, user, contentType, func });
+export function POST<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function, language?: string) {
+    return send<T>({ method: 'POST', path, data, token, user, contentType, func, language });
 }
 
-export function PUT<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function) {
-    return send<T>({ method: 'PUT', path, data, token, user, contentType, func });
+export function PUT<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function, language?: string) {
+    return send<T>({ method: 'PUT', path, data, token, user, contentType, func, language });
 }
 
-export function HEAD<T>(path: string, data: T, token?: string, user?: User, func?: Function) {
-    return send<T>({ method: 'HEAD', path, data, token, user, func });
+export function HEAD<T>(path: string, data: T, token?: string, user?: User, func?: Function, language?: string) {
+    return send<T>({ method: 'HEAD', path, data, token, user, func, language });
 }
 
-export function PATCH<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function) {
-    return send<T>({ method: 'PATCH', path, data, token, user, contentType, func });
+export function PATCH<T>(path: string, data: T, token?: string, user?: User, contentType?: ContentType, func?: Function, language?: string) {
+    return send<T>({ method: 'PATCH', path, data, token, user, contentType, func, language });
 }

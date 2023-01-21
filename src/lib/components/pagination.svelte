@@ -4,7 +4,6 @@
 	import type { User } from "$lib/models";
 	import { getPath } from "$lib/utils";
 	import { t } from "$lib/translations/config";
-  import { preloadData } from "$app/navigation";
 
 	export let previous: string | null,
 		next: string | null,
@@ -15,10 +14,22 @@
 		token: string | undefined,
 		user: User;
 
+	let preloaded = false,
+		resp: { json: () => any; ok: any };
+
+	const preload = async (url: string) => {
+		resp = await api.GET(getPath(url), token, user);
+		preloaded = true;
+	};
+
 	const get = async (url: string) => {
 		results = null;
 		status = Status.RETRIEVING;
-		const resp = await api.GET(getPath(url), token, user);
+		if (!preloaded) {
+			resp = await api.GET(getPath(url), token, user);
+		} else {
+			preloaded = false;
+		}
 		const json = await resp.json();
 		if (!resp.ok) {
 			status = Status.ERROR;
@@ -49,7 +60,7 @@
 				}}
 				on:pointerenter={() => {
 					if (previous) {
-						// preloadData(previous);
+						preload(previous);
 					}
 				}}>«</button
 			>
@@ -70,7 +81,7 @@
 				}}
 				on:pointerenter={() => {
 					if (next) {
-						// preloadData(next);
+						preload(next);
 					}
 				}}>»</button
 			>

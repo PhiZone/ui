@@ -16,13 +16,9 @@ export const GET: RequestHandler = async ({ locals }) => {
             } catch (e) {
                 err = await resp.text();
             }
-            return new Response(
-                JSON.stringify({
-                    code: resp.status,
-                    msg: err,
-                }),
+            return new Response(JSON.stringify(err),
                 {
-                    status: 400,
+                    status: resp.status,
                 }
             );
         }

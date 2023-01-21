@@ -1,8 +1,9 @@
 import * as api from '$lib/api';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request }) => {
-    const resp = await api.auth.register(await request.json());
+export const POST: RequestHandler = async ({ request, fetch }) => {
+    const language = request.headers.get('Accept-Language')
+    const resp = await api.auth.register(await request.json(), fetch, language ? language : undefined);
     if (!resp.ok) {
         let err, respClone = resp.clone();
         try {
@@ -10,13 +11,9 @@ export const POST: RequestHandler = async ({ request }) => {
         } catch (e) {
             err = await respClone.text();
         }
-        return new Response(
-            JSON.stringify({
-                code: resp.status,
-                msg: err,
-            }),
+        return new Response(JSON.stringify(err),
             {
-                status: 400,
+                status: resp.status,
             }
         );
     }

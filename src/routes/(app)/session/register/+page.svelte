@@ -38,7 +38,7 @@
 			goto(`/session/email-confirmation${$page.url.search}`);
 		} else {
 			status = Status.ERROR;
-			const errors = (await resp.json()).msg;
+			const errors = await resp.json();
 			console.log(errors);
 			if (errors.email) {
 				emailErr = errors.email[0];

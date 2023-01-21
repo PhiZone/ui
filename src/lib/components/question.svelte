@@ -1,6 +1,19 @@
 <script lang="ts">
 	import { getCompressedImage, parseLatex } from "$lib/utils";
-	import { math } from "mathlifier";
+	// import { math } from "mathlifier";
+	// [commonjs--resolver] Failed to resolve entry for package "mathlifier". The package may have incorrect main/module/exports specified in its package.json.
+	// error during build:
+	// Error: Failed to resolve entry for package "mathlifier". The package may have incorrect main/module/exports specified in its package.json.
+	//     at packageEntryFailure (file:///root/phizone_ui/node_modules/vite/dist/node/chunks/dep-5e7f419b.js:21837:11)
+	//     at resolvePackageEntry (file:///root/phizone_ui/node_modules/vite/dist/node/chunks/dep-5e7f419b.js:21834:5)
+	//     at tryNodeResolve (file:///root/phizone_ui/node_modules/vite/dist/node/chunks/dep-5e7f419b.js:21572:20)
+	//     at Object.resolveId (file:///root/phizone_ui/node_modules/vite/dist/node/chunks/dep-5e7f419b.js:21336:28)
+	//     at file:///root/phizone_ui/node_modules/rollup/dist/es/shared/rollup.js:23704:40
+	//     at async PluginDriver.hookFirstAndGetPlugin (file:///root/phizone_ui/node_modules/rollup/dist/es/shared/rollup.js:23604:28)
+	//     at async resolveId (file:///root/phizone_ui/node_modules/rollup/dist/es/shared/rollup.js:22547:26)
+	//     at async ModuleLoader.resolveId (file:///root/phizone_ui/node_modules/rollup/dist/es/shared/rollup.js:22811:15)
+	//     at async Object.resolveId (file:///root/phizone_ui/node_modules/vite/dist/node/chunks/dep-5e7f419b.js:8001:10)
+	//     at async PluginDriver.hookFirstAndGetPlugin (file:///root/phizone_ui/node_modules/rollup/dist/es/shared/rollup.js:23604:28)
 	import { t } from "$lib/translations/config";
 
 	interface Trunk {
@@ -98,7 +111,7 @@
 		<div class="pb-2 text-xl">
 			{#each parseLatex(obj.q.text) as e}
 				{#if e.latex}
-					{@html math(e.text)}
+					<!-- {@html math(e.text)} -->
 				{:else}
 					{e.text}
 				{/if}
@@ -119,7 +132,7 @@
 							{#if c.text}
 								{#each parseLatex(c.text) as e}
 									{#if e.latex}
-										{@html math(e.text)}
+										<!-- {@html math(e.text)} -->
 									{:else}
 										{e.text}
 									{/if}

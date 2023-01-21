@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
             err = await respClone.text();
         }
         console.log(err);
-        return new Response(err, {
+        return new Response(JSON.stringify(err), {
             status: resp.status,
         });
     }

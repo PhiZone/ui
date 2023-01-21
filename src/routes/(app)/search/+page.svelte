@@ -27,6 +27,7 @@
 
 	beforeNavigate(() => {
 		results = null;
+		page = 1;
 		count = null;
 		previous = null;
 		next = null;

@@ -135,7 +135,7 @@
 		>
 		{#if showUser}
 			{#if user}
-				<a href="/me/notifications">
+				<a data-sveltekit-preload-data href="/me/notifications">
 					<button class="btn btn-ghost btn-circle">
 						<div class="indicator">
 							<svg
