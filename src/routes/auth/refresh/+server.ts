@@ -2,6 +2,7 @@ import * as api from '$lib/api';
 import type { TokenOpts } from '$lib/api/auth';
 import type { RequestHandler } from './$types';
 import { setTokens } from '../_cookie';
+import { error } from '@sveltejs/kit';
 
 interface AuthLoginResult {
     access_token: string;
@@ -21,23 +22,18 @@ export const POST: RequestHandler = async ({ request }) => {
     };
     const resp = await api.auth.token(credentials);
     if (!resp.ok) {
-        const err = await resp.json();
-        return new Response(JSON.stringify(err),
-            {
-                status: resp.status,
-            }
-        );
+        return new Response(JSON.stringify({
+            code: resp.status,
+            content: await resp.json()
+        }));
     }
     try {
         const result: AuthLoginResult = await resp.json();
         return new Response(null, {
-            status: 200,
             headers: setTokens(result.access_token, result.refresh_token),
         });
     } catch (e) {
         console.log(resp.status, e);
-        return new Response(null, {
-            status: 500,
-        });
+        throw error(500, "Internal Error");
     }
 };

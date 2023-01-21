@@ -15,7 +15,8 @@
         "register": "注册",
         "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
         "select_language": "选择语言",
-        "success": "你的 PhiZone 账号注册成功！"
+        "success": "你的 PhiZone 账号注册成功！",
+        "language_error": "语言选项出现问题。请更换浏览器重试。"
     },
     "email_confirmation": {
         "email_confirmation": "确认邮箱地址",
@@ -30,5 +31,8 @@
         "password_reset_text2": "一封邮件已发至你的邮箱！请点击邮件中的链接以继续。",
         "password_reset_text3": "请在下方输入你希望为你的账户设置的新密码。",
         "new_password": "新密码"
-    }
+    },
+    "logging_out": "登出中",
+    "redirecting": "重定向中",
+    "redirection_description": "请等待重定向完毕"
 }

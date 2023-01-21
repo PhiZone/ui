@@ -1,31 +1,31 @@
-<script>
+<script lang="ts">
 	import { POST } from "$lib/utils";
 	import { locale, t } from "$lib/translations/config";
 	import { Status } from "$lib/constants";
-
-	/** @type {import('./$types').PageData} */
-	export let data;
-	$: ({ redirect } = data);
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
 
 	let email = "";
 	let password = "";
-	let error_msg = "";
+	let msg = "";
 
 	let status = Status.WAITING;
 
 	const login = async () => {
 		if (!email || !password) {
-			error_msg = $t("session.data_incomplete");
+			msg = $t("session.data_incomplete");
 			return;
 		}
 		status = Status.SENDING;
 		const resp = await POST("/auth/login", { email, password }, locale.get());
-		if (resp.ok) {
-			location.href = redirect ? redirect : "/";
+		const json = await resp.json();
+		const redirect = $page.url.searchParams.get("redirect");
+		if (json.code === 200) {
+			goto(redirect ? redirect : "/");
 		} else {
 			status = Status.ERROR;
-			error_msg = $t(
-				resp.status == 400
+			msg = $t(
+				json.code == 400
 					? "session.login.invalid_credentials"
 					: "common.unknown_error"
 			);
@@ -61,7 +61,7 @@
 							autocomplete="username"
 							class="input input-bordered"
 							on:input={() => {
-								error_msg = "";
+								msg = "";
 							}}
 							bind:value={email}
 						/>
@@ -77,7 +77,7 @@
 							autocomplete="current-password"
 							class="input input-bordered"
 							on:input={() => {
-								error_msg = "";
+								msg = "";
 							}}
 							bind:value={password}
 						/>
@@ -97,20 +97,25 @@
 							>
 						</label>
 					</div>
-					<div class="form-control mt-6">
-						{#if error_msg}
+					<div class="flex justify-center mt-6">
+						{#if msg}
 							<div
-								class="tooltip tooltip-open tooltip-error"
-								data-tip={error_msg}
+								class="tooltip tooltip-open tooltip-bottom tooltip-error w-full"
+								data-tip={msg}
 							>
-								<button class="btn btn-error">{$t("common.error")}</button>
+								<button class="btn btn-error w-full"
+									>{$t("common.error")}</button
+								>
 							</div>
 						{:else if status === Status.SENDING}
-							<button class={`btn btn-outline btn-ghost btn-disabled glass`}
+							<button class="btn btn-ghost btn-disabled glass w-full"
 								>{$t("common.waiting")}</button
 							>
 						{:else}
-							<button class="btn btn-primary" on:click={login}>
+							<button
+								class="btn btn-primary btn-outline w-full"
+								on:click={login}
+							>
 								{$t("session.login.login")}</button
 							>
 						{/if}

@@ -745,7 +745,7 @@
 					status === Status.ERROR
 						? "btn-disabled tooltip tooltip-open tooltip-left tooltip-error"
 						: status === Status.SENDING
-						? "btn btn-outline btn-ghost btn-disabled glass"
+						? "btn btn-ghost btn-disabled glass"
 						: "btn-primary"
 				} glass float-right my-5 text-lg`}
 				data-tip={errorMsg

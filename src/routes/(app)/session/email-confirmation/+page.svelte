@@ -86,7 +86,7 @@
 						<button class="btn btn-error">{$t("common.error")}</button>
 					</div>
 				{:else if status === Status.SENDING}
-					<button class={`btn btn-outline btn-ghost btn-disabled glass`}
+					<button class={`btn btn-ghost btn-disabled glass`}
 						>{$t("common.waiting")}</button
 					>
 				{:else}

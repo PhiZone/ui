@@ -15,7 +15,8 @@
         "register": "Register",
         "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
         "select_language": "Select Language",
-        "success": "You've successfully registered an account on PhiZone!"
+        "success": "You've successfully registered an account on PhiZone!",
+        "language_error": "Invalid language. Switch to another browser and retry."
     },
     "email_confirmation": {
         "email_confirmation": "Confirm Email Address",
@@ -30,5 +31,8 @@
         "password_reset_text2": "We've sent an email to your mailbox. Please click the link in the email so that you can reset your password.",
         "password_reset_text3": "Please enter your new password.",
         "new_password": "New Password"
-    }
+    },
+    "logging_out": "Logging Out",
+    "redirecting": "Redirecting",
+    "redirection_description": "Please wait while you're being redirected."
 }

@@ -22,21 +22,15 @@ export const POST: RequestHandler = async ({ request }) => {
     };
     const resp = await api.auth.token(credentials);
     if (!resp.ok) {
-        let err;
-        const respClone = resp.clone();
-        try {
-            err = await resp.json();
-        } catch (e) {
-            err = await respClone.text();
-        }
-        console.log(err);
-        return new Response(JSON.stringify(err), {
-            status: resp.status,
-        });
+        return new Response(JSON.stringify({
+            code: resp.status,
+            content: await resp.json()
+        }));
     }
     const result: AuthLoginResult = await resp.json();
-    return new Response(null, {
-        status: 200,
+    return new Response(JSON.stringify({
+        code: resp.status
+    }), {
         headers: setTokens(result.access_token, result.refresh_token),
     });
 };

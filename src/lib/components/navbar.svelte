@@ -212,7 +212,7 @@
 							<a href="/me/settings">{$t("common.settings")}</a>
 						</li>
 						<li>
-							<a href="/auth/logout">{$t("common.navbar.logout")}</a>
+							<a href="/session/logout">{$t("common.navbar.logout")}</a>
 						</li>
 					</ul>
 				</div>

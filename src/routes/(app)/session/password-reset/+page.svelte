@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { browser } from "$app/environment";
 	import * as api from "$lib/api";
 	import { Status } from "$lib/constants";
 	import { t } from "$lib/translations/config";
@@ -104,7 +103,7 @@
 								<button class="btn btn-error">{$t("common.error")}</button>
 							</div>
 						{:else if status === Status.SENDING}
-							<button class={`btn btn-outline btn-ghost btn-disabled glass`}
+							<button class={`btn btn-ghost btn-disabled glass`}
 								>{$t("common.waiting")}</button
 							>
 						{:else}
@@ -171,7 +170,7 @@
 							<button class="btn btn-error">{$t("common.error")}</button>
 						</div>
 					{:else if status === Status.RETRIEVING}
-						<button class={`btn btn-outline btn-ghost btn-disabled glass`}
+						<button class={`btn btn-ghost btn-disabled glass`}
 							>{$t("common.waiting")}</button
 						>
 					{:else}

@@ -13,20 +13,20 @@
 		const resp = await POST("/auth/refresh", {
 			refresh_token,
 		});
-		if (resp.ok) {
+        const json = await resp.json();
+		if (json.code === 200) {
 			const redirect = $page.url.searchParams.get("redirect");
 			goto(redirect ? redirect : "/");
 		} else {
-			const detail = await resp.json();
 			try {
-				if (detail.msg.error === Error.INVALID_GRANT) {
+				if (json.content.error === Error.INVALID_GRANT) {
 					goto("/session/login" + $page.url.search);
 				} else {
-					console.log("error", detail);
-					throw error(400, detail);
+					console.log("error", json.code, json.content);
+					throw error(json.code, json.content.error_description);
 				}
 			} catch (e) {
-				console.log("error", detail);
+				console.log("error", json.code, json.content);
 				goto("/session/login" + $page.url.search);
 			}
 		}

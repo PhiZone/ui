@@ -153,7 +153,7 @@
 									avatarStatus === Status.ERROR
 										? "btn-error btn-disabled"
 										: avatarStatus === Status.SENDING
-										? "btn btn-outline btn-ghost btn-disabled glass"
+										? "btn btn-ghost btn-disabled glass"
 										: "btn-primary"
 								} glass float-right my-5 text-lg`}
 								on:click={submitAvatar}
@@ -264,7 +264,7 @@
 										genderStatus === Status.ERROR
 											? "btn-error btn-disabled"
 											: genderStatus === Status.SENDING
-											? "btn btn-outline btn-ghost btn-disabled glass"
+											? "btn btn-ghost btn-disabled glass"
 											: "btn-primary"
 									} glass float-right text-lg`}
 									on:click={async () => {
@@ -318,7 +318,7 @@
 										usernameStatus === Status.ERROR
 											? "btn-error btn-disabled"
 											: usernameStatus === Status.SENDING
-											? "btn btn-outline btn-ghost btn-disabled glass"
+											? "btn btn-ghost btn-disabled glass"
 											: "btn-primary"
 									} glass float-right text-lg`}
 									on:click={async () => {
@@ -374,7 +374,7 @@
 										languageStatus === Status.ERROR
 											? "btn-error btn-disabled"
 											: languageStatus === Status.SENDING
-											? "btn btn-outline btn-ghost btn-disabled glass"
+											? "btn btn-ghost btn-disabled glass"
 											: "btn-primary"
 									} glass float-right text-lg`}
 									on:click={async () => {
@@ -425,7 +425,7 @@
 										bioStatus === Status.ERROR
 											? "btn-error btn-disabled"
 											: bioStatus === Status.SENDING
-											? "btn btn-outline btn-ghost btn-disabled glass"
+											? "btn btn-ghost btn-disabled glass"
 											: "btn-primary"
 									} glass float-right text-lg`}
 									on:click={async () => {
