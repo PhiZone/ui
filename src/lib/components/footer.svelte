@@ -8,7 +8,7 @@
 	const email_address = "i@phi.zone";
 </script>
 
-{#if !($page.url.pathname.startsWith("/studio") && user && getUserPrivilege(user.type) >= 2)}
+{#if !($page.url.pathname.startsWith("/studio") && $page.status < 400 && user && getUserPrivilege(user.type) >= 2)}
 	<footer
 		class="footer pt-[23px] pb-3 px-10 border-t bg-base-200 border-base-300 text-base"
 	>

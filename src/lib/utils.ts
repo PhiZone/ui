@@ -212,32 +212,7 @@ export function getCompressedImage(input: string | undefined) {
     if (!input) {
         return "";
     }
-    input = input.replace(`${LOCAL_API_BASE}/media`, RES_BASE);
-    if (input.endsWith(".webp")) {
-        return input.replace(".webp", ".comp.webp")
-    }
-    if (input.endsWith(".png")) {
-        return input.replace(".png", ".comp.webp")
-    }
-    if (input.endsWith(".jpg")) {
-        return input.replace(".jpg", ".comp.webp")
-    }
-    if (input.endsWith(".PNG")) {
-        return input.replace(".PNG", ".comp.webp")
-    }
-    if (input.endsWith(".JPG")) {
-        return input.replace(".JPG", ".comp.webp")
-    }
-    if (input.endsWith(".jpeg")) {
-        return input.replace(".jpeg", ".comp.webp")
-    }
-    if (input.endsWith(".JPEG")) {
-        return input.replace(".JPEG", ".comp.webp")
-    }
-    if (input.endsWith(".WEBP")) {
-        return input.replace(".WEBP", ".comp.webp")
-    }
-    return input;
+    return input.replace(/^http[^ ]+media$/g, RES_BASE).replace(/.(png)|(jpe?g)|(webp)$/gi, ".comp.webp");
 }
 
 export function getUserColor(type: string | undefined) {

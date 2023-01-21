@@ -35,12 +35,12 @@ export const handle = (async ({ event, resolve }) => {
     return await resolve(event);
 }) satisfies Handle;
 
-export const handleFetch = (({ request, fetch }) => {
-    if (request.url.startsWith(API_BASE)) {
-        request = new Request(
-            request.url.replace(API_BASE, LOCAL_API_BASE),
-            request
-        );
-    }
-    return fetch(request);
-}) satisfies HandleFetch;
+// export const handleFetch = (({ request, fetch }) => {
+//     if (request.url.startsWith(API_BASE)) {
+//         request = new Request(
+//             request.url.replace(API_BASE, LOCAL_API_BASE),
+//             request
+//         );
+//     }
+//     return fetch(request);
+// }) satisfies HandleFetch;
