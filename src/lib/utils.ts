@@ -212,7 +212,7 @@ export function getCompressedImage(input: string | undefined) {
     if (!input) {
         return "";
     }
-    return input.replace(/^http[^ ]+media$/g, RES_BASE).replace(/.(png)|(jpe?g)|(webp)$/gi, ".comp.webp");
+    return input.replace(/^http[^ ]+media$/g, RES_BASE).replace(/\.(png)|(jpe?g)|(webp)$/gi, ".comp.webp");
 }
 
 export function getUserColor(type: string | undefined) {
