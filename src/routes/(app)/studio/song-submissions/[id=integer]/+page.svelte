@@ -168,7 +168,7 @@
 								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("song.offset")}</span
 								>
-								{content.offset}
+								{`${content.offset}ms`}
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"

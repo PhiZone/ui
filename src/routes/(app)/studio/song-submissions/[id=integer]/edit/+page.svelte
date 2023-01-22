@@ -110,7 +110,7 @@
 			ContentType.FORM_DATA
 		);
 		if (resp.ok) {
-			goto("/studio/song-submissions");
+			goto(`/studio/song-submissions/${content?.id}`);
 		} else {
 			error = await resp.json();
 			console.log(error);
@@ -349,7 +349,7 @@
 									<span class="w-1/4 min-w-[64px]">{$t("song.offset")}</span>
 									<input
 										type="text"
-										placeholder={`${content.offset}ms`}
+										placeholder={`${content.offset}`}
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											status === Status.ERROR && error?.offset
 												? "input-error"

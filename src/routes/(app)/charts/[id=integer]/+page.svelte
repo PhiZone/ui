@@ -163,7 +163,7 @@
 			commentStatus = Status.RETRIEVING;
 			comments = null;
 			const resp = await api.GET(
-				`/comments/?chart=${content.id}&order=-like_count${
+				`/comments/?chart=${content.id}&query_user=1&order=-like_count${
 					page ? `&page=${page}` : ""
 				}`,
 				access_token,

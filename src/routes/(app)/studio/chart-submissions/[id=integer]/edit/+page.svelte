@@ -113,7 +113,7 @@
 			ContentType.FORM_DATA
 		);
 		if (resp.ok) {
-			goto("/studio/chart-submissions");
+			goto(`/studio/chart-submissions/${content?.id}`);
 		} else {
 			error = await resp.json();
 			console.log(error);

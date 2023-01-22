@@ -167,7 +167,7 @@
 			commentStatus = Status.RETRIEVING;
 			comments = null;
 			const resp = await api.GET(
-				`/comments/?song=${content.id}&order=-like_count${
+				`/comments/?song=${content.id}&query_user=1&order=-like_count${
 					page ? `&page=${page}` : ""
 				}`,
 				access_token,

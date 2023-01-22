@@ -14,7 +14,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
     let commentRes;
     try {
         if (json.comment_count > 0)
-            commentRes = await (await api.GET(`/comments/?chart=${json.id}&order=-like_count`, access_token, user, fetch)).json();
+            commentRes = await (await api.GET(`/comments/?chart=${json.id}&query_user=1&order=-like_count`, access_token, user, fetch)).json();
     } catch (e) {
         console.log(e);
     }

@@ -16,7 +16,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
         if (json.songs > 0)
             songRes = await (await api.GET(`/songs/?chapter=${json.id}&order=id`, access_token, user, fetch)).json();
         if (json.comment_count > 0)
-            commentRes = await (await api.GET(`/comments/?chapter=${json.id}&order=-like_count`, access_token, user, fetch)).json();
+            commentRes = await (await api.GET(`/comments/?chapter=${json.id}&query_user=1&order=-like_count`, access_token, user, fetch)).json();
     } catch (e) {
         console.log(e);
     }
