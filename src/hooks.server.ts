@@ -2,6 +2,7 @@ import * as cookie from 'cookie';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { getUserDetail } from '$lib/api/userDetail';
 import { API_BASE, LOCAL_API_BASE } from '$lib/constants';
+import * as api from '$lib/api';
 
 export const handle = (async ({ event, resolve }) => {
     const cookies = cookie.parse(event.request.headers.get('cookie') || '');
@@ -16,18 +17,35 @@ export const handle = (async ({ event, resolve }) => {
         }
         if (resp?.ok) {
             event.locals.user = await resp.json();
-        } else if (
-            cookies.refresh_token &&
-            !event.url.pathname.startsWith('/session') &&
-            !event.url.pathname.startsWith('/auth')
-        ) {
-            console.log('refresh required');
-            return await new Response(null, {
-                status: 303,
-                headers: {
-                    location: `/session/refresh?redirect=${encodeURIComponent(event.url.pathname + event.url.search)}`,
-                },
-            });
+        } else {
+            event.locals.user = undefined;
+            const credentials: api.auth.TokenOpts = {
+                client_id: import.meta.env.VITE_CLIENT_ID,
+                client_secret: import.meta.env.VITE_CLIENT_SECRET,
+                grant_type: 'refresh_token',
+                refresh_token: cookies.refresh_token,
+            };
+            const resp = await api.auth.token(credentials);
+            if (resp.ok) {
+                const json: api.auth.AuthLoginResult = await resp.json()
+                event.request.headers.append('cookie',
+                    cookie.serialize('access_token', json.access_token, {
+                        path: '/',
+                        maxAge: 43200,
+                    })
+                );
+                event.request.headers.append('cookie',
+                    cookie.serialize('refresh_token', json.refresh_token, {
+                        path: '/',
+                        maxAge: 1296000,
+                    })
+                );
+                event.locals.access_token = json.access_token;
+                event.locals.refresh_token = json.refresh_token;
+            } else {
+                event.locals.access_token = undefined;
+                event.locals.refresh_token = undefined;
+            }
         }
     } else {
         event.locals.user = undefined;

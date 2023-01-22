@@ -4,14 +4,6 @@ import type { RequestHandler } from './$types';
 import { setTokens } from '../_cookie';
 import { error } from '@sveltejs/kit';
 
-interface AuthLoginResult {
-    access_token: string;
-    expires_in: number;
-    refresh_token: string;
-    scope: string;
-    token_type: 'Bearer';
-}
-
 export const POST: RequestHandler = async ({ request }) => {
     const json = await request.json();
     const credentials: TokenOpts = {
@@ -28,8 +20,11 @@ export const POST: RequestHandler = async ({ request }) => {
         }));
     }
     try {
-        const result: AuthLoginResult = await resp.json();
-        return new Response(null, {
+        const result: api.auth.AuthLoginResult = await resp.json();
+        return new Response(JSON.stringify({
+            code: resp.status,
+            content: result
+        }), {
             headers: setTokens(result.access_token, result.refresh_token),
         });
     } catch (e) {

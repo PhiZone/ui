@@ -2,7 +2,7 @@
     "recorder": "Chart Recording Service",
     "new_request": "New Request",
     "view_history": "View History",
-    "description": "RPE Recorder is a chart recorder designed for providing a better look for standard-compliant Re: PhiEdit charts, written with C++ by 不会特效の点缀星空.\n\nBefore posting a request, make sure that your chart meets the following requirements:\n1. At the beginning of the chart lies one and only one judgement line in the center of the screen, with a rotation of 0 and an opacity of 255.\n2. There's no use of features other than Phigros vanilla, multiple event layers, fake notes, XY unsync, Y offset, note width change, hold speed change, note visible time, parent judgment lines.\nSubstandard charts will be declined.",
+    "description": "RPE Recorder is a chart recorder designed for providing a better look for standard-compliant Re: PhiEdit charts, written with C++ by 不会特效の点缀星空.\n\nBefore posting a request, make sure that your chart meets the following requirements:\n1. At the beginning of the chart lies one and only one judgement line in the center of the screen, with a rotation of 0 and an opacity of 255.\n2. There's no use of features other than Phigros vanilla, multiple event layers, storyboard (color events and XY scale events), fake notes, XY unsync, Y offset, note width change, hold speed change, note visible time, parent judgment lines.\nSubstandard charts will be declined.",
     "request": "Chart Recording Request",
     "req": "Request",
     "history": "Request History",
@@ -42,9 +42,6 @@
     "replier": "Replier",
     "requested_at": "Requested At",
     "replied_at": "Replied At",
-    "data_incomplete": "The input data is incomplete!",
-    "data_invalid": "The input data is invalid!",
-    "unknown_error": "An unknown error has occurred!",
     "stat_statuses": {
         "0": "Waiting",
         "1": "Accepted",

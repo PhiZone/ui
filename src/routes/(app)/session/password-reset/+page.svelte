@@ -17,7 +17,7 @@
 			msg = $t("session.data_incomplete");
 			return;
 		}
-		status = Status.RETRIEVING;
+		status = Status.SENDING;
 		const resp = await api.POST("/password_reset/", { email });
 		if (resp.ok) {
 			status = Status.OK;
@@ -52,7 +52,9 @@
 			goto("/session/login");
 		} else {
 			status = Status.ERROR;
-			msg = (await resp.json()).error;
+			const json = await resp.json();
+			console.log(json);
+			msg = json.password ? json.password[0] : json.detail ? json.detail : $t("common.unknown_error");
 		}
 	};
 </script>
@@ -169,7 +171,7 @@
 						>
 							<button class="btn btn-error">{$t("common.error")}</button>
 						</div>
-					{:else if status === Status.RETRIEVING}
+					{:else if status === Status.SENDING}
 						<button class={`btn btn-ghost btn-disabled glass`}
 							>{$t("common.waiting")}</button
 						>

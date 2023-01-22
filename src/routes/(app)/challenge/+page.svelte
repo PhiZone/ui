@@ -26,7 +26,7 @@
 					{$t("challenge.already_passed")}
 				</p>
 			{:else if status == 2}
-				<p class="py-6 text-lg text-red-600">{$t("common.session_required")}</p>
+				<p class="py-6 text-lg text-red-600">{$t("common.errors.401")}</p>
 			{/if}
 		</div>
 	</div>

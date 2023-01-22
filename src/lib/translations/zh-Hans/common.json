@@ -60,8 +60,8 @@
     "votes": "投票",
     "download": "下载",
     "empty": "空空如也……",
+    "empty_v": "清空",
     "correct_errors": "请改正以上错误信息！",
-    "session_required": "请先注册 / 登录！",
     "loading": "加载中……",
     "lang": {
         "en": "英语",
@@ -91,16 +91,23 @@
             "chart": "仅支持 PE / RPE 创作的谱面",
             "illustration": "6MB 或更小的 JPG / JPEG / PNG，长宽比须为 16:9，分辨率不得低于 960×540",
             "chart_level": "EZ / HD / IN / AT / SP / ……"
+        },
+        "errors": {
+            "data_incomplete": "输入的信息不完整！",
+            "data_invalid": "输入的信息不合法！",
+            "unknown_error": "发生了未知错误！"
         }
     },
     "profile": "用户资料",
     "fetch": "获取",
+    "edit": "编辑",
     "unavailable": "该功能暂未开放！",
     "error_msg": "错误信息：",
     "errors": {
         "400": "你的请求有误",
         "401": "请先注册 / 登录",
-        "403": "你无权访问该页面",
-        "404": "你所请求的资源不存在"
+        "403": "你无权访问该功能",
+        "404": "你所请求的资源不存在",
+        "500": "服务器在处理你的请求时出现问题"
     }
 }

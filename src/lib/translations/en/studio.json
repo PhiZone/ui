@@ -58,7 +58,11 @@
         "add_charter": "Add Charter",
         "your_id": "Your ID",
         "charter_placeholder": "Integers only; the specified user needs qualified",
-        "optional": " (Optional)"
+        "optional": " (Optional)",
+        "original_chart": "Original Chart",
+        "original_song": "Original Song",
+        "original_audio": "Original Audio",
+        "original_illustration": "Original Illustration"
     },
     "request": {
         "accept": "Accept",

@@ -58,7 +58,11 @@
         "add_charter": "关联谱师",
         "your_id": "你的 ID",
         "charter_placeholder": "仅整数；对应用户须已认证",
-        "optional": "（选填）"
+        "optional": "（选填）",
+        "original_chart": "原谱面",
+        "original_song": "原曲目",
+        "original_audio": "原音源",
+        "original_illustration": "原曲绘"
     },
     "request": {
         "accept": "接受",

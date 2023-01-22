@@ -11,6 +11,7 @@
 	import { onMount } from "svelte";
 	import * as api from "$lib/api";
 	import Song from "$lib/components/song.svelte";
+	import { goto } from "$app/navigation";
 
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
@@ -104,7 +105,6 @@
 						<div class="text-5xl py-3 flex font-bold gap-4 items-center">
 							{#if content.song}
 								<a
-									
 									class="hover:underline"
 									href={`/songs/${content.song.id}`}
 									target="_blank"
@@ -114,7 +114,6 @@
 								</a>
 							{:else}
 								<a
-									
 									class="hover:underline"
 									href={`/studio/song-submissions/${content.song_upload?.id}`}
 									target="_blank"
@@ -149,7 +148,7 @@
 									href={content.chart}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -162,7 +161,6 @@
 								{#each parseRichText(content.charter) as t}
 									{#if t.id > 0}
 										<a
-											
 											href={`/users/${t.id}`}
 											class="text-accent hover:underline"
 											target="_blank"
@@ -228,7 +226,17 @@
 								</p>
 							{/if}
 						</div>
-						<div class="card-actions flex items-center justify-end">
+						<div class="card-actions flex items-center justify-end gap-2">
+							{#if (typeof content.uploader === "object" && content.uploader.id === user.id) || getUserPrivilege(user.type) >= 3}
+								<button
+									class="btn btn-primary btn-outline glass text-lg w-32"
+									on:click={() => {
+										goto(`/studio/chart-submissions/${content?.id}/edit`);
+									}}
+								>
+									{$t("common.edit")}
+								</button>
+							{/if}
 							{#if getUserPrivilege(user.type) >= 3}
 								<label
 									for="studio-chart-submission"

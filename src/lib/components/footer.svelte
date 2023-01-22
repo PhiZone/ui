@@ -5,7 +5,7 @@
 	import { getUserPrivilege } from "$lib/utils";
 
 	export let user: User | undefined;
-	const email_address = "i@phi.zone";
+	const email_address = "contact@phi.zone";
 </script>
 
 {#if !($page.url.pathname.startsWith("/studio") && $page.status < 400 && user && getUserPrivilege(user.type) >= 2)}

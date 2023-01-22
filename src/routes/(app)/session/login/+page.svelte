@@ -113,7 +113,7 @@
 							>
 						{:else}
 							<button
-								class="btn btn-primary btn-outline w-full"
+								class="btn btn-secondary btn-outline glass w-full"
 								on:click={login}
 							>
 								{$t("session.login.login")}</button

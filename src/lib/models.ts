@@ -285,6 +285,8 @@ export interface SongSubmission {
     message: null | string;
     name: string;
     offset: number;
+    preview_start: string;
+    preview_end: string;
     representation: number | null;
     song: string;
     status: number;

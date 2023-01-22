@@ -18,7 +18,9 @@
 		previewStart = "",
 		previewEnd = "",
 		description = "",
-		chapters = "",
+		chapters: Chapter[] = [],
+		showChapters = false,
+		newChapter: number = 0,
 		song: File | null = null,
 		illustration: File | null = null,
 		status = Status.OK,
@@ -40,6 +42,14 @@
 		} else {
 			console.log(await resp.json());
 		}
+	};
+
+	const getChapterString = (chapters: Chapter[]) => {
+		let ids: number[] = [];
+		chapters.forEach((value) => {
+			ids.push(value.id);
+		});
+		return ids.join(",");
 	};
 
 	const handleSong = (
@@ -67,7 +77,7 @@
 		}
 	};
 
-	async function handleSubmit() {
+	const handleSubmit = async () => {
 		dataIncomplete = !(
 			song &&
 			illustration &&
@@ -97,7 +107,7 @@
 		formData.append("preview_start", `00:${previewStart}`);
 		formData.append("preview_end", `00:${previewEnd}`);
 		formData.append("description", description);
-		formData.append("chapters", chapters);
+		formData.append("chapters", getChapterString(chapters));
 		status = Status.SENDING;
 		const resp = await api.POST(
 			"/song_uploads/",
@@ -118,7 +128,7 @@
 			}
 			status = Status.ERROR;
 		}
-	}
+	};
 </script>
 
 <svelte:head>
@@ -395,12 +405,13 @@
 								</span>
 								<textarea
 									class={`textarea ${
-										(!description && dataIncomplete) ||
-										(status === Status.ERROR && error?.description)
+										status === Status.ERROR && error?.description
 											? "textarea-error"
 											: "textarea-primary"
 									} w-3/4 h-28`}
-									placeholder={$t("common.description")}{$t("studio.submission.optional")}
+									placeholder="{$t('common.description')}{$t(
+										'studio.submission.optional'
+									)}"
 									bind:value={description}
 								/>
 							</label>
@@ -415,25 +426,72 @@
 						>
 							<label class="input-group my-2" on:pointerenter={getChapters}>
 								<span class="w-1/4 min-w-[64px]"
-									>{$t("studio.submission.chapters")}{$t("studio.submission.optional")}</span
+									>{$t("studio.submission.chapters")}{$t(
+										"studio.submission.optional"
+									)}</span
 								>
 								<select
-									class={`select select-bordered w-3/4 min-w-[180px] ${
+									class={`select select-bordered w-2/3 min-w-[180px] ${
 										status === Status.ERROR && error?.chapters
 											? "select-error"
 											: "select-primary"
 									}`}
-									bind:value={chapters}
+									bind:value={newChapter}
 								>
 									{#if chapterList}
-										{#each chapterList as chapter}
-											<option value={chapter.id}
+										{#each chapterList as chapter, i}
+											<option value={i}
 												>{chapter.title} - {chapter.subtitle}</option
 											>
 										{/each}
 									{/if}
 								</select>
+								<button
+									class="btn btn-primary btn-outline text-xl w-1/12"
+									on:click={() => {
+										if (!chapters.includes(chapterList[newChapter])) {
+											showChapters = false;
+											chapters.push(chapterList[newChapter]);
+											setTimeout(() => {
+												showChapters = true;
+											}, 1);
+										}
+									}}>+</button
+								>
 							</label>
+							{#if showChapters}
+								<div class="flex h-fit">
+									<span class="w-32 px-4 place-self-center"
+										>{$t("studio.submission.chapters")}</span
+									>
+									<div class="form-control w-full gap-1">
+										{#each chapters as chapter, i}
+											{#if chapter}
+												<div class="flex items-center justify-between">
+													<a
+														href={`/chapters/${chapter.id}`}
+														target="_blank"
+														rel="noreferrer"
+														class="hover:underline"
+													>
+														{chapter.title} - {chapter.subtitle}
+													</a>
+													<button
+														class="btn btn-accent btn-outline btn-sm text-xl"
+														on:click={() => {
+															showChapters = false;
+															chapters.splice(i, 1);
+															setTimeout(() => {
+																showChapters = chapters.length > 0;
+															}, 1);
+														}}>-</button
+													>
+												</div>
+											{/if}
+										{/each}
+									</div>
+								</div>
+							{/if}
 						</div>
 					</div>
 				</div>
@@ -446,7 +504,7 @@
 						? "btn btn-ghost btn-disabled glass"
 						: "btn-primary"
 				} glass float-right my-5 text-lg`}
-				data-tip={$t(`recorder.${errorMsg}`)}
+				data-tip={$t(`common.form.errors.${errorMsg}`)}
 				on:click={handleSubmit}
 				>{$t(
 					status === Status.SENDING ? "common.waiting" : "common.submit"

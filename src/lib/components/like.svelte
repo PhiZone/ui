@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
 	import * as api from "$lib/api";
 	import type { User } from "$lib/models";
 
@@ -32,7 +33,7 @@
 			if (resp.status === 401) {
 				goto(
 					`/session/login?redirect=${encodeURIComponent(
-						window.location.pathname + window.location.search
+						$page.url.pathname + $page.url.search
 					)}`
 				);
 			}

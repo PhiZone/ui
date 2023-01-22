@@ -161,7 +161,7 @@
 									href={content.chart}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -175,7 +175,7 @@
 									href={content.song}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -189,7 +189,7 @@
 									href={content.illustration}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -256,7 +256,7 @@
 										href={content.avatar}
 										target="_blank"
 										rel="noreferrer"
-										class="hover:underline underline-offset-2"
+										class="hover:underline"
 										download
 									>
 										{$t("common.download")}

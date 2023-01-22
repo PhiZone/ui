@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="hero min-h-screen" style="background-image: url(/background.webp);">
-	<div class="hero-overlay bg-opacity-70" />
+	<div class="hero-overlay bg-opacity-50" />
 	<div class="w-5/6 max-w-4xl form-control text-center text-neutral-content">
 		<img class="logo" src="/favicon.ico" alt="logo" />
 		<h1 class="mb-5 text-7xl font-bold">{$t("common.title")}</h1>
@@ -93,10 +93,10 @@
 						on:pointerenter={() => {
 							if (!error && searchText) {
 								// preloadData(
-							// 		`/search?type=${searchType}${
-							// 			searchText ? `&name=${searchText}` : ""
-							// 		}`
-							// 	);
+								// 		`/search?type=${searchType}${
+								// 			searchText ? `&name=${searchText}` : ""
+								// 		}`
+								// 	);
 							}
 						}}
 					>
@@ -124,7 +124,6 @@
 	* {
 		font-family: "Saira", "Noto Sans SC", sans-serif;
 	}
-
 	.logo {
 		margin: 10px auto 20px;
 		display: block;

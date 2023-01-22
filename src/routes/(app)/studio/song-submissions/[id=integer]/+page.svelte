@@ -10,6 +10,7 @@
 	import { onMount } from "svelte";
 	import * as api from "$lib/api";
 	import Chapter from "$lib/components/chapter.svelte";
+  import { goto } from "$app/navigation";
 
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
@@ -119,7 +120,7 @@
 									href={content.song}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -133,7 +134,7 @@
 									href={content.illustration}
 									target="_blank"
 									rel="noreferrer"
-									class="hover:underline underline-offset-2"
+									class="hover:underline"
 									download
 								>
 									{$t("common.download")}
@@ -168,6 +169,18 @@
 									>{$t("song.offset")}</span
 								>
 								{content.offset}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("studio.submission.preview_start")}</span
+								>
+								{content.preview_start.replace(/^00:/, "")}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("studio.submission.preview_end")}</span
+								>
+								{content.preview_end.replace(/^00:/, "")}
 							</p>
 							{#if getUserPrivilege(user.type) >= 3 && typeof content.uploader == "object"}
 								<p class="min-w-fit">
@@ -206,8 +219,18 @@
 								</p>
 							{/if}
 						</div>
-						<div class="card-actions flex items-center justify-between">
-							<audio class="w-3/5" controls src={content.song} />
+						<audio class="w-full" controls src={content.song} />
+						<div class="card-actions flex items-center justify-end">
+							{#if (typeof content.uploader === "object" && content.uploader.id === user.id) || getUserPrivilege(user.type) >= 3}
+								<button
+									class="btn btn-primary btn-outline glass text-lg w-32"
+									on:click={() => {
+										goto(`/studio/song-submissions/${content?.id}/edit`);
+									}}
+								>
+									{$t("common.edit")}
+								</button>
+							{/if}
 							{#if getUserPrivilege(user.type) >= 3}
 								<label
 									for="studio-song-submission"

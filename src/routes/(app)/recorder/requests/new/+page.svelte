@@ -749,7 +749,7 @@
 						: "btn-primary"
 				} glass float-right my-5 text-lg`}
 				data-tip={errorMsg
-					? $t(`recorder.${errorMsg}`)
+					? $t(`common.form.errors.${errorMsg}`)
 					: typeof error?.detail === "string"
 					? error?.detail
 					: ""}

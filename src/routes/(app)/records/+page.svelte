@@ -6,10 +6,11 @@
 	import { onMount } from "svelte";
 	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
 
-	let page = 1,
+	let pageCount = 1,
 		recordStatus = Status.RETRIEVING,
 		records: any[] | null,
 		recordCount: number,
@@ -26,7 +27,7 @@
 		} else if (status === Status.ERROR && !access_token && browser) {
 			goto(
 				`/session/login/?redirect=${encodeURIComponent(
-					window.location.pathname + window.location.search
+					$page.url.pathname + $page.url.search
 				)}`
 			);
 		}
@@ -53,7 +54,7 @@
 				bind:next={nextRecords}
 				bind:results={records}
 				bind:count={recordCount}
-				bind:page
+				bind:page={pageCount}
 				bind:status={recordStatus}
 				token={access_token}
 				{user}

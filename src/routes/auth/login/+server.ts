@@ -3,14 +3,6 @@ import type { TokenOpts } from '$lib/api/auth';
 import type { RequestHandler } from './$types';
 import { setTokens } from '../_cookie';
 
-interface AuthLoginResult {
-    access_token: string;
-    expires_in: number;
-    refresh_token: string;
-    scope: string;
-    token_type: 'Bearer';
-}
-
 export const POST: RequestHandler = async ({ request }) => {
     const json = await request.json();
     const credentials: TokenOpts = {
@@ -27,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
             content: await resp.json()
         }));
     }
-    const result: AuthLoginResult = await resp.json();
+    const result: api.auth.AuthLoginResult = await resp.json();
     return new Response(JSON.stringify({
         code: resp.status
     }), {

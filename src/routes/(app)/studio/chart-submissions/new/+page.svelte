@@ -51,7 +51,7 @@
 
 	const getSongSubmissions = async () => {
 		const resp = await api.GET(
-			"/song_uploads/?order=-id&pagination=0",
+			`/song_uploads/?order=-id&uploader=${user.id}&pagination=0`,
 			access_token,
 			user
 		);
@@ -307,7 +307,7 @@
 												<option value={song.id}
 													>[{$t(
 														`studio.submission.accessibilities.${song.accessibility}`
-													)}] {song.id}. {song.composer} - {song.name}</option
+													)}] {song.id}. {song.composer} - {song.name} ({song.edition})</option
 												>
 											{/each}
 										{/if}
@@ -339,7 +339,7 @@
 										{#if songSubmissionList}
 											{#each songSubmissionList as song}
 												<option value={song.id}
-													>{song.id}. {song.composer} - {song.name}</option
+													>{song.id}. {song.composer} - {song.name} ({song.edition})</option
 												>
 											{/each}
 										{/if}
@@ -445,7 +445,6 @@
 									{#each parseRichText(charter) as t}
 										{#if t.id > 0}
 											<a
-												
 												href={`/users/${t.id}`}
 												class="text-accent hover:underline"
 												target="_blank"
@@ -519,7 +518,7 @@
 						? "btn btn-ghost btn-disabled glass"
 						: "btn-primary"
 				} glass float-right my-5 text-lg`}
-				data-tip={$t(`recorder.${errorMsg}`)}
+				data-tip={$t(`common.form.errors.${errorMsg}`)}
 				on:click={handleSubmit}
 				>{$t(
 					status === Status.SENDING ? "common.waiting" : "common.submit"

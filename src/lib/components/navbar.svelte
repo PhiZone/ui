@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from "$lib/translations/config";
-	import { goto, preloadData } from "$app/navigation";
+	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { getCompressedImage, getUserPrivilege } from "$lib/utils";
 	import type { User } from "$lib/models";
@@ -219,7 +219,7 @@
 			{:else}
 				<div class="ml-2 btn-group user">
 					<button
-						class="btn btn-outline btn-secondary glass"
+						class="btn btn-outline btn-accent glass"
 						on:click={async () => {
 							goto("/session/register");
 						}}
@@ -228,7 +228,7 @@
 						}}>{$t("session.registration.register")}</button
 					>
 					<button
-						class="btn btn-outline btn-primary glass"
+						class="btn btn-outline btn-secondary glass"
 						on:click={async () => {
 							goto("/session/login");
 						}}

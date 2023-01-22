@@ -14,7 +14,7 @@
 		const resp = await POST("/auth/refresh", {
 			refresh_token,
 		});
-        const json = await resp.json();
+		const json = await resp.json();
 		if (json.code === 200) {
 			const redirect = $page.url.searchParams.get("redirect");
 			goto(redirect ? redirect : "/");
