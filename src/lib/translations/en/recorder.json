@@ -33,9 +33,10 @@
     "status": "Status",
     "statuses": {
         "0": "Waiting",
-        "1": "Accepted",
-        "2": "Finished",
-        "3": "Rejected"
+        "1": "Under Review",
+        "2": "Accepted",
+        "3": "Finished",
+        "4": "Rejected"
     },
     "reply": "Reply",
     "reply_v": "Reply",
@@ -44,8 +45,9 @@
     "replied_at": "Replied At",
     "stat_statuses": {
         "0": "Waiting",
-        "1": "Accepted",
-        "2": "Finished",
-        "3": "Rejected"
+        "1": "Under Review",
+        "2": "Accepted",
+        "3": "Finished",
+        "4": "Rejected"
     }
 }

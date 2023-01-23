@@ -5,7 +5,7 @@
 
 	export let data: import("./$types").PageData;
 	$: ({ status, content, user } = data);
-	let array = [0, 1, 2, 3];
+	let array = [0, 1, 2, 3, 4];
 </script>
 
 <svelte:head>

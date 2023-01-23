@@ -93,6 +93,7 @@
 					<option value="1">{$t("recorder.statuses.1")}</option>
 					<option value="2">{$t("recorder.statuses.2")}</option>
 					<option value="3">{$t("recorder.statuses.3")}</option>
+					<option value="4">{$t("recorder.statuses.4")}</option>
 				</select>
 			</label>
 			<label class="input-group my-2">

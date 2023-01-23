@@ -103,7 +103,8 @@
 				songSwitch ? song : songSubmission
 			);
 		if (notes) formData.append("notes", notes);
-		if (emptyDescription || description) formData.append("description", description);
+		if (emptyDescription || description)
+			formData.append("description", description);
 		status = Status.SENDING;
 		const resp = await api.PATCH(
 			`/chart_uploads/${content?.id}/`,
@@ -113,7 +114,7 @@
 			ContentType.FORM_DATA
 		);
 		if (resp.ok) {
-			goto(`/studio/chart-submissions/${content?.id}`);
+			window.location.href = `/studio/chart-submissions/${content?.id}`;
 		} else {
 			error = await resp.json();
 			console.log(error);

@@ -64,7 +64,7 @@
 					}
 				}}>«</button
 			>
-			<button class="btn btn-primary w-32 text-lg glass btn-active btn-disabled"
+			<button class="btn btn-primary w-36 min-w-fit text-lg glass btn-active btn-disabled"
 				>Page {page} / {Math.ceil(count / PAGINATION_PER_PAGE)}</button
 			>
 			<button

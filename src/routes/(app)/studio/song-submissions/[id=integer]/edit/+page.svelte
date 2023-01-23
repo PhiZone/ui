@@ -110,7 +110,7 @@
 			ContentType.FORM_DATA
 		);
 		if (resp.ok) {
-			goto(`/studio/song-submissions/${content?.id}`);
+			window.location.href = `/studio/song-submissions/${content?.id}`;
 		} else {
 			error = await resp.json();
 			console.log(error);
