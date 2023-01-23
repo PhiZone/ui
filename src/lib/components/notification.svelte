@@ -7,11 +7,14 @@
 
 	const types = new Map([
 		["User", "/users"],
+		["Chapter", "/chapters"],
 		["Song", "/songs"],
 		["Chart", "/charts"],
+		["Discussion", "/discussions"],
 		["Comment", "/comments"],
 		["Reply", "/replies"],
 		["ChartUpload", "/studio/chart-submissions"],
+		["SongUpload", "/studio/song-submissions"],
 		["Collab", "/studio/collaborations"],
 	]);
 </script>

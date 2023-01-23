@@ -76,6 +76,7 @@
 			};
 		}
 		status = Status.SENDING;
+		console.log("Submitting", { [field]: text ? text : "" });
 		const resp = await api.PATCH(
 			`/users/${user.id}/`,
 			{ [field]: text ? text : "" },

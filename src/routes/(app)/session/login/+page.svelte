@@ -21,7 +21,7 @@
 		const json = await resp.json();
 		const redirect = $page.url.searchParams.get("redirect");
 		if (json.code === 200) {
-			goto(redirect ? redirect : "/");
+			window.location.href = redirect ? redirect : "/";
 		} else {
 			status = Status.ERROR;
 			msg = $t(
