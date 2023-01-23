@@ -28,7 +28,7 @@
 	const getReplies = async (page?: number) => {
 		status = Status.RETRIEVING;
 		const resp = await api.GET(
-			`/replies/?comment=${comment.id}&order=-like_count${
+			`/replies/?comment=${comment.id}&query_user=1&order=-like_count${
 				page ? `&page=${page}` : ""
 			}`,
 			token,

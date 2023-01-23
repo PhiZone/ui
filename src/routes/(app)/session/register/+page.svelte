@@ -55,8 +55,7 @@
 			}
 			if (error.language) {
 				msg = $t("session.registration.language_error");
-			}
-			if (error.detail) {
+			} else if (error.detail) {
 				msg = error.detail;
 			} else {
 				msg = $t("common.correct_errors");
