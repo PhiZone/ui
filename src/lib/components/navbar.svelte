@@ -251,6 +251,7 @@
 	.logo {
 		max-height: 60px;
 		margin-right: 10px;
+		filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
 	}
 	.title {
 		font-size: 35px;

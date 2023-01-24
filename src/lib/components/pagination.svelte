@@ -27,8 +27,6 @@
 		status = Status.RETRIEVING;
 		if (!preloaded) {
 			resp = await api.GET(getPath(url), token, user);
-		} else {
-			preloaded = false;
 		}
 		const json = await resp.json();
 		if (!resp.ok) {
@@ -39,7 +37,14 @@
 		previous = json.previous;
 		next = json.next;
 		results = json.results;
-		status = Status.OK;
+		if (preloaded) {
+			preloaded = false;
+			setTimeout(() => {
+				status = Status.OK;
+			}, 1);
+		} else {
+			status = Status.OK;
+		}
 	};
 </script>
 
@@ -64,7 +69,8 @@
 					}
 				}}>«</button
 			>
-			<button class="btn btn-primary w-36 min-w-fit text-lg glass btn-active btn-disabled"
+			<button
+				class="btn btn-primary w-36 min-w-fit text-lg glass btn-active btn-disabled"
 				>Page {page} / {Math.ceil(count / PAGINATION_PER_PAGE)}</button
 			>
 			<button

@@ -194,18 +194,20 @@
 								>
 								{$t(`common.lang.${content.language}`)}
 							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
+							<a data-sveltekit-preload-data href={`/users/${content.id}/following`}>
+								<span
+									class="badge badge-primary badge-outline mr-1 hover:underline"
 									>{$t("user.following")}</span
 								>
 								{content.following}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
+							</a>
+							<a data-sveltekit-preload-data href={`/users/${content.id}/fans`}>
+								<span
+									class="badge badge-primary badge-outline mr-1 hover:underline"
 									>{$t("user.fans")}</span
 								>
 								{fans}
-							</p>
+							</a>
 							{#if content.date_of_birth}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
@@ -265,11 +267,7 @@
 									{$t("user.charts")}
 								</h2>
 								{#if charts.length > 0}
-									<a
-										
-										class="min-w-fit"
-										href={`/charts?owner=${content.id}`}
-									>
+									<a class="min-w-fit" href={`/charts?owner=${content.id}`}>
 										<button class="btn btn-sm btn-primary btn-outline">
 											{$t("common.all")}
 										</button>
@@ -281,7 +279,6 @@
 									{#each charts as chart}
 										<li>
 											<a
-												
 												href={`/charts/${chart.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
@@ -306,7 +303,6 @@
 													{#each parseRichText(chart.charter) as t}
 														{#if t.id > 0}
 															<a
-																
 																href={`/users/${t.id}`}
 																class="text-accent hover:underline">{t.text}</a
 															>
@@ -346,11 +342,7 @@
 									{$t("user.songs")}
 								</h2>
 								{#if songs.length > 0}
-									<a
-										
-										class="min-w-fit"
-										href={`/songs?owner=${content.id}`}
-									>
+									<a class="min-w-fit" href={`/songs?owner=${content.id}`}>
 										<button class="btn btn-sm btn-primary btn-outline">
 											{$t("common.all")}
 										</button>
@@ -362,7 +354,6 @@
 									{#each songs as song}
 										<li>
 											<a
-												
 												href={`/songs/${song.id}`}
 												class="w-full overflow-hidden h-[82px] flex px-5"
 											>
@@ -412,11 +403,7 @@
 									{$t("user.recent_records")}
 								</h2>
 								{#if recentRecords.length > 0}
-									<a
-										
-										class="min-w-fit"
-										href={`/records?player=${content.id}`}
-									>
+									<a class="min-w-fit" href={`/records?player=${content.id}`}>
 										<button class="btn btn-sm btn-primary btn-outline">
 											{$t("common.all")}
 										</button>
@@ -440,7 +427,6 @@
 								</h2>
 								{#if bestRecords.length > 0}
 									<a
-										
 										class="min-w-fit"
 										href={`/records?player=${content.id}&order=-rks`}
 									>
