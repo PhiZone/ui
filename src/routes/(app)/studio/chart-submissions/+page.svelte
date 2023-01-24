@@ -44,7 +44,7 @@
 				<h1 class="text-4xl font-bold">
 					{$t("studio.chart_submissions")}
 				</h1>
-				<a href="/studio/chart-submissions/new">
+				<a data-sveltekit-preload-data href="/studio/chart-submissions/new">
 					<button class="btn btn-accent text-lg btn-xl btn-outline glass ml-3">
 						{$t("studio.upload_chart")}
 					</button>

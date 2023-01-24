@@ -9,7 +9,7 @@
 
 {#if typeof chart.song == "object"}
 	<div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
-		<a href={`/charts/${chart.id}`}>
+		<a data-sveltekit-preload-data href={`/charts/${chart.id}`}>
 			<figure class="h-[180px] relative">
 				<img
 					src={getCompressedImage(chart.song.illustration)}
@@ -43,7 +43,7 @@
 					{#if chart.charter}
 						{#each parseRichText(chart.charter) as t}
 							{#if t.id > 0}
-								<a href={`/users/${t.id}`} class="text-accent hover:underline"
+								<a data-sveltekit-preload-data href={`/users/${t.id}`} class="text-accent hover:underline"
 									>{t.text}</a
 								>
 							{:else}

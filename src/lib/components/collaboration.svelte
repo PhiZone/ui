@@ -94,9 +94,9 @@
 					goto(`/studio/chart-submissions/${getChart(collaboration)?.id}`);
 				}}
 				on:pointerenter={() => {
-					// preloadData(
-					// 	`/studio/chart-submissions/${getChart(collaboration)?.id}`
-					// );
+					preloadData(
+						`/studio/chart-submissions/${getChart(collaboration)?.id}`
+					);
 				}}
 			>
 				<svg

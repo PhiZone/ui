@@ -16,7 +16,7 @@
 		replied_at: string | null;
 </script>
 
-<a href={`/recorder/requests/${id}`}>
+<a data-sveltekit-preload-data href={`/recorder/requests/${id}`}>
 	<div
 		class="card min-w-[900px] h-44 card-side bg-base-100 shadow-lg glass overflow-hidden"
 	>

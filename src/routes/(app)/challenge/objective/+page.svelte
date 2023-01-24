@@ -106,7 +106,7 @@
 			{:else}
 				<div class="text-center">
 					<p class="text-lg text-red-600 my-8">{error}</p>
-					<a href="/challenge"
+					<a data-sveltekit-preload-data href="/challenge"
 						><button class="btn btn-primary btn-outline text-lg">{$t("common.back")}</button
 						></a
 					>

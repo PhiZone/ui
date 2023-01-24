@@ -39,7 +39,7 @@
 										: "border-neutral-500"
 								}`}
 							>
-								<a href={`/users/${content.user.id}`}>
+								<a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
 									<img
 										class="object-fill"
 										src={getCompressedImage(content.user.avatar)}
@@ -47,7 +47,7 @@
 									/>
 								</a>
 							</div>
-							<a href={`/users/${content.user.id}`}>
+							<a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
 								<p class="text-lg text-center max-w-[120px] break-all">
 									{content.user.username}
 								</p>
@@ -89,7 +89,7 @@
 											goto(`/comments/${content?.comment}`);
 										}}
 										on:pointerenter={() => {
-											// preloadData(`/comments/${content?.comment}`);
+											preloadData(`/comments/${content?.comment}`);
 										}}
 									>
 										<svg

@@ -32,7 +32,7 @@
 </script>
 
 <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
-	<a href={`/songs/${song.id}`}>
+	<a data-sveltekit-preload-data href={`/songs/${song.id}`}>
 		<figure class="h-[180px] relative">
 			<img
 				src={getCompressedImage(song.illustration)}
@@ -136,7 +136,7 @@
 					</a>
 				{/if}
 				{#if otherCount}
-					<a href={`/charts?song=${song.id}`}>
+					<a data-sveltekit-preload-data href={`/charts?song=${song.id}`}>
 						<button class="btn btn-sm btn-primary btn-outline gap-2">
 							OTH ({otherCount})
 						</button>

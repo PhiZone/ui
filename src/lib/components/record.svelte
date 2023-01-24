@@ -59,12 +59,12 @@
 							);
 						}}
 						on:pointerenter={() => {
-							// preloadData(
-							// 	typeof record.chart === "object" &&
-							// 		typeof record.chart.song === "object"
-							// 		? `/songs/${record.chart.song.id}`
-							// 		: "#"
-							// );
+							preloadData(
+								typeof record.chart === "object" &&
+									typeof record.chart.song === "object"
+									? `/songs/${record.chart.song.id}`
+									: "#"
+							);
 						}}
 					>
 						{record.chart.song.name}
@@ -81,13 +81,13 @@
 							);
 						}}
 						on:pointerenter={() => {
-							// preloadData(
-							// 	`/charts/${
-							// 		typeof record.chart === "object"
-							// 			? record.chart.id
-							// 			: record.chart
-							// 	}`
-							// );
+							preloadData(
+								`/charts/${
+									typeof record.chart === "object"
+										? record.chart.id
+										: record.chart
+								}`
+							);
 						}}
 					>
 						{record.chart.level}

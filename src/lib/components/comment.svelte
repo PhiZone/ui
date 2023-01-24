@@ -121,7 +121,7 @@
 									goto(`/users/${reply.user.id}`);
 								}}
 								on:pointerenter={() => {
-									// preloadData(`/users/${reply.user.id}`);
+									preloadData(`/users/${reply.user.id}`);
 								}}
 								on:keyup
 							>
@@ -199,7 +199,7 @@
 			<div
 				class="relative inline-flex items-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
 			>
-				<a href={`/users/${comment.user.id}`}>
+				<a data-sveltekit-preload-data href={`/users/${comment.user.id}`}>
 					<div
 						class={`w-[72px] rounded-full overflow-hidden border-[3px] border-opacity-80 ${
 							comment.user.type == "admin"
@@ -218,7 +218,7 @@
 						/>
 					</div>
 				</a>
-				<a href={`/users/${comment.user.id}`}>
+				<a data-sveltekit-preload-data href={`/users/${comment.user.id}`}>
 					<p class="text-lg text-center max-w-[120px] break-all">
 						{comment.user.username}
 					</p>

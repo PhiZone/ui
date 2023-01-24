@@ -14,12 +14,12 @@
 				{$t("studio.description")}
 			</p>
 			<div class="mt-3 flex justify-center">
-				<a href="/studio/chart-submissions/new">
+				<a data-sveltekit-preload-data href="/studio/chart-submissions/new">
 					<button class="btn btn-primary text-lg btn-xl btn-outline glass mr-3">
 						{$t("studio.upload_chart")}
 					</button>
 				</a>
-				<a href="/studio/song-submissions/new">
+				<a data-sveltekit-preload-data href="/studio/song-submissions/new">
 					<button class="btn btn-accent text-lg btn-xl btn-outline glass ml-3">
 						{$t("studio.upload_song")}
 					</button>

@@ -34,15 +34,15 @@
 				>
 			</li>
 			<li>
-				<a href="/studio/song-submissions">{$t("studio.song_submissions")}</a>
+				<a data-sveltekit-preload-data href="/studio/song-submissions">{$t("studio.song_submissions")}</a>
 			</li>
 			<li>
-				<a href="/studio/chart-submissions">{$t("studio.chart_submissions")}</a>
+				<a data-sveltekit-preload-data href="/studio/chart-submissions">{$t("studio.chart_submissions")}</a>
 			</li>
 			<li>
-				<a href="/studio/collaborations">{$t("studio.collaborations")}</a>
+				<a data-sveltekit-preload-data href="/studio/collaborations">{$t("studio.collaborations")}</a>
 			</li>
-			<!-- <li><a href="/studio/admissions">{$t("studio.admissions")}</a></li> -->
+			<!-- <li><a data-sveltekit-preload-data href="/studio/admissions">{$t("studio.admissions")}</a></li> -->
 		</ul>
 	</div>
 </div>
