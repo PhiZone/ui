@@ -55,7 +55,7 @@
 				</li>
 				<!-- <li><a href="/apps">{$t("common.navbar.apps")}</a></li>
 				<li><a href="/discussions">{$t("common.discussions")}</a></li> -->
-				<li class="rounded-full">
+				<li>
 					<a data-sveltekit-preload-data href="/recorder"
 						>{$t("common.navbar.recorder")}</a
 					>

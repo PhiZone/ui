@@ -101,7 +101,7 @@
 					>{$t("recorder.reply")}</span
 				><textarea
 					class="textarea textarea-primary w-full max-w-xs h-48"
-					placeholder={$t("write_reply")}
+					placeholder={$t("common.write_reply")}
 					bind:value={reply}
 				/>
 			</label>
