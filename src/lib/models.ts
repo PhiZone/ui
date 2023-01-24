@@ -117,6 +117,7 @@ export interface Comment {
     content: string;
     creation: string;
     deletion: null | string;
+    discussion: number | null;
     event: number | null;
     id: number;
     language: string;
@@ -134,7 +135,6 @@ export interface Reply {
     content: string;
     creation: string;
     deletion: null | string;
-    discussion: number | null;
     id: number;
     language: string;
     last_edit: string;
@@ -328,4 +328,14 @@ export interface Collaboration {
     inviter: number | User;
     status: number;
     time: string;
+}
+
+export interface UserInput {
+    content: string;
+    id: number;
+    language: string;
+    origin: string;
+    time: string;
+    type: number;
+    user: number;
 }

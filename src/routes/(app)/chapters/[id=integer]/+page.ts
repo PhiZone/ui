@@ -10,7 +10,6 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
         throw error(resp.status, resp.statusText);
     }
     const json = await resp.json();
-    
     let songRes, commentRes;
     try {
         if (json.songs > 0)

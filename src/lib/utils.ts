@@ -189,8 +189,11 @@ export function convertLanguageCode(input: string) {
     return input.split('-')[0];
 }
 
-export function parseDateTime(input: string) {
+export function parseDateTime(input: string, precise = false) {
     const date = new Date(input);
+    if (precise) {
+        return date.toLocaleString()
+    }
     return date.toLocaleDateString(undefined, {
         year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"
     });

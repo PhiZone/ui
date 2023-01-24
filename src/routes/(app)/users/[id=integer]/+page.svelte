@@ -194,7 +194,10 @@
 								>
 								{$t(`common.lang.${content.language}`)}
 							</p>
-							<a data-sveltekit-preload-data href={`/users/${content.id}/following`}>
+							<a
+								data-sveltekit-preload-data
+								href={`/users/${content.id}/following`}
+							>
 								<span
 									class="badge badge-primary badge-outline mr-1 hover:underline"
 									>{$t("user.following")}</span

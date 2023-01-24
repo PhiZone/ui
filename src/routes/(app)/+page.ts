@@ -1,5 +1,4 @@
 import * as api from '$lib/api';
-import { Status } from '$lib/constants';
 
 export const load: import('./$types').PageLoad = async ({ fetch }) => {
     const resp = await api.GET("/headline/", undefined, undefined, fetch);

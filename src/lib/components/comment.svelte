@@ -70,6 +70,8 @@
 			source = `/charts/${comment.chart}/`;
 		} else if (comment.event) {
 			source = `/events/${comment.event}/`;
+		} else if (comment.discussion) {
+			source = `/discussions/${comment.discussion}/`;
 		}
 	}
 </script>
@@ -284,7 +286,7 @@
 							goto(source);
 						}}
 						on:pointerenter={() => {
-							// preloadData(source);
+							preloadData(source);
 						}}
 					>
 						<svg

@@ -70,6 +70,11 @@ const config = {
             loader: async () => (await import('./en/studio.json')).default,
         },
         {
+            locale: 'en',
+            key: 'admin',
+            loader: async () => (await import('./en/admin.json')).default,
+        },
+        {
             locale: 'zh-Hans',
             key: 'common',
             loader: async () => (await import('./zh-Hans/common.json')).default,
@@ -128,6 +133,11 @@ const config = {
             locale: 'zh-Hans',
             key: 'studio',
             loader: async () => (await import('./zh-Hans/studio.json')).default,
+        },
+        {
+            locale: 'zh-Hans',
+            key: 'admin',
+            loader: async () => (await import('./zh-Hans/admin.json')).default,
         },
     ],
 };

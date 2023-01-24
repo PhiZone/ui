@@ -10,7 +10,6 @@ export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) 
         throw error(resp.status, resp.statusText);
     }
     const json = await resp.json();
-    
     return {
         status: resp.ok ? Status.OK : Status.ERROR,
         content: resp.ok ? json : null,

@@ -10,9 +10,11 @@ export const POST: RequestHandler = async ({ request }) => {
         token: json.refresh_token,
     });
     if (!resp.ok) {
+        const content = await resp.json();
+        console.log(content)
         return new Response(JSON.stringify({
             code: resp.status,
-            content: await resp.json()
+            content: content
         }));
     }
     const headers = clearTokens();

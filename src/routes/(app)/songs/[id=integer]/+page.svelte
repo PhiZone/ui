@@ -6,6 +6,7 @@
 		parseRichText,
 		parseDuration,
 		parseLyrics,
+		parseDateTime,
 	} from "$lib/utils";
 	import * as api from "$lib/api";
 	import { onDestroy, onMount } from "svelte";
@@ -246,6 +247,12 @@
 												>{$t("song.duration")}</span
 											>
 											{convertDuration(content.duration)}
+										</p>
+										<p>
+											<span class="badge badge-primary badge-outline mr-1"
+												>{$t("song.time")}</span
+											>
+											{parseDateTime(content.time)}
 										</p>
 										{#if content.description && content.description.length < 172}
 											<p class="content">

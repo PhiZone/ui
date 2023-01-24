@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { Status } from "$lib/constants";
 	import { locale, t } from "$lib/translations/config";
-	import { getPath, getUserLevel, parseRichText } from "$lib/utils";
+	import {
+		getPath,
+		getUserLevel,
+		parseDateTime,
+		parseRichText,
+	} from "$lib/utils";
 	import * as api from "$lib/api";
 	import { onMount } from "svelte";
 	import Comment from "$lib/components/comment.svelte";
@@ -444,7 +449,6 @@
 										{#each parseRichText(content.charter) as t}
 											{#if t.id > 0}
 												<a
-													
 													href={`/users/${t.id}`}
 													class="text-accent hover:underline">{t.text}</a
 												>
@@ -487,6 +491,12 @@
 										>{$t("chart.real_vote_count")}</span
 									>
 									{content.votes}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("chart.time")}</span
+									>
+									{parseDateTime(content.time)}
 								</p>
 								{#if content.description}
 									<p class="content">

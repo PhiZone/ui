@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-	<title>{$t("common.relations")} | {$t("common.title")}</title>
+	<title>{$t("user.user")} - {$t("user.fans")} | {$t("common.title")}</title>
 </svelte:head>
 
 <div class="pt-32 bg-base-200 page form-control justify-center">
@@ -35,7 +35,7 @@
 		{#if relations.length > 0}
 			<div class="px-32 result">
 				{#each relations as relation}
-					<div class="min-w-fit w-80">
+					<div class="w-80">
 						<Relation
 							user={relation.follower}
 							token={access_token}

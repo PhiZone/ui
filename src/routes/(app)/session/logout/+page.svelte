@@ -2,15 +2,8 @@
 	import { onMount } from "svelte";
 	import { t } from "$lib/translations/config";
 	import { page } from "$app/stores";
-	import { POST } from "$lib/utils";
 
-	export let data: import("./$types").PageData;
-	$: ({ refresh_token } = data);
-
-	onMount(async () => {
-		POST("/auth/logout", {
-			refresh_token,
-		});
+	onMount(() => {
 		const redirect = $page.url.searchParams.get("redirect");
 		window.location.href = redirect ? redirect : "/";
 	});

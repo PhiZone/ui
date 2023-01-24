@@ -448,10 +448,8 @@
 												href={`/users/${t.id}`}
 												class="text-accent hover:underline"
 												target="_blank"
-												rel="noreferrer"
+												rel="noreferrer">{t.text}</a
 											>
-												{t.text}
-											</a>
 										{:else}
 											{t.text}
 										{/if}

@@ -109,5 +109,7 @@
         "403": "You're not permitted to access this feature",
         "404": "The resource you requested does not exist",
         "500": "An error has occurred whilst handling your request"
-    }
+    },
+    "admin": "Administration",
+    "delete": "Delete"
 }
