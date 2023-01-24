@@ -2,10 +2,13 @@
 	import { onMount } from "svelte";
 	import { t } from "$lib/translations/config";
 	import { page } from "$app/stores";
+  import { browser } from "$app/environment";
 
 	onMount(() => {
-		const redirect = $page.url.searchParams.get("redirect");
-		window.location.href = redirect ? redirect : "/";
+		if (browser) {
+			const redirect = $page.url.searchParams.get("redirect");
+			window.location.href = redirect ? redirect : "/";
+		}
 	});
 </script>
 

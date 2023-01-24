@@ -2,7 +2,6 @@
 	import { POST } from "$lib/utils";
 	import { locale, t } from "$lib/translations/config";
 	import { Status } from "$lib/constants";
-	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 
 	let email = "";

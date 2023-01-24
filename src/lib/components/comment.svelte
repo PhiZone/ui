@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Comment, Reply } from "../models";
-	import { t, locale } from "$lib/translations/config";
+	import { locale, t } from "$lib/translations/config";
 	import * as api from "$lib/api";
 	import type { User } from "$lib/models";
 	import Like from "./like.svelte";
@@ -178,16 +178,16 @@
 						</div>
 					</li>
 				{/each}
-			<Pagination
-				bind:previous={previousReplies}
-				bind:next={nextReplies}
-				bind:results={replies}
-				bind:count={replyCount}
-				bind:page
-				bind:status
-				{token}
-				{user}
-			/>
+				<Pagination
+					bind:previous={previousReplies}
+					bind:next={nextReplies}
+					bind:results={replies}
+					bind:count={replyCount}
+					bind:page
+					bind:status
+					{token}
+					{user}
+				/>
 			{/if}
 		</ul>
 	</div>

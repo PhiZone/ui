@@ -45,6 +45,7 @@
         "edition_placeholder": "特指（剪辑后的）音源出处（如 Arcaea Ver. / 自剪 / 原版 ...）",
         "bpm_placeholder": "若 BPM 变化，按“最低BPM~最高BPM (主要BPM)”格式填写，注意空格，所有符号须为半角",
         "offset_placeholder": "以毫秒为单位，取值范围应在 ±30000/BPM 内（暂时以 RPE 播放窗口为准）",
+        "description_placeholder": "简介（选填，建议在此标注视频平台上的谱面预览视频的链接）",
         "preview_start": "预览开始时间",
         "preview_end": "预览结束时间",
         "preview_placeholder": "用于游玩器内预览播放，须以 mm:ss 格式填写（如 01:14）",

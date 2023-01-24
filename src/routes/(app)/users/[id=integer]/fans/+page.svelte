@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Status } from "$lib/constants";
-	import { locale, t } from "$lib/translations/config";
+	import { t } from "$lib/translations/config";
 	import Relation from "$lib/components/user.svelte";
 	import Pagination from "$lib/components/pagination.svelte";
 	import { onMount } from "svelte";

@@ -1,12 +1,22 @@
 import { ContentType, LOCAL_API_BASE, RES_BASE, USER_LEVELS } from "./constants";
 
-export function POST(endpoint: string, data: unknown, language?: string) {
+export function POST(endpoint: string, data: unknown, language?: string, func?: Function) {
+    if (func) {
+        return func(endpoint, {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(data || {}),
+            headers: {
+                'Accept-Language': language ? language : 'en'
+            },
+        });
+    }
     return fetch(endpoint, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(data || {}),
         headers: {
-            'Accept-Language': language ? language : convertLanguageCode(window.navigator.language)
+            'Accept-Language': language ? language : 'en'
         },
     });
 }

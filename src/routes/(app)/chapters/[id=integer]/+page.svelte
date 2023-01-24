@@ -2,12 +2,10 @@
 	import { Status } from "$lib/constants";
 	import { locale, t } from "$lib/translations/config";
 	import * as api from "$lib/api";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import Comment from "$lib/components/comment.svelte";
-	import Song from "$lib/components/song.svelte";
 	import Pagination from "$lib/components/pagination.svelte";
 	import Like from "$lib/components/like.svelte";
-	import { page } from "$app/stores";
 	import User from "$lib/components/user.svelte";
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, songRes, commentRes, access_token, user } =

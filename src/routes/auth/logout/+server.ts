@@ -1,6 +1,5 @@
 import * as api from '$lib/api';
 import type { RequestHandler } from './$types';
-import { clearTokens } from '../_cookie';
 
 export const POST: RequestHandler = async ({ request }) => {
     const json = await request.json();
@@ -17,11 +16,7 @@ export const POST: RequestHandler = async ({ request }) => {
             content: content
         }));
     }
-    const headers = clearTokens();
-    headers.append('Location', '/');
     return new Response(JSON.stringify({
         code: resp.status
-    }), {
-        headers: headers
-    });
+    }));
 };

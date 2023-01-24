@@ -2,7 +2,6 @@
 	import { Status } from "$lib/constants";
 	import { locale, t } from "$lib/translations/config";
 	import {
-		getPath,
 		getUserLevel,
 		parseDateTime,
 		parseRichText,
@@ -11,7 +10,6 @@
 	import { onMount } from "svelte";
 	import Comment from "$lib/components/comment.svelte";
 	import Song from "$lib/components/song.svelte";
-	import { browser } from "$app/environment";
 	import { Chart, registerables } from "chart.js";
 	import "chart.js/auto";
 	import User from "$lib/components/user.svelte";

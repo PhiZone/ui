@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Status } from "$lib/constants";
-	import { locale, t } from "$lib/translations/config";
+	import { t } from "$lib/translations/config";
 	import { parseDateTime } from "$lib/utils";
 	import User from "$lib/components/user.svelte";
 	import Chart from "$lib/components/chart.svelte";

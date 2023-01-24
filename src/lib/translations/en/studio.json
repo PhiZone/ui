@@ -45,6 +45,7 @@
         "edition_placeholder": "Especially refers to song's origin (e.g. Arcaea Ver. / Self-Edited / Original ...)",
         "bpm_placeholder": "If BPM changes, fill in according to the format of \"min~max (main)\"",
         "offset_placeholder": "In milliseconds, within the range of ±30000/BPM (shall prevail the playback window in RPE)",
+        "description_placeholder": "Description (Optional; it's advised that you attach a link to your chart's preview video)",
         "preview_start": "Start Time of Preview",
         "preview_end": "End Time of Preview",
         "preview_placeholder": "In the format of mm:ss (e.g. 01:14), used to specify the preview section in players",

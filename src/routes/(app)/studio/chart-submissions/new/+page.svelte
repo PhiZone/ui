@@ -498,9 +498,7 @@
 											? "textarea-error"
 											: "textarea-primary"
 									} w-3/4 h-28`}
-									placeholder="{$t('common.description')}{$t(
-										'studio.submission.optional'
-									)}"
+									placeholder={$t("studio.submission.description_placeholder")}
 									bind:value={description}
 								/>
 							</label>
