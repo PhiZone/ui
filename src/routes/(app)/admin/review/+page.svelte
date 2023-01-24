@@ -37,7 +37,6 @@
 		if (document.hidden || page != 1) {
 			return;
 		}
-        console.log(document.hidden);
 		const resp = await api.GET(`/user_inputs/`, access_token, user, fetch);
 		if (!resp.ok) {
 			throw error(resp.status, resp.statusText);
