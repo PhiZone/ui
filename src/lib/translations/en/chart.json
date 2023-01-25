@@ -6,7 +6,12 @@
     "description": "Description",
     "ranked": "Ranked",
     "notes": "Number of Notes",
-    "format": "Chart Format",
+    "format": "Format",
+    "formats": {
+        "0": "Re: PhiEdit Chart",
+        "1": "PhiEditer Chart",
+        "2": "Unsupported"
+    },
     "score": "Total Score",
     "rating": "Rating",
     "equivalent_vote_count": "Equiv. Vote Count",

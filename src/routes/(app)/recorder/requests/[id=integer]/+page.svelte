@@ -230,9 +230,15 @@
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.audio_option")}</span
+									>{$t("recorder.music_volume")}</span
 								>
-								{$t(`recorder.audio_option_${content.audio_option}`)}
+								{content.music_volume.toFixed(1)}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("recorder.hitsound_volume")}</span
+								>
+								{content.hitsound_volume.toFixed(1)}
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"

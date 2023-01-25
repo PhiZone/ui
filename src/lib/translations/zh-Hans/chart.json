@@ -6,7 +6,12 @@
     "description": "简介",
     "ranked": "Ranked",
     "notes": "物量",
-    "format": "谱面格式",
+    "format": "格式",
+    "formats": {
+        "0": "Re: PhiEdit 谱面",
+        "1": "PhiEditer 谱面",
+        "2": "未受支持"
+    },
     "score": "总分",
     "rating": "评分",
     "equivalent_vote_count": "等效票数",

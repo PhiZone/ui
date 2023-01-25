@@ -466,6 +466,12 @@
 								</p>
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("chart.format")}</span
+									>
+									{$t(`chart.formats.${content.format}`)}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("chart.score")}</span
 									>
 									{content.score.toFixed(2)}

@@ -17,7 +17,8 @@
 		illustrator = "",
 		noteSize = "",
 		resolution = "",
-		audio_option = 1,
+		musicVolume = 1.0,
+		hitsoundVolume = 1.0,
 		loadingOption = true,
 		endingOption = false,
 		tip = "",
@@ -145,7 +146,8 @@
 		formData.append("difficulty", difficulty);
 		formData.append("note_size", noteSize);
 		formData.append("resolution", resolution);
-		formData.append("audio_option", audio_option.toString());
+		formData.append("music_volume", musicVolume.toString());
+		formData.append("hitsound_volume", hitsoundVolume.toString());
 		formData.append("total_score", totalScore);
 		if (loadingOption) {
 			formData.append("charter", charter);
@@ -205,7 +207,7 @@
 						}}
 					>
 						<div class="flex">
-							<span class="w-32 px-4 place-self-center"
+							<span class="w-1/4 px-4 place-self-center"
 								>{$t("common.form.audio")}</span
 							>
 							<input
@@ -228,7 +230,7 @@
 							{/if}
 						</div>
 						<div class="flex">
-							<span class="w-32 px-4 place-self-center"
+							<span class="w-1/4 px-4 place-self-center"
 								>{$t("common.form.chart")}</span
 							>
 							<input
@@ -251,7 +253,7 @@
 							{/if}
 						</div>
 						<div class="flex">
-							<span class="w-32 px-4 place-self-center"
+							<span class="w-1/4 px-4 place-self-center"
 								>{$t("common.form.illustration")}</span
 							>
 							<input
@@ -425,40 +427,40 @@
 								/>
 							</label>
 						</div>
-						<div class="flex">
-							<span class="w-32 px-4 place-self-center"
-								>{$t("recorder.audio_option")}</span
+						<div class="flex my-3 gap-1">
+							<span class="w-1/4 px-4 place-self-center"
+								>{$t("recorder.music_volume")}</span
 							>
-							<div class="form-control">
-								<div class="pt-3">
-									<input
-										type="radio"
-										bind:group={audio_option}
-										name="audio_option"
-										value="1"
-										class="radio radio-primary mr-2"
-										checked
-									/>
-									<div class="choice">
-										{$t("recorder.audio_option_1")}
-									</div>
-								</div>
-								<div class="pt-3">
-									<input
-										type="radio"
-										bind:group={audio_option}
-										name="audio_option"
-										value="2"
-										class="radio radio-primary mr-2"
-									/>
-									<div class="choice">
-										{$t("recorder.audio_option_2")}
-									</div>
-								</div>
-							</div>
+							<p class="text-xl font-bold w-1/12">
+								{musicVolume.toFixed(1)}
+							</p>
+							<input
+								type="range"
+								min="0.0"
+								max="2.0"
+								bind:value={musicVolume}
+								class="range"
+								step="0.1"
+							/>
+						</div>
+						<div class="flex my-3 gap-1">
+							<span class="w-1/4 px-4 place-self-center"
+								>{$t("recorder.hitsound_volume")}</span
+							>
+							<p class="text-xl font-bold w-1/12">
+								{hitsoundVolume.toFixed(1)}
+							</p>
+							<input
+								type="range"
+								min="0.0"
+								max="1.0"
+								bind:value={hitsoundVolume}
+								class="range"
+								step="0.1"
+							/>
 						</div>
 						<div class="flex my-3">
-							<span class="w-32 px-4 place-self-center"
+							<span class="w-1/4 px-4 place-self-center"
 								>{$t("recorder.loading_option")}</span
 							>
 							<input
@@ -572,7 +574,7 @@
 							</div>
 						{/if}
 						<div class="flex my-3">
-							<span class="w-32 px-4 place-self-center"
+							<span class="w-1/4 px-4 place-self-center"
 								>{$t("recorder.ending_option")}</span
 							>
 							<input
@@ -583,7 +585,7 @@
 						</div>
 						{#if endingOption}
 							<div class="flex">
-								<span class="w-32 px-4 place-self-center"
+								<span class="w-1/4 px-4 place-self-center"
 									>{$t("recorder.avatar")}</span
 								>
 								<input

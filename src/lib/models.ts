@@ -159,7 +159,8 @@ export interface RecorderRequest {
     difficulty: string;
     note_size: number;
     resolution: string;
-    audio_option: number;
+    music_volume: number;
+    hitsound_volume: number;
     tip: string | null;
     avatar: string | null;
     username: string | null;
@@ -189,7 +190,8 @@ export interface RecorderRequestError {
     charter?: string[];
     illustrator?: string[];
     composer?: string[];
-    audio_option?: string[];
+    music_volume?: string[];
+    hitsound_volume?: string[];
     tip?: string[];
     avatar?: string[];
     username?: string[];
