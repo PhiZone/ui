@@ -72,5 +72,6 @@
         "rejected": "Rejected",
         "sent": "Requests Sent",
         "received": "Requests Received"
-    }
+    },
+    "view_guide": "View Guide"
 }

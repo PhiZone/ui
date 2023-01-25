@@ -72,5 +72,6 @@
         "rejected": "已拒绝",
         "sent": "发出的请求",
         "received": "收到的请求"
-    }
+    },
+    "view_guide": "查看指南"
 }

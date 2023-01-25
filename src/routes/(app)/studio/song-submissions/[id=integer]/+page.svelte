@@ -10,7 +10,7 @@
 	import { onMount } from "svelte";
 	import * as api from "$lib/api";
 	import Chapter from "$lib/components/chapter.svelte";
-  import { goto } from "$app/navigation";
+  import { goto, preloadData } from "$app/navigation";
 
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
@@ -226,6 +226,9 @@
 									class="btn btn-primary btn-outline glass text-lg w-32"
 									on:click={() => {
 										goto(`/studio/song-submissions/${content?.id}/edit`);
+									}}
+									on:pointerenter={() => {
+										preloadData(`/studio/song-submissions/${content?.id}/edit`);
 									}}
 								>
 									{$t("common.edit")}

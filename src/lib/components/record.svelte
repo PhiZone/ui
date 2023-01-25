@@ -11,16 +11,12 @@
 	const grade = getGrade(record.score, record.full_combo);
 </script>
 
-<a
-	
-	class="w-fit h-fit"
-	href={`/records/${record.id}`}
+<div
+	class={`card m-1 w-[288px] ${
+		typeof record.player == "object" ? "h-40" : "h-36"
+	} card-side relative bg-base-100 shadow-lg glass overflow-hidden`}
 >
-	<div
-		class={`card m-1 w-[288px] ${
-			typeof record.player == "object" ? "h-40" : "h-36"
-		} card-side relative bg-base-100 shadow-lg glass overflow-hidden`}
-	>
+	<a class="w-fit h-fit" href={`/records/${record.id}`}>
 		{#if typeof record.chart === "object" && typeof record.chart.song === "object"}
 			<img
 				class="object-fill w-full h-full blur opacity-40"
@@ -115,11 +111,7 @@
 		<div class="absolute right-2 bottom-2 form-control justify-end">
 			<p class="text-right player">
 				{#if typeof record.player == "object"}
-					<a
-						
-						href={`/users/${record.player.id}`}
-						class="hover:underline"
-					>
+					<a href={`/users/${record.player.id}`} class="hover:underline">
 						{$t(record.player.username)}
 					</a>
 					@
@@ -127,8 +119,8 @@
 				{parseDateTime(record.time)}
 			</p>
 		</div>
-	</div>
-</a>
+	</a>
+</div>
 
 <style>
 	.song {

@@ -13,6 +13,10 @@
 			<p class="text-lg py-6 whitespace-pre-wrap">
 				{$t("studio.description")}
 			</p>
+			<a
+				href="/studio_guide.html"
+				class="text-lg hover:underline mb-3">{$t("studio.view_guide")}</a
+			>
 			<div class="mt-3 flex justify-center">
 				<a data-sveltekit-preload-data href="/studio/chart-submissions/new">
 					<button class="btn btn-primary text-lg btn-xl btn-outline glass mr-3">
