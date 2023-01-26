@@ -56,6 +56,25 @@
 	) => {
 		searchType = (e.target as HTMLSelectElement).value;
 	};
+
+	const handleKeyUp = (e: KeyboardEvent) => {
+		if (e.key === "Enter") {
+			handleSearch();
+		}
+	};
+
+	const handleSearch = () => {
+		if (!searchError) {
+			if (!searchText) {
+				searchError = "input_null";
+			} else {
+				pageStatus = Status.RETRIEVING;
+				goto(
+					`/search?type=${searchType}${searchText ? `&name=${searchText}` : ""}`
+				);
+			}
+		}
+	};
 </script>
 
 <svelte:head>
@@ -98,6 +117,9 @@
 							searchError = "";
 						}
 					}}
+					on:keyup={(e) => {
+						handleKeyUp(e);
+					}}
 				/>
 				{#if searchError}
 					<button class="btn btn-lg btn-square btn-error">
@@ -118,20 +140,7 @@
 				{:else}
 					<button
 						class="btn btn-lg btn-square btn-primary"
-						on:click={() => {
-							if (!searchError) {
-								if (!searchText) {
-									searchError = "input_null";
-								} else {
-									pageStatus = Status.RETRIEVING;
-									goto(
-										`/search?type=${searchType}${
-											searchText ? `&name=${searchText}` : ""
-										}`
-									);
-								}
-							}
-						}}
+						on:click={handleSearch}
 						on:pointerenter={() => {
 							if (!searchError && searchText) {
 								preloadData(

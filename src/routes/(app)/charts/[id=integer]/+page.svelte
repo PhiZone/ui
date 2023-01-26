@@ -429,6 +429,12 @@
 							<div class="w-1/2">
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("chart.id")}</span
+									>
+									{content.id}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("chart.level")}</span
 									>
 									{content.level}

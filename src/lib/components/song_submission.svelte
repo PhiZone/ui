@@ -6,10 +6,7 @@
 	export let submission: SongSubmission;
 </script>
 
-<a
-	
-	href={`/studio/song-submissions/${submission.id}`}
->
+<a href={`/studio/song-submissions/${submission.id}`}>
 	<div
 		class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg glass"
 	>
@@ -43,6 +40,14 @@
 				</div>
 			{/if}
 			<div class="flex items-center min-w-fit">
+				{#if typeof submission.uploader === "object"}
+					<p class="min-w-fit">
+						<span class="badge badge-primary badge-outline mr-1"
+							>{$t("studio.submission.uploader")}</span
+						>
+						{submission.uploader.username}
+					</p>
+				{/if}
 				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.uploaded_at")}</span

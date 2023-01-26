@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 
 export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) => {
     const { user, access_token } = await parent();
-    const resp = await api.GET(`/song_uploads/${url.search}${getUserPrivilege(user.type) >= 3 ? "" : `${url.search ? "&" : "?"}uploader=${user.id}`}`, access_token, user, fetch);
+    const resp = await api.GET(`/song_uploads/${url.search}${getUserPrivilege(user.type) >= 3 ? `${url.search ? "&" : "?"}query_uploader=1` : `${url.search ? "&" : "?"}uploader=${user.id}`}`, access_token, user, fetch);
     if (!resp.ok) {
         throw error(resp.status, resp.statusText);
     }

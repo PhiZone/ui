@@ -1,5 +1,6 @@
 {
     "chart": "Chart",
+    "id": "Chart ID",
     "file": "Chart File",
     "level": "Level",
     "difficulty": "Difficulty",

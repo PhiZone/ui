@@ -53,13 +53,13 @@
 			</h2>
 			<p class="whitespace-nowrap overflow-hidden text-ellipsis">
 				<span class="badge badge-primary badge-outline mr-1"
-					>{$t("song.composer")}</span
-				>{song.composer}
+					>{$t("song.edition")}</span
+				>{song.edition}
 			</p>
 			<p class="whitespace-nowrap overflow-hidden text-ellipsis">
 				<span class="badge badge-primary badge-outline mr-1"
-					>{$t("song.edition")}</span
-				>{song.edition}
+					>{$t("song.composer")}</span
+				>{song.composer}
 			</p>
 			<p class="whitespace-nowrap overflow-hidden text-ellipsis">
 				<span class="badge badge-primary badge-outline mr-1"

@@ -214,15 +214,21 @@
 									<div class="form-control gap-1">
 										<p>
 											<span class="badge badge-primary badge-outline mr-1"
-												>{$t("song.composer")}</span
+												>{$t("song.id")}</span
 											>
-											{content.composer}
+											{content.id}
 										</p>
 										<p>
 											<span class="badge badge-primary badge-outline mr-1"
 												>{$t("song.edition")}</span
 											>
 											{content.edition}
+										</p>
+										<p>
+											<span class="badge badge-primary badge-outline mr-1"
+												>{$t("song.composer")}</span
+											>
+											{content.composer}
 										</p>
 										<p>
 											<span class="badge badge-primary badge-outline mr-1"
