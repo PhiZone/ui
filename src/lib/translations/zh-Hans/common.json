@@ -61,6 +61,7 @@
     "download": "下载",
     "empty": "空空如也……",
     "empty_v": "清空",
+    "empty_adj": "空",
     "correct_errors": "请改正以上错误信息！",
     "loading": "加载中……",
     "lang": {
@@ -86,7 +87,7 @@
         "charter_preview": "谱师名义预览",
         "illustrator": "画师名义",
         "tips": {
-            "audio": "10MB 或更小的 MP3 / OGG / OGA",
+            "audio": "10MB 或更小的 MP3 / OGG",
             "image": "6MB 或更小的 JPG / JPEG / PNG",
             "chart": "仅支持 PE / RPE 创作的谱面",
             "illustration": "6MB 或更小的 JPG / JPEG / PNG，长宽比须为 16:9，分辨率不得低于 960×540",

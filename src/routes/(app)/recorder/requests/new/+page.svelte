@@ -4,6 +4,7 @@
 	import { ContentType, Status } from "$lib/constants";
 	import { goto } from "$app/navigation";
 	import type { RecorderRequestError } from "$lib/models";
+	import { onMount } from "svelte";
 
 	export let data: import("./$types").PageData;
 	$: ({ access_token, user } = data);
@@ -34,35 +35,39 @@
 		avatar: File | null = null,
 		status = Status.OK,
 		dataIncomplete = false,
-		error: RecorderRequestError;
-
-	let challengeColors = [
-		{
-			id: 0,
-			text: "Rainbow",
-			image: "https://res.phi.zone/static/challenge_rainbow.png",
-		},
-		{
-			id: 1,
-			text: "Gold",
-			image: "https://res.phi.zone/static/challenge_gold.png",
-		},
-		{
-			id: 2,
-			text: "Orange",
-			image: "https://res.phi.zone/static/challenge_orange.png",
-		},
-		{
-			id: 3,
-			text: "Blue",
-			image: "https://res.phi.zone/static/challenge_blue.png",
-		},
-		{
-			id: 4,
-			text: "Green",
-			image: "https://res.phi.zone/static/challenge_green.png",
-		},
-	];
+		error: RecorderRequestError,
+		challengeColors = [
+			{
+				id: 0,
+				text: "Rainbow",
+				image: "https://res.phi.zone/static/challenge_rainbow.png",
+			},
+			{
+				id: 1,
+				text: "Gold",
+				image: "https://res.phi.zone/static/challenge_gold.png",
+			},
+			{
+				id: 2,
+				text: "Orange",
+				image: "https://res.phi.zone/static/challenge_orange.png",
+			},
+			{
+				id: 3,
+				text: "Blue",
+				image: "https://res.phi.zone/static/challenge_blue.png",
+			},
+			{
+				id: 4,
+				text: "Green",
+				image: "https://res.phi.zone/static/challenge_green.png",
+			},
+			{
+				id: 5,
+				text: $t("common.empty_adj"),
+				image: null,
+			},
+		];
 
 	const handleChart = (
 		e: Event & { currentTarget: EventTarget & HTMLInputElement }
@@ -129,8 +134,8 @@
 					username &&
 					rks &&
 					challengeColor >= 0 &&
-					challengeColor <= 4 &&
-					challengeDifficulty
+					challengeColor <= 5 &&
+					(challengeColor === 5 ? true : challengeDifficulty)
 				));
 		if (dataIncomplete) {
 			errorMsg = "data_incomplete";
@@ -160,7 +165,10 @@
 			formData.append("username", username);
 			formData.append("rks", rks);
 			formData.append("challenge_color", challengeColor.toString());
-			formData.append("challenge_difficulty", challengeDifficulty);
+			formData.append(
+				"challenge_difficulty",
+				challengeColor === 5 ? challengeDifficulty : "Empty"
+			);
 		}
 		formData.append("addition", addition);
 		status = Status.SENDING;
@@ -212,7 +220,7 @@
 							>
 							<input
 								type="file"
-								accept=".mp3, .ogg, .oga"
+								accept=".mp3, .ogg"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 									(!song && dataIncomplete) ||
 									(status === Status.ERROR && error?.song)
@@ -647,7 +655,7 @@
 									<span class="w-1/4 min-w-[64px]">{$t("recorder.rks")}</span>
 									<input
 										type="text"
-										placeholder={(Math.random() * (16.12 - 12) + 12).toFixed(2)}
+										placeholder="9.24"
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											endingOption &&
 											((!rks && dataIncomplete) ||
@@ -696,7 +704,11 @@
 									? error.challenge_difficulty
 									: ""}
 							>
-								<label class="input-group my-2">
+								<label
+									class={`input-group my-2 ${
+										challengeColor === 5 ? "pointer-events-none" : ""
+									}`}
+								>
 									<span class="w-1/4 min-w-[64px]"
 										>{$t("recorder.challenge_difficulty")}</span
 									>
@@ -705,10 +717,14 @@
 										placeholder={$t("recorder.challenge_difficulty")}
 										class={`input input-bordered w-3/4 min-w-[180px] ${
 											endingOption &&
-											((!challengeDifficulty && dataIncomplete) ||
+											((!challengeDifficulty &&
+												challengeColor !== 5 &&
+												dataIncomplete) ||
 												(status === Status.ERROR &&
 													error?.challenge_difficulty))
 												? "input-error"
+												: challengeColor === 5
+												? "input-disabled"
 												: "input-primary"
 										}`}
 										bind:value={challengeDifficulty}

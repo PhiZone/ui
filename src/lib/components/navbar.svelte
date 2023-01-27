@@ -6,8 +6,6 @@
 	import type { User } from "$lib/models";
 	export let showUser = true,
 		user: User | undefined;
-
-	let openDrawer = false;
 </script>
 
 <div
@@ -42,16 +40,21 @@
 				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 			>
 				<li>
-					<a data-sveltekit-preload-data href="/chapters">{$t("common.chapters")}</a>
+					<a data-sveltekit-preload-data href="/chapters"
+						>{$t("common.chapters")}</a
+					>
 				</li>
 				<li>
 					<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
 				</li>
 				<li>
-					<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a>
+					<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a
+					>
 				</li>
 				<li>
-					<a data-sveltekit-preload-data href="/records">{$t("common.records")}</a>
+					<a data-sveltekit-preload-data href="/records"
+						>{$t("common.records")}</a
+					>
 				</li>
 				<!-- <li><a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a></li>
 				<li><a data-sveltekit-preload-data href="/discussions">{$t("common.discussions")}</a></li> -->
@@ -70,23 +73,17 @@
 		{#if $page.url.pathname.startsWith("/studio")}
 			<label
 				for="studio-sidebar"
-				class={`btn btn-primary ${
-					openDrawer ? "btn-active" : "btn-outline"
-				} drawer-button lg:hidden`}
-				on:click={() => {
-					openDrawer = !openDrawer;
-				}}
-				on:keyup
-				>{openDrawer
-					? $t("studio.close_drawer")
-					: $t("studio.open_drawer")}</label
+				class="btn btn-primary btn-outline drawer-button lg:hidden"
+				>{$t("studio.drawer")}</label
 			>
 		{/if}
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal rounded-full p-0">
 			<li>
-				<a data-sveltekit-preload-data href="/chapters">{$t("common.chapters")}</a>
+				<a data-sveltekit-preload-data href="/chapters"
+					>{$t("common.chapters")}</a
+				>
 			</li>
 			<li>
 				<a data-sveltekit-preload-data href="/songs">{$t("common.songs")}</a>
@@ -95,7 +92,8 @@
 				<a data-sveltekit-preload-data href="/charts">{$t("common.charts")}</a>
 			</li>
 			<li>
-				<a data-sveltekit-preload-data href="/records">{$t("common.records")}</a>
+				<a data-sveltekit-preload-data href="/records">{$t("common.records")}</a
+				>
 			</li>
 			<!-- <li class="rounded-full">
 				<a data-sveltekit-preload-data href="/apps">{$t("common.navbar.apps")}</a>
@@ -209,7 +207,9 @@
 							</li>
 						{/if}
 						<li>
-							<a data-sveltekit-preload-data href="/me/settings">{$t("common.settings")}</a>
+							<a data-sveltekit-preload-data href="/me/settings"
+								>{$t("common.settings")}</a
+							>
 						</li>
 						<li>
 							<a href="/session/logout">{$t("common.navbar.logout")}</a>

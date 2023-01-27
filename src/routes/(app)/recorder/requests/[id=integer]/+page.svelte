@@ -13,7 +13,40 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
 
-	let requestStatus: number, reply: string | null;
+	let requestStatus: number,
+		reply: string | null,
+		challengeColors = [
+			{
+				id: 0,
+				text: "Rainbow",
+				image: "https://res.phi.zone/static/challenge_rainbow.png",
+			},
+			{
+				id: 1,
+				text: "Gold",
+				image: "https://res.phi.zone/static/challenge_gold.png",
+			},
+			{
+				id: 2,
+				text: "Orange",
+				image: "https://res.phi.zone/static/challenge_orange.png",
+			},
+			{
+				id: 3,
+				text: "Blue",
+				image: "https://res.phi.zone/static/challenge_blue.png",
+			},
+			{
+				id: 4,
+				text: "Green",
+				image: "https://res.phi.zone/static/challenge_green.png",
+			},
+			{
+				id: 5,
+				text: "Empty",
+				image: "",
+			},
+		];
 
 	onMount(() => {
 		if (status === Status.OK && content) {
@@ -40,34 +73,6 @@
 			console.log(await resp.json());
 		}
 	};
-
-	let challengeColors = [
-		{
-			id: 0,
-			text: "Rainbow",
-			image: "https://res.phi.zone/static/challenge_rainbow.png",
-		},
-		{
-			id: 1,
-			text: "Gold",
-			image: "https://res.phi.zone/static/challenge_gold.png",
-		},
-		{
-			id: 2,
-			text: "Orange",
-			image: "https://res.phi.zone/static/challenge_orange.png",
-		},
-		{
-			id: 3,
-			text: "Blue",
-			image: "https://res.phi.zone/static/challenge_blue.png",
-		},
-		{
-			id: 4,
-			text: "Green",
-			image: "https://res.phi.zone/static/challenge_green.png",
-		},
-	];
 </script>
 
 <svelte:head>
@@ -286,7 +291,7 @@
 									{content.rks}
 								</p>
 							{/if}
-							{#if content.avatar && content.challenge_color !== null && content.challenge_color >= 0 && content.challenge_color <= 4}
+							{#if content.avatar && content.challenge_color !== null && content.challenge_color >= 0 && content.challenge_color <= 5}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_color")}</span
@@ -294,7 +299,7 @@
 									{challengeColors[content.challenge_color].text}
 								</p>
 							{/if}
-							{#if content.avatar && content.challenge_difficulty}
+							{#if content.avatar && content.challenge_color !== 5 && content.challenge_difficulty}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
 										>{$t("recorder.challenge_difficulty")}</span
@@ -367,10 +372,7 @@
 											: "border-neutral-500"
 									}`}
 								>
-									<a
-										
-										href={`/users/${content.replier.id}`}
-									>
+									<a href={`/users/${content.replier.id}`}>
 										<img
 											class="object-fill"
 											src={getCompressedImage(content.replier.avatar)}
@@ -378,10 +380,7 @@
 										/>
 									</a>
 								</div>
-								<a
-									
-									href={`/users/${content.user.id}`}
-								>
+								<a href={`/users/${content.user.id}`}>
 									<p class="text-lg text-center max-w-[120px] break-all">
 										{content.replier.username}
 									</p>

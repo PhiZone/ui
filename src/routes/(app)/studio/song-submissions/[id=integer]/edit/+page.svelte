@@ -167,7 +167,7 @@
 								>
 								<input
 									type="file"
-									accept=".mp3, .ogg, .oga"
+									accept=".mp3, .ogg"
 									class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
 										status === Status.ERROR && error?.song
 											? "input-error file:btn-error"
