@@ -193,14 +193,6 @@
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("studio.submission.volunteer_status")}</span
-								>
-								{$t(
-									`studio.submission.bi_statuses.${content.volunteer_status}`
-								)}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("studio.submission.collab_status")}</span
 								>
 								{$t(`studio.submission.bi_statuses.${content.collab_status}`)}
@@ -210,6 +202,14 @@
 									>{$t("studio.submission.adm_status")}</span
 								>
 								{$t(`studio.submission.bi_statuses.${content.adm_status}`)}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("studio.submission.volunteer_status")}</span
+								>
+								{$t(
+									`studio.submission.bi_statuses.${content.volunteer_status}`
+								)}
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"

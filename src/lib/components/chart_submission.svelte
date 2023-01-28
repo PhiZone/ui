@@ -43,15 +43,15 @@
 			<div class="flex items-center min-w-fit">
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
-						>{$t("studio.submission.collab_status")}</span
-					>
-					{$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
-				</p>
-				<p>
-					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.adm_status")}</span
 					>
 					{$t(`studio.submission.bi_statuses.${submission.adm_status}`)}
+				</p>
+				<p>
+					<span class="badge badge-primary badge-outline mr-1"
+						>{$t("studio.submission.collab_status")}</span
+					>
+					{$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
 				</p>
 			</div>
 			<div class="flex items-center min-w-fit">
