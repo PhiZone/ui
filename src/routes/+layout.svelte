@@ -20,7 +20,9 @@
 	try {
 		language = $page.data.user.language.toString();
 		locale.set(language);
-		console.log("Language:", language, "(from user data)");
+		if (browser) {
+			console.log("Language:", language, "(from user data)");
+		}
 	} catch (error) {
 		if (browser) {
 			language = convertLanguageCode(window.navigator.language);

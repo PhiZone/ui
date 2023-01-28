@@ -1,4 +1,4 @@
-import { ContentType, LOCAL_API_BASE, RES_BASE, USER_LEVELS } from "./constants";
+import { RES_BASE, USER_LEVELS } from "./constants";
 
 export function POST(endpoint: string, data: unknown, language?: string, func?: Function) {
     if (func) {

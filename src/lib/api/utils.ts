@@ -34,7 +34,9 @@ function send<T>({ method, path, data, token, user, contentType, func, language 
     if (token) {
         headers.append('Authorization', `Bearer ${token}`);
     }
-    console.log(path, data);
+    if (path !== '/user_detail/') {
+        console.log(path, data);
+    }
 
     if (func) {
         return func(`${API_BASE}${path}`, opts);

@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit';
 export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
     const { user, access_token } = await parent();
     // const resp = await api.GET(`/charts/${params.id}/?query_song=1&query_owner=1&query_levels=1&query_relation=1`, access_token, user, fetch);
-    const resp = await api.GET(`/charts/${params.id}/?query_song=1&query_owner=1&query_player=1&query_relation=1`, access_token, user, fetch);
+    const resp = await api.GET(`/charts/${params.id}/?query_song=1&query_owner=1&query_records=1&query_player=1&query_relation=1`, access_token, user, fetch);
     if (!resp.ok) {
         throw error(resp.status, resp.statusText);
     }
