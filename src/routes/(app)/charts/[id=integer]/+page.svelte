@@ -451,7 +451,7 @@
 									>
 									{#if content.charter}
 										{#each parseRichText(content.charter) as t}
-											{#if t.id > 0}
+											{#if t.id > 0 && content.collab_status}
 												<a
 													href={`/users/${t.id}`}
 													class="text-accent hover:underline">{t.text}</a

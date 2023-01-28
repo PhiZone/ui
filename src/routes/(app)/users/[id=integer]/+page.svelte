@@ -304,7 +304,7 @@
 													class="w-5/12 text-lg whitespace-no-wrap text-ellipsis"
 												>
 													{#each parseRichText(chart.charter) as t}
-														{#if t.id > 0}
+														{#if t.id > 0 && chart.collab_status}
 															<a
 																href={`/users/${t.id}`}
 																class="text-accent hover:underline">{t.text}</a

@@ -42,7 +42,7 @@
 					>
 					{#if chart.charter}
 						{#each parseRichText(chart.charter) as t}
-							{#if t.id > 0}
+							{#if t.id > 0 && chart.collab_status}
 								<a data-sveltekit-preload-data href={`/users/${t.id}`} class="text-accent hover:underline"
 									>{t.text}</a
 								>

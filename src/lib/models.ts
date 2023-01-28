@@ -83,6 +83,7 @@ export interface Chart {
     at_event: boolean;
     chart: null | string;
     charter: null | string;
+    collab_status: boolean;
     comment_count: number;
     description: string;
     difficulty: number;

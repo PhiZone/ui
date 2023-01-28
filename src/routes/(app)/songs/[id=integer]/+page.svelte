@@ -555,7 +555,7 @@
 																<div class="w-2/3 text-lg">
 																	{#if chart.charter}
 																		{#each parseRichText(chart.charter) as t}
-																			{#if t.id > 0}
+																			{#if t.id > 0 && chart.collab_status}
 																				<a
 																					
 																					href={`/users/${t.id}`}
