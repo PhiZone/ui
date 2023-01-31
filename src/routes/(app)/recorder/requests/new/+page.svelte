@@ -64,7 +64,7 @@
 			},
 			{
 				id: 5,
-				text: $t("common.empty_adj"),
+				text: "Empty",
 				image: null,
 			},
 		];
@@ -167,7 +167,7 @@
 			formData.append("challenge_color", challengeColor.toString());
 			formData.append(
 				"challenge_difficulty",
-				challengeColor === 5 ? challengeDifficulty : "Empty"
+				challengeColor !== 5 ? challengeDifficulty : "Empty"
 			);
 		}
 		formData.append("addition", addition);
@@ -744,9 +744,7 @@
 								<span class="w-1/4 min-w-[64px]">{$t("recorder.addition")}</span
 								><textarea
 									class={`textarea ${
-										endingOption &&
-										((!addition && dataIncomplete) ||
-											(status === Status.ERROR && error?.addition))
+										status === Status.ERROR && error?.addition
 											? "textarea-error"
 											: "textarea-primary"
 									} w-3/4 h-48`}

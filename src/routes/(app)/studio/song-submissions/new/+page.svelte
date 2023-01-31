@@ -139,7 +139,7 @@
 	>
 </svelte:head>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-200 min-h-screen" on:pointerenter={getChapters}>
 	<div class="pt-32 flex justify-center">
 		<div class="w-3/4 max-w-6xl min-w-20">
 			<h1 class="text-4xl font-bold mb-6">{$t("studio.upload_song")}</h1>
@@ -424,7 +424,7 @@
 								? error.chapters
 								: ""}
 						>
-							<label class="input-group my-2" on:pointerenter={getChapters}>
+							<label class="input-group my-2">
 								<span class="w-1/4 min-w-[64px]"
 									>{$t("studio.submission.chapters")}{$t(
 										"studio.submission.optional"
