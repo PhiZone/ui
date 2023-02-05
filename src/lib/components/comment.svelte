@@ -27,7 +27,7 @@
 		replies: Reply[],
 		previousReplies: string | null = null,
 		nextReplies: string | null = null,
-		page = 1,
+		pageIndex = 1,
 		status: Status,
 		source: string;
 
@@ -58,7 +58,7 @@
 				user
 			);
 			replyText = "";
-			getReplies(page);
+			getReplies(pageIndex);
 		}
 	};
 
@@ -199,7 +199,7 @@
 						bind:next={nextReplies}
 						bind:results={replies}
 						bind:count={replyCount}
-						bind:page
+						bind:pageIndex
 						bind:status
 						{token}
 						{user}

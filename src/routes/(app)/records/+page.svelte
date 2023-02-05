@@ -12,7 +12,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
 
-	let pageCount = 1,
+	let pageIndex = 1,
 		recordStatus = Status.RETRIEVING,
 		records: any[] | null,
 		recordCount: number,
@@ -204,7 +204,7 @@
 				bind:next={nextRecords}
 				bind:results={records}
 				bind:count={recordCount}
-				bind:page={pageCount}
+				bind:pageIndex
 				bind:status={recordStatus}
 				token={access_token}
 				{user}

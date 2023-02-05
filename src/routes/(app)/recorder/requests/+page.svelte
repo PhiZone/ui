@@ -73,7 +73,7 @@
 							bind:next={nextRequests}
 							bind:results={requests}
 							bind:count={requestCount}
-							bind:page
+							bind:pageIndex
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

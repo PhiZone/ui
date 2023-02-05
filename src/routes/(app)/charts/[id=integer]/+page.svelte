@@ -49,7 +49,7 @@
 	};
 
 	let comment = "",
-		page = 1,
+		pageIndex = 1,
 		commentStatus = Status.RETRIEVING,
 		comments: any[] | null,
 		commentCount: number,
@@ -158,7 +158,7 @@
 				user
 			);
 			comment = "";
-			getComments(page);
+			getComments(pageIndex);
 		}
 	};
 
@@ -613,7 +613,7 @@
 									bind:next={nextComments}
 									bind:results={comments}
 									bind:count={commentCount}
-									bind:page
+									bind:pageIndex
 									bind:status
 									token={access_token}
 									{user}

@@ -75,7 +75,7 @@
 							bind:next={nextInputs}
 							bind:results={inputs}
 							bind:count={inputCount}
-							bind:page
+							bind:pageIndex
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

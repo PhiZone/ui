@@ -45,7 +45,7 @@
 				bind:next={nextChapters}
 				bind:results={chapters}
 				bind:count={chapterCount}
-				bind:page
+				bind:pageIndex
 				bind:status={chapterStatus}
 				token={access_token}
 				{user}

@@ -45,7 +45,7 @@
 				bind:next={nextSongs}
 				bind:results={songs}
 				bind:count={songCount}
-				bind:page
+				bind:pageIndex
 				bind:status={songStatus}
 				token={access_token}
 				{user}

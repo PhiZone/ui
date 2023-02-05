@@ -4,13 +4,14 @@
 	import type { User } from "$lib/models";
 	import { getPath } from "$lib/utils";
 	import { t } from "$lib/translations/config";
+	import { page } from "$app/stores";
 
 	export let previous: string | null,
 		next: string | null,
 		results: any[] | null,
 		count: number,
 		status: Status,
-		page: number,
+		pageIndex: number,
 		token: string | undefined,
 		user: User;
 
@@ -19,9 +20,11 @@
 		resp: { json: () => any; ok: any },
 		nearbyPages = [
 			...Array(
-				page > 3 ? Math.min(page + 4, total + 1) : Math.min(total + 1, 8)
+				pageIndex > 3
+					? Math.min(pageIndex + 4, total + 1)
+					: Math.min(total + 1, 8)
 			).keys(),
-		].slice(Math.max(1, page <= total - 3 ? page - 3 : total - 6)),
+		].slice(Math.max(1, pageIndex <= total - 3 ? pageIndex - 3 : total - 6)),
 		allPages = [...Array(total + 1).keys()].slice(1);
 
 	const preload = async (url: string, page: number) => {
@@ -55,7 +58,9 @@
 <input type="checkbox" id="pagination" class="modal-toggle" />
 <div class="modal">
 	<div
-		class="modal-box bg-base-100 max-h-[90vh] min-w-[70vw] w-[75vw] max-w-[1800px]"
+		class={`modal-box bg-base-100 max-h-[90vh] ${
+			$page.url.pathname.startsWith("/studio") ? "w-[40vw]" : "w-[70vw]"
+		} max-w-[1800px]`}
 	>
 		<label
 			for="pagination"
@@ -68,13 +73,13 @@
 				<label
 					for="pagination"
 					class={`btn btn-sm btn-circle ${
-						page == p ? "btn-disabled" : "btn-outline"
+						pageIndex == p ? "btn-disabled" : "btn-outline"
 					}`}
 					on:click={async () => {
 						let url = next ? next : previous ? previous : null;
 						if (url) {
 							await get(url.replace(/page=\d+/, `page=${p}`), p);
-							page = p;
+							pageIndex = p;
 							results = results;
 							previous = previous;
 							next = next;
@@ -104,17 +109,18 @@
 					}`}
 					on:click={() => {
 						if (previous) {
-							get(previous, --page);
+							get(previous, --pageIndex);
 						}
 					}}
 					on:pointerenter={() => {
 						if (previous) {
-							preload(previous, page - 1);
+							preload(previous, pageIndex - 1);
 						}
 					}}>«</button
 				>
-				<button class="btn btn-primary w-36 min-w-fit text-lg glass btn-active pointer-events-none"
-					>Page {page} / {total}</button
+				<button
+					class="btn btn-primary w-36 min-w-fit text-lg glass btn-active pointer-events-none"
+					>Page {pageIndex} / {total}</button
 				>
 				<button
 					class={`btn text-4xl ${
@@ -124,12 +130,12 @@
 					}`}
 					on:click={() => {
 						if (next) {
-							get(next, ++page);
+							get(next, ++pageIndex);
 						}
 					}}
 					on:pointerenter={() => {
 						if (next) {
-							preload(next, page + 1);
+							preload(next, pageIndex + 1);
 						}
 					}}>»</button
 				>
@@ -142,13 +148,13 @@
 					{#each nearbyPages as p}
 						<button
 							class={`btn btn-sm ${
-								page == p ? "btn-disabled" : "btn-outline"
+								pageIndex == p ? "btn-disabled" : "btn-outline"
 							}`}
 							on:click={async () => {
 								let url = next ? next : previous ? previous : null;
 								if (url) {
 									await get(url.replace(/page=\d+/, `page=${p}`), p);
-									page = p;
+									pageIndex = p;
 									results = results;
 								}
 							}}

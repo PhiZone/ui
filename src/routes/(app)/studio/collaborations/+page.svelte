@@ -15,7 +15,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, user, access_token } = data);
 
-	let pageCount = 1,
+	let pageIndex = 1,
 		collaborationCount: number,
 		pageStatus = Status.RETRIEVING,
 		collaborations: Collaboration[],
@@ -94,7 +94,7 @@
 							bind:next={nextCollaborations}
 							bind:results={collaborations}
 							bind:count={collaborationCount}
-							bind:page={pageCount}
+							bind:pageIndex
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

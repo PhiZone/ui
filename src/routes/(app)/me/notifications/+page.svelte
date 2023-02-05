@@ -46,7 +46,7 @@
 							bind:next={nextNotifications}
 							bind:results={notifications}
 							bind:count={notificationCount}
-							bind:page
+							bind:pageIndex
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

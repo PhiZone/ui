@@ -198,7 +198,7 @@
 				bind:next
 				bind:results
 				bind:count
-				bind:page
+				bind:pageIndex
 				bind:status
 				token={access_token}
 				{user}

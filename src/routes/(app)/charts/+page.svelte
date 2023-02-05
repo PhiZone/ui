@@ -45,7 +45,7 @@
 				bind:next={nextCharts}
 				bind:results={charts}
 				bind:count={chartCount}
-				bind:page
+				bind:pageIndex
 				bind:status={chartStatus}
 				token={access_token}
 				{user}

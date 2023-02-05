@@ -11,7 +11,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, user, access_token } = data);
 
-	let pageCount = 1,
+	let pageIndex = 1,
 		submissionCount: number,
 		pageStatus = Status.RETRIEVING,
 		submissions: SongSubmission[],
@@ -197,7 +197,7 @@
 							bind:next={nextSubmissions}
 							bind:results={submissions}
 							bind:count={submissionCount}
-							bind:page={pageCount}
+							bind:pageIndex
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

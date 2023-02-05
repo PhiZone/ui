@@ -50,7 +50,7 @@
 				bind:next={nextRelations}
 				bind:results={relations}
 				bind:count={relationCount}
-				bind:page
+				bind:pageIndex
 				bind:status={relationStatus}
 				token={access_token}
 				{user}

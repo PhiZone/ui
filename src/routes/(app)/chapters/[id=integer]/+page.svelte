@@ -11,14 +11,14 @@
 	$: ({ status, content, error, songRes, commentRes, access_token, user } =
 		data);
 
-	let songPageCount = 1,
+	let songPageIndex = 1,
 		songs: any[] | null,
 		songCount: number,
 		previousSongs: string,
 		nextSongs: string,
 		songStatus = Status.RETRIEVING,
 		comment = "",
-		commentPageCount = 1,
+		commentPageIndex = 1,
 		comments: any[] | null,
 		commentCount: number,
 		previousComments: string,
@@ -51,7 +51,7 @@
 				user
 			);
 			comment = "";
-			getComments(commentPageCount);
+			getComments(commentPageIndex);
 		}
 	};
 
@@ -217,7 +217,7 @@
 										bind:next={nextSongs}
 										bind:results={songs}
 										bind:count={songCount}
-										bind:page={songPageCount}
+										bind:pageIndex={songPageIndex}
 										bind:status={songStatus}
 										token={access_token}
 										{user}
@@ -267,7 +267,7 @@
 										bind:next={nextComments}
 										bind:results={comments}
 										bind:count={commentCount}
-										bind:page={commentPageCount}
+										bind:pageIndex={commentPageIndex}
 										bind:status
 										token={access_token}
 										{user}

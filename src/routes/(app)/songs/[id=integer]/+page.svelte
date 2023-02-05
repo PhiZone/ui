@@ -34,7 +34,7 @@
 		showCharts = false,
 		charts: Chart[],
 		comment = "",
-		pageCount = 1,
+		pageIndex = 1,
 		comments: any[] | null,
 		commentCount: number,
 		previousComments: string,
@@ -160,7 +160,7 @@
 				user
 			);
 			comment = "";
-			getComments(pageCount);
+			getComments(pageIndex);
 		}
 	};
 
@@ -555,7 +555,9 @@
 																			{Math.floor(chart.difficulty)}
 																		</button>
 																		{#if chart.ranked}
-																			<button class="btn btn-primary btn-sm text-xl no-animation">
+																			<button
+																				class="btn btn-primary btn-sm text-xl no-animation"
+																			>
 																				{$t("chart.ranked")}
 																			</button>
 																		{/if}
@@ -662,7 +664,7 @@
 									bind:next={nextComments}
 									bind:results={comments}
 									bind:count={commentCount}
-									bind:page={pageCount}
+									bind:pageIndex
 									bind:status={commentStatus}
 									token={access_token}
 									{user}
