@@ -167,13 +167,12 @@
 					>
 					<div class="card w-full bg-base-100 shadow-lg">
 						<div class="card-body">
-							{#if songStatus === Status.OK}
-								{#if songs && songs.length > 0}
+							{#if songStatus === Status.OK && songs}
+								{#if songs.length > 0}
 									<ul class="menu bg-base-100 w-full">
 										{#each songs as song}
 											<li class="overflow-hidden">
 												<a
-													
 													href={`/songs/${song.id}`}
 													class="w-full h-[82px] flex px-5"
 												>
@@ -258,8 +257,8 @@
 									}}>{$t("common.send")}</button
 								>
 							</div>
-							{#if commentStatus === Status.OK}
-								{#if comments && comments.length > 0}
+							{#if commentStatus === Status.OK && comments}
+								{#if comments.length > 0}
 									{#each comments as comment}
 										<Comment {comment} token={access_token} {user} />
 									{/each}

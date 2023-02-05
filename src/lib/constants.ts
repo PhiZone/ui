@@ -4,12 +4,12 @@ export const RES_BASE = import.meta.env.VITE_RES_BASE;
 export const PAGINATION_PER_PAGE = 12
 
 export const USER_LEVELS = [
-    { exp: 10, level: 1 },
-    { exp: 50, level: 2 },
-    { exp: 100, level: 3 },
-    { exp: 500, level: 4 },
-    { exp: 1000, level: 5 },
-    { exp: 5000, level: 6 },
+    { exp: 50, level: 1 },
+    { exp: 100, level: 2 },
+    { exp: 500, level: 3 },
+    { exp: 1000, level: 4 },
+    { exp: 3000, level: 5 },
+    { exp: 6000, level: 6 },
     { exp: 10000, level: 7 },
     { exp: 30000, level: 8 },
     { exp: 60000, level: 9 },

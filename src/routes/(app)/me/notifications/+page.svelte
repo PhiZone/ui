@@ -8,7 +8,7 @@
 	$: ({ status, content, error, access_token, user } = data);
 
 	let page = 1,
-    pageStatus = Status.RETRIEVING,
+		pageStatus = Status.RETRIEVING,
 		notifications: any[] | null,
 		notificationCount: number,
 		previousNotifications: string,
@@ -36,22 +36,24 @@
 				{$t("notification.notifications")}
 			</h1>
 			<div class="py-4 min-w-fit">
-				{#if pageStatus === Status.OK && notifications && notifications.length > 0}
-					{#each notifications as notification}
-						<Notification {notification} />
-					{/each}
-					<Pagination
-						bind:previous={previousNotifications}
-						bind:next={nextNotifications}
-						bind:results={notifications}
-						bind:count={notificationCount}
-						bind:page
-						bind:status={pageStatus}
-						token={access_token}
-						{user}
-					/>
-				{:else}
-					<p class="pt-3 text-center">{$t("common.empty")}</p>
+				{#if pageStatus === Status.OK && notifications}
+					{#if notifications.length > 0}
+						{#each notifications as notification}
+							<Notification {notification} />
+						{/each}
+						<Pagination
+							bind:previous={previousNotifications}
+							bind:next={nextNotifications}
+							bind:results={notifications}
+							bind:count={notificationCount}
+							bind:page
+							bind:status={pageStatus}
+							token={access_token}
+							{user}
+						/>
+					{:else}
+						<p class="py-3 text-center">{$t("common.empty")}</p>
+					{/if}
 				{/if}
 			</div>
 		</div>

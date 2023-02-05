@@ -6,8 +6,14 @@
 	import Like from "./like.svelte";
 	import Pagination from "./pagination.svelte";
 	import { Status } from "$lib/constants";
-	import { getCompressedImage, getUserLevel, parseDateTime } from "$lib/utils";
+	import {
+		getCompressedImage,
+		getUserLevel,
+		getUserPrivilege,
+		parseDateTime,
+	} from "$lib/utils";
 	import { goto, preloadData } from "$app/navigation";
+	import Delete from "./delete.svelte";
 
 	export let comment: Comment,
 		token: string | undefined,
@@ -111,83 +117,96 @@
 			>
 		</div>
 		<ul class="menu bg-base-100 w-full">
-			{#if replies && status != Status.RETRIEVING && status != Status.ERROR}
-				{#each replies as reply}
-					<li class="max-w-full">
-						<div class="flex w-full">
-							<div
-								class="avatar items-center w-1/6 min-w-fit whitespace-nowrap overflow-hidden text-ellipsis"
-								on:click={() => {
-									goto(`/users/${reply.user.id}`);
-								}}
-								on:pointerenter={() => {
-									preloadData(`/users/${reply.user.id}`);
-								}}
-								on:keyup
-							>
+			{#if replies && status !== Status.RETRIEVING && status !== Status.ERROR}
+				{#if replies.length > 0}
+					{#each replies as reply}
+						<li class="max-w-full">
+							<div class="flex w-full">
 								<div
-									class={`w-10 rounded-full border-[2px] border-opacity-80 ${
-										reply.user.type == "admin"
-											? "border-indigo-500"
-											: reply.user.type == "volunteer"
-											? "border-emerald-500"
-											: reply.user.type == "qualified"
-											? "border-sky-500"
-											: "border-neutral-500"
-									}`}
+									class="avatar items-center w-1/6 min-w-fit whitespace-nowrap overflow-hidden text-ellipsis"
+									on:click={() => {
+										goto(`/users/${reply.user.id}`);
+									}}
+									on:pointerenter={() => {
+										preloadData(`/users/${reply.user.id}`);
+									}}
+									on:keyup
 								>
-									<img
-										src={getCompressedImage(reply.user.avatar)}
-										alt="Avatar"
+									<div
+										class={`w-10 rounded-full border-[2px] border-opacity-80 ${
+											reply.user.type == "admin"
+												? "border-indigo-500"
+												: reply.user.type == "volunteer"
+												? "border-emerald-500"
+												: reply.user.type == "qualified"
+												? "border-sky-500"
+												: "border-neutral-500"
+										}`}
+									>
+										<img
+											src={getCompressedImage(reply.user.avatar)}
+											alt="Avatar"
+										/>
+									</div>
+									<p class="ml-2 text-base max-w-fit">{reply.user.username}</p>
+									<span class="ml-1 badge badge-sm font-bold"
+										>LV{getUserLevel(reply.user.exp)}</span
+									>
+								</div>
+								<div
+									class="ml-2 w-3/4 content"
+									on:click={() => {
+										replyTo(reply);
+									}}
+									on:keyup
+								>
+									{reply.content}
+								</div>
+								<p
+									class="w-1/6 text-sm opacity-70 overflow-hidden"
+									on:click={() => {
+										replyTo(reply);
+									}}
+									on:keyup
+								>
+									{parseDateTime(reply.creation)}
+								</p>
+								<div class="min-w-fit text-right flex items-center gap-1">
+									{#if getUserPrivilege(user.type) >= 4 || user.id === reply.user.id}
+										<Delete
+											deleted={reply.deletion !== null}
+											target={`/replies/${reply.id}/`}
+											{token}
+											{user}
+											css="sm"
+										/>
+									{/if}
+									<Like
+										id={reply.like}
+										likes={reply.like_count}
+										type={"reply"}
+										target={reply.id}
+										{token}
+										{user}
+										css="sm"
 									/>
 								</div>
-								<p class="ml-2 text-base max-w-fit">{reply.user.username}</p>
-								<span class="ml-1 badge badge-sm font-bold"
-									>LV{getUserLevel(reply.user.exp)}</span
-								>
 							</div>
-							<div
-								class="ml-2 w-3/4 content"
-								on:click={() => {
-									replyTo(reply);
-								}}
-								on:keyup
-							>
-								{reply.content}
-							</div>
-							<p
-								class="w-1/6 text-sm opacity-70 overflow-hidden"
-								on:click={() => {
-									replyTo(reply);
-								}}
-								on:keyup
-							>
-								{parseDateTime(reply.creation)}
-							</p>
-							<div class="min-w-fit text-right">
-								<Like
-									id={reply.like}
-									likes={reply.like_count}
-									type={"reply"}
-									target={reply.id}
-									{token}
-									{user}
-									css="sm"
-								/>
-							</div>
-						</div>
-					</li>
-				{/each}
-				<Pagination
-					bind:previous={previousReplies}
-					bind:next={nextReplies}
-					bind:results={replies}
-					bind:count={replyCount}
-					bind:page
-					bind:status
-					{token}
-					{user}
-				/>
+						</li>
+					{/each}
+					<Pagination
+						bind:previous={previousReplies}
+						bind:next={nextReplies}
+						bind:results={replies}
+						bind:count={replyCount}
+						bind:page
+						bind:status
+						{token}
+						{user}
+					/>
+				{:else}
+					<p class="py-3 text-center">{$t("common.empty")}</p>
+				{/if}
 			{/if}
 		</ul>
 	</div>
@@ -243,6 +262,15 @@
 				{parseDateTime(comment.creation)}
 			</p>
 			<div class="flex items-center gap-1">
+				{#if getUserPrivilege(user.type) >= 4 || user.id === comment.user.id}
+					<Delete
+						deleted={comment.deletion !== null}
+						target={`/comments/${comment.id}/`}
+						{token}
+						{user}
+						css="sm"
+					/>
+				{/if}
 				<Like
 					id={comment.like}
 					likes={comment.like_count}

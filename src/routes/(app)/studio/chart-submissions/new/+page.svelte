@@ -10,16 +10,16 @@
 		User,
 	} from "$lib/models";
 	import Charter from "$lib/components/user.svelte";
-	import { parseRichText } from "$lib/utils";
+	import { getLevelColor, parseRichText } from "$lib/utils";
 
 	export let data: import("./$types").PageData;
 	$: ({ access_token, user } = data);
 
 	let errorMsg = "",
+		levelType = 2,
 		level = "",
 		difficulty = "",
 		charter = "",
-		notes = "",
 		song = "",
 		songSubmission = "",
 		songSwitch = true,
@@ -35,6 +35,8 @@
 		newCharterStatus = Status.OK,
 		newCharterErr = "",
 		newCharterText = "";
+
+	const levelTypes = ["EZ", "HD", "IN", "AT", "SP"];
 
 	const getSongs = async () => {
 		const resp = await api.GET(
@@ -93,7 +95,7 @@
 
 	async function handleSubmit() {
 		dataIncomplete =
-			!(chart && level && difficulty && charter && notes) ||
+			!(chart && level && difficulty && charter) ||
 			(songSwitch && !song) ||
 			(!songSwitch && !songSubmission);
 		if (dataIncomplete) {
@@ -103,14 +105,14 @@
 		}
 		let formData = new FormData();
 		formData.append("chart", chart as unknown as File);
+		formData.append("level_type", levelType.toString());
 		formData.append("level", level);
-		formData.append("difficulty", difficulty);
+		formData.append("difficulty", parseFloat(difficulty).toFixed(1));
 		formData.append("charter", charter);
 		formData.append(
 			songSwitch ? "song" : "song_upload",
 			songSwitch ? song : songSubmission
 		);
-		formData.append("notes", notes);
 		formData.append("description", description);
 		status = Status.SENDING;
 		const resp = await api.POST(
@@ -207,7 +209,7 @@
 				for="studio-charter"
 				class="btn btn-primary btn-outline text-lg"
 				on:click={() => {
-					charter += `[PZUser:${newCharter?.id}:${newCharterText}]`;
+					charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
 				}}
 				on:keyup>{$t("common.submit")}</label
 			>
@@ -359,10 +361,23 @@
 								<span class="w-1/4 min-w-[64px]"
 									>{$t("common.form.chart_level")}</span
 								>
+								<select
+									class={`select select-bordered w-1/6 ${
+										(!levelType && dataIncomplete) ||
+										(status === Status.ERROR && error?.level_type)
+											? "select-error"
+											: "select-primary"
+									}`}
+									bind:value={levelType}
+								>
+									{#each levelTypes as type, i}
+										<option value={i}>{type}</option>
+									{/each}
+								</select>
 								<input
 									type="text"
 									placeholder={$t("common.form.tips.chart_level")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
+									class={`input input-bordered w-7/12 min-w-[180px] ${
 										(!level && dataIncomplete) ||
 										(status === Status.ERROR && error?.level)
 											? "input-error"
@@ -399,6 +414,23 @@
 								/>
 							</label>
 						</div>
+						{#if level && difficulty}
+							<div class="flex">
+								<span class="w-1/4 px-4 place-self-center"
+									>{$t("common.form.level_preview")}</span
+								>
+								<div class="w-3/4">
+									<button
+										class={`btn ${getLevelColor(
+											levelType
+										)} text-xl no-animation`}
+									>
+										{level}
+										{Math.floor(parseFloat(difficulty))}
+									</button>
+								</div>
+							</div>
+						{/if}
 						<div
 							class={status === Status.ERROR && error?.charter
 								? "tooltip tooltip-open tooltip-right tooltip-error"
@@ -424,7 +456,7 @@
 								/>
 								<label
 									for="studio-charter"
-									class="btn btn-primary btn-outline w-1/6 min-w-fit"
+									class="btn btn-primary btn-outline w-1/6"
 									on:click={() => {
 										newCharterId = null;
 										newCharter = null;
@@ -441,7 +473,7 @@
 								<span class="w-1/4 px-4 place-self-center"
 									>{$t("common.form.charter_preview")}</span
 								>
-								<p class="w-3/4 px-4 content">
+								<p class="w-3/4 content">
 									{#each parseRichText(charter) as t}
 										{#if t.id > 0}
 											<a
@@ -457,29 +489,6 @@
 								</p>
 							</div>
 						{/if}
-						<div
-							class={status === Status.ERROR && error?.notes
-								? "tooltip tooltip-open tooltip-right tooltip-error"
-								: ""}
-							data-tip={status === Status.ERROR && error?.notes
-								? error.notes
-								: ""}
-						>
-							<label class="input-group my-2">
-								<span class="w-1/4 min-w-[64px]">{$t("chart.notes")}</span>
-								<input
-									type="text"
-									placeholder={$t("chart.notes")}
-									class={`input input-bordered w-3/4 min-w-[180px] ${
-										(!notes && dataIncomplete) ||
-										(status === Status.ERROR && error?.notes)
-											? "input-error"
-											: "input-primary"
-									}`}
-									bind:value={notes}
-								/>
-							</label>
-						</div>
 						<div
 							class={status === Status.ERROR && error?.description
 								? "tooltip tooltip-open tooltip-right tooltip-error"

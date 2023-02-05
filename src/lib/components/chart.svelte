@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Chart, User } from "$lib/models";
 	import { t } from "$lib/translations/config";
-	import { getCompressedImage, parseRichText } from "$lib/utils";
+	import { getCompressedImage, getLevelColor, parseRichText } from "$lib/utils";
 	import Like from "./like.svelte";
 
 	export let chart: Chart, token: string | undefined, user: User;
@@ -18,12 +18,16 @@
 				/>
 				<div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
 					<div class="btn-group btn-group-horizontal">
-						<button class="btn btn-secondary btn-sm text-xl no-animation">
+						<button
+							class={`btn ${getLevelColor(
+								chart.level_type
+							)} text-xl no-animation`}
+						>
 							{chart.level}
 							{Math.floor(chart.difficulty)}
 						</button>
 						{#if chart.ranked}
-							<button class="btn btn-sm text-xl no-animation">
+							<button class="btn btn-primary btn-outline btn-sm text-xl no-animation">
 								{$t("chart.ranked")}
 							</button>
 						{/if}
@@ -39,12 +43,13 @@
 				<p class="whitespace-nowrap overflow-hidden text-ellipsis">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("chart.charter")}</span
-					>
-					{#if chart.charter}
+					>{#if chart.charter}
 						{#each parseRichText(chart.charter) as t}
 							{#if t.id > 0 && chart.collab_status}
-								<a data-sveltekit-preload-data href={`/users/${t.id}`} class="text-accent hover:underline"
-									>{t.text}</a
+								<a
+									data-sveltekit-preload-data
+									href={`/users/${t.id}`}
+									class="text-accent hover:underline">{t.text}</a
 								>
 							{:else}
 								{t.text}

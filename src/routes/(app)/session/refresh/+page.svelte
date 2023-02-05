@@ -3,9 +3,9 @@
 	import { t } from "$lib/translations/config";
 	import { Error } from "$lib/constants";
 	import { error } from "@sveltejs/kit";
-	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { POST } from "$lib/utils";
+	import { browser } from "$app/environment";
 
 	export let data: import("./$types").PageData;
 	$: ({ refresh_token } = data);
@@ -16,19 +16,25 @@
 		});
 		const json = await resp.json();
 		if (json.code === 200) {
-			const redirect = $page.url.searchParams.get("redirect");
-			goto(redirect ? redirect : "/");
+			if (browser) {
+				const redirect = $page.url.searchParams.get("redirect");
+				window.location.href = redirect ? redirect : "/";
+			}
 		} else {
 			try {
 				if (json.content.error === Error.INVALID_GRANT) {
-					goto("/session/login" + $page.url.search);
+					if (browser) {
+						window.location.href = "/session/login" + $page.url.search;
+					}
 				} else {
 					console.log("error", json.code, json.content);
 					throw error(json.code, json.content.error_description);
 				}
 			} catch (e) {
 				console.log("error", json.code, json.content);
-				goto("/session/login" + $page.url.search);
+				if (browser) {
+					window.location.href = "/session/login" + $page.url.search;
+				}
 			}
 		}
 	});

@@ -138,7 +138,18 @@ export function parseLyrics(input: string) {
 }
 
 export function parseRichText(input: string) {
-    const result = input.matchAll(new RegExp(`\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]`, 'g'));
+    const result = input.matchAll(
+        new RegExp(
+            [
+                ...input.matchAll(
+                    new RegExp(`\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT\]).)*):PZRT\\]`, "g")
+                ),
+            ].length === 0
+                ? `\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]` // legacy support
+                : `\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT\]).)*):PZRT\\]`,
+            "g"
+        )
+    );
     let element = result.next();
     const rich = [];
     while (element.value) {
@@ -242,6 +253,21 @@ export function getUserColor(type: string | undefined) {
             return "indigo-500";
         default:
             return "neutral-500";
+    }
+}
+
+export function getLevelColor(type: number) {
+    switch (type) {
+        case 0:
+            return "btn-info btn-sm";
+        case 1:
+            return "btn-warning btn-sm";
+        case 2:
+            return "btn-secondary btn-sm";
+        case 3:
+            return "btn-sm";
+        default:
+            return "btn-accent btn-sm";
     }
 }
 

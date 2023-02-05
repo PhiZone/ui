@@ -105,21 +105,18 @@
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("user.rks")}</span
-					>
-					{user.rks.toFixed(3)}
+					>{user.rks.toFixed(3)}
 				</p>
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("user.exp")}</span
-					>
-					{user.exp}
+					>{user.exp}
 				</p>
 				{#if user.bio}
 					<p class="content bio">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("user.bio")}</span
-						>
-						{user.bio}
+						>{user.bio}
 					</p>
 				{/if}
 			</div>

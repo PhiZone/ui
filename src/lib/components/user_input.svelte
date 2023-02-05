@@ -5,10 +5,9 @@
 	import { goto, preloadData } from "$app/navigation";
 	import type { UserInput } from "$lib/models";
 
-	export let input: UserInput,
-		token: string | undefined,
-		addDeletion: Function,
-		deleted = false,
+	export let input: UserInput, token: string | undefined;
+
+	let deleted = input.deletion !== null,
 		deleteTip = "";
 
 	const types = new Map([
@@ -20,7 +19,23 @@
 		["Comment", "/comments"],
 		["Reply", "/replies"],
 	]);
-	const result = input.origin.match(`\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]`);
+	const result = input.origin.matchAll(
+		new RegExp(
+			[
+				...input.origin.matchAll(
+					new RegExp(`\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT\]).)*):PZRT\\]`, "g")
+				),
+			].length === 0
+				? `\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]` // legacy support
+				: `\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT\]).)*):PZRT\\]`,
+			"g"
+		)
+	);
+	let element = result.next(),
+		originType = element.value[1],
+		originId = element.value[2];
+
+	console.log(input, element, originType, originId);
 </script>
 
 <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
@@ -40,10 +55,10 @@
 		</p>
 		<div class="card-actions mt-4 flex justify-between items-center">
 			<p class="text-sm opacity-70">
-				{parseDateTime(input.time, true)}
+				{parseDateTime(input.creation, true)}
 			</p>
 			<div class="flex justify-end gap-4">
-				{#if result && result[1] !== "User"}
+				{#if result && originType !== "User"}
 					<div
 						class={deleteTip
 							? "tooltip tooltip-open tooltip-error tooltip-bottom"
@@ -55,14 +70,13 @@
 								deleted ? "btn-disabled" : "btn-accent btn-outline"
 							} btn-sm flex gap-1 items-center`}
 							on:click={async () => {
-								if (result) {
+								if (originType && originId) {
 									const resp = await api.DELETE(
-										`${types.get(result[1])}/${result[2]}/`,
+										`${types.get(originType)}/${originId}/`,
 										token
 									);
 									if (resp.status === 204) {
 										deleted = true;
-										addDeletion(input.id);
 									} else {
 										deleteTip = (await resp.json()).detail;
 										setTimeout(() => {
@@ -104,10 +118,10 @@
 			<button
 				class="btn btn-sm btn-primary btn-outline"
 				on:click={() => {
-					if (result) goto(`${types.get(result[1])}/${result[2]}`);
+					if (originType && originId) goto(`${types.get(originType)}/${originId}`);
 				}}
 				on:pointerenter={() => {
-					if (result) preloadData(`${types.get(result[1])}/${result[2]}`);
+					if (originType && originId) preloadData(`${types.get(originType)}/${originId}`);
 				}}
 			>
 				<svg

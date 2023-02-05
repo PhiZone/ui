@@ -40,8 +40,7 @@
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("recorder.requester")}</span
-						>
-						{user.username}
+						>{user.username}
 					</p>
 				{/if}
 				<p class="min-w-fit">
@@ -54,8 +53,7 @@
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("recorder.replier")}</span
-						>
-						{replier.username}
+						>{replier.username}
 					</p>
 				{/if}
 			</div>
@@ -63,15 +61,13 @@
 				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("recorder.requested_at")}</span
-					>
-					{parseDateTime(requested_at)}
+					>{parseDateTime(requested_at)}
 				</p>
 				{#if replied_at}
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("recorder.replied_at")}</span
-						>
-						{parseDateTime(replied_at)}
+						>{parseDateTime(replied_at)}
 					</p>
 				{/if}
 			</div>

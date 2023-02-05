@@ -193,7 +193,6 @@
 					</div>
 				{/each}
 			</div>
-
 			<Pagination
 				bind:previous
 				bind:next

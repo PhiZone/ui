@@ -47,12 +47,6 @@
 		inputCount = json.count;
 		pageStatus = Status.OK;
 	}, 10000);
-
-	const deleted: number[] = [];
-
-	const addDeletion = (id: number) => {
-		deleted.push(id);
-	};
 </script>
 
 <svelte:head>
@@ -74,8 +68,6 @@
 							<UserInputCard
 								{input}
 								token={access_token}
-								{addDeletion}
-								deleted={deleted.includes(input.id)}
 							/>
 						{/each}
 						<Pagination
@@ -89,7 +81,7 @@
 							{user}
 						/>
 					{:else}
-						<p class="pt-3 text-center">{$t("common.empty")}</p>
+						<p class="py-3 text-center">{$t("common.empty")}</p>
 					{/if}
 				{/if}
 			</div>

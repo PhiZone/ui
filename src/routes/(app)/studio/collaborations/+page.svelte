@@ -4,7 +4,12 @@
 	import { Status } from "$lib/constants";
 	import Pagination from "$lib/components/pagination.svelte";
 	import type { Collaboration } from "$lib/models";
-	import { afterNavigate, beforeNavigate, goto, preloadData } from "$app/navigation";
+	import {
+		afterNavigate,
+		beforeNavigate,
+		goto,
+		preloadData,
+	} from "$app/navigation";
 	import { page } from "$app/stores";
 	import CollaborationCard from "$lib/components/collaboration.svelte";
 	export let data: import("./$types").PageData;
@@ -79,22 +84,24 @@
 				{/if}
 			</div>
 			<div class="min-w-fit form-control gap-4">
-				{#if pageStatus === Status.OK && collaborations && collaborations.length > 0}
-					{#each collaborations as collaboration}
-						<CollaborationCard {collaboration} token={access_token} {user} />
-					{/each}
-					<Pagination
-						bind:previous={previousCollaborations}
-						bind:next={nextCollaborations}
-						bind:results={collaborations}
-						bind:count={collaborationCount}
-						bind:page={pageCount}
-						bind:status={pageStatus}
-						token={access_token}
-						{user}
-					/>
-				{:else}
-					<p class="pt-3 text-center">{$t("common.empty")}</p>
+				{#if pageStatus === Status.OK && collaborations}
+					{#if collaborations.length > 0}
+						{#each collaborations as collaboration}
+							<CollaborationCard {collaboration} token={access_token} {user} />
+						{/each}
+						<Pagination
+							bind:previous={previousCollaborations}
+							bind:next={nextCollaborations}
+							bind:results={collaborations}
+							bind:count={collaborationCount}
+							bind:page={pageCount}
+							bind:status={pageStatus}
+							token={access_token}
+							{user}
+						/>
+					{:else}
+						<p class="py-3 text-center">{$t("common.empty")}</p>
+					{/if}
 				{/if}
 			</div>
 		</div>

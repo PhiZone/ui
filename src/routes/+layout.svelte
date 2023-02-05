@@ -16,6 +16,15 @@
 		)}`;
 	}
 
+	if (
+		!$page.data.user &&
+		$page.data.access_token &&
+		$page.data.refresh_token &&
+		browser
+	) {
+		window.location.reload();
+	}
+
 	let language;
 	try {
 		language = $page.data.user.language.toString();

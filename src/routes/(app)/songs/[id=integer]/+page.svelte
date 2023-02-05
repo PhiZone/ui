@@ -7,6 +7,7 @@
 		parseDuration,
 		parseLyrics,
 		parseDateTime,
+		getLevelColor,
 	} from "$lib/utils";
 	import * as api from "$lib/api";
 	import { onDestroy, onMount } from "svelte";
@@ -540,24 +541,31 @@
 													{#each charts as chart}
 														<li class="border border-base-300">
 															<a
-																
 																href={`/charts/${chart.id}`}
 																class="w-full h-[82px] flex px-5"
 															>
-																<div class="w-1/6 min-w-fit">
-																	<div
-																		class="mr-1 badge badge-lg text-lg badge-secondary"
-																	>
-																		{chart.level}
-																		{Math.floor(chart.difficulty)}
+																<div class="w-1/4 min-w-fit">
+																	<div class="btn-group btn-group-horizontal">
+																		<button
+																			class={`btn ${getLevelColor(
+																				chart.level_type
+																			)} text-xl no-animation`}
+																		>
+																			{chart.level}
+																			{Math.floor(chart.difficulty)}
+																		</button>
+																		{#if chart.ranked}
+																			<button class="btn btn-primary btn-outline btn-sm text-xl no-animation">
+																				{$t("chart.ranked")}
+																			</button>
+																		{/if}
 																	</div>
 																</div>
-																<div class="w-2/3 text-lg">
+																<div class="w-7/12 text-lg">
 																	{#if chart.charter}
 																		{#each parseRichText(chart.charter) as t}
 																			{#if t.id > 0 && chart.collab_status}
 																				<a
-																					
 																					href={`/users/${t.id}`}
 																					class="text-accent hover:underline"
 																					>{t.text}</a
@@ -604,10 +612,10 @@
 													{/each}
 												</ul>
 											{:else}
-												<p class="pt-3 text-center">{$t("common.empty")}</p>
+												<p class="py-3 text-center">{$t("common.empty")}</p>
 											{/if}
 										{:else}
-											<p class="pt-3 text-center">{$t("common.loading")}</p>
+											<p class="py-3 text-center">{$t("common.loading")}</p>
 										{/if}
 									</ul>
 								</div>
@@ -644,14 +652,14 @@
 								}}>{$t("common.send")}</button
 							>
 						</div>
-						{#if commentStatus === Status.OK}
-							{#if comments && comments.length > 0}
+						{#if commentStatus === Status.OK && comments}
+							{#if comments.length > 0}
 								{#each comments as comment}
 									<Comment {comment} token={access_token} {user} />
 								{/each}
 								<Pagination
-									previous={previousComments}
-									next={nextComments}
+									bind:previous={previousComments}
+									bind:next={nextComments}
 									bind:results={comments}
 									bind:count={commentCount}
 									bind:page={pageCount}

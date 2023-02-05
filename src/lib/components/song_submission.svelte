@@ -8,7 +8,13 @@
 
 <a href={`/studio/song-submissions/${submission.id}`}>
 	<div
-		class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg glass"
+		class={`card min-w-[500px] card-side overflow-hidden ${
+			submission.status === 1
+				? "bg-green-100"
+				: submission.status === 2
+				? "bg-red-100"
+				: "bg-base-100"
+		} shadow-lg glass`}
 	>
 		<figure class="min-w-[30%] max-w-[30%]">
 			<img
@@ -25,8 +31,7 @@
 				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.status")}</span
-					>
-					{$t(`studio.submission.volunteer_statuses.${submission.status}`)}
+					>{$t(`studio.submission.volunteer_statuses.${submission.status}`)}
 				</p>
 			</div>
 			{#if submission.message}
@@ -34,8 +39,7 @@
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("studio.submission.message")}</span
-						>
-						{submission.message}
+						>{submission.message}
 					</p>
 				</div>
 			{/if}
@@ -44,15 +48,13 @@
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("studio.submission.uploader")}</span
-						>
-						{submission.uploader.username}
+						>{submission.uploader.username}
 					</p>
 				{/if}
 				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.uploaded_at")}</span
-					>
-					{parseDateTime(submission.time)}
+					>{parseDateTime(submission.time)}
 				</p>
 			</div>
 		</div>

@@ -2,6 +2,7 @@
 	import { Status } from "$lib/constants";
 	import { locale, t } from "$lib/translations/config";
 	import {
+  getLevelColor,
 		getUserLevel,
 		parseDateTime,
 		parseRichText,
@@ -26,23 +27,23 @@
 			case 1:
 				return 1.0;
 			case 2:
-				return 1.2;
+				return 1.1;
 			case 3:
-				return 1.4;
+				return 1.2;
 			case 4:
-				return 1.6;
+				return 1.3;
 			case 5:
-				return 2.0;
+				return 1.4;
 			case 6:
-				return 2.5;
+				return 1.5;
 			case 7:
-				return 3.0;
+				return 1.6;
 			case 8:
-				return 3.5;
+				return 1.8;
 			case 9:
-				return 4.0;
+				return 2.0;
 			case 10:
-				return 5.0;
+				return 3.0;
 		}
 		return 0;
 	};
@@ -254,14 +255,6 @@
 								class="range"
 								step="1"
 							/>
-							<!-- <div class="w-full flex justify-between text-xs px-2">
-							<span>|</span>
-							<span>|</span>
-							<span>|</span>
-							<span>|</span>
-							<span>|</span>
-							<span>|</span>
-						</div> -->
 						</div>
 						<p class="text-xl font-bold w-[5%] text-center">{arrangement}</p>
 					</div>
@@ -412,13 +405,15 @@
 							<div class="ml-2 min-w-fit flex gap-1 align-middle">
 								<div class="btn-group btn-group-horizontal">
 									<button
-										class="btn btn-secondary btn-sm text-2xl no-animation"
+										class={`btn ${getLevelColor(
+											content.level_type
+										)} text-2xl no-animation`}
 									>
 										{content.level}
 										{Math.floor(content.difficulty)}
 									</button>
 									{#if content.ranked}
-										<button class="btn btn-sm text-2xl no-animation">
+										<button class="btn btn-primary btn-outline btn-sm text-2xl no-animation">
 											{$t("chart.ranked")}
 										</button>
 									{/if}
@@ -608,8 +603,8 @@
 								}}>{$t("common.send")}</button
 							>
 						</div>
-						{#if commentStatus === Status.OK}
-							{#if comments && comments.length > 0}
+						{#if commentStatus === Status.OK && comments}
+							{#if comments.length > 0}
 								{#each comments as comment}
 									<Comment {comment} token={access_token} {user} />
 								{/each}

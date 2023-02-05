@@ -33,7 +33,9 @@
 <svelte:head>
 	<title>
 		{$t("recorder.request")} - {$t(
-			user && getUserPrivilege(user.type) >= 3 ? "recorder.manage" : "recorder.history"
+			user && getUserPrivilege(user.type) >= 3
+				? "recorder.manage"
+				: "recorder.history"
 		)} | {$t("common.title")}
 	</title>
 </svelte:head>
@@ -49,34 +51,36 @@
 				)}
 			</h1>
 			<div class="min-w-fit form-control gap-4">
-				{#if pageStatus === Status.OK && requests && requests.length > 0}
-					{#each requests as request}
-						<Request
-							id={request.id}
-							name={request.name}
-							illustration={request.illustration}
-							level={request.level}
-							difficulty={request.difficulty}
-							status={request.status}
-							showUser={getUserPrivilege(user.type) >= 3}
-							user={request.user}
-							replier={request.replier}
-							requested_at={request.requested_at}
-							replied_at={request.replied_at}
+				{#if pageStatus === Status.OK && requests}
+					{#if requests.length > 0}
+						{#each requests as request}
+							<Request
+								id={request.id}
+								name={request.name}
+								illustration={request.illustration}
+								level={request.level}
+								difficulty={request.difficulty}
+								status={request.status}
+								showUser={getUserPrivilege(user.type) >= 3}
+								user={request.user}
+								replier={request.replier}
+								requested_at={request.requested_at}
+								replied_at={request.replied_at}
+							/>
+						{/each}
+						<Pagination
+							bind:previous={previousRequests}
+							bind:next={nextRequests}
+							bind:results={requests}
+							bind:count={requestCount}
+							bind:page
+							bind:status={pageStatus}
+							token={access_token}
+							{user}
 						/>
-					{/each}
-					<Pagination
-						bind:previous={previousRequests}
-						bind:next={nextRequests}
-						bind:results={requests}
-						bind:count={requestCount}
-						bind:page
-						bind:status={pageStatus}
-						token={access_token}
-						{user}
-					/>
-				{:else}
-					<p class="pt-3 text-center">{$t("common.empty")}</p>
+					{:else}
+						<p class="py-3 text-center">{$t("common.empty")}</p>
+					{/if}
 				{/if}
 			</div>
 		</div>

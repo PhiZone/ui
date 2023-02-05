@@ -91,6 +91,7 @@ export interface Chart {
     events_incl: string[];
     format: number;
     id: number;
+    level_type: number;
     level: string;
     like: number | null;
     like_count: number;
@@ -153,79 +154,29 @@ export interface RecorderRequest {
     charter: string | null;
     illustration: string;
     illustrator: string | null;
-    song: string;
+    song: string | null;
     name: string;
     composer: string | null;
     level: string;
     difficulty: string;
-    note_size: number;
-    resolution: string;
-    music_volume: number;
-    hitsound_volume: number;
+    note_size: number | null;
+    resolution: string | null;
+    music_volume: number | null;
+    hitsound_volume: number | null;
     tip: string | null;
     avatar: string | null;
     username: string | null;
-    total_score: number;
+    total_score: number | null;
     rks: number | null;
     challenge_color: number | null;
     challenge_difficulty: number | null;
     addition: string | null;
+    config: string | null;
     status: number;
     reply: string | null;
     replier: User | null;
     requested_at: string;
     replied_at: string | null;
-}
-
-export interface RecorderRequestError {
-    chart?: string[];
-    detail?: string;
-    difficulty?: string[];
-    illustration?: string[];
-    level?: string[];
-    name?: string[];
-    note_size?: string[];
-    resolution?: string[];
-    song?: string[];
-    total_score?: string[];
-    charter?: string[];
-    illustrator?: string[];
-    composer?: string[];
-    music_volume?: string[];
-    hitsound_volume?: string[];
-    tip?: string[];
-    avatar?: string[];
-    username?: string[];
-    rks?: string[];
-    challenge_color?: string[];
-    challenge_difficulty?: string[];
-    addition?: string[];
-}
-
-export interface SongSubmissionError {
-    name?: string[];
-    song?: string[];
-    edition?: string[];
-    illustration?: string[];
-    composer?: string[];
-    illustrator?: string[];
-    bpm?: string[];
-    offset?: string[];
-    preview_start?: string[];
-    preview_end?: string[];
-    description?: string[];
-    chapters?: string[];
-}
-export interface ChartSubmissionError {
-    song?: string[];
-    song_upload?: string[];
-    chart?: string[];
-    level?: string[];
-    difficulty?: string[];
-    description?: string[];
-    charter?: string[];
-    notes?: string[];
-    event_part?: string[];
 }
 
 export interface Notification {
@@ -306,6 +257,7 @@ export interface ChartSubmission {
     difficulty: number;
     event_part: null | number;
     id: number;
+    level_type: number;
     level: string;
     notes: number;
     representation: number | null;
@@ -319,9 +271,9 @@ export interface ChartSubmission {
 }
 
 export interface VolunteerVote {
-    message: string,
-    time: string,
-    value: number
+    message: string;
+    time: string;
+    value: number;
 }
 
 export interface Collaboration {
@@ -335,10 +287,63 @@ export interface Collaboration {
 
 export interface UserInput {
     content: string;
+    creation: string;
+    deletion: string;
     id: number;
     language: string;
     origin: string;
-    time: string;
     type: number;
     user: number;
+}
+
+export interface RecorderRequestError {
+    chart?: string[];
+    detail?: string;
+    difficulty?: string[];
+    illustration?: string[];
+    level?: string[];
+    name?: string[];
+    note_size?: string[];
+    resolution?: string[];
+    song?: string[];
+    total_score?: string[];
+    charter?: string[];
+    illustrator?: string[];
+    composer?: string[];
+    music_volume?: string[];
+    hitsound_volume?: string[];
+    tip?: string[];
+    avatar?: string[];
+    username?: string[];
+    rks?: string[];
+    challenge_color?: string[];
+    challenge_difficulty?: string[];
+    addition?: string[];
+    config?: string[];
+}
+
+export interface SongSubmissionError {
+    name?: string[];
+    song?: string[];
+    edition?: string[];
+    illustration?: string[];
+    composer?: string[];
+    illustrator?: string[];
+    bpm?: string[];
+    offset?: string[];
+    preview_start?: string[];
+    preview_end?: string[];
+    description?: string[];
+    chapters?: string[];
+}
+export interface ChartSubmissionError {
+    song?: string[];
+    song_upload?: string[];
+    chart?: string[];
+    level_type?: string[];
+    level?: string[];
+    difficulty?: string[];
+    description?: string[];
+    charter?: string[];
+    event_part?: string[];
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ChartSubmission, User } from "$lib/models";
 	import { t } from "$lib/translations/config";
-	import { getCompressedImage, parseDateTime } from "$lib/utils";
+	import { getCompressedImage, getLevelColor, parseDateTime } from "$lib/utils";
 
 	export let submission: ChartSubmission;
 	let song = submission.song ? submission.song : submission.song_upload;
@@ -9,7 +9,7 @@
 
 <a href={`/studio/chart-submissions/${submission.id}`}>
 	<div
-		class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg glass"
+		class={`card min-w-[500px] card-side overflow-hidden ${submission.status === 1 ? "bg-green-100" : submission.status === 2 ? "bg-red-100" : "bg-base-100"} shadow-lg glass`}
 	>
 		<figure class="min-w-[30%] max-w-[30%]">
 			<img
@@ -21,8 +21,11 @@
 		<div class="card-body w-[70%] max-h-fit">
 			<h2 class="card-title text-2xl mb-3 min-w-fit">
 				{song?.name}
-				<button class="btn btn-secondary btn-sm text-2xl no-animation">
-					{submission.level}
+				<button
+					class={`btn ${getLevelColor(
+						submission.level_type
+					)} text-xl no-animation`}
+					>{submission.level}
 					{Math.floor(submission.difficulty)}
 				</button>
 			</h2>
@@ -30,28 +33,24 @@
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.overall_status")}</span
-					>
-					{$t(`studio.submission.statuses.${submission.status}`)}
+					>{$t(`studio.submission.statuses.${submission.status}`)}
 				</p>
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.volunteer_status")}</span
-					>
-					{$t(`studio.submission.bi_statuses.${submission.volunteer_status}`)}
+					>{$t(`studio.submission.bi_statuses.${submission.volunteer_status}`)}
 				</p>
 			</div>
 			<div class="flex items-center min-w-fit">
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.adm_status")}</span
-					>
-					{$t(`studio.submission.bi_statuses.${submission.adm_status}`)}
+					>{$t(`studio.submission.bi_statuses.${submission.adm_status}`)}
 				</p>
 				<p>
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.collab_status")}</span
-					>
-					{$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
+					>{$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
 				</p>
 			</div>
 			<div class="flex items-center min-w-fit">
@@ -59,15 +58,13 @@
 					<p class="min-w-fit">
 						<span class="badge badge-primary badge-outline mr-1"
 							>{$t("studio.submission.uploader")}</span
-						>
-						{submission.uploader.username}
+						>{submission.uploader.username}
 					</p>
 				{/if}
 				<p class="min-w-fit">
 					<span class="badge badge-primary badge-outline mr-1"
 						>{$t("studio.submission.uploaded_at")}</span
-					>
-					{parseDateTime(submission.time)}
+					>{parseDateTime(submission.time)}
 				</p>
 			</div>
 		</div>

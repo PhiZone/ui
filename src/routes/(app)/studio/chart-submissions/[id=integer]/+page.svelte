@@ -3,6 +3,7 @@
 	import { t } from "$lib/translations/config";
 	import {
 		getCompressedImage,
+		getLevelColor,
 		getUserLevel,
 		getUserPrivilege,
 		parseDateTime,
@@ -24,6 +25,9 @@
 			console.log(error);
 		}
 	});
+
+	const levelTypes = ["EZ", "HD", "IN", "AT", "SP"];
+
 	const handleSubmit = async () => {
 		const resp = await api.POST(
 			"/volunteer_votes/",
@@ -122,8 +126,11 @@
 									{content.song_upload?.name}
 								</a>
 							{/if}
-							<button class="btn btn-secondary btn-sm text-2xl no-animation">
-								{content.level}
+							<button
+								class={`btn ${getLevelColor(
+									content.level_type
+								)} text-2xl no-animation`}
+								>{content.level}
 								{Math.floor(content.difficulty)}
 							</button>
 						</div>
@@ -132,7 +139,7 @@
 								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("common.form.chart_level")}</span
 								>
-								{content.level}
+								[{levelTypes[content.level_type]}] {content.level}
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
@@ -234,7 +241,9 @@
 										goto(`/studio/chart-submissions/${content?.id}/edit`);
 									}}
 									on:pointerenter={() => {
-										preloadData(`/studio/chart-submissions/${content?.id}/edit`);
+										preloadData(
+											`/studio/chart-submissions/${content?.id}/edit`
+										);
 									}}
 								>
 									{$t("common.edit")}

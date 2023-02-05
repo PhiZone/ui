@@ -201,6 +201,22 @@
 									{$t("common.download")}
 								</a>
 							</p>
+							{#if content.config}
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.config")}</span
+									>
+									<a
+										href={content.config}
+										target="_blank"
+										rel="noreferrer"
+										class="hover:underline"
+										download
+									>
+										{$t("common.download")}
+									</a>
+								</p>
+							{/if}
 							{#if content.tip && content.charter && content.composer && content.illustrator}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"
@@ -221,36 +237,38 @@
 									{content.illustrator}
 								</p>
 							{/if}
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.note_size")}</span
-								>
-								{content.note_size}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.resolution")}</span
-								>
-								{content.resolution}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.music_volume")}</span
-								>
-								{content.music_volume.toFixed(1)}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.hitsound_volume")}</span
-								>
-								{content.hitsound_volume.toFixed(1)}
-							</p>
-							<p>
-								<span class="badge badge-primary badge-outline mr-1"
-									>{$t("recorder.total_score")}</span
-								>
-								{content.total_score}
-							</p>
+							{#if content.note_size && content.resolution && content.music_volume && content.hitsound_volume && content.total_score}
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.note_size")}</span
+									>
+									{content.note_size}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.resolution")}</span
+									>
+									{content.resolution}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.music_volume")}</span
+									>
+									{content.music_volume.toFixed(1)}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.hitsound_volume")}</span
+									>
+									{content.hitsound_volume.toFixed(1)}
+								</p>
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("recorder.total_score")}</span
+									>
+									{content.total_score}
+								</p>
+							{/if}
 							{#if content.tip && content.charter && content.composer && content.illustrator}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"

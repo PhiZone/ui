@@ -52,22 +52,24 @@
 				</a>
 			</div>
 			<div class="min-w-fit form-control gap-4">
-				{#if pageStatus === Status.OK && submissions && submissions.length > 0}
-					{#each submissions as submission}
-						<Submission {submission} />
-					{/each}
-					<Pagination
-						bind:previous={previousSubmissions}
-						bind:next={nextSubmissions}
-						bind:results={submissions}
-						bind:count={submissionCount}
-						bind:page
-						bind:status={pageStatus}
-						token={access_token}
-						{user}
-					/>
-				{:else}
-					<p class="pt-3 text-center">{$t("common.empty")}</p>
+				{#if pageStatus === Status.OK && submissions}
+					{#if submissions.length > 0}
+						{#each submissions as submission}
+							<Submission {submission} />
+						{/each}
+						<Pagination
+							bind:previous={previousSubmissions}
+							bind:next={nextSubmissions}
+							bind:results={submissions}
+							bind:count={submissionCount}
+							bind:page
+							bind:status={pageStatus}
+							token={access_token}
+							{user}
+						/>
+					{:else}
+						<p class="py-3 text-center">{$t("common.empty")}</p>
+					{/if}
 				{/if}
 			</div>
 		</div>

@@ -5,6 +5,8 @@
 
 	export let notification: Notification;
 
+	console.log(notification);
+
 	const types = new Map([
 		["User", "/users"],
 		["Chapter", "/chapters"],
@@ -26,13 +28,7 @@
 	>
 	<div
 		class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
-			notification.read_at
-				? Math.abs(
-						new Date().getTime() - new Date(notification.read_at).getTime()
-				  ) < 2000
-					? "border border-secondary"
-					: "border"
-				: "border border-secondary"
+			notification.read_at ? "border" : "border border-secondary"
 		}`}
 	>
 		<div class="card-body w-[60%]">

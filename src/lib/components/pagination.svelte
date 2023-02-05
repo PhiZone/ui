@@ -14,18 +14,25 @@
 		token: string | undefined,
 		user: User;
 
-	let preloaded = false,
-		resp: { json: () => any; ok: any };
+	let preloaded: number | null = null,
+		total = Math.ceil(count / PAGINATION_PER_PAGE),
+		resp: { json: () => any; ok: any },
+		nearbyPages = [
+			...Array(
+				page > 3 ? Math.min(page + 4, total + 1) : Math.min(total + 1, 8)
+			).keys(),
+		].slice(Math.max(1, page <= total - 3 ? page - 3 : total - 6)),
+		allPages = [...Array(total + 1).keys()].slice(1);
 
-	const preload = async (url: string) => {
+	const preload = async (url: string, page: number) => {
 		resp = await api.GET(getPath(url), token, user);
-		preloaded = true;
+		preloaded = page;
 	};
 
-	const get = async (url: string) => {
-		results = null;
+	const get = async (url: string, page: number) => {
 		status = Status.RETRIEVING;
-		if (!preloaded) {
+		results = null;
+		if (preloaded === null || preloaded != page) {
 			resp = await api.GET(getPath(url), token, user);
 		}
 		const json = await resp.json();
@@ -37,62 +44,135 @@
 		previous = json.previous;
 		next = json.next;
 		results = json.results;
-		if (preloaded) {
-			preloaded = false;
-			setTimeout(() => {
-				status = Status.OK;
-			}, 1);
-		} else {
+		total = Math.ceil(count / PAGINATION_PER_PAGE);
+		preloaded = null;
+		setTimeout(() => {
 			status = Status.OK;
-		}
+		}, 1);
 	};
 </script>
 
-{#if results && results.length > 0}
-	<div class="py-4 min-w-fit">
-		<div class="btn-group flex justify-center min-w-fit mt-3">
-			<button
-				class={`btn text-4xl ${
-					previous && status === Status.OK
-						? "btn-primary btn-outline glass"
-						: "btn-ghost btn-disabled"
-				}`}
-				on:click={() => {
-					if (previous) {
-						get(previous);
-						--page;
-					}
-				}}
-				on:pointerenter={() => {
-					if (previous) {
-						preload(previous);
-					}
-				}}>«</button
-			>
-			<button
-				class="btn btn-primary w-36 min-w-fit text-lg glass btn-active btn-disabled"
-				>Page {page} / {Math.ceil(count / PAGINATION_PER_PAGE)}</button
-			>
-			<button
-				class={`btn text-4xl ${
-					next && status === Status.OK
-						? "btn-primary btn-outline glass"
-						: "btn-ghost btn-disabled"
-				}`}
-				on:click={() => {
-					if (next) {
-						get(next);
-						++page;
-					}
-				}}
-				on:pointerenter={() => {
-					if (next) {
-						preload(next);
-					}
-				}}>»</button
-			>
+<input type="checkbox" id="pagination" class="modal-toggle" />
+<div class="modal">
+	<div
+		class="modal-box bg-base-100 max-h-[90vh] min-w-[70vw] w-[75vw] max-w-[1800px]"
+	>
+		<label
+			for="pagination"
+			class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
+			>✕</label
+		>
+		<h2 class="font-bold text-xl mb-4">{$t("common.jump_to")}</h2>
+		<div class="page-btn-grid">
+			{#each allPages as p}
+				<label
+					for="pagination"
+					class={`btn btn-sm btn-circle ${
+						page == p ? "btn-disabled" : "btn-outline"
+					}`}
+					on:click={async () => {
+						let url = next ? next : previous ? previous : null;
+						if (url) {
+							await get(url.replace(/page=\d+/, `page=${p}`), p);
+							page = p;
+							results = results;
+							previous = previous;
+							next = next;
+						}
+					}}
+					on:pointerenter={() => {
+						let url = next ? next : previous ? previous : null;
+						if (url) {
+							preload(url.replace(/page=\d+/, `page=${p}`), p);
+						}
+					}}
+					on:keyup>{p}</label
+				>
+			{/each}
+		</div>
+	</div>
+</div>
+{#if status === Status.OK && results && results.length > 0}
+	<div class="py-4 min-w-fit flex justify-center">
+		<div class="dropdown dropdown-hover dropdown-top w-full mt-3">
+			<div class="btn-group flex justify-center">
+				<button
+					class={`btn text-4xl ${
+						previous && status === Status.OK
+							? "btn-primary btn-outline glass"
+							: "btn-ghost btn-disabled"
+					}`}
+					on:click={() => {
+						if (previous) {
+							get(previous, --page);
+						}
+					}}
+					on:pointerenter={() => {
+						if (previous) {
+							preload(previous, page - 1);
+						}
+					}}>«</button
+				>
+				<button class="btn btn-primary w-36 min-w-fit text-lg glass btn-active pointer-events-none"
+					>Page {page} / {total}</button
+				>
+				<button
+					class={`btn text-4xl ${
+						next && status === Status.OK
+							? "btn-primary btn-outline glass"
+							: "btn-ghost btn-disabled"
+					}`}
+					on:click={() => {
+						if (next) {
+							get(next, ++page);
+						}
+					}}
+					on:pointerenter={() => {
+						if (next) {
+							preload(next, page + 1);
+						}
+					}}>»</button
+				>
+			</div>
+			{#if total > 1}
+				<div
+					tabindex="-1"
+					class="dropdown-content menu menu-horizontal left-0 right-0 mx-auto btn-group btn-group-horizontal p-2 shadow bg-base-100 glass rounded-box"
+				>
+					{#each nearbyPages as p}
+						<button
+							class={`btn btn-sm ${
+								page == p ? "btn-disabled" : "btn-outline"
+							}`}
+							on:click={async () => {
+								let url = next ? next : previous ? previous : null;
+								if (url) {
+									await get(url.replace(/page=\d+/, `page=${p}`), p);
+									page = p;
+									results = results;
+								}
+							}}
+							on:pointerenter={() => {
+								let url = next ? next : previous ? previous : null;
+								if (url) {
+									preload(url.replace(/page=\d+/, `page=${p}`), p);
+								}
+							}}>{p}</button
+						>
+					{/each}
+					<label for="pagination" class="btn btn-sm btn-outline">…</label>
+				</div>
+			{/if}
 		</div>
 	</div>
 {:else if status === Status.RETRIEVING}
-	<p class="pt-3 text-center">{$t("common.loading")}</p>
+	<p class="py-3 text-center">{$t("common.loading")}</p>
 {/if}
+
+<style>
+	.page-btn-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+		grid-gap: 1rem;
+	}
+</style>

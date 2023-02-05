@@ -91,7 +91,7 @@
             "image": "JPG / JPEG / PNG, no larger than 6MB",
             "chart": "Only charts made with PE / RPE are supported",
             "illustration": "JPG / JPEG / PNG, no larger than 6MB, 16:9, no smaller than 960×540",
-            "chart_level": "EZ / HD / IN / AT / SP / ……"
+            "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……"
         },
         "errors": {
             "data_incomplete": "The input data is incomplete!",
@@ -102,6 +102,7 @@
     "profile": "Profile",
     "fetch": "Fetch",
     "edit": "Edit",
+    "jump_to": "Jump to",
     "unavailable": "This feature is currently unavailable!",
     "error_msg": "Error Message: ",
     "errors": {

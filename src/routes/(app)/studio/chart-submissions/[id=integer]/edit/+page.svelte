@@ -10,16 +10,16 @@
 		User,
 	} from "$lib/models";
 	import Charter from "$lib/components/user.svelte";
-	import { parseRichText } from "$lib/utils";
+	import { getLevelColor, parseRichText } from "$lib/utils";
 
 	export let data: import("./$types").PageData;
 	$: ({ content, access_token, user } = data);
 
 	let errorMsg = "",
+		levelType = -1,
 		level = "",
 		difficulty = "",
 		charter = "",
-		notes = "",
 		song = "",
 		songSubmission = "",
 		songSwitch = true,
@@ -35,6 +35,8 @@
 		newCharterStatus = Status.OK,
 		newCharterErr = "",
 		newCharterText = "";
+
+	const levelTypes = ["EZ", "HD", "IN", "AT", "SP"];
 
 	const getSongs = async () => {
 		const resp = await api.GET(
@@ -94,15 +96,16 @@
 	async function handleSubmit() {
 		let formData = new FormData();
 		if (chart) formData.append("chart", chart as unknown as File);
+		if (levelType !== -1) formData.append("level_type", levelType.toString());
 		if (level) formData.append("level", level);
-		if (difficulty) formData.append("difficulty", difficulty);
+		if (difficulty)
+			formData.append("difficulty", parseFloat(difficulty).toFixed(1));
 		if (charter) formData.append("charter", charter);
 		if ((songSwitch && song) || (!songSwitch && songSubmission))
 			formData.append(
 				songSwitch ? "song" : "song_upload",
 				songSwitch ? song : songSubmission
 			);
-		if (notes) formData.append("notes", notes);
 		if (emptyDescription || description)
 			formData.append("description", description);
 		status = Status.SENDING;
@@ -204,7 +207,7 @@
 					for="studio-charter"
 					class="btn btn-primary btn-outline text-lg"
 					on:click={() => {
-						charter += `[PZUser:${newCharter?.id}:${newCharterText}]`;
+						charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
 					}}
 					on:keyup>{$t("common.submit")}</label
 				>
@@ -397,10 +400,22 @@
 									<span class="w-1/4 min-w-[64px]"
 										>{$t("common.form.chart_level")}</span
 									>
+									<select
+										class={`select select-bordered w-1/6 ${
+											status === Status.ERROR && error?.level_type
+												? "select-error"
+												: "select-primary"
+										}`}
+										bind:value={levelType}
+									>
+										{#each levelTypes as type, i}
+											<option value={i}>{type}</option>
+										{/each}
+									</select>
 									<input
 										type="text"
-										placeholder={content.level}
-										class={`input input-bordered w-3/4 min-w-[180px] ${
+										placeholder={$t("common.form.tips.chart_level")}
+										class={`input input-bordered w-7/12 min-w-[180px] ${
 											status === Status.ERROR && error?.level
 												? "input-error"
 												: "input-primary"
@@ -433,6 +448,23 @@
 									/>
 								</label>
 							</div>
+							{#if level && difficulty}
+								<div class="flex">
+									<span class="w-1/4 px-4 place-self-center"
+										>{$t("common.form.level_preview")}</span
+									>
+									<div class="w-3/4">
+										<button
+											class={`btn ${getLevelColor(
+												levelType
+											)} text-xl no-animation`}
+										>
+											{level}
+											{Math.floor(parseFloat(difficulty))}
+										</button>
+									</div>
+								</div>
+							{/if}
 							<div
 								class={status === Status.ERROR && error?.charter
 									? "tooltip tooltip-open tooltip-right tooltip-error"
@@ -490,28 +522,6 @@
 									</p>
 								</div>
 							{/if}
-							<div
-								class={status === Status.ERROR && error?.notes
-									? "tooltip tooltip-open tooltip-right tooltip-error"
-									: ""}
-								data-tip={status === Status.ERROR && error?.notes
-									? error.notes
-									: ""}
-							>
-								<label class="input-group my-2">
-									<span class="w-1/4 min-w-[64px]">{$t("chart.notes")}</span>
-									<input
-										type="text"
-										placeholder={`${content.notes}`}
-										class={`input input-bordered w-3/4 min-w-[180px] ${
-											status === Status.ERROR && error?.notes
-												? "input-error"
-												: "input-primary"
-										}`}
-										bind:value={notes}
-									/>
-								</label>
-							</div>
 							<div
 								class={status === Status.ERROR && error?.description
 									? "tooltip tooltip-open tooltip-right tooltip-error relative"
