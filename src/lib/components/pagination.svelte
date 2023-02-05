@@ -98,8 +98,12 @@
 	</div>
 </div>
 {#if status === Status.OK && results && results.length > 0}
-	<div class="py-4 min-w-fit flex justify-center">
-		<div class="dropdown dropdown-hover dropdown-top w-full mt-3">
+	<div
+		class={`${
+			$page.url.pathname.startsWith("/studio") ? "pt-4 pb-16" : "py-4"
+		} min-w-fit flex justify-center`}
+	>
+		<div class="dropdown dropdown-hover dropdown-bottom w-full mt-3">
 			<div class="btn-group flex justify-center">
 				<button
 					class={`btn text-4xl ${

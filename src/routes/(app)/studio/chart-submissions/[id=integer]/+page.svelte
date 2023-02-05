@@ -129,7 +129,7 @@
 							<button
 								class={`btn ${getLevelColor(
 									content.level_type
-								)} text-2xl no-animation`}
+								)} btn-sm text-2xl no-animation`}
 								>{content.level}
 								{Math.floor(content.difficulty)}
 							</button>

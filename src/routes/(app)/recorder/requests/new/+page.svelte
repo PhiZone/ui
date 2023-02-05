@@ -304,7 +304,7 @@
 						{#if !(noteSize || resolution || composer || illustrator || charter || tip || username || rks || challengeDifficulty)}
 							<div class="flex">
 								<span class="w-1/4 px-4 place-self-center"
-									>{$t("recorder.config")}</span
+									>{$t("recorder.config")}{$t("common.optional")}</span
 								>
 								<input
 									type="file"

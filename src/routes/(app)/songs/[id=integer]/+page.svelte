@@ -549,7 +549,7 @@
 																		<button
 																			class={`btn ${getLevelColor(
 																				chart.level_type
-																			)} text-xl no-animation`}
+																			)} btn-sm text-xl no-animation`}
 																		>
 																			{chart.level}
 																			{Math.floor(chart.difficulty)}

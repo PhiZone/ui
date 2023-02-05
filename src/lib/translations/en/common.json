@@ -121,5 +121,6 @@
     "admin": "Administration",
     "delete": "Delete",
     "true": "True",
-    "false": "False"
+    "false": "False",
+    "optional": " (Optional)"
 }

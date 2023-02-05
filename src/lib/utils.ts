@@ -259,15 +259,15 @@ export function getUserColor(type: string | undefined) {
 export function getLevelColor(type: number) {
     switch (type) {
         case 0:
-            return "btn-info btn-sm";
+            return "btn-info";
         case 1:
-            return "btn-warning btn-sm";
+            return "btn-warning";
         case 2:
-            return "btn-secondary btn-sm";
+            return "btn-secondary";
         case 3:
-            return "btn-sm";
+            return "";
         default:
-            return "btn-accent btn-sm";
+            return "btn-accent";
     }
 }
 

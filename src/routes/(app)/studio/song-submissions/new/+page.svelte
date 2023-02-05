@@ -401,7 +401,7 @@
 						>
 							<label class="input-group my-2">
 								<span class="w-1/4 min-w-[64px]">
-									{$t("common.description")}{$t("studio.submission.optional")}
+									{$t("common.description")}{$t("common.optional")}
 								</span>
 								<textarea
 									class={`textarea ${
@@ -410,7 +410,7 @@
 											: "textarea-primary"
 									} w-3/4 h-28`}
 									placeholder="{$t('common.description')}{$t(
-										'studio.submission.optional'
+										'common.optional'
 									)}"
 									bind:value={description}
 								/>
@@ -427,7 +427,7 @@
 							<label class="input-group my-2">
 								<span class="w-1/4 min-w-[64px]"
 									>{$t("studio.submission.chapters")}{$t(
-										"studio.submission.optional"
+										"common.optional"
 									)}</span
 								>
 								<select

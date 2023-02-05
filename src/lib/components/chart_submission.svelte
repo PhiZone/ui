@@ -24,7 +24,7 @@
 				<button
 					class={`btn ${getLevelColor(
 						submission.level_type
-					)} text-xl no-animation`}
+					)} btn-sm text-xl no-animation`}
 					>{submission.level}
 					{Math.floor(submission.difficulty)}
 				</button>

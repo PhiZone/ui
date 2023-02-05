@@ -2,7 +2,12 @@
 	import { goto, preloadData } from "$app/navigation";
 	import type { User, Record, Chart } from "$lib/models";
 	import { t } from "$lib/translations/config";
-	import { getCompressedImage, getGrade, parseDateTime } from "$lib/utils";
+	import {
+		getCompressedImage,
+		getGrade,
+		getLevelColor,
+		parseDateTime,
+	} from "$lib/utils";
 
 	export let record: Record,
 		chart: Chart | undefined = undefined,
@@ -45,8 +50,9 @@
 			{#if showChart && typeof record.chart === "object" && typeof record.chart.song === "object"}
 				<div class="btn-group btn-group-horizontal w-[272px] justify-end">
 					<button
-						class="btn song flex-shrink btn-xs justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
-						on:click={() => {
+						class="btn song flex-shrink btn-xs btn-outline justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
+						on:click={(e) => {
+							e.preventDefault();
 							goto(
 								typeof record.chart === "object" &&
 									typeof record.chart.song === "object"
@@ -66,8 +72,11 @@
 						{record.chart.song.name}
 					</button>
 					<button
-						class="btn btn-secondary btn-xs text-sm no-animation"
-						on:click={() => {
+						class={`btn ${getLevelColor(
+							record.chart.level_type
+						)} btn-xs text-sm no-animation`}
+						on:click={(e) => {
+							e.preventDefault();
 							goto(
 								`/charts/${
 									typeof record.chart === "object"

@@ -457,7 +457,7 @@
 										<button
 											class={`btn ${getLevelColor(
 												levelType
-											)} text-xl no-animation`}
+											)} btn-sm text-xl no-animation`}
 										>
 											{level}
 											{Math.floor(parseFloat(difficulty))}

@@ -121,5 +121,6 @@
     "admin": "管理",
     "delete": "删除",
     "true": "真",
-    "false": "假"
+    "false": "假",
+    "optional": "（选填）"
 }

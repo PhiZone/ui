@@ -423,7 +423,7 @@
 									<button
 										class={`btn ${getLevelColor(
 											levelType
-										)} text-xl no-animation`}
+										)} btn-sm text-xl no-animation`}
 									>
 										{level}
 										{Math.floor(parseFloat(difficulty))}
@@ -499,7 +499,7 @@
 						>
 							<label class="input-group my-2">
 								<span class="w-1/4 min-w-[64px]">
-									{$t("common.description")}{$t("studio.submission.optional")}
+									{$t("common.description")}{$t("common.optional")}
 								</span>
 								<textarea
 									class={`textarea ${
