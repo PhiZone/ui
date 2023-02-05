@@ -50,5 +50,7 @@
         "2": "Accepted",
         "3": "Finished",
         "4": "Rejected"
-    }
+    },
+    "view_notice": "View Notice on Recording",
+    "view_guide": "View Guide on Settings Generator"
 }

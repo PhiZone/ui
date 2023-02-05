@@ -17,9 +17,23 @@
 		<div class="w-5/6 form-control text-center">
 			<h3 class="text-4xl font-bold">RPE Recorder</h3>
 			<h1 class="text-6xl font-bold">{$t("recorder.recorder")}</h1>
-			<p class="text-lg py-6 text-left whitespace-pre-wrap">
+			<p class="text-lg pt-6 text-left whitespace-pre-wrap">
 				{$t("recorder.description")}
 			</p>
+			<div class="flex gap-5 max-w-fit mx-auto my-6">
+				<a
+					href="https://docs.qq.com/doc/DZGVDQVFUUVBXcW1D"
+					target="_blank"
+					rel="noreferrer"
+					class="text-lg hover:underline">{$t("recorder.view_notice")}</a
+				>
+				<a
+					href="https://docs.qq.com/doc/DZGdGRGd3S3RaZHpW"
+					target="_blank"
+					rel="noreferrer"
+					class="text-lg hover:underline">{$t("recorder.view_guide")}</a
+				>
+			</div>
 			{#if status === Status.OK && content}
 				<div class="stats stats-horizontal shadow">
 					{#each array as i}

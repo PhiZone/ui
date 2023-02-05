@@ -40,6 +40,8 @@
 			</p>
 			<a
 				href="/studio_guide.html"
+				target="_blank"
+				rel="noreferrer"
 				class="text-lg hover:underline max-w-fit mx-auto my-3"
 				>{$t("studio.view_guide")}</a
 			>
