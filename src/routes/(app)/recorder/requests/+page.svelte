@@ -9,7 +9,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, search, content, error, user, access_token } = data);
 
-	let page = 1,
+	let pageIndex = 1,
 		requestCount: number,
 		pageStatus = Status.RETRIEVING,
 		requests: RecorderRequest[],

@@ -17,7 +17,7 @@
 	$: ({ status, type, name, content, error, access_token, user } = data);
 	let results: any,
 		count: number | null,
-		page = 1,
+		pageIndex = 1,
 		pageStatus = Status.RETRIEVING,
 		previous: string | null,
 		next: string | null,
@@ -27,7 +27,7 @@
 
 	beforeNavigate(() => {
 		results = null;
-		page = 1;
+		pageIndex = 1;
 		count = null;
 		previous = null;
 		next = null;

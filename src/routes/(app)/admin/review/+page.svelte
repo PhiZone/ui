@@ -9,7 +9,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, user, access_token } = data);
 
-	let page = 1,
+	let pageIndex = 1,
 		inputCount: number,
 		pageStatus = Status.RETRIEVING,
 		inputs: UserInput[],
@@ -34,7 +34,7 @@
 	});
 
 	let updater = setInterval(async () => {
-		if (document.hidden || page != 1) {
+		if (document.hidden || pageIndex != 1) {
 			return;
 		}
 		const resp = await api.GET(`/user_inputs/`, access_token, user, fetch);

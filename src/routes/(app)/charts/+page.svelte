@@ -7,7 +7,7 @@
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, access_token, user } = data);
 
-	let page = 1,
+	let pageIndex = 1,
 		chartStatus = Status.RETRIEVING,
 		charts: any[] | null,
 		chartCount: number,
