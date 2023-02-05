@@ -113,6 +113,13 @@
         "404": "你所请求的资源不存在",
         "500": "服务器在处理你的请求时出现问题"
     },
+    "list_options": "列表选项",
+    "filter": "筛选",
+    "order": "排序",
+    "order_forward": "正序",
+    "order_backward": "倒序",
     "admin": "管理",
-    "delete": "删除"
+    "delete": "删除",
+    "true": "真",
+    "false": "假"
 }

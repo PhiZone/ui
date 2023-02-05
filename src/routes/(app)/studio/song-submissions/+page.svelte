@@ -1,20 +1,28 @@
 <script lang="ts">
 	import { t } from "$lib/translations/config";
+	import * as api from "$lib/api";
 	import { onMount } from "svelte";
 	import { Status } from "$lib/constants";
 	import Submission from "$lib/components/song_submission.svelte";
 	import { getUserPrivilege } from "$lib/utils";
 	import Pagination from "$lib/components/pagination.svelte";
-	import type { SongSubmission } from "$lib/models";
+	import type { Chapter, SongSubmission, User } from "$lib/models";
+	import { page } from "$app/stores";
 	export let data: import("./$types").PageData;
 	$: ({ status, content, error, user, access_token } = data);
 
-	let page = 1,
+	let pageCount = 1,
 		submissionCount: number,
 		pageStatus = Status.RETRIEVING,
 		submissions: SongSubmission[],
 		previousSubmissions: string,
-		nextSubmissions: string;
+		nextSubmissions: string,
+		filter: string | null = null,
+		filterParam: string | null = null,
+		userList: User[],
+		chapterList: Chapter[],
+		order: string | null = null,
+		reverse = false;
 
 	onMount(() => {
 		pageStatus = status;
@@ -38,6 +46,124 @@
 	</title>
 </svelte:head>
 
+<input type="checkbox" id="list-options" class="modal-toggle" />
+<div class="modal">
+	<div class="modal-box bg-base-100 max-h-[90vh] w-[50vw] max-w-[1800px]">
+		<label
+			for="list-options"
+			class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
+			>✕</label
+		>
+		<h2 class="font-bold text-xl mb-4">{$t("common.list_options")}</h2>
+		<label class="input-group my-2">
+			<span class="w-1/6 min-w-[64px]">{$t("common.filter")}</span>
+			<select
+				bind:value={filter}
+				class="select select-bordered w-1/3"
+				on:change={async () => {
+					if (filter === "uploader") {
+						const resp = await api.GET("/users/?pagination=0");
+						if (resp.ok) {
+							userList = await resp.json();
+						} else {
+							console.log(await resp.json());
+						}
+					} else if (filter === "chapter") {
+						const resp = await api.GET("/chapters/?pagination=0", access_token);
+						if (resp.ok) {
+							chapterList = await resp.json();
+						} else {
+							console.log(await resp.json());
+						}
+					}
+				}}
+			>
+				<option value="status">{$t("studio.submission.status")}</option>
+				<option value="uploader">{$t("studio.submission.uploader")}</option>
+				<option value="chapter">{$t("song.chapter")}</option>
+			</select>
+			<select bind:value={filterParam} class="select select-bordered w-1/2">
+				{#if filter === "status"}
+					<option value="0">{$t("studio.submission.statuses.0")}</option>
+					<option value="1">{$t("studio.submission.statuses.1")}</option>
+					<option value="2">{$t("studio.submission.statuses.2")}</option>
+				{:else if filter === "uploader" && userList}
+					{#each userList as user}
+						<option value={`${user.id}`}>{user.username}</option>
+					{/each}
+				{:else if filter === "chapter" && chapterList}
+					{#each chapterList as chapter}
+						<option value={`${chapter.id}`}
+							>{chapter.title} - {chapter.subtitle}</option
+						>
+					{/each}
+				{/if}
+			</select>
+		</label>
+		<label class="input-group my-2">
+			<span class="w-1/6 min-w-[64px]">{$t("common.order")}</span>
+			<select bind:value={reverse} class="select select-bordered w-1/3">
+				<option value={false}>{$t("common.order_forward")}</option>
+				<option value={true}>{$t("common.order_backward")}</option>
+			</select>
+			<select bind:value={order} class="select select-bordered w-1/2">
+				<option value="id">{$t("song.id")}</option>
+				<option value="name">{$t("song.name")}</option>
+				<option value="edition">{$t("song.edition")}</option>
+				<option value="composer">{$t("song.composer")}</option>
+				<option value="illustrator">{$t("song.illustrator")}</option>
+				<option value="status">{$t("studio.submission.status")}</option>
+				<option value="uploader">{$t("studio.submission.uploader")}</option>
+				<option value="chapter">{$t("song.chapter")}</option>
+			</select>
+		</label>
+		<div class="modal-action">
+			<button
+				class={`btn ${
+					(filter !== null && filterParam !== null) || order !== null
+						? "btn-primary btn-outline"
+						: "btn-disabled"
+				}`}
+				on:click={() => {
+					window.location.href =
+						filter &&
+						filterParam &&
+						order &&
+						$page.url.search.includes(filter) &&
+						$page.url.search.includes("order")
+							? `${$page.url.pathname}${$page.url.search
+									.replace(
+										new RegExp(`${filter}=[^&]*`, "g"),
+										`${filter}=${filterParam}`
+									)
+									.replace(
+										/order=[^&]*/g,
+										`order=${reverse ? "-" : ""}${order}`
+									)}`
+							: filter && filterParam && $page.url.search.includes(filter)
+							? `${$page.url.pathname}${$page.url.search.replace(
+									new RegExp(`${filter}=[^&]*`, "g"),
+									`${filter}=${filterParam}`
+							  )}`
+							: order && $page.url.search.includes("order")
+							? `${$page.url.pathname}${$page.url.search.replace(
+									/order=[^&]*/g,
+									`order=${reverse ? "-" : ""}${order}`
+							  )}`
+							: `${$page.url.pathname}${$page.url.search}${
+									$page.url.search ? "&" : "?"
+							  }${
+									filter !== null && filterParam !== null
+										? `${filter}=${filterParam}${order !== null ? "&" : ""}`
+										: ""
+							  }${
+									order !== null ? `order=${reverse ? "-" : ""}${order}` : ""
+							  }`;
+				}}>{$t("common.continue")}</button
+			>
+		</div>
+	</div>
+</div>
 <div class="bg-base-200 min-h-screen">
 	<div class="pt-32 flex justify-center">
 		<div class="w-3/4 max-w-7xl min-w-20">
@@ -45,11 +171,20 @@
 				<h1 class="text-4xl font-bold">
 					{$t("studio.song_submissions")}
 				</h1>
-				<a data-sveltekit-preload-data href="/studio/song-submissions/new">
-					<button class="btn btn-accent text-lg btn-xl btn-outline glass ml-3">
+				<div class="flex justify-between gap-3">
+					<label
+						for="list-options"
+						class="btn btn-secondary text-lg btn-xl btn-outline glass"
+						>{$t("common.list_options")}</label
+					>
+					<a
+						data-sveltekit-preload-data
+						href="/studio/song-submissions/new"
+						class="btn btn-accent text-lg btn-xl btn-outline glass"
+					>
 						{$t("studio.upload_song")}
-					</button>
-				</a>
+					</a>
+				</div>
 			</div>
 			<div class="min-w-fit form-control gap-4">
 				{#if pageStatus === Status.OK && submissions}
@@ -62,7 +197,7 @@
 							bind:next={nextSubmissions}
 							bind:results={submissions}
 							bind:count={submissionCount}
-							bind:page
+							bind:page={pageCount}
 							bind:status={pageStatus}
 							token={access_token}
 							{user}

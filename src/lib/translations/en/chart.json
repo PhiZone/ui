@@ -2,6 +2,7 @@
     "chart": "Chart",
     "id": "Chart ID",
     "file": "Chart File",
+    "level_type": "Level Type",
     "level": "Level",
     "difficulty": "Difficulty",
     "description": "Description",

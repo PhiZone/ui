@@ -80,6 +80,7 @@
         "illustration": "Illustration File",
         "song_name": "Song Name",
         "chart_level": "Chart Level",
+        "level_preview": "Level Preview",
         "chart_difficulty_1": "Chart Difficulty Tier",
         "chart_difficulty_2": "Chart Difficulty",
         "composer": "Composer's Name",
@@ -112,6 +113,13 @@
         "404": "The resource you requested does not exist",
         "500": "An error has occurred whilst handling your request"
     },
+    "list_options": "List Options",
+    "filter": "Filter",
+    "order": "Order",
+    "order_forward": "Forward",
+    "order_backward": "Backward",
     "admin": "Administration",
-    "delete": "Delete"
+    "delete": "Delete",
+    "true": "True",
+    "false": "False"
 }

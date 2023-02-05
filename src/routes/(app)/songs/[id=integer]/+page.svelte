@@ -555,7 +555,7 @@
 																			{Math.floor(chart.difficulty)}
 																		</button>
 																		{#if chart.ranked}
-																			<button class="btn btn-primary btn-outline btn-sm text-xl no-animation">
+																			<button class="btn btn-primary btn-sm text-xl no-animation">
 																				{$t("chart.ranked")}
 																			</button>
 																		{/if}

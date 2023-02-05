@@ -1,6 +1,6 @@
 import * as api from '$lib/api';
 import { Status } from '$lib/constants';
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
 export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) => {
     const { user, access_token } = await parent();

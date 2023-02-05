@@ -2,6 +2,7 @@
     "chart": "谱面",
     "id": "谱面 ID",
     "file": "谱面文件",
+    "level_type": "等级类型",
     "level": "等级",
     "difficulty": "难度",
     "description": "简介",
