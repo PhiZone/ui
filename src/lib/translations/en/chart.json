@@ -36,6 +36,7 @@
     "charter": "Charter(s)",
     "time": "Time",
     "owner": "Owner",
+    "owner_id": "Owner ID",
     "lowest_score": "Lowest Score",
     "highest_score": "Highest Score",
     "lowest_rating": "Lowest Rating",

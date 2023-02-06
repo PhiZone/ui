@@ -5,6 +5,7 @@
     "description": "RPE Recorder 是由不会特效の点缀星空使用 C++ 编写的、旨在为符合标准的 RPE 谱面提高美观度的谱面录制器。因其使用了 Phigros 游戏制作组原创素材，无法公之于众，所以产生了谱面代录服务。\n\n为了方便代录员联系和发送视频，请加入使用群 795546640。进群后，请确保你的群昵称与 PhiZone 的用户名一致。\n\n在申请录制谱面之前，请确保谱面符合下列两个要求：\n1. 开头有且只有一条不透明度为 255、旋转角度为 0 的、位于屏幕中央的判定线；\n2. 不使用除了 Phigros 原版、多事件层、故事板（XY缩放、颜色与文字事件）、假音符、XY分离、Y轴偏移、音符宽度、长条变速、音符可视时间、父线以外的特性。\n不符合上述要求的谱面将被拒绝录制。",
     "request": "谱面录制申请",
     "req": "申请",
+    "req_id": "申请 ID",
     "history": "申请历史",
     "manage": "管理申请",
     "chart_placeholder": "目前仅支持录制 RPE 谱面。请在此上传你的 RPE JSON",
@@ -31,6 +32,7 @@
     "loading_option": "录制加载动画",
     "ending_option": "录制结算动画",
     "requester": "申请人",
+    "requester_id": "申请人 ID",
     "status": "状态",
     "statuses": {
         "0": "等待处理",
@@ -42,6 +44,7 @@
     "reply": "回复",
     "reply_v": "回复",
     "replier": "处理人",
+    "replier_id": "处理人 ID",
     "requested_at": "申请时间",
     "replied_at": "处理时间",
     "stat_statuses": {

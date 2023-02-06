@@ -549,14 +549,14 @@
 																		<button
 																			class={`btn ${getLevelColor(
 																				chart.level_type
-																			)} btn-sm text-xl no-animation`}
+																			)} btn-sm text-lg no-animation`}
 																		>
 																			{chart.level}
 																			{Math.floor(chart.difficulty)}
 																		</button>
 																		{#if chart.ranked}
 																			<button
-																				class="btn btn-primary btn-sm text-xl no-animation"
+																				class="btn btn-primary btn-sm text-lg no-animation"
 																			>
 																				{$t("chart.ranked")}
 																			</button>

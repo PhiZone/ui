@@ -23,7 +23,6 @@
 		nextSubmissions: string,
 		filter: string | null = null,
 		filterParam: string | null = null,
-		userList: User[],
 		songList: Song[],
 		songSubmissionList: SongSubmission[],
 		order: string | null = null,
@@ -66,14 +65,7 @@
 				bind:value={filter}
 				class="select select-bordered w-1/3"
 				on:change={async () => {
-					if (filter === "uploader") {
-						const resp = await api.GET("/users/?pagination=0");
-						if (resp.ok) {
-							userList = await resp.json();
-						} else {
-							console.log(await resp.json());
-						}
-					} else if (filter === "song") {
+					if (filter === "song") {
 						const resp = await api.GET("/songs/?pagination=0", access_token);
 						if (resp.ok) {
 							songList = await resp.json();
@@ -90,37 +82,39 @@
 						} else {
 							console.log(await resp.json());
 						}
+					} else if (filter === "status") {
+						filterParam = "0";
 					}
 				}}
 			>
 				<option value="status">{$t("studio.submission.overall_status")}</option>
-				<option value="uploader">{$t("studio.submission.uploader")}</option>
+				<option value="uploader">{$t("studio.submission.uploader_id")}</option>
 				<option value="song">{$t("song.song")}</option>
 				<option value="song_upload">{$t("studio.song_submission")}</option>
 			</select>
-			<select bind:value={filterParam} class="select select-bordered w-1/2">
-				{#if filter === "status"}
-					<option value="0">{$t("studio.submission.statuses.0")}</option>
-					<option value="1">{$t("studio.submission.statuses.1")}</option>
-					<option value="2">{$t("studio.submission.statuses.2")}</option>
-				{:else if filter === "uploader" && userList}
-					{#each userList as user}
-						<option value={`${user.id}`}>{user.username}</option>
-					{/each}
-				{:else if filter === "song" && songList}
-					{#each songList as song}
-						<option value={`${song.id}`}
-							>{song.composer} - {song.name} ({song.edition})</option
-						>
-					{/each}
-				{:else if filter === "song_upload" && songSubmissionList}
-					{#each songSubmissionList as song}
-						<option value={`${song.id}`}
-							>{song.composer} - {song.name} ({song.edition})</option
-						>
-					{/each}
-				{/if}
-			</select>
+			{#if filter !== "uploader"}
+				<select bind:value={filterParam} class="select select-bordered w-1/2">
+					{#if filter === "status"}
+						<option value="0">{$t("studio.submission.statuses.0")}</option>
+						<option value="1">{$t("studio.submission.statuses.1")}</option>
+						<option value="2">{$t("studio.submission.statuses.2")}</option>
+					{:else if filter === "song" && songList}
+						{#each songList as song}
+							<option value={`${song.id}`}
+								>{song.composer} - {song.name} ({song.edition})</option
+							>
+						{/each}
+					{:else if filter === "song_upload" && songSubmissionList}
+						{#each songSubmissionList as song}
+							<option value={`${song.id}`}
+								>{song.composer} - {song.name} ({song.edition})</option
+							>
+						{/each}
+					{/if}
+				</select>
+			{:else}
+				<input bind:value={filterParam} class="input input-bordered w-1/2" />
+			{/if}
 		</label>
 		<label class="input-group my-2">
 			<span class="w-1/6 min-w-[64px]">{$t("common.order")}</span>

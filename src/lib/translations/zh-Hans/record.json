@@ -13,6 +13,7 @@
     "rks": "RKS",
     "time": "游玩时间",
     "player": "玩家",
+    "player_id": "玩家 ID",
     "lowest_score": "最低分数",
     "highest_score": "最高分数",
     "lowest_acc": "最低准确率",

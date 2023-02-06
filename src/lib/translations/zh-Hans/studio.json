@@ -50,6 +50,7 @@
         "preview_placeholder": "用于游玩器内预览播放，须以 mm:ss 格式填写（如 01:14）",
         "chapters": "收录章节",
         "uploader": "上传者",
+        "uploader_id": "上传者 ID",
         "volunteer_vote": "志愿者投票",
         "score": "评分",
         "message": "留言",

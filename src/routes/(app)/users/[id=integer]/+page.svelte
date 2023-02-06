@@ -3,6 +3,7 @@
 	import * as api from "$lib/api";
 	import { t } from "$lib/translations/config";
 	import {
+		getLevelColor,
 		getUserLevel,
 		parseDateTime,
 		parseMonthAndDay,
@@ -292,16 +293,27 @@
 														{chart.song.name}
 													</div>
 												</div>
-												<div class="w-1/12 min-w-fit">
-													<div
-														class="mr-1 badge badge-lg text-lg badge-secondary"
-													>
-														{chart.level}
-														{Math.floor(chart.difficulty)}
+												<div class="w-1/4 min-w-fit">
+													<div class="btn-group btn-group-horizontal">
+														<button
+															class={`btn ${getLevelColor(
+																chart.level_type
+															)} btn-sm text-lg no-animation`}
+														>
+															{chart.level}
+															{Math.floor(chart.difficulty)}
+														</button>
+														{#if chart.ranked}
+															<button
+																class="btn btn-primary btn-sm text-lg no-animation"
+															>
+																{$t("chart.ranked")}
+															</button>
+														{/if}
 													</div>
 												</div>
 												<div
-													class="w-5/12 text-lg whitespace-no-wrap text-ellipsis"
+													class="w-1/3 text-lg whitespace-no-wrap text-ellipsis"
 												>
 													{#each parseRichText(chart.charter) as t}
 														{#if t.id > 0 && chart.collab_status}
@@ -364,9 +376,11 @@
 													<div class="text-xl font-bold">
 														{song.name}
 														{#if song.original}
-															<div class="ml-1 badge badge-lg badge-secondary">
+															<button
+																class="btn btn-secondary btn-sm text-lg no-animation"
+															>
 																{$t("song.original")}
-															</div>
+															</button>
 														{/if}
 													</div>
 												</div>

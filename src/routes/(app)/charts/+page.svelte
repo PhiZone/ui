@@ -18,7 +18,6 @@
 		nextCharts: string,
 		filter: string | null = null,
 		filterParam: string | null = null,
-		userList: User[],
 		songList: Song[],
 		order: string | null = null,
 		reverse = false;
@@ -52,14 +51,7 @@
 				bind:value={filter}
 				class="select select-bordered w-1/3"
 				on:change={async () => {
-					if (filter === "owner") {
-						const resp = await api.GET("/users/?pagination=0");
-						if (resp.ok) {
-							userList = await resp.json();
-						} else {
-							console.log(await resp.json());
-						}
-					} else if (filter === "song") {
+					if (filter === "song") {
 						const resp = await api.GET("/songs/?pagination=0", access_token);
 						if (resp.ok) {
 							songList = await resp.json();
@@ -69,7 +61,7 @@
 					}
 				}}
 			>
-				<option value="owner">{$t("chart.owner")}</option>
+				<option value="owner">{$t("chart.owner_id")}</option>
 				<option value="song">{$t("song.song")}</option>
 				<option value="chart_format">{$t("chart.format")}</option>
 				<option value="ranked">{$t("chart.ranked")}</option>
@@ -90,13 +82,9 @@
 					>{$t("chart.highest_note_count")}</option
 				>
 			</select>
-			{#if filter === "owner" || filter === "song" || filter === "ranked" || filter === "chart_format"}
+			{#if filter === "song" || filter === "ranked" || filter === "chart_format"}
 				<select bind:value={filterParam} class="select select-bordered w-1/2">
-					{#if filter === "owner" && userList}
-						{#each userList as user}
-							<option value={`${user.id}`}>{user.username}</option>
-						{/each}
-					{:else if filter === "song" && songList}
+					{#if filter === "song" && songList}
 						{#each songList as song}
 							{#if typeof song.song === "object"}
 								<option value={`${song.id}`}

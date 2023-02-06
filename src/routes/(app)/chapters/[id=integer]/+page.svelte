@@ -180,11 +180,11 @@
 														<div class="text-xl font-bold">
 															{song.name}
 															{#if song.original}
-																<div
-																	class="ml-1 badge badge-lg badge-secondary"
+																<button
+																	class="btn btn-secondary btn-sm text-lg no-animation"
 																>
 																	{$t("song.original")}
-																</div>
+																</button>
 															{/if}
 														</div>
 													</div>

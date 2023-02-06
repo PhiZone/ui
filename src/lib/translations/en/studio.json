@@ -50,6 +50,7 @@
         "preview_placeholder": "In the format of mm:ss (e.g. 01:14), used to specify the preview section in players",
         "chapters": "Associated Chapters",
         "uploader": "Uploader",
+        "uploader_id": "Uploader ID",
         "volunteer_vote": "Volunteer Vote",
         "score": "Score",
         "message": "Message",

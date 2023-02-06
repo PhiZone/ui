@@ -47,19 +47,19 @@
 			<div class="mt-3 flex justify-center">
 				{#if user}
 					{#if getUserPrivilege(user.type) >= 1}
-						<a data-sveltekit-preload-data href="/recorder/requests/new"
-							><button
-								class="btn btn-primary text-lg btn-xl btn-outline glass mr-3"
-								>{$t("recorder.new_request")}</button
-							></a
+						<a
+							data-sveltekit-preload-data
+							href="/recorder/requests/new"
+							class="btn btn-primary text-lg btn-xl btn-outline glass mr-3"
+							>{$t("recorder.new_request")}</a
 						>
-						<a data-sveltekit-preload-data href="/recorder/requests"
-							><button
-								class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
-								>{getUserPrivilege(user.type) < 3
-									? $t("recorder.view_history")
-									: $t("recorder.manage")}</button
-							></a
+						<a
+							data-sveltekit-preload-data
+							href="/recorder/requests"
+							class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
+							>{getUserPrivilege(user.type) < 3
+								? $t("recorder.view_history")
+								: $t("recorder.manage")}</a
 						>
 					{:else}
 						<p class="text-error">{$t("common.errors.403")}</p>

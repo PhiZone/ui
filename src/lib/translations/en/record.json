@@ -13,6 +13,7 @@
     "rks": "RKS",
     "time": "Time",
     "player": "Player",
+    "player_id": "Player ID",
     "lowest_score": "Lowest Score",
     "highest_score": "Highest Score",
     "lowest_acc": "Lowest Accuracy",

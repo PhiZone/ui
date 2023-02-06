@@ -20,7 +20,6 @@
 		nextRecords: string,
 		filter: string | null = null,
 		filterParam: string | null = null,
-		userList: User[],
 		chartList: Chart[],
 		order: string | null = null,
 		reverse = false;
@@ -61,14 +60,7 @@
 				bind:value={filter}
 				class="select select-bordered w-1/3"
 				on:change={async () => {
-					if (filter === "player") {
-						const resp = await api.GET("/users/?pagination=0");
-						if (resp.ok) {
-							userList = await resp.json();
-						} else {
-							console.log(await resp.json());
-						}
-					} else if (filter === "chart") {
+					if (filter === "chart") {
 						const resp = await api.GET(
 							"/charts/?query_song=1&pagination=0",
 							access_token
@@ -81,7 +73,7 @@
 					}
 				}}
 			>
-				<option value="player">{$t("record.player")}</option>
+				<option value="player">{$t("record.player_id")}</option>
 				<option value="chart">{$t("chart.chart")}</option>
 				<option value="full_combo">{$t("record.full_combo")}</option>
 				<option value="lowest_score">{$t("record.lowest_score")}</option>
@@ -91,13 +83,9 @@
 				<option value="lowest_rks">{$t("record.lowest_rks")}</option>
 				<option value="highest_rks">{$t("record.highest_rks")}</option>
 			</select>
-			{#if filter === "player" || filter === "chart" || filter === "full_combo"}
+			{#if filter === "chart" || filter === "full_combo"}
 				<select bind:value={filterParam} class="select select-bordered w-1/2">
-					{#if filter === "player" && userList}
-						{#each userList as user}
-							<option value={`${user.id}`}>{user.username}</option>
-						{/each}
-					{:else if filter === "chart" && chartList}
+					{#if filter === "chart" && chartList}
 						{#each chartList as chart}
 							{#if typeof chart.song === "object"}
 								<option value={`${chart.id}`}

@@ -271,9 +271,11 @@ export interface ChartSubmission {
 }
 
 export interface VolunteerVote {
+    id?: number;
     message: string;
     time: string;
     value: number;
+    user?: User;
 }
 
 export interface Collaboration {

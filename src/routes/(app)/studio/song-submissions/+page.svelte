@@ -19,7 +19,6 @@
 		nextSubmissions: string,
 		filter: string | null = null,
 		filterParam: string | null = null,
-		userList: User[],
 		chapterList: Chapter[],
 		order: string | null = null,
 		reverse = false;
@@ -61,44 +60,39 @@
 				bind:value={filter}
 				class="select select-bordered w-1/3"
 				on:change={async () => {
-					if (filter === "uploader") {
-						const resp = await api.GET("/users/?pagination=0");
-						if (resp.ok) {
-							userList = await resp.json();
-						} else {
-							console.log(await resp.json());
-						}
-					} else if (filter === "chapter") {
+					if (filter === "chapter") {
 						const resp = await api.GET("/chapters/?pagination=0", access_token);
 						if (resp.ok) {
 							chapterList = await resp.json();
 						} else {
 							console.log(await resp.json());
 						}
+					} else if (filter === "status") {
+						filterParam = "0";
 					}
 				}}
 			>
 				<option value="status">{$t("studio.submission.status")}</option>
-				<option value="uploader">{$t("studio.submission.uploader")}</option>
+				<option value="uploader">{$t("studio.submission.uploader_id")}</option>
 				<option value="chapter">{$t("song.chapter")}</option>
 			</select>
-			<select bind:value={filterParam} class="select select-bordered w-1/2">
-				{#if filter === "status"}
-					<option value="0">{$t("studio.submission.statuses.0")}</option>
-					<option value="1">{$t("studio.submission.statuses.1")}</option>
-					<option value="2">{$t("studio.submission.statuses.2")}</option>
-				{:else if filter === "uploader" && userList}
-					{#each userList as user}
-						<option value={`${user.id}`}>{user.username}</option>
-					{/each}
-				{:else if filter === "chapter" && chapterList}
-					{#each chapterList as chapter}
-						<option value={`${chapter.id}`}
-							>{chapter.title} - {chapter.subtitle}</option
-						>
-					{/each}
-				{/if}
-			</select>
+			{#if filter !== "uploader"}
+				<select bind:value={filterParam} class="select select-bordered w-1/2">
+					{#if filter === "status"}
+						<option value="0">{$t("studio.submission.statuses.0")}</option>
+						<option value="1">{$t("studio.submission.statuses.1")}</option>
+						<option value="2">{$t("studio.submission.statuses.2")}</option>
+					{:else if filter === "chapter" && chapterList}
+						{#each chapterList as chapter}
+							<option value={`${chapter.id}`}
+								>{chapter.title} - {chapter.subtitle}</option
+							>
+						{/each}
+					{/if}
+				</select>
+			{:else}
+				<input bind:value={filterParam} class="input input-bordered w-1/2" />
+			{/if}
 		</label>
 		<label class="input-group my-2">
 			<span class="w-1/6 min-w-[64px]">{$t("common.order")}</span>

@@ -4,7 +4,6 @@
 	import { ContentType, Status } from "$lib/constants";
 	import { goto } from "$app/navigation";
 	import type { RecorderRequestError } from "$lib/models";
-	import { onMount } from "svelte";
 
 	export let data: import("./$types").PageData;
 	$: ({ access_token, user } = data);
@@ -148,7 +147,8 @@
 						challengeColor <= 5 &&
 						(challengeColor === 5 ? true : challengeDifficulty)
 					))
-			: !(song && chart && illustration && songName && level && difficulty);
+			: !(song && chart && illustration && songName && level && difficulty) ||
+			  (endingOption && !avatar);
 		if (dataIncomplete) {
 			errorMsg = "data_incomplete";
 			status = Status.ERROR;
@@ -163,6 +163,9 @@
 		formData.append("difficulty", difficulty);
 		if (config) {
 			formData.append("config", config as unknown as File);
+			if (endingOption) {
+				formData.append("avatar", avatar as unknown as File);
+			}
 		} else {
 			formData.append("note_size", noteSize);
 			formData.append("resolution", resolution);
@@ -630,42 +633,44 @@
 									</label>
 								</div>
 							{/if}
-							<div class="flex my-3">
+						{/if}
+						<div class="flex my-3">
+							<span class="w-1/4 px-4 place-self-center"
+								>{$t("recorder.ending_option")}</span
+							>
+							<input
+								type="checkbox"
+								bind:checked={endingOption}
+								class="checkbox checkbox-primary"
+							/>
+						</div>
+						{#if endingOption}
+							<div class="flex">
 								<span class="w-1/4 px-4 place-self-center"
-									>{$t("recorder.ending_option")}</span
+									>{$t("recorder.avatar")}</span
 								>
 								<input
-									type="checkbox"
-									bind:checked={endingOption}
-									class="checkbox checkbox-primary"
+									type="file"
+									accept=".jpg, .jpeg, .png"
+									class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+										(!song && dataIncomplete) ||
+										(status === Status.ERROR && error?.avatar)
+											? "input-error file:btn-error"
+											: "input-primary file:btn-outline file:bg-primary"
+									}`}
+									on:change={handleAvatar}
 								/>
-							</div>
-							{#if endingOption}
-								<div class="flex">
-									<span class="w-1/4 px-4 place-self-center"
-										>{$t("recorder.avatar")}</span
+								{#if status === Status.ERROR && error?.avatar}
+									<span class="place-self-center text-error"
+										>{error.avatar}</span
 									>
-									<input
-										type="file"
-										accept=".jpg, .jpeg, .png"
-										class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-											(!song && dataIncomplete) ||
-											(status === Status.ERROR && error?.avatar)
-												? "input-error file:btn-error"
-												: "input-primary file:btn-outline file:bg-primary"
-										}`}
-										on:change={handleAvatar}
-									/>
-									{#if status === Status.ERROR && error?.avatar}
-										<span class="place-self-center text-error"
-											>{error.avatar}</span
-										>
-									{:else}
-										<span class="place-self-center"
-											>{$t("recorder.illustration_placeholder")}</span
-										>
-									{/if}
-								</div>
+								{:else}
+									<span class="place-self-center"
+										>{$t("recorder.illustration_placeholder")}</span
+									>
+								{/if}
+							</div>
+							{#if !config}
 								<div
 									class={status === Status.ERROR && error?.username
 										? "tooltip tooltip-open tooltip-right tooltip-error"

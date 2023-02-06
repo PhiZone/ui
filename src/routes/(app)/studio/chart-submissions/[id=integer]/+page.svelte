@@ -283,8 +283,21 @@
 							<p class="w-full content text-lg">
 								{vote.message}
 							</p>
-							<div class="card-actions mt-4 flex justify-between items-center">
-								<p class="text-sm opacity-70">
+							<div class="w-full mt-4 flex justify-between items-center">
+								<p class="text-base opacity-70">
+									{#if vote.id}
+										#{vote.id}
+									{/if}
+								</p>
+								<p class="text-sm opacity-70 text-right">
+									{#if vote.user}
+										<a
+											href={`/users/${vote.user.id}`}
+											target="_blank"
+											rel="noreferrer"
+											class="hover:underline">{vote.user.username}</a
+										> @
+									{/if}
 									{parseDateTime(vote.time)}
 								</p>
 							</div>
