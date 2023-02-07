@@ -1,13 +1,13 @@
 {
-    "notifications": "Notifications",
-    "type": "Type",
-    "type_0": "Mentions",
-    "type_1": "Comments & Replies",
-    "type_2": "Likes",
-    "type_3": "Requests & Invitations",
-    "type_4": "Followed Updates",
-    "type_5": "System Notifications",
-    "type_6": "Direct Messages",
-    "notified_at": "Notified At",
-    "read_at": "Read At"
+	"notifications": "Notifications",
+	"type": "Type",
+	"type_0": "Mentions",
+	"type_1": "Comments & Replies",
+	"type_2": "Likes",
+	"type_3": "Requests & Invitations",
+	"type_4": "Followed Updates",
+	"type_5": "System Notifications",
+	"type_6": "Direct Messages",
+	"notified_at": "Notified At",
+	"read_at": "Read At"
 }
