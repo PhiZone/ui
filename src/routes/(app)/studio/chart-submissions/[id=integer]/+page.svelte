@@ -52,7 +52,7 @@
 		{$t("studio.chart_submission")} - {content?.song
 			? content?.song.name
 			: content?.song_upload?.name}
-		{content ? `[${content.level}${Math.floor(content.difficulty)}]` : ""} | {$t(
+		{content ? `[${content.level} ${Math.floor(content.difficulty)}]` : ""} | {$t(
 			"common.title"
 		)}
 	</title>

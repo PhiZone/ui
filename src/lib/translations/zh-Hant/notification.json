@@ -1,0 +1,13 @@
+{
+    "notifications": "通知",
+    "type": "類型",
+    "type_0": "提及",
+    "type_1": "留言與回覆",
+    "type_2": "點讚數",
+    "type_3": "請求",
+    "type_4": "關注",
+    "type_5": "系統通知",
+    "type_6": "私訊",
+    "notified_at": "通知於",
+    "read_at": "閱讀於"
+}

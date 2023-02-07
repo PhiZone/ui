@@ -218,7 +218,7 @@
 		>{$t("chart.chart")} - {typeof content?.song == "object"
 			? content?.song.name
 			: ""}
-		{content ? `[${content.level}${Math.floor(content.difficulty)}]` : ""} | {$t(
+		{content ? `[${content.level} ${Math.floor(content.difficulty)}]` : ""} | {$t(
 			"common.title"
 		)}</title
 	>
