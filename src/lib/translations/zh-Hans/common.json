@@ -120,6 +120,7 @@
 	"order_backward": "倒序",
 	"admin": "管理",
 	"delete": "删除",
+	"revert": "恢复",
 	"true": "真",
 	"false": "假",
 	"optional": "（选填）"

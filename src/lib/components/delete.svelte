@@ -15,17 +15,21 @@
 <div
 	class={deleteTip
 		? "tooltip tooltip-open tooltip-error tooltip-bottom"
-		: deleted ? "" : "tooltip tooltip-bottom"}
-	data-tip={deleteTip ? deleteTip : $t("common.delete")}
+		: "tooltip tooltip-bottom"}
+	data-tip={deleteTip
+		? deleteTip
+		: !deleted
+		? $t("common.delete")
+		: $t("common.revert")}
 >
 	<button
 		class={`btn btn-${css} ${
-			deleted ? "btn-disabled" : "btn-accent btn-outline"
+			deleted ? "btn-ghost" : "btn-accent btn-outline"
 		} btn-sm flex gap-1 items-center`}
 		on:click={async () => {
 			const resp = await api.DELETE(target, token, user);
 			if (resp.status === 204) {
-				deleted = true;
+				deleted = !deleted;
 			} else {
 				deleteTip = (await resp.json()).detail;
 				setTimeout(() => {
@@ -33,7 +37,8 @@
 				}, 3000);
 			}
 		}}
-		><svg
+	>
+		<svg
 			width="16px"
 			height="16px"
 			viewBox="0 0 24 24"

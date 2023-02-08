@@ -120,6 +120,7 @@
 	"order_backward": "Backward",
 	"admin": "Administration",
 	"delete": "Delete",
+	"revert": "Revert",
 	"true": "True",
 	"false": "False",
 	"optional": " (Optional)"
