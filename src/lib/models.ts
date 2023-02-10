@@ -242,6 +242,7 @@ export interface SongSubmission {
 	preview_start: string;
 	preview_end: string;
 	representation: number | null;
+	reviewer: number | User;
 	song: string;
 	status: number;
 	time: string;
@@ -267,6 +268,7 @@ export interface ChartSubmission {
 	time: string;
 	uploader: number | User;
 	volunteer_status: boolean;
+	voted: boolean;
 	votes: VolunteerVote[];
 }
 

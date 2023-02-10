@@ -62,7 +62,9 @@
 		"original_chart": "原谱面",
 		"original_song": "原曲目",
 		"original_audio": "原音源",
-		"original_illustration": "原曲绘"
+		"original_illustration": "原曲绘",
+		"reviewer": "处理人",
+		"reviewer_id": "处理人 ID"
 	},
 	"request": {
 		"accept": "接受",

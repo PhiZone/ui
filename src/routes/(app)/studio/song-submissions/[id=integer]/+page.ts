@@ -10,7 +10,7 @@ export const load: import("./$types").PageLoad = async ({
 }) => {
 	const { user, access_token } = await parent();
 	const resp = await api.GET(
-		`/song_uploads/${params.id}/?query_chapters=1&query_uploader=1`,
+		`/song_uploads/${params.id}/?query_chapters=1&query_uploader=1&query_reviewer=1`,
 		access_token,
 		user,
 		fetch

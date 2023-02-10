@@ -74,9 +74,10 @@
 			>
 				<option value="status">{$t("studio.submission.status")}</option>
 				<option value="uploader">{$t("studio.submission.uploader_id")}</option>
+				<option value="reviewer">{$t("studio.submission.reviewer_id")}</option>
 				<option value="chapter">{$t("song.chapter")}</option>
 			</select>
-			{#if filter !== "uploader"}
+			{#if filter !== "uploader" && filter !== "reviewer"}
 				<select bind:value={filterParam} class="select select-bordered w-1/2">
 					{#if filter === "status"}
 						<option value="0">{$t("studio.submission.statuses.0")}</option>
@@ -108,6 +109,7 @@
 				<option value="illustrator">{$t("song.illustrator")}</option>
 				<option value="status">{$t("studio.submission.status")}</option>
 				<option value="uploader">{$t("studio.submission.uploader")}</option>
+				<option value="reviewer">{$t("studio.submission.reviewer")}</option>
 				<option value="chapter">{$t("song.chapter")}</option>
 			</select>
 		</label>

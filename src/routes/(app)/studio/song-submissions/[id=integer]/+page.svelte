@@ -202,6 +202,14 @@
 								>
 								{$t(`studio.submission.volunteer_statuses.${content.status}`)}
 							</p>
+							{#if content.reviewer && typeof content.reviewer === 'object'}
+								<p>
+									<span class="badge badge-primary badge-outline mr-1"
+										>{$t("studio.submission.reviewer")}</span
+									>
+									{content.reviewer.username}
+								</p>
+							{/if}
 							{#if content.message}
 								<p>
 									<span class="badge badge-primary badge-outline mr-1"

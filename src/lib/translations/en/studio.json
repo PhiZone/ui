@@ -62,7 +62,9 @@
 		"original_chart": "Original Chart",
 		"original_song": "Original Song",
 		"original_audio": "Original Audio",
-		"original_illustration": "Original Illustration"
+		"original_illustration": "Original Illustration",
+		"reviewer": "Reviewer",
+		"reviewer_id": "Reviewer ID"
 	},
 	"request": {
 		"accept": "Accept",
