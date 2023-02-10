@@ -206,7 +206,7 @@
 				{#if pageStatus === Status.OK && submissions}
 					{#if submissions.length > 0}
 						{#each submissions as submission}
-							<Submission {submission} />
+							<Submission {submission} {user} />
 						{/each}
 						<Pagination
 							bind:previous={previousSubmissions}

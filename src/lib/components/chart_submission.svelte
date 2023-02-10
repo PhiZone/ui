@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { ChartSubmission, User } from "$lib/models";
 	import { t } from "$lib/translations/config";
-	import { getCompressedImage, getLevelColor, parseDateTime } from "$lib/utils";
+	import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from "$lib/utils";
 
-	export let submission: ChartSubmission;
+	export let submission: ChartSubmission, user: User;
 	let song = submission.song ? submission.song : submission.song_upload;
 </script>
 
 <a href={`/studio/chart-submissions/${submission.id}`}>
 	<div
-		class={`card min-w-[500px] card-side overflow-hidden ${submission.status === 1 ? "bg-green-100" : submission.status === 2 ? "bg-red-100" : submission.voted ? "bg-base-100" : "bg-orange-100"} shadow-lg glass`}
+		class={`card min-w-[500px] card-side overflow-hidden ${submission.status === 1 ? "bg-green-100" : submission.status === 2 ? "bg-red-100" : getUserPrivilege(user.type) < 3 || submission.voted ? "bg-base-100" : "bg-orange-100"} shadow-lg glass`}
 	>
 		<figure class="min-w-[30%] max-w-[30%]">
 			<img
