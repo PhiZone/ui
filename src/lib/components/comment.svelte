@@ -238,7 +238,7 @@
 					</div>
 				</a>
 				<a data-sveltekit-preload-data href={`/users/${comment.user.id}`}>
-					<p class="text-lg text-center max-w-[120px] break-all">
+					<p class="text-lg text-center max-w-[120px]">
 						{comment.user.username}
 					</p>
 				</a>

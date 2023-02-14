@@ -32,7 +32,7 @@
 		}`}
 	>
 		<div class="card-body w-[60%]">
-			<h2 class="card-title text-2xl mb-3 min-w-fit inline">
+			<h2 class="text-xl mb-3 min-w-fit inline">
 				{#each parseRichText(notification.message) as t}
 					{#if t.type}
 						<a

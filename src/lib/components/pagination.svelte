@@ -86,6 +86,9 @@
 						}
 					}}
 					on:pointerenter={() => {
+						if (total > 20) {
+							return;
+						}
 						let url = next ? next : previous ? previous : null;
 						if (url) {
 							preload(url.replace(/page=\d+/, `page=${p}`), p);
