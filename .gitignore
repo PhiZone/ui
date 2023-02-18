@@ -12,3 +12,4 @@ yarn.lock
 package-lock.json
 *.log
 /.vscode
+/.yarnrc.yml

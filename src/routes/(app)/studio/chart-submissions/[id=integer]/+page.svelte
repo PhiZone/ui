@@ -163,6 +163,24 @@
 							</p>
 							<p>
 								<span class="badge badge-primary badge-outline mr-1"
+									>{$t("common.form.assets")}</span
+								>
+								{#if content.assets}
+									<a
+										href={content.assets}
+										target="_blank"
+										rel="noreferrer"
+										class="hover:underline"
+										download
+									>
+										{$t("common.download")}
+									</a>
+								{:else}
+									无
+								{/if}
+							</p>
+							<p>
+								<span class="badge badge-primary badge-outline mr-1"
 									>{$t("chart.charter")}</span
 								>
 								{#each parseRichText(content.charter) as t}

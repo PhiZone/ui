@@ -75,6 +75,7 @@
 	"anonymous": "[ ANONYMOUS ]",
 	"records": "Play Records",
 	"form": {
+		"assets": "Assets Zip",
 		"audio": "Audio File",
 		"chart": "Chart File",
 		"illustration": "Illustration File",
@@ -88,6 +89,7 @@
 		"charter_preview": "Charter Name Preview",
 		"illustrator": "Illustrator's Name",
 		"tips": {
+			"assets": "Zip file, no larger than 20 MB",
 			"audio": "MP3 / OGG, no larger than 10 MB",
 			"image": "JPG / JPEG / PNG, no larger than 6MB",
 			"chart": "Only charts made with PE / RPE are supported",
