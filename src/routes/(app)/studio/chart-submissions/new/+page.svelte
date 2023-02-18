@@ -274,7 +274,6 @@
 								type="file"
 								accept=".zip"
 								class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-									(!assets && dataIncomplete) ||
 									(status === Status.ERROR && error?.assets)
 										? "input-error file:btn-error"
 										: "input-primary file:btn-outline file:bg-primary"
