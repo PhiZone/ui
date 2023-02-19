@@ -25,6 +25,7 @@
 		songSwitch = true,
 		description = "",
 		emptyDescription = false,
+		assets: File | null = null,
 		chart: File | null = null,
 		status = Status.OK,
 		error: ChartSubmissionError,
@@ -93,9 +94,20 @@
 		}
 	};
 
+	const handleAssets = (
+		e: Event & { currentTarget: EventTarget & HTMLInputElement }
+	) => {
+		if (error?.assets) error.assets = [];
+		const target = e.target as HTMLInputElement;
+		if (target.files && target.files.length > 0) {
+			assets = target.files[0];
+		}
+	};
+
 	async function handleSubmit() {
 		let formData = new FormData();
 		if (chart) formData.append("chart", chart as unknown as File);
+		if (assets) formData.append("assets", assets as unknown as File);
 		if (levelType !== -1) formData.append("level_type", levelType.toString());
 		if (level) formData.append("level", level);
 		if (difficulty)
@@ -265,6 +277,45 @@
 								{:else}
 									<span class="place-self-center"
 										>{$t("common.form.tips.chart")}</span
+									>
+								{/if}
+							</div>
+							{#if content.assets}
+								<div class="flex justify-start items-center my-2">
+									<span class="w-32 px-4 place-self-center"
+										>{$t("studio.submission.original_assets")}</span
+									>
+									<a
+										href={content.assets}
+										target="_blank"
+										rel="noreferrer"
+										class="hover:underline place-self-center min-w-fit mr-4"
+										download
+									>
+										{$t("common.download")}
+									</a>
+								</div>
+							{/if}
+							<div class="flex">
+								<span class="w-32 px-4 place-self-center"
+									>{$t("common.form.assets")}</span
+								>
+								<input
+									type="file"
+									accept=".zip"
+									class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+										status === Status.ERROR && error?.assets
+											? "input-error file:btn-error"
+											: "input-primary file:btn-outline file:bg-primary"
+									}`}
+									on:change={handleAssets}
+								/>
+								{#if status === Status.ERROR && error?.assets}
+									<span class="place-self-center text-error">{error.assets}</span
+									>
+								{:else}
+									<span class="place-self-center"
+										>{$t("common.form.tips.assets")}</span
 									>
 								{/if}
 							</div>
