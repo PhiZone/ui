@@ -262,7 +262,7 @@
 				{parseDateTime(comment.creation)}
 			</p>
 			<div class="flex items-center gap-1">
-				{#if getUserPrivilege(user.type) >= 4 || user.id === comment.user.id}
+				{#if getUserPrivilege(user?.type) >= 4 || user?.id === comment.user.id}
 					<Delete
 						deleted={comment.deletion !== null}
 						target={`/comments/${comment.id}/`}
