@@ -298,7 +298,7 @@
 							{/if}
 							<div class="flex">
 								<span class="w-32 px-4 place-self-center"
-									>{$t("common.form.assets")}</span
+									>{$t("common.form.assets")}{$t("common.optional")}</span
 								>
 								<input
 									type="file"
