@@ -24,7 +24,7 @@
 							)} btn-sm text-xl no-animation`}
 						>
 							{chart.level}
-							{Math.floor(chart.difficulty)}
+							{chart.difficulty != 0 ? Math.floor(chart.difficulty) : "?"}
 						</button>
 						{#if chart.ranked}
 							<button class="btn btn-primary btn-sm text-xl no-animation">

@@ -552,7 +552,7 @@
 																			)} btn-sm text-lg no-animation`}
 																		>
 																			{chart.level}
-																			{Math.floor(chart.difficulty)}
+																			{chart.difficulty != 0 ? Math.floor(chart.difficulty) : "?"}
 																		</button>
 																		{#if chart.ranked}
 																			<button

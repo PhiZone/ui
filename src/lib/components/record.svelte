@@ -96,7 +96,7 @@
 						}}
 					>
 						{record.chart.level}
-						{Math.floor(record.chart.difficulty)}
+						{record.chart.difficulty != 0 ? Math.floor(record.chart.difficulty) : "?"}
 					</button>
 				</div>
 			{:else if pos}
