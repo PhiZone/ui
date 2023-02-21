@@ -89,7 +89,7 @@
 		"charter_preview": "譜師名義（馬甲）預覽",
 		"illustrator": "畫師名義（馬甲）",
 		"tips": {
-			"assets": "20MB 或更小的資源壓縮包，zip 格式",
+			"assets": "（可選）20MB 或更小的資源壓縮包 ZIP",
 			"audio": "10MB 或更小的 MP3 / OGG",
 			"image": "6MB 或更小的 JPG / JPEG / PNG",
 			"chart": "僅支援 PE / RPE 創作的譜面",

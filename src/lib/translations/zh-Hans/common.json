@@ -89,7 +89,7 @@
 		"charter_preview": "谱师名义预览",
 		"illustrator": "画师名义",
 		"tips": {
-			"assets": "20MB 或更小的资源压缩包，zip 格式",
+			"assets": "（可选）20MB 或更小的资源压缩包 ZIP",
 			"audio": "10MB 或更小的 MP3 / OGG",
 			"image": "6MB 或更小的 JPG / JPEG / PNG",
 			"chart": "仅支持 PE / RPE 创作的谱面",
