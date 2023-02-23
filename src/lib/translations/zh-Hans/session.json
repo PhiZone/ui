@@ -1,38 +1,38 @@
 {
-	"username": "用户名",
-	"email": "邮箱",
-	"password": "密码",
-	"data_incomplete": "请填写所有信息！",
-	"confirm_password": "确认密码",
-	"passwords_differ": "两次输入的密码不相同！",
-	"login": {
-		"login": "登录",
-		"login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
-		"forgot_password": "忘记密码？",
-		"invalid_credentials": "你的凭据有误。请仔细检查。"
-	},
-	"registration": {
-		"register": "注册",
-		"registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
-		"select_language": "选择语言",
-		"success": "你的 PhiZone 账号注册成功！",
-		"language_error": "语言选项出现问题。请更换浏览器重试。"
-	},
-	"email_confirmation": {
-		"email_confirmation": "确认邮箱地址",
-		"email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入以下输入框中，以便激活你的账号。",
-		"code": "确认代码",
-		"activate": "激活账号",
-		"code_not_numeric": "验证码须为六位数字！"
-	},
-	"password_reset": {
-		"password_reset": "重置密码",
-		"password_reset_text1": "请在下方输入你注册时输入的邮箱。",
-		"password_reset_text2": "一封邮件已发至你的邮箱！请点击邮件中的链接以继续。",
-		"password_reset_text3": "请在下方输入你希望为你的账户设置的新密码。",
-		"new_password": "新密码"
-	},
-	"logging_out": "登出中",
-	"redirecting": "重定向中",
-	"redirection_description": "请等待重定向完毕"
+  "username": "用户名",
+  "email": "邮箱",
+  "password": "密码",
+  "data_incomplete": "请填写所有信息！",
+  "confirm_password": "确认密码",
+  "passwords_differ": "两次输入的密码不相同！",
+  "login": {
+    "login": "登录",
+    "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
+    "forgot_password": "忘记密码？",
+    "invalid_credentials": "你的凭据有误。请仔细检查。"
+  },
+  "registration": {
+    "register": "注册",
+    "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
+    "select_language": "选择语言",
+    "success": "你的 PhiZone 账号注册成功！",
+    "language_error": "语言选项出现问题。请更换浏览器重试。"
+  },
+  "email_confirmation": {
+    "email_confirmation": "确认邮箱地址",
+    "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入以下输入框中，以便激活你的账号。",
+    "code": "确认代码",
+    "activate": "激活账号",
+    "code_not_numeric": "验证码须为六位数字！"
+  },
+  "password_reset": {
+    "password_reset": "重置密码",
+    "password_reset_text1": "请在下方输入你注册时输入的邮箱。",
+    "password_reset_text2": "一封邮件已发至你的邮箱！请点击邮件中的链接以继续。",
+    "password_reset_text3": "请在下方输入你希望为你的账户设置的新密码。",
+    "new_password": "新密码"
+  },
+  "logging_out": "登出中",
+  "redirecting": "重定向中",
+  "redirection_description": "请等待重定向完毕"
 }
