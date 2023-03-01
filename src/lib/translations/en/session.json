@@ -1,38 +1,38 @@
 {
-	"username": "Username",
-	"email": "Email",
-	"password": "Password",
-	"data_incomplete": "You have something unfilled in the blanks!",
-	"confirm_password": "Confirm Password",
-	"passwords_differ": "The two passwords differ from each other!",
-	"login": {
-		"login": "Log In",
-		"login_text": "Log in to participate in player communications and to play charts on PhiZone!",
-		"forgot_password": "Forgot your password?",
-		"invalid_credentials": "You might have entered something wrong. Please carefully check your credentials."
-	},
-	"registration": {
-		"register": "Register",
-		"registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
-		"select_language": "Select Language",
-		"success": "You've successfully registered an account on PhiZone!",
-		"language_error": "Invalid language. Switch to another browser and retry."
-	},
-	"email_confirmation": {
-		"email_confirmation": "Confirm Email Address",
-		"email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the following blank so that we can activate your account.",
-		"code": "Confirmation Code",
-		"activate": "Activate Account",
-		"code_not_numeric": "The code must be a six-digit number!"
-	},
-	"password_reset": {
-		"password_reset": "Reset Password",
-		"password_reset_text1": "Please enter your email address.",
-		"password_reset_text2": "We've sent an email to your mailbox. Please click the link in the email so that you can reset your password.",
-		"password_reset_text3": "Please enter your new password.",
-		"new_password": "New Password"
-	},
-	"logging_out": "Logging Out",
-	"redirecting": "Redirecting",
-	"redirection_description": "Please wait while you're being redirected."
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "data_incomplete": "You have something unfilled in the blanks!",
+  "confirm_password": "Confirm Password",
+  "passwords_differ": "The two passwords differ from each other!",
+  "login": {
+    "login": "Log In",
+    "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
+    "forgot_password": "Forgot your password?",
+    "invalid_credentials": "You might have entered something wrong. Please carefully check your credentials."
+  },
+  "registration": {
+    "register": "Register",
+    "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
+    "select_language": "Select Language",
+    "success": "You've successfully registered an account on PhiZone!",
+    "language_error": "Invalid language. Switch to another browser and retry."
+  },
+  "email_confirmation": {
+    "email_confirmation": "Confirm Email Address",
+    "email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the following blank so that we can activate your account.",
+    "code": "Confirmation Code",
+    "activate": "Activate Account",
+    "code_not_numeric": "The code must be a six-digit number!"
+  },
+  "password_reset": {
+    "password_reset": "Reset Password",
+    "password_reset_text1": "Please enter your email address.",
+    "password_reset_text2": "We've sent an email to your mailbox. Please click the link in the email so that you can reset your password.",
+    "password_reset_text3": "Please enter your new password.",
+    "new_password": "New Password"
+  },
+  "logging_out": "Logging Out",
+  "redirecting": "Redirecting",
+  "redirection_description": "Please wait while you're being redirected."
 }
