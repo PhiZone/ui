@@ -357,7 +357,7 @@
 									{$t("user.songs")}
 								</h2>
 								{#if songs.length > 0}
-									<a class="min-w-fit" href={`/songs?owner=${content.id}`}>
+									<a class="min-w-fit" href={`/songs?uploader=${content.id}`}>
 										<button class="btn btn-sm btn-primary btn-outline">
 											{$t("common.all")}
 										</button>
