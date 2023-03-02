@@ -241,7 +241,7 @@ export function getCompressedImage(input: string | undefined) {
     return '';
   }
   return input
-    .replace(/^http[^ ]+media$/g, RES_BASE)
+    .replace(/^http[^ ]+media/g, RES_BASE)
     .replace(/(png)|(jpe?g)|(webp)$/gi, 'comp.webp');
 }
 
