@@ -2,6 +2,7 @@
   import { ContentType, Status } from '$lib/constants';
   import * as api from '$lib/api';
   import { locales, locale, t } from '$lib/translations/config';
+  import { getImage } from '$lib/utils';
 
   export let data: import('./$types').PageData;
   $: ({ access_token, user } = data);
@@ -124,7 +125,11 @@
                     : 'border-neutral-500'
                 }`}
               >
-                <img class="object-fill" src={avatarData ? avatarData : user.avatar} alt="Avatar" />
+                <img
+                  class="object-fill"
+                  src={avatarData ? avatarData : getImage(user.avatar)}
+                  alt="Avatar"
+                />
               </div>
               <input
                 type="file"

@@ -7,6 +7,7 @@
   import Pagination from '$lib/components/pagination.svelte';
   import Like from '$lib/components/like.svelte';
   import User from '$lib/components/user.svelte';
+  import { getImage } from '$lib/utils';
   export let data: import('./$types').PageData;
   $: ({ status, content, error, songRes, commentRes, access_token, user } = data);
 
@@ -97,7 +98,7 @@
           </button>
         </div>
       </div>
-      <img src={content.illustration} alt="Illustration" class="object-contain" />
+      <img src={getImage(content.illustration)} alt="Illustration" class="object-contain" />
     </div>
   </div>
   <div class="background min-h-screen" style={`background-image: url(${content.illustration});`}>

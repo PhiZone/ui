@@ -3,6 +3,7 @@
   import * as api from '$lib/api';
   import { t } from '$lib/translations/config';
   import {
+    getImage,
     getLevelColor,
     getUserLevel,
     parseDateTime,
@@ -117,7 +118,7 @@
                     : 'border-neutral-500'
                 }`}
               >
-                <img src={content.avatar} alt="Avatar" />
+                <img src={getImage(content.avatar)} alt="Avatar" />
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">
