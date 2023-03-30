@@ -1,10 +1,10 @@
 {
-	"chapter": "Chapter",
-	"id": "Chapter ID",
-	"illustration": "Illustration",
-	"view_illustration": "View Illustration",
-	"illustrator": "Illustrator",
-	"description": "Description",
-	"owner": "Owner",
-	"songs": "Songs"
+  "chapter": "Chapter",
+  "id": "Chapter ID",
+  "illustration": "Illustration",
+  "view_illustration": "View Illustration",
+  "illustrator": "Illustrator",
+  "description": "Description",
+  "owner": "Owner",
+  "songs": "Songs"
 }

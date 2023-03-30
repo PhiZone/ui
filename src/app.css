@@ -1,17 +1,17 @@
 /* Write your global styles here, in PostCSS syntax */
-@import url("https://fonts.googleapis.com/css2?family=Saira:wght@400;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .page {
-	min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 200px);
 }
 
 .content {
-	white-space: pre-line;
-	word-break: break-word;
+  white-space: pre-line;
+  word-break: break-word;
 }

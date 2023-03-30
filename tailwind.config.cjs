@@ -3,13 +3,13 @@ const typography = require('@tailwindcss/typography');
 const forms = require('@tailwindcss/forms');
 
 const config = {
-    content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: ['./src/**/*.{html,js,svelte,ts}'],
 
-    theme: {
-        extend: {},
-    },
+  theme: {
+    extend: {},
+  },
 
-    plugins: [forms, typography, daisyui],
+  plugins: [forms, typography, daisyui],
 };
 
 module.exports = config;
