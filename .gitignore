@@ -10,3 +10,4 @@ node_modules
 .yarn/install-state.gz
 *.log
 /.vscode
+/.yarnrc.yml

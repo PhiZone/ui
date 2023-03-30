@@ -251,6 +251,7 @@ export interface SongSubmission {
 
 export interface ChartSubmission {
   adm_status: boolean;
+  assets: string;
   chart: string;
   charter: string;
   collab_status: boolean;
@@ -350,4 +351,5 @@ export interface ChartSubmissionError {
   description?: string[];
   charter?: string[];
   event_part?: string[];
+  assets?: string[];
 }

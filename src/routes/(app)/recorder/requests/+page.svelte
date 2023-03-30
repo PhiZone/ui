@@ -41,8 +41,7 @@
   <title>
     {$t('recorder.request')} - {$t(
       user && getUserPrivilege(user.type) >= 3 ? 'recorder.manage' : 'recorder.history'
-    )} |
-    {$t('common.title')}
+    )} | {$t('common.title')}
   </title>
 </svelte:head>
 <input type="checkbox" id="list-options" class="modal-toggle" />
