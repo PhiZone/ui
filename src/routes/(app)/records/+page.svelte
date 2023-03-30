@@ -82,7 +82,7 @@
               {#if typeof chart.song === 'object'}
                 <option value={`${chart.id}`}
                   >{chart.song.name} [{chart.level}
-                  {Math.floor(chart.difficulty)}]</option
+                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}]</option
                 >
               {/if}
             {/each}

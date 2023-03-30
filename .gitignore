@@ -8,8 +8,6 @@ node_modules
 !.env.example
 .yarn/cache
 .yarn/install-state.gz
-yarn.lock
-package-lock.json
 *.log
 /.vscode
 /.yarnrc.yml

@@ -52,7 +52,9 @@
     {$t('studio.chart_submission')} - {content?.song
       ? content?.song.name
       : content?.song_upload?.name}
-    {content ? `[${content.level} ${Math.floor(content.difficulty)}]` : ''} | {$t('common.title')}
+    {content
+      ? `[${content.level} ${content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}]`
+      : ''} | {$t('common.title')}
   </title>
 </svelte:head>
 
@@ -118,7 +120,7 @@
               <button
                 class={`btn ${getLevelColor(content.level_type)} btn-sm text-2xl no-animation`}
                 >{content.level}
-                {Math.floor(content.difficulty)}
+                {content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}
               </button>
             </div>
             <div>

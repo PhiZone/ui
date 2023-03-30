@@ -211,9 +211,9 @@
 <svelte:head>
   <title
     >{$t('chart.chart')} - {typeof content?.song == 'object' ? content?.song.name : ''}
-    {content ? `[${content.level} ${Math.floor(content.difficulty)}]` : ''} | {$t(
-      'common.title'
-    )}</title
+    {content
+      ? `[${content.level} ${content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}]`
+      : ''} | {$t('common.title')}</title
   >
 </svelte:head>
 
@@ -347,7 +347,7 @@
                     class={`btn ${getLevelColor(content.level_type)} btn-sm text-2xl no-animation`}
                   >
                     {content.level}
-                    {Math.floor(content.difficulty)}
+                    {content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}
                   </button>
                   {#if content.ranked}
                     <button class="btn btn-primary btn-sm text-2xl no-animation">

@@ -18,9 +18,9 @@
 
   const getDifficulty = (collaboration: Collaboration) => {
     if (typeof collaboration.chart == 'object') {
-      return collaboration.chart.difficulty;
+      return collaboration.chart.difficulty != 0 ? collaboration.chart.difficulty : '?';
     }
-    return 0;
+    return '?';
   };
 
   const getSong = (collaboration: Collaboration) => {
@@ -60,7 +60,7 @@
       {getSong(collaboration)?.name}
       <button class="btn btn-secondary btn-sm text-2xl no-animation">
         {getChart(collaboration)?.level}
-        {Math.floor(getDifficulty(collaboration))}
+        {getDifficulty(collaboration)}
       </button>
     </h2>
     <div class="flex gap-3 justify-between h-1/2 items-center">

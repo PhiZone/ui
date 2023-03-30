@@ -400,7 +400,7 @@
                 <div class="w-3/4">
                   <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
                     {level}
-                    {Math.floor(parseFloat(difficulty))}
+                    {parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'}
                   </button>
                 </div>
               </div>

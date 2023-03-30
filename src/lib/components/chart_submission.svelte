@@ -31,7 +31,7 @@
         {song?.name}
         <button class={`btn ${getLevelColor(submission.level_type)} btn-sm text-xl no-animation`}
           >{submission.level}
-          {Math.floor(submission.difficulty)}
+          {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
         </button>
       </h2>
       <div class="flex items-center min-w-fit">

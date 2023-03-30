@@ -8,6 +8,7 @@
     parseLyrics,
     parseDateTime,
     getLevelColor,
+    getImage,
   } from '$lib/utils';
   import * as api from '$lib/api';
   import { onDestroy, onMount } from 'svelte';
@@ -296,7 +297,11 @@
               <div class="w-2/3 float-right">
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                   <div class="relative">
-                    <img src={content.illustration} class="object-fill" alt="illustration" />
+                    <img
+                      src={getImage(content.illustration)}
+                      class="object-fill"
+                      alt="illustration"
+                    />
                     {#if line}
                       <div
                         class="absolute p-4 inset-0 flex form-control justify-end backdrop backdrop-blur-5 text-neutral-content"
@@ -508,7 +513,7 @@
                                       )} btn-sm text-lg no-animation`}
                                     >
                                       {chart.level}
-                                      {Math.floor(chart.difficulty)}
+                                      {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                                     </button>
                                     {#if chart.ranked}
                                       <button class="btn btn-primary btn-sm text-lg no-animation">

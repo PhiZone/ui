@@ -3,6 +3,7 @@
   import * as api from '$lib/api';
   import { t } from '$lib/translations/config';
   import {
+    getImage,
     getLevelColor,
     getUserLevel,
     parseDateTime,
@@ -117,7 +118,7 @@
                     : 'border-neutral-500'
                 }`}
               >
-                <img src={content.avatar} alt="Avatar" />
+                <img src={getImage(content.avatar)} alt="Avatar" />
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">
@@ -273,7 +274,7 @@
                               )} btn-sm text-lg no-animation`}
                             >
                               {chart.level}
-                              {Math.floor(chart.difficulty)}
+                              {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                             </button>
                             {#if chart.ranked}
                               <button class="btn btn-primary btn-sm text-lg no-animation">
@@ -324,7 +325,7 @@
                   {$t('user.songs')}
                 </h2>
                 {#if songs.length > 0}
-                  <a class="min-w-fit" href={`/songs?owner=${content.id}`}>
+                  <a class="min-w-fit" href={`/songs?uploader=${content.id}`}>
                     <button class="btn btn-sm btn-primary btn-outline">
                       {$t('common.all')}
                     </button>

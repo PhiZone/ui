@@ -1,7 +1,6 @@
-import i18n from 'sveltekit-i18n';
+import i18n, { type Config } from 'sveltekit-i18n';
 import lang from './lang.json';
 
-/** @type {import('sveltekit-i18n').Config} */
 const config = {
   fallbackLocale: 'en',
   translations: {
@@ -205,7 +204,7 @@ const config = {
       loader: async () => (await import('./zh-Hant/admin.json')).default,
     },
   ],
-};
+} satisfies Config;
 
 export const { t, locale, locales, loading, loadTranslations } = new i18n(config);
 
