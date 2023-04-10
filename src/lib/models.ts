@@ -4,7 +4,6 @@ export interface User {
   date_joined: string;
   date_of_birth: null | string;
   exp: number;
-  extra?: UserExtra;
   fans: number;
   following: number;
   gender: number;
@@ -20,12 +19,19 @@ export interface User {
   username: string;
 }
 
-export interface UserExtra {
-  best_records?: Record[];
-  charts?: Chart[];
-  comments: Comment[];
-  recent_records?: Record[];
-  songs?: Song[];
+// export interface UserExtra {
+//   best_records?: PlayRecord[];
+//   charts?: Chart[];
+//   comments: Comment[];
+//   recent_records?: PlayRecord[];
+//   songs?: Song[];
+// }
+
+export interface Relation {
+  id: number;
+  follower: number;
+  followee: number;
+  time: string;
 }
 
 export interface Chapter {
@@ -38,23 +44,18 @@ export interface Chapter {
   illustrator: string;
   like: number | null;
   like_count: number;
-  owner: number | User;
-  songs: number | Song[];
+  owner: number;
+  songs: number;
   subtitle: string;
   time: string;
   title: string;
 }
 
-export interface ChartLevel {
-  level: string;
-  count: number;
-}
-
 export interface Song {
   accessibility: number;
   bpm: string;
-  chapters: number | Chapter[];
-  charts: number | Chart[];
+  chapters: number;
+  charts: number;
   comment_count: number;
   composer: string;
   description: null | string;
@@ -65,14 +66,14 @@ export interface Song {
   id: number;
   illustration: string;
   illustrator: string;
-  levels: ChartLevel[];
+  levels: number[];
   like: number | null;
   like_count: number;
   lyrics: string;
   name: string;
   offset: number;
   original: boolean;
-  uploader: number | User;
+  uploader: number;
   preview_end: string;
   preview_start: string;
   song: string;
@@ -96,7 +97,7 @@ export interface Chart {
   like: number | null;
   like_count: number;
   notes: number;
-  owner: number | null | User;
+  owner: number | null;
   r_arrangement: number;
   r_concord: number;
   r_feel: number;
@@ -106,11 +107,23 @@ export interface Chart {
   ranked: boolean;
   rating: number;
   score: number;
-  song: number | Song;
+  song: number;
   time: string;
   vote: null | Vote;
   votes: number;
-  records: null | Record[];
+  records: null | PlayRecord[];
+}
+
+export interface Like {
+  id: number;
+  time: string;
+  user: number;
+  chart: number | null;
+  song: number | null;
+  chapter: number | null;
+  discussion: number | null;
+  comment: number | null;
+  reply: number | null;
 }
 
 export interface Comment {
@@ -129,7 +142,7 @@ export interface Comment {
   pinned: boolean;
   replies: number;
   song: number | null;
-  user: User;
+  user: number;
 }
 
 export interface Reply {
@@ -142,9 +155,7 @@ export interface Reply {
   last_edit: string;
   like: number | null;
   like_count: number;
-  reply: number | null;
-  replies: number;
-  user: User;
+  user: number;
 }
 
 export interface RecorderRequest {
@@ -204,24 +215,25 @@ export interface Vote {
   visual_effects: number;
 }
 
-export interface Record {
-  acc: number;
-  bad: number;
-  chart: number | Chart;
-  event_part: null | number;
-  full_combo: boolean;
-  good_early: number;
-  good_judgment: number;
-  good_late: number;
+export interface PlayRecord {
   id: number;
   max_combo: number;
-  miss: number;
   perfect: number;
-  perfect_judgment: number;
-  player: number | User;
-  rks: number;
+  good_early: number;
+  good_late: number;
+  bad: number;
+  miss: number;
   score: number;
+  full_combo: boolean;
+  acc: number;
+  rks: number;
+  perfect_judgment: number;
+  good_judgment: number;
   time: string;
+  chart_id: number;
+  event_part: null | number;
+  player: number;
+  rank: number;
 }
 
 export interface SongSubmission {
@@ -298,56 +310,4 @@ export interface UserInput {
   origin: string;
   type: number;
   user: number;
-}
-
-export interface RecorderRequestError {
-  chart?: string[];
-  detail?: string;
-  difficulty?: string[];
-  illustration?: string[];
-  level?: string[];
-  name?: string[];
-  note_size?: string[];
-  resolution?: string[];
-  song?: string[];
-  total_score?: string[];
-  charter?: string[];
-  illustrator?: string[];
-  composer?: string[];
-  music_volume?: string[];
-  hitsound_volume?: string[];
-  tip?: string[];
-  avatar?: string[];
-  username?: string[];
-  rks?: string[];
-  challenge_color?: string[];
-  challenge_difficulty?: string[];
-  addition?: string[];
-  config?: string[];
-}
-
-export interface SongSubmissionError {
-  name?: string[];
-  song?: string[];
-  edition?: string[];
-  illustration?: string[];
-  composer?: string[];
-  illustrator?: string[];
-  bpm?: string[];
-  offset?: string[];
-  preview_start?: string[];
-  preview_end?: string[];
-  description?: string[];
-  chapters?: string[];
-}
-export interface ChartSubmissionError {
-  song?: string[];
-  song_upload?: string[];
-  chart?: string[];
-  level_type?: string[];
-  level?: string[];
-  difficulty?: string[];
-  description?: string[];
-  charter?: string[];
-  event_part?: string[];
 }

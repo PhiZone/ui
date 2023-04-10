@@ -107,8 +107,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('common.profile')}</span
         >
+          {$t('common.profile')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="avatar gap-4 items-center min-w-fit h-fit">
@@ -150,8 +151,9 @@
                     : 'btn-primary'
                 } glass float-right my-5 text-lg`}
                 on:click={submitAvatar}
-                >{$t(avatarStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}</button
               >
+                {$t(avatarStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}
+              </button>
             </div>
             <div class="flex items-center justify-between">
               <span class="w-16 min-w-fit px-4 place-self-center">{$t('user.gender')}</span>
@@ -257,10 +259,9 @@
                     if (data?.status) genderStatus = data?.status;
                     if (data?.textErr) genderErr = data?.textErr;
                   }}
-                  >{$t(
-                    genderStatus === Status.SENDING ? 'common.waiting' : 'common.submit'
-                  )}</button
                 >
+                  {$t(genderStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}
+                </button>
               </div>
             </div>
             <div
@@ -302,10 +303,9 @@
                     if (data?.status) usernameStatus = data?.status;
                     if (data?.textErr) usernameErr = data?.textErr;
                   }}
-                  >{$t(
-                    usernameStatus === Status.SENDING ? 'common.waiting' : 'common.submit'
-                  )}</button
                 >
+                  {$t(usernameStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}
+                </button>
               </label>
             </div>
             <div
@@ -354,10 +354,9 @@
                     if (data?.status) languageStatus = data?.status;
                     if (data?.textErr) languageErr = data?.textErr;
                   }}
-                  >{$t(
-                    languageStatus === Status.SENDING ? 'common.waiting' : 'common.submit'
-                  )}</button
                 >
+                  {$t(languageStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}
+                </button>
               </label>
             </div>
             <div
@@ -397,8 +396,10 @@
                     let data = await submitText('bio', bio, bioStatus, bioErr, true);
                     if (data?.status) bioStatus = data?.status;
                     if (data?.textErr) bioErr = data?.textErr;
-                  }}>{$t(bioStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}</button
+                  }}
                 >
+                  {$t(bioStatus === Status.SENDING ? 'common.waiting' : 'common.submit')}
+                </button>
               </label>
             </div>
           </div>

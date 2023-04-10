@@ -1,40 +1,20 @@
-import * as api from '$lib/api';
-import type { Song } from '$lib/models';
-import { Status } from '$lib/constants';
-import { error } from '@sveltejs/kit';
+import queryString from 'query-string';
+import type { PageLoad } from './$types';
 
-export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
-  const { user, access_token } = await parent();
-  const resp = await api.GET(
-    `/songs/${params.id}/?query_chapters=1&query_uploader=1&query_relation=1`,
-    access_token,
-    user,
-    fetch
-  );
-  if (!resp.ok) {
-    throw error(resp.status, resp.statusText);
-  }
-  const json = await resp.json();
+export const load = (async ({ params, url, parent }) => {
+  const { api, queryClient } = await parent();
+  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
+  const id = parseInt(params.id);
+  await Promise.allSettled([
+    queryClient.prefetchQuery(api.song.info({ id })),
+    queryClient.prefetchQuery(api.chart.listAll({ song: id })),
+    queryClient.prefetchQuery(
+      api.comment.list({ song: id, page: 1, order_by: 'creation', order: 'desc' })
+    ),
+  ]);
 
-  let commentRes;
-  try {
-    if (json.comment_count > 0) {
-      commentRes = await (
-        await api.GET(
-          `/comments/?song=${json.id}&query_user=1&order=-like_count`,
-          access_token,
-          user,
-          fetch
-        )
-      ).json();
-    }
-  } catch (e) {
-    console.log(e);
-  }
   return {
-    status: resp.ok ? Status.OK : Status.ERROR,
-    content: resp.ok ? (json as Song) : null,
-    error: resp.ok ? null : json.detail,
-    commentRes,
+    searchParams,
+    id,
   };
-};
+}) satisfies PageLoad;

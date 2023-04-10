@@ -1,59 +1,53 @@
 <script lang="ts">
-  import { goto, preloadData } from '$app/navigation';
+  import { createQuery } from '@tanstack/svelte-query';
+  import { goto } from '$app/navigation';
   import { t } from '$lib/translations/config';
+  import type { PageData } from './$types';
 
-  export let data: import('./$types').PageData;
-  $: ({ status, content } = data);
+  export let data: PageData;
 
-  let searchText = '',
-    error = '',
-    searchType = '0';
+  $: ({ api } = data);
 
-  const handleSearchType = (e: Event & { currentTarget: EventTarget & HTMLSelectElement }) => {
-    searchType = (e.target as HTMLSelectElement).value;
-  };
+  let type: 'chapters' | 'songs' | 'users' = 'songs';
+  let text = '';
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
+  $: href = `/${type}/?${
+    text ? `${type === 'chapters' ? 'title' : type === 'users' ? 'username' : 'name'}=${text}` : ''
+  }`;
 
-  const handleSearch = () => {
-    if (!error) {
-      if (!searchText) {
-        error = 'input_null';
-      } else {
-        goto(`/search?type=${searchType}${searchText ? `&name=${searchText}` : ''}`);
-      }
-    }
-  };
+  const search = () => goto(href);
+
+  $: headline = createQuery(api.headline.get());
 </script>
 
 <svelte:head>
   <title>{$t('common.title')}</title>
 </svelte:head>
 
-{#if status === 200 && content}
-  <div class="flex justify-center">
-    <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          class="stroke-current flex-shrink-0 w-6 h-6"
-          ><path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          /></svg
-        >
-        <span class="content">{content.message}</span>
+{#if $headline.isSuccess}
+  {@const headline = $headline.data.message}
+  {#if headline}
+    <div class="flex justify-center">
+      <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-current flex-shrink-0 w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span class="content">{headline}</span>
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
 {/if}
 
 <div class="hero min-h-screen" style="background-image: url(/background.webp);">
@@ -64,83 +58,41 @@
     <p class="mb-5 text-lg">
       {$t('home.description')}
     </p>
-    <div class="form-control">
-      <div class="input-group">
+    <form class="form-control" on:submit|preventDefault={search}>
+      <div class="input-group input-group-sm lg:input-group-md">
         <select
-          class="select select-lg select-primary max-w-1/3 text-primary-content bg-opacity-80"
-          on:change={(e) => {
-            handleSearchType(e);
-          }}
+          class="select select-bordered lg:select-lg max-w-1/3 text-primary-content bg-opacity-80"
+          bind:value={type}
         >
-          <option selected value="0">{$t('common.chapters')}</option>
-          <option value="1">{$t('common.songs')}</option>
-          <option value="2">{$t('common.users')}</option>
-          <!-- <option value="3">{$t("common.discussions")}</option> -->
+          <option value="chapters">{$t('common.chapters')}</option>
+          <option selected value="songs">{$t('common.songs')}</option>
+          <option value="users">{$t('common.users')}</option>
+          <!-- <option value="discussions">{$t("common.discussions")}</option> -->
         </select>
         <input
           type="text"
-          placeholder={error ? $t(`common.${error}`) : $t('common.search_placeholder')}
-          class={`input input-lg w-full bg-opacity-80 text-primary-content ${
-            error ? 'input-error' : 'input-primary'
-          }`}
-          bind:value={searchText}
-          on:input={() => {
-            if (error === 'input_null' && searchText) {
-              error = '';
-            }
-            if (searchText.length > 100) {
-              error = 'text_too_long';
-            } else if (error === 'text_too_long') {
-              error = '';
-            }
-          }}
-          on:keyup={(e) => {
-            handleKeyUp(e);
-          }}
+          placeholder={$t('common.search_placeholder')}
+          class="input input-bordered lg:input-lg w-full bg-opacity-80 text-primary-content"
+          bind:value={text}
         />
-        {#if error}
-          <button class="btn btn-lg btn-square btn-error bg-opacity-80">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              ><path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              /></svg
-            >
-          </button>
-        {:else}
-          <button
-            class="btn btn-lg btn-square btn-primary bg-opacity-80"
-            on:click={handleSearch}
-            on:pointerenter={() => {
-              if (!error && searchText) {
-                preloadData(`/search?type=${searchType}${searchText ? `&name=${searchText}` : ''}`);
-              }
-            }}
+        <a class="btn lg:btn-lg btn-square btn-primary bg-opacity-80" {href}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              ><path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              /></svg
-            >
-          </button>
-        {/if}
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </a>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 
@@ -151,9 +103,5 @@
   .logo {
     margin: 10px auto 20px;
     display: block;
-  }
-  .w {
-    width: 80%;
-    max-width: 850px;
   }
 </style>

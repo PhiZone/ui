@@ -80,7 +80,8 @@
                   }
                 }
               }}
-              ><svg
+            >
+              <svg
                 width="16px"
                 height="16px"
                 viewBox="0 0 24 24"

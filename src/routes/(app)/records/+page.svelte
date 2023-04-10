@@ -1,53 +1,30 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import * as api from '$lib/api';
-  import { Status } from '$lib/constants';
-  import Record from '$lib/components/record.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
-  import type { Chart, User } from '$lib/models';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  import Record from '$lib/components/Record.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
+  import SearchOptions from '$lib/components/SearchOptions.svelte';
+  import type { PageData } from './$types';
 
-  let pageIndex = 1,
-    recordStatus = Status.RETRIEVING,
-    records: any[] | null,
-    recordCount: number,
-    previousRecords: string,
-    nextRecords: string,
-    filter: string | null = null,
-    filterParam: string | null = null,
-    chartList: Chart[],
-    order: string | null = null,
-    reverse = false;
+  export let data: PageData;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    recordStatus = status;
-    if (status === Status.OK) {
-      records = content.results;
-      recordCount = content.count;
-      previousRecords = content.previous;
-      nextRecords = content.next;
-    } else if (status === Status.ERROR && !access_token && browser) {
-      goto(`/session/login/?redirect=${encodeURIComponent($page.url.pathname + $page.url.search)}`);
-    }
-  });
+  $: query = createQuery(api.record.list(searchParams));
 </script>
 
 <svelte:head>
   <title>{$t('common.records')} | {$t('common.title')}</title>
 </svelte:head>
 
-<input type="checkbox" id="list-options" class="modal-toggle" />
+<!-- <input type="checkbox" id="list-options" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box bg-base-100 max-h-[90vh] w-[50vw] max-w-[1800px]">
     <label
       for="list-options"
-      class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2">✕</label
+      class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
     >
+      ✕
+    </label>
     <h2 class="font-bold text-xl mb-4">{$t('common.list_options')}</h2>
     <label class="input-group my-2">
       <span class="w-1/6 min-w-[64px]">{$t('common.filter')}</span>
@@ -80,10 +57,10 @@
           {#if filter === 'chart' && chartList}
             {#each chartList as chart}
               {#if typeof chart.song === 'object'}
-                <option value={`${chart.id}`}
-                  >{chart.song.name} [{chart.level}
-                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}]</option
-                >
+                <option value={`${chart.id}`}>
+                  {chart.song.name} [{chart.level}
+                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}]
+                </option>
               {/if}
             {/each}
           {:else if filter === 'full_combo'}
@@ -146,37 +123,52 @@
                     ? `${filter}=${filterParam}${order !== null ? '&' : ''}`
                     : ''
                 }${order !== null ? `order=${reverse ? '-' : ''}${order}` : ''}`;
-        }}>{$t('common.continue')}</button
+        }}
       >
+        {$t('common.continue')}
+      </button>
     </div>
   </div>
-</div>
-<div class="pt-32 bg-base-200 page form-control justify-center">
-  <div class="px-32 flex justify-between items-center mb-6">
-    <h1 class="text-4xl font-bold">{$t('common.records')}</h1>
-    <label for="list-options" class="btn btn-secondary text-lg btn-xl btn-outline glass"
-      >{$t('common.list_options')}</label
-    >
-  </div>
-  {#if recordStatus === Status.OK && records}
-    {#if records.length > 0}
-      <div class="px-32 result">
-        {#each records as record}
-          <div class="min-w-fit">
-            <Record {record} />
-          </div>
+</div> -->
+
+<div class="page">
+  <h1 class="text-4xl font-bold">{$t('common.records')}</h1>
+  <SearchOptions
+    params={searchParams}
+    filters={[
+      { value: 'id', name: $t('record.id'), options: 'number' },
+      { value: 'chart', name: $t('chart.id'), options: 'number' },
+      { value: 'player', name: $t('record.player_id'), options: 'number' },
+      {
+        value: 'full_combo',
+        name: $t('record.full_combo'),
+        options: [
+          { value: '1', name: $t('common.yes') },
+          { value: '0', name: $t('common.no') },
+        ],
+      },
+      { value: 'score', name: $t('record.score'), options: 'range' },
+      { value: 'acc', name: $t('record.acc'), options: 'range' },
+      { value: 'rks', name: $t('record.rks'), options: 'range' },
+    ]}
+    orders={[
+      { value: 'id', name: $t('record.id') },
+      { value: 'chart', name: $t('chart.id') },
+      { value: 'player', name: $t('record.player_id') },
+      { value: 'score', name: $t('record.score') },
+      { value: 'acc', name: $t('record.acc') },
+      { value: 'rks', name: $t('record.rks') },
+    ]}
+  />
+  {#if $query.isSuccess}
+    {@const { results, count } = $query.data}
+    {#if results.length > 0}
+      <div class="result">
+        {#each results as record}
+          <Record {record} />
         {/each}
       </div>
-      <Pagination
-        bind:previous={previousRecords}
-        bind:next={nextRecords}
-        bind:results={records}
-        bind:count={recordCount}
-        bind:pageIndex
-        bind:status={recordStatus}
-        token={access_token}
-        {user}
-      />
+      <Pagination {count} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}
@@ -189,7 +181,8 @@
   }
   .result {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 1.5rem;
+    justify-items: center;
   }
 </style>

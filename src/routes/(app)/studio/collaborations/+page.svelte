@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { onMount } from 'svelte';
   import { Status } from '$lib/constants';
-  import Pagination from '$lib/components/pagination.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
   import type { Collaboration } from '$lib/models';
   import { afterNavigate, beforeNavigate, goto, preloadData } from '$app/navigation';
   import { page } from '$app/stores';
@@ -62,8 +62,10 @@
             }}
             on:pointerenter={() => {
               preloadData('/studio/collaborations/');
-            }}>{$t('studio.request.received')}</button
+            }}
           >
+            {$t('studio.request.received')}
+          </button>
         {:else}
           <button
             class="btn btn-primary btn-outline"
@@ -72,8 +74,10 @@
             }}
             on:pointerenter={() => {
               preloadData('/studio/collaborations/?sent=1');
-            }}>{$t('studio.request.sent')}</button
+            }}
           >
+            {$t('studio.request.sent')}
+          </button>
         {/if}
       </div>
       <div class="min-w-fit form-control gap-4">

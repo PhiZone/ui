@@ -1,25 +1,6 @@
-import { RES_BASE, USER_LEVELS } from './constants';
-
-export function POST(endpoint: string, data: unknown, language?: string, func?: Function) {
-  if (func) {
-    return func(endpoint, {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify(data || {}),
-      headers: {
-        'Accept-Language': language ? language : 'en',
-      },
-    });
-  }
-  return fetch(endpoint, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(data || {}),
-    headers: {
-      'Accept-Language': language ? language : 'en',
-    },
-  });
-}
+import { PUBLIC_RES_BASE } from '$env/static/public';
+import type { Cookies } from '@sveltejs/kit';
+import { USER_LEVELS } from './constants';
 
 export function parseLatex(input: string) {
   const result = input.matchAll(/(\$[^$]+\$)/g);
@@ -137,68 +118,6 @@ export function parseLyrics(input: string) {
   return lyrics;
 }
 
-export function parseRichText(input: string) {
-  const result = input.matchAll(
-    new RegExp(
-      [...input.matchAll(new RegExp('\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT]).)*):PZRT\\]', 'g'))]
-        .length === 0
-        ? '\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]' // legacy support
-        : '\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT]).)*):PZRT\\]',
-      'g'
-    )
-  );
-  let element = result.next();
-  const rich = [];
-  while (element.value) {
-    rich.push({
-      index: element.value.index,
-      text: element.value[0],
-      type: element.value[1],
-      id: element.value[2],
-      display: element.value[3],
-      length: element.value[0].length,
-    });
-    if (element.done) {
-      break;
-    }
-    element = result.next();
-  }
-  const array: { type?: string; id: number; text: string }[] = [];
-  if (rich.length === 0) {
-    array.push({
-      type: undefined,
-      id: 0,
-      text: input,
-    });
-    return array;
-  }
-  let i = 0;
-  for (let j = 0; i < input.length && j < rich.length; j++) {
-    if (i < rich[j].index) {
-      array.push({
-        type: undefined,
-        id: 0,
-        text: input.substring(i, rich[j].index),
-      });
-      i = rich[j].index;
-    }
-    array.push({
-      type: rich[j].type,
-      id: rich[j].id,
-      text: rich[j].display,
-    });
-    i += rich[j].length;
-  }
-  if (i < input.length - 1) {
-    array.push({
-      type: undefined,
-      id: 0,
-      text: input.substring(i),
-    });
-  }
-  return array;
-}
-
 export function convertLanguageCode(input: string) {
   const text = input.toLowerCase();
   if (text.startsWith('zh')) {
@@ -241,7 +160,7 @@ export function getCompressedImage(input: string | undefined) {
     return '';
   }
   return input
-    .replace(/^http[^ ]+media$/g, RES_BASE)
+    .replace(/^http[^ ]+media$/g, PUBLIC_RES_BASE)
     .replace(/(png)|(jpe?g)|(webp)$/gi, 'comp.webp');
 }
 
@@ -306,4 +225,29 @@ export function getGrade(score: number, fullCombo: boolean) {
     return 'C';
   }
   return 'F';
+}
+
+export function getLevelDisplay(difficulty: number) {
+  if (difficulty === 0) return '?';
+  else return Math.floor(difficulty).toString();
+}
+
+export function setTokens(cookies: Cookies, access_token: string, refresh_token: string) {
+  cookies.set('access_token', access_token, {
+    path: '/',
+    maxAge: 43200,
+  });
+  cookies.set('refresh_token', refresh_token, {
+    path: '/',
+    maxAge: 1296000,
+  });
+}
+
+export function clearTokens(cookies: Cookies) {
+  cookies.delete('access_token', { path: '/' });
+  cookies.delete('refresh_token', { path: '/' });
+}
+
+export function range(start: number, end: number) {
+  return [...Array(end - start).keys()].map((x) => x + start);
 }

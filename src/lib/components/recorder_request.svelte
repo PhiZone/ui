@@ -16,7 +16,7 @@
     replied_at: string | null;
 </script>
 
-<a data-sveltekit-preload-data href={`/recorder/requests/${id}`}>
+<a href={`/recorder/requests/${id}`}>
   <div class="card min-w-[900px] h-44 card-side bg-base-100 shadow-lg glass overflow-hidden">
     <figure class="min-w-[30%] max-w-[30%] h-44">
       <img
@@ -36,8 +36,8 @@
       <div class="flex items-center min-w-fit">
         {#if showUser}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.requester')}</span
-            >{user.username}
+            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.requester')}</span>
+            {user.username}
           </p>
         {/if}
         <p class="min-w-fit">
@@ -46,20 +46,20 @@
         </p>
         {#if replier}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.replier')}</span
-            >{replier.username}
+            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.replier')}</span>
+            {replier.username}
           </p>
         {/if}
       </div>
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1">{$t('recorder.requested_at')}</span
-          >{parseDateTime(requested_at)}
+          <span class="badge badge-primary badge-outline mr-1">{$t('recorder.requested_at')}</span>
+          {parseDateTime(requested_at)}
         </p>
         {#if replied_at}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.replied_at')}</span
-            >{parseDateTime(replied_at)}
+            <span class="badge badge-primary badge-outline mr-1">{$t('recorder.replied_at')}</span>
+            {parseDateTime(replied_at)}
           </p>
         {/if}
       </div>

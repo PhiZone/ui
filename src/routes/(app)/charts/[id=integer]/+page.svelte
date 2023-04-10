@@ -1,19 +1,20 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+  import { enhance } from '$app/forms';
+  import { t } from '$lib/translations/config';
+  import { getLevelColor, getLevelDisplay, getUserLevel, parseDateTime } from '$lib/utils';
+  import { richtext } from '$lib/richtext';
   import { Status } from '$lib/constants';
-  import { locale, t } from '$lib/translations/config';
-  import { getLevelColor, getUserLevel, parseDateTime, parseRichText } from '$lib/utils';
-  import * as api from '$lib/api';
-  import { onMount } from 'svelte';
-  import Comment from '$lib/components/comment.svelte';
-  import Song from '$lib/components/song.svelte';
-  import { Chart, registerables } from 'chart.js';
-  import 'chart.js/auto';
-  import User from '$lib/components/user.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
-  import Like from '$lib/components/like.svelte';
-  import Record from '$lib/components/record.svelte';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, commentRes, access_token, user } = data);
+  import Song from '$lib/components/Song.svelte';
+  import User from '$lib/components/User.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Record from '$lib/components/Record.svelte';
+  import Comments from '$lib/components/Comments.svelte';
+  import ChartRadar from '$lib/components/ChartRadar.svelte';
+  import type { PageData, ActionData } from './$types';
+
+  export let data: PageData;
+  $: ({ searchParams, id, user, api } = data);
 
   const getMultiplier = (level: number) => {
     switch (level) {
@@ -43,229 +44,137 @@
     return 0;
   };
 
-  let comment = '',
-    pageIndex = 1,
-    commentStatus = Status.RETRIEVING,
-    comments: any[] | null,
-    commentCount: number,
-    previousComments: string,
-    nextComments: string,
-    voteStatus = Status.OK,
-    voteMsg = '',
-    arrangement = 0,
-    feel = 0,
-    vfx = 0,
-    innovativeness = 0,
-    concord = 0,
-    impression = 0,
-    radarChartElement: HTMLCanvasElement,
-    chart: Chart;
+  let status = Status.WAITING;
+  let arrangement = 0;
+  let feel = 0;
+  let vfx = 0;
+  let innovativeness = 0;
+  let concord = 0;
+  let impression = 0;
+  let open = false;
 
-  onMount(() => {
-    if (commentRes) {
-      comments = commentRes.results;
-      commentCount = commentRes.count;
-      previousComments = commentRes.previous;
-      nextComments = commentRes.next;
-      commentStatus = Status.OK;
-    }
-    if (content && content.vote) {
-      arrangement = content.vote.arrangement;
-      feel = content.vote.feel;
-      vfx = content.vote.visual_effects;
-      innovativeness = content.vote.innovativeness;
-      concord = content.vote.concord;
-      impression = content.vote.impression;
-    }
-    if (status === Status.OK) {
-      let chartData = {
-        labels: [
-          $t('chart.arrangement'),
-          $t('chart.feel'),
-          $t('chart.vfx'),
-          $t('chart.innovativeness'),
-          $t('chart.concord'),
-          $t('chart.impression'),
-        ],
-        datasets: [
-          {
-            label: `${$t('chart.rating')}`,
-            data: [
-              content?.r_arrangement.toFixed(2),
-              content?.r_feel.toFixed(2),
-              content?.r_vfx.toFixed(2),
-              content?.r_innovativeness.toFixed(2),
-              content?.r_concord.toFixed(2),
-              content?.r_impression.toFixed(2),
-            ],
-            backgroundColor: ['rgba(255, 155, 132, 0.2)'],
-            borderColor: ['rgba(255, 99, 132, 1)'],
-            borderRadius: 4,
-            borderWidth: 2,
-          },
-        ],
-      };
-      if (chartData.labels.length === 6 && chartData.labels[0] == '') {
-        chartData.labels = [
-          'Note Arrangement',
-          'Feel',
-          'Visual Effects',
-          'Innovativeness',
-          'Concord',
-          'Impression',
-        ];
-      }
-      Chart.defaults.font.family = "'Saira', sans-serif";
-      Chart.defaults.font.size = 12;
-      if (chart instanceof Chart) {
-        chart.destroy();
-      }
-      chart = new Chart(radarChartElement, {
-        type: 'radar',
-        data: chartData,
-        options: {
-          scales: {
-            r: {
-              beginAtZero: true,
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-        },
-      });
-    }
-    return () => {
-      if (chart instanceof Chart) {
-        chart.destroy();
-      }
-    };
-  });
+  export let form: ActionData;
 
-  const sendComment = async () => {
-    if (content && comment && comment.length > 0) {
-      await api.POST(
-        '/comments/',
-        { chart: content.id, content: comment, language: locale.get() },
-        access_token,
-        user
-      );
-      comment = '';
-      getComments(pageIndex);
-    }
-  };
+  $: chart = createQuery(api.chart.info({ id }));
+  $: song = createQuery(
+    api.song.info({ id: $chart.data?.song ?? 0 }, { enabled: $chart.isSuccess })
+  );
+  $: records = createQuery(api.record.list({ chart: id, order_by: 'score', order: 'desc' }));
 
-  const getComments = async (page?: number) => {
-    if (content) {
-      commentStatus = Status.RETRIEVING;
-      comments = null;
-      const resp = await api.GET(
-        `/comments/?chart=${content.id}&query_user=1&order=-like_count${
-          page ? `&page=${page}` : ''
-        }`,
-        access_token,
-        user
-      );
-      const json = await resp.json();
-      comments = json.results;
-      commentCount = json.count;
-      previousComments = json.previous;
-      nextComments = json.next;
-      commentStatus = Status.OK;
-    }
-  };
-
-  const submitVote = async () => {
-    voteStatus = Status.SENDING;
-    const resp = await api.POST(
-      '/votes/',
-      {
-        chart: content?.id,
-        arrangement: arrangement,
-        feel: feel,
-        visual_effects: vfx,
-        innovativeness: innovativeness,
-        concord: concord,
-        impression: impression,
-      },
-      access_token,
-      user
-    );
-    if (resp.ok) {
-      window.location.reload();
-    } else {
-      const json = await resp.json();
-      voteMsg = json.detail;
-      voteStatus = Status.ERROR;
-      console.log(json);
-    }
-  };
-
-  if (status === Status.OK) {
-    Chart.register(...registerables);
-  }
+  $: charter = richtext($chart.data?.charter ?? '', api);
 </script>
 
+{#if $chart.isSuccess}
+  {$chart.data.id}
+  {#if $song.isSuccess}
+    {$song.data.id}
+  {/if}
+{/if}
+
 <svelte:head>
-  <title
-    >{$t('chart.chart')} - {typeof content?.song == 'object' ? content?.song.name : ''}
-    {content
-      ? `[${content.level} ${content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}]`
-      : ''} | {$t('common.title')}</title
-  >
+  <title>
+    {$t('chart.chart')} -
+    {$chart.data
+      ? `[${$song.data?.name} ${$chart.data.level} ${getLevelDisplay($chart.data.difficulty)}]`
+      : ''}
+    | {$t('common.title')}
+  </title>
 </svelte:head>
 
-{#if status === Status.OK && content !== null && typeof content.song === 'object'}
-  {#if access_token}
-    <input type="checkbox" id="chart-vote" class="modal-toggle" />
+{#if $chart.isSuccess}
+  {@const chart = $chart.data}
+  {#if user}
+    <input type="checkbox" id="chart-vote" class="modal-toggle" bind:checked={open} />
     <div class="modal">
       <div class="modal-box bg-base-100 min-w-fit w-[50vw] max-w-[1200px]">
         <label
           for="chart-vote"
-          class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2">✕</label
+          class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
         >
+          ✕
+        </label>
         <h2 class="font-bold text-xl mb-4">{$t('common.vote')}</h2>
-        <div
+        <form
           class="form-control"
-          on:focusin={() => {
-            voteStatus = Status.OK;
+          method="POST"
+          action="?/vote"
+          use:enhance={() => {
+            status = Status.SENDING;
+
+            return async ({ result, update }) => {
+              if (result.type === 'failure') {
+                status = Status.ERROR;
+              } else if (result.type === 'success') {
+                status = Status.SENDING;
+                // TODO: toast
+                open = false;
+              }
+              await update();
+            };
           }}
         >
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.arrangement')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.arrangement')}
+            </span>
             <div class="w-[70%]">
-              <input type="range" min="0" max="5" bind:value={arrangement} class="range" step="1" />
+              <input
+                id="arrangement"
+                name="arrangement"
+                type="range"
+                min="0"
+                max="5"
+                bind:value={arrangement}
+                class="range"
+                step="1"
+              />
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{arrangement}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.feel')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.feel')}
+            </span>
             <div class="w-[70%]">
-              <input type="range" min="0" max="5" bind:value={feel} class="range" step="1" />
+              <input
+                id="feel"
+                name="feel"
+                type="range"
+                min="0"
+                max="5"
+                bind:value={feel}
+                class="range"
+                step="1"
+              />
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{feel}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.vfx')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.vfx')}
+            </span>
             <div class="w-[70%]">
-              <input type="range" min="0" max="5" bind:value={vfx} class="range" step="1" />
+              <input
+                id="vfx"
+                name="vfx"
+                type="range"
+                min="0"
+                max="5"
+                bind:value={vfx}
+                class="range"
+                step="1"
+              />
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{vfx}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.innovativeness')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.innovativeness')}
+            </span>
             <div class="w-[70%]">
               <input
+                id="innovativeness"
+                name="innovativeness"
                 type="range"
                 min="0"
                 max="5"
@@ -277,35 +186,53 @@
             <p class="text-xl font-bold w-[5%] text-center">{innovativeness}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.concord')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.concord')}
+            </span>
             <div class="w-[70%]">
-              <input type="range" min="0" max="5" bind:value={concord} class="range" step="1" />
+              <input
+                id="concord"
+                name="concord"
+                type="range"
+                min="0"
+                max="5"
+                bind:value={concord}
+                class="range"
+                step="1"
+              />
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{concord}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.impression')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.impression')}
+            </span>
             <div class="w-[70%]">
-              <input type="range" min="0" max="5" bind:value={impression} class="range" step="1" />
+              <input
+                id="impression"
+                name="impression"
+                type="range"
+                min="0"
+                max="5"
+                bind:value={impression}
+                class="range"
+                step="1"
+              />
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{impression}</p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.multiplier')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.multiplier')}
+            </span>
             <p class="text-xl font-bold w-3/4">
               {getMultiplier(getUserLevel(user.exp)).toFixed(1)}
             </p>
           </div>
           <div class="flex gap-3">
-            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit"
-              >{$t('chart.score')}</span
-            >
+            <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
+              {$t('chart.score')}
+            </span>
             <p class="text-xl font-bold w-3/4">
               {(
                 (arrangement + feel + vfx + innovativeness + concord + impression) *
@@ -313,43 +240,54 @@
               ).toFixed(2)}
             </p>
           </div>
-        </div>
-        <div class="modal-action">
-          {#if voteStatus === Status.ERROR}
-            <div class="tooltip tooltip-open tooltip-left tooltip-error" data-tip={voteMsg}>
-              <button class="btn btn-error">{$t('common.error')}</button>
-            </div>
-          {:else if voteStatus === Status.SENDING}
-            <button class={'btn btn-ghost btn-disabled'}>{$t('common.waiting')}</button>
-          {:else}
-            <button class="btn btn-primary btn-outline" on:click={submitVote}
-              >{$t('common.submit')}</button
+          <div class="modal-action">
+            <div
+              class="tooltip tooltip-top tooltip-error w-full"
+              class:tooltip-open={status === Status.ERROR}
+              data-tip={status === Status.ERROR ? form?.detail ?? $t('common.unknown_error') : null}
             >
-          {/if}
-        </div>
+              <button
+                type="submit"
+                class="btn {status === Status.ERROR
+                  ? 'btn-error'
+                  : status === Status.SENDING
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
+                disabled={status == Status.SENDING}
+              >
+                {status === Status.ERROR
+                  ? $t('common.error')
+                  : status === Status.SENDING
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   {/if}
-  <div class="bg-base-200 page py-24 px-12 justify-center flex">
+  <div class="info-page">
     <div class="mx-4 min-w-[540px] max-w-7xl main-width">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('chart.chart')}</span
         >
+          {$t('chart.chart')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold items-center">
-              {content.song.name}
+              {$song.data?.name}
               <div class="ml-2 min-w-fit flex gap-1 align-middle">
                 <div class="btn-group btn-group-horizontal">
                   <button
-                    class={`btn ${getLevelColor(content.level_type)} btn-sm text-2xl no-animation`}
+                    class="btn {getLevelColor(chart.level_type)} btn-sm text-2xl no-animation"
                   >
-                    {content.level}
-                    {content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}
+                    {chart.level}
+                    {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                   </button>
-                  {#if content.ranked}
+                  {#if chart.ranked}
                     <button class="btn btn-primary btn-sm text-2xl no-animation">
                       {$t('chart.ranked')}
                     </button>
@@ -361,91 +299,81 @@
               <div class="w-1/2">
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.id')}</span>
-                  {content.id}
+                  {chart.id}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.level')}</span>
-                  {content.level}
+                  {chart.level}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('chart.difficulty')}</span
-                  >
-                  {content.difficulty.toFixed(1)}
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('chart.difficulty')}
+                  </span>
+                  {chart.difficulty.toFixed(1)}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
-                  {#if content.charter}
-                    {#each parseRichText(content.charter) as t}
-                      {#if t.id > 0 && content.collab_status}
-                        <a href={`/users/${t.id}`} class="text-accent hover:underline">{t.text}</a>
-                      {:else}
-                        {t.text}
-                      {/if}
-                    {/each}
+                  {#if chart.charter}
+                    {@html $charter}
                   {:else}
                     {$t('common.anonymous')}
                   {/if}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
-                  {content.notes}
+                  {chart.notes}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.format')}</span>
-                  {$t(`chart.formats.${content.format}`)}
+                  {$t(`chart.formats.${chart.format}`)}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.score')}</span>
-                  {content.score.toFixed(2)}
+                  {chart.score.toFixed(2)}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.rating')}</span>
-                  {content.rating.toFixed(2)}
+                  {chart.rating.toFixed(2)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('chart.equivalent_vote_count')}</span
-                  >
-                  {content.rating > 0 ? (content.score / content.rating).toFixed(2) : 0}
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('chart.equivalent_vote_count')}
+                  </span>
+                  {chart.rating > 0 ? (chart.score / chart.rating).toFixed(2) : 0}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('chart.real_vote_count')}</span
-                  >
-                  {content.votes}
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('chart.real_vote_count')}
+                  </span>
+                  {chart.votes}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.time')}</span>
-                  {parseDateTime(content.time)}
+                  {parseDateTime(chart.time)}
                 </p>
-                {#if content.description}
+                {#if chart.description}
                   <p class="content">
-                    <span class="badge badge-primary badge-outline mr-1"
-                      >{$t('common.description')}</span
-                    >
-                    {content.description}
+                    <span class="badge badge-primary badge-outline mr-1">
+                      {$t('common.description')}
+                    </span>
+                    {chart.description}
                   </p>
                 {/if}
               </div>
               <div class="divider divider-horizontal" />
               <div class="w-1/2 float-right p-4 form-control gap-3">
-                <canvas bind:this={radarChartElement} />
+                <ChartRadar {chart} />
                 <div class="flex justify-center gap-2">
                   <Like
-                    id={content.like}
-                    likes={content.like_count}
+                    id={chart.like}
+                    likes={chart.like_count}
                     type="chart"
-                    target={content.id}
-                    token={access_token}
-                    {user}
-                    css="md"
+                    target={chart.id}
+                    class="btn-md"
                   />
                   <label
                     for="chart-vote"
-                    class={`btn ${
-                      access_token ? 'btn-primary' : 'btn-disabled'
-                    } btn-outline flex gap-1`}
+                    class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline flex gap-1"
                   >
                     <svg
                       fill="currentColor"
@@ -461,8 +389,8 @@
                     </svg>
                     {$t('common.vote')}
                   </label>
-                  {#if content.chart && access_token}
-                    <a href={content.chart} target="_blank" rel="noreferrer" download>
+                  {#if chart.chart && user}
+                    <a href={chart.chart} target="_blank" rel="noreferrer" download>
                       <button class="btn btn-primary btn-outline flex gap-1">
                         <svg
                           fill="currentColor"
@@ -486,88 +414,47 @@
           </div>
         </div>
       </div>
-      <div class="indicator w-full my-4">
-        <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('common.comments')}</span
-        >
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
-          <div class="card-body py-10">
-            <div class="flex items-center">
-              <textarea
-                class={`mr-3 textarea ${
-                  access_token ? 'textarea-primary' : 'textarea-disabled pointer-events-none'
-                } w-11/12`}
-                placeholder={$t('common.write_comment')}
-                bind:value={comment}
-              />
-              <button
-                class={`ml-3 btn ${
-                  comment.length > 0 && access_token
-                    ? 'btn-outline btn-primary'
-                    : 'btn-ghost btn-disabled'
-                } w-1/12 min-w-fit`}
-                on:click={() => {
-                  sendComment();
-                }}>{$t('common.send')}</button
-              >
-            </div>
-            {#if commentStatus === Status.OK && comments}
-              {#if comments.length > 0}
-                {#each comments as comment}
-                  <Comment {comment} token={access_token} {user} />
-                {/each}
-                <Pagination
-                  bind:previous={previousComments}
-                  bind:next={nextComments}
-                  bind:results={comments}
-                  bind:count={commentCount}
-                  bind:pageIndex
-                  bind:status
-                  token={access_token}
-                  {user}
-                />
-              {:else}
-                <p class="py-3 text-center">{$t('common.empty')}</p>
-              {/if}
-            {/if}
-          </div>
-        </div>
-      </div>
+      <Comments type="chart" id={chart.id} {searchParams} />
     </div>
     <div class="mx-4 w-80 form-control">
-      {#if content.owner && typeof content.owner === 'object'}
+      {#if chart.owner}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('chart.owner')}</span
-          >
-          <User user={content.owner} operator={user} token={access_token} />
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('chart.owner')}
+          </span>
+          <User id={chart.owner} />
         </div>
       {/if}
-      <div class="indicator my-4 w-full">
-        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('song.song')}</span
-        >
-        <Song song={content.song} token={access_token} {user} />
-      </div>
-      {#if content.records && content.records.length > 0}
+      {#if $song.isSuccess}
+        {@const song = $song.data}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('common.records')}</span
-          >
-          <div class="card w-80 bg-base-100 shadow-lg overflow-hidden">
-            <div class="card-body gap-2 items-center justify-center">
-              {#each content.records as record, i}
-                <Record
-                  {record}
-                  chart={content}
-                  pos={content.ranked ? i + 1 : undefined}
-                  showChart={false}
-                />
-              {/each}
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('song.song')}
+          </span>
+          <Song {song} />
+        </div>
+      {/if}
+      {#if $records.isSuccess}
+        {@const records = $records.data.results.slice(0, 10)}
+        {#if records.length > 0}
+          <div class="indicator my-4 w-full">
+            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+              {$t('common.records')}
+            </span>
+            <div class="card w-80 bg-base-100 shadow-lg overflow-hidden">
+              <div class="card-body gap-2 items-center justify-center">
+                {#each records as record, i}
+                  <Record
+                    {record}
+                    {chart}
+                    rank={chart.ranked ? i + 1 : undefined}
+                    showChart={false}
+                  />
+                {/each}
+              </div>
             </div>
           </div>
-        </div>
+        {/if}
       {/if}
     </div>
   </div>

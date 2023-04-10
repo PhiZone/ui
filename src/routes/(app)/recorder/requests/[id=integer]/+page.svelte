@@ -71,11 +71,11 @@
 </script>
 
 <svelte:head>
-  <title
-    >{$t('recorder.request')} - {content?.name} [{content?.level}{content?.difficulty}] | {$t(
+  <title>
+    {$t('recorder.request')} - {content?.name} [{content?.level}{content?.difficulty}] | {$t(
       'common.title'
-    )}</title
-  >
+    )}
+  </title>
 </svelte:head>
 
 {#if status === Status.OK && content !== null}
@@ -93,22 +93,25 @@
         </select>
       </label>
       <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('recorder.reply')}</span><textarea
+        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('recorder.reply')}</span>
+        <textarea
           class="textarea textarea-primary w-full max-w-xs h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />
       </label>
       <div class="modal-action btn-group btn-group-horizontal">
-        <label for="recorder-manage-request" class="btn btn-primary btn-outline text-lg"
-          >{$t('common.back')}</label
-        >
+        <label for="recorder-manage-request" class="btn btn-primary btn-outline text-lg">
+          {$t('common.back')}
+        </label>
         <label
           for="recorder-manage-request"
           class="btn btn-primary btn-outline text-lg"
           on:click={handleSubmit}
-          on:keyup>{$t('common.submit')}</label
+          on:keyup
         >
+          {$t('common.submit')}
+        </label>
       </div>
     </div>
   </div>
@@ -117,8 +120,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('recorder.req')}</span
         >
+          {$t('recorder.req')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold gap-4 items-center">
@@ -130,26 +134,27 @@
             </div>
             <div>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.song_name')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.song_name')}
+                </span>
                 {content.name}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.chart_level')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart_level')}
+                </span>
                 {content.level}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.chart_difficulty_1')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart_difficulty_1')}
+                </span>
                 {content.difficulty}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('common.form.chart')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart')}
+                </span>
                 <a
                   href={content.chart}
                   target="_blank"
@@ -161,8 +166,9 @@
                 </a>
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('common.form.audio')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.audio')}
+                </span>
                 <a
                   href={content.song}
                   target="_blank"
@@ -174,9 +180,9 @@
                 </a>
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.illustration')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.illustration')}
+                </span>
                 <a
                   href={content.illustration}
                   target="_blank"
@@ -189,8 +195,9 @@
               </p>
               {#if content.config}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('recorder.config')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.config')}
+                  </span>
                   <a
                     href={content.config}
                     target="_blank"
@@ -204,53 +211,53 @@
               {/if}
               {#if content.tip && content.charter && content.composer && content.illustrator}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('common.form.charter')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.form.charter')}
+                  </span>
                   {content.charter}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('common.form.composer')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.form.composer')}
+                  </span>
                   {content.composer}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('common.form.illustrator')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.form.illustrator')}
+                  </span>
                   {content.illustrator}
                 </p>
               {/if}
               {#if content.note_size && content.resolution && content.music_volume && content.hitsound_volume && content.total_score}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.note_size')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.note_size')}
+                  </span>
                   {content.note_size}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.resolution')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.resolution')}
+                  </span>
                   {content.resolution}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.music_volume')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.music_volume')}
+                  </span>
                   {content.music_volume.toFixed(1)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.hitsound_volume')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.hitsound_volume')}
+                  </span>
                   {content.hitsound_volume.toFixed(1)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.total_score')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.total_score')}
+                  </span>
                   {content.total_score}
                 </p>
               {/if}
@@ -262,8 +269,9 @@
               {/if}
               {#if content.avatar}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('recorder.avatar')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.avatar')}
+                  </span>
                   <a
                     href={content.avatar}
                     target="_blank"
@@ -277,9 +285,9 @@
               {/if}
               {#if content.avatar && content.username}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.username')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.username')}
+                  </span>
                   {content.username}
                 </p>
               {/if}
@@ -291,40 +299,40 @@
               {/if}
               {#if content.avatar && content.challenge_color !== null && content.challenge_color >= 0 && content.challenge_color <= 5}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.challenge_color')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.challenge_color')}
+                  </span>
                   {challengeColors[content.challenge_color].text}
                 </p>
               {/if}
               {#if content.avatar && content.challenge_color !== 5 && content.challenge_difficulty}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.challenge_difficulty')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.challenge_difficulty')}
+                  </span>
                   {content.challenge_difficulty}
                 </p>
               {/if}
               {#if content.addition}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.addition')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.addition')}
+                  </span>
                   {content.addition}
                 </p>
               {/if}
               {#if getUserPrivilege(user.type) >= 3}
                 <p class="min-w-fit">
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('recorder.requester')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('recorder.requester')}
+                  </span>
                   {content.user.username}
                 </p>
               {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('recorder.requested_at')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('recorder.requested_at')}
+                </span>
                 {parseDateTime(content.requested_at)}
               </p>
               <p>
@@ -337,8 +345,9 @@
                 <label
                   for="recorder-manage-request"
                   class="btn btn-primary btn-outline glass text-lg w-32"
-                  >{$t('recorder.reply')}</label
                 >
+                  {$t('recorder.reply')}
+                </label>
               </div>
             {/if}
           </div>
@@ -348,8 +357,9 @@
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('recorder.reply')}</span
           >
+            {$t('recorder.reply')}
+          </span>
           <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
             <figure class="w-1/6 min-w-fit">
               <div
@@ -380,8 +390,9 @@
                   </p>
                 </a>
                 <div class="flex gap-1 aspect-[21/5]">
-                  <span class="badge badge-sm font-bold">LV{getUserLevel(content.replier.exp)}</span
-                  >
+                  <span class="badge badge-sm font-bold">
+                    LV{getUserLevel(content.replier.exp)}
+                  </span>
                   {#if content.replier.tag}
                     <span class="badge badge-sm badge-accent">{content.replier.tag}</span>
                   {/if}

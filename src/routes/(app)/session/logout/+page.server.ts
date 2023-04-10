@@ -1,24 +1,19 @@
-import { POST } from '$lib/utils';
+import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API from '$lib/api';
+import { clearTokens } from '$lib/utils';
+import type { PageServerLoad } from './$types';
 
-export const load: import('./$types').PageServerLoad = ({ cookies, locals, fetch }) => {
-  cookies.set('access_token', '', {
-    path: '/',
-    maxAge: 0,
+export const load = (async ({ cookies, locals, fetch }) => {
+  const api = new API(fetch, locals.access_token, locals.user);
+  const refresh_token = locals.refresh_token!;
+  await api.session.revokeToken({
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    token: refresh_token,
   });
-  cookies.set('refresh_token', '', {
-    path: '/',
-    maxAge: 0,
-  });
-  POST(
-    '/auth/logout',
-    {
-      refresh_token: locals.refresh_token,
-    },
-    locals.user?.language,
-    fetch
-  );
-  locals.user = undefined;
-  locals.access_token = undefined;
-  locals.refresh_token = undefined;
-  return;
-};
+  clearTokens(cookies);
+
+  return {
+    api,
+  };
+}) satisfies PageServerLoad;

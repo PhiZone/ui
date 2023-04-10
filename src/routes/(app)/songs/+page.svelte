@@ -1,55 +1,61 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import Song from '$lib/components/song.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
-  import { onMount } from 'svelte';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  import Song from '$lib/components/Song.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
+  import SearchOptions from '$lib/components/SearchOptions.svelte';
+  import type { PageData } from './$types';
 
-  let pageIndex = 1,
-    songStatus = Status.RETRIEVING,
-    songs: any[] | null,
-    songCount: number,
-    previousSongs: string,
-    nextSongs: string;
+  export let data: PageData;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    songStatus = status;
-    if (status === Status.OK) {
-      songs = content.results;
-      songCount = content.count;
-      previousSongs = content.previous;
-      nextSongs = content.next;
-    }
-  });
+  $: query = createQuery(api.song.list(searchParams));
 </script>
 
 <svelte:head>
   <title>{$t('common.songs')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="pt-32 bg-base-200 page form-control justify-center">
-  <h1 class="px-32 text-4xl font-bold mb-6">{$t('common.songs')}</h1>
-  {#if songStatus === Status.OK && songs}
-    {#if songs.length > 0}
+<div class="page">
+  <h1 class="text-4xl font-bold mb-6">{$t('common.songs')}</h1>
+  <SearchOptions
+    params={searchParams}
+    filters={[
+      { value: 'id', name: $t('song.id'), options: 'number' },
+      { value: 'name', name: $t('song.name'), options: 'text' },
+      { value: 'composer', name: $t('song.composer'), options: 'text' },
+      { value: 'illustrator', name: $t('song.illustrator'), options: 'text' },
+      { value: 'uploader', name: $t('song.uploader'), options: 'number' },
+      { value: 'duration', name: $t('song.duration'), options: 'range' },
+      {
+        value: 'original',
+        name: $t('song.original'),
+        options: [
+          { value: '1', name: $t('common.yes') },
+          { value: '0', name: $t('common.no') },
+        ],
+      },
+    ]}
+    orders={[
+      { value: 'id', name: $t('song.id') },
+      { value: 'name', name: $t('song.name') },
+      { value: 'composer', name: $t('song.composer') },
+      { value: 'illustrator', name: $t('song.illustrator') },
+      { value: 'uploader', name: $t('song.uploader') },
+      { value: 'duration', name: $t('song.duration') },
+    ]}
+  />
+  {#if $query.isSuccess}
+    {@const { results, count } = $query.data}
+    {#if results.length > 0}
       <div class="px-32 result">
-        {#each songs as song}
+        {#each results as song}
           <div class="min-w-fit">
-            <Song {song} token={access_token} {user} />
+            <Song {song} />
           </div>
         {/each}
       </div>
-      <Pagination
-        bind:previous={previousSongs}
-        bind:next={nextSongs}
-        bind:results={songs}
-        bind:count={songCount}
-        bind:pageIndex
-        bind:status={songStatus}
-        token={access_token}
-        {user}
-      />
+      <Pagination {count} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}
@@ -64,5 +70,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 1.5rem;
+    justify-items: center;
   }
 </style>

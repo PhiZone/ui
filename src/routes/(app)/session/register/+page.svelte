@@ -1,67 +1,20 @@
 <script lang="ts">
-  import { POST } from '$lib/utils';
-  import { locale, locales, t } from '$lib/translations/config';
+  import { locales, t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
+  import type { ActionData } from './$types';
+  import { enhance } from '$app/forms';
 
-  let username = '';
-  let email = '';
-  let password = '';
-  let confirmPassword = '';
-  let emailErr = '';
-  let usernameErr = '';
-  let passwordErr = '';
-  let msg = '';
   let status = Status.WAITING;
+  let msg = '';
 
-  const register = async () => {
-    if (!username || !email || !password || !confirmPassword) {
-      msg = $t('session.data_incomplete');
-      return;
-    }
-    if (password != confirmPassword) {
-      msg = $t('session.passwords_differ');
-      return;
-    }
-    status = Status.SENDING;
-    const resp = await POST(
-      '/auth/register',
-      {
-        username,
-        email,
-        password,
-        language: locale.get(),
-        search: $page.url.search,
-      },
-      locale.get()
-    );
-    const json = await resp.json();
-    if (json.code === 200) {
-      status = Status.OK;
-      goto(`/session/email-confirmation${$page.url.search}`);
-    } else {
-      status = Status.ERROR;
-      const error = json.content;
-      console.log(error);
-      if (error.email) {
-        emailErr = error.email[0];
-      }
-      if (error.username) {
-        usernameErr = error.username[0];
-      }
-      if (error.password) {
-        passwordErr = error.password[0];
-      }
-      if (error.language) {
-        msg = $t('session.registration.language_error');
-      } else if (error.detail) {
-        msg = error.detail;
-      } else {
-        msg = $t('common.correct_errors');
-      }
+  const clear = () => {
+    if (status !== Status.WAITING) {
+      status = Status.WAITING;
+      msg = '';
     }
   };
+
+  export let form: ActionData;
 </script>
 
 <svelte:head>
@@ -81,111 +34,120 @@
     <div class="card flex-shrink-0 w-full max-w-sm shadow-lg bg-base-100">
       <div class="card-body">
         <form
+          method="POST"
           class="w-full form-control"
-          on:focusin={() => {
-            status = Status.WAITING;
+          on:focusin={clear}
+          use:enhance={() => {
+            status = Status.SENDING;
+
+            return async ({ result, update }) => {
+              if (result.type === 'failure') {
+                status = Status.ERROR;
+                msg = result.data?.detail ?? $t('common.correct_errors');
+              }
+              await update();
+            };
           }}
         >
-          <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="label">
+          <label class="label" for="username">
             <span class="label-text">{$t('session.username')}</span>
           </label>
           <input
-            name="username"
             type="username"
+            id="username"
+            name="username"
             placeholder={$t('session.username')}
+            value={form?.username ?? ''}
             class="input input-bordered"
-            on:input={() => {
-              msg = '';
-              usernameErr = '';
-            }}
-            bind:value={username}
           />
           <div
-            class={usernameErr ? 'tooltip tooltip-open tooltip-bottom tooltip-error' : ''}
-            data-tip={usernameErr ? usernameErr : null}
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={form?.username_error}
+            data-tip={form?.username_error || null}
           />
-          <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="label">
+          <label class="label" for="email">
             <span class="label-text">{$t('session.email')}</span>
           </label>
           <input
-            name="email"
             type="email"
+            id="email"
+            name="email"
             placeholder={$t('session.email')}
+            value={form?.email ?? ''}
             autocomplete="username"
             class="input input-bordered"
-            on:input={() => {
-              msg = '';
-              emailErr = '';
-            }}
-            bind:value={email}
           />
           <div
-            class={emailErr ? 'tooltip tooltip-open tooltip-bottom tooltip-error' : ''}
-            data-tip={emailErr ? emailErr : null}
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={form?.email_error}
+            data-tip={form?.email_error || null}
           />
-          <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="label">
+          <label class="label" for="password">
             <span class="label-text">{$t('session.password')}</span>
           </label>
           <input
-            name="password"
             type="password"
+            id="password"
+            name="password"
             placeholder={$t('session.password')}
+            value={form?.password ?? ''}
             autocomplete="new-password"
             class="input input-bordered"
-            on:input={() => {
-              msg = '';
-              passwordErr = '';
-            }}
-            bind:value={password}
           />
           <div
-            class={passwordErr ? 'tooltip tooltip-open tooltip-bottom tooltip-error' : ''}
-            data-tip={passwordErr ? passwordErr : null}
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={form?.password_error}
+            data-tip={form?.password_error || null}
           />
-          <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="label">
+          <label class="label" for="confirm_password">
             <span class="label-text">{$t('session.confirm_password')}</span>
           </label>
           <input
-            name="confirm_password"
             type="password"
+            id="confirm_password"
+            name="confirm_password"
             placeholder={$t('session.confirm_password')}
+            value={form?.confirm_password ?? ''}
             autocomplete="new-password"
             class="input input-bordered"
-            on:input={() => {
-              msg = '';
-            }}
-            bind:value={confirmPassword}
           />
-          <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="label">
+          <div
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={form?.confirm_password_error}
+            data-tip={form?.confirm_password_error || null}
+          />
+          <label class="label" for="language">
             <span class="label-text">{$t('session.registration.select_language')}</span>
           </label>
-          <select
-            name="language"
-            class="select select-bordered w-full max-w-xs"
-            bind:value={$locale}
-          >
+          <select id="language" name="language" class="select select-bordered w-full max-w-xs">
             {#each $locales as value}
               <option {value}>{$t(`lang.${value}`)}</option>
             {/each}
           </select>
           <div class="w-full flex justify-center mt-6">
-            {#if msg}
-              <div class="tooltip tooltip-open tooltip-bottom tooltip-error w-full" data-tip={msg}>
-                <button class="btn btn-error w-full">{$t('common.error')}</button>
-              </div>
-            {:else if status === Status.SENDING}
-              <button class="btn btn-ghost btn-disabled glass w-full">{$t('common.waiting')}</button
+            <div
+              class="tooltip tooltip-bottom tooltip-error w-full"
+              class:tooltip-open={status === Status.ERROR}
+              data-tip={status === Status.ERROR ? msg : null}
+            >
+              <button
+                type="submit"
+                class="btn {status === Status.ERROR
+                  ? 'btn-error'
+                  : status === Status.SENDING
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
+                disabled={status == Status.SENDING}
               >
-            {:else}
-              <button class="btn btn-accent btn-outline glass w-full" on:click={register}>
-                {$t('session.registration.register')}</button
-              >
-            {/if}
+                {$t(
+                  status === Status.ERROR
+                    ? 'common.error'
+                    : status === Status.SENDING
+                    ? 'common.waiting'
+                    : 'session.registration.register'
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </div>

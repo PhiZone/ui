@@ -24,8 +24,9 @@
 <div class="indicator w-full my-4">
   <span
     class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-    >{$t(`notification.type_${notification.type}`)}</span
   >
+    {$t(`notification.type_${notification.type}`)}
+  </span>
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
       notification.read_at ? 'border' : 'border border-secondary'
@@ -39,8 +40,10 @@
               href={`${types.get(t.type)}/${t.id}`}
               class="text-accent hover:underline"
               target="_blank"
-              rel="noreferrer">{t.text}</a
+              rel="noreferrer"
             >
+              {t.text}
+            </a>
           {:else}
             {t.text}
           {/if}
@@ -48,9 +51,9 @@
       </h2>
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('notification.notified_at')}</span
-          >
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('notification.notified_at')}
+          </span>
           {parseDateTime(notification.notified_at)}
         </p>
         {#if notification.read_at}

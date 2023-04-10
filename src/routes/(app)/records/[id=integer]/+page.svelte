@@ -1,34 +1,44 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import { parseDateTime } from '$lib/utils';
-  import User from '$lib/components/user.svelte';
-  import Chart from '$lib/components/chart.svelte';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, grade, error, access_token, user } = data);
+  import { getGrade, parseDateTime } from '$lib/utils';
+  import User from '$lib/components/User.svelte';
+  import Chart from '$lib/components/Chart.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+  $: ({ id, api } = data);
+
+  $: record = createQuery(api.record.info({ id }));
+  $: chart = createQuery(
+    api.chart.info({ id: $record.data?.chart_id ?? 0 }, { enabled: $record.isSuccess })
+  );
 </script>
 
 <svelte:head>
   <title>{$t('record.record')} | {$t('common.title')}</title>
 </svelte:head>
 
-{#if status === Status.OK && content !== null && typeof content.chart === 'object' && typeof content.chart.song === 'object' && grade !== null}
-  <div class="bg-base-200 page py-24 px-12 justify-center flex">
+{#if $record.isSuccess}
+  {@const record = $record.data}
+  {@const grade = getGrade(record.score, record.full_combo)}
+  <div class="info-page">
     <div class="mx-4 min-w-fit max-w-xl main-width">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('record.record')}</span
         >
+          {$t('record.record')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-1 flex gap-5 items-center font-bold">
-              {content.score}
+              {record.score}
               <div
                 class={`text-8xl font-normal grade ${
                   grade == 'P'
                     ? 'top-11 text-yellow-400'
-                    : content.full_combo
+                    : record.full_combo
                     ? 'top-11 text-blue-400'
                     : 'top-11'
                 }`}
@@ -38,57 +48,55 @@
             </div>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.acc')}</span>
-              {(content.acc * 100).toFixed(2)}%
+              {(record.acc * 100).toFixed(2)}%
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.perfect')}</span>
-              {content.perfect}
+              {record.perfect}
               <span class="opacity-70">
-                (±{content.perfect_judgment}ms)
+                (±{record.perfect_judgment}ms)
               </span>
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.good')}</span>
-              {content.good_early + content.good_late} [E{content.good_early} · L{content.good_late}]
+              {record.good_early + record.good_late} [E{record.good_early} · L{record.good_late}]
               <span class="opacity-70">
-                (±{content.good_judgment}ms)
+                (±{record.good_judgment}ms)
               </span>
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.bad')}</span>
-              {content.bad}
+              {record.bad}
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.miss')}</span>
-              {content.miss}
+              {record.miss}
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.rks')}</span>
-              {content.rks.toFixed(3)}
+              {record.rks.toFixed(3)}
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.time')}</span>
-              {parseDateTime(content.time)}
+              {parseDateTime(record.time)}
             </p>
           </div>
         </div>
       </div>
     </div>
     <div class="mx-4 w-80 form-control">
-      {#if content.player && typeof content.player === 'object'}
+      <div class="indicator my-4 w-full">
+        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          {$t('record.player')}
+        </span>
+        <User id={record.player} />
+      </div>
+      {#if $chart.isSuccess}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('record.player')}</span
-          >
-          <User user={content.player} operator={user} token={access_token} />
-        </div>
-      {/if}
-      {#if content.chart && typeof content.chart === 'object'}
-        <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('chart.chart')}</span
-          >
-          <Chart chart={content.chart} token={access_token} {user} />
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('chart.chart')}
+          </span>
+          <Chart chart={$chart.data} />
         </div>
       {/if}
     </div>

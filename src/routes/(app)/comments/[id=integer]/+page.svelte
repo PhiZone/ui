@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Comment from '$lib/components/comment.svelte';
+  import Comment from '$lib/components/Comment.svelte';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
 
@@ -17,8 +17,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('common.comment')}</span
         >
+          {$t('common.comment')}
+        </span>
         <Comment comment={content} token={access_token} {user} showSource />
       </div>
     {/if}

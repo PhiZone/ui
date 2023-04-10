@@ -1,28 +1,17 @@
 {
   "svelte.enable-ts-plugin": true,
   "eslint.packageManager": "pnpm",
-  "eslint.probe": [
-    "javascript",
-    "typescript",
-    "html",
-    "markdown",
-    "svelte"
-  ],
-  "eslint.validate": [
-    "svelte"
-  ],
-  "prettier.documentSelectors": [
-    "**/*.svelte"
-  ],
+  "eslint.probe": ["javascript", "typescript", "html", "markdown", "svelte"],
+  "eslint.validate": ["svelte"],
+  "prettier.documentSelectors": ["**/*.svelte"],
   "svelte.plugin.svelte.defaultScriptLanguage": "ts",
-  "i18n-ally.localesPaths": [
-    "src/lib/translations"
-  ],
+  "i18n-ally.localesPaths": ["src/lib/translations"],
   "i18n-ally.dirStructure": "dir",
-  "i18n-ally.enabledFrameworks": [
-    "svelte"
-  ],
+  "i18n-ally.enabledFrameworks": ["svelte"],
   "i18n-ally.editor.preferEditor": false,
   "i18n-ally.keystyle": "nested",
-  "i18n-ally.namespace": true
+  "i18n-ally.namespace": true,
+  "files.exclude": {
+    "**/.svelte-kit": true
+  }
 }

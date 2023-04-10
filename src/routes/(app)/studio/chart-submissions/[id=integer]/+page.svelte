@@ -11,7 +11,7 @@
   } from '$lib/utils';
   import { onMount } from 'svelte';
   import * as api from '$lib/api';
-  import Song from '$lib/components/song.svelte';
+  import Song from '$lib/components/Song.svelte';
   import { goto, preloadData } from '$app/navigation';
 
   export let data: import('./$types').PageData;
@@ -68,23 +68,25 @@
         <p class="w-8 text-right text-xl font-bold">{score}</p>
       </div>
       <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.message')}</span
-        ><textarea
+        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.message')}</span>
+        <textarea
           class="textarea textarea-primary w-full h-48"
           placeholder={$t('studio.submission.write_message')}
           bind:value={message}
         />
       </label>
       <div class="modal-action btn-group btn-group-horizontal">
-        <label for="studio-chart-submission" class="btn btn-primary btn-outline text-lg"
-          >{$t('common.back')}</label
-        >
+        <label for="studio-chart-submission" class="btn btn-primary btn-outline text-lg">
+          {$t('common.back')}
+        </label>
         <label
           for="studio-chart-submission"
           class="btn btn-primary btn-outline text-lg"
           on:click={handleSubmit}
-          on:keyup>{$t('common.submit')}</label
+          on:keyup
         >
+          {$t('common.submit')}
+        </label>
       </div>
     </div>
   </div>
@@ -93,8 +95,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('studio.chart_submission')}</span
         >
+          {$t('studio.chart_submission')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold gap-4 items-center">
@@ -119,26 +122,28 @@
               {/if}
               <button
                 class={`btn ${getLevelColor(content.level_type)} btn-sm text-2xl no-animation`}
-                >{content.level}
+              >
+                {content.level}
                 {content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}
               </button>
             </div>
             <div>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.chart_level')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart_level')}
+                </span>
                 [{levelTypes[content.level_type]}] {content.level}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.chart_difficulty_2')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart_difficulty_2')}
+                </span>
                 {content.difficulty.toFixed(1)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('common.form.chart')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.chart')}
+                </span>
                 <a
                   href={content.chart}
                   target="_blank"
@@ -157,8 +162,10 @@
                       href={`/users/${t.id}`}
                       class="text-accent hover:underline"
                       target="_blank"
-                      rel="noreferrer">{t.text}</a
+                      rel="noreferrer"
                     >
+                      {t.text}
+                    </a>
                   {:else}
                     {t.text}
                   {/if}
@@ -170,47 +177,47 @@
               </p>
               {#if getUserPrivilege(user.type) >= 3 && typeof content.uploader == 'object'}
                 <p class="min-w-fit">
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('studio.submission.uploader')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('studio.submission.uploader')}
+                  </span>
                   {content.uploader.username}
                 </p>
               {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.uploaded_at')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.uploaded_at')}
+                </span>
                 {parseDateTime(content.time)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.collab_status')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.collab_status')}
+                </span>
                 {$t(`studio.submission.bi_statuses.${content.collab_status}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.adm_status')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.adm_status')}
+                </span>
                 {$t(`studio.submission.bi_statuses.${content.adm_status}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.volunteer_status')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.volunteer_status')}
+                </span>
                 {$t(`studio.submission.bi_statuses.${content.volunteer_status}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.overall_status')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.overall_status')}
+                </span>
                 {$t(`studio.submission.statuses.${content.status}`)}
               </p>
               {#if content.description}
                 <p class="content">
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('chart.description')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('chart.description')}
+                  </span>
                   {content.description}
                 </p>
               {/if}
@@ -233,8 +240,9 @@
                 <label
                   for="studio-chart-submission"
                   class="btn btn-primary btn-outline glass text-lg w-32"
-                  >{$t('common.vote_v')}</label
                 >
+                  {$t('common.vote_v')}
+                </label>
               {/if}
             </div>
           </div>
@@ -244,8 +252,9 @@
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('studio.submission.volunteer_vote')}</span
           >
+            {$t('studio.submission.volunteer_vote')}
+          </span>
           <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
             <figure class="w-1/6 min-w-fit">
               <div
@@ -273,8 +282,11 @@
                       href={`/users/${vote.user.id}`}
                       target="_blank"
                       rel="noreferrer"
-                      class="hover:underline">{vote.user.username}</a
-                    > @
+                      class="hover:underline"
+                    >
+                      {vote.user.username}
+                    </a>
+                    @
                   {/if}
                   {parseDateTime(vote.time)}
                 </p>
@@ -287,9 +299,9 @@
     {#if content.song && typeof content.song == 'object'}
       <div class="mx-4 w-80 form-control">
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-            >{$t('song.song')}</span
-          >
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('song.song')}
+          </span>
           <Song song={content.song} token={access_token} {user} />
         </div>
       </div>

@@ -29,32 +29,36 @@
       </h2>
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.status')}</span
-          >{$t(`studio.submission.volunteer_statuses.${submission.status}`)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.status')}
+          </span>
+          {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
         </p>
       </div>
       {#if submission.message}
         <div class="flex items-center min-w-fit">
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1"
-              >{$t('studio.submission.message')}</span
-            >{submission.message}
+            <span class="badge badge-primary badge-outline mr-1">
+              {$t('studio.submission.message')}
+            </span>
+            {submission.message}
           </p>
         </div>
       {/if}
       <div class="flex items-center min-w-fit">
         {#if typeof submission.uploader === 'object'}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1"
-              >{$t('studio.submission.uploader')}</span
-            >{submission.uploader.username}
+            <span class="badge badge-primary badge-outline mr-1">
+              {$t('studio.submission.uploader')}
+            </span>
+            {submission.uploader.username}
           </p>
         {/if}
         <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.uploaded_at')}</span
-          >{parseDateTime(submission.time)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.uploaded_at')}
+          </span>
+          {parseDateTime(submission.time)}
         </p>
       </div>
     </div>

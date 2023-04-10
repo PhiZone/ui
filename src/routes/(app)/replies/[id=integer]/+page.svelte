@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto, preloadData } from '$app/navigation';
-  import Comment from '$lib/components/comment.svelte';
-  import Like from '$lib/components/like.svelte';
+  import Comment from '$lib/components/Comment.svelte';
+  import Like from '$lib/components/Like.svelte';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, getUserLevel, parseDateTime } from '$lib/utils';
 
@@ -19,8 +19,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('common.reply')}</span
         >
+          {$t('common.reply')}
+        </span>
         <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
           <figure class="w-1/6 min-w-fit">
             <div
@@ -37,7 +38,7 @@
                     : 'border-neutral-500'
                 }`}
               >
-                <a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
+                <a href={`/users/${content.user.id}`}>
                   <img
                     class="object-fill"
                     src={getCompressedImage(content.user.avatar)}
@@ -45,7 +46,7 @@
                   />
                 </a>
               </div>
-              <a data-sveltekit-preload-data href={`/users/${content.user.id}`}>
+              <a href={`/users/${content.user.id}`}>
                 <p class="text-lg text-center max-w-[120px] break-all">
                   {content.user.username}
                 </p>

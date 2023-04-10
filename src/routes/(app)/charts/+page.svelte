@@ -1,42 +1,21 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import * as api from '$lib/api';
-  import { Status } from '$lib/constants';
-  import Chart from '$lib/components/chart.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
-  import { onMount } from 'svelte';
-  import type { Song, User } from '$lib/models';
-  import { page } from '$app/stores';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  import Chart from '$lib/components/Chart.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
+  import SearchOptions from '$lib/components/SearchOptions.svelte';
+  import type { PageData } from './$types';
 
-  let pageIndex = 1,
-    chartStatus = Status.RETRIEVING,
-    charts: any[] | null,
-    chartCount: number,
-    previousCharts: string,
-    nextCharts: string,
-    filter: string | null = null,
-    filterParam: string | null = null,
-    songList: Song[],
-    order: string | null = null,
-    reverse = false;
+  export let data: PageData;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    chartStatus = status;
-    if (status === Status.OK) {
-      charts = content.results;
-      chartCount = content.count;
-      previousCharts = content.previous;
-      nextCharts = content.next;
-    }
-  });
+  $: query = createQuery(api.chart.list(searchParams));
 </script>
 
 <svelte:head>
   <title>{$t('common.charts')} | {$t('common.title')}</title>
 </svelte:head>
-<input type="checkbox" id="list-options" class="modal-toggle" />
+<!-- <input type="checkbox" id="list-options" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box bg-base-100 max-h-[90vh] w-[50vw] max-w-[1800px]">
     <label
@@ -153,33 +132,61 @@
       >
     </div>
   </div>
-</div>
-<div class="pt-32 bg-base-200 page form-control justify-center">
-  <div class="px-32 flex justify-between items-center mb-6">
-    <h1 class="text-4xl font-bold">{$t('common.charts')}</h1>
-    <label for="list-options" class="btn btn-secondary text-lg btn-xl btn-outline glass"
-      >{$t('common.list_options')}</label
-    >
-  </div>
-  {#if chartStatus === Status.OK && charts}
-    {#if charts.length > 0}
-      <div class="px-32 result">
-        {#each charts as chart}
-          <div class="min-w-fit">
-            <Chart {chart} token={access_token} {user} />
-          </div>
+</div> -->
+
+<div class="page">
+  <h1 class="text-4xl font-bold mb-6">{$t('common.charts')}</h1>
+  <SearchOptions
+    params={searchParams}
+    filters={[
+      { value: 'id', name: 'id', options: 'number' },
+      { value: 'song', name: 'song id', options: 'number' },
+      { value: 'owner', name: 'owner id', options: 'number' },
+      {
+        value: 'level',
+        name: 'Level',
+        options: [
+          { value: 'EZ', name: 'EZ' },
+          { value: 'HD', name: 'HD' },
+          { value: 'IN', name: 'IN' },
+          { value: 'AT', name: 'AT' },
+        ],
+      },
+      { value: 'charter', name: 'charter', options: 'text' },
+      { value: 'description', name: 'description', options: 'text' },
+      {
+        value: 'ranked',
+        name: 'ranked',
+        options: [
+          { value: '1', name: 'yes' },
+          { value: '0', name: 'no' },
+        ],
+      },
+      { value: 'difficulty', name: 'difficulty', options: 'range' },
+      { value: 'note_count', name: 'note_count', options: 'range' },
+      { value: 'score', name: 'score', options: 'range' },
+      { value: 'rating', name: 'rating', options: 'range' },
+    ]}
+    orders={[
+      { value: 'id', name: 'id' },
+      { value: 'song', name: 'song' },
+      { value: 'owner', name: 'owner' },
+      { value: 'charter', name: 'charter' },
+      { value: 'level', name: 'level' },
+      { value: 'difficulty', name: 'difficulty' },
+      { value: 'note_count', name: 'note_count' },
+      { value: 'score', name: 'score' },
+    ]}
+  />
+  {#if $query.isSuccess}
+    {@const { results, count } = $query.data}
+    {#if results.length > 0}
+      <div class="result">
+        {#each results as chart}
+          <Chart {chart} />
         {/each}
       </div>
-      <Pagination
-        bind:previous={previousCharts}
-        bind:next={nextCharts}
-        bind:results={charts}
-        bind:count={chartCount}
-        bind:pageIndex
-        bind:status={chartStatus}
-        token={access_token}
-        {user}
-      />
+      <Pagination {count} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}
@@ -194,5 +201,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 1.5rem;
+    justify-items: center;
   }
 </style>

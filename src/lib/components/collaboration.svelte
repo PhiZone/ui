@@ -4,7 +4,7 @@
   import { goto, preloadData } from '$app/navigation';
   import { page } from '$app/stores';
   import type { Collaboration, User } from '$lib/models';
-  import UserCard from '$lib/components/user.svelte';
+  import UserCard from '$lib/components/User.svelte';
   import { getCompressedImage } from '$lib/utils';
 
   export let collaboration: Collaboration, token: string | undefined, user: User;
@@ -101,22 +101,24 @@
               class="btn btn-primary btn-outline"
               on:click={() => {
                 updateStatus(collaboration, 1);
-              }}>{$t('studio.request.accept')}</button
+              }}
             >
+              {$t('studio.request.accept')}
+            </button>
             <button
               class="btn btn-accent btn-outline"
               on:click={() => {
                 updateStatus(collaboration, 2);
-              }}>{$t('studio.request.reject')}</button
+              }}
             >
+              {$t('studio.request.reject')}
+            </button>
           </div>
         {/if}
       {:else}
-        <button class="btn btn-disabled"
-          >{$t(
-            collaboration.status === 1 ? 'studio.request.accepted' : 'studio.request.rejected'
-          )}</button
-        >
+        <button class="btn btn-disabled">
+          {$t(collaboration.status === 1 ? 'studio.request.accepted' : 'studio.request.rejected')}
+        </button>
       {/if}
     </div>
   </div>

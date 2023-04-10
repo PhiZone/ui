@@ -3,7 +3,7 @@
   import { onDestroy, onMount } from 'svelte';
   import { Status } from '$lib/constants';
   import * as api from '$lib/api';
-  import Pagination from '$lib/components/pagination.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
   import type { UserInput } from '$lib/models';
   import UserInputCard from '$lib/components/user_input.svelte';
   export let data: import('./$types').PageData;

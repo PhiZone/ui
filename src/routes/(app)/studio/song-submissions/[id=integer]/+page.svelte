@@ -4,7 +4,7 @@
   import { getCompressedImage, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { onMount } from 'svelte';
   import * as api from '$lib/api';
-  import Chapter from '$lib/components/chapter.svelte';
+  import Chapter from '$lib/components/Chapter.svelte';
   import { goto, preloadData } from '$app/navigation';
 
   export let data: import('./$types').PageData;
@@ -57,23 +57,25 @@
         </select>
       </label>
       <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.reply')}</span
-        ><textarea
+        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.reply')}</span>
+        <textarea
           class="textarea textarea-primary w-3/4 h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />
       </label>
       <div class="modal-action btn-group btn-group-horizontal">
-        <label for="studio-song-submission" class="btn btn-primary btn-outline text-lg"
-          >{$t('common.back')}</label
-        >
+        <label for="studio-song-submission" class="btn btn-primary btn-outline text-lg">
+          {$t('common.back')}
+        </label>
         <label
           for="studio-song-submission"
           class="btn btn-primary btn-outline text-lg"
           on:click={handleSubmit}
-          on:keyup>{$t('common.submit')}</label
+          on:keyup
         >
+          {$t('common.submit')}
+        </label>
       </div>
     </div>
   </div>
@@ -82,8 +84,9 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('studio.song_submission')}</span
         >
+          {$t('studio.song_submission')}
+        </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold gap-4 items-center">
@@ -91,14 +94,15 @@
             </div>
             <div>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.song_name')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.song_name')}
+                </span>
                 {content.name}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('common.form.audio')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.audio')}
+                </span>
                 <a
                   href={content.song}
                   target="_blank"
@@ -110,9 +114,9 @@
                 </a>
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.illustration')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.illustration')}
+                </span>
                 <a
                   href={content.illustration}
                   target="_blank"
@@ -128,15 +132,15 @@
                 {content.edition}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.composer')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.composer')}
+                </span>
                 {content.composer}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('common.form.illustrator')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('common.form.illustrator')}
+                </span>
                 {content.illustrator}
               </p>
               <p>
@@ -148,58 +152,58 @@
                 {`${content.offset}ms`}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.preview_start')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.preview_start')}
+                </span>
                 {content.preview_start.replace(/^00:/, '')}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.preview_end')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.preview_end')}
+                </span>
                 {content.preview_end.replace(/^00:/, '')}
               </p>
               {#if getUserPrivilege(user.type) >= 3 && typeof content.uploader == 'object'}
                 <p class="min-w-fit">
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('studio.submission.uploader')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('studio.submission.uploader')}
+                  </span>
                   {content.uploader.username}
                 </p>
               {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.uploaded_at')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.uploaded_at')}
+                </span>
                 {parseDateTime(content.time)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1"
-                  >{$t('studio.submission.status')}</span
-                >
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.status')}
+                </span>
                 {$t(`studio.submission.volunteer_statuses.${content.status}`)}
               </p>
               {#if content.reviewer && typeof content.reviewer === 'object'}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('studio.submission.reviewer')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('studio.submission.reviewer')}
+                  </span>
                   {content.reviewer.username}
                 </p>
               {/if}
               {#if content.message}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('studio.submission.reply')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('studio.submission.reply')}
+                  </span>
                   {content.message}
                 </p>
               {/if}
               {#if content.description}
                 <p class="content">
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('common.description')}</span
-                  >
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.description')}
+                  </span>
                   {content.description}
                 </p>
               {/if}
@@ -223,8 +227,9 @@
                 <label
                   for="studio-song-submission"
                   class="btn btn-primary btn-outline glass text-lg w-32"
-                  >{$t('studio.submission.reply_v')}</label
                 >
+                  {$t('studio.submission.reply_v')}
+                </label>
               {/if}
             </div>
           </div>
@@ -235,9 +240,9 @@
       <div class="mx-4 w-80 form-control">
         {#each content.chapters as chapter}
           <div class="indicator my-4 w-full">
-            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-              >{$t('song.chapter')}</span
-            >
+            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+              {$t('song.chapter')}
+            </span>
             <Chapter {chapter} token={access_token} {user} />
           </div>
         {/each}

@@ -9,9 +9,20 @@
 
 .page {
   min-height: calc(100vh - 200px);
+  max-width: 1600px;
+  @apply bg-base-200 flex flex-col pt-32 px-4 md:px-32 mx-auto justify-start;
+}
+
+.info-page {
+  min-height: calc(100vh - 200px);
+  @apply bg-base-200 py-24 px-12 justify-center flex;
 }
 
 .content {
   white-space: pre-line;
   word-break: break-word;
+}
+
+.richtext-user {
+  @apply text-accent hover:underline;
 }

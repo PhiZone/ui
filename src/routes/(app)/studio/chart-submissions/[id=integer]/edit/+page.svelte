@@ -4,7 +4,7 @@
   import { ContentType, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
   import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/models';
-  import Charter from '$lib/components/user.svelte';
+  import Charter from '$lib/components/User.svelte';
   import { getLevelColor, parseRichText } from '$lib/utils';
 
   export let data: import('./$types').PageData;
@@ -134,8 +134,10 @@
       </div>
       <label
         for="studio-charter"
-        class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2">✕</label
+        class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
       >
+        ✕
+      </label>
       <div
         class={newCharterStatus === Status.ERROR && newCharterErr
           ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
@@ -162,8 +164,10 @@
                   : 'btn-primary btn-outline'
                 : 'btn-disabled'
             }`}
-            on:click={getUser}>{$t('common.fetch')}</button
+            on:click={getUser}
           >
+            {$t('common.fetch')}
+          </button>
         </label>
       </div>
       {#if newCharter !== null && newCharterStatus === Status.OK}
@@ -184,8 +188,10 @@
           on:click={() => {
             charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
           }}
-          on:keyup>{$t('common.submit')}</label
+          on:keyup
         >
+          {$t('common.submit')}
+        </label>
       </div>
     </div>
   </div>
@@ -206,9 +212,9 @@
             >
               {#if content.chart}
                 <div class="flex justify-start items-center my-2">
-                  <span class="w-32 px-4 place-self-center"
-                    >{$t('studio.submission.original_chart')}</span
-                  >
+                  <span class="w-32 px-4 place-self-center">
+                    {$t('studio.submission.original_chart')}
+                  </span>
                   <a
                     href={content.chart}
                     target="_blank"
@@ -239,28 +245,29 @@
                 {/if}
               </div>
               <div class="flex justify-start items-center my-2">
-                <span class="w-32 px-4 place-self-center"
-                  >{$t('studio.submission.original_song')}</span
-                >
+                <span class="w-32 px-4 place-self-center">
+                  {$t('studio.submission.original_song')}
+                </span>
                 {#if content.song}
                   <a
                     href={`/songs/${content.song.id}`}
                     class="hover:underline"
                     target="_blank"
                     rel="noreferrer"
-                    >[{$t('song.song')}] [{$t(
+                  >
+                    [{$t('song.song')}] [{$t(
                       `studio.submission.accessibilities.${content.song.accessibility}`
                     )}] {content.song.id}. {content.song.composer} - {content.song.name} ({content
-                      .song.edition})</a
-                  >
+                      .song.edition})
+                  </a>
                 {:else}
                   <a
                     href={`/studio/song-submissions/${content.song_upload?.id}`}
                     class="hover:underline"
-                    >[{$t('studio.song_submission')}] {content.song_upload?.id}. {content
-                      .song_upload?.composer} - {content.song_upload?.name} ({content.song_upload
-                      ?.edition})</a
                   >
+                    [{$t('studio.song_submission')}] {content.song_upload?.id}. {content.song_upload
+                      ?.composer} - {content.song_upload?.name} ({content.song_upload?.edition})
+                  </a>
                 {/if}
               </div>
               <div class="flex justify-start items-center my-2">
@@ -310,10 +317,10 @@
                     >
                       {#if songList}
                         {#each songList as song}
-                          <option value={song.id}
-                            >[{$t(`studio.submission.accessibilities.${song.accessibility}`)}] {song.id}.
-                            {song.composer} - {song.name} ({song.edition})</option
-                          >
+                          <option value={song.id}>
+                            [{$t(`studio.submission.accessibilities.${song.accessibility}`)}] {song.id}.
+                            {song.composer} - {song.name} ({song.edition})
+                          </option>
                         {/each}
                       {/if}
                     </select>
@@ -338,9 +345,9 @@
                     >
                       {#if songSubmissionList}
                         {#each songSubmissionList as song}
-                          <option value={song.id}
-                            >{song.id}. {song.composer} - {song.name} ({song.edition})</option
-                          >
+                          <option value={song.id}>
+                            {song.id}. {song.composer} - {song.name} ({song.edition})
+                          </option>
                         {/each}
                       {/if}
                     </select>
@@ -397,8 +404,9 @@
               </div>
               {#if level && difficulty}
                 <div class="flex">
-                  <span class="w-1/4 px-4 place-self-center">{$t('common.form.level_preview')}</span
-                  >
+                  <span class="w-1/4 px-4 place-self-center">
+                    {$t('common.form.level_preview')}
+                  </span>
                   <div class="w-3/4">
                     <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
                       {level}
@@ -439,9 +447,9 @@
               </div>
               {#if charter}
                 <div class="flex">
-                  <span class="w-1/4 px-4 place-self-center"
-                    >{$t('common.form.charter_preview')}</span
-                  >
+                  <span class="w-1/4 px-4 place-self-center">
+                    {$t('common.form.charter_preview')}
+                  </span>
                   <p class="w-3/4 px-4 content">
                     {#each parseRichText(charter) as t}
                       {#if t.id > 0}
@@ -449,8 +457,10 @@
                           href={`/users/${t.id}`}
                           class="text-accent hover:underline"
                           target="_blank"
-                          rel="noreferrer">{t.text}</a
+                          rel="noreferrer"
                         >
+                          {t.text}
+                        </a>
                       {:else}
                         {t.text}
                       {/if}
@@ -486,8 +496,10 @@
                   on:click={() => {
                     emptyDescription = true;
                     description = '';
-                  }}>{$t('common.empty_v')}</button
+                  }}
                 >
+                  {$t('common.empty_v')}
+                </button>
               </div>
             </div>
           </div>
@@ -502,8 +514,9 @@
           } glass float-right my-5 text-lg`}
           data-tip={$t(`common.form.errors.${errorMsg}`)}
           on:click={handleSubmit}
-          >{$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}</button
         >
+          {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
+        </button>
       </div>
     </div>
   </div>

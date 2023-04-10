@@ -1,22 +1,14 @@
-import * as api from '$lib/api';
-import { Status } from '$lib/constants';
-import { error } from '@sveltejs/kit';
+import queryString from 'query-string';
+import type { PageLoad } from './$types';
 
-export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) => {
-  const { user, access_token } = await parent();
-  const resp = await api.GET(
-    `/charts/${url.search}${url.search ? '&' : '?'}query_song=1`,
-    access_token,
-    user,
-    fetch
-  );
-  if (!resp.ok) {
-    throw error(resp.status, resp.statusText);
-  }
-  const json = await resp.json();
+export const load = (async ({ url, parent }) => {
+  const { api, queryClient } = await parent();
+  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
+  const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
+  await queryClient.prefetchQuery(api.chart.list(searchParams));
+
   return {
-    status: resp.ok ? Status.OK : Status.ERROR,
-    content: resp.ok ? json : null,
-    error: resp.ok ? null : json.detail,
+    searchParams,
+    page,
   };
-};
+}) satisfies PageLoad;

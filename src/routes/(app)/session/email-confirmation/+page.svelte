@@ -1,41 +1,29 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
-  import * as api from '$lib/api';
-  import { Status } from '$lib/constants';
-  import { t } from '$lib/translations/config';
-  import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
+  import type { PageData } from './$types';
 
-  export let data: import('./$types').PageData;
-  $: ({ status, msg, code } = data);
+  export let data: PageData;
 
-  let input = '',
-    redirect = $page.url.searchParams.get('redirect');
+  let code = data.code ?? '';
+  let msg = data.detail ?? '';
+  $: msg = data.detail ?? '';
+  let valid = false;
 
-  onMount(() => {
-    if (code) {
-      input = code;
-    }
-    if (status === Status.OK && browser) {
-      goto(redirect ? redirect : '/session/login');
-    }
-  });
-
-  const handleClick = async () => {
-    status = Status.SENDING;
-    let code = input;
-    if (code?.length != 6) {
-      return;
-    }
-    const resp = await api.auth.activate({ code });
-    if (resp.ok) {
-      goto(redirect ? redirect : '/session/login');
-    } else {
-      status = Status.ERROR;
-      msg = (await resp.json()).detail;
-    }
+  // $: valid = /^\d+$/.test(code) && code.length == 6;
+  const oninput = () => {
+    valid = /^\d+$/.test(code) && code.length == 6;
+    msg = !valid && code ? $t('session.email_confirmation.code_not_numeric') : '';
   };
+
+  $: if (browser && data.code && !data.detail) {
+    setTimeout(async () => {
+      $page.url.searchParams.delete('code');
+      await goto('/session/login' + $page.url.search);
+    }, 3000);
+  }
 </script>
 
 <svelte:head>
@@ -45,48 +33,57 @@
 <div class="hero min-h-screen bg-base-200">
   <div class="hero-content text-center">
     <div class="max-w-4xl">
-      <h1 class="text-5xl font-bold">
-        {$t('session.email_confirmation.email_confirmation')}
-      </h1>
-      <p class="py-6">
-        {$t('session.email_confirmation.email_confirmation_text')}
-      </p>
-      <input
-        type="text"
-        class={`input input-bordered input-lg ${
-          status === Status.ERROR
-            ? 'input-error'
-            : input?.length == 6
-            ? 'input-success'
-            : 'input-info'
-        } w-full max-w-xs text-center glass`}
-        placeholder={$t('session.email_confirmation.code')}
-        bind:value={input}
-        on:input={() => {
-          status = Status.WAITING;
-          if (!/^\d+$/.test(input) || input?.length > 6) {
-            status = Status.ERROR;
-            msg = 'code_not_numeric';
-          }
-          if (input?.length == 0) {
-            status = Status.WAITING;
-          }
-        }}
-      />
-      <div class="mt-6">
-        {#if status === Status.ERROR}
-          <div class="tooltip tooltip-open tooltip-bottom tooltip-error" data-tip={msg}>
-            <button class="btn btn-error">{$t('common.error')}</button>
+      {#if data.code && !data.detail}
+        <h1 class="text-5xl font-bold">
+          {$t('common.success')}
+        </h1>
+        <p class="py-6">
+          {$t('session.registration.success')}
+        </p>
+      {:else}
+        <h1 class="text-5xl font-bold">
+          {$t('session.email_confirmation.email_confirmation')}
+        </h1>
+        <p class="py-6">
+          {$t('session.email_confirmation.email_confirmation_text')}
+        </p>
+        <form>
+          <input
+            type="text"
+            name="redirect"
+            hidden
+            value={$page.url.searchParams.get('redirect')}
+          />
+          <input
+            type="text"
+            id="code"
+            name="code"
+            class="input input-bordered input-lg input-{msg
+              ? 'error'
+              : valid
+              ? 'success'
+              : 'info'} w-full max-w-xs text-center glass"
+            placeholder={$t('session.email_confirmation.code')}
+            bind:value={code}
+            on:input={oninput}
+          />
+          <div class="mt-6">
+            <div
+              class="tooltip tooltip-bottom tooltip-error"
+              class:tooltip-open={msg}
+              data-tip={msg || null}
+            >
+              <button
+                type="submit"
+                class="btn {msg ? 'btn-error' : 'btn-accent btn-outline'}"
+                disabled={!valid}
+              >
+                {$t(msg ? 'common.error' : 'session.email_confirmation.activate')}
+              </button>
+            </div>
           </div>
-        {:else if status === Status.SENDING}
-          <button class={'btn btn-ghost btn-disabled glass'}>{$t('common.waiting')}</button>
-        {:else}
-          <button
-            class={`btn btn-outline btn-accent ${input?.length == 6 ? '' : 'btn-disabled'} glass`}
-            on:click={handleClick}>{$t('session.email_confirmation.activate')}</button
-          >
-        {/if}
-      </div>
+        </form>
+      {/if}
     </div>
   </div>
 </div>

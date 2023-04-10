@@ -18,13 +18,14 @@
           fill="none"
           viewBox="0 0 24 24"
           class="stroke-current flex-shrink-0 w-6 h-6"
-          ><path
+        >
+          <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          /></svg
-        >
+          />
+        </svg>
         <span class="content">{content.message}</span>
       </div>
     </div>
@@ -42,18 +43,18 @@
         href="/studio_guide.html"
         target="_blank"
         rel="noreferrer"
-        class="text-lg hover:underline max-w-fit mx-auto my-3">{$t('studio.view_guide')}</a
+        class="text-lg hover:underline max-w-fit mx-auto my-3"
       >
+        {$t('studio.view_guide')}
+      </a>
       <div class="mt-3 flex justify-center">
         <a
-          data-sveltekit-preload-data
           href="/studio/chart-submissions/new"
           class="btn btn-secondary text-lg btn-xl btn-outline glass mr-3"
         >
           {$t('studio.upload_chart')}
         </a>
         <a
-          data-sveltekit-preload-data
           href="/studio/song-submissions/new"
           class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
         >

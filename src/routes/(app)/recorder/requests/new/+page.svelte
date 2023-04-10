@@ -276,9 +276,9 @@
             </div>
             {#if !(noteSize || resolution || composer || illustrator || charter || tip || username || rks || challengeDifficulty)}
               <div class="flex">
-                <span class="w-1/4 px-4 place-self-center"
-                  >{$t('recorder.config')}{$t('common.optional')}</span
-                >
+                <span class="w-1/4 px-4 place-self-center">
+                  {$t('recorder.config')}{$t('common.optional')}
+                </span>
                 <input
                   type="file"
                   accept=".set"
@@ -298,8 +298,10 @@
                   class="ml-2 place-self-center btn btn-accent btn-outline btn-sm"
                   on:click={() => {
                     config = null;
-                  }}>{$t('common.empty_v')}</button
+                  }}
                 >
+                  {$t('common.empty_v')}
+                </button>
               </div>
             {/if}
             <div
@@ -686,7 +688,8 @@
               data-tip={status === Status.ERROR && error?.addition ? error.addition : ''}
             >
               <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('recorder.addition')}</span><textarea
+                <span class="w-1/4 min-w-[64px]">{$t('recorder.addition')}</span>
+                <textarea
                   class={`textarea ${
                     status === Status.ERROR && error?.addition
                       ? 'textarea-error'
@@ -714,8 +717,9 @@
           ? error?.detail
           : ''}
         on:click={handleSubmit}
-        >{$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}</button
       >
+        {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
+      </button>
     </div>
   </div>
 </div>

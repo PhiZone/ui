@@ -5,7 +5,7 @@
   import { Status } from '$lib/constants';
   import Request from '$lib/components/recorder_request.svelte';
   import { getUserPrivilege } from '$lib/utils';
-  import Pagination from '$lib/components/pagination.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
   import type { RecorderRequest, User } from '$lib/models';
   import { page } from '$app/stores';
 
@@ -50,8 +50,10 @@
   <div class="modal-box bg-base-100 max-h-[90vh] w-[50vw] max-w-[1800px]">
     <label
       for="list-options"
-      class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2">✕</label
+      class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
     >
+      ✕
+    </label>
     <h2 class="font-bold text-xl mb-4">{$t('common.list_options')}</h2>
     <label class="input-group my-2">
       <span class="w-1/6 min-w-[64px]">{$t('common.filter')}</span>
@@ -128,8 +130,10 @@
                     ? `${filter}=${filterParam}${order !== null ? '&' : ''}`
                     : ''
                 }${order !== null ? `order=${reverse ? '-' : ''}${order}` : ''}`;
-        }}>{$t('common.continue')}</button
+        }}
       >
+        {$t('common.continue')}
+      </button>
     </div>
   </div>
 </div>
@@ -141,14 +145,12 @@
           {$t(user && getUserPrivilege(user.type) >= 3 ? 'recorder.manage' : 'recorder.history')}
         </h1>
         <div class="flex justify-between gap-3">
-          <label for="list-options" class="btn btn-secondary text-lg btn-xl btn-outline glass"
-            >{$t('common.list_options')}</label
-          >
-          <a
-            data-sveltekit-preload-data
-            href="/recorder/requests/new"
-            class="btn btn-accent text-lg btn-xl btn-outline glass">{$t('recorder.new_request')}</a
-          >
+          <label for="list-options" class="btn btn-secondary text-lg btn-xl btn-outline glass">
+            {$t('common.list_options')}
+          </label>
+          <a href="/recorder/requests/new" class="btn btn-accent text-lg btn-xl btn-outline glass">
+            {$t('recorder.new_request')}
+          </a>
         </div>
       </div>
       <div class="min-w-fit form-control gap-4">

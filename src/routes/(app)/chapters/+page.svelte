@@ -1,55 +1,33 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import Chapter from '$lib/components/chapter.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
-  import { onMount } from 'svelte';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  import Chapter from '$lib/components/Chapter.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
+  import type { PageData } from './$types';
 
-  let pageIndex = 1,
-    chapterStatus = Status.RETRIEVING,
-    chapters: any[] | null,
-    chapterCount: number,
-    previousChapters: string,
-    nextChapters: string;
+  export let data: PageData;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    chapterStatus = status;
-    if (status === Status.OK) {
-      chapters = content.results;
-      chapterCount = content.count;
-      previousChapters = content.previous;
-      nextChapters = content.next;
-    }
-  });
+  $: query = createQuery(api.chapter.list(searchParams));
 </script>
 
 <svelte:head>
   <title>{$t('common.chapters')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="pt-32 bg-base-200 page form-control justify-center">
-  <h1 class="px-32 text-4xl font-bold mb-6">{$t('common.chapters')}</h1>
-  {#if chapterStatus === Status.OK && chapters}
-    {#if chapters.length > 0}
-      <div class="px-32 result">
-        {#each chapters as chapter}
+<div class="page">
+  <h1 class="text-4xl font-bold mb-6">{$t('common.chapters')}</h1>
+  {#if $query.isSuccess}
+    {@const { results, count } = $query.data}
+    {#if results.length > 0}
+      <div class="mx-auto result">
+        {#each results as chapter}
           <div class="min-w-fit">
-            <Chapter {chapter} token={access_token} {user} fixedHeight />
+            <Chapter {chapter} fixedHeight />
           </div>
         {/each}
       </div>
-      <Pagination
-        bind:previous={previousChapters}
-        bind:next={nextChapters}
-        bind:results={chapters}
-        bind:count={chapterCount}
-        bind:pageIndex
-        bind:status={chapterStatus}
-        token={access_token}
-        {user}
-      />
+      <Pagination {count} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

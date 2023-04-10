@@ -1,106 +1,41 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
-  import * as api from '$lib/api';
   import { t } from '$lib/translations/config';
-  import {
-    getLevelColor,
-    getUserLevel,
-    parseDateTime,
-    parseMonthAndDay,
-    parseRichText,
-  } from '$lib/utils';
-  import { onMount } from 'svelte';
-  import Like from '$lib/components/like.svelte';
-  import Record from '$lib/components/record.svelte';
-  import Comment from '$lib/components/comment.svelte';
-  export let data: import('./$types').PageData;
-  $: ({
-    status,
-    content,
-    error,
-    charts,
-    songs,
-    recentRecords,
-    bestRecords,
-    comments,
-    access_token,
-    user,
-  } = data);
+  import { getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
+  import Like from '$lib/components/Like.svelte';
+  import Record from '$lib/components/Record.svelte';
+  import Comment from '$lib/components/Comment.svelte';
+  import type { PageData } from './$types';
+  import Follow from '$lib/components/Follow.svelte';
+  import { createQuery } from '@tanstack/svelte-query';
+  import Chart from '$lib/components/Chart.svelte';
+  import Song from '$lib/components/Song.svelte';
 
-  let fans: number,
-    isFollowing: boolean | null,
-    followError = '';
+  export let data: PageData;
 
-  onMount(() => {
-    if (status === Status.OK && content) {
-      fans = content.fans;
-      isFollowing = content.is_following;
-    }
-  });
+  $: ({ searchParams, id, api } = data);
 
-  const follow = async () => {
-    if (!content) return;
-    isFollowing = true;
-    fans++;
-    const resp = await api.POST(
-      '/relations/',
-      {
-        followee: content.id,
-        operation: 0,
-      },
-      access_token,
-      user
-    );
-    if (!resp.ok) {
-      const json = await resp.json();
-      followError = json.detail;
-      console.log(json);
-      isFollowing = false;
-      fans--;
-      setTimeout(() => {
-        followError = '';
-      }, 3500);
-    }
-  };
-
-  const unfollow = async () => {
-    if (!content) return;
-    isFollowing = false;
-    fans--;
-    const resp = await api.POST(
-      '/relations/',
-      {
-        followee: content.id,
-        operation: 1,
-      },
-      access_token,
-      user
-    );
-    if (!resp.ok) {
-      const json = await resp.json();
-      followError = json.detail;
-      console.log(json);
-      isFollowing = true;
-      fans++;
-      setTimeout(() => {
-        followError = '';
-      }, 3500);
-    }
-  };
+  $: user = createQuery(api.user.info({ id }));
+  $: charts = createQuery(api.chart.list({ owner: id }));
+  $: songs = createQuery(api.song.list({ uploader: id }));
+  $: recent_records = createQuery(api.record.list({ player: id, order_by: 'time', order: 'desc' }));
+  $: best_records = createQuery(api.record.list({ player: id, order_by: 'rks', order: 'desc' }));
+  $: comments = createQuery(api.comment.list({ user: id }));
 </script>
 
 <svelte:head>
-  <title>{$t('user.user')} - {content?.username} | {$t('common.title')}</title>
+  <title>{$t('user.user')} - {$user.data?.username ?? ''} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="bg-base-200 page py-24 px-12 justify-center flex">
-  <div class="mx-4 w-full max-w-[1800px]">
-    {#if status === Status.OK && content}
+{#if $user.isSuccess}
+  {@const user = $user.data}
+  <div class="info-page">
+    <div class="mx-4 w-full max-w-[1800px]">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >{$t('user.user')}</span
         >
+          {$t('user.user')}
+        </span>
         <div class="card card-side min-w-fit w-full bg-base-100 border border-base-300 shadow-lg">
           <figure
             class="min-w-[150px] max-w-[28%] px-6 py-6 form-control border-r border-base-300 mx-auto overflow-visible"
@@ -108,24 +43,24 @@
             <div class="avatar min-w-fit h-fit">
               <div
                 class={`mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] ${
-                  content.type == 'admin'
+                  user.type == 'admin'
                     ? 'border-indigo-500'
-                    : content.type == 'volunteer'
+                    : user.type == 'volunteer'
                     ? 'border-emerald-500'
-                    : content.type == 'qualified'
+                    : user.type == 'qualified'
                     ? 'border-sky-500'
                     : 'border-neutral-500'
                 }`}
               >
-                <img src={content.avatar} alt="Avatar" />
+                <img src={user.avatar} alt="Avatar" />
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">
-              {content.username}
+              {user.username}
             </p>
             <div class="flex items-center justify-center gap-1 h-fit">
-              <span class="badge badge-sm font-bold">LV{getUserLevel(content.exp)}</span>
-              {#if content.gender == 1}
+              <span class="badge badge-sm font-bold">LV{getUserLevel(user.exp)}</span>
+              {#if user.gender == 1}
                 <span class="badge badge-sm">
                   <svg
                     fill="currentColor"
@@ -140,7 +75,7 @@
                     />
                   </svg>
                 </span>
-              {:else if content.gender == 2}
+              {:else if user.gender == 2}
                 <span class="badge badge-sm">
                   <svg
                     fill="currentColor"
@@ -156,245 +91,152 @@
                   </svg>
                 </span>
               {/if}
-              {#if content.tag}
-                <span class="badge badge-sm badge-accent">{content.tag}</span>
+              {#if user.tag}
+                <span class="badge badge-sm badge-accent">{user.tag}</span>
               {/if}
             </div>
             <div class="mt-4 w-full form-control gap-0.5 h-fit">
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.id')}</span>
-                {content.id}
+                {user.id}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.type')}</span>
-                {$t(`user.types.${content.type}`)}
+                {$t(`user.types.${user.type}`)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
-                {content.rks.toFixed(3)}
+                {user.rks.toFixed(3)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-                {content.exp}
+                {user.exp}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.language')}</span>
-                {$t(`common.lang.${content.language}`)}
+                {$t(`common.lang.${user.language}`)}
               </p>
-              <a data-sveltekit-preload-data href={`/users/${content.id}/following`}>
-                <span class="badge badge-primary badge-outline mr-1 hover:underline"
-                  >{$t('user.following')}</span
-                >
-                {content.following}
+              <a href="/users/{user.id}/following" class="group">
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('user.following')}
+                </span>
+                <span class="group-hover:underline">
+                  {user.following}
+                </span>
               </a>
-              <a data-sveltekit-preload-data href={`/users/${content.id}/fans`}>
-                <span class="badge badge-primary badge-outline mr-1 hover:underline"
-                  >{$t('user.fans')}</span
-                >
-                {fans}
+              <a href="/users/{user.id}/fans" class="group">
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('user.fans')}
+                </span>
+                <span class="group-hover:underline">
+                  {user.fans}
+                </span>
               </a>
-              {#if content.date_of_birth}
+              {#if user.date_of_birth}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1"
-                    >{$t('user.date_of_birth')}</span
-                  >
-                  {parseMonthAndDay(content.date_of_birth)}
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('user.date_of_birth')}
+                  </span>
+                  {parseMonthAndDay(user.date_of_birth)}
                 </p>
               {/if}
-              {#if content.last_login}
+              {#if user.last_login}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('user.last_login')}</span
-                  >
-                  {parseDateTime(content.last_login)}
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('user.last_login')}
+                  </span>
+                  {parseDateTime(user.last_login)}
                 </p>
               {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.date_joined')}</span>
-                {parseDateTime(content.date_joined)}
+                {parseDateTime(user.date_joined)}
               </p>
-              {#if content.bio}
+              {#if user.bio}
                 <p class="content">
                   <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
-                  {content.bio}
+                  {user.bio}
                 </p>
               {/if}
             </div>
             <div>
-              <div
-                class={followError
-                  ? 'tooltip tooltip-open tooltip-error tooltip-bottom flex justify-center my-3 h-fit'
-                  : 'flex justify-center my-3 h-fit'}
-                data-tip={followError}
-              >
-                {#if !isFollowing}
-                  <button class="w-fit btn btn-outline btn-primary text-sm" on:click={follow}
-                    >{$t('user.follow')} {fans}</button
-                  >
-                {:else}
-                  <button class="w-fit btn btn-outline btn-ghost text-sm" on:click={unfollow}
-                    >{$t('user.unfollow')} {fans}</button
-                  >
-                {/if}
+              <div class="flex justify-center my-3 h-fit">
+                <Follow {id} {user} />
               </div>
             </div>
           </figure>
           <div class="card-body pt-3 max-w-full">
-            {#if charts}
+            {#if $charts.isSuccess}
+              {@const count = $charts.data.count}
+              {@const charts = $charts.data.results.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.charts')}
                 </h2>
-                {#if charts.length > 0}
-                  <a class="min-w-fit" href={`/charts?owner=${content.id}`}>
-                    <button class="btn btn-sm btn-primary btn-outline">
-                      {$t('common.all')}
-                    </button>
+                {#if count > 10}
+                  <a
+                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    href="/charts?owner={user.id}"
+                  >
+                    {$t('common.all')}
                   </a>
                 {/if}
               </div>
               {#if charts.length > 0}
                 <ul class="menu bg-base-100 w-full border border-base-300">
                   {#each charts as chart}
-                    <li>
-                      <a
-                        href={`/charts/${chart.id}`}
-                        class="w-full overflow-hidden h-[82px] flex px-5"
-                      >
-                        <div class="w-5/12">
-                          <div class="text-xl font-bold whitespace-no-wrap text-ellipsis">
-                            {chart.song.name}
-                          </div>
-                        </div>
-                        <div class="w-1/4 min-w-fit">
-                          <div class="btn-group btn-group-horizontal">
-                            <button
-                              class={`btn ${getLevelColor(
-                                chart.level_type
-                              )} btn-sm text-lg no-animation`}
-                            >
-                              {chart.level}
-                              {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
-                            </button>
-                            {#if chart.ranked}
-                              <button class="btn btn-primary btn-sm text-lg no-animation">
-                                {$t('chart.ranked')}
-                              </button>
-                            {/if}
-                          </div>
-                        </div>
-                        <div class="w-1/3 text-lg whitespace-no-wrap text-ellipsis">
-                          {#each parseRichText(chart.charter) as t}
-                            {#if t.id > 0 && chart.collab_status}
-                              <a href={`/users/${t.id}`} class="text-accent hover:underline"
-                                >{t.text}</a
-                              >
-                            {:else}
-                              {t.text}
-                            {/if}
-                          {/each}
-                        </div>
-                        <div
-                          class="w-1/12 min-w-fit"
-                          on:click={(e) => {
-                            e.preventDefault();
-                          }}
-                          on:keyup
-                        >
-                          <Like
-                            id={chart.like}
-                            likes={chart.like_count}
-                            type={'chart'}
-                            target={chart.id}
-                            token={access_token}
-                            {user}
-                            css="sm"
-                          />
-                        </div>
-                      </a>
-                    </li>
+                    <li><Chart {chart} kind="inline" /></li>
                   {/each}
                 </ul>
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if songs}
+            {#if $songs.isSuccess}
+              {@const count = $songs.data.count}
+              {@const songs = $songs.data.results.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.songs')}
                 </h2>
-                {#if songs.length > 0}
-                  <a class="min-w-fit" href={`/songs?owner=${content.id}`}>
-                    <button class="btn btn-sm btn-primary btn-outline">
-                      {$t('common.all')}
-                    </button>
+                {#if count > 10}
+                  <a
+                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    href="/songs?uploader={user.id}"
+                  >
+                    {$t('common.all')}
                   </a>
                 {/if}
               </div>
               {#if songs.length > 0}
                 <ul class="menu bg-base-100 w-full border border-base-300">
                   {#each songs as song}
-                    <li>
-                      <a
-                        href={`/songs/${song.id}`}
-                        class="w-full overflow-hidden h-[82px] flex px-5"
-                      >
-                        <div class="w-1/2">
-                          <div class="text-xl font-bold">
-                            {song.name}
-                            {#if song.original}
-                              <button class="btn btn-secondary btn-sm text-lg no-animation">
-                                {$t('song.original')}
-                              </button>
-                            {/if}
-                          </div>
-                        </div>
-                        <div class="w-5/12">
-                          <div class="text-lg">
-                            {song.composer}
-                          </div>
-                        </div>
-                        <div
-                          class="w-1/12 min-w-fit"
-                          on:click={(e) => {
-                            e.preventDefault();
-                          }}
-                          on:keyup
-                        >
-                          <Like
-                            id={song.like}
-                            likes={song.like_count}
-                            type={'song'}
-                            target={song.id}
-                            token={access_token}
-                            {user}
-                            css="sm"
-                          />
-                        </div>
-                      </a>
-                    </li>
+                    <li><Song {song} kind="inline" /></li>
                   {/each}
                 </ul>
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if recentRecords}
+            {#if $recent_records.isSuccess}
+              {@const count = $recent_records.data.count}
+              {@const recent_records = $recent_records.data.results.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.recent_records')}
                 </h2>
-                {#if recentRecords.length > 0}
-                  <a class="min-w-fit" href={`/records?player=${content.id}`}>
-                    <button class="btn btn-sm btn-primary btn-outline">
-                      {$t('common.all')}
-                    </button>
+                {#if count > 10}
+                  <a
+                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    href="/records?player={user.id}"
+                  >
+                    {$t('common.all')}
                   </a>
                 {/if}
               </div>
-              {#if recentRecords.length > 0}
+              {#if recent_records.length > 0}
                 <div class="grid-result">
-                  {#each recentRecords as record}
+                  {#each recent_records as record}
                     <Record {record} />
                   {/each}
                 </div>
@@ -402,22 +244,25 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if bestRecords}
+            {#if $best_records.isSuccess}
+              {@const count = $best_records.data.count}
+              {@const best_records = $best_records.data.results.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.best_records')}
                 </h2>
-                {#if bestRecords.length > 0}
-                  <a class="min-w-fit" href={`/records?player=${content.id}&order=-rks`}>
-                    <button class="btn btn-sm btn-primary btn-outline">
-                      {$t('common.all')}
-                    </button>
+                {#if count > 10}
+                  <a
+                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    href="/records?player={user.id}&order=-rks"
+                  >
+                    {$t('common.all')}
                   </a>
                 {/if}
               </div>
-              {#if bestRecords.length > 0}
+              {#if best_records.length > 0}
                 <div class="grid-result">
-                  {#each bestRecords as record}
+                  {#each best_records as record}
                     <Record {record} />
                   {/each}
                 </div>
@@ -425,14 +270,15 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if comments}
+            {#if $comments.isSuccess}
+              {@const comments = $comments.data.results}
               <h2 class="text-3xl font-bold mt-6 mb-2">
                 {$t('user.comments')}
               </h2>
               {#if comments.length > 0}
                 <div class="form-control gap-1">
                   {#each comments as comment}
-                    <Comment {comment} token={access_token} {user} showUser={false} showSource />
+                    <Comment {searchParams} {comment} showUser={false} showSource />
                   {/each}
                 </div>
               {:else}
@@ -442,9 +288,9 @@
           </div>
         </div>
       </div>
-    {/if}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   * {

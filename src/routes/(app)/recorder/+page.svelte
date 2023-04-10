@@ -25,14 +25,18 @@
           href="https://docs.qq.com/doc/DZGVDQVFUUVBXcW1D"
           target="_blank"
           rel="noreferrer"
-          class="text-lg hover:underline">{$t('recorder.view_notice')}</a
+          class="text-lg hover:underline"
         >
+          {$t('recorder.view_notice')}
+        </a>
         <a
           href="https://docs.qq.com/doc/DZGdGRGd3S3RaZHpW"
           target="_blank"
           rel="noreferrer"
-          class="text-lg hover:underline">{$t('recorder.view_guide')}</a
+          class="text-lg hover:underline"
         >
+          {$t('recorder.view_guide')}
+        </a>
       </div>
       {#if status === Status.OK && content}
         <div class="stats stats-horizontal shadow">
@@ -48,19 +52,19 @@
         {#if user}
           {#if getUserPrivilege(user.type) >= 1}
             <a
-              data-sveltekit-preload-data
               href="/recorder/requests/new"
               class="btn btn-primary text-lg btn-xl btn-outline glass mr-3"
-              >{$t('recorder.new_request')}</a
             >
+              {$t('recorder.new_request')}
+            </a>
             <a
-              data-sveltekit-preload-data
               href="/recorder/requests"
               class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
-              >{getUserPrivilege(user.type) < 3
-                ? $t('recorder.view_history')
-                : $t('recorder.manage')}</a
             >
+              {getUserPrivilege(user.type) < 3
+                ? $t('recorder.view_history')
+                : $t('recorder.manage')}
+            </a>
           {:else}
             <p class="text-error">{$t('common.errors.403')}</p>
           {/if}

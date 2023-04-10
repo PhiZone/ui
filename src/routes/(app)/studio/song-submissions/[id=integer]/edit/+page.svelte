@@ -136,9 +136,9 @@
               }}
             >
               <div class="flex justify-start items-center my-2">
-                <span class="w-32 px-4 place-self-center"
-                  >{$t('studio.submission.original_audio')}</span
-                >
+                <span class="w-32 px-4 place-self-center">
+                  {$t('studio.submission.original_audio')}
+                </span>
                 <a
                   href={content.song}
                   target="_blank"
@@ -168,9 +168,9 @@
                 {/if}
               </div>
               <div class="flex justify-start items-center my-2">
-                <span class="w-32 px-4 place-self-center"
-                  >{$t('studio.submission.original_illustration')}</span
-                >
+                <span class="w-32 px-4 place-self-center">
+                  {$t('studio.submission.original_illustration')}
+                </span>
                 <a
                   href={content.illustration}
                   target="_blank"
@@ -381,8 +381,10 @@
                   on:click={() => {
                     emptyDescription = true;
                     description = '';
-                  }}>{$t('common.empty_v')}</button
+                  }}
                 >
+                  {$t('common.empty_v')}
+                </button>
               </div>
               <div
                 class={status === Status.ERROR && error?.chapters
@@ -421,14 +423,16 @@
                           showChapters = true;
                         }, 1);
                       }
-                    }}>+</button
+                    }}
                   >
+                    +
+                  </button>
                 </label>
                 {#if showChapters}
                   <div class="flex h-fit">
-                    <span class="w-32 px-4 place-self-center"
-                      >{$t('studio.submission.chapters')}</span
-                    >
+                    <span class="w-32 px-4 place-self-center">
+                      {$t('studio.submission.chapters')}
+                    </span>
                     <div class="form-control w-full gap-1">
                       {#each chapters as chapter, i}
                         {#if chapter}
@@ -449,8 +453,10 @@
                                 setTimeout(() => {
                                   showChapters = chapters.length > 0;
                                 }, 1);
-                              }}>-</button
+                              }}
                             >
+                              -
+                            </button>
                           </div>
                         {/if}
                       {/each}
@@ -471,8 +477,9 @@
           } glass float-right my-5 text-lg`}
           data-tip={$t(`common.form.errors.${errorMsg}`)}
           on:click={handleSubmit}
-          >{$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}</button
         >
+          {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
+        </button>
       </div>
     </div>
   </div>

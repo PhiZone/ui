@@ -3,11 +3,15 @@
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
+  import { goto, invalidateAll } from '$app/navigation';
+  import { useQueryClient } from '@tanstack/svelte-query';
 
   onMount(() => {
     if (browser) {
-      const redirect = $page.url.searchParams.get('redirect');
-      window.location.href = redirect ? redirect : '/';
+      setTimeout(async () => {
+        await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
+        await goto($page.url.searchParams.get('redirect') ?? '/');
+      }, 1000);
     }
   });
 </script>

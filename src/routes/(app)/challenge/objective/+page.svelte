@@ -88,14 +88,16 @@
             timeUp ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error' : 'btn-primary'
           } glass float-right my-5 text-lg`}
           data-tip={$t('challenge.time_up')}
-          on:click={handleSubmit}>{$t('common.continue')}</button
+          on:click={handleSubmit}
         >
+          {$t('common.continue')}
+        </button>
       {:else}
         <div class="text-center">
           <p class="text-lg text-red-600 my-8">{error}</p>
-          <a data-sveltekit-preload-data href="/challenge"
-            ><button class="btn btn-primary btn-outline text-lg">{$t('common.back')}</button></a
-          >
+          <a href="/challenge">
+            <button class="btn btn-primary btn-outline text-lg">{$t('common.back')}</button>
+          </a>
         </div>
       {/if}
     </div>

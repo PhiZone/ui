@@ -16,10 +16,9 @@
       <h1 class="text-5xl font-bold">{$t('challenge.title')}</h1>
       {#if status == 0}
         <p class="py-6 text-lg">{$t('challenge.description')}</p>
-        <a data-sveltekit-preload-data href="/challenge/objective"
-          ><button class="btn btn-primary btn-outline text-xl glass">{$t('challenge.start')}</button
-          ></a
-        >
+        <a href="/challenge/objective">
+          <button class="btn btn-primary btn-outline text-xl glass">{$t('challenge.start')}</button>
+        </a>
       {:else if status == 1}
         <p class="py-6 text-lg text-red-600">
           {$t('challenge.already_passed')}

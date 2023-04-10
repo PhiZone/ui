@@ -2,7 +2,7 @@
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import Notification from '$lib/components/notification.svelte';
-  import Pagination from '$lib/components/pagination.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
   import { onMount } from 'svelte';
   export let data: import('./$types').PageData;
   $: ({ status, content, error, access_token, user } = data);

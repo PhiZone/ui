@@ -1,23 +1,12 @@
-import * as api from '$lib/api';
-import { Status } from '$lib/constants';
-import { error } from '@sveltejs/kit';
+import queryString from 'query-string';
+import type { PageLoad } from './$types';
 
-export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
-  const { user, access_token } = await parent();
-  const resp = await api.GET(
-    `/relations/?follower=${params.id}&query_followee=1&query_relation=1`,
-    access_token,
-    user,
-    fetch
-  );
-  if (!resp.ok) {
-    throw error(resp.status, resp.statusText);
-  }
-  const json = await resp.json();
+export const load = (async ({ params, url, parent }) => {
+  const { api, queryClient } = await parent();
+  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
+  const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
+  const id = parseInt(params.id);
+  await queryClient.prefetchQuery(api.relation.list({ follower: id, page }));
 
-  return {
-    status: resp.ok ? Status.OK : Status.ERROR,
-    content: resp.ok ? json : null,
-    error: resp.ok ? null : json.detail,
-  };
-};
+  return { searchParams, id, page };
+}) satisfies PageLoad;

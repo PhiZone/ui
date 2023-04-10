@@ -29,47 +29,53 @@
     <div class="card-body w-[70%] max-h-fit">
       <h2 class="card-title text-2xl mb-3 min-w-fit">
         {song?.name}
-        <button class={`btn ${getLevelColor(submission.level_type)} btn-sm text-xl no-animation`}
-          >{submission.level}
+        <button class={`btn ${getLevelColor(submission.level_type)} btn-sm text-xl no-animation`}>
+          {submission.level}
           {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
         </button>
       </h2>
       <div class="flex items-center min-w-fit">
         <p>
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.overall_status')}</span
-          >{$t(`studio.submission.statuses.${submission.status}`)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.overall_status')}
+          </span>
+          {$t(`studio.submission.statuses.${submission.status}`)}
         </p>
         <p>
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.volunteer_status')}</span
-          >{$t(`studio.submission.bi_statuses.${submission.volunteer_status}`)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.volunteer_status')}
+          </span>
+          {$t(`studio.submission.bi_statuses.${submission.volunteer_status}`)}
         </p>
       </div>
       <div class="flex items-center min-w-fit">
         <p>
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.adm_status')}</span
-          >{$t(`studio.submission.bi_statuses.${submission.adm_status}`)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.adm_status')}
+          </span>
+          {$t(`studio.submission.bi_statuses.${submission.adm_status}`)}
         </p>
         <p>
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.collab_status')}</span
-          >{$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.collab_status')}
+          </span>
+          {$t(`studio.submission.bi_statuses.${submission.collab_status}`)}
         </p>
       </div>
       <div class="flex items-center min-w-fit">
         {#if typeof submission.uploader === 'object'}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1"
-              >{$t('studio.submission.uploader')}</span
-            >{submission.uploader.username}
+            <span class="badge badge-primary badge-outline mr-1">
+              {$t('studio.submission.uploader')}
+            </span>
+            {submission.uploader.username}
           </p>
         {/if}
         <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1"
-            >{$t('studio.submission.uploaded_at')}</span
-          >{parseDateTime(submission.time)}
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.uploaded_at')}
+          </span>
+          {parseDateTime(submission.time)}
         </p>
       </div>
     </div>

@@ -1,211 +1,45 @@
-import i18n, { type Config } from 'sveltekit-i18n';
+import I18n, { type Config } from 'sveltekit-i18n';
+import type { Translations } from '@sveltekit-i18n/base';
 import lang from './lang.json';
 
+const createLoaders = (
+  lang: string,
+  loaders: Record<string, () => Promise<Translations.Input>>
+) => {
+  return Object.entries(loaders).map(([path, loader]) => {
+    const key = path.match(/\.\/(.*?)\/(.*?)\.json/)?.[2]!;
+    return {
+      locale: lang,
+      key,
+      loader,
+    };
+  });
+};
+
 const config = {
+  initLocale: 'zh-Hans',
   fallbackLocale: 'en',
   translations: {
     en: { lang },
     'zh-Hans': { lang },
+    'zh-Hant': { lang },
   },
   loaders: [
-    {
-      locale: 'en',
-      key: 'common',
-      loader: async () => (await import('./en/common.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'home',
-      loader: async () => (await import('./en/home.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'session',
-      loader: async () => (await import('./en/session.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'challenge',
-      loader: async () => (await import('./en/challenge.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'chapter',
-      loader: async () => (await import('./en/chapter.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'song',
-      loader: async () => (await import('./en/song.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'chart',
-      loader: async () => (await import('./en/chart.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'user',
-      loader: async () => (await import('./en/user.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'recorder',
-      loader: async () => (await import('./en/recorder.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'notification',
-      loader: async () => (await import('./en/notification.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'record',
-      loader: async () => (await import('./en/record.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'studio',
-      loader: async () => (await import('./en/studio.json')).default,
-    },
-    {
-      locale: 'en',
-      key: 'admin',
-      loader: async () => (await import('./en/admin.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'common',
-      loader: async () => (await import('./zh-Hans/common.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'home',
-      loader: async () => (await import('./zh-Hans/home.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'session',
-      loader: async () => (await import('./zh-Hans/session.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'challenge',
-      loader: async () => (await import('./zh-Hans/challenge.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'chapter',
-      loader: async () => (await import('./zh-Hans/chapter.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'song',
-      loader: async () => (await import('./zh-Hans/song.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'chart',
-      loader: async () => (await import('./zh-Hans/chart.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'user',
-      loader: async () => (await import('./zh-Hans/user.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'recorder',
-      loader: async () => (await import('./zh-Hans/recorder.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'notification',
-      loader: async () => (await import('./zh-Hans/notification.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'record',
-      loader: async () => (await import('./zh-Hans/record.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'studio',
-      loader: async () => (await import('./zh-Hans/studio.json')).default,
-    },
-    {
-      locale: 'zh-Hans',
-      key: 'admin',
-      loader: async () => (await import('./zh-Hans/admin.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'common',
-      loader: async () => (await import('./zh-Hant/common.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'home',
-      loader: async () => (await import('./zh-Hant/home.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'session',
-      loader: async () => (await import('./zh-Hant/session.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'challenge',
-      loader: async () => (await import('./zh-Hant/challenge.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'chapter',
-      loader: async () => (await import('./zh-Hant/chapter.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'song',
-      loader: async () => (await import('./zh-Hant/song.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'chart',
-      loader: async () => (await import('./zh-Hant/chart.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'user',
-      loader: async () => (await import('./zh-Hant/user.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'recorder',
-      loader: async () => (await import('./zh-Hant/recorder.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'notification',
-      loader: async () => (await import('./zh-Hant/notification.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'record',
-      loader: async () => (await import('./zh-Hant/record.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'studio',
-      loader: async () => (await import('./zh-Hant/studio.json')).default,
-    },
-    {
-      locale: 'zh-Hant',
-      key: 'admin',
-      loader: async () => (await import('./zh-Hant/admin.json')).default,
-    },
+    ...createLoaders(
+      'en',
+      import.meta.glob<Translations.Input>('./en/*.json', { import: 'default' })
+    ),
+    ...createLoaders(
+      'zh-Hans',
+      import.meta.glob<Translations.Input>('./zh-Hans/*.json', { import: 'default' })
+    ),
+    ...createLoaders(
+      'zh-Hant',
+      import.meta.glob<Translations.Input>('./zh-Hant/*.json', { import: 'default' })
+    ),
   ],
 } satisfies Config;
 
-export const { t, locale, locales, loading, loadTranslations } = new i18n(config);
+export const { t, locale, locales, loading, loadTranslations } = new I18n(config);
 
 loading.subscribe(($loading) => $loading);

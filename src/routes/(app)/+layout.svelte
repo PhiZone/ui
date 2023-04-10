@@ -1,12 +1,15 @@
 <script lang="ts">
-  import '../../app.css';
-  import Navbar from '$lib/components/navbar.svelte';
-  import Footer from '$lib/components/footer.svelte';
-
-  export let data: import('./$types').LayoutData;
-  $: ({ user, backupUser, refresh_token } = data);
+  import { page } from '$app/stores';
+  import Navbar from '$lib/components/Navbar.svelte';
+  import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<Navbar user={refresh_token ? (user ? user : backupUser) : undefined} />
-<slot />
-<Footer user={refresh_token ? (user ? user : backupUser) : undefined} />
+<Navbar />
+
+<main class="bg-base-200">
+  <slot />
+</main>
+
+{#if !$page.url.pathname.startsWith('/studio') && $page.status < 400}
+  <Footer />
+{/if}

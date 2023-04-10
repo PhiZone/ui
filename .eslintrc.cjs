@@ -31,5 +31,6 @@ module.exports = {
   rules: {
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 };

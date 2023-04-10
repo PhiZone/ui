@@ -1,3 +1,5 @@
-export const match: import('@sveltejs/kit').ParamMatcher = (param) => {
+import type { ParamMatcher } from '@sveltejs/kit';
+
+export const match = ((param) => {
   return /^\d+$/.test(param);
-};
+}) satisfies ParamMatcher;
