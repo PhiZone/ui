@@ -1,8 +1,7 @@
 import API from '$lib/api';
 import { fail } from '@sveltejs/kit';
-import type { Actions } from './$types';
 
-export const actions: Actions = {
+export const actions = {
   vote: async ({ request, params, fetch, locals }) => {
     const api = new API(fetch, locals.access_token, locals.user);
     const data = await request.formData();

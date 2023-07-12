@@ -3,9 +3,8 @@
   import { t } from '$lib/translations/config';
   import User from '$lib/components/User.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ searchParams, id, page, api } = data);
 
   $: query = createQuery(api.relation.list({ follower: id, page }));

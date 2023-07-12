@@ -4,9 +4,8 @@
   import Song from '$lib/components/Song.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import SearchOptions from '$lib/components/SearchOptions.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ searchParams, page, api } = data);
 
   $: query = createQuery(api.song.list(searchParams));
@@ -48,7 +47,7 @@
   {#if $query.isSuccess}
     {@const { results, count } = $query.data}
     {#if results.length > 0}
-      <div class="px-32 result">
+      <div class="result">
         {#each results as song}
           <div class="min-w-fit">
             <Song {song} />

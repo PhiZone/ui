@@ -8,9 +8,8 @@
   import Chapter from '$lib/components/Chapter.svelte';
   import Player from '$lib/components/SongPlayer.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
 
   $: ({ searchParams, id, user, api } = data);
 

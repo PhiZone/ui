@@ -1,20 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import { getUserPrivilege } from '$lib/utils';
-  import { onMount } from 'svelte';
-
-  export let data: import('./$types').LayoutData;
-  $: ({ access_token, user } = data);
-  onMount(() => {
-    if (!access_token) {
-      goto(`/session/login?redirect=${encodeURIComponent($page.url.pathname + $page.url.search)}`);
-    }
-    if (getUserPrivilege(user.type) < 2) {
-      goto('/');
-    }
-  });
 </script>
 
 <div class="drawer drawer-mobile">

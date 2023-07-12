@@ -1,7 +1,6 @@
 <script lang="ts">
   import { locales, t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
-  import type { ActionData } from './$types';
   import { enhance } from '$app/forms';
 
   let status = Status.WAITING;
@@ -14,7 +13,7 @@
     }
   };
 
-  export let form: ActionData;
+  export let form;
 </script>
 
 <svelte:head>
@@ -139,13 +138,11 @@
                   : 'btn-secondary btn-outline'} w-full"
                 disabled={status == Status.SENDING}
               >
-                {$t(
-                  status === Status.ERROR
-                    ? 'common.error'
-                    : status === Status.SENDING
-                    ? 'common.waiting'
-                    : 'session.registration.register'
-                )}
+                {status === Status.ERROR
+                  ? $t('common.error')
+                  : status === Status.SENDING
+                  ? $t('common.waiting')
+                  : $t('session.registration.register')}
               </button>
             </div>
           </div>

@@ -3,9 +3,8 @@
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
 
   let code = data.code ?? '';
   let msg = data.detail ?? '';

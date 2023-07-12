@@ -11,7 +11,7 @@ import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'name' | 'composer' | 'illustrator' | 'chapters' | 'uploader';
+  order_by?: 'id' | 'name' | 'composer' | 'illustrator' | 'chapters' | 'uploader' | 'reviewer';
   id?: number | number[];
   name?: string;
   composer?: string;

@@ -1,12 +1,12 @@
 <script lang="ts">
   import '../app.css';
+  import 'cropperjs/dist/cropper.min.css';
   import { locale } from '$lib/translations/config';
   import { convertLanguageCode } from '$lib/utils';
   import { browser } from '$app/environment';
   import { QueryClientProvider } from '@tanstack/svelte-query';
-  import type { LayoutData } from './$types';
 
-  export let data: LayoutData;
+  export let data;
 
   // if (
   //   !$page.data.access_token &&

@@ -1,9 +1,15 @@
 <script lang="ts">
-  import type { SongSubmission, User } from '$lib/models';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
+  import type { SongSubmission } from '$lib/models';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
+  import { page } from '$app/stores';
 
   export let submission: SongSubmission;
+
+  $: ({ api } = $page.data);
+
+  $: uploader = createQuery(api.user.info({ id: submission.uploader }));
 </script>
 
 <a href={`/studio/song-submissions/${submission.id}`}>
@@ -48,10 +54,13 @@
       <div class="flex items-center min-w-fit">
         {#if typeof submission.uploader === 'object'}
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1">
-              {$t('studio.submission.uploader')}
-            </span>
-            {submission.uploader.username}
+            {#if $uploader.isSuccess}
+              {@const uploader = $uploader.data}
+              <span class="badge badge-primary badge-outline mr-1">
+                {$t('studio.submission.uploader')}
+              </span>
+              {uploader.username}
+            {/if}
           </p>
         {/if}
         <p class="min-w-fit">

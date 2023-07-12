@@ -6,7 +6,6 @@
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
-  import type { ActionData } from './$types';
   import { useQueryClient } from '@tanstack/svelte-query';
 
   let status = Status.WAITING;
@@ -19,7 +18,7 @@
     }
   };
 
-  export let form: ActionData;
+  export let form;
 
   const queryClient = useQueryClient();
 </script>
@@ -88,7 +87,7 @@
           />
           <div class="label flex justify-between">
             <a
-              href="/session/password-reset{$page.url.search}"
+              href="/session/password-reset/request{$page.url.search}"
               class="label-text-alt link link-hover"
             >
               {$t('session.login.forgot_password')}

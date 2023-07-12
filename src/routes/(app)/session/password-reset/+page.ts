@@ -1,6 +1,4 @@
-import type { PageLoad } from './$types';
-
-export const load = (async ({ url, parent }) => {
+export const load = async ({ url, parent }) => {
   const { api } = await parent();
   const token = url.searchParams.get('token') as string;
   if (token) {
@@ -12,4 +10,4 @@ export const load = (async ({ url, parent }) => {
 
     return { token };
   }
-}) satisfies PageLoad;
+};

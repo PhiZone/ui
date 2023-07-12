@@ -1,7 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
-import type { Actions } from './$types';
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
@@ -47,4 +46,4 @@ export const actions = {
 
     throw redirect(303, '/session/email-confirmation' + url.search);
   },
-} satisfies Actions;
+};

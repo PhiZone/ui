@@ -34,7 +34,7 @@ export interface UpdateOpts {
   id: number;
   username?: string;
   avatar?: Blob;
-  gender?: number;
+  gender?: string;
   bio?: string;
   language?: string;
   is_active?: boolean;
@@ -73,7 +73,8 @@ export default class UserAPI {
 
   update(opts: UpdateOpts) {
     const { id, ...rest } = opts;
-    return this.api.POST<FormData | typeof rest, UpdateResult>(
+    console.log(serialize(rest));
+    return this.api.PATCH<FormData | typeof rest, UpdateResult>(
       `/users/${id}/`,
       rest.avatar ? serialize(rest) : rest
     );

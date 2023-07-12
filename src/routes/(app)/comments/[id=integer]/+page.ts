@@ -1,18 +1,9 @@
-import * as api from '$lib/api';
-import type { Comment } from '$lib/models';
-import { Status } from '$lib/constants';
-import { error } from '@sveltejs/kit';
+import queryString from 'query-string';
 
-export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
-  const { user, access_token } = await parent();
-  const resp = await api.GET(`/comments/${params.id}/?query_user=1`, access_token, user, fetch);
-  if (!resp.ok) {
-    throw error(resp.status, resp.statusText);
-  }
-  const json = await resp.json();
-  return {
-    status: resp.ok ? Status.OK : Status.ERROR,
-    content: resp.ok ? (json as Comment) : null,
-    error: resp.ok ? null : json.detail,
-  };
+export const load = async ({ params, url, parent }) => {
+  const { api, queryClient } = await parent();
+  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
+  const id = parseInt(params.id);
+  await queryClient.prefetchQuery(api.comment.info({ id }));
+  return { searchParams, id };
 };

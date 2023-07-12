@@ -40,7 +40,7 @@ export default class API {
     if (data) {
       if (data instanceof FormData) {
         init.body = data;
-        headers.append('Content-Type', ContentType.FORM_DATA);
+        // headers.append('Content-Type', ContentType.FORM_DATA);
       } else {
         init.body = JSON.stringify(data);
         headers.append('Content-Type', ContentType.JSON);

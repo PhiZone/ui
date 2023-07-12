@@ -1,21 +1,9 @@
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
 
 export const actions = {
-  request: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
-    const data = await request.formData();
-    const email = data.get('email') as string;
-    const resp = await api.session.password_reset.request({ email });
-
-    if (!resp.ok) {
-      const err = await resp.json();
-      return fail(resp.status, { email, detail: err.detail });
-    }
-  },
-  confirm: async ({ request, url, locals, fetch }) => {
+  default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.access_token, locals.user);
     const data = await request.formData();
     const password = data.get('password') as string,
@@ -43,4 +31,4 @@ export const actions = {
 
     throw redirect(303, '/session/login' + url.search);
   },
-} satisfies Actions;
+};

@@ -1,10 +1,9 @@
-import type { Handle } from '@sveltejs/kit';
 import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import { clearTokens, setTokens } from '$lib/utils';
 import { locale } from '$lib/translations/config';
 
-export const handle = (async ({ event, resolve }) => {
+export const handle = async ({ event, resolve }) => {
   console.log(event.url.href);
   let access_token = event.cookies.get('access_token'),
     refresh_token = event.cookies.get('refresh_token');
@@ -50,4 +49,4 @@ export const handle = (async ({ event, resolve }) => {
   }
 
   return await resolve(event);
-}) satisfies Handle;
+};

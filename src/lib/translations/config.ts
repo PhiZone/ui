@@ -1,4 +1,4 @@
-import I18n, { type Config } from 'sveltekit-i18n';
+import I18n from 'sveltekit-i18n';
 import type { Translations } from '@sveltekit-i18n/base';
 import lang from './lang.json';
 
@@ -16,7 +16,7 @@ const createLoaders = (
   });
 };
 
-const config = {
+export const { t, locale, locales, loading, loadTranslations } = new I18n({
   initLocale: 'zh-Hans',
   fallbackLocale: 'en',
   translations: {
@@ -38,8 +38,6 @@ const config = {
       import.meta.glob<Translations.Input>('./zh-Hant/*.json', { import: 'default' })
     ),
   ],
-} satisfies Config;
-
-export const { t, locale, locales, loading, loadTranslations } = new I18n(config);
+});
 
 loading.subscribe(($loading) => $loading);

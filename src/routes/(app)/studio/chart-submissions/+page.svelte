@@ -1,40 +1,14 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import * as api from '$lib/api';
-  import { onMount } from 'svelte';
-  import { Status } from '$lib/constants';
-  import Submission from '$lib/components/chart_submission.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import type { ChartSubmission, Song, SongSubmission, User } from '$lib/models';
-  import { page } from '$app/stores';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, user, access_token } = data);
+  import Submission from '$lib/components/chart_submission.svelte';
+  import SearchOptions from '$lib/components/SearchOptions.svelte';
 
-  let pageIndex = 1,
-    submissionCount: number,
-    pageStatus = Status.RETRIEVING,
-    submissions: ChartSubmission[],
-    previousSubmissions: string,
-    nextSubmissions: string,
-    filter: string | null = null,
-    filterParam: string | null = null,
-    songList: Song[],
-    songSubmissionList: SongSubmission[],
-    order: string | null = null,
-    reverse = false;
+  export let data;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    pageStatus = status;
-    if (status === Status.OK) {
-      submissions = content.results;
-      submissionCount = content.count;
-      previousSubmissions = content.previous;
-      nextSubmissions = content.next;
-    } else {
-      console.log('status:', status);
-      console.log('error:', error);
-    }
-  });
+  $: query = createQuery(api.song.submission.list(searchParams));
 </script>
 
 <svelte:head>
@@ -43,7 +17,7 @@
   </title>
 </svelte:head>
 
-<input type="checkbox" id="list-options" class="modal-toggle" />
+<!-- <input type="checkbox" id="list-options" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box bg-base-100 max-h-[90vh] w-[50vw] max-w-[1800px]">
     <label
@@ -158,7 +132,7 @@
       </button>
     </div>
   </div>
-</div>
+</div> -->
 <div class="bg-base-200 min-h-screen">
   <div class="pt-32 flex justify-center">
     <div class="w-3/4 max-w-7xl min-w-20">

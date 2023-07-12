@@ -2,14 +2,11 @@
   import { enhance } from '$app/forms';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
-  import Error from '../../../+error.svelte';
-  import type { PageData, ActionData } from './$types';
 
-  export let data: PageData;
-  export let form: ActionData;
+  export let data;
+  export let form;
 
   $: ({ token, detail } = data);
-  // $: ({ status, msg, token } = data);
 
   let status = Status.WAITING;
   let msg = '';
@@ -18,61 +15,6 @@
     status = Status.WAITING;
     msg = '';
   };
-
-  // let password = '',
-  //   confirmPassword = '',
-  //   emailErr = '',
-  //   email = '';
-
-  // const requestToken = async () => {
-  //   if (!email) {
-  //     msg = $t('session.data_incomplete');
-  //     return;
-  //   }
-  //   status = Status.SENDING;
-  //   const resp = await api.POST('/password_reset/', { email });
-  //   if (resp.ok) {
-  //     status = Status.OK;
-  //   } else {
-  //     status = Status.ERROR;
-  //     const json = await resp.json();
-  //     console.log(json);
-  //     if (json.email) {
-  //       emailErr = json.email[0];
-  //     }
-  //     msg = $t('common.correct_errors');
-  //   }
-  // };
-
-  // const resetPassword = async () => {
-  //   if (!password || !confirmPassword) {
-  //     msg = $t('session.data_incomplete');
-  //     status = Status.ERROR;
-  //     return;
-  //   }
-  //   if (password != confirmPassword) {
-  //     msg = $t('session.passwords_differ');
-  //     status = Status.ERROR;
-  //     return;
-  //   }
-  //   status = Status.SENDING;
-  //   const resp = await api.POST('/password_reset/confirm/', {
-  //     token,
-  //     password,
-  //   });
-  //   if (resp.ok) {
-  //     goto('/session/login');
-  //   } else {
-  //     status = Status.ERROR;
-  //     const json = await resp.json();
-  //     console.log(json);
-  //     msg = json.password
-  //       ? json.password[0]
-  //       : json.detail
-  //       ? json.detail
-  //       : $t('common.unknown_error');
-  //   }
-  // };
 </script>
 
 <svelte:head>
@@ -82,133 +24,93 @@
 <div class="hero min-h-screen bg-base-200">
   <div class="hero-content text-center">
     <div class="w-[400px] max-w-7xl">
-      <h1 class="text-5xl font-bold">
-        {$t('session.password_reset.password_reset')}
-      </h1>
       {#if !token}
-        {#if status !== Status.OK}
-          <form
-            method="POST"
-            action="?/request"
-            on:focus={clear}
-            use:enhance={() => {
-              status = Status.SENDING;
-
-              return async ({ result, update }) => {
-                if (result.type === 'success') {
-                  status = Status.OK;
-                  msg = '';
-                } else if (result.type === 'failure') {
-                  status = Status.ERROR;
-                  msg = result.data?.detail ?? $t('common.unknown_error');
-                }
-
-                await update();
-              };
-            }}
-          >
-            <p class="py-6">
-              {$t('session.password_reset.password_reset_text1')}
-            </p>
-            <div
-              class="tooltip tooltip-right tooltip-error"
-              class:tooltip-open={status === Status.ERROR}
-              data-tip={status === Status.ERROR ? msg : null}
-            >
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder={$t('session.email')}
-                value={form?.email ?? ''}
-                class={`input input-bordered input-lg ${
-                  form?.detail ? 'input-error' : 'input-info'
-                } w-full max-w-xs text-center glass`}
-              />
-            </div>
-            <div class="mt-6">
-              {#if status === Status.ERROR}
-                <div class="tooltip tooltip-open tooltip-bottom tooltip-error" data-tip={msg}>
-                  <button class="btn btn-error">{$t('common.error')}</button>
-                </div>
-              {:else if status === Status.SENDING}
-                <button class={'btn btn-ghost btn-disabled glass'}>{$t('common.waiting')}</button>
-              {:else}
-                <button
-                  class={`btn btn-outline btn-accent ${
-                    email?.length > 0 ? '' : 'btn-disabled'
-                  } glass`}
-                  on:click={requestToken}
-                >
-                  {$t('common.submit')}
-                </button>
-              {/if}
-            </div>
-          </form>
-        {:else}
-          <p class="py-6">
-            {$t('session.password_reset.password_reset_text2')}
-          </p>
-        {/if}
+        <h1 class="text-5xl font-bold">
+          {$t('session.password_reset.token_missing')}
+        </h1>
+      {:else if detail}
+        <h1 class="text-5xl font-bold">
+          {$t('session.password_reset.token_invalid')}
+        </h1>
       {:else}
+        <h1 class="text-5xl font-bold">
+          {$t('session.password_reset.password_reset')}
+        </h1>
         <p class="py-6">
           {$t('session.password_reset.password_reset_text3')}
         </p>
-        <form>
-          <input type="email" autocomplete="username" class="hidden" />
-          <input
-            type="password"
-            autocomplete="new-password"
-            class={`input input-bordered input-lg my-2 ${
-              status === Status.ERROR
-                ? 'input-error'
-                : confirmPassword && password == confirmPassword
-                ? 'input-success'
-                : 'input-info'
-            } w-full max-w-xs text-center glass`}
-            placeholder={$t('session.password_reset.new_password')}
-            bind:value={password}
-            on:input={() => {
-              status = Status.WAITING;
-              msg = '';
-            }}
-          />
-          <input
-            type="password"
-            autocomplete="new-password"
-            class={`input input-bordered input-lg my-2 ${
-              status === Status.ERROR
-                ? 'input-error'
-                : password && password == confirmPassword
-                ? 'input-success'
-                : 'input-info'
-            } w-full max-w-xs text-center glass`}
-            placeholder={$t('session.confirm_password')}
-            bind:value={confirmPassword}
-            on:input={() => {
-              status = Status.WAITING;
-              msg = '';
-            }}
-          />
-        </form>
-        <div class="mt-6">
-          {#if status === Status.ERROR}
-            <div class="tooltip tooltip-open tooltip-bottom tooltip-error" data-tip={msg}>
-              <button class="btn btn-error">{$t('common.error')}</button>
-            </div>
-          {:else if status === Status.SENDING}
-            <button class={'btn btn-ghost btn-disabled glass'}>{$t('common.waiting')}</button>
-          {:else}
-            <button
-              class={`btn btn-outline btn-accent ${
-                password?.length > 0 ? '' : 'btn-disabled'
-              } glass`}
-              on:click={resetPassword}
+        <form
+          method="POST"
+          on:focus={clear}
+          use:enhance={() => {
+            status = Status.SENDING;
+
+            return async ({ result, update }) => {
+              if (result.type === 'success') {
+                status = Status.OK;
+              } else if (result.type === 'failure') {
+                status = Status.ERROR;
+                msg = result.data?.detail ?? $t('common.unknown_error');
+              }
+
+              await update();
+            };
+          }}
+        >
+          <input type="text" name="token" value={token} hidden />
+          <input type="email" autocomplete="username" hidden />
+          <div
+            class="tooltip tooltip-right tooltip-error w-full"
+            class:tooltip-open={form?.password_error}
+            data-tip={form?.password_error ?? null}
+          >
+            <input
+              type="password"
+              name="password"
+              autocomplete="new-password"
+              class="input input-bordered input-lg my-2 input-info w-full text-center"
+              placeholder={$t('session.password_reset.new_password')}
+              value={form?.password ?? ''}
+            />
+          </div>
+          <div
+            class="tooltip tooltip-right tooltip-error w-full"
+            class:tooltip-open={form?.confirm_password_error}
+            data-tip={form?.confirm_password_error ?? null}
+          >
+            <input
+              type="password"
+              name="confirm_password"
+              autocomplete="new-password"
+              class="input input-bordered input-lg my-2 input-info w-full text-center"
+              placeholder={$t('session.confirm_password')}
+              value={form?.confirm_password ?? ''}
+            />
+          </div>
+          <div class="mt-6">
+            <div
+              class="tooltip tooltip-bottom tooltip-error w-full"
+              class:tooltip-open={status === Status.ERROR}
+              data-tip={status === Status.ERROR ? msg : null}
             >
-              {$t('common.submit')}
-            </button>
-          {/if}
-        </div>
+              <button
+                type="submit"
+                class="btn {status === Status.ERROR
+                  ? 'btn-error'
+                  : status === Status.SENDING
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
+                disabled={status == Status.SENDING}
+              >
+                {status === Status.ERROR
+                  ? $t('common.error')
+                  : status === Status.SENDING
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
+              </button>
+            </div>
+          </div>
+        </form>
       {/if}
     </div>
   </div>

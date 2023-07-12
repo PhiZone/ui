@@ -4,14 +4,13 @@
   import { getGrade, parseDateTime } from '$lib/utils';
   import User from '$lib/components/User.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ id, api } = data);
 
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
-    api.chart.info({ id: $record.data?.chart_id ?? 0 }, { enabled: $record.isSuccess })
+    api.chart.info({ id: $record.data?.chart.id ?? 0 }, { enabled: $record.isSuccess })
   );
 </script>
 

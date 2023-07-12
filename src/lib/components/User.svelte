@@ -31,12 +31,12 @@
     <a
       href="/users/{user.id}"
       class="avatar {kind === 'embedded'
-        ? 'flex-col'
-        : 'w-1/6 min-w-fit whitespace-nowrap text-ellipsis'} items-center gap-1 overflow-hidden"
+        ? 'flex-col w-full'
+        : 'w-1/6 min-w-fit'} items-center gap-1"
     >
       <div
         class="{kind === 'embedded'
-          ? 'w-[72px] border-[3px] border-opacity-80'
+          ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
           : 'w-10 border-2'} rounded-full {user.type == 'admin'
           ? 'border-indigo-500'
           : user.type == 'volunteer'
@@ -47,7 +47,7 @@
       >
         <img class="object-fill" src={getCompressedImage(user.avatar)} alt="Avatar" />
       </div>
-      <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center max-w-[120px]">
+      <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center truncate w-full">
         {user.username}
       </p>
       <div class="flex flex-wrap gap-1 !aspect-auto">

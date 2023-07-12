@@ -1,16 +1,14 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
-  import Like from '$lib/components/Like.svelte';
+  import { createQuery } from '@tanstack/svelte-query';
   import Record from '$lib/components/Record.svelte';
   import Comment from '$lib/components/Comment.svelte';
-  import type { PageData } from './$types';
   import Follow from '$lib/components/Follow.svelte';
-  import { createQuery } from '@tanstack/svelte-query';
   import Chart from '$lib/components/Chart.svelte';
   import Song from '$lib/components/Song.svelte';
 
-  export let data: PageData;
+  export let data;
 
   $: ({ searchParams, id, api } = data);
 

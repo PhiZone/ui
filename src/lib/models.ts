@@ -230,7 +230,8 @@ export interface PlayRecord {
   perfect_judgment: number;
   good_judgment: number;
   time: string;
-  chart_id: number;
+  // chart_id: number;
+  chart: Chart;
   event_part: null | number;
   player: number;
   rank: number;
@@ -254,11 +255,11 @@ export interface SongSubmission {
   preview_start: string;
   preview_end: string;
   representation: number | null;
-  reviewer: number | User;
+  reviewer: number;
   song: string;
   status: number;
   time: string;
-  uploader: number | User;
+  uploader: number;
 }
 
 export interface ChartSubmission {

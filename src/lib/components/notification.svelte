@@ -1,24 +1,15 @@
 <script lang="ts">
   import type { Notification } from '$lib/models';
   import { t } from '$lib/translations/config';
-  import { parseDateTime, parseRichText } from '$lib/utils';
+  import { parseDateTime } from '$lib/utils';
+  import { page } from '$app/stores';
+  import { richtext } from '$lib/richtext';
+
+  $: ({ api } = $page.data);
 
   export let notification: Notification;
 
-  console.log(notification);
-
-  const types = new Map([
-    ['User', '/users'],
-    ['Chapter', '/chapters'],
-    ['Song', '/songs'],
-    ['Chart', '/charts'],
-    ['Discussion', '/discussions'],
-    ['Comment', '/comments'],
-    ['Reply', '/replies'],
-    ['ChartUpload', '/studio/chart-submissions'],
-    ['SongUpload', '/studio/song-submissions'],
-    ['Collab', '/studio/collaborations'],
-  ]);
+  $: message = richtext(notification.message, api);
 </script>
 
 <div class="indicator w-full my-4">
@@ -34,20 +25,7 @@
   >
     <div class="card-body w-[60%]">
       <h2 class="text-xl mb-3 min-w-fit inline">
-        {#each parseRichText(notification.message) as t}
-          {#if t.type}
-            <a
-              href={`${types.get(t.type)}/${t.id}`}
-              class="text-accent hover:underline"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t.text}
-            </a>
-          {:else}
-            {t.text}
-          {/if}
-        {/each}
+        {@html $message}
       </h2>
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">

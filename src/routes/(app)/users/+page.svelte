@@ -4,9 +4,8 @@
   import User from '$lib/components/User.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import SearchOptions from '$lib/components/SearchOptions.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ searchParams, page, api } = data);
 
   $: query = createQuery(api.user.list(searchParams));

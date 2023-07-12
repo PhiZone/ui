@@ -3,9 +3,8 @@
   import { t } from '$lib/translations/config';
   import Chapter from '$lib/components/Chapter.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ searchParams, page, api } = data);
 
   $: query = createQuery(api.chapter.list(searchParams));
@@ -20,7 +19,7 @@
   {#if $query.isSuccess}
     {@const { results, count } = $query.data}
     {#if results.length > 0}
-      <div class="mx-auto result">
+      <div class="result">
         {#each results as chapter}
           <div class="min-w-fit">
             <Chapter {chapter} fixedHeight />
@@ -42,5 +41,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 1.5rem;
+    justify-items: center;
   }
 </style>

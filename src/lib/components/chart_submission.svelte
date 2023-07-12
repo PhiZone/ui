@@ -1,9 +1,13 @@
 <script lang="ts">
-  import type { ChartSubmission, User } from '$lib/models';
+  import type { ChartSubmission } from '$lib/models';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { page } from '$app/stores';
 
-  export let submission: ChartSubmission, user: User;
+  export let submission: ChartSubmission;
+
+  $: ({ user } = $page.data);
+
   let song = submission.song ? submission.song : submission.song_upload;
 </script>
 

@@ -21,7 +21,7 @@
 
   $: grade = getGrade(record.score, record.full_combo);
 
-  $: chartQ = createQuery(api.chart.info({ id: record.chart_id }, { initialData: chart }));
+  $: chartQ = createQuery(api.chart.info({ id: record.chart.id }, { initialData: chart }));
   $: songQ = createQuery(
     api.song.info(
       { id: $chartQ.data?.song ?? 0 },

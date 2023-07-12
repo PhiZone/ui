@@ -1,27 +1,15 @@
-import * as api from '$lib/api';
-import { Status } from '$lib/constants';
+import queryString from 'query-string';
 import { getUserPrivilege } from '$lib/utils';
-import { error } from '@sveltejs/kit';
 
-export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) => {
-  const { user, access_token } = await parent();
-  const resp = await api.GET(
-    `/chart_uploads/${url.search}${
-      getUserPrivilege(user.type) >= 3
-        ? `${url.search ? '&' : '?'}query_uploader=1`
-        : `${url.search ? '&' : '?'}uploader=${user.id}`
-    }`,
-    access_token,
-    user,
-    fetch
-  );
-  if (!resp.ok) {
-    throw error(resp.status, resp.statusText);
-  }
-  const json = await resp.json();
+export const load = async ({ url, parent }) => {
+  const { api, queryClient, user } = await parent();
+  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
+  const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
+  searchParams.page = page;
+  if (user && getUserPrivilege(user.type) < 3) searchParams.uploader = user.id;
+  await queryClient.prefetchQuery(api.chart.submission.list(searchParams));
   return {
-    status: resp.ok ? Status.OK : Status.ERROR,
-    content: resp.ok ? json : null,
-    error: resp.ok ? null : json.detail,
+    searchParams,
+    page,
   };
 };

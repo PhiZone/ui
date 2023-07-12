@@ -11,12 +11,11 @@
   import Record from '$lib/components/Record.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import ChartRadar from '$lib/components/ChartRadar.svelte';
-  import type { PageData, ActionData } from './$types';
 
-  export let data: PageData;
+  export let data;
   $: ({ searchParams, id, user, api } = data);
 
-  const getMultiplier = (level: number) => {
+  const getMultiplier = (level: number): number => {
     switch (level) {
       case 0:
         return 0.0;
@@ -53,7 +52,7 @@
   let impression = 0;
   let open = false;
 
-  export let form: ActionData;
+  export let form;
 
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(

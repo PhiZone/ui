@@ -100,15 +100,15 @@
 
 <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
   {#if showUser}
-    <figure class="w-1/6 min-w-fit">
+    <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center border-r border-base-300 px-3 py-3 mx-auto my-auto"
+        class="relative inline-flex flex-col items-center justify-center border-r border-base-300 px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={comment.user} kind="embedded" />
       </div>
     </figure>
   {/if}
-  <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
+  <div class="card-body w-2/3 md:w-5/6 pt-6 pl-6 pb-4 pr-4">
     <p class="w-full content text-lg">
       {@html $content}
     </p>

@@ -1,6 +1,4 @@
-import type { PageLoad } from './$types';
-
-export const load = (async ({ parent }) => {
+export const load = async ({ parent }) => {
   const { api, queryClient } = await parent();
   await queryClient.prefetchQuery(api.headline.get());
-}) satisfies PageLoad;
+};

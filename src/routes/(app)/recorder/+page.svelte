@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data: import('./$types').PageData;
+  export let data;
   $: ({ status, content, user } = data);
   let array = [0, 1, 2, 3, 4];
 </script>

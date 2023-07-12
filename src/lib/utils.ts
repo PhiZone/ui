@@ -251,3 +251,17 @@ export function clearTokens(cookies: Cookies) {
 export function range(start: number, end: number) {
   return [...Array(end - start).keys()].map((x) => x + start);
 }
+
+class Test {
+  constructor(b: number);
+  constructor(a: string, b: number);
+  constructor(ab: number | string, b?: number) {
+    if (b !== undefined) {
+      const a = ab as string;
+      // balabala
+    } else {
+      b = ab as number;
+      // balabala
+    }
+  }
+}

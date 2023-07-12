@@ -4,9 +4,8 @@
   import Like from '$lib/components/Like.svelte';
   import User from '$lib/components/User.svelte';
   import Comments from '$lib/components/Comments.svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
 
   $: ({ searchParams, id, api } = data);
 
@@ -22,7 +21,7 @@
   {@const chapter = $chapter.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
-    <div class="modal-box bg-base-100 p-0 w-[59vw] max-w-[1600px]">
+    <div class="modal-box bg-base-100 p-0 max-w-[1600px]">
       <label
         for="illustration"
         class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
@@ -45,8 +44,8 @@
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
     <div class="hero-overlay bg-opacity-60" />
-    <div class="pt-32 pb-24 mx-auto w-3/4 flex justify-center">
-      <div class="w-full min-w-[700px] max-w-[1280px]">
+    <div class="pt-32 pb-24 w-full flex justify-center">
+      <div class="w-full max-w-[1280px] mx-4">
         <h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">
           {chapter.title}
         </h1>
@@ -56,7 +55,7 @@
         <p class="text-xl text-neutral-content mb-6 content">
           {chapter.description}
         </p>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center flex-wrap">
           <div class="my-4 flex gap-3">
             <Like
               id={chapter.like}
@@ -110,23 +109,28 @@
                 {#if songs.length > 0}
                   <ul class="menu bg-base-100 w-full">
                     {#each songs as song}
-                      <li class="overflow-hidden">
-                        <a href={`/songs/${song.id}`} class="w-full h-[82px] flex px-5">
-                          <div class="w-1/2">
-                            <div class="text-xl font-bold">
+                      <li class="w-full overflow-hidden">
+                        <a
+                          href={`/songs/${song.id}`}
+                          class="w-full h-[82px] flex flex-wrap px-5 overflow-hidden"
+                        >
+                          <div class="basis-1 grow flex overflow-hidden">
+                            <div class="text-xl font-bold w-full truncate">
                               {song.name}
-                              {#if song.original}
-                                <div class="btn btn-secondary btn-sm text-lg no-animation">
-                                  {$t('song.original')}
-                                </div>
-                              {/if}
+                            </div>
+                            {#if song.original}
+                              <div class="btn btn-secondary btn-sm text-lg no-animation">
+                                {$t('song.original')}
+                              </div>
+                            {/if}
+                          </div>
+                          <div class="basis-1 grow flex overflow-hidden">
+                            <div class="text-lg w-full truncate">
+                              {song.composer}
                             </div>
                           </div>
-                          <div class="w-5/12 text-lg">
-                            {song.composer}
-                          </div>
                           <div
-                            class="w-1/12 min-w-fit"
+                            class="min-w-fit"
                             on:click={(e) => {
                               e.preventDefault();
                             }}

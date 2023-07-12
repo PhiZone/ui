@@ -4,9 +4,8 @@ import { locale, loadTranslations } from '$lib/translations/config';
 import { convertLanguageCode } from '$lib/utils';
 import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
-import type { LayoutLoad } from './$types';
 
-export const load = (async ({ url, data, fetch }) => {
+export const load = async ({ url, data, fetch }) => {
   let lang;
   if (browser && window.localStorage.getItem('lang')) {
     lang = window.localStorage.getItem('lang');
@@ -26,6 +25,7 @@ export const load = (async ({ url, data, fetch }) => {
     defaultOptions: {
       queries: {
         enabled: browser,
+        refetchOnWindowFocus: false,
       },
     },
   });
@@ -35,4 +35,4 @@ export const load = (async ({ url, data, fetch }) => {
     api: new API(fetch, data.access_token, data.user),
     queryClient,
   };
-}) satisfies LayoutLoad;
+};

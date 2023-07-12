@@ -1,10 +1,13 @@
 <script lang="ts">
-  import Comment from '$lib/components/Comment.svelte';
-  import { Status } from '$lib/constants';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
+  import Comment from '$lib/components/Comment.svelte';
 
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  export let data;
+
+  $: ({ searchParams, id, api } = data);
+
+  $: query = createQuery(api.comment.info({ id }));
 </script>
 
 <svelte:head>
@@ -13,14 +16,15 @@
 
 <div class="hero min-h-screen bg-base-200">
   <div class="w-5/6 form-control mx-auto">
-    {#if status === Status.OK && content}
+    {#if $query.isSuccess}
+      {@const comment = $query.data}
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
         >
           {$t('common.comment')}
         </span>
-        <Comment comment={content} token={access_token} {user} showSource />
+        <Comment {searchParams} {comment} showSource />
       </div>
     {/if}
   </div>

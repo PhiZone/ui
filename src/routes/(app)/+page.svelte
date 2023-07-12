@@ -2,9 +2,8 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { goto } from '$app/navigation';
   import { t } from '$lib/translations/config';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
 
   $: ({ api } = data);
 

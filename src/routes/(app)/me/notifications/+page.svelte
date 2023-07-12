@@ -1,28 +1,13 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
+  import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Notification from '$lib/components/notification.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import { onMount } from 'svelte';
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
 
-  let pageIndex = 1,
-    pageStatus = Status.RETRIEVING,
-    notifications: any[] | null,
-    notificationCount: number,
-    previousNotifications: string,
-    nextNotifications: string;
+  export let data;
+  $: ({ searchParams, page, api } = data);
 
-  onMount(() => {
-    pageStatus = status;
-    if (status === Status.OK) {
-      notifications = content.results;
-      notificationCount = content.count;
-      previousNotifications = content.previous;
-      nextNotifications = content.next;
-    }
-  });
+  $: query = createQuery(api.notification.list(searchParams));
 </script>
 
 <svelte:head>
@@ -36,21 +21,13 @@
         {$t('notification.notifications')}
       </h1>
       <div class="py-4 min-w-fit">
-        {#if pageStatus === Status.OK && notifications}
-          {#if notifications.length > 0}
-            {#each notifications as notification}
+        {#if $query.isSuccess}
+          {@const { results, count } = $query.data}
+          {#if results.length > 0}
+            {#each results as notification}
               <Notification {notification} />
             {/each}
-            <Pagination
-              bind:previous={previousNotifications}
-              bind:next={nextNotifications}
-              bind:results={notifications}
-              bind:count={notificationCount}
-              bind:pageIndex
-              bind:status={pageStatus}
-              token={access_token}
-              {user}
-            />
+            <Pagination {count} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}
