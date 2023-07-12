@@ -2,7 +2,7 @@
   "recorder": "Chart Recording Service",
   "new_request": "New Request",
   "view_history": "View History",
-  "description": "RPE Recorder is a chart recorder designed for providing a better look for standard-compliant Re: PhiEdit and PhiEdit charts, written with C++ by 不会特效の点缀星空.\n\nBefore posting a request, make sure that your chart meets the following requirement:\nThere's no use of features other than Phigros vanilla, multiple event layers, storyboard (color events, text events and XY scale events), UI attach, fake notes, XY unsync, Y offset of note, note width changes, note alphas, speed changes of hold, visible time of note, parent lines, negative alpha of lines, cover / uncover, and Bezier curves (custom easings).\nSubstandard charts will be declined.",
+  "description": "RPE Recorder is a chart recorder designed for providing a better look for standard-compliant Re: PhiEdit and PhiEdit charts, written with C++ by 不会特效の点缀星空.\n\nBefore posting a request, make sure that your chart meets the following requirement:\nThere's no use of features of RPE except for multiple event layers, all attributes of normal events (move, rotate, alpha, speed), storyboard (XY scale events, text events (excluding custom fonts), color events, UI attach), all attributes of notes, speed changes of hold, parent lines, negative alpha of lines, XY unsync, cover / uncover.\nSubstandard charts will be declined.",
   "request": "Chart Recording Request",
   "req": "Request",
   "req_id": "Request ID",
