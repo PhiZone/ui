@@ -4,9 +4,6 @@
   import { Status } from '$lib/constants';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { error } from '@sveltejs/kit';
-
-  throw error(500, "停止服务 Out of Service");
 
   let username = '';
   let email = '';
