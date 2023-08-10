@@ -6,9 +6,12 @@
   import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/models';
   import Charter from '$lib/components/user.svelte';
   import { getLevelColor, parseRichText } from '$lib/utils';
+  import { error as err } from '@sveltejs/kit';
 
   export let data: import('./$types').PageData;
   $: ({ access_token, user } = data);
+
+  throw err(500, "停止服务 Out of Service");
 
   let errorMsg = '',
     levelType = 2,

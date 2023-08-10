@@ -4,9 +4,12 @@
   import { ContentType, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
   import type { Chapter, SongSubmissionError } from '$lib/models';
+  import { error as err } from '@sveltejs/kit';
 
   export let data: import('./$types').PageData;
   $: ({ access_token, user } = data);
+
+  throw err(500, "停止服务 Out of Service");
 
   let errorMsg = '',
     songName = '',
