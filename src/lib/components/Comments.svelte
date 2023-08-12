@@ -8,8 +8,8 @@
 
   $: ({ user, api } = $page.data);
 
-  export let type: 'chapter' | 'song' | 'chart' | 'user';
-  export let id: number;
+  export let type: 'chapters' | 'songs' | 'charts' | 'records';
+  export let id: string;
   export let showUser = true;
   export let showSource = false;
   export let searchParams: ParsedQuery<string | number | boolean>;
@@ -21,26 +21,24 @@
   const sendComment = async () => {
     if (commentText.length > 0) {
       disabled = true;
-      await api.POST('/comments/', { [type]: id, content: commentText, language: locale.get() });
+      await api.POST('/comments', { [type]: id, content: commentText, language: locale.get() });
       disabled = false;
       commentText = '';
       await queryClient.invalidateQueries([
         'comment.list',
-        { [type]: id, page: commentPage, order_by: 'creation', order: 'desc' },
+        { type, id, page: commentPage, order: 'dateCreated', desc: true },
       ]);
     }
   };
 
   $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
   $: query = createQuery(
-    api.comment.list({ [type]: id, page: commentPage, order_by: 'creation', order: 'desc' })
+    api.comment.list({ type, id, page: commentPage, order: 'likeCount', desc: true })
   );
 </script>
 
 <div class="indicator w-full my-4">
-  <span
-    class="indicator-item indicator-start badge badge-secondary badge-lg w-20 h-8 text-lg"
-  >
+  <span class="indicator-item indicator-start badge badge-secondary badge-lg w-20 h-8 text-lg">
     {$t('common.comments')}
   </span>
   <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
@@ -63,12 +61,12 @@
       {#if $query.isLoading}
         <div />
       {:else if $query.isSuccess}
-        {@const { count, results } = $query.data}
-        {#if results.length > 0}
-          {#each results as comment}
+        {@const { total, data } = $query.data}
+        {#if data && data.length > 0}
+          {#each data as comment}
             <CommentComponent {comment} {showUser} {showSource} {searchParams} />
           {/each}
-          <Pagination {count} page={commentPage} pageName="comment_page" {searchParams} />
+          <Pagination {total} page={commentPage} pageName="comment_page" {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}

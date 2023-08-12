@@ -4,43 +4,37 @@
   $: ({ api } = $page.data);
 
   interface $$Props {
-    id: number | null;
+    id: string;
     likes: number;
-    type: 'discussion' | 'comment' | 'reply' | 'chart' | 'song' | 'chapter';
-    target: number;
+    type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
     class: string;
   }
 
-  export let id: number | null;
+  export let id: string;
   export let likes: number;
-  export let type: 'discussion' | 'comment' | 'reply' | 'chart' | 'song' | 'chapter';
-  export let target: number;
+  export let type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
 
   const like = async () => {
-    id = null;
-    const resp = await api.like.like({
-      [type]: target,
+    const resp = await api.like.create({
+      type, id
     });
     if (resp.ok) {
-      ({ id } = await resp.json());
       likes++;
     } else {
-      const { detail } = await resp.json();
+      const data = await resp.json();
       // TODO: toast
-      console.error(detail);
+      console.error(data);
     }
   };
 
   const unlike = async () => {
-    if (id === null) return;
-    const resp = await api.like.unlike({ id });
+    const resp = await api.like.remove({ type, id });
     if (resp.ok) {
       likes--;
-      id = null;
     } else {
-      const { detail } = await resp.json();
+      const data = await resp.json();
       // TODO: toast
-      console.error(detail);
+      console.error(data);
     }
   };
 </script>

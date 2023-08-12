@@ -11,22 +11,24 @@ export const handle = async ({ event, resolve }) => {
   if (refresh_token) {
     let resp;
     const api = new API(event.fetch, access_token, event.locals.user);
-    resp = await api.user.current();
+    resp = await api.user.me();
     if (resp.ok) {
-      event.locals.user = await resp.json();
+      event.locals.user = (await resp.json()).data;
     } else {
-      resp = await api.session.token({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type: 'refresh_token',
-        refresh_token: refresh_token,
-      });
+      let data = new URLSearchParams();
+      data.append('client_id', CLIENT_ID);
+      data.append('client_secret', CLIENT_SECRET);
+      data.append('grant_type', 'refresh_token');
+      data.append('refresh_token', refresh_token);
+
+      resp = await api.session.token(data);
+
       if (resp.ok) {
         ({ access_token, refresh_token } = await resp.json());
         setTokens(event.cookies, access_token, refresh_token);
 
         const api = new API(event.fetch, access_token);
-        resp = await api.user.current();
+        resp = await api.user.me();
         if (resp.ok) event.locals.user = await resp.json();
       } else {
         event.locals.user = undefined;

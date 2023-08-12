@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { Reply } from '$lib/models';
+  import type { ReplyDto } from '$lib/models';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { t } from '$lib/translations/config';
   import { richtext } from '$lib/richtext';
@@ -11,8 +11,8 @@
   $: ({ api, user } = $page.data);
 
   export let kind: 'mini' | 'full' = 'mini';
-  export let reply: Reply;
-  export let replyTo: (reply: Reply) => void = (_) => {};
+  export let reply: ReplyDto;
+  export let replyTo: (reply: ReplyDto) => void = (_) => {};
 
   $: content = richtext(reply.content, api);
 </script>
@@ -20,7 +20,7 @@
 {#if kind === 'mini'}
   <li class="max-w-full">
     <div class="flex w-full">
-      <User id={reply.user} kind="embedded-mini" />
+      <User id={reply.ownerId} kind="embedded-mini" />
       <div
         class="ml-2 w-3/4 min-w-fit content"
         on:click={() => {
@@ -37,19 +37,13 @@
         }}
         on:keyup
       >
-        {parseDateTime(reply.creation)}
+        {parseDateTime(reply.dateCreated)}
       </p>
       <div class="min-w-fit text-right flex items-center gap-1">
-        {#if user && (getUserPrivilege(user.type) >= 4 || user.id === reply.user)}
+        {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
           <Delete target={reply} class="btn-sm" />
         {/if}
-        <Like
-          id={reply.like}
-          likes={reply.like_count}
-          type="reply"
-          target={reply.id}
-          class="btn-sm"
-        />
+        <Like id={reply.id} likes={reply.likeCount} type="replies" class="btn-sm" />
       </div>
     </div>
   </li>
@@ -59,7 +53,7 @@
       <div
         class="relative inline-flex flex-col items-center border-r border-base-300 px-3 py-3 mx-auto my-auto"
       >
-        <User id={reply.user} kind="embedded" />
+        <User id={reply.ownerId} kind="embedded" />
       </div>
     </figure>
     <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
@@ -68,21 +62,15 @@
       </p>
       <div class="card-actions mt-4 flex justify-between items-center">
         <p class="text-sm opacity-70">
-          {parseDateTime(reply.creation)}
+          {parseDateTime(reply.dateCreated)}
         </p>
         <div class="flex items-center gap-1">
-          {#if user && (getUserPrivilege(user.type) >= 4 || user.id === reply.user)}
+          {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
             <Delete target={reply} class="btn-sm" />
           {/if}
-          <Like
-            id={reply.like}
-            likes={reply.like_count}
-            type="reply"
-            target={reply.id}
-            class="btn-sm"
-          />
-          {#if reply.comment}
-            <a class="btn btn-sm btn-primary btn-outline" href="/comments/{reply.comment}">
+          <Like id={reply.id} likes={reply.likeCount} type="replies" class="btn-sm" />
+          {#if reply.commentId}
+            <a class="btn btn-sm btn-primary btn-outline" href="/comments/{reply.commentId}">
               <svg
                 fill="currentColor"
                 width="25px"

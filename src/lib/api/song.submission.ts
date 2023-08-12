@@ -4,7 +4,7 @@ import type { SongSubmission } from '$lib/models';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
@@ -66,7 +66,7 @@ export default class SongSubmissionAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('song.submission.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<SongSubmission>>(
+    return this.api.GET<ResponseDto<SongSubmission>>(
       '/song_submission/?' + stringifyListOpts(opts)
     );
   });

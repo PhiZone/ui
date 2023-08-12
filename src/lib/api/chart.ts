@@ -1,9 +1,9 @@
-import type { Chart } from '$lib/models';
+import type { ChartDto } from '$lib/models';
 import queryString from 'query-string';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import ChartSubmissionAPI from './chart.submission';
@@ -11,41 +11,41 @@ import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?:
-    | 'id'
-    | 'song'
-    | 'owner'
-    | 'charter'
+  order?:
+    | 'dateCreated'
+    | 'dateUpdated'
+    | 'ownerId'
+    | 'authorName'
     | 'level'
     | 'ranked'
     | 'difficulty'
-    | 'note_count'
+    | 'noteCount'
     | 'score'
     | 'rating';
-  id?: number | number[];
-  song?: number | number[];
-  owner?: number | number[];
-  level?: string | string[];
-  charter?: string;
-  description?: string;
-  ranked?: number;
-  lowest_difficulty?: number;
-  highest_difficulty?: number;
-  lowest_note_count?: number;
-  highest_note_count?: number;
-  lowest_score?: number;
-  highest_score?: number;
-  lowest_rating?: number;
-  highest_rating?: number;
-  query_song?: number;
-  query_owner?: number;
+  rangeId?: string[];
+  rangeSongId?: string[];
+  rangeOwnerId?: number[];
+  // level?: string | string[];
+  // charter?: string;
+  // description?: string;
+  // ranked?: number;
+  // lowest_difficulty?: number;
+  // highest_difficulty?: number;
+  // lowest_note_count?: number;
+  // highest_note_count?: number;
+  // lowest_score?: number;
+  // highest_score?: number;
+  // lowest_rating?: number;
+  // highest_rating?: number;
+  // query_song?: number;
+  // query_owner?: number;
 }
 
 // info
 export interface InfoOpts {
-  id: number;
-  query_song?: number;
-  query_owner?: number;
+  id: string;
+  // query_song?: number;
+  // query_owner?: number;
 }
 
 export default class ChartAPI {
@@ -54,16 +54,16 @@ export default class ChartAPI {
   }
 
   list = createQueryCreator('chart.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Chart>>('/charts/?' + stringifyListOpts(opts));
+    return this.api.GET<ResponseDto<ChartDto[]>>('/charts?' + stringifyListOpts(opts));
   });
 
   listAll = createQueryCreator('chart.listAll', (opts: ListOpts) => {
-    return this.api.GET<Chart[]>('/charts/?' + stringifyListOpts(opts, true));
+    return this.api.GET<ResponseDto<ChartDto[]>>('/charts?' + stringifyListOpts(opts, true));
   });
 
   info = createQueryCreator('chart.info', (opts: InfoOpts) => {
     const { id, ...rest } = opts;
-    return this.api.GET<Chart>(`/charts/${id}/?` + queryString.stringify(rest));
+    return this.api.GET<ResponseDto<ChartDto>>(`/charts/${id}?` + queryString.stringify(rest));
   });
 
   submission;

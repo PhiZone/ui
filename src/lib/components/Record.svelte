@@ -1,46 +1,38 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
-  import type { Chart, PlayRecord, Song } from '$lib/models';
+  import type { ChartDto, RecordDto, SongDto } from '$lib/models';
   import { t } from '$lib/translations/config';
-  import {
-    getCompressedImage,
-    getGrade,
-    getLevelColor,
-    getLevelDisplay,
-    parseDateTime,
-  } from '$lib/utils';
+  import { getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
 
   $: ({ api } = $page.data);
 
-  export let record: PlayRecord;
-  export let chart: Chart | undefined = undefined;
-  export let song: Song | undefined = undefined;
+  export let record: RecordDto;
+  export let chart: ChartDto | undefined = undefined;
+  export let song: SongDto | undefined = undefined;
   export let rank: number | undefined = undefined;
   export let showChart = true;
 
-  $: grade = getGrade(record.score, record.full_combo);
+  $: grade = getGrade(record.score, record.isFullCombo);
 
-  $: chartQ = createQuery(api.chart.info({ id: record.chart.id }, { initialData: chart }));
+  $: chartQ = createQuery(api.chart.info({ id: record.chartId }, { enabled: !chart, initialData: chart }));
   $: songQ = createQuery(
     api.song.info(
-      { id: $chartQ.data?.song ?? 0 },
-      { enabled: $chartQ.isSuccess, initialData: song }
+      { id: chart ? chart.songId : ($chartQ.data?.data.songId ?? 0) },
+      { enabled: $chartQ.isSuccess && !song, initialData: song }
     )
   );
-  $: player = createQuery(api.user.info({ id: record.player }));
+  $: player = createQuery(api.user.info({ id: record.ownerId }));
 </script>
 
 <div
-  class={`card m-1 w-[288px] ${
-    typeof record.player == 'object' ? 'h-40' : 'h-36'
-  } card-side relative bg-base-100 shadow-lg glass overflow-hidden`}
+  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass overflow-hidden'}
 >
   <a class="w-fit h-fit" href={`/records/${record.id}`}>
     {#if $songQ.isSuccess}
       <img
         class="object-fill w-full h-full blur opacity-40"
-        src={getCompressedImage($songQ.data.illustration)}
+        src={$songQ.data.data.illustration}
         alt="Illustration"
       />
     {/if}
@@ -48,7 +40,7 @@
       class={`absolute left-6 text-7xl grade ${
         grade == 'P'
           ? 'top-11 text-yellow-400'
-          : record.full_combo
+          : record.isFullCombo
           ? 'top-11 text-blue-400'
           : 'top-11'
       }`}
@@ -57,17 +49,17 @@
     </div>
     <div class="absolute right-2 top-2 form-control justify-end">
       {#if showChart && $chartQ.isSuccess && $songQ.isSuccess}
-        {@const chart = $chartQ.data}
-        {@const song = $songQ.data}
+        {@const chart = $chartQ.data.data}
+        {@const song = $songQ.data.data}
         <div class="btn-group btn-group-horizontal w-[272px] justify-end">
           <a
             class="btn song flex-shrink btn-xs btn-outline justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
             href="/songs/{song.id}"
           >
-            {song.name}
+            {song.title}
           </a>
           <a
-            class={`btn ${getLevelColor(chart.level_type)} btn-xs text-sm no-animation`}
+            class={`btn ${getLevelColor(chart.levelType)} btn-xs text-sm no-animation`}
             href="/charts/{chart.id}"
           >
             {chart.level}
@@ -85,22 +77,22 @@
         {record.score}
       </h2>
       <p class="text-xl h-[26px] text-right">
-        {(record.acc * 100).toFixed(2)}%
+        {(record.accuracy * 100).toFixed(2)}%
       </p>
       <p class="text-right h-5">
-        P{record.perfect} · G{record.good_early + record.good_late} · B{record.bad}
+        P{record.perfect} · G{record.goodEarly + record.goodLate} · B{record.bad}
         · M{record.miss}
       </p>
     </div>
     <div class="absolute right-2 bottom-2 form-control justify-end">
       <p class="text-right player">
         {#if $player.isSuccess}
-          {@const player = $player.data}
+          {@const player = $player.data.data}
           <a href={`/users/${player.id}`} class="hover:underline">
-            {$t(player.username)}
+            {$t(player.userName)}
           </a>
         {/if}
-        {parseDateTime(record.time)}
+        {parseDateTime(record.dateCreated)}
       </p>
     </div>
   </a>

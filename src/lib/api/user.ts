@@ -1,32 +1,37 @@
 import { serialize } from 'object-to-formdata';
 import queryString from 'query-string';
-import type { User } from '$lib/models';
+import type { UserDto, UserDetailedDto } from '$lib/models';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'username' | 'gender' | 'rks' | 'exp';
-  id?: number | number[];
-  username?: string;
-  gender?: number | number[];
-  language?: string;
-  lowest_rks?: string;
-  highest_rks?: string;
-  lowest_exp?: string;
-  highest_exp?: string;
-  query_relation?: number;
+  order?: 'id' | 'userName' | 'gender' | 'rks' | 'experience' | 'dateJoined' | 'dateOfBirth';
+  // id?: number | number[];
+  // username?: string;
+  // gender?: number | number[];
+  // language?: string;
+  // lowest_rks?: string;
+  // highest_rks?: string;
+  // lowest_exp?: string;
+  // highest_exp?: string;
+  // query_relation?: number;
 }
 
 // info
 export interface InfoOpts {
   id: number;
-  query_relation?: number;
+}
+
+export interface RelationListOpts extends InfoOpts, ListOptsBase {
+  rangeType?: number[];
+  earliestDateCreated?: string;
+  latestDateCreated?: string;
 }
 
 // update
@@ -54,21 +59,31 @@ export interface UpdateResult {
 export default class UserAPI {
   constructor(private api: API) {}
 
-  current(_opts: void) {
-    return this.api.GET<User>('/user_detail/');
+  me() {
+    return this.api.GET<ResponseDto<UserDetailedDto>>('/me');
   }
 
   list = createQueryCreator('user.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<User>>('/users/?' + stringifyListOpts(opts));
+    return this.api.GET<ResponseDto<UserDto[]>>('/users?' + stringifyListOpts(opts));
   });
 
-  listAll = createQueryCreator('user.listAll', (opts: ListOpts) => {
-    return this.api.GET<User[]>('/users/?' + stringifyListOpts(opts, true));
+  listFollowers = createQueryCreator('user.list', (opts: RelationListOpts) => {
+    const { id, ...rest } = opts;
+    return this.api.GET<ResponseDto<UserDto[]>>(
+      `/users/${id}/followers?` + stringifyListOpts(rest)
+    );
+  });
+
+  listFollowees = createQueryCreator('user.list', (opts: RelationListOpts) => {
+    const { id, ...rest } = opts;
+    return this.api.GET<ResponseDto<UserDto[]>>(
+      `/users/${id}/followees?` + stringifyListOpts(rest)
+    );
   });
 
   info = createQueryCreator('user.info', (opts: InfoOpts) => {
     const { id, ...rest } = opts;
-    return this.api.GET<User>(`/users/${id}/?` + queryString.stringify(rest));
+    return this.api.GET<ResponseDto<UserDto>>(`/users/${id}?` + queryString.stringify(rest));
   });
 
   update(opts: UpdateOpts) {
@@ -78,5 +93,13 @@ export default class UserAPI {
       `/users/${id}/`,
       rest.avatar ? serialize(rest) : rest
     );
+  }
+
+  follow(opts: InfoOpts) {
+    return this.api.POST<InfoOpts, void>(`/users/${opts.id}/follow`);
+  }
+
+  unfollow(opts: InfoOpts) {
+    return this.api.POST<InfoOpts, void>(`/users/${opts.id}/unfollow`);
   }
 }

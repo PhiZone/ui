@@ -28,6 +28,7 @@
   "pause": "Pause",
   "fast_forward": "Fast Forward",
   "volume": "Volume",
+  "charts": "Charts",
   "show_charts": "Display Charts",
   "hide_charts": "Collapse"
 }

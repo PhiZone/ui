@@ -1,6 +1,6 @@
 <script lang="ts">
   import { locale, t } from '$lib/translations/config';
-  import type { Comment, Reply } from '$lib/models';
+  import type { CommentDto, ReplyDto } from '$lib/models';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import { page } from '$app/stores';
@@ -14,7 +14,8 @@
 
   $: ({ user, api } = $page.data);
 
-  export let comment: Comment;
+  export let type: string;
+  export let comment: CommentDto;
   export let showUser = true;
   export let showSource = false;
   export let searchParams: ParsedQuery<string | number | boolean>;
@@ -26,7 +27,7 @@
   const sendReply = async () => {
     if (replyText.length > 0) {
       disabled = true;
-      await api.reply.post({ comment: comment.id, content: replyText, language: locale.get() });
+      await api.reply.create(comment.id, { content: replyText, language: locale.get() });
       disabled = false;
       replyText = '';
       await queryClient.invalidateQueries(['reply.list', { comment: comment.id, page: replyPage }]);
@@ -34,23 +35,13 @@
   };
 
   $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
-  $: query = createQuery(api.reply.list({ comment: comment.id, page: replyPage }));
+  $: query = createQuery(api.reply.list({ id: comment.id, page: replyPage }));
 
-  const replyTo = async (reply: Reply) => {
-    replyText = `${$t('common.reply_to')}[PZUserAt:${reply.user}]${$t('common.colon')}`;
+  const replyTo = async (reply: ReplyDto) => {
+    replyText = `${$t('common.reply_to')}[PZUser:${reply.ownerId}:PZMRT]${$t('common.colon')}`;
   };
 
-  $: source = comment.chapter
-    ? `/chapters/${comment.chapter}`
-    : comment.song
-    ? `/songs/${comment.song}`
-    : comment.chart
-    ? `/charts/${comment.chart}`
-    : comment.event
-    ? `/events/${comment.event}`
-    : comment.discussion
-    ? `/discussions/${comment.discussion}`
-    : null;
+  $: source = `${type}/${comment.resourceId}`;
 
   $: content = richtext(comment.content, api);
 </script>
@@ -84,12 +75,12 @@
       {#if $query.isLoading}
         <div />
       {:else if $query.isSuccess}
-        {@const { count, results } = $query.data}
-        {#if results.length > 0}
-          {#each results as reply}
+        {@const { total, data } = $query.data}
+        {#if data && data.length > 0}
+          {#each data as reply}
             <ReplyComponent {reply} {replyTo} />
           {/each}
-          <Pagination {count} page={replyPage} pageName="reply_page" {searchParams} />
+          <Pagination {total} page={replyPage} pageName="reply_page" {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}
@@ -104,7 +95,7 @@
       <div
         class="relative inline-flex flex-col items-center justify-center border-r border-base-300 px-3 py-3 mx-auto my-auto w-full"
       >
-        <User id={comment.user} kind="embedded" />
+        <User id={comment.ownerId} kind="embedded" />
       </div>
     </figure>
   {/if}
@@ -114,19 +105,13 @@
     </p>
     <div class="card-actions mt-4 flex justify-between items-center">
       <p class="text-sm opacity-70">
-        {parseDateTime(comment.creation)}
+        {parseDateTime(comment.dateCreated)}
       </p>
       <div class="flex items-center gap-1">
-        {#if user && (getUserPrivilege(user.type) >= 4 || user.id === comment.user)}
+        {#if user && (getUserPrivilege(user.role) >= 4 || user.id === comment.ownerId)}
           <Delete target={comment} class="btn-sm" />
         {/if}
-        <Like
-          id={comment.like}
-          likes={comment.like_count}
-          type="comment"
-          target={comment.id}
-          class="btn-sm"
-        />
+        <Like id={comment.id} likes={comment.likeCount} type="comments" class="btn-sm" />
         <label
           for="comment-{comment.id}-replies"
           class="btn btn-sm btn-primary btn-outline gap-2"
@@ -147,7 +132,7 @@
             />
           </svg>
           {#if $query.isSuccess}
-            {$query.data.count}
+            {$query.data.total}
           {/if}
         </label>
         {#if showSource && source}

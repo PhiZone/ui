@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
-  import { getCompressedImage, getUserPrivilege } from '$lib/utils';
+  import { getAvatar, getUserPrivilege } from '$lib/utils';
 </script>
 
 <div
@@ -134,17 +134,17 @@
           <label
             tabindex="-1"
             class={`btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 ${
-              user.type == 'admin'
+              user.role == 'Administrator'
                 ? 'bg-indigo-500'
-                : user.type == 'volunteer'
+                : user.role == 'Volunteer'
                 ? 'bg-emerald-500'
-                : user.type == 'qualified'
+                : user.role == 'Qualified'
                 ? 'bg-sky-500'
                 : ''
             }`}
           >
             <div class="w-12 rounded-full">
-              <img src={getCompressedImage(user.avatar)} alt="avatar" class="bg-white" />
+              <img src={getAvatar(user.avatar)} alt="avatar" class="bg-white" />
             </div>
           </label>
           <ul
@@ -153,11 +153,11 @@
           >
             <li>
               <a class="justify-between" href={`/users/${user.id}`}>
-                {user.username}
+                {user.userName}
                 <!-- <span class="badge">{userDetail.tag}</span> -->
               </a>
             </li>
-            {#if getUserPrivilege(user.type) < 2}
+            {#if getUserPrivilege(user.role) < 2}
               <li class="disabled">
                 <div
                   class="tooltip tooltip-left tooltip-warning text-left"

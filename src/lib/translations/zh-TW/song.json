@@ -28,6 +28,7 @@
   "pause": "暫停",
   "fast_forward": "快轉",
   "volume": "音量",
+  "charts": "譜面列表",
   "show_charts": "展開譜面列表",
   "hide_charts": "收起譜面列表"
 }

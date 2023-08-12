@@ -1,20 +1,19 @@
-import type { Reply } from '$lib/models';
+import type { ReplyDto } from '$lib/models';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'comment' | 'user' | 'creation';
-  id?: number | number[];
-  comment?: number | number[];
-  user?: number | number[];
-  content?: string;
-  language?: string;
+  id: string;
+  // comment?: number | number[];
+  // user?: number | number[];
+  // content?: string;
+  // language?: string;
 }
 
 // info
@@ -23,8 +22,7 @@ export interface InfoOpts {
 }
 
 // post
-export interface PostOpts {
-  comment: number;
+export interface CreateOpts {
   content: string;
   language: string;
 }
@@ -33,22 +31,25 @@ export default class ReplyAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('reply.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Reply>>('/replies/?' + stringifyListOpts(opts));
+    const { id, ...rest } = opts;
+    return this.api.GET<ResponseDto<ReplyDto[]>>(
+      `/comments/${id}/replies?` + stringifyListOpts(rest)
+    );
   });
 
   listAll = createQueryCreator('reply.listAll', (opts: ListOpts) => {
-    return this.api.GET<Reply[]>('/replies/?' + stringifyListOpts(opts, true));
+    return this.api.GET<ResponseDto<ReplyDto[]>>('/replies/?' + stringifyListOpts(opts, true));
   });
 
   info = createQueryCreator('reply.info', (opts: InfoOpts) => {
-    return this.api.GET<Reply>(`/replies/${opts.id}/`);
+    return this.api.GET<ResponseDto<ReplyDto>>(`/replies/${opts.id}/`);
   });
 
-  delete(opts: InfoOpts) {
-    return this.api.DELETE<void>(`/replies/${opts.id}/`);
+  remove(opts: InfoOpts) {
+    return this.api.DELETE<void>(`/replies/${opts.id}`);
   }
 
-  post(opts: PostOpts) {
-    return this.api.POST<PostOpts, Reply>('/replies/', opts);
+  create(id: string, opts: CreateOpts) {
+    return this.api.POST<CreateOpts, ReplyDto>(`/comments/${id}/replies`, opts);
   }
 }

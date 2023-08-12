@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Song } from '$lib/models';
+  import type { SongDto } from '$lib/models';
   import { t } from '$lib/translations/config';
-  import { convertDuration, getCompressedImage } from '$lib/utils';
+  import { convertDuration } from '$lib/utils';
   import Like from './Like.svelte';
 
-  export let song: Song;
+  export let song: SongDto;
   export let kind: 'full' | 'inline' = 'full';
 
   // let easyCount = song.levels.find((e) => {
@@ -36,8 +36,8 @@
   <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
     <a href={`/songs/${song.id}`}>
       <figure class="h-[180px] relative">
-        <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
-        {#if song.original}
+        <img src={song.illustration} alt="Illustration" class="object-fill" />
+        {#if song.isOriginal}
           <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
             <button class="btn btn-secondary btn-sm text-xl no-animation">
               {$t('song.original')}
@@ -47,7 +47,7 @@
       </figure>
       <div class="card-body gap-0.5">
         <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
-          {song.name}
+          {song.title}
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
@@ -55,7 +55,7 @@
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.composer')}</span>
-          {song.composer}
+          {song.authorName}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.illustrator')}</span>
@@ -126,13 +126,7 @@
             }}
             on:keyup
           >
-            <Like
-              id={song.like}
-              likes={song.like_count}
-              type="song"
-              target={song.id}
-              class="btn-sm"
-            />
+            <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm" />
           </div>
         </div>
       </div>
@@ -142,8 +136,8 @@
   <a href="/songs/{song.id}" class="w-full overflow-hidden h-[82px] flex px-5">
     <div class="w-1/2">
       <div class="text-xl font-bold">
-        {song.name}
-        {#if song.original}
+        {song.title}
+        {#if song.isOriginal}
           <button class="btn btn-secondary btn-sm text-lg no-animation">
             {$t('song.original')}
           </button>
@@ -152,7 +146,7 @@
     </div>
     <div class="w-5/12">
       <div class="text-lg">
-        {song.composer}
+        {song.authorName}
       </div>
     </div>
     <div
@@ -162,7 +156,7 @@
       }}
       on:keyup
     >
-      <Like id={song.like} likes={song.like_count} type="song" target={song.id} class="btn-sm" />
+      <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm" />
     </div>
   </a>
 {/if}

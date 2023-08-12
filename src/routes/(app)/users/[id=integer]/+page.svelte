@@ -1,9 +1,8 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
+  import { getAvatar, getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import Record from '$lib/components/Record.svelte';
-  import Comment from '$lib/components/Comment.svelte';
   import Follow from '$lib/components/Follow.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Song from '$lib/components/Song.svelte';
@@ -13,19 +12,19 @@
   $: ({ searchParams, id, api } = data);
 
   $: user = createQuery(api.user.info({ id }));
-  $: charts = createQuery(api.chart.list({ owner: id }));
-  $: songs = createQuery(api.song.list({ uploader: id }));
-  $: recent_records = createQuery(api.record.list({ player: id, order_by: 'time', order: 'desc' }));
-  $: best_records = createQuery(api.record.list({ player: id, order_by: 'rks', order: 'desc' }));
-  $: comments = createQuery(api.comment.list({ user: id }));
+  $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
+  $: songs = createQuery(api.song.list({ rangeOwnerId: [id] }));
+  $: recent_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }));
+  $: best_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
+  // $: comments = createQuery(api.comment.list({ user: id }));
 </script>
 
 <svelte:head>
-  <title>{$t('user.user')} - {$user.data?.username ?? ''} | {$t('common.title')}</title>
+  <title>{$t('user.user')} - {$user.data?.data.userName ?? ''} | {$t('common.title')}</title>
 </svelte:head>
 
 {#if $user.isSuccess}
-  {@const user = $user.data}
+  {@const user = $user.data.data}
   <div class="info-page">
     <div class="mx-4 w-full max-w-[1800px]">
       <div class="indicator w-full my-4">
@@ -41,23 +40,23 @@
             <div class="avatar min-w-fit h-fit">
               <div
                 class={`mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] ${
-                  user.type == 'admin'
+                  user.role == 'admin'
                     ? 'border-indigo-500'
-                    : user.type == 'volunteer'
+                    : user.role == 'volunteer'
                     ? 'border-emerald-500'
-                    : user.type == 'qualified'
+                    : user.role == 'qualified'
                     ? 'border-sky-500'
                     : 'border-neutral-500'
                 }`}
               >
-                <img src={user.avatar} alt="Avatar" />
+                <img src={getAvatar(user.avatar)} alt="Avatar" />
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">
-              {user.username}
+              {user.userName}
             </p>
             <div class="flex items-center justify-center gap-1 h-fit">
-              <span class="badge badge-sm font-bold">LV{getUserLevel(user.exp)}</span>
+              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
               {#if user.gender == 1}
                 <span class="badge badge-sm">
                   <svg
@@ -99,8 +98,8 @@
                 {user.id}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.type')}</span>
-                {$t(`user.types.${user.type}`)}
+                <span class="badge badge-primary badge-outline mr-1">{$t('user.role')}</span>
+                {$t(`user.roles.${user.role}`)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
@@ -108,7 +107,7 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-                {user.exp}
+                {user.experience}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.language')}</span>
@@ -119,7 +118,7 @@
                   {$t('user.following')}
                 </span>
                 <span class="group-hover:underline">
-                  {user.following}
+                  {user.followeeCount}
                 </span>
               </a>
               <a href="/users/{user.id}/fans" class="group">
@@ -127,51 +126,51 @@
                   {$t('user.fans')}
                 </span>
                 <span class="group-hover:underline">
-                  {user.fans}
+                  {user.followerCount}
                 </span>
               </a>
-              {#if user.date_of_birth}
+              {#if user.dateOfBirth}
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('user.date_of_birth')}
                   </span>
-                  {parseMonthAndDay(user.date_of_birth)}
+                  {parseMonthAndDay(user.dateOfBirth)}
                 </p>
               {/if}
-              {#if user.last_login}
+              {#if user.dateLastLoggedIn}
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('user.last_login')}
                   </span>
-                  {parseDateTime(user.last_login)}
+                  {parseDateTime(user.dateLastLoggedIn)}
                 </p>
               {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.date_joined')}</span>
-                {parseDateTime(user.date_joined)}
+                {parseDateTime(user.dateJoined)}
               </p>
-              {#if user.bio}
+              {#if user.biography}
                 <p class="content">
                   <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
-                  {user.bio}
+                  {user.biography}
                 </p>
               {/if}
             </div>
             <div>
               <div class="flex justify-center my-3 h-fit">
-                <Follow {id} {user} />
+                <Follow {user} />
               </div>
             </div>
           </figure>
           <div class="card-body pt-3 max-w-full">
             {#if $charts.isSuccess}
-              {@const count = $charts.data.count}
-              {@const charts = $charts.data.results.slice(0, 10)}
+              {@const total = $charts.data.total}
+              {@const charts = $charts.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.charts')}
                 </h2>
-                {#if count > 10}
+                {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/charts?owner={user.id}"
@@ -191,13 +190,13 @@
               {/if}
             {/if}
             {#if $songs.isSuccess}
-              {@const count = $songs.data.count}
-              {@const songs = $songs.data.results.slice(0, 10)}
+              {@const total = $songs.data.total}
+              {@const songs = $songs.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.songs')}
                 </h2>
-                {#if count > 10}
+                {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/songs?uploader={user.id}"
@@ -217,13 +216,13 @@
               {/if}
             {/if}
             {#if $recent_records.isSuccess}
-              {@const count = $recent_records.data.count}
-              {@const recent_records = $recent_records.data.results.slice(0, 10)}
+              {@const total = $recent_records.data.total}
+              {@const recent_records = $recent_records.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.recent_records')}
                 </h2>
-                {#if count > 10}
+                {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/records?player={user.id}"
@@ -243,13 +242,13 @@
               {/if}
             {/if}
             {#if $best_records.isSuccess}
-              {@const count = $best_records.data.count}
-              {@const best_records = $best_records.data.results.slice(0, 10)}
+              {@const total = $best_records.data.total}
+              {@const best_records = $best_records.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.best_records')}
                 </h2>
-                {#if count > 10}
+                {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/records?player={user.id}&order=-rks"
@@ -268,7 +267,7 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if $comments.isSuccess}
+            <!-- {#if $comments.isSuccess}
               {@const comments = $comments.data.results}
               <h2 class="text-3xl font-bold mt-6 mb-2">
                 {$t('user.comments')}
@@ -282,7 +281,7 @@
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
-            {/if}
+            {/if} -->
           </div>
         </div>
       </div>

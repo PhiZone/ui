@@ -17,13 +17,13 @@
   "last_login": "上次登录",
   "date_joined": "加入时间",
   "date_of_birth": "生日",
-  "type": "用户类型",
-  "types": {
-    "admin": "管理员",
-    "volunteer": "志愿者",
-    "qualified": "认证用户",
-    "member": "普通用户",
-    "banned": "封禁用户"
+  "role": "用户类型",
+  "roles": {
+    "Administrator": "管理员",
+    "Moderator": "版主",
+    "Volunteer": "志愿者",
+    "Qualified": "认证用户",
+    "Member": "普通用户"
   },
   "following": "关注",
   "fans": "粉丝",

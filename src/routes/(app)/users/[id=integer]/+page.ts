@@ -6,11 +6,13 @@ export const load = async ({ params, url, parent }) => {
   const id = parseInt(params.id);
   await Promise.allSettled([
     queryClient.prefetchQuery(api.user.info({ id })),
-    queryClient.prefetchQuery(api.chart.list({ owner: id })),
-    queryClient.prefetchQuery(api.song.list({ uploader: id })),
-    queryClient.prefetchQuery(api.record.list({ player: id })),
-    queryClient.prefetchQuery(api.record.list({ player: id, order_by: 'rks', order: 'desc' })),
-    queryClient.prefetchQuery(api.comment.list({ user: id })),
+    queryClient.prefetchQuery(api.chart.list({ rangeOwnerId: [id] })),
+    queryClient.prefetchQuery(api.song.list({ rangeOwnerId: [id] })),
+    queryClient.prefetchQuery(
+      api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true })
+    ),
+    queryClient.prefetchQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true })),
+    // queryClient.prefetchQuery(api.comment.list({ rangeOwnerId: [id] })),
   ]);
   return { searchParams, id };
 };

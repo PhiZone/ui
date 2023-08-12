@@ -1,6 +1,6 @@
-import { PUBLIC_RES_BASE } from '$env/static/public';
 import type { Cookies } from '@sveltejs/kit';
 import { USER_LEVELS } from './constants';
+import { PUBLIC_AVATAR } from '$env/static/public';
 
 export function parseLatex(input: string) {
   const result = input.matchAll(/(\$[^$]+\$)/g);
@@ -49,20 +49,22 @@ export function parseLatex(input: string) {
   return array;
 }
 
-export function getUserPrivilege(type: string | undefined) {
+export function getUserPrivilege(type: string | null | undefined) {
   switch (type) {
-    case 'banned':
-      return 0;
-    case 'member':
+    case 'Member':
       return 1;
-    case 'qualified':
+    case 'Sponsor':
       return 2;
-    case 'volunteer':
+    case 'Qualified':
       return 3;
-    case 'admin':
+    case 'Volunteer':
       return 4;
+    case 'Moderator':
+      return 5;
+    case 'Administrator':
+      return 6;
     default:
-      return -1;
+      return 0;
   }
 }
 
@@ -118,17 +120,7 @@ export function parseLyrics(input: string) {
   return lyrics;
 }
 
-export function convertLanguageCode(input: string) {
-  const text = input.toLowerCase();
-  if (text.startsWith('zh')) {
-    return text.endsWith('cn') || text.endsWith('sg') || text.endsWith('hans')
-      ? 'zh-Hans'
-      : 'zh-Hant';
-  }
-  return input.split('-')[0];
-}
-
-export function parseDateTime(input: string, precise = false) {
+export function parseDateTime(input: string | Date, precise = false) {
   const date = new Date(input);
   if (precise) {
     return date.toLocaleString();
@@ -142,7 +134,7 @@ export function parseDateTime(input: string, precise = false) {
   });
 }
 
-export function parseMonthAndDay(input: string) {
+export function parseMonthAndDay(input: string | Date) {
   const date = new Date(input);
   return date.toLocaleDateString(undefined, {
     month: 'long',
@@ -155,16 +147,12 @@ export function getPath(input: string) {
   return url.pathname + url.search;
 }
 
+// TODO implement this
 export function getCompressedImage(input: string | undefined) {
-  if (!input) {
-    return '';
-  }
-  return input
-    .replace(/^http[^ ]+media$/g, PUBLIC_RES_BASE)
-    .replace(/(png)|(jpe?g)|(webp)$/gi, 'comp.webp');
+  return input;
 }
 
-export function getUserColor(type: string | undefined) {
+export function getUserColor(type: string | null) {
   switch (type) {
     case 'banned':
       return 'stone-800';
@@ -203,6 +191,10 @@ export function getUserLevel(exp: number) {
     }
   }
   return USER_LEVELS[USER_LEVELS.length - 1].level;
+}
+
+export function getAvatar(avatar: string | null) {
+  return avatar ?? PUBLIC_AVATAR;
 }
 
 export function getGrade(score: number, fullCombo: boolean) {
@@ -252,16 +244,16 @@ export function range(start: number, end: number) {
   return [...Array(end - start).keys()].map((x) => x + start);
 }
 
-class Test {
-  constructor(b: number);
-  constructor(a: string, b: number);
-  constructor(ab: number | string, b?: number) {
-    if (b !== undefined) {
-      const a = ab as string;
-      // balabala
-    } else {
-      b = ab as number;
-      // balabala
-    }
-  }
-}
+// class Test {
+//   constructor(b: number);
+//   constructor(a: string, b: number);
+//   constructor(ab: number | string, b?: number) {
+//     if (b !== undefined) {
+//       const a = ab as string;
+//       // balabala
+//     } else {
+//       b = ab as number;
+//       // balabala
+//     }
+//   }
+// }

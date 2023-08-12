@@ -1,4 +1,3 @@
-import type { CommonError } from './common';
 import type API from '.';
 import SessionPasswordResetAPI from './session.password_reset';
 
@@ -7,37 +6,14 @@ export interface RegisterOpts {
   username: string;
   email: string;
   password: string;
+  gender: number;
   language?: string;
-}
-
-export interface RegisterError extends CommonError {
-  username?: string[];
-  email?: string[];
-  password?: string[];
 }
 
 // activate
 export interface ActivateOpts {
   code: string;
 }
-
-// token
-export interface TokenPwdOpts {
-  client_id: string;
-  client_secret: string;
-  grant_type: 'password';
-  username: string;
-  password: string;
-}
-
-export interface TokenTokenOpts {
-  client_id: string;
-  client_secret: string;
-  grant_type: 'refresh_token';
-  refresh_token: string;
-}
-
-export type TokenOpts = TokenPwdOpts | TokenTokenOpts;
 
 export interface TokenResult {
   access_token: string;
@@ -60,19 +36,19 @@ export default class SessionAPI {
   }
 
   register(opts: RegisterOpts) {
-    return this.api.POST<RegisterOpts, void, RegisterError>('/register/', opts);
+    return this.api.POST<RegisterOpts, void>('/register', opts);
   }
 
   activate(opts: ActivateOpts) {
-    return this.api.POST<ActivateOpts, void>('/activate/', opts);
+    return this.api.POST<ActivateOpts, void>('/activate', opts);
   }
 
-  token(opts: TokenOpts) {
-    return this.api.POST<TokenOpts, TokenResult>('/auth/token/', opts);
+  token(opts: URLSearchParams) {
+    return this.api.POST<URLSearchParams, TokenResult>('/auth/token', opts);
   }
 
   revokeToken(opts: RevokeTokenOpts) {
-    return this.api.POST<RevokeTokenOpts, void>('/auth/revoke-token/', opts);
+    return this.api.POST<RevokeTokenOpts, void>('/auth/revoke', opts);
   }
 
   password_reset;

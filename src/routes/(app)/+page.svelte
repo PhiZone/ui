@@ -10,7 +10,7 @@
   let type: 'chapters' | 'songs' | 'users' = 'songs';
   let text = '';
 
-  $: href = `/${type}/?${
+  $: href = `/${type}?${
     text ? `${type === 'chapters' ? 'title' : type === 'users' ? 'username' : 'name'}=${text}` : ''
   }`;
 

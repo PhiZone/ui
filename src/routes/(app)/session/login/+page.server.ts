@@ -6,20 +6,23 @@ import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 export const actions = {
   default: async ({ request, cookies, url, fetch, locals }) => {
     const api = new API(fetch, locals.access_token, locals.user);
-    const data = await request.formData();
-    const email = data.get('email') as string,
-      password = data.get('password') as string;
-    const resp = await api.session.token({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: 'password',
-      username: email,
-      password,
-    });
+    const formData = await request.formData();
+    const email = formData.get('email') as string,
+      password = formData.get('password') as string;
+    
+    let data = new URLSearchParams();
+    data.append('client_id', CLIENT_ID);
+    data.append('client_secret', CLIENT_SECRET);
+    data.append('grant_type', 'password');
+    data.append('username', email);
+    data.append('password', password);
+
+    const resp = await api.session.token(data);
 
     if (!resp.ok) {
       const err = await resp.json();
-      return fail(resp.status, { email, password, detail: err.detail });
+      console.log(err);
+      return fail(resp.status, { email, password, detail: err });
     }
 
     const { access_token, refresh_token } = await resp.json();

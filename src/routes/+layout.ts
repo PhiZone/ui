@@ -1,7 +1,6 @@
 import API from '$lib/api';
 import { defaultLocale } from '$lib/constants';
 import { locale, loadTranslations } from '$lib/translations/config';
-import { convertLanguageCode } from '$lib/utils';
 import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
 
@@ -14,7 +13,7 @@ export const load = async ({ url, data, fetch }) => {
   lang ||= locale.get();
 
   if (browser) {
-    lang ||= convertLanguageCode(window.navigator.language);
+    lang ||= window.navigator.language;
   }
 
   lang ||= defaultLocale;

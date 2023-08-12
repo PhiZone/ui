@@ -1,35 +1,30 @@
-import type { Comment } from '$lib/models';
+import type { CommentDto } from '$lib/models';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'chart' | 'song' | 'chapter' | 'user' | 'content' | 'creation';
-  id?: number | number[];
-  chart?: number | number[];
-  song?: number | number[];
-  chapter?: number | number[];
-  user?: number | number[];
-  content?: string;
-  language?: string;
+  type: string;
+  id: string;
+  page: number;
+  rangeOwnerId?: number[];
+  rangeResourceId?: string[];
 }
 
 // info
 export interface InfoOpts {
-  id: number;
+  id: string;
 }
 
-// post
-export interface PostOpts {
-  chart?: number;
-  song?: number;
-  chapter?: number;
-  event?: number;
+// create
+export interface CreateOpts {
+  type: string;
+  id: string;
   content: string;
   language: string;
 }
@@ -38,22 +33,19 @@ export default class CommentAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('comment.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Comment>>('/comments/?' + stringifyListOpts(opts));
-  });
-
-  listAll = createQueryCreator('comment.listAll', (opts: ListOpts) => {
-    return this.api.GET<Comment[]>('/comments/?' + stringifyListOpts(opts, true));
+    const {type, id, ...rest} = opts;
+    return this.api.GET<ResponseDto<CommentDto[]>>(`/${type}/${id}/comments?` + stringifyListOpts(rest));
   });
 
   info = createQueryCreator('comment.info', (opts: InfoOpts) => {
-    return this.api.GET<Comment>(`/comments/${opts.id}/`);
+    return this.api.GET<ResponseDto<CommentDto>>(`/comments/${opts.id}`);
   });
 
-  delete(opts: InfoOpts) {
-    return this.api.DELETE<void>(`/comments/${opts.id}/`);
+  remove(opts: InfoOpts) {
+    return this.api.DELETE<void>(`/comments/${opts.id}`);
   }
 
-  post(opts: PostOpts) {
-    return this.api.POST<PostOpts, Comment>('/comments/', opts);
+  create(opts: CreateOpts) {
+    return this.api.POST<CreateOpts, CommentDto>(`/${opts.type}/${opts.id}/comments`, opts);
   }
 }

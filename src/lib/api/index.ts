@@ -1,10 +1,7 @@
-export { type CommonError } from './common';
-
 import { ContentType, defaultLocale } from '$lib/constants';
 import { locale } from '$lib/translations/config';
-import type { User } from '$lib/models';
+import type { UserDetailedDto } from '$lib/models';
 import { PUBLIC_API_BASE } from '$env/static/public';
-import type { CommonError } from './common';
 import ChapterAPI from './chapter';
 import ChartAPI from './chart';
 import CommentAPI from './comment';
@@ -30,17 +27,19 @@ export default class API {
   constructor(
     public fetch: typeof window.fetch,
     public access_token?: string,
-    public _user?: User
+    public _user?: UserDetailedDto
   ) {}
 
-  send<T, R, E>({ method, path, data }: SendOpts<T>): Promise<TypedResponse<R, E>> {
+  send<T, R>({ method, path, data }: SendOpts<T>): Promise<TypedResponse<R>> {
     const headers = new Headers();
     const init: RequestInit = { method, headers };
 
     if (data) {
       if (data instanceof FormData) {
         init.body = data;
-        // headers.append('Content-Type', ContentType.FORM_DATA);
+      } else if (data instanceof URLSearchParams) {
+        init.body = data;
+        headers.append('Content-Type', ContentType.FORM_URLENCODED);
       } else {
         init.body = JSON.stringify(data);
         headers.append('Content-Type', ContentType.JSON);
@@ -55,28 +54,28 @@ export default class API {
     return this.fetch(`${PUBLIC_API_BASE}${path}`, init);
   }
 
-  GET<R, E = CommonError>(path: string) {
-    return this.send<undefined, R, E>({ method: 'GET', path });
+  GET<R>(path: string) {
+    return this.send<undefined, R>({ method: 'GET', path });
   }
 
-  DELETE<R, E = CommonError>(path: string) {
-    return this.send<undefined, R, E>({ method: 'DELETE', path });
+  DELETE<R>(path: string) {
+    return this.send<undefined, R>({ method: 'DELETE', path });
   }
 
-  POST<T, R, E = CommonError>(path: string, data: T) {
-    return this.send<T, R, E>({ method: 'POST', path, data });
+  POST<T, R>(path: string, data?: T) {
+    return this.send<T, R>({ method: 'POST', path, data });
   }
 
-  PUT<T, R, E = CommonError>(path: string, data: T) {
-    return this.send<T, R, E>({ method: 'PUT', path, data });
+  PUT<T, R>(path: string, data: T) {
+    return this.send<T, R>({ method: 'PUT', path, data });
   }
 
-  HEAD<T, R, E = CommonError>(path: string, data: T) {
-    return this.send<T, R, E>({ method: 'HEAD', path, data });
+  HEAD<T, R>(path: string, data: T) {
+    return this.send<T, R>({ method: 'HEAD', path, data });
   }
 
-  PATCH<T, R, E = CommonError>(path: string, data: T) {
-    return this.send<T, R, E>({ method: 'PATCH', path, data });
+  PATCH<T, R>(path: string, data: T) {
+    return this.send<T, R>({ method: 'PATCH', path, data });
   }
 
   chapter = new ChapterAPI(this);

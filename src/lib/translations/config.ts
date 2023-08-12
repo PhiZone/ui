@@ -17,12 +17,12 @@ const createLoaders = (
 };
 
 export const { t, locale, locales, loading, loadTranslations } = new I18n({
-  initLocale: 'zh-Hans',
+  initLocale: 'zh-CN',
   fallbackLocale: 'en',
   translations: {
     en: { lang },
-    'zh-Hans': { lang },
-    'zh-Hant': { lang },
+    'zh-CN': { lang },
+    'zh-TW': { lang },
   },
   loaders: [
     ...createLoaders(
@@ -30,12 +30,12 @@ export const { t, locale, locales, loading, loadTranslations } = new I18n({
       import.meta.glob<Translations.Input>('./en/*.json', { import: 'default' })
     ),
     ...createLoaders(
-      'zh-Hans',
-      import.meta.glob<Translations.Input>('./zh-Hans/*.json', { import: 'default' })
+      'zh-CN',
+      import.meta.glob<Translations.Input>('./zh-CN/*.json', { import: 'default' })
     ),
     ...createLoaders(
-      'zh-Hant',
-      import.meta.glob<Translations.Input>('./zh-Hant/*.json', { import: 'default' })
+      'zh-TW',
+      import.meta.glob<Translations.Input>('./zh-TW/*.json', { import: 'default' })
     ),
   ],
 });

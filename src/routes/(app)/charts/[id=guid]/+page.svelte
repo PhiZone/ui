@@ -47,7 +47,7 @@
   let arrangement = 0;
   let feel = 0;
   let vfx = 0;
-  let innovativeness = 0;
+  let creativity = 0;
   let concord = 0;
   let impression = 0;
   let open = false;
@@ -56,32 +56,35 @@
 
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(
-    api.song.info({ id: $chart.data?.song ?? 0 }, { enabled: $chart.isSuccess })
+    api.song.info({ id: $chart.data?.data.songId }, { enabled: $chart.isSuccess })
   );
-  $: records = createQuery(api.record.list({ chart: id, order_by: 'score', order: 'desc' }));
+  $: records = createQuery(api.record.list({ chart: id, order: 'rks', desc: true }));
+  $: votes = createQuery(api.vote.listAll({ id }));
 
-  $: charter = richtext($chart.data?.charter ?? '', api);
+  $: charter = richtext($chart.data?.data.authorName ?? '', api);
 </script>
 
-{#if $chart.isSuccess}
+<!-- {#if $chart.isSuccess}
   {$chart.data.id}
   {#if $song.isSuccess}
     {$song.data.id}
   {/if}
-{/if}
+{/if} -->
 
 <svelte:head>
   <title>
     {$t('chart.chart')} -
     {$chart.data
-      ? `[${$song.data?.name} ${$chart.data.level} ${getLevelDisplay($chart.data.difficulty)}]`
+      ? `[${$chart.data.data.title ?? $song.data?.data.title} ${
+          $chart.data.data.level
+        } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
     | {$t('common.title')}
   </title>
 </svelte:head>
 
 {#if $chart.isSuccess}
-  {@const chart = $chart.data}
+  {@const chart = $chart.data.data}
   {#if user}
     <input type="checkbox" id="chart-vote" class="modal-toggle" bind:checked={open} />
     <div class="modal">
@@ -154,8 +157,8 @@
             </span>
             <div class="w-[70%]">
               <input
-                id="vfx"
-                name="vfx"
+                id="visualEffects"
+                name="visualEffects"
                 type="range"
                 min="0"
                 max="5"
@@ -168,21 +171,21 @@
           </div>
           <div class="flex gap-3">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.innovativeness')}
+              {$t('chart.creativity')}
             </span>
             <div class="w-[70%]">
               <input
-                id="innovativeness"
-                name="innovativeness"
+                id="creativity"
+                name="creativity"
                 type="range"
                 min="0"
                 max="5"
-                bind:value={innovativeness}
+                bind:value={creativity}
                 class="range"
                 step="1"
               />
             </div>
-            <p class="text-xl font-bold w-[5%] text-center">{innovativeness}</p>
+            <p class="text-xl font-bold w-[5%] text-center">{creativity}</p>
           </div>
           <div class="flex gap-3">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
@@ -234,7 +237,7 @@
             </span>
             <p class="text-xl font-bold w-3/4">
               {(
-                (arrangement + feel + vfx + innovativeness + concord + impression) *
+                (arrangement + feel + vfx + creativity + concord + impression) *
                 getMultiplier(getUserLevel(user.exp))
               ).toFixed(2)}
             </p>
@@ -277,16 +280,14 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold items-center">
-              {$song.data?.name}
+              {$song.data?.data.title}
               <div class="ml-2 min-w-fit flex gap-1 align-middle">
                 <div class="btn-group btn-group-horizontal">
-                  <button
-                    class="btn {getLevelColor(chart.level_type)} btn-sm text-2xl no-animation"
-                  >
+                  <button class="btn {getLevelColor(chart.levelType)} btn-sm text-2xl no-animation">
                     {chart.level}
                     {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                   </button>
-                  {#if chart.ranked}
+                  {#if chart.isRanked}
                     <button class="btn btn-primary btn-sm text-2xl no-animation">
                       {$t('chart.ranked')}
                     </button>
@@ -312,7 +313,7 @@
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
-                  {#if chart.charter}
+                  {#if chart.authorName}
                     {@html $charter}
                   {:else}
                     {$t('common.anonymous')}
@@ -320,7 +321,7 @@
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
-                  {chart.notes}
+                  {chart.noteCount}
                 </p>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.format')}</span>
@@ -340,15 +341,17 @@
                   </span>
                   {chart.rating > 0 ? (chart.score / chart.rating).toFixed(2) : 0}
                 </p>
-                <p>
-                  <span class="badge badge-primary badge-outline mr-1">
-                    {$t('chart.real_vote_count')}
-                  </span>
-                  {chart.votes}
-                </p>
+                {#if $votes.isSuccess}
+                  <p>
+                    <span class="badge badge-primary badge-outline mr-1">
+                      {$t('chart.real_vote_count')}
+                    </span>
+                    {$votes.data?.total}
+                  </p>
+                {/if}
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.time')}</span>
-                  {parseDateTime(chart.time)}
+                  {parseDateTime(chart.dateCreated)}
                 </p>
                 {#if chart.description}
                   <p class="content">
@@ -363,13 +366,7 @@
               <div class="w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
                 <div class="flex justify-center gap-2">
-                  <Like
-                    id={chart.like}
-                    likes={chart.like_count}
-                    type="chart"
-                    target={chart.id}
-                    class="btn-md"
-                  />
+                  <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-md" />
                   <label
                     for="chart-vote"
                     class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline flex gap-1"
@@ -388,8 +385,8 @@
                     </svg>
                     {$t('common.vote')}
                   </label>
-                  {#if chart.chart && user}
-                    <a href={chart.chart} target="_blank" rel="noreferrer" download>
+                  {#if chart.file && user}
+                    <a href={chart.file} target="_blank" rel="noreferrer" download>
                       <button class="btn btn-primary btn-outline flex gap-1">
                         <svg
                           fill="currentColor"
@@ -413,46 +410,43 @@
           </div>
         </div>
       </div>
-      <Comments type="chart" id={chart.id} {searchParams} />
+      <Comments type="charts" id={chart.id} {searchParams} />
     </div>
     <div class="mx-4 w-80 form-control">
-      {#if chart.owner}
+      {#if chart.ownerId}
         <div class="indicator my-4 w-full">
           <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
             {$t('chart.owner')}
           </span>
-          <User id={chart.owner} />
+          <User id={chart.ownerId} />
         </div>
       {/if}
       {#if $song.isSuccess}
-        {@const song = $song.data}
+        {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
           <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
             {$t('song.song')}
           </span>
           <Song {song} />
         </div>
-      {/if}
-      {#if $records.isSuccess}
-        {@const records = $records.data.results.slice(0, 10)}
-        {#if records.length > 0}
-          <div class="indicator my-4 w-full">
-            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
-              {$t('common.records')}
-            </span>
-            <div class="card w-80 bg-base-100 shadow-lg overflow-hidden">
-              <div class="card-body gap-2 items-center justify-center">
-                {#each records as record, i}
-                  <Record
-                    {record}
-                    {chart}
-                    rank={chart.ranked ? i + 1 : undefined}
-                    showChart={false}
-                  />
-                {/each}
+        {#if $records.isSuccess}
+          {@const records = $records.data.data.slice(0, 10)}
+          {#if records.length > 0}
+            <div class="indicator my-4 w-full">
+              <span
+                class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+              >
+                {$t('common.records')}
+              </span>
+              <div class="card w-80 bg-base-100 shadow-lg overflow-hidden">
+                <div class="card-body gap-2 items-center justify-center">
+                  {#each records as record}
+                    <Record {record} {chart} {song} rank={record.position} showChart={false} />
+                  {/each}
+                </div>
               </div>
             </div>
-          </div>
+          {/if}
         {/if}
       {/if}
     </div>

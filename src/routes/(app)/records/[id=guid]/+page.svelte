@@ -10,7 +10,7 @@
 
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
-    api.chart.info({ id: $record.data?.chart.id ?? 0 }, { enabled: $record.isSuccess })
+    api.chart.info({ id: $record.data?.data.chartId ?? 0 }, { enabled: $record.isSuccess })
   );
 </script>
 
@@ -19,8 +19,8 @@
 </svelte:head>
 
 {#if $record.isSuccess}
-  {@const record = $record.data}
-  {@const grade = getGrade(record.score, record.full_combo)}
+  {@const record = $record.data.data}
+  {@const grade = getGrade(record.score, record.isFullCombo)}
   <div class="info-page">
     <div class="mx-4 min-w-fit max-w-xl main-width">
       <div class="indicator w-full my-4">
@@ -37,7 +37,7 @@
                 class={`text-8xl font-normal grade ${
                   grade == 'P'
                     ? 'top-11 text-yellow-400'
-                    : record.full_combo
+                    : record.isFullCombo
                     ? 'top-11 text-blue-400'
                     : 'top-11'
                 }`}
@@ -47,20 +47,20 @@
             </div>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.acc')}</span>
-              {(record.acc * 100).toFixed(2)}%
+              {(record.accuracy * 100).toFixed(2)}%
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.perfect')}</span>
               {record.perfect}
               <span class="opacity-70">
-                (±{record.perfect_judgment}ms)
+                (±{record.perfectJudgment}ms)
               </span>
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.good')}</span>
-              {record.good_early + record.good_late} [E{record.good_early} · L{record.good_late}]
+              {record.goodEarly + record.goodLate} [E{record.goodEarly} · L{record.goodLate}]
               <span class="opacity-70">
-                (±{record.good_judgment}ms)
+                (±{record.goodJudgment}ms)
               </span>
             </p>
             <p>
@@ -77,7 +77,7 @@
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.time')}</span>
-              {parseDateTime(record.time)}
+              {parseDateTime(record.dateCreated)}
             </p>
           </div>
         </div>
@@ -88,14 +88,14 @@
         <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
           {$t('record.player')}
         </span>
-        <User id={record.player} />
+        <User id={record.ownerId} />
       </div>
       {#if $chart.isSuccess}
         <div class="indicator my-4 w-full">
           <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
             {$t('chart.chart')}
           </span>
-          <Chart chart={$chart.data} />
+          <Chart chart={$chart.data.data} />
         </div>
       {/if}
     </div>

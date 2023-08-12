@@ -10,7 +10,7 @@ declare namespace App {
     user?: import('$lib/models').User;
   }
   interface PageData {
-    user?: import('$lib/models').User;
+    user?: import('$lib/models').UserDetailedDto;
     api: import('$lib/api').default;
     queryClient?: import('@tanstack/svelte-query').QueryClient;
   }
@@ -19,17 +19,9 @@ declare namespace App {
   // interface Stuff {}
 }
 
-interface TypedOkResponse<R> extends Response {
-  ok: true;
-  json(): Promise<R>;
+interface TypedResponse<T> extends Response {
+  json(): Promise<T>;
 }
-
-interface TypedErrorResponse<E> extends Response {
-  ok: false;
-  json(): Promise<E>;
-}
-
-type TypedResponse<R, E> = TypedOkResponse<R> | TypedErrorResponse<E>;
 
 // type Fetch<R, E = import('$lib/api').CommonError> = (
 //   input: RequestInfo | URL,

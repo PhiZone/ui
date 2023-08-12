@@ -7,7 +7,7 @@
   export let data;
   $: ({ searchParams, id, page, api } = data);
 
-  $: query = createQuery(api.relation.list({ follower: id, page }));
+  $: query = createQuery(api.user.listFollowees({ id, page }));
 </script>
 
 <svelte:head>
@@ -17,16 +17,16 @@
 <div class="pt-32 bg-base-200 page form-control justify-center">
   <h1 class="px-32 text-4xl font-bold mb-6">{$t('user.following')}</h1>
   {#if $query.isSuccess}
-    {@const { count, results } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data && data.length > 0}
       <div class="px-32 result">
-        {#each results as relation}
+        {#each data as user}
           <div class="w-80">
-            <User id={relation.followee} fixedHeight />
+            <User id={user.id} initUser={user} fixedHeight />
           </div>
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

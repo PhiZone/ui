@@ -1,81 +1,77 @@
-import type { Vote } from '$lib/models';
-import queryString from 'query-string';
-import { createQueryCreator, type ListOptsBase, type PagedResults } from './common';
+import type { VoteDto } from '$lib/models';
+import {
+  createQueryCreator,
+  stringifyListOpts,
+  type ListOptsBase,
+  type ResponseDto,
+} from './common';
 import type API from '.';
 
 // list
 export interface ListOpts extends ListOptsBase {
-  order_by?:
-    | 'id'
-    | 'chart'
-    | 'user'
-    | 'total'
-    | 'arrangement'
-    | 'feel'
-    | 'vfx'
-    | 'innovativeness'
-    | 'concord'
-    | 'impression';
-  id?: number | number[];
-  chart?: number | number[];
-  user?: number | number[];
-  highest_total?: number;
-  lowest_total?: number;
-  highest_arrangement?: number;
-  lowest_arrangement?: number;
-  highest_feel?: number;
-  lowest_feel?: number;
-  highest_vfx?: number;
-  lowest_vfx?: number;
-  highest_innovativeness?: number;
-  lowest_innovativeness?: number;
-  highest_concord?: number;
-  lowest_concord?: number;
-  highest_impression?: number;
-  lowest_impression?: number;
+  order?: 'ownerId' | 'score' | 'rating';
+  // id?: number | number[];
+  // chart?: number | number[];
+  // user?: number | number[];
+  // highest_total?: number;
+  // lowest_total?: number;
+  // highest_arrangement?: number;
+  // lowest_arrangement?: number;
+  // highest_feel?: number;
+  // lowest_feel?: number;
+  // highest_vfx?: number;
+  // lowest_vfx?: number;
+  // highest_creativity?: number;
+  // lowest_creativity?: number;
+  // highest_concord?: number;
+  // lowest_concord?: number;
+  // highest_impression?: number;
+  // lowest_impression?: number;
 }
 
 // info
 export interface InfoOpts {
-  id: number;
+  id: string;
 }
 
 // vote
 export interface VoteOpts {
-  chart: number;
+  id: string;
   arrangement: number;
   feel: number;
-  visual_effects: number;
-  innovativeness: number;
+  visualEffects: number;
+  creativity: number;
   concord: number;
   impression: number;
 }
 
 // unvote
 export interface UnvoteOpts {
-  id: number;
+  id: string;
 }
 
 export default class VoteAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('vote.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Vote>>('/votes/?' + queryString.stringify(opts));
+  // list = createQueryCreator('vote.list', (opts: ListOpts) => {
+  //   return this.api.GET<ResponseDto<Vote>>('/votes?' + stringifyListOpts(opts));
+  // });
+
+  listAll = createQueryCreator('vote.listAll', (opts: InfoOpts & ListOpts) => {
+    return this.api.GET<ResponseDto<VoteDto[]>>(
+      `/charts/${opts.id}/votes?` + stringifyListOpts(opts, true)
+    );
   });
 
-  listAll = createQueryCreator('vote.listAll', (opts: ListOpts) => {
-    return this.api.GET<Vote[]>('/votes/?pagination=0&' + queryString.stringify(opts));
-  });
-
-  info = createQueryCreator('vote.info', (opts: InfoOpts) => {
-    return this.api.GET<Vote>(`/votes/${opts.id}`);
-  });
+  // info = createQueryCreator('vote.info', (opts: InfoOpts) => {
+  //   return this.api.GET<Vote>(`/votes/${opts.id}`);
+  // });
 
   vote(opts: VoteOpts) {
-    return this.api.POST<VoteOpts, Vote>('/votes/', opts);
+    return this.api.POST<VoteOpts, void>(`/charts/${opts.id}/votes`, opts);
   }
 
-  unvote(opts: UnvoteOpts) {
-    return this.api.DELETE<UnvoteOpts, void>(`/votes/${opts.id}/`);
+  unvote(opts: InfoOpts) {
+    return this.api.DELETE<void>(`/charts/${opts.id}/votes`);
   }
 }

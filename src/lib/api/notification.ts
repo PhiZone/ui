@@ -1,6 +1,6 @@
 import type { Notification } from '$lib/models';
 import queryString from 'query-string';
-import { createQueryCreator, type PagedResults } from './common';
+import { createQueryCreator, type ResponseDto } from './common';
 import type API from '.';
 
 // list
@@ -23,7 +23,7 @@ export default class NotificationAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('comment.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Notification>>(
+    return this.api.GET<ResponseDto<Notification>>(
       '/notifications/?' + queryString.stringify(opts)
     );
   });

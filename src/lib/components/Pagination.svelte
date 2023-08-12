@@ -4,15 +4,15 @@
   import { range } from '$lib/utils';
 
   export let studio = false;
-  export let count: number;
+  export let total: number | null;
   export let page: number;
   export let pageName = 'page';
   export let searchParams: ParsedQuery<string | number | boolean>;
 
-  $: total = Math.ceil(count / PAGINATION_PER_PAGE);
+  $: totalPages = Math.ceil((total ?? 0) / PAGINATION_PER_PAGE);
   // let pages = range(1, total + 1);
   $: nearbyPagesStart = page <= 3 ? 1 : page - 1;
-  $: nearbyPagesEnd = page >= total - 2 ? total : page + 1;
+  $: nearbyPagesEnd = page >= totalPages - 2 ? totalPages : page + 1;
   $: nearbyPages = range(nearbyPagesStart, nearbyPagesEnd + 1);
 
   // let preloaded: number | null = null,
@@ -124,20 +124,22 @@
           {p}
         </a>
       {/each}
-      {#if nearbyPagesEnd !== total}
+      {#if nearbyPagesEnd !== totalPages}
         <span class="btn text-lg btn-disabled pointer-events-none">...</span>
         <a
-          href="?{getSearch(total)}"
-          class="btn btn-primary text-lg {page === total
+          href="?{getSearch(totalPages)}"
+          class="btn btn-primary text-lg {page === totalPages
             ? 'btn-active btn-disabled'
             : 'btn-outline'}"
         >
-          {total}
+          {totalPages}
         </a>
       {/if}
       <a
         href="?{getSearch(page + 1)}"
-        class="btn btn-primary text-4xl {page < total ? 'btn-outline' : 'btn-ghost btn-disabled'}"
+        class="btn btn-primary text-4xl {page < totalPages
+          ? 'btn-outline'
+          : 'btn-ghost btn-disabled'}"
       >
         »
       </a>

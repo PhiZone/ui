@@ -45,16 +45,16 @@
     ]}
   />
   {#if $query.isSuccess}
-    {@const { results, count } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data.length > 0}
       <div class="result">
-        {#each results as song}
+        {#each data as song}
           <div class="min-w-fit">
             <Song {song} />
           </div>
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

@@ -1,21 +1,21 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
-  import type { Chart } from '$lib/models';
+  import type { ChartDto } from '$lib/models';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, getLevelDisplay } from '$lib/utils';
+  import { getLevelColor, getLevelDisplay } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
 
   $: ({ api } = $page.data);
 
-  export let chart: Chart;
+  export let chart: ChartDto;
   export let kind: 'full' | 'inline' = 'full';
 
-  $: song = createQuery(api.song.info({ id: chart.song }));
-  $: owner = createQuery(api.user.info({ id: chart.owner ?? 0 }, { enabled: !!chart.owner }));
+  $: song = createQuery(api.song.info({ id: chart.songId }));
+  $: owner = createQuery(api.user.info({ id: chart.ownerId }));
 
-  $: charter = richtext(chart.charter ?? '', api);
+  $: charter = richtext(chart.authorName ?? '', api);
 </script>
 
 {#if kind === 'full'}
@@ -23,17 +23,17 @@
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[180px] relative">
         <img
-          src={$song.isSuccess ? getCompressedImage($song.data.illustration) : null}
+          src={chart.illustration ?? ($song.isSuccess ? $song.data.data.illustration : null)}
           alt="Illustration"
           class="object-fill"
         />
         <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
           <div class="btn-group btn-group-horizontal">
-            <button class={`btn ${getLevelColor(chart.level_type)} btn-sm text-xl no-animation`}>
+            <button class={`btn ${getLevelColor(chart.levelType)} btn-sm text-xl no-animation`}>
               {chart.level}
               {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
             </button>
-            {#if chart.ranked}
+            {#if chart.isRanked}
               <button class="btn btn-primary btn-sm text-xl no-animation">
                 {$t('chart.ranked')}
               </button>
@@ -43,11 +43,11 @@
       </figure>
       <div class="card-body gap-0.5">
         <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
-          {$song.isSuccess ? $song.data.name : ''}
+          {$song.isSuccess ? $song.data.data.title : ''}
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
-          {#if chart.charter}
+          {#if chart.authorName}
             {@html $charter}
           {:else}
             {$t('common.anonymous')}
@@ -55,7 +55,7 @@
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
-          {chart.notes}
+          {chart.noteCount}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('chart.score')}</span>
@@ -68,7 +68,7 @@
         {#if $owner.isSuccess}
           <p class="whitespace-nowrap overflow-hidden text-ellipsis">
             <span class="badge badge-primary badge-outline mr-1">{$t('chart.owner')}</span>
-            {$owner.data.username}
+            {$owner.data.data.userName}
           </p>
         {/if}
         <div class="card-actions flex items-center justify-end">
@@ -78,13 +78,7 @@
             }}
             on:keyup
           >
-            <Like
-              id={chart.like}
-              likes={chart.like_count}
-              type="chart"
-              target={chart.id}
-              class="btn-sm"
-            />
+            <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm" />
           </div>
         </div>
       </div>
@@ -94,11 +88,11 @@
   <a href="/charts/{chart.id}" class="w-full h-[82px] flex items-center px-5">
     <div class="w-1/4 min-w-fit">
       <div class="btn-group btn-group-horizontal">
-        <button class="btn {getLevelColor(chart.level_type)} btn-sm text-lg no-animation">
+        <button class="btn {getLevelColor(chart.levelType)} btn-sm text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}
         </button>
-        {#if chart.ranked}
+        {#if chart.isRanked}
           <button class="btn btn-primary btn-sm text-lg no-animation">
             {$t('chart.ranked')}
           </button>
@@ -106,7 +100,7 @@
       </div>
     </div>
     <div class="w-7/12 text-lg">
-      {#if chart.charter}
+      {#if chart.authorName}
         {@html $charter}
       {:else}
         {$t('common.anonymous')}
@@ -115,7 +109,7 @@
     <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
       <div
         class="radial-progress text-primary"
-        style:--value={(chart.rating / 30) * 100}
+        style:--value={(chart.rating / 5) * 100}
         style:--size="48px"
       >
         {chart.rating.toFixed(1)}
@@ -126,13 +120,7 @@
         }}
         on:keyup
       >
-        <Like
-          id={chart.like}
-          likes={chart.like_count}
-          type="chart"
-          target={chart.id}
-          class="btn-sm"
-        />
+        <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm" />
       </div>
     </div>
   </a>

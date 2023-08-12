@@ -136,10 +136,10 @@
     params={searchParams}
     filters={[
       { value: 'id', name: $t('record.id'), options: 'number' },
-      { value: 'chart', name: $t('chart.id'), options: 'number' },
-      { value: 'player', name: $t('record.player_id'), options: 'number' },
+      { value: 'chartId', name: $t('chart.id'), options: 'number' },
+      { value: 'ownerId', name: $t('record.player_id'), options: 'number' },
       {
-        value: 'full_combo',
+        value: 'isFullCombo',
         name: $t('record.full_combo'),
         options: [
           { value: '1', name: $t('common.yes') },
@@ -155,19 +155,19 @@
       { value: 'chart', name: $t('chart.id') },
       { value: 'player', name: $t('record.player_id') },
       { value: 'score', name: $t('record.score') },
-      { value: 'acc', name: $t('record.acc') },
+      { value: 'accuracy', name: $t('record.acc') },
       { value: 'rks', name: $t('record.rks') },
     ]}
   />
   {#if $query.isSuccess}
-    {@const { results, count } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data && data.length > 0}
       <div class="result">
-        {#each results as record}
+        {#each data as record}
           <Record {record} />
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

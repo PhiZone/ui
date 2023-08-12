@@ -17,16 +17,16 @@
 <div class="page">
   <h1 class="text-4xl font-bold mb-6">{$t('common.chapters')}</h1>
   {#if $query.isSuccess}
-    {@const { results, count } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data && total && data.length > 0}
       <div class="result">
-        {#each results as chapter}
+        {#each data as chapter}
           <div class="min-w-fit">
             <Chapter {chapter} fixedHeight />
           </div>
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

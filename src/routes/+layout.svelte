@@ -2,7 +2,6 @@
   import '../app.css';
   import 'cropperjs/dist/cropper.min.css';
   import { locale } from '$lib/translations/config';
-  import { convertLanguageCode } from '$lib/utils';
   import { browser } from '$app/environment';
   import { QueryClientProvider } from '@tanstack/svelte-query';
 
@@ -26,7 +25,7 @@
 
   if (browser) {
     const language =
-      locale.get() || data.user?.language || convertLanguageCode(window.navigator.language);
+      locale.get() || data.user?.language || window.navigator.language;
     locale.set(language);
     console.log('Language:', language);
   }

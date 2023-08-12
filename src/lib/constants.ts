@@ -29,6 +29,7 @@ export enum Error {
 export enum ContentType {
   JSON = 'application/json',
   FORM_DATA = 'multipart/form-data',
+  FORM_URLENCODED = 'application/x-www-form-urlencoded'
 }
 
 export enum Size {

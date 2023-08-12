@@ -17,13 +17,13 @@
   "last_login": "上次登入",
   "date_joined": "加入於",
   "date_of_birth": "生日",
-  "type": "使用者類型",
-  "types": {
-    "admin": "管理員",
-    "volunteer": "志願者",
-    "qualified": "認證使用者",
-    "member": "普通使用者",
-    "banned": "封禁使用者"
+  "role": "使用者類型",
+  "roles": {
+    "Administrator": "管理員",
+    "Moderator": "版主",
+    "Volunteer": "志願者",
+    "Qualified": "認證使用者",
+    "Member": "普通使用者"
   },
   "following": "關注",
   "fans": "粉絲",

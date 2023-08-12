@@ -51,7 +51,7 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body gap-4 py-10">
             <div class="avatar gap-4 items-center min-w-fit h-fit">
-              <span class="w-16 min-w-fit px-4 place-self-center">{$t('user.avatar')}</span>
+              <span class="w-16 min-w-fit px-4 place-self-center">{$t('getAvatar(user.avatar)')}</span>
               <div
                 class="mx-auto min-w-fit w-[140px] h-[140px] rounded-full m-2 overflow-hidden border-[4px] {user.type ==
                 'admin'
@@ -62,7 +62,7 @@
                   ? 'border-sky-500'
                   : 'border-neutral-500'}"
               >
-                <img class="object-fill" src={user.avatar} alt="Avatar" />
+                <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
               </div>
               <input
                 type="file"

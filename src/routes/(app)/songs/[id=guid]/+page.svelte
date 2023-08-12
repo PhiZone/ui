@@ -14,16 +14,16 @@
   $: ({ searchParams, id, user, api } = data);
 
   $: song = createQuery(api.song.info({ id }));
-  $: charts = createQuery(api.chart.listAll({ song: id }));
-  $: chapters = createQuery(api.chapter.listAll({}, { enabled: false }));
+  $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
+  $: chapters = createQuery(api.song.listAllAdmitters({ id }));
 </script>
 
 <svelte:head>
-  <title>{$t('song.song')} - {$song.data?.name} | {$t('common.title')}</title>
+  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.title')}</title>
 </svelte:head>
 
 {#if $song.isSuccess}
-  {@const song = $song.data}
+  {@const song = $song.data.data}
   <div class="info-page">
     <div class="mx-4 min-w-[540px] max-w-7xl main-width">
       <div class="indicator w-full my-4">
@@ -35,8 +35,8 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold items-center">
-              {song.name}
-              {#if song.original}
+              {song.title}
+              {#if song.isOriginal}
                 <button class="ml-2 btn btn-secondary btn-sm text-xl no-animation">
                   {$t('song.original')}
                 </button>
@@ -60,7 +60,7 @@
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.composer')}
                       </span>
-                      {song.composer}
+                      {song.authorName}
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
@@ -86,7 +86,7 @@
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">{$t('song.time')}</span>
-                      {parseDateTime(song.time)}
+                      {parseDateTime(song.dateCreated)}
                     </p>
                     {#if song.description && song.description.length < 172}
                       <p class="content">
@@ -99,15 +99,9 @@
                   </div>
                 </div>
                 <div class="flex gap-2 items-end w-full justify-start">
-                  <Like
-                    id={song.like}
-                    likes={song.like_count}
-                    type="song"
-                    target={song.id}
-                    class="btn-md"
-                  />
+                  <Like id={song.id} likes={song.likeCount} type="songs" class="btn-md" />
                   {#if user}
-                    <a href={song.song} target="_blank" rel="noreferrer" download>
+                    <a href={song.file} target="_blank" rel="noreferrer" download>
                       <button class="btn btn-primary btn-outline flex gap-1">
                         <svg
                           fill="currentColor"
@@ -129,7 +123,7 @@
               </div>
               <div class="w-2/3 float-right">
                 <Player
-                  song={song.song}
+                  song={song.file}
                   illustration={song.illustration}
                   duration={parseDuration(song.duration)}
                   lyrics={song.lyrics ? parseLyrics(song.lyrics) : null}
@@ -150,7 +144,7 @@
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
                 <div class="collapse-content">
                   {#if $charts.isSuccess}
-                    {@const charts = $charts.data}
+                    {@const charts = $charts.data.data}
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
@@ -169,22 +163,22 @@
           </div>
         </div>
       </div>
-      <Comments type="song" {id} {searchParams} />
+      <Comments type="songs" {id} {searchParams} />
     </div>
     <div class="mx-4 w-80 form-control">
       <div class="indicator my-4 w-full">
         <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
-          {$t(song.original ? 'song.author' : 'song.uploader')}
+          {$t(song.isOriginal ? 'song.author' : 'song.uploader')}
         </span>
-        <User id={song.uploader} />
+        <User id={song.ownerId} />
       </div>
       {#if $chapters.isSuccess}
-        {#each $chapters.data as chapter}
+        {#each $chapters.data.data as chapter}
           <div class="indicator my-4 w-full">
             <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
               {$t('song.chapter')}
             </span>
-            <Chapter {chapter} />
+            <Chapter chapter={chapter.admitter} />
           </div>
         {/each}
       {/if}

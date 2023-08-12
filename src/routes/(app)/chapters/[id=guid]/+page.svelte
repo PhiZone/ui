@@ -4,21 +4,22 @@
   import Like from '$lib/components/Like.svelte';
   import User from '$lib/components/User.svelte';
   import Comments from '$lib/components/Comments.svelte';
+  import { richtext } from '$lib/richtext';
 
   export let data;
 
   $: ({ searchParams, id, api } = data);
 
   $: chapter = createQuery(api.chapter.info({ id }));
-  $: songs = createQuery(api.song.listAll({ chapter: id }));
+  $: songs = createQuery(api.chapter.listSongs({ id }));
 </script>
 
 <svelte:head>
-  <title>{$t('chapter.chapter')} - {$chapter.data?.title} | {$t('common.title')}</title>
+  <title>{$t('chapter.chapter')} - {$chapter.data?.data?.title} | {$t('common.title')}</title>
 </svelte:head>
 
-{#if $chapter.isSuccess}
-  {@const chapter = $chapter.data}
+{#if $chapter.isSuccess && $chapter.data.data}
+  {@const chapter = $chapter.data.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100 p-0 max-w-[1600px]">
@@ -58,10 +59,9 @@
         <div class="flex justify-between items-center flex-wrap">
           <div class="my-4 flex gap-3">
             <Like
-              id={chapter.like}
-              likes={chapter.like_count}
-              type="chapter"
-              target={chapter.id}
+              id={chapter.id}
+              likes={chapter.likeCount}
+              type="chapters"
               class="btn-md w-36 text-lg"
             />
             <label
@@ -76,7 +76,7 @@
               {$t('chapter.owner')}
             </span>
             <div class="w-fit">
-              <User id={chapter.owner} kind="mini" />
+              <User id={chapter.ownerId} kind="mini" />
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@
                   </li>
                 </ul>
               {:else if $songs.isSuccess}
-                {@const songs = $songs.data}
+                {@const songs = $songs.data.data}
                 {#if songs.length > 0}
                   <ul class="menu bg-base-100 w-full">
                     {#each songs as song}
@@ -116,9 +116,9 @@
                         >
                           <div class="basis-1 grow flex overflow-hidden">
                             <div class="text-xl font-bold w-full truncate">
-                              {song.name}
+                              {song.title}
                             </div>
-                            {#if song.original}
+                            {#if song.isOriginal}
                               <div class="btn btn-secondary btn-sm text-lg no-animation">
                                 {$t('song.original')}
                               </div>
@@ -126,7 +126,7 @@
                           </div>
                           <div class="basis-1 grow flex overflow-hidden">
                             <div class="text-lg w-full truncate">
-                              {song.composer}
+                              {song.isOriginal ? richtext(song.authorName) : song.authorName}
                             </div>
                           </div>
                           <div
@@ -136,13 +136,7 @@
                             }}
                             on:keyup
                           >
-                            <Like
-                              id={song.like}
-                              likes={song.like_count}
-                              type="song"
-                              target={song.id}
-                              class="sm"
-                            />
+                            <Like id={song.id} likes={song.likeCount} type="songs" class="sm" />
                           </div>
                         </a>
                       </li>
@@ -155,7 +149,7 @@
             </div>
           </div>
         </div>
-        <Comments type="chapter" id={chapter.id} {searchParams} />
+        <Comments type="chapters" id={chapter.id} {searchParams} />
       </div>
     </div>
   </div>

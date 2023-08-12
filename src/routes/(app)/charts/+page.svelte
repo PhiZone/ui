@@ -60,14 +60,14 @@
     ]}
   />
   {#if $query.isSuccess}
-    {@const { results, count } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data && data.length > 0}
       <div class="result">
-        {#each results as chart}
+        {#each data as chart}
           <Chart {chart} />
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

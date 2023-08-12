@@ -2,19 +2,19 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getUserColor, getUserLevel } from '$lib/utils';
-  import type { User } from '$lib/models';
+  import { getAvatar, getUserColor, getUserLevel } from '$lib/utils';
+  import type { UserDto } from '$lib/models';
   import Follow from './Follow.svelte';
 
   $: ({ api } = $page.data);
 
   export let id: number;
-  export let user: User | undefined = undefined;
+  export let initUser: UserDto | undefined = undefined;
   export let kind: 'full' | 'mini' | 'embedded' | 'embedded-mini' = 'full';
   export let fixedHeight = false;
   export let showFollow = true;
 
-  $: query = createQuery(api.user.info({ id }, { initialData: user }));
+  $: query = createQuery(api.user.info({ id }, { initialData: initUser }));
 </script>
 
 {#if kind === 'embedded' || kind === 'embedded-mini'}
@@ -27,7 +27,7 @@
       <span class="h-4 w-6 bg-slate-200" />
     </div>
   {:else if $query.isSuccess}
-    {@const user = $query.data}
+    {@const user = $query.data.data}
     <a
       href="/users/{user.id}"
       class="avatar {kind === 'embedded'
@@ -37,21 +37,21 @@
       <div
         class="{kind === 'embedded'
           ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
-          : 'w-10 border-2'} rounded-full {user.type == 'admin'
+          : 'w-10 border-2'} rounded-full {user.role == 'Administrator'
           ? 'border-indigo-500'
-          : user.type == 'volunteer'
+          : user.role == 'Volunteer'
           ? 'border-emerald-500'
-          : user.type == 'qualified'
+          : user.role == 'Qualified'
           ? 'border-sky-500'
           : 'border-neutral-500'}"
       >
-        <img class="object-fill" src={getCompressedImage(user.avatar)} alt="Avatar" />
+        <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
       </div>
       <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center truncate w-full">
-        {user.username}
+        {user.userName}
       </p>
       <div class="flex flex-wrap gap-1 !aspect-auto">
-        <span class="badge badge-sm font-bold">LV{getUserLevel(user.exp)}</span>
+        <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
         {#if kind === 'embedded' && user.tag}
           <span class="badge badge-sm badge-accent">{user.tag}</span>
         {/if}
@@ -66,7 +66,7 @@
         : ''}"
       class:animate-pulse={$query.isLoading}
     >
-      {#if $query.isLoading}
+      {#if !initUser && $query.isLoading}
         <div>
           <div class="avatar flex items-center min-w-fit">
             <div class="w-12 rounded-full bg-slate-200" />
@@ -86,20 +86,20 @@
         {#if showFollow}
           <button class="w-24 h-12 btn" disabled />
         {/if}
-      {:else if $query.isSuccess}
-        {@const user = $query.data}
+      {:else if initUser || $query.isSuccess}
+        {@const user = initUser ?? $query.data.data}
         <a href="/users/{user.id}">
           <div class="avatar flex items-center min-w-fit">
             <div
               class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                user.type
+                user.role
               )}"
             >
-              <img src={getCompressedImage(user.avatar)} alt="Avatar" />
+              <img src={getAvatar(user.avatar)} alt="Avatar" />
             </div>
-            <p class="text-lg ml-2 text-[{getUserColor(user.type)}] flex gap-1 items-center">
-              {user.username}
-              <span class="badge badge-sm font-bold">LV{getUserLevel(user.exp)}</span>
+            <p class="text-lg ml-2 text-[{getUserColor(user.role)}] flex gap-1 items-center">
+              {user.userName}
+              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
               {#if user.tag}
                 <span class="badge badge-sm badge-accent">{user.tag}</span>
               {/if}
@@ -114,18 +114,18 @@
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-              {user.exp}
+              {user.experience}
             </p>
-            {#if user.bio}
+            {#if user.biography}
               <p class="content bio">
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
-                {user.bio}
+                {user.biography}
               </p>
             {/if}
           </div>
         {/if}
         {#if showFollow}
-          <Follow {id} {user} />
+          <Follow {user} />
         {/if}
       {/if}
     </div>

@@ -12,7 +12,9 @@
   "formats": {
     "0": "Re: PhiEdit 谱面",
     "1": "PhiEditer 谱面",
-    "2": "未受支持"
+    "2": "PhiZone 谱面",
+    "3": "Phigrim 谱面",
+    "4": "未受支持"
   },
   "score": "总分",
   "rating": "评分",
@@ -21,13 +23,13 @@
   "arrangement": "配置",
   "feel": "手感",
   "vfx": "视觉效果",
-  "innovativeness": "创新度",
+  "creativity": "创新度",
   "concord": "契合度",
   "impression": "印象",
   "r_arrangement": "配置评分",
   "r_feel": "手感评分",
   "r_vfx": "视觉效果评分",
-  "r_innovativeness": "创新度评分",
+  "r_creativity": "创新度评分",
   "r_concord": "契合度评分",
   "r_impression": "印象评分",
   "multiplier": "评分倍率",

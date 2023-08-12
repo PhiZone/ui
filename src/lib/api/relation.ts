@@ -2,7 +2,7 @@ import type { Relation } from '$lib/models';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
@@ -36,7 +36,7 @@ export default class RelationAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('relation.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<Relation>>('/relations/?' + stringifyListOpts(opts));
+    return this.api.GET<ResponseDto<Relation>>('/relations/?' + stringifyListOpts(opts));
   });
 
   listAll = createQueryCreator('relation.listAll', (opts: ListOpts) => {

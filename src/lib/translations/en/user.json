@@ -16,14 +16,14 @@
   "language": "Language",
   "last_login": "Last Login",
   "date_joined": "Date Jonied",
-  "date_of_birth": "Birthday",
-  "type": "Type",
-  "types": {
-    "admin": "Admin",
-    "volunteer": "Volunteer",
-    "qualified": "Qualified",
-    "member": "Member",
-    "banned": "Banned"
+  "date_of_birth": "Date of Birth",
+  "role": "Role",
+  "roles": {
+    "Administrator": "Administrator",
+    "Moderator": "Moderator",
+    "Volunteer": "Volunteer",
+    "Qualified": "Qualified",
+    "Member": "Member"
   },
   "following": "Following",
   "fans": "Fans",

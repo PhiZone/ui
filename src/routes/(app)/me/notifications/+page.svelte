@@ -22,12 +22,12 @@
       </h1>
       <div class="py-4 min-w-fit">
         {#if $query.isSuccess}
-          {@const { results, count } = $query.data}
-          {#if results.length > 0}
-            {#each results as notification}
+          {@const { data, total } = $query.data}
+          {#if data && data.length > 0}
+            {#each data as notification}
               <Notification {notification} />
             {/each}
-            <Pagination {count} {page} {searchParams} />
+            <Pagination {total} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}

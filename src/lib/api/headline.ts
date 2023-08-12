@@ -14,18 +14,18 @@ export default class HeadlineAPI {
   constructor(private api: API) {}
 
   get = createQueryCreator('headline.get', (_opts: void) => {
-    return this.api.GET<Headline>('/headline/');
+    return this.api.GET<Headline>('/headline');
   });
 
   set(opts: SetOpts) {
-    return this.api.POST<SetOpts, void>('/headline/', opts);
+    return this.api.POST<SetOpts, void>('/headline', opts);
   }
 
-  get_studio = createQueryCreator('headline.get_studio', (_opts: void) => {
-    return this.api.GET<Headline>('/studio_headline/');
+  get_studio = createQueryCreator('headline.getStudio', (_opts: void) => {
+    return this.api.GET<Headline>('/studio/headline');
   });
 
   set_studio(opts: SetOpts) {
-    return this.api.POST<SetOpts, void>('/studio_headline/', opts);
+    return this.api.POST<SetOpts, void>('/studio/headline', opts);
   }
 }

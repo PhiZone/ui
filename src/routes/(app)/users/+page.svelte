@@ -38,30 +38,30 @@
         name: $t('user.language'),
         options: [
           { value: 'en', name: $t('common.lang.en') },
-          { value: 'zh-Hans', name: $t('common.lang.zh-Hans') },
-          { value: 'zh-Hant', name: $t('common.lang.zh-Hant') },
+          { value: 'zh-CN', name: $t('common.lang.zh-CN') },
+          { value: 'zh-TW', name: $t('common.lang.zh-TW') },
           { value: 'ja', name: $t('common.lang.ja') },
         ],
       },
     ]}
     orders={[
       { value: 'id', name: $t('user.id') },
-      { value: 'username', name: $t('user.username') },
+      { value: 'userName', name: $t('user.username') },
       { value: 'rks', name: $t('user.rks') },
-      { value: 'exp', name: $t('user.exp') },
+      { value: 'experience', name: $t('user.exp') },
     ]}
   />
   {#if $query.isSuccess}
-    {@const { results, count } = $query.data}
-    {#if results.length > 0}
+    {@const { data, total } = $query.data}
+    {#if data && data.length > 0}
       <div class="result">
-        {#each results as user}
+        {#each data as user}
           <div class="w-80">
             <User id={user.id} {user} fixedHeight />
           </div>
         {/each}
       </div>
-      <Pagination {count} {page} {searchParams} />
+      <Pagination {total} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

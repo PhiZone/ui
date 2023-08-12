@@ -66,8 +66,8 @@
   "loading": "Loading...",
   "lang": {
     "en": "English",
-    "zh-Hans": "Chinese (Simplified)",
-    "zh-Hant": "Chinese (Traditional)",
+    "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)",
     "ja": "Japanese"
   },
   "source": "Source",

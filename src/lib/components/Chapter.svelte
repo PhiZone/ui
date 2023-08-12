@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { Chapter } from '$lib/models';
+  import type { ChapterDto } from '$lib/models';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage } from '$lib/utils';
   import Like from './Like.svelte';
 
-  export let chapter: Chapter;
+  export let chapter: ChapterDto;
   export let fixedHeight = false;
 </script>
 
@@ -13,7 +12,7 @@
 >
   <a href="/chapters/{chapter.id}">
     <figure class="h-[180px]">
-      <img src={getCompressedImage(chapter.illustration)} alt="Illustration" class="object-fill" />
+      <img src={chapter.illustration} alt="Illustration" class="object-fill" />
     </figure>
     <div class="card-body {fixedHeight ? 'h-[280px]' : ''} gap-0.5">
       <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
@@ -44,13 +43,7 @@
           }}
           on:keyup
         >
-          <Like
-            id={chapter.like}
-            likes={chapter.like_count}
-            type="chapter"
-            target={chapter.id}
-            class="btn-sm"
-          />
+          <Like id={chapter.id} likes={chapter.likeCount} type="chapters" class="btn-sm" />
         </div>
       </div>
     </div>

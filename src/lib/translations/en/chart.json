@@ -12,7 +12,9 @@
   "formats": {
     "0": "Re: PhiEdit Chart",
     "1": "PhiEditer Chart",
-    "2": "Unsupported"
+    "2": "PhiZone Chart",
+    "3": "Phigrim Chart",
+    "4": "Unsupported"
   },
   "score": "Total Score",
   "rating": "Rating",
@@ -21,13 +23,13 @@
   "arrangement": "Note Arrangement",
   "feel": "Feel",
   "vfx": "Visual Effects",
-  "innovativeness": "Innovativeness",
+  "creativity": "Creativity",
   "concord": "Concord",
   "impression": "Impression",
   "r_arrangement": "Rating on Note Arrangement",
   "r_feel": "Rating on Feel",
   "r_vfx": "Rating on Visual Effects",
-  "r_innovativeness": "Rating on Innovativeness",
+  "r_creativity": "Rating on Creativity",
   "r_concord": "Rating on Concord",
   "r_impression": "Rating on Impression",
   "multiplier": "Multiplier",

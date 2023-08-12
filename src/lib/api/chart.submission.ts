@@ -3,7 +3,7 @@ import { serialize } from 'object-to-formdata';
 import {
   stringifyListOpts,
   type ListOptsBase,
-  type PagedResults,
+  type ResponseDto,
   createQueryCreator,
 } from './common';
 import type API from '.';
@@ -63,7 +63,7 @@ export default class ChartSubmissionAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('chart.submission.list', (opts: ListOpts) => {
-    return this.api.GET<PagedResults<ChartSubmission>>(
+    return this.api.GET<ResponseDto<ChartSubmission>>(
       '/chart_uploads/?' + stringifyListOpts(opts)
     );
   });

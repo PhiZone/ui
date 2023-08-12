@@ -12,7 +12,9 @@
   "formats": {
     "0": "Re: PhiEdit 譜面",
     "1": "PhiEditer 譜面",
-    "2": "不支援"
+    "2": "PhiZone 譜面",
+    "3": "Phigrim 譜面",
+    "4": "不支援"
   },
   "score": "總分",
   "rating": "評分",
@@ -21,13 +23,13 @@
   "arrangement": "配置",
   "feel": "手感",
   "vfx": "視覺效果",
-  "innovativeness": "創新度",
+  "creativity": "創新度",
   "concord": "契合度",
   "impression": "印象",
   "r_arrangement": "配置評分",
   "r_feel": "手感評分",
   "r_vfx": "視覺效果評分",
-  "r_innovativeness": "創新度評分",
+  "r_creativity": "創新度評分",
   "r_concord": "契合度評分",
   "r_impression": "印象評分",
   "multiplier": "評分倍率",
