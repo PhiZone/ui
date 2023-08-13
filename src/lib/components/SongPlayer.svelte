@@ -29,14 +29,6 @@
       r = lyrics.length - 1,
       m = (l + r) >> 1;
     while (l < r) {
-      // console.log(
-      // 	l,
-      // 	r,
-      // 	m,
-      // 	lyrics[m].time,
-      // 	currentTime,
-      // 	lyrics[m + 1].time
-      // );
       if (lyrics[m].time <= time && lyrics[m + 1].time > time) {
         break;
       } else if (lyrics[m].time > time) {
@@ -48,7 +40,6 @@
     }
     lyricsIndex = m;
     line = lyrics[lyricsIndex].line;
-    // console.log("lyrics synced", lyrics[m]);
   };
 
   let timer: number;
@@ -90,7 +81,7 @@
   });
 </script>
 
-<div class="bg-white rounded-lg shadow-lg overflow-hidden">
+<div class="bg-white rounded-lg shadow-lg overflow-hidden bg-blur bg-opacity-50" style="background-image: url({illustration});">
   <div class="relative">
     <img src={illustration} class="object-fill" alt="illustration" />
     {#if line}

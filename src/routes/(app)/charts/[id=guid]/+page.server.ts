@@ -16,7 +16,7 @@ export const actions = {
       impression: parseInt(data.get('impression') as string),
     });
     if (resp.ok) return await resp.json();
-    const err: ResponseDto<void> = await resp.json();
+    const err = (await resp.json()) as unknown as ResponseDto<void>;
     return fail(resp.status, { detail: err.code });
   },
 };

@@ -5,11 +5,11 @@ import { clearTokens } from '$lib/utils';
 export const load = async ({ cookies, locals, fetch }) => {
   const api = new API(fetch, locals.access_token, locals.user);
   const refresh_token = locals.refresh_token!;
-  await api.session.revokeToken({
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-    token: refresh_token,
-  });
+  const data = new URLSearchParams();
+  data.append('client_id', CLIENT_ID);
+  data.append('client_secret', CLIENT_SECRET);
+  data.append('token', refresh_token);
+  await api.session.revokeToken(data);
   clearTokens(cookies);
 
   return {

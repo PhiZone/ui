@@ -11,8 +11,8 @@ const config = {
   plugins: [typography, daisyui],
 
   daisyui: {
-    themes: ['emerald', 'night'],
-    darkTheme: 'night',
+    themes: ['emerald', 'dracula'],
+    darkTheme: 'dracula',
   },
 };
 

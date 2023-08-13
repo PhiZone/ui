@@ -11,8 +11,8 @@
 
   $: totalPages = Math.ceil((total ?? 0) / PAGINATION_PER_PAGE);
   // let pages = range(1, total + 1);
-  $: nearbyPagesStart = page <= 3 ? 1 : page - 1;
-  $: nearbyPagesEnd = page >= totalPages - 2 ? totalPages : page + 1;
+  $: nearbyPagesStart = page <= 5 ? 1 : page - 3;
+  $: nearbyPagesEnd = page >= totalPages - 4 ? totalPages : page + 3;
   $: nearbyPages = range(nearbyPagesStart, nearbyPagesEnd + 1);
 
   // let preloaded: number | null = null,

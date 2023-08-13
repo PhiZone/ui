@@ -203,7 +203,7 @@
         </div>
       {:else}
         <textarea
-          class="textarea textarea-primary text-base"
+          class="textarea textarea-secondary text-base"
           placeholder={$t('challenge.placeholder')}
           bind:value={text}
         />

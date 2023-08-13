@@ -14,7 +14,7 @@
   export let fixedHeight = false;
   export let showFollow = true;
 
-  $: query = createQuery(api.user.info({ id }, { initialData: initUser }));
+  $: query = createQuery(api.user.info({ id }));
 </script>
 
 {#if kind === 'embedded' || kind === 'embedded-mini'}
@@ -87,45 +87,47 @@
           <button class="w-24 h-12 btn" disabled />
         {/if}
       {:else if initUser || $query.isSuccess}
-        {@const user = initUser ?? $query.data.data}
-        <a href="/users/{user.id}">
-          <div class="avatar flex items-center min-w-fit">
-            <div
-              class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                user.role,
-              )}"
-            >
-              <img src={getAvatar(user.avatar)} alt="Avatar" />
-            </div>
-            <p class="text-lg ml-2 text-[{getUserColor(user.role)}] flex gap-1 items-center">
-              {user.userName}
-              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-              {#if user.tag}
-                <span class="badge badge-sm badge-accent">{user.tag}</span>
-              {/if}
-            </p>
-          </div>
-        </a>
-        {#if kind === 'full'}
-          <div class="px-3 w-full text-left {fixedHeight ? 'h-3/4' : ''}">
-            <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
-              {user.rks.toFixed(3)}
-            </p>
-            <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-              {user.experience}
-            </p>
-            {#if user.biography}
-              <p class="content bio">
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
-                {user.biography}
+        {@const user = initUser ?? $query.data?.data}
+        {#if user}
+          <a href="/users/{user.id}">
+            <div class="avatar flex items-center min-w-fit">
+              <div
+                class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
+                  user.role,
+                )}"
+              >
+                <img src={getAvatar(user.avatar)} alt="Avatar" />
+              </div>
+              <p class="text-lg ml-2 text-[{getUserColor(user.role)}] flex gap-1 items-center">
+                {user.userName}
+                <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
+                {#if user.tag}
+                  <span class="badge badge-sm badge-accent">{user.tag}</span>
+                {/if}
               </p>
-            {/if}
-          </div>
-        {/if}
-        {#if showFollow}
-          <Follow {user} />
+            </div>
+          </a>
+          {#if kind === 'full'}
+            <div class="px-3 w-full text-left {fixedHeight ? 'h-3/4' : ''}">
+              <p>
+                <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
+                {user.rks.toFixed(3)}
+              </p>
+              <p>
+                <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
+                {user.experience}
+              </p>
+              {#if user.biography}
+                <p class="content bio">
+                  <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
+                  {user.biography}
+                </p>
+              {/if}
+            </div>
+          {/if}
+          {#if showFollow}
+            <Follow {user} />
+          {/if}
         {/if}
       {/if}
     </div>

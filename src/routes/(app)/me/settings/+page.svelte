@@ -160,7 +160,7 @@
                 <textarea
                   placeholder={$t('user.bio')}
                   name="bio"
-                  class="textarea textarea-primary join-item rounded-none w-[88%] min-w-[180px] h-48"
+                  class="textarea textarea-secondary join-item rounded-none w-[88%] min-w-[180px] h-48"
                   value={user.bio}
                 />
               </label>

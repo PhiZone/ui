@@ -46,10 +46,10 @@
               <div class="w-1/3">
                 <div class="info">
                   <div class="form-control gap-1">
-                    <p>
+                    <!-- <p>
                       <span class="badge badge-primary badge-outline mr-1">{$t('song.id')}</span>
                       {song.id}
-                    </p>
+                    </p> -->
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.edition')}
@@ -139,7 +139,7 @@
               </p>
             {/if}
             {#if $charts.isSuccess}
-              <div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+              <div class="collapse collapse-arrow border border-secondary bg-base-100 rounded-box">
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
                 <div class="collapse-content">
@@ -148,7 +148,7 @@
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
-                          <li class="hover-bordered"><Chart {chart} kind="inline" /></li>
+                          <li class="hover-bordered"><Chart {chart} kind="inline" showSong={false} /></li>
                         {/each}
                       </ul>
                     {:else}

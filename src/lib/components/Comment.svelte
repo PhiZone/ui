@@ -58,7 +58,7 @@
     <h2 class="font-bold text-xl mb-4">{$t('common.replies')}</h2>
     <div class="flex items-center mx-5 mb-3">
       <textarea
-        class="mr-3 textarea textarea-primary w-11/12"
+        class="mr-3 textarea textarea-secondary w-11/12"
         placeholder={$t('common.write_reply')}
         {disabled}
         bind:value={replyText}
@@ -89,11 +89,11 @@
   </div>
 </div>
 
-<div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
+<div class="card card-side w-full bg-base-100 border border-base-200 shadow-lg">
   {#if showUser}
     <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center justify-center border-r border-base-300 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center justify-center border-r border-base-200 px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={comment.ownerId} kind="embedded" />
       </div>

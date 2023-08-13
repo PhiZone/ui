@@ -99,7 +99,7 @@
           {$t('recorder.reply')}
         </span>
         <textarea
-          class="textarea textarea-primary join-item w-full max-w-xs h-48"
+          class="textarea textarea-secondary join-item w-full max-w-xs h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />

@@ -4,6 +4,7 @@
   import type { ChartDto, RecordDto, SongDto } from '$lib/models';
   import { t } from '$lib/translations/config';
   import { getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
+    import { Chart } from 'chart.js';
 
   $: ({ api } = $page.data);
 
@@ -16,19 +17,19 @@
   $: grade = getGrade(record.score, record.isFullCombo);
 
   $: chartQ = createQuery(
-    api.chart.info({ id: record.chartId }, { enabled: !chart, initialData: chart }),
+    api.chart.info({ id: record.chartId }, { enabled: !chart }),
   );
   $: songQ = createQuery(
     api.song.info(
-      { id: chart ? chart.songId : $chartQ.data?.data.songId ?? 0 },
-      { enabled: $chartQ.isSuccess && !song, initialData: song },
+      { id: chart ? chart.songId : $chartQ.data?.data.songId ?? '' },
+      { enabled: $chartQ.isSuccess && !song },
     ),
   );
   $: player = createQuery(api.user.info({ id: record.ownerId }));
 </script>
 
 <div
-  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass overflow-hidden'}
+  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass hover:shadow-primary-content overflow-hidden'}
 >
   <a class="w-fit h-fit" href={`/records/${record.id}`}>
     {#if $songQ.isSuccess}

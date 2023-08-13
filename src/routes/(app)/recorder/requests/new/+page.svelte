@@ -718,7 +718,7 @@
                 <textarea
                   class="textarea {status === Status.ERROR && error?.addition
                     ? 'textarea-error'
-                    : 'textarea-primary'} join-item w-3/4 h-48"
+                    : 'textarea-secondary'} join-item w-3/4 h-48"
                   placeholder={$t('recorder.addition_placeholder')}
                   bind:value={addition}
                 />

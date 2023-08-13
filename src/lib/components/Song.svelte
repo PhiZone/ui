@@ -33,7 +33,7 @@
 </script>
 
 {#if kind === 'full'}
-  <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
+  <div class="card w-80 bg-base-100 hover:shadow-primary-content shadow-lg overflow-hidden">
     <a href={`/songs/${song.id}`}>
       <figure class="h-[180px] relative">
         <img src={song.illustration} alt="Illustration" class="object-fill" />
@@ -133,8 +133,8 @@
     </a>
   </div>
 {:else if kind === 'inline'}
-  <a href="/songs/{song.id}" class="w-full overflow-hidden h-[82px] flex px-5">
-    <div class="w-1/2">
+  <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
+    <div class="w-11/12 md:w-1/2">
       <div class="text-xl font-bold">
         {song.title}
         {#if song.isOriginal}
@@ -144,8 +144,8 @@
         {/if}
       </div>
     </div>
-    <div class="w-5/12">
-      <div class="text-lg">
+    <div class="w-0 md:w-5/12">
+      <div class="text-lg hidden md:flex">
         {song.authorName}
       </div>
     </div>
@@ -156,7 +156,7 @@
       }}
       on:keyup
     >
-      <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm" />
+      <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm w-24" />
     </div>
   </a>
 {/if}

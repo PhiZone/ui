@@ -371,7 +371,7 @@
                   class={`textarea join-item ${
                     status === Status.ERROR && error?.description
                       ? 'textarea-error'
-                      : 'textarea-primary'
+                      : 'textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder="{$t('common.description')}{$t('common.optional')}"
                   bind:value={description}

@@ -112,7 +112,7 @@
                       <li class="w-full overflow-hidden">
                         <a
                           href={`/songs/${song.id}`}
-                          class="w-full h-[82px] flex flex-wrap px-5 overflow-hidden"
+                          class="w-full flex flex-wrap px-5 h-16 content-center overflow-hidden"
                         >
                           <div class="basis-1 grow flex overflow-hidden">
                             <div class="text-xl font-bold w-full truncate">
@@ -136,7 +136,7 @@
                             }}
                             on:keyup
                           >
-                            <Like id={song.id} likes={song.likeCount} type="songs" class="sm" />
+                            <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm w-24" />
                           </div>
                         </a>
                       </li>

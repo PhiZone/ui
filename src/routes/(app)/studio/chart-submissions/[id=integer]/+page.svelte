@@ -72,7 +72,7 @@
           {$t('studio.submission.message')}
         </span>
         <textarea
-          class="textarea textarea-primary join-item w-full h-48"
+          class="textarea textarea-secondary join-item w-full h-48"
           placeholder={$t('studio.submission.write_message')}
           bind:value={message}
         />

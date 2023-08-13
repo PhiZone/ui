@@ -63,7 +63,7 @@
           {$t('studio.submission.reply')}
         </span>
         <textarea
-          class="textarea textarea-primary join-item w-3/4 h-48"
+          class="textarea textarea-secondary join-item w-3/4 h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />

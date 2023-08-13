@@ -41,7 +41,7 @@
 </script>
 
 {#if !id}
-  <button class="btn btn-primary btn-outline gap-2 {$$restProps.class}" on:click={like}>
+  <button class="btn btn-primary btn-outline gap-2 overflow-hidden {$$restProps.class}" on:click={like}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="h-5 w-5"

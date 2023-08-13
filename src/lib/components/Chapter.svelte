@@ -8,7 +8,7 @@
 </script>
 
 <div
-  class="card w-80 ${fixedHeight ? 'h-[460px]' : ''} bg-base-100 shadow-lg glass overflow-hidden"
+  class="card w-80 ${fixedHeight ? 'h-[460px]' : ''} bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden"
 >
   <a href="/chapters/{chapter.id}">
     <figure class="h-[180px]">

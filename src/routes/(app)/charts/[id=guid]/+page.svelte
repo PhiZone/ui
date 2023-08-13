@@ -56,9 +56,9 @@
 
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(
-    api.song.info({ id: $chart.data?.data.songId }, { enabled: $chart.isSuccess }),
+    api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
   );
-  $: records = createQuery(api.record.list({ chart: id, order: 'rks', desc: true }));
+  $: records = createQuery(api.record.list({ rangeChartId: [id], order: 'rks', desc: true }));
   $: votes = createQuery(api.vote.listAll({ id }));
 
   $: charter = richtext($chart.data?.data.authorName ?? '', api);
@@ -301,10 +301,10 @@
             </div>
             <div class="flex">
               <div class="w-1/2">
-                <p>
+                <!-- <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.id')}</span>
                   {chart.id}
-                </p>
+                </p> -->
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.level')}</span>
                   {chart.level}
@@ -391,7 +391,7 @@
                   </label>
                   {#if chart.file && user}
                     <a href={chart.file} target="_blank" rel="noreferrer" download>
-                      <button class="btn btn-primary btn-outline flex gap-1">
+                      <button class="btn btn-primary btn-outline flex gap-1 min-w-fit">
                         <svg
                           fill="currentColor"
                           width="14px"

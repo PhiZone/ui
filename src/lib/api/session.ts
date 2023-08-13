@@ -23,13 +23,6 @@ export interface TokenResult {
   token_type: 'Bearer';
 }
 
-// revoke token
-export interface RevokeTokenOpts {
-  client_id: string;
-  client_secret: string;
-  token: string;
-}
-
 export default class SessionAPI {
   constructor(private api: API) {
     this.password_reset = new SessionPasswordResetAPI(api);
@@ -47,8 +40,8 @@ export default class SessionAPI {
     return this.api.POST<URLSearchParams, TokenResult>('/auth/token', opts);
   }
 
-  revokeToken(opts: RevokeTokenOpts) {
-    return this.api.POST<RevokeTokenOpts, void>('/auth/revoke', opts);
+  revokeToken(opts: URLSearchParams) {
+    return this.api.POST<URLSearchParams, void>('/auth/revoke', opts);
   }
 
   password_reset;

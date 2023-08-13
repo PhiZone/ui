@@ -11,6 +11,8 @@
 
   export let chart: ChartDto;
   export let kind: 'full' | 'inline' = 'full';
+  export let showSong: boolean = true;
+  export let showCharter: boolean = true;
 
   $: song = createQuery(api.song.info({ id: chart.songId }));
   $: owner = createQuery(api.user.info({ id: chart.ownerId }));
@@ -19,7 +21,7 @@
 </script>
 
 {#if kind === 'full'}
-  <div class="card w-80 bg-base-100 shadow-lg glass overflow-hidden">
+  <div class="card w-80 bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden">
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[180px] relative">
         <img
@@ -87,9 +89,14 @@
     </a>
   </div>
 {:else if kind === 'inline'}
-  <a href="/charts/{chart.id}" class="w-full h-[82px] flex items-center px-5">
-    <div class="w-1/4 min-w-fit">
-      <div class="join join-horizontal">
+  <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
+    <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
+      {#if showSong}
+        <div class="hidden md:flex md:w-1/2 2xl:w-2/3 text-xl font-bold">
+          {$song.data?.data.title}
+        </div>
+      {/if}
+      <div class="join join-horizontal items-center">
         <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}
@@ -101,16 +108,18 @@
         {/if}
       </div>
     </div>
-    <div class="w-7/12 text-lg">
-      {#if chart.authorName}
-        {@html $charter}
-      {:else}
-        {$t('common.anonymous')}
-      {/if}
-    </div>
+    {#if showCharter}
+      <div class="hidden lg:flex w-1/3 max-w-1/3 text-lg">
+        {#if chart.authorName}
+          {@html $charter}
+        {:else}
+          {$t('common.anonymous')}
+        {/if}
+      </div>
+    {/if}
     <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
       <div
-        class="radial-progress text-primary"
+        class="radial-progress text-primary hidden xl:grid"
         style:--value={(chart.rating / 5) * 100}
         style:--size="48px"
       >
@@ -122,7 +131,7 @@
         }}
         on:keyup
       >
-        <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm" />
+        <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm w-24" />
       </div>
     </div>
   </a>
