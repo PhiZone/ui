@@ -52,7 +52,7 @@
                 msg = $t(
                   result.status == 400
                     ? 'session.login.invalid_credentials'
-                    : 'common.unknown_error'
+                    : 'common.unknown_error',
                 );
               } else if (result.type === 'redirect') {
                 // await queryClient.invalidateQueries();

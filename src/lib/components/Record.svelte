@@ -15,12 +15,14 @@
 
   $: grade = getGrade(record.score, record.isFullCombo);
 
-  $: chartQ = createQuery(api.chart.info({ id: record.chartId }, { enabled: !chart, initialData: chart }));
+  $: chartQ = createQuery(
+    api.chart.info({ id: record.chartId }, { enabled: !chart, initialData: chart }),
+  );
   $: songQ = createQuery(
     api.song.info(
-      { id: chart ? chart.songId : ($chartQ.data?.data.songId ?? 0) },
-      { enabled: $chartQ.isSuccess && !song, initialData: song }
-    )
+      { id: chart ? chart.songId : $chartQ.data?.data.songId ?? 0 },
+      { enabled: $chartQ.isSuccess && !song, initialData: song },
+    ),
   );
   $: player = createQuery(api.user.info({ id: record.ownerId }));
 </script>

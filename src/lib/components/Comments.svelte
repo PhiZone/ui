@@ -33,7 +33,7 @@
 
   $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
   $: query = createQuery(
-    api.comment.list({ type, id, page: commentPage, order: 'likeCount', desc: true })
+    api.comment.list({ type, id, page: commentPage, order: 'likeCount', desc: true }),
   );
 </script>
 

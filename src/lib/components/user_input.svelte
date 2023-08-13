@@ -23,13 +23,13 @@
     new RegExp(
       [
         ...input.origin.matchAll(
-          new RegExp('\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT]).)*):PZRT\\]', 'g')
+          new RegExp('\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT]).)*):PZRT\\]', 'g'),
         ),
       ].length === 0
         ? '\\[PZ([A-Za-z]+):([0-9]+):([^\\]]+)\\]' // legacy support
         : '\\[PZ([A-Za-z]+):([0-9]+):((?:(?!:PZRT]).)*):PZRT\\]',
-      'g'
-    )
+      'g',
+    ),
   );
   let element = result.next(),
     originType = element.value[1],

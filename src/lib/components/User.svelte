@@ -92,7 +92,7 @@
           <div class="avatar flex items-center min-w-fit">
             <div
               class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                user.role
+                user.role,
               )}"
             >
               <img src={getAvatar(user.avatar)} alt="Avatar" />

@@ -106,7 +106,7 @@
       formData,
       access_token,
       user,
-      ContentType.FORM_DATA
+      ContentType.FORM_DATA,
     );
     if (resp.ok) {
       goto('/studio/song-submissions');

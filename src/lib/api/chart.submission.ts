@@ -63,9 +63,7 @@ export default class ChartSubmissionAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('chart.submission.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChartSubmission>>(
-      '/chart_uploads/?' + stringifyListOpts(opts)
-    );
+    return this.api.GET<ResponseDto<ChartSubmission>>('/chart_uploads/?' + stringifyListOpts(opts));
   });
 
   listAll = createQueryCreator('chart.submission.listAll', (opts: ListOpts) => {
@@ -84,7 +82,7 @@ export default class ChartSubmissionAPI {
     const { id, ...rest } = opts;
     return this.api.PATCH<FormData | typeof rest, void>(
       `/chart_uploads/${id}/`,
-      rest.chart ? serialize(rest) : rest
+      rest.chart ? serialize(rest) : rest,
     );
   }
 

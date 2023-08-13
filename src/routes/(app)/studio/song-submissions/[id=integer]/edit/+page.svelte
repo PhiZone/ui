@@ -97,7 +97,7 @@
       formData,
       access_token,
       user,
-      ContentType.FORM_DATA
+      ContentType.FORM_DATA,
     );
     if (resp.ok) {
       window.location.href = `/studio/song-submissions/${content?.id}`;

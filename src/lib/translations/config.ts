@@ -4,10 +4,10 @@ import lang from './lang.json';
 
 const createLoaders = (
   lang: string,
-  loaders: Record<string, () => Promise<Translations.Input>>
+  loaders: Record<string, () => Promise<Translations.Input>>,
 ) => {
   return Object.entries(loaders).map(([path, loader]) => {
-    const key = path.match(/\.\/(.*?)\/(.*?)\.json/)?.[2]!;
+    const key = path.match(/\.\/(.*?)\/(.*?)\.json/)![2];
     return {
       locale: lang,
       key,
@@ -27,15 +27,15 @@ export const { t, locale, locales, loading, loadTranslations } = new I18n({
   loaders: [
     ...createLoaders(
       'en',
-      import.meta.glob<Translations.Input>('./en/*.json', { import: 'default' })
+      import.meta.glob<Translations.Input>('./en/*.json', { import: 'default' }),
     ),
     ...createLoaders(
       'zh-CN',
-      import.meta.glob<Translations.Input>('./zh-CN/*.json', { import: 'default' })
+      import.meta.glob<Translations.Input>('./zh-CN/*.json', { import: 'default' }),
     ),
     ...createLoaders(
       'zh-TW',
-      import.meta.glob<Translations.Input>('./zh-TW/*.json', { import: 'default' })
+      import.meta.glob<Translations.Input>('./zh-TW/*.json', { import: 'default' }),
     ),
   ],
 });

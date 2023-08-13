@@ -59,7 +59,7 @@ export default class VoteAPI {
 
   listAll = createQueryCreator('vote.listAll', (opts: InfoOpts & ListOpts) => {
     return this.api.GET<ResponseDto<VoteDto[]>>(
-      `/charts/${opts.id}/votes?` + stringifyListOpts(opts, true)
+      `/charts/${opts.id}/votes?` + stringifyListOpts(opts, true),
     );
   });
 

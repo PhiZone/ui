@@ -7,7 +7,7 @@ export const load: import('./$types').PageServerLoad = async ({ url, locals, fet
     `/recorder/requests/${url.search}`,
     locals.access_token,
     locals.user,
-    fetch
+    fetch,
   );
   if (!resp.ok) {
     throw error(resp.status, resp.statusText);

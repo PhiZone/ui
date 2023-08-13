@@ -83,7 +83,7 @@ export default class ChapterAPI {
   listSongs = createQueryCreator('chapter.listSongs', (opts: SongListOpts) => {
     const { id, ...rest } = opts;
     return this.api.GET<ResponseDto<SongAdmitteeDto[]>>(
-      `/chapters/${id}/songs?` + stringifyListOpts(rest, true)
+      `/chapters/${id}/songs?` + stringifyListOpts(rest, true),
     );
   });
 

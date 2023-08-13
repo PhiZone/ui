@@ -16,7 +16,8 @@
 
   const like = async () => {
     const resp = await api.like.create({
-      type, id
+      type,
+      id,
     });
     if (resp.ok) {
       likes++;

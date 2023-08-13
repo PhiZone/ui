@@ -56,7 +56,7 @@
 
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(
-    api.song.info({ id: $chart.data?.data.songId }, { enabled: $chart.isSuccess })
+    api.song.info({ id: $chart.data?.data.songId }, { enabled: $chart.isSuccess }),
   );
   $: records = createQuery(api.record.list({ chart: id, order: 'rks', desc: true }));
   $: votes = createQuery(api.vote.listAll({ id }));

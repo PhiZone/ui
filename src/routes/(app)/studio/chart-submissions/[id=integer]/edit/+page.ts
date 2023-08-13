@@ -9,7 +9,7 @@ export const load: import('./$types').PageLoad = async ({ params, parent, fetch 
     `/chart_uploads/${params.id}/?query_song=1`,
     access_token,
     user,
-    fetch
+    fetch,
   );
   if (!resp.ok) {
     throw error(resp.status, resp.statusText);

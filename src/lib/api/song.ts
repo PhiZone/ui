@@ -55,7 +55,7 @@ export default class SongAPI {
   listAllAdmitters = createQueryCreator('song.listAll', (opts: AdmissionListOpts) => {
     const { id, ...rest } = opts;
     return this.api.GET<ResponseDto<AdmissionDto<SongDto, ChapterDto>[]>>(
-      `/songs/${id}/chapters?` + stringifyListOpts(rest, true)
+      `/songs/${id}/chapters?` + stringifyListOpts(rest, true),
     );
   });
 

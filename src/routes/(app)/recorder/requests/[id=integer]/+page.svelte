@@ -60,7 +60,7 @@
         reply: reply,
       },
       access_token,
-      user
+      user,
     );
     if (resp.ok) {
       window.location.href = `/recorder/requests/${content?.id}`;
@@ -73,7 +73,7 @@
 <svelte:head>
   <title>
     {$t('recorder.request')} - {content?.name} [{content?.level}{content?.difficulty}] | {$t(
-      'common.title'
+      'common.title',
     )}
   </title>
 </svelte:head>

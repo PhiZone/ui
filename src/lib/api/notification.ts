@@ -24,13 +24,13 @@ export default class NotificationAPI {
 
   list = createQueryCreator('comment.list', (opts: ListOpts) => {
     return this.api.GET<ResponseDto<Notification>>(
-      '/notifications/?' + queryString.stringify(opts)
+      '/notifications/?' + queryString.stringify(opts),
     );
   });
 
   listAll = createQueryCreator('comment.listAll', (opts: ListOpts) => {
     return this.api.GET<Notification[]>(
-      '/notifications/?pagination=0&' + queryString.stringify(opts)
+      '/notifications/?pagination=0&' + queryString.stringify(opts),
     );
   });
 

@@ -40,7 +40,7 @@
 <svelte:head>
   <title>
     {$t('recorder.request')} - {$t(
-      user && getUserPrivilege(user.type) >= 3 ? 'recorder.manage' : 'recorder.history'
+      user && getUserPrivilege(user.type) >= 3 ? 'recorder.manage' : 'recorder.history',
     )} |
     {$t('common.title')}
   </title>
@@ -118,12 +118,12 @@
               : filter && filterParam && $page.url.search.includes(filter)
               ? `${$page.url.pathname}${$page.url.search.replace(
                   new RegExp(`${filter}=[^&]*`, 'g'),
-                  `${filter}=${filterParam}`
+                  `${filter}=${filterParam}`,
                 )}`
               : order && $page.url.search.includes('order')
               ? `${$page.url.pathname}${$page.url.search.replace(
                   /order=[^&]*/g,
-                  `order=${reverse ? '-' : ''}${order}`
+                  `order=${reverse ? '-' : ''}${order}`,
                 )}`
               : `${$page.url.pathname}${$page.url.search}${$page.url.search ? '&' : '?'}${
                   filter !== null && filterParam !== null

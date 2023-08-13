@@ -30,7 +30,12 @@ module.exports = {
   ],
   rules: {
     semi: ['error', 'always'],
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single', { avoidEscape: true }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^\\$\\$' },
+    ],
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'svelte/no-at-html-tags': 'off',
   },
 };

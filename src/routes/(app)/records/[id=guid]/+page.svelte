@@ -10,7 +10,7 @@
 
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
-    api.chart.info({ id: $record.data?.data.chartId ?? 0 }, { enabled: $record.isSuccess })
+    api.chart.info({ id: $record.data?.data.chartId ?? 0 }, { enabled: $record.isSuccess }),
   );
 </script>
 

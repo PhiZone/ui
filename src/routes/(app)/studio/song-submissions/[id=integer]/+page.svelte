@@ -28,7 +28,7 @@
         message: reply,
       },
       access_token,
-      user
+      user,
     );
     if (resp.ok) {
       window.location.reload();

@@ -37,7 +37,7 @@
         attitude: attitude,
       },
       token,
-      user
+      user,
     );
     if (resp.ok) {
       window.location.reload();

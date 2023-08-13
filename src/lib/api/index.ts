@@ -27,7 +27,7 @@ export default class API {
   constructor(
     public fetch: typeof window.fetch,
     public access_token?: string,
-    public _user?: UserDetailedDto
+    public _user?: UserDetailedDto,
   ) {}
 
   send<T, R>({ method, path, data }: SendOpts<T>): Promise<TypedResponse<R>> {

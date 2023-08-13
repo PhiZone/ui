@@ -175,7 +175,7 @@
         formData.append('challenge_color', challengeColor.toString());
         formData.append(
           'challenge_difficulty',
-          challengeColor !== 5 ? challengeDifficulty : 'Empty'
+          challengeColor !== 5 ? challengeDifficulty : 'Empty',
         );
       }
     }
@@ -186,7 +186,7 @@
       formData,
       access_token,
       user,
-      ContentType.FORM_DATA
+      ContentType.FORM_DATA,
     );
     if (resp.ok) {
       goto('/recorder/requests');

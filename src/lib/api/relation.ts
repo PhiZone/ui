@@ -68,7 +68,7 @@ export default class RelationAPI {
         (query) => {
           if (query.isSuccess) return query.data.length > 0;
           return false;
-        }
+        },
       );
     }
     return readable(false);
@@ -81,7 +81,7 @@ export default class RelationAPI {
         (query) => {
           if (query.isSuccess) return query.data.length > 0;
           return false;
-        }
+        },
       );
     }
     return readable(false);

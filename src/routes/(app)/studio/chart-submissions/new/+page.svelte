@@ -46,7 +46,7 @@
     const resp = await api.GET(
       `/song_uploads/?order=-id&uploader=${user.id}&pagination=0`,
       access_token,
-      user
+      user,
     );
     if (resp.ok) {
       songSubmissionList = await resp.json();
@@ -102,7 +102,7 @@
       formData,
       access_token,
       user,
-      ContentType.FORM_DATA
+      ContentType.FORM_DATA,
     );
     if (resp.ok) {
       goto('/studio/chart-submissions');

@@ -70,14 +70,14 @@ export default class UserAPI {
   listFollowers = createQueryCreator('user.list', (opts: RelationListOpts) => {
     const { id, ...rest } = opts;
     return this.api.GET<ResponseDto<UserDto[]>>(
-      `/users/${id}/followers?` + stringifyListOpts(rest)
+      `/users/${id}/followers?` + stringifyListOpts(rest),
     );
   });
 
   listFollowees = createQueryCreator('user.list', (opts: RelationListOpts) => {
     const { id, ...rest } = opts;
     return this.api.GET<ResponseDto<UserDto[]>>(
-      `/users/${id}/followees?` + stringifyListOpts(rest)
+      `/users/${id}/followees?` + stringifyListOpts(rest),
     );
   });
 
@@ -91,7 +91,7 @@ export default class UserAPI {
     console.log(serialize(rest));
     return this.api.PATCH<FormData | typeof rest, UpdateResult>(
       `/users/${id}/`,
-      rest.avatar ? serialize(rest) : rest
+      rest.avatar ? serialize(rest) : rest,
     );
   }
 

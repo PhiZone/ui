@@ -46,7 +46,7 @@
     const resp = await api.GET(
       `/song_uploads/?order=-id&uploader=${user.id}&pagination=0`,
       access_token,
-      user
+      user,
     );
     if (resp.ok) {
       songSubmissionList = await resp.json();
@@ -94,7 +94,7 @@
       formData,
       access_token,
       user,
-      ContentType.FORM_DATA
+      ContentType.FORM_DATA,
     );
     if (resp.ok) {
       window.location.href = `/studio/chart-submissions/${content?.id}`;
@@ -256,7 +256,7 @@
                     rel="noreferrer"
                   >
                     [{$t('song.song')}] [{$t(
-                      `studio.submission.accessibilities.${content.song.accessibility}`
+                      `studio.submission.accessibilities.${content.song.accessibility}`,
                     )}] {content.song.id}. {content.song.composer} - {content.song.name} ({content
                       .song.edition})
                   </a>

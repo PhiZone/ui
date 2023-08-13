@@ -67,7 +67,7 @@ export default class SongSubmissionAPI {
 
   list = createQueryCreator('song.submission.list', (opts: ListOpts) => {
     return this.api.GET<ResponseDto<SongSubmission>>(
-      '/song_submission/?' + stringifyListOpts(opts)
+      '/song_submission/?' + stringifyListOpts(opts),
     );
   });
 
@@ -88,7 +88,7 @@ export default class SongSubmissionAPI {
     const { id, ...rest } = opts;
     return this.api.PATCH<FormData | typeof rest, void>(
       `/song_uploads/${id}/`,
-      rest.song || rest.illustration ? serialize(rest) : rest
+      rest.song || rest.illustration ? serialize(rest) : rest,
     );
   }
 }

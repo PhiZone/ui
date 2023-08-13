@@ -14,7 +14,7 @@ export const load = async ({ params, url, parent }) => {
         page: 1,
         order: 'DateCreated',
         desc: true,
-      })
+      }),
     ),
   ]);
 

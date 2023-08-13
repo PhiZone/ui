@@ -15,7 +15,7 @@ export const handle = async ({ event, resolve }) => {
     if (resp.ok) {
       event.locals.user = (await resp.json()).data;
     } else {
-      let data = new URLSearchParams();
+      const data = new URLSearchParams();
       data.append('client_id', CLIENT_ID);
       data.append('client_secret', CLIENT_SECRET);
       data.append('grant_type', 'refresh_token');

@@ -33,7 +33,7 @@ export default class ReplyAPI {
   list = createQueryCreator('reply.list', (opts: ListOpts) => {
     const { id, ...rest } = opts;
     return this.api.GET<ResponseDto<ReplyDto[]>>(
-      `/comments/${id}/replies?` + stringifyListOpts(rest)
+      `/comments/${id}/replies?` + stringifyListOpts(rest),
     );
   });
 

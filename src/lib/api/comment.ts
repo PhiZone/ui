@@ -33,8 +33,10 @@ export default class CommentAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('comment.list', (opts: ListOpts) => {
-    const {type, id, ...rest} = opts;
-    return this.api.GET<ResponseDto<CommentDto[]>>(`/${type}/${id}/comments?` + stringifyListOpts(rest));
+    const { type, id, ...rest } = opts;
+    return this.api.GET<ResponseDto<CommentDto[]>>(
+      `/${type}/${id}/comments?` + stringifyListOpts(rest),
+    );
   });
 
   info = createQueryCreator('comment.info', (opts: InfoOpts) => {

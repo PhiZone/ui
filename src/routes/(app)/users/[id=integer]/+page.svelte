@@ -14,7 +14,9 @@
   $: user = createQuery(api.user.info({ id }));
   $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
   $: songs = createQuery(api.song.list({ rangeOwnerId: [id] }));
-  $: recent_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }));
+  $: recent_records = createQuery(
+    api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }),
+  );
   $: best_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
   // $: comments = createQuery(api.comment.list({ user: id }));
 </script>

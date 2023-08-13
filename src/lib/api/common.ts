@@ -30,22 +30,22 @@ export function stringifyListOpts<T extends ListOptsBase>(opts: T, all = false) 
       perPage: all ? -1 : perPage,
       ...rest,
     },
-    { arrayFormat: 'comma', skipEmptyString: true }
+    { arrayFormat: 'comma', skipEmptyString: true },
   );
 }
 
 type Options<TQueryFnData = unknown, TQueryKey extends QueryKey = QueryKey> =
-  | QueryObserverOptions<TQueryFnData, TQueryFnData, TQueryFnData, TQueryKey>
-  | FetchQueryOptions<TQueryFnData, TQueryFnData, TQueryKey>;
+  | QueryObserverOptions<TQueryFnData, unknown, TQueryFnData, TQueryFnData, TQueryKey>
+  | FetchQueryOptions<TQueryFnData, unknown, TQueryFnData, TQueryKey>;
 
 export type QueryCreator<K extends QueryKey, O, T> = (
   opts: O,
-  options?: Partial<Options<T, K>>
+  options?: Partial<Options<T, K>>,
 ) => Options<T, K>;
 
 export function createQueryCreator<K extends string, O, T>(
   key: K,
-  func: (opts: O) => Promise<TypedResponse<T>>
+  func: (opts: O) => Promise<TypedResponse<T>>,
 ): QueryCreator<[K, O], O, T> {
   return (opts, options) => ({
     queryKey: [key, opts],

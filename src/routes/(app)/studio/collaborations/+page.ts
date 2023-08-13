@@ -12,7 +12,7 @@ export const load: import('./$types').PageLoad = async ({ url, parent, fetch }) 
     }`,
     access_token,
     user,
-    fetch
+    fetch,
   );
   if (!resp.ok) {
     throw error(resp.status, resp.statusText);

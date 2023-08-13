@@ -9,8 +9,8 @@ export const actions = {
     const formData = await request.formData();
     const email = formData.get('email') as string,
       password = formData.get('password') as string;
-    
-    let data = new URLSearchParams();
+
+    const data = new URLSearchParams();
     data.append('client_id', CLIENT_ID);
     data.append('client_secret', CLIENT_SECRET);
     data.append('grant_type', 'password');
