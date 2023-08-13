@@ -28,22 +28,20 @@
   {#if headline}
     <div class="flex justify-center">
       <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            class="stroke-current flex-shrink-0 w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span class="content">{headline}</span>
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          class="stroke-current flex-shrink-0 w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span class="content">{headline}</span>
       </div>
     </div>
   {/if}
@@ -58,9 +56,9 @@
       {$t('home.description')}
     </p>
     <form class="form-control" on:submit|preventDefault={search}>
-      <div class="input-group input-group-sm lg:input-group-md">
+      <div class="join text-sm lg:text-md">
         <select
-          class="select select-bordered lg:select-lg max-w-1/3 text-primary-content bg-opacity-80"
+          class="select select-bordered lg:select-lg join-item max-w-1/3 text-base-content bg-opacity-80"
           bind:value={type}
         >
           <option value="chapters">{$t('common.chapters')}</option>
@@ -71,10 +69,10 @@
         <input
           type="text"
           placeholder={$t('common.search_placeholder')}
-          class="input input-bordered lg:input-lg w-full bg-opacity-80 text-primary-content"
+          class="input input-bordered lg:input-lg join-item w-full bg-opacity-80 text-base-content"
           bind:value={text}
         />
-        <a class="btn lg:btn-lg btn-square btn-primary bg-opacity-80" {href}>
+        <a class="btn lg:btn-lg btn-square btn-primary join-item bg-opacity-80" {href}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"

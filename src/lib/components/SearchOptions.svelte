@@ -28,15 +28,15 @@
   <div class="collapse-content">
     <form class="form-control items-stretch w-full">
       {#each filters as filter}
-        <label class="label input-group input-group-sm md:input-group-md cursor-pointer">
-          <span class="label-text whitespace-nowrap">{filter.name}</span>
+        <label class="label join text-sm md:text-md cursor-pointer">
+          <span class="label-text btn no-animation join-item whitespace-nowrap">{filter.name}</span>
           {#if filter.options === 'text' || filter.options === 'number'}
             <input
               type={filter.options}
               name={filter.value}
               placeholder={filter.name}
               value={params?.[filter.value] ?? ''}
-              class="input input-ghost input-bordered input-sm md:input-md flex-grow w-0"
+              class="input input-ghost input-bordered input-sm md:input-md join-item flex-grow w-0"
             />
           {:else if filter.options === 'range'}
             <input
@@ -44,18 +44,18 @@
               name="lowest_{filter.value}"
               placeholder="lowest {filter.name}"
               value={params?.[`lowest_${filter.value}`] ?? ''}
-              class="input input-ghost input-bordered input-sm md:input-md flex-grow w-0"
+              class="input input-ghost input-bordered input-sm md:input-md join-item flex-grow w-0"
             />
             <input
               type="number"
               name="highest_{filter.value}"
               placeholder="highest {filter.name}"
               value={params?.[`highest_${filter.value}`] ?? ''}
-              class="input input-ghost input-bordered input-sm md:input-md flex-grow w-0"
+              class="input input-ghost input-bordered input-sm md:input-md join-item flex-grow w-0"
             />
           {:else}
             <select
-              class="select select-ghost select-bordered select-sm md:select-md flex-grow w-0"
+              class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"
               name={filter.value}
               value={params?.[filter.value] ?? ''}
             >
@@ -67,10 +67,10 @@
           {/if}
         </label>
       {/each}
-      <label class="label input-group input-group-sm md:input-group-md cursor-pointer">
-        <span class="label-text whitespace-nowrap">order</span>
+      <label class="label join text-sm md:text-md cursor-pointer">
+        <span class="label-text btn no-animation join-item whitespace-nowrap">order</span>
         <select
-          class="select select-ghost select-bordered select-sm md:select-md flex-grow w-0"
+          class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"
           name="order_by"
           value={params?.order_by || orders[0].value}
         >
@@ -79,7 +79,7 @@
           {/each}
         </select>
         <select
-          class="select select-ghost select-bordered select-sm md:select-md flex-grow w-0"
+          class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"
           name="order"
           value={params?.order || 'asc'}
         >

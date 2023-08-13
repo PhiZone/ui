@@ -182,12 +182,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.name ? error.name : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.song_name')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.song_name')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.song_name')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!songName && dataIncomplete) || (status === Status.ERROR && error?.name)
                       ? 'input-error'
                       : 'input-primary'
@@ -202,12 +204,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.edition ? error.edition : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('song.edition')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('song.edition')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('studio.submission.edition_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!edition && dataIncomplete) || (status === Status.ERROR && error?.edition)
                       ? 'input-error'
                       : 'input-primary'
@@ -222,12 +226,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.composer ? error.composer : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.composer')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.composer')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.composer')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!composer && dataIncomplete) || (status === Status.ERROR && error?.composer)
                       ? 'input-error'
                       : 'input-primary'
@@ -242,12 +248,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.illustrator ? error.illustrator : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.illustrator')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.illustrator')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.illustrator')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!illustrator && dataIncomplete) ||
                     (status === Status.ERROR && error?.illustrator)
                       ? 'input-error'
@@ -263,12 +271,12 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.bpm ? error.bpm : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('song.bpm')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">{$t('song.bpm')}</span>
                 <input
                   type="text"
                   placeholder={$t('studio.submission.bpm_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!bpm && dataIncomplete) || (status === Status.ERROR && error?.bpm)
                       ? 'input-error'
                       : 'input-primary'
@@ -283,12 +291,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.offset ? error.offset : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('song.offset')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('song.offset')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!offset && dataIncomplete) || (status === Status.ERROR && error?.offset)
                       ? 'input-error'
                       : 'input-primary'
@@ -305,12 +315,14 @@
                 ? error.preview_start[0].replace('hh:mm[:ss[.uuuuuu]]', 'mm:ss')
                 : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('studio.submission.preview_start')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('studio.submission.preview_start')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('studio.submission.preview_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!previewStart && dataIncomplete) ||
                     (status === Status.ERROR && error?.preview_start)
                       ? 'input-error'
@@ -328,12 +340,14 @@
                 ? error.preview_end[0].replace('hh:mm[:ss[.uuuuuu]]', 'mm:ss')
                 : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('studio.submission.preview_end')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('studio.submission.preview_end')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('studio.submission.preview_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!previewEnd && dataIncomplete) ||
                     (status === Status.ERROR && error?.preview_end)
                       ? 'input-error'
@@ -349,12 +363,12 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.description ? error.description : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
                   {$t('common.description')}{$t('common.optional')}
                 </span>
                 <textarea
-                  class={`textarea ${
+                  class={`textarea join-item ${
                     status === Status.ERROR && error?.description
                       ? 'textarea-error'
                       : 'textarea-primary'
@@ -370,12 +384,12 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.chapters ? error.chapters : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
                   {$t('studio.submission.chapters')}{$t('common.optional')}
                 </span>
                 <select
-                  class={`select select-bordered w-2/3 min-w-[180px] ${
+                  class={`select select-bordered join-item w-2/3 min-w-[180px] ${
                     status === Status.ERROR && error?.chapters ? 'select-error' : 'select-primary'
                   }`}
                   bind:value={newChapter}
@@ -387,7 +401,7 @@
                   {/if}
                 </select>
                 <button
-                  class="btn btn-primary btn-outline text-xl w-1/12"
+                  class="btn btn-primary btn-outline join-item text-xl w-1/12"
                   on:click={() => {
                     if (!chapters.includes(chapterList[newChapter])) {
                       showChapters = false;

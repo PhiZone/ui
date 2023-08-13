@@ -171,30 +171,32 @@
               on:change={handleIllustration}
             />
           </div>
-          <label class="input-group my-2">
-            <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('song.name')}</span>
+          <label class="join my-2">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">{$t('song.name')}</span>
             <input
               type="text"
               placeholder={$t('song.name')}
-              class="input input-bordered input-primary w-3/4 min-w-[180px]"
+              class="input input-bordered input-primary join-item w-3/4 min-w-[180px]"
               bind:value={songName}
             />
           </label>
-          <label class="input-group my-2">
-            <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('chart.level')}</span>
+          <label class="join my-2">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">{$t('chart.level')}</span>
             <input
               type="text"
               placeholder="IN"
-              class="input input-bordered input-primary w-3/4 min-w-[180px]"
+              class="input input-bordered input-primary join-item w-3/4 min-w-[180px]"
               bind:value={level}
             />
           </label>
-          <label class="input-group my-2">
-            <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('chart.difficulty')}</span>
+          <label class="join my-2">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('chart.difficulty')}
+            </span>
             <input
               type="text"
               placeholder={(Math.random() * (16 - 12) + 12).toFixed(1)}
-              class="input input-bordered input-primary w-3/4 min-w-[180px]"
+              class="input input-bordered input-primary join-item w-3/4 min-w-[180px]"
               bind:value={difficulty}
             />
           </label>

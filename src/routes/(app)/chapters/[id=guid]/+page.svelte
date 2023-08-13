@@ -30,11 +30,11 @@
         ✕
       </label>
       <div class="absolute left-2 bottom-2">
-        <div class="btn-group btn-group-horizontal">
-          <div class="btn btn-secondary btn-xs text-base no-animation">
+        <div class="join join-horizontal">
+          <div class="btn btn-secondary btn-xs join-item text-base no-animation">
             {$t('chapter.illustrator')}
           </div>
-          <div class="btn btn-xs text-base no-animation">
+          <div class="btn btn-xs join-item text-base no-animation">
             {chapter.illustrator}
           </div>
         </div>

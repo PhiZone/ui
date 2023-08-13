@@ -25,7 +25,7 @@
     "autoprefixer": "^10.4.14",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "3.3.0",
-    "daisyui": "^2.51.6",
+    "daisyui": "^3.5.1",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",

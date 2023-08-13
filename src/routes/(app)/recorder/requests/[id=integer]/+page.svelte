@@ -83,30 +83,34 @@
   <div class="modal">
     <div class="modal-box bg-base-100">
       <h3 class="font-bold text-lg">{$t('recorder.reply_v')}</h3>
-      <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('recorder.status')}</span>
-        <select bind:value={requestStatus} class="select select-primary w-full max-w-xs">
+      <label class="join my-2">
+        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+          {$t('recorder.status')}
+        </span>
+        <select bind:value={requestStatus} class="select select-primary join-item w-full max-w-xs">
           <option value="1">{$t('recorder.statuses.1')}</option>
           <option value="2">{$t('recorder.statuses.2')}</option>
           <option value="3">{$t('recorder.statuses.3')}</option>
           <option value="4">{$t('recorder.statuses.4')}</option>
         </select>
       </label>
-      <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('recorder.reply')}</span>
+      <label class="join my-2">
+        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+          {$t('recorder.reply')}
+        </span>
         <textarea
-          class="textarea textarea-primary w-full max-w-xs h-48"
+          class="textarea textarea-primary join-item w-full max-w-xs h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />
       </label>
-      <div class="modal-action btn-group btn-group-horizontal">
-        <label for="recorder-manage-request" class="btn btn-primary btn-outline text-lg">
+      <div class="modal-action join join-horizontal">
+        <label for="recorder-manage-request" class="btn btn-primary btn-outline join-item text-lg">
           {$t('common.back')}
         </label>
         <label
           for="recorder-manage-request"
-          class="btn btn-primary btn-outline text-lg"
+          class="btn btn-primary btn-outline join-item text-lg"
           on:click={handleSubmit}
           on:keyup
         >

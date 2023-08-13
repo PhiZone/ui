@@ -9,6 +9,11 @@ const config = {
   },
 
   plugins: [typography, daisyui],
+
+  daisyui: {
+    themes: ['emerald', 'night'],
+    darkTheme: 'night',
+  },
 };
 
 module.exports = config;

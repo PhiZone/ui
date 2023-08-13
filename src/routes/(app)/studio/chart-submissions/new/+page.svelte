@@ -143,11 +143,11 @@
         : 'w-full my-2'}
       data-tip={newCharterStatus === Status.ERROR && newCharterErr ? newCharterErr : ''}
     >
-      <label class="input-group">
-        <span class="w-1/4 min-w-fit">{$t('user.id')}</span>
+      <label class="join">
+        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.charter_placeholder')}
-          class={`input input-bordered w-3/4 min-w-[180px] ${
+          class={`input input-bordered join-item w-3/4 min-w-[180px] ${
             (!songSubmission && dataIncomplete) ||
             (newCharterStatus === Status.ERROR && newCharterErr)
               ? 'input-error'
@@ -159,7 +159,7 @@
           }}
         />
         <button
-          class={`btn ${
+          class={`btn join-item ${
             newCharterId && newCharterStatus !== Status.RETRIEVING
               ? newCharterStatus === Status.ERROR
                 ? 'btn-error'
@@ -174,19 +174,19 @@
     </div>
     {#if newCharter !== null && newCharterStatus === Status.OK}
       <Charter user={newCharter} token={access_token} operator={user} mini />
-      <label class="input-group">
-        <span class="w-1/4 min-w-fit">{$t('common.form.charter')}</span>
+      <label class="join">
+        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.charter')}</span>
         <input
           placeholder={$t('common.form.charter')}
-          class="input input-primary w-3/4"
+          class="input input-primary join-item w-3/4"
           bind:value={newCharterText}
         />
       </label>
     {/if}
-    <div class="modal-action mt-3 btn-group btn-group-horizontal">
+    <div class="modal-action mt-3 join join-horizontal">
       <label
         for="studio-charter"
-        class="btn btn-primary btn-outline text-lg"
+        class="btn btn-primary btn-outline join-item text-lg"
         on:click={() => {
           charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
         }}
@@ -265,10 +265,12 @@
                   }
                 }}
               >
-                <label class="input-group my-2">
-                  <span class="w-1/4 min-w-[64px]">{$t('song.song')}</span>
+                <label class="join my-2">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('song.song')}
+                  </span>
                   <select
-                    class={`select select-bordered w-3/4 min-w-[180px] ${
+                    class={`select select-bordered join-item w-3/4 min-w-[180px] ${
                       (!song && dataIncomplete) || (status === Status.ERROR && error?.song)
                         ? 'select-error'
                         : 'select-primary'
@@ -293,10 +295,12 @@
                   : ''}
                 data-tip={status === Status.ERROR && error?.song_upload ? error.song_upload : ''}
               >
-                <label class="input-group my-2">
-                  <span class="w-1/4 min-w-[64px]">{$t('studio.song_submission')}</span>
+                <label class="join my-2">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('studio.song_submission')}
+                  </span>
                   <select
-                    class={`select select-bordered w-3/4 min-w-[180px] ${
+                    class={`select select-bordered join-item w-3/4 min-w-[180px] ${
                       (!songSubmission && dataIncomplete) ||
                       (status === Status.ERROR && error?.song_upload)
                         ? 'select-error'
@@ -321,10 +325,12 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.level ? error.level : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.chart_level')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_level')}
+                </span>
                 <select
-                  class={`select select-bordered w-1/6 ${
+                  class={`select select-bordered join-item w-1/6 ${
                     (!levelType && dataIncomplete) || (status === Status.ERROR && error?.level_type)
                       ? 'select-error'
                       : 'select-primary'
@@ -338,7 +344,7 @@
                 <input
                   type="text"
                   placeholder={$t('common.form.tips.chart_level')}
-                  class={`input input-bordered w-7/12 min-w-[180px] ${
+                  class={`input input-bordered join-item w-7/12 min-w-[180px] ${
                     (!level && dataIncomplete) || (status === Status.ERROR && error?.level)
                       ? 'input-error'
                       : 'input-primary'
@@ -353,12 +359,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.difficulty ? error.difficulty : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.chart_difficulty_2')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_difficulty_2')}
+                </span>
                 <input
                   type="text"
                   placeholder={(Math.random() * (16.9 - 11.9) + 11.9).toFixed(1)}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!difficulty && dataIncomplete) ||
                     (status === Status.ERROR && error?.difficulty)
                       ? 'input-error'
@@ -385,12 +393,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.charter ? error.charter : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.charter')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.charter')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.charter')}
-                  class={`input input-bordered w-7/12 min-w-[180px] ${
+                  class={`input input-bordered join-item w-7/12 min-w-[180px] ${
                     (!charter && dataIncomplete) || (status === Status.ERROR && error?.charter)
                       ? 'input-error'
                       : 'input-primary'
@@ -399,7 +409,7 @@
                 />
                 <label
                   for="studio-charter"
-                  class="btn btn-primary btn-outline w-1/6"
+                  class="btn btn-primary btn-outline join-item w-1/6"
                   on:click={() => {
                     newCharterId = null;
                     newCharter = null;
@@ -440,12 +450,12 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.description ? error.description : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
                   {$t('common.description')}{$t('common.optional')}
                 </span>
                 <textarea
-                  class={`textarea ${
+                  class={`textarea join-item ${
                     status === Status.ERROR && error?.description
                       ? 'textarea-error'
                       : 'textarea-primary'

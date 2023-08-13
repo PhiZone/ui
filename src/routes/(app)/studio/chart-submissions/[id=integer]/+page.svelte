@@ -67,21 +67,23 @@
         <input type="range" min="-3" max="3" bind:value={score} class="range min-w-auto" step="1" />
         <p class="w-8 text-right text-xl font-bold">{score}</p>
       </div>
-      <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.message')}</span>
+      <label class="join my-2">
+        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+          {$t('studio.submission.message')}
+        </span>
         <textarea
-          class="textarea textarea-primary w-full h-48"
+          class="textarea textarea-primary join-item w-full h-48"
           placeholder={$t('studio.submission.write_message')}
           bind:value={message}
         />
       </label>
-      <div class="modal-action btn-group btn-group-horizontal">
-        <label for="studio-chart-submission" class="btn btn-primary btn-outline text-lg">
+      <div class="modal-action join join-horizontal">
+        <label for="studio-chart-submission" class="btn btn-primary btn-outline join-item text-lg">
           {$t('common.back')}
         </label>
         <label
           for="studio-chart-submission"
-          class="btn btn-primary btn-outline text-lg"
+          class="btn btn-primary btn-outline join-item text-lg"
           on:click={handleSubmit}
           on:keyup
         >

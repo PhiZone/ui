@@ -282,13 +282,17 @@
             <div class="text-5xl py-3 flex font-bold items-center">
               {$song.data?.data.title}
               <div class="ml-2 min-w-fit flex gap-1 align-middle">
-                <div class="btn-group btn-group-horizontal">
-                  <button class="btn {getLevelColor(chart.levelType)} btn-sm text-2xl no-animation">
+                <div class="join join-horizontal">
+                  <button
+                    class="btn {getLevelColor(
+                      chart.levelType,
+                    )} btn-sm join-item text-2xl no-animation"
+                  >
                     {chart.level}
                     {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                   </button>
                   {#if chart.isRanked}
-                    <button class="btn btn-primary btn-sm text-2xl no-animation">
+                    <button class="btn btn-primary btn-sm join-item text-2xl no-animation">
                       {$t('chart.ranked')}
                     </button>
                   {/if}

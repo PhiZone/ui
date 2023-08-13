@@ -98,10 +98,10 @@
 </div> -->
 <div class="{studio ? 'pt-4 pb-16' : 'py-4'} min-w-fit flex justify-center">
   <div class="dropdown dropdown-hover dropdown-bottom w-full mt-3">
-    <div class="btn-group flex justify-center">
+    <div class="join flex justify-center">
       <a
         href="?{getSearch(page - 1)}"
-        class="btn btn-primary text-4xl {page > 1
+        class="btn btn-primary join-item text-4xl {page > 1
           ? 'btn-primary btn-outline'
           : 'btn-ghost btn-disabled'}"
       >
@@ -110,7 +110,9 @@
       {#if nearbyPagesStart !== 1}
         <a
           href="?{getSearch(1)}"
-          class="btn btn-primary text-lg {page === 1 ? 'btn-active btn-disabled' : 'btn-outline'}"
+          class="btn btn-primary join-item text-lg {page === 1
+            ? 'btn-active btn-disabled'
+            : 'btn-outline'}"
         >
           1
         </a>
@@ -119,16 +121,18 @@
       {#each nearbyPages as p}
         <a
           href="?{getSearch(p)}"
-          class="btn btn-primary text-lg {page === p ? 'btn-active btn-disabled' : 'btn-outline'}"
+          class="btn btn-primary join-item text-lg {page === p
+            ? 'btn-active btn-disabled'
+            : 'btn-outline'}"
         >
           {p}
         </a>
       {/each}
       {#if nearbyPagesEnd !== totalPages}
-        <span class="btn text-lg btn-disabled pointer-events-none">...</span>
+        <span class="btn btn-disabled join-item text-lg pointer-events-none">...</span>
         <a
           href="?{getSearch(totalPages)}"
-          class="btn btn-primary text-lg {page === totalPages
+          class="btn btn-primary join-item text-lg {page === totalPages
             ? 'btn-active btn-disabled'
             : 'btn-outline'}"
         >
@@ -137,7 +141,7 @@
       {/if}
       <a
         href="?{getSearch(page + 1)}"
-        class="btn btn-primary text-4xl {page < totalPages
+        class="btn btn-primary join-item text-4xl {page < totalPages
           ? 'btn-outline'
           : 'btn-ghost btn-disabled'}"
       >

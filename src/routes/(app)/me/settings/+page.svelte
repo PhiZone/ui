@@ -92,13 +92,13 @@
             >
               <input type="number" name="id" value={user.id} hidden />
               <input type="text" name="old_username" value={user.username} hidden />
-              <label class="input-group">
-                <span class="w-[12%] min-w-fit">{$t('user.username')}</span>
+              <label class="join">
+                <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.username')}</span>
                 <input
                   type="text"
                   name="username"
                   placeholder={$t('user.username')}
-                  class="input input-primary w-[88%] min-w-[180px]"
+                  class="input input-primary join-item w-[88%] min-w-[180px]"
                   value={user.username}
                 />
               </label>
@@ -108,7 +108,7 @@
                   <div class="flex gap-2 w-1/3">
                     <input
                       type="radio"
-                      group={user.gender}
+                      bind:group={user.gender}
                       name="gender"
                       value={0}
                       class="radio radio-primary"
@@ -120,7 +120,7 @@
                   <div class="flex gap-2 w-1/3">
                     <input
                       type="radio"
-                      group={user.gender}
+                      bind:group={user.gender}
                       name="gender"
                       value={1}
                       class="radio radio-primary"
@@ -132,7 +132,7 @@
                   <div class="flex gap-2 w-1/3">
                     <input
                       type="radio"
-                      group={user.gender}
+                      bind:group={user.gender}
                       name="gender"
                       value={2}
                       class="radio radio-primary"
@@ -143,24 +143,24 @@
                   </div>
                 </div>
               </div>
-              <label class="input-group">
-                <span class="w-[12%] min-w-fit">{$t('user.language')}</span>
+              <label class="join">
+                <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.language')}</span>
                 <select
                   value={user.language}
                   name="language"
-                  class="select input-primary flex-shrink w-[88%] min-w-[180px]"
+                  class="select input-primary join-item flex-shrink w-[88%] min-w-[180px]"
                 >
                   {#each $locales as value}
                     <option {value}>{$t(`lang.${value}`)}</option>
                   {/each}
                 </select>
               </label>
-              <label class="input-group">
-                <span class="w-[12%] min-w-fit">{$t('user.bio')}</span>
+              <label class="join">
+                <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.bio')}</span>
                 <textarea
                   placeholder={$t('user.bio')}
                   name="bio"
-                  class="textarea textarea-primary rounded-none w-[88%] min-w-[180px] h-48"
+                  class="textarea textarea-primary join-item rounded-none w-[88%] min-w-[180px] h-48"
                   value={user.bio}
                 />
               </label>

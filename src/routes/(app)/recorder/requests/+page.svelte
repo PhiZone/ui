@@ -55,11 +55,11 @@
       ✕
     </label>
     <h2 class="font-bold text-xl mb-4">{$t('common.list_options')}</h2>
-    <label class="input-group my-2">
-      <span class="w-1/6 min-w-[64px]">{$t('common.filter')}</span>
+    <label class="join my-2">
+      <span class="btn no-animation join-item w-1/6 min-w-[64px]">{$t('common.filter')}</span>
       <select
         bind:value={filter}
-        class="select select-bordered w-1/3"
+        class="select select-bordered join-item w-1/3"
         on:change={() => {
           if (filter === 'status') {
             filterParam = '0';
@@ -82,13 +82,13 @@
         <input bind:value={filterParam} class="input input-bordered w-1/2" />
       {/if}
     </label>
-    <label class="input-group my-2">
-      <span class="w-1/6 min-w-[64px]">{$t('common.order')}</span>
-      <select bind:value={reverse} class="select select-bordered w-1/3">
+    <label class="join my-2">
+      <span class="btn no-animation join-item w-1/6 min-w-[64px]">{$t('common.order')}</span>
+      <select bind:value={reverse} class="select select-bordered join-item w-1/3">
         <option value={false}>{$t('common.order_forward')}</option>
         <option value={true}>{$t('common.order_backward')}</option>
       </select>
-      <select bind:value={order} class="select select-bordered w-1/2">
+      <select bind:value={order} class="select select-bordered join-item w-1/2">
         <option value="id">{$t('recorder.req_id')}</option>
         <option value="level">{$t('common.form.chart_level')}</option>
         <option value="difficulty">{$t('common.form.chart_difficulty_1')}</option>

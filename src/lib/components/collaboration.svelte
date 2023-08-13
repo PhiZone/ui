@@ -96,9 +96,9 @@
       </button>
       {#if collaboration.status === 0}
         {#if !$page.url.searchParams.get('sent') && typeof collaboration.invitee === 'number' && collaboration.invitee === user.id}
-          <div class="btn-group">
+          <div class="join">
             <button
-              class="btn btn-primary btn-outline"
+              class="btn btn-primary btn-outline join-item"
               on:click={() => {
                 updateStatus(collaboration, 1);
               }}
@@ -106,7 +106,7 @@
               {$t('studio.request.accept')}
             </button>
             <button
-              class="btn btn-accent btn-outline"
+              class="btn btn-accent btn-outline join-item"
               on:click={() => {
                 updateStatus(collaboration, 2);
               }}

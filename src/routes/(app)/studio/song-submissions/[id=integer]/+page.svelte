@@ -49,28 +49,32 @@
   <div class="modal">
     <div class="modal-box bg-base-100">
       <h3 class="font-bold text-lg">{$t('studio.submission.reply_v')}</h3>
-      <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.status')}</span>
-        <select bind:value={submissionStatus} class="select select-primary w-3/4">
+      <label class="join my-2">
+        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+          {$t('studio.submission.status')}
+        </span>
+        <select bind:value={submissionStatus} class="select select-primary join-item w-3/4">
           <option value="1">{$t('studio.submission.volunteer_statuses.1')}</option>
           <option value="2">{$t('studio.submission.volunteer_statuses.2')}</option>
         </select>
       </label>
-      <label class="input-group my-2">
-        <span class="w-1/4 min-w-[64px] max-w-[180px]">{$t('studio.submission.reply')}</span>
+      <label class="join my-2">
+        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+          {$t('studio.submission.reply')}
+        </span>
         <textarea
-          class="textarea textarea-primary w-3/4 h-48"
+          class="textarea textarea-primary join-item w-3/4 h-48"
           placeholder={$t('common.write_reply')}
           bind:value={reply}
         />
       </label>
-      <div class="modal-action btn-group btn-group-horizontal">
-        <label for="studio-song-submission" class="btn btn-primary btn-outline text-lg">
+      <div class="modal-action join join-horizontal">
+        <label for="studio-song-submission" class="btn btn-primary btn-outline join-item text-lg">
           {$t('common.back')}
         </label>
         <label
           for="studio-song-submission"
-          class="btn btn-primary btn-outline text-lg"
+          class="btn btn-primary btn-outline join-item text-lg"
           on:click={handleSubmit}
           on:keyup
         >

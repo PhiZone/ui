@@ -28,13 +28,15 @@
           class="object-fill"
         />
         <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
-          <div class="btn-group btn-group-horizontal">
-            <button class={`btn ${getLevelColor(chart.levelType)} btn-sm text-xl no-animation`}>
+          <div class="join join-horizontal">
+            <button
+              class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
+            >
               {chart.level}
               {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
             </button>
             {#if chart.isRanked}
-              <button class="btn btn-primary btn-sm text-xl no-animation">
+              <button class="btn btn-primary btn-sm join-item text-xl no-animation">
                 {$t('chart.ranked')}
               </button>
             {/if}
@@ -87,13 +89,13 @@
 {:else if kind === 'inline'}
   <a href="/charts/{chart.id}" class="w-full h-[82px] flex items-center px-5">
     <div class="w-1/4 min-w-fit">
-      <div class="btn-group btn-group-horizontal">
-        <button class="btn {getLevelColor(chart.levelType)} btn-sm text-lg no-animation">
+      <div class="join join-horizontal">
+        <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}
         </button>
         {#if chart.isRanked}
-          <button class="btn btn-primary btn-sm text-lg no-animation">
+          <button class="btn btn-primary btn-sm join-item text-lg no-animation">
             {$t('chart.ranked')}
           </button>
         {/if}

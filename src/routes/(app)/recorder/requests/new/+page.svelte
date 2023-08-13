@@ -310,12 +310,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.name ? error.name : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.song_name')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.song_name')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.song_name')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!songName && dataIncomplete) || (status === Status.ERROR && error?.name)
                       ? 'input-error'
                       : 'input-primary'
@@ -330,12 +332,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.level ? error.level : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.chart_level')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_level')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('common.form.tips.chart_level')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!level && dataIncomplete) || (status === Status.ERROR && error?.level)
                       ? 'input-error'
                       : 'input-primary'
@@ -350,12 +354,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.difficulty ? error.difficulty : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('common.form.chart_difficulty_1')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_difficulty_1')}
+                </span>
                 <input
                   type="text"
                   placeholder={$t('recorder.difficulty_placeholder')}
-                  class={`input input-bordered w-3/4 min-w-[180px] ${
+                  class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!difficulty && dataIncomplete) ||
                     (status === Status.ERROR && error?.difficulty)
                       ? 'input-error'
@@ -372,12 +378,14 @@
                   : ''}
                 data-tip={status === Status.ERROR && error?.note_size ? error.note_size : ''}
               >
-                <label class="input-group my-2">
-                  <span class="w-1/4 min-w-[64px]">{$t('recorder.note_size')}</span>
+                <label class="join my-2">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('recorder.note_size')}
+                  </span>
                   <input
                     type="text"
                     placeholder={$t('recorder.note_size_placeholder')}
-                    class={`input input-bordered w-3/4 min-w-[180px] ${
+                    class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                       (!noteSize && dataIncomplete) || (status === Status.ERROR && error?.note_size)
                         ? 'input-error'
                         : 'input-primary'
@@ -392,12 +400,14 @@
                   : ''}
                 data-tip={status === Status.ERROR && error?.resolution ? error.resolution : ''}
               >
-                <label class="input-group my-2">
-                  <span class="w-1/4 min-w-[64px]">{$t('recorder.resolution')}</span>
+                <label class="join my-2">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('recorder.resolution')}
+                  </span>
                   <input
                     type="text"
                     placeholder={$t('recorder.resolution_placeholder')}
-                    class={`input input-bordered w-3/4 min-w-[180px] ${
+                    class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                       (!resolution && dataIncomplete) ||
                       (status === Status.ERROR && error?.resolution)
                         ? 'input-error'
@@ -413,12 +423,14 @@
                   : ''}
                 data-tip={status === Status.ERROR && error?.total_score ? error.total_score : ''}
               >
-                <label class="input-group my-2">
-                  <span class="w-1/4 min-w-[64px]">{$t('recorder.total_score')}</span>
+                <label class="join my-2">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('recorder.total_score')}
+                  </span>
                   <input
                     type="text"
                     placeholder={$t('recorder.total_score_placeholder')}
-                    class={`input input-bordered w-3/4 min-w-[180px] ${
+                    class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                       (!totalScore && dataIncomplete) ||
                       (status === Status.ERROR && error?.total_score)
                         ? 'input-error'
@@ -471,12 +483,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.composer ? error.composer : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('common.form.composer')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('common.form.composer')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('common.form.composer')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         loadingOption &&
                         ((!composer && dataIncomplete) ||
                           (status === Status.ERROR && error?.composer))
@@ -493,12 +507,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.charter ? error.charter : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('common.form.charter')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('common.form.charter')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('common.form.charter')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         loadingOption &&
                         ((!charter && dataIncomplete) ||
                           (status === Status.ERROR && error?.charter))
@@ -515,12 +531,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.illustrator ? error.illustrator : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('common.form.illustrator')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('common.form.illustrator')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('common.form.illustrator')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         loadingOption &&
                         ((!illustrator && dataIncomplete) ||
                           (status === Status.ERROR && error?.illustrator))
@@ -537,12 +555,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.tip ? error.tip : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('recorder.tip')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('recorder.tip')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('recorder.tip')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         loadingOption &&
                         ((!tip && dataIncomplete) || (status === Status.ERROR && error?.tip))
                           ? 'input-error'
@@ -588,12 +608,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.username ? error.username : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('recorder.username')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('recorder.username')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('recorder.username')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         endingOption &&
                         ((!username && dataIncomplete) ||
                           (status === Status.ERROR && error?.username))
@@ -610,12 +632,14 @@
                     : ''}
                   data-tip={status === Status.ERROR && error?.rks ? error.rks : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('recorder.rks')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('recorder.rks')}
+                    </span>
                     <input
                       type="text"
                       placeholder="9.24"
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
+                      class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                         endingOption &&
                         ((!rks && dataIncomplete) || (status === Status.ERROR && error?.rks))
                           ? 'input-error'
@@ -633,16 +657,18 @@
                     ? error.challenge_color
                     : ''}
                 >
-                  <label class="input-group my-2">
-                    <span class="w-1/4 min-w-[64px]">{$t('recorder.challenge_color')}</span>
+                  <label class="join my-2">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('recorder.challenge_color')}
+                    </span>
                     <select
                       bind:value={challengeColor}
-                      class={`select select-bordered select-primary w-3/4 min-w-[180px] ${
+                      class={`select select-bordered join-item w-3/4 min-w-[180px] ${
                         endingOption &&
                         ((!(challengeColor >= 0 && challengeColor <= 4) && dataIncomplete) ||
                           (status === Status.ERROR && error?.challenge_color))
-                          ? 'input-error'
-                          : 'input-primary'
+                          ? 'select-error'
+                          : 'select-primary'
                       }`}
                     >
                       {#each challengeColors as c}
@@ -659,22 +685,20 @@
                     ? error.challenge_difficulty
                     : ''}
                 >
-                  <label
-                    class={`input-group my-2 ${challengeColor === 5 ? 'pointer-events-none' : ''}`}
-                  >
-                    <span class="w-1/4 min-w-[64px]">{$t('recorder.challenge_difficulty')}</span>
+                  <label class="join my-2 {challengeColor === 5 ? 'pointer-events-none' : ''}">
+                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                      {$t('recorder.challenge_difficulty')}
+                    </span>
                     <input
                       type="text"
                       placeholder={$t('recorder.challenge_difficulty')}
-                      class={`input input-bordered w-3/4 min-w-[180px] ${
-                        endingOption &&
-                        ((!challengeDifficulty && challengeColor !== 5 && dataIncomplete) ||
-                          (status === Status.ERROR && error?.challenge_difficulty))
-                          ? 'input-error'
-                          : challengeColor === 5
-                          ? 'input-disabled'
-                          : 'input-primary'
-                      }`}
+                      class="input input-bordered join-item w-3/4 min-w-[180px] {endingOption &&
+                      ((!challengeDifficulty && challengeColor !== 5 && dataIncomplete) ||
+                        (status === Status.ERROR && error?.challenge_difficulty))
+                        ? 'input-error'
+                        : challengeColor === 5
+                        ? 'input-disabled'
+                        : 'input-primary'}"
                       bind:value={challengeDifficulty}
                     />
                   </label>
@@ -687,14 +711,14 @@
                 : ''}
               data-tip={status === Status.ERROR && error?.addition ? error.addition : ''}
             >
-              <label class="input-group my-2">
-                <span class="w-1/4 min-w-[64px]">{$t('recorder.addition')}</span>
+              <label class="join my-2">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('recorder.addition')}
+                </span>
                 <textarea
-                  class={`textarea ${
-                    status === Status.ERROR && error?.addition
-                      ? 'textarea-error'
-                      : 'textarea-primary'
-                  } w-3/4 h-48`}
+                  class="textarea {status === Status.ERROR && error?.addition
+                    ? 'textarea-error'
+                    : 'textarea-primary'} join-item w-3/4 h-48"
                   placeholder={$t('recorder.addition_placeholder')}
                   bind:value={addition}
                 />
@@ -704,13 +728,11 @@
         </div>
       </div>
       <button
-        class={`btn btn-outline ${
-          status === Status.ERROR
-            ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
-            : status === Status.SENDING
-            ? 'btn btn-ghost btn-disabled glass'
-            : 'btn-primary'
-        } glass float-right my-5 text-lg`}
+        class="btn btn-outline {status === Status.ERROR
+          ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
+          : status === Status.SENDING
+          ? 'btn btn-ghost btn-disabled glass'
+          : 'btn-primary'} glass float-right my-5 text-lg"
         data-tip={errorMsg
           ? $t(`common.form.errors.${errorMsg}`)
           : typeof error?.detail === 'string'

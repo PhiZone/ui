@@ -53,15 +53,15 @@
       {#if showChart && $chartQ.isSuccess && $songQ.isSuccess}
         {@const chart = $chartQ.data.data}
         {@const song = $songQ.data.data}
-        <div class="btn-group btn-group-horizontal w-[272px] justify-end">
+        <div class="join join-horizontal w-[272px] justify-end">
           <a
-            class="btn song flex-shrink btn-xs btn-outline justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
+            class="btn btn-xs btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
             href="/songs/{song.id}"
           >
             {song.title}
           </a>
           <a
-            class={`btn ${getLevelColor(chart.levelType)} btn-xs text-sm no-animation`}
+            class={`btn ${getLevelColor(chart.levelType)} btn-xs text-sm join-item no-animation`}
             href="/charts/{chart.id}"
           >
             {chart.level}
@@ -69,8 +69,8 @@
           </a>
         </div>
       {:else if rank}
-        <div class="btn-group btn-group-horizontal w-[272px] justify-start">
-          <button class="btn btn-secondary btn-xs text-sm no-animation">
+        <div class="join join-horizontal w-[272px] justify-start">
+          <button class="btn btn-secondary btn-xs join-item text-sm no-animation">
             #{rank}
           </button>
         </div>
