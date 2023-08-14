@@ -1,38 +1,48 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
 
   $: ({ api } = $page.data);
 
   interface $$Props {
+    type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
     id: string;
     likes: number;
-    type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
+    liked: boolean;
     class: string;
   }
 
+  export let type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
   export let id: string;
   export let likes: number;
-  export let type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
+  export let liked: boolean;
 
   const like = async () => {
+    liked = true;
+    likes++;
     const resp = await api.like.create({
       type,
       id,
     });
-    if (resp.ok) {
-      likes++;
-    } else {
-      const data = await resp.json();
-      // TODO: toast
-      console.error(data);
+    if (!resp.ok) {
+      liked = false;
+      likes--;
+      if (resp.status == 401) {
+        goto(`/session/login?redirect=${window.location.href}`);
+      } else {
+        const data = await resp.json();
+        console.error(data);
+      }
     }
   };
 
   const unlike = async () => {
+    liked = false;
+    likes--;
     const resp = await api.like.remove({ type, id });
-    if (resp.ok) {
-      likes--;
-    } else {
+    if (!resp.ok) {
+      liked = true;
+      likes++;
       const data = await resp.json();
       // TODO: toast
       console.error(data);
@@ -40,8 +50,11 @@
   };
 </script>
 
-{#if !id}
-  <button class="btn btn-primary btn-outline gap-2 overflow-hidden {$$restProps.class}" on:click={like}>
+{#if !liked}
+  <button
+    class="btn btn-primary btn-outline gap-2 overflow-hidden {$$restProps.class}"
+    on:click={like}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="h-5 w-5"

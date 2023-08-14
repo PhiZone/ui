@@ -120,8 +120,11 @@
   "order_backward": "倒序",
   "admin": "管理",
   "delete": "刪除",
-  "revert": "恢復",
-  "true": "真",
-  "false": "假",
-  "optional": "（選填）"
+  "deleted": "已刪除",
+  "delete_confirmation": "你確認要刪除此{resource}？此操作不可逆。",
+  "confirm": "確認",
+  "yes": "是",
+  "no": "否",
+  "optional": "（選填）",
+  "search_options": "搜索選項"
 }

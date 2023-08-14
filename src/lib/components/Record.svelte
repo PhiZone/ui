@@ -4,7 +4,6 @@
   import type { ChartDto, RecordDto, SongDto } from '$lib/models';
   import { t } from '$lib/translations/config';
   import { getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
-    import { Chart } from 'chart.js';
 
   $: ({ api } = $page.data);
 
@@ -16,9 +15,7 @@
 
   $: grade = getGrade(record.score, record.isFullCombo);
 
-  $: chartQ = createQuery(
-    api.chart.info({ id: record.chartId }, { enabled: !chart }),
-  );
+  $: chartQ = createQuery(api.chart.info({ id: record.chartId }, { enabled: !chart }));
   $: songQ = createQuery(
     api.song.info(
       { id: chart ? chart.songId : $chartQ.data?.data.songId ?? '' },

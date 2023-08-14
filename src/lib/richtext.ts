@@ -96,7 +96,7 @@ export function richtext(content: string, api?: API): Readable<string> {
       ([users]) => {
         const ctx: RichContext = {
           users: users.reduce((map, query) => {
-            if (query.isSuccess) map.set(query.data.id, query.data.username);
+            if (query.isSuccess) map.set(query.data.data.id, query.data.data.userName);
             return map;
           }, new Map<number, string>()),
         };

@@ -50,12 +50,12 @@
       <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center truncate w-full">
         {user.userName}
       </p>
-      <div class="flex flex-wrap gap-1 !aspect-auto">
-        <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-        {#if kind === 'embedded' && user.tag}
+      {#if kind === 'embedded' && user.tag}
+        <div class="flex flex-wrap gap-1 !aspect-auto">
+          <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
           <span class="badge badge-sm badge-accent">{user.tag}</span>
-        {/if}
-      </div>
+        </div>
+      {/if}
     </a>
   {/if}
 {:else}

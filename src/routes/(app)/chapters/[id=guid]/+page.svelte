@@ -62,6 +62,7 @@
               id={chapter.id}
               likes={chapter.likeCount}
               type="chapters"
+              liked={chapter.dateLiked != null}
               class="btn-md w-36 text-lg"
             />
             <label
@@ -129,6 +130,7 @@
                               {song.isOriginal ? richtext(song.authorName) : song.authorName}
                             </div>
                           </div>
+                          <!-- svelte-ignore a11y-no-static-element-interactions -->
                           <div
                             class="min-w-fit"
                             on:click={(e) => {
@@ -136,7 +138,13 @@
                             }}
                             on:keyup
                           >
-                            <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm w-24" />
+                            <Like
+                              id={song.id}
+                              likes={song.likeCount}
+                              type="songs"
+                              liked={song.dateLiked != null}
+                              class="btn-sm w-24"
+                            />
                           </div>
                         </a>
                       </li>

@@ -76,13 +76,20 @@
           </p>
         {/if}
         <div class="card-actions flex items-center justify-end">
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
             on:click={(e) => {
               e.preventDefault();
             }}
             on:keyup
           >
-            <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm" />
+            <Like
+              id={chart.id}
+              likes={chart.likeCount}
+              type="charts"
+              liked={chart.dateLiked != null}
+              class="btn-sm"
+            />
           </div>
         </div>
       </div>
@@ -125,13 +132,20 @@
       >
         {chart.rating.toFixed(1)}
       </div>
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         on:click={(e) => {
           e.preventDefault();
         }}
         on:keyup
       >
-        <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-sm w-24" />
+        <Like
+          id={chart.id}
+          likes={chart.likeCount}
+          type="charts"
+          liked={chart.dateLiked != null}
+          class="btn-sm w-24"
+        />
       </div>
     </div>
   </a>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { locale, t } from '$lib/translations/config';
-  import type { CommentDto, ReplyDto } from '$lib/models';
+  import type { CommentDto, UserDto } from '$lib/models';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import { page } from '$app/stores';
@@ -30,19 +30,20 @@
       await api.reply.create(comment.id, { content: replyText, language: locale.get() });
       disabled = false;
       replyText = '';
-      await queryClient.invalidateQueries(['reply.list', { comment: comment.id, page: replyPage }]);
+      await queryClient.invalidateQueries(['reply.list', { id: comment.id, page: replyPage }]);
     }
   };
 
   $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
   $: query = createQuery(api.reply.list({ id: comment.id, page: replyPage }));
 
-  const replyTo = async (reply: ReplyDto) => {
-    replyText = `${$t('common.reply_to')}[PZUser:${reply.ownerId}:PZMRT]${$t('common.colon')}`;
+  const replyTo = async (user: UserDto) => {
+    replyText = `${$t('common.reply_to')}[PZUser:${user.id}:${user.userName}:PZRT]${$t(
+      'common.colon',
+    )}`;
   };
 
   $: source = `${type}/${comment.resourceId}`;
-
   $: content = richtext(comment.content, api);
 </script>
 
@@ -111,7 +112,13 @@
         {#if user && (getUserPrivilege(user.role) >= 4 || user.id === comment.ownerId)}
           <Delete target={comment} class="btn-sm" />
         {/if}
-        <Like id={comment.id} likes={comment.likeCount} type="comments" class="btn-sm" />
+        <Like
+          id={comment.id}
+          likes={comment.likeCount}
+          type="comments"
+          liked={comment.dateLiked != null}
+          class="btn-sm"
+        />
         <label
           for="comment-{comment.id}-replies"
           class="btn btn-sm btn-primary btn-outline gap-2"

@@ -8,7 +8,9 @@
 </script>
 
 <div
-  class="card w-80 ${fixedHeight ? 'h-[460px]' : ''} bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden"
+  class="card w-80 ${fixedHeight
+    ? 'h-[460px]'
+    : ''} bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden"
 >
   <a href="/chapters/{chapter.id}">
     <figure class="h-[180px]">
@@ -37,13 +39,20 @@
       {/if}
       <p />
       <div class="card-actions flex items-center justify-end">
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
           on:click={(e) => {
             e.preventDefault();
           }}
           on:keyup
         >
-          <Like id={chapter.id} likes={chapter.likeCount} type="chapters" class="btn-sm" />
+          <Like
+            id={chapter.id}
+            likes={chapter.likeCount}
+            type="chapters"
+            liked={chapter.dateLiked != null}
+            class="btn-sm"
+          />
         </div>
       </div>
     </div>

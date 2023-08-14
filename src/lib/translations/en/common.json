@@ -120,8 +120,11 @@
   "order_backward": "Backward",
   "admin": "Administration",
   "delete": "Delete",
-  "revert": "Revert",
-  "true": "True",
-  "false": "False",
-  "optional": " (Optional)"
+  "deleted": "Deleted",
+  "delete_confirmation": "Are you sure you want to delete {resource}? This operation is irreversible.",
+  "confirm": "Confirm",
+  "yes": "Yes",
+  "no": "No",
+  "optional": " (Optional)",
+  "search_options": "Search Options"
 }

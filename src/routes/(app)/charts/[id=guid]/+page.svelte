@@ -370,7 +370,13 @@
               <div class="w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
                 <div class="flex justify-center gap-2">
-                  <Like id={chart.id} likes={chart.likeCount} type="charts" class="btn-md" />
+                  <Like
+                    id={chart.id}
+                    likes={chart.likeCount}
+                    type="charts"
+                    liked={chart.dateLiked != null}
+                    class="btn-md"
+                  />
                   <label
                     for="chart-vote"
                     class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline flex gap-1"

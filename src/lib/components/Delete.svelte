@@ -1,33 +1,62 @@
 <script lang="ts">
-  import type { Comment, Reply } from '$lib/models';
+  import type { CommentDto, ReplyDto } from '$lib/models';
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
 
   const { api } = $page.data;
 
   interface $$Props {
-    target: Comment | Reply;
+    target: CommentDto | ReplyDto;
     class: string;
   }
 
-  export let target: Comment | Reply;
-  let type: 'comment' | 'reply' = 'replies' in target ? 'comment' : 'reply';
-  let deleted = !!target.deletion;
+  export let target: CommentDto | ReplyDto;
+  let typePlural: 'comments' | 'replies' =
+    (target as CommentDto).replyCount >= 0 ? 'comments' : 'replies';
+  let type: 'comment' | 'reply' = 'replyCount' in target ? 'comment' : 'reply';
+  let deleted = false;
 </script>
 
-<div class="tooltip tooltip-bottom" data-tip={deleted ? $t('common.revert') : $t('common.delete')}>
-  <button
+<input type="checkbox" id="delete_{target.id}_modal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box text-left">
+    <label
+      for="delete_{target.id}_modal"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <h3 class="font-bold text-lg">{$t('common.delete')}</h3>
+    <p class="py-4">
+      {$t('common.delete_confirmation').replace('{resource}', $t(`common.${type}`))}
+    </p>
+    <div class="modal-action">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <label
+        for="delete_{target.id}_modal"
+        class="btn"
+        on:click={async () => {
+          const resp = await api.DELETE(`/${typePlural}/${target.id}`);
+          if (resp.ok || resp.status == 404) {
+            deleted = true;
+          } else {
+            console.error(await resp.json());
+          }
+        }}
+      >
+        {$t('common.confirm')}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip tooltip-bottom" data-tip={deleted ? $t('common.deleted') : $t('common.delete')}>
+  <label
+    for="delete_{target.id}_modal"
     class="btn {deleted
-      ? 'btn-ghost'
+      ? 'btn-ghost btn-disabled'
       : 'btn-accent btn-outline'} btn-sm flex gap-1 items-center {$$restProps.class}"
-    on:click={async () => {
-      const resp = await api[type].delete({ id: target.id });
-      if (resp.ok) {
-        deleted = !deleted;
-      } else {
-        console.error((await resp.json()).detail);
-      }
-    }}
   >
     <svg
       width="16px"
@@ -52,5 +81,5 @@
         d="M18.865 21.124L18.1176 21.0617L18.1176 21.062L18.865 21.124ZM17.37 22.5L17.3701 21.75H17.37V22.5ZM6.631 22.5V21.75H6.63093L6.631 22.5ZM5.136 21.124L5.88343 21.062L5.88341 21.0617L5.136 21.124ZM4.49741 4.43769C4.46299 4.0249 4.10047 3.71818 3.68769 3.75259C3.2749 3.78701 2.96818 4.14953 3.00259 4.56231L4.49741 4.43769ZM20.9974 4.56227C21.0318 4.14949 20.7251 3.78698 20.3123 3.75259C19.8995 3.7182 19.537 4.02495 19.5026 4.43773L20.9974 4.56227ZM18.1176 21.062C18.102 21.2495 18.0165 21.4244 17.878 21.5518L18.8939 22.6555C19.3093 22.2732 19.5658 21.7486 19.6124 21.186L18.1176 21.062ZM17.878 21.5518C17.7396 21.6793 17.5583 21.75 17.3701 21.75L17.3699 23.25C17.9345 23.25 18.4785 23.0379 18.8939 22.6555L17.878 21.5518ZM17.37 21.75H6.631V23.25H17.37V21.75ZM6.63093 21.75C6.44274 21.75 6.26142 21.6793 6.12295 21.5518L5.10713 22.6555C5.52253 23.0379 6.06649 23.25 6.63107 23.25L6.63093 21.75ZM6.12295 21.5518C5.98449 21.4244 5.89899 21.2495 5.88343 21.062L4.38857 21.186C4.43524 21.7486 4.69172 22.2732 5.10713 22.6555L6.12295 21.5518ZM5.88341 21.0617L4.49741 4.43769L3.00259 4.56231L4.38859 21.1863L5.88341 21.0617ZM19.5026 4.43773L18.1176 21.0617L19.6124 21.1863L20.9974 4.56227L19.5026 4.43773Z"
       />
     </svg>
-  </button>
+  </label>
 </div>

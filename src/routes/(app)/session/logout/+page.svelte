@@ -6,11 +6,16 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { useQueryClient } from '@tanstack/svelte-query';
 
-  onMount(() => {
+  onMount(async () => {
     if (browser) {
       setTimeout(async () => {
-        await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
-        await goto($page.url.searchParams.get('redirect') ?? '/');
+        try {
+          await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
+          await goto($page.url.searchParams.get('redirect') ?? '/');
+        } catch (e) {
+          console.log('Failed to log out gracefully', e);
+          window.location.href = $page.url.searchParams.get('redirect') ?? '/';
+        }
       }, 1000);
     }
   });

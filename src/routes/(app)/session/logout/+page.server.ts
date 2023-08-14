@@ -10,9 +10,10 @@ export const load = async ({ cookies, locals, fetch }) => {
   data.append('client_secret', CLIENT_SECRET);
   data.append('token', refresh_token);
   await api.session.revokeToken(data);
+  locals.user = null;
   clearTokens(cookies);
 
   return {
-    api,
+    // api,
   };
 };

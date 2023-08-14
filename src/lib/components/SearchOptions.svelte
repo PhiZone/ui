@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '$lib/translations/config';
   import type { ParsedQuery } from 'query-string';
 
   interface ValueName {
@@ -24,7 +25,7 @@
 
 <div class="collapse collapse-arrow bg-base-100 m-4 rounded-box w-full self-center">
   <input type="checkbox" bind:checked={open} />
-  <div class="collapse-title texl-xl">Search Options</div>
+  <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
   <div class="collapse-content">
     <form class="form-control items-stretch w-full">
       {#each filters as filter}
@@ -83,8 +84,8 @@
           name="order"
           value={params?.order || 'asc'}
         >
-          <option value="asc">ascending</option>
-          <option value="desc">descending</option>
+          <option value="asc">{$t('common.ascending')}</option>
+          <option value="desc">{$t('common.descending')}</option>
         </select>
       </label>
       <button type="submit" class="btn btn-secondary" on:click={() => (open = false)}>

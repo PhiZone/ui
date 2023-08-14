@@ -120,13 +120,20 @@
           </a>
         {/if} -->
 
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
             on:click={(e) => {
               e.preventDefault();
             }}
             on:keyup
           >
-            <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm" />
+            <Like
+              id={song.id}
+              likes={song.likeCount}
+              type="songs"
+              liked={song.dateLiked != null}
+              class="btn-sm"
+            />
           </div>
         </div>
       </div>
@@ -149,6 +156,7 @@
         {song.authorName}
       </div>
     </div>
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="w-1/12 min-w-fit"
       on:click={(e) => {
@@ -156,7 +164,13 @@
       }}
       on:keyup
     >
-      <Like id={song.id} likes={song.likeCount} type="songs" class="btn-sm w-24" />
+      <Like
+        id={song.id}
+        likes={song.likeCount}
+        type="songs"
+        liked={song.dateLiked != null}
+        class="btn-sm w-24"
+      />
     </div>
   </a>
 {/if}

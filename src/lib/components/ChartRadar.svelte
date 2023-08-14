@@ -51,6 +51,8 @@
 <Radar
   {data}
   options={{
-    scales: { r: { beginAtZero: true, suggestedMax: 5 } },
+    scales: {
+      r: { beginAtZero: true, suggestedMax: 5, ticks: { backdropColor: 'rgba(0, 0, 0, 0)' } },
+    },
   }}
 />

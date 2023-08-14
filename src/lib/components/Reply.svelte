@@ -1,39 +1,43 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { ReplyDto } from '$lib/models';
+  import type { ReplyDto, UserDto } from '$lib/models';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { t } from '$lib/translations/config';
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
   import Delete from './Delete.svelte';
   import User from './User.svelte';
+  import { createQuery } from '@tanstack/svelte-query';
 
   $: ({ api, user } = $page.data);
 
   export let kind: 'mini' | 'full' = 'mini';
   export let reply: ReplyDto;
-  export let replyTo: (reply: ReplyDto) => void = (_) => {};
+  export let replyTo: (reply: UserDto) => void = (_) => {};
 
   $: content = richtext(reply.content, api);
+  $: owner = createQuery(api.user.info({ id: reply.ownerId }));
 </script>
 
 {#if kind === 'mini'}
   <li class="max-w-full">
     <div class="flex w-full">
-      <User id={reply.ownerId} kind="embedded-mini" />
+      <User id={reply.ownerId} initUser={$owner.data?.data} kind="embedded-mini" />
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="ml-2 w-3/4 min-w-fit content"
         on:click={() => {
-          replyTo(reply);
+          if ($owner.isSuccess && $owner.data) replyTo($owner.data.data);
         }}
         on:keyup
       >
         {@html $content}
       </div>
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <p
         class="w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
         on:click={() => {
-          replyTo(reply);
+          if ($owner.isSuccess && $owner.data) replyTo($owner.data.data);
         }}
         on:keyup
       >
@@ -43,20 +47,26 @@
         {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
           <Delete target={reply} class="btn-sm" />
         {/if}
-        <Like id={reply.id} likes={reply.likeCount} type="replies" class="btn-sm" />
+        <Like
+          id={reply.id}
+          likes={reply.likeCount}
+          type="replies"
+          liked={reply.dateLiked != null}
+          class="btn-sm"
+        />
       </div>
     </div>
   </li>
 {:else}
   <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
-    <figure class="w-1/6 min-w-fit">
+    <figure class="w-1/3 min-w-fit">
       <div
         class="relative inline-flex flex-col items-center border-r border-base-300 px-3 py-3 mx-auto my-auto"
       >
         <User id={reply.ownerId} kind="embedded" />
       </div>
     </figure>
-    <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
+    <div class="card-body w-2/3 pt-6 pl-6 pb-4 pr-4">
       <p class="w-full content text-lg">
         {@html $content}
       </p>
@@ -68,7 +78,13 @@
           {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
             <Delete target={reply} class="btn-sm" />
           {/if}
-          <Like id={reply.id} likes={reply.likeCount} type="replies" class="btn-sm" />
+          <Like
+            id={reply.id}
+            likes={reply.likeCount}
+            type="replies"
+            liked={reply.dateLiked != null}
+            class="btn-sm"
+          />
           {#if reply.commentId}
             <a class="btn btn-sm btn-primary btn-outline" href="/comments/{reply.commentId}">
               <svg

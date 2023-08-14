@@ -99,7 +99,13 @@
                   </div>
                 </div>
                 <div class="flex gap-2 items-end w-full justify-start">
-                  <Like id={song.id} likes={song.likeCount} type="songs" class="btn-md" />
+                  <Like
+                    id={song.id}
+                    likes={song.likeCount}
+                    type="songs"
+                    liked={song.dateLiked != null}
+                    class="btn-md"
+                  />
                   {#if user}
                     <a href={song.file} target="_blank" rel="noreferrer" download>
                       <button class="btn btn-primary btn-outline flex gap-1">
@@ -148,7 +154,9 @@
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
-                          <li class="hover-bordered"><Chart {chart} kind="inline" showSong={false} /></li>
+                          <li class="hover-bordered">
+                            <Chart {chart} kind="inline" showSong={false} />
+                          </li>
                         {/each}
                       </ul>
                     {:else}
