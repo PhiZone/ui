@@ -1,6 +1,7 @@
 import API from '$lib/api';
 import type { ResponseDto } from '$lib/api/common';
 import { fail } from '@sveltejs/kit';
+import { useQueryClient } from '@tanstack/svelte-query';
 
 export const actions = {
   vote: async ({ request, params, fetch, locals }) => {
@@ -15,8 +16,12 @@ export const actions = {
       concord: parseInt(data.get('concord') as string),
       impression: parseInt(data.get('impression') as string),
     });
-    if (resp.ok) return await resp.json();
+    if (resp.ok) {
+      const queryClient = useQueryClient();
+      await queryClient.invalidateQueries(['chart.info', { id: params.id }]);
+      return;
+    }
     const err = (await resp.json()) as unknown as ResponseDto<void>;
-    return fail(resp.status, { detail: err.code });
+    return fail(resp.status, { error: err.code });
   },
 };

@@ -76,12 +76,12 @@
       {#if $query.isLoading}
         <div />
       {:else if $query.isSuccess}
-        {@const { total, data } = $query.data}
-        {#if data && data.length > 0}
+        {@const { total, perPage, data } = $query.data}
+        {#if total && perPage && data && data.length > 0}
           {#each data as reply}
             <ReplyComponent {reply} {replyTo} />
           {/each}
-          <Pagination {total} page={replyPage} pageName="reply_page" {searchParams} />
+          <Pagination {total} {perPage} page={replyPage} pageName="reply_page" {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}

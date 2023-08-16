@@ -1,4 +1,5 @@
 import API from '$lib/api';
+import type { ResponseDto } from '$lib/api/common';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
@@ -19,7 +20,7 @@ export const actions = {
       bio: data.get('bio') as string,
     });
     if (resp.ok) return await resp.json();
-    const err = await resp.json();
-    return fail(resp.status, { detail: err.detail });
+    const err = (await resp.json()) as unknown as ResponseDto<void>;
+    return fail(resp.status, { error: err.code });
   },
 };

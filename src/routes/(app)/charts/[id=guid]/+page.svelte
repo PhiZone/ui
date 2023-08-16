@@ -246,7 +246,7 @@
             <div
               class="tooltip tooltip-top tooltip-error w-full"
               class:tooltip-open={status === Status.ERROR}
-              data-tip={status === Status.ERROR ? form?.detail ?? $t('common.unknown_error') : null}
+              data-tip={status === Status.ERROR ? form?.error ?? $t('common.unknown_error') : null}
             >
               <button
                 type="submit"

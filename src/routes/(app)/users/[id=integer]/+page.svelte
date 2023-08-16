@@ -14,10 +14,10 @@
   $: user = createQuery(api.user.info({ id }));
   $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
   $: songs = createQuery(api.song.list({ rangeOwnerId: [id] }));
-  $: recent_records = createQuery(
+  $: recentRecords = createQuery(
     api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }),
   );
-  $: best_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
+  $: bestRecords = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
 </script>
 
 <svelte:head>
@@ -216,9 +216,9 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if $recent_records.isSuccess}
-              {@const total = $recent_records.data.total}
-              {@const recent_records = $recent_records.data.data.slice(0, 10)}
+            {#if $recentRecords.isSuccess}
+              {@const total = $recentRecords.data.total}
+              {@const recent_records = $recentRecords.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.recent_records')}
@@ -242,9 +242,9 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if $best_records.isSuccess}
-              {@const total = $best_records.data.total}
-              {@const best_records = $best_records.data.data.slice(0, 10)}
+            {#if $bestRecords.isSuccess}
+              {@const total = $bestRecords.data.total}
+              {@const best_records = $bestRecords.data.data.slice(0, 10)}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.best_records')}

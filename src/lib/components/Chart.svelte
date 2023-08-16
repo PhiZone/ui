@@ -118,7 +118,7 @@
       </div>
     </div>
     {#if showCharter}
-      <div class="hidden lg:flex w-1/3 max-w-1/3 text-lg">
+      <div class="hidden lg:inline w-1/3 max-w-1/3 text-lg">
         {#if chart.authorName}
           {@html $charter}
         {:else}
