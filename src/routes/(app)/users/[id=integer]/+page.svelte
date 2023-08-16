@@ -9,7 +9,7 @@
 
   export let data;
 
-  $: ({ searchParams, id, api } = data);
+  $: ({ id, api } = data);
 
   $: user = createQuery(api.user.info({ id }));
   $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
@@ -18,7 +18,6 @@
     api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }),
   );
   $: best_records = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
-  // $: comments = createQuery(api.comment.list({ user: id }));
 </script>
 
 <svelte:head>

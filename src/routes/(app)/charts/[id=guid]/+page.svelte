@@ -75,7 +75,7 @@
   <title>
     {$t('chart.chart')} -
     {$chart.data
-      ? `[${$chart.data.data.title ?? $song.data?.data.title} ${
+      ? `${$chart.data.data.title ?? $song.data?.data.title} [${
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}

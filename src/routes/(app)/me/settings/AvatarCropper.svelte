@@ -51,7 +51,7 @@
   <label class="modal-box flex flex-col gap-2 relative" for="">
     <h3 class="text-lg font-bold">{$t('user.crop_avatar')}</h3>
     <div class="w-full">
-      <img bind:this={el} {src} alt="avatar" class="w-full" />
+      <img bind:this={el} {src} alt="Avatar" class="w-full" />
     </div>
     <button class="btn btn-primary" disabled={!croppable} on:click={submit}>
       {$t('common.submit')}

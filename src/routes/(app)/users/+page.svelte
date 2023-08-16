@@ -57,7 +57,7 @@
       <div class="result">
         {#each data as user}
           <div class="w-80">
-            <User id={user.id} {user} fixedHeight />
+            <User id={user.id} initUser={user} fixedHeight />
           </div>
         {/each}
       </div>

@@ -82,6 +82,7 @@ export interface SongDto {
   isHidden: boolean;
   isLocked: boolean;
   isOriginal: boolean;
+  license: null | string;
   likeCount: number;
   lyrics: null | string;
   maxBpm: number;
@@ -114,6 +115,7 @@ export interface SongAdmitteeDto {
   isLocked: boolean;
   isOriginal: boolean;
   label: null | string;
+  license: null | string;
   likeCount: number;
   lyrics: null | string;
   maxBpm: number;

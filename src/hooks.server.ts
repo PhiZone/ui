@@ -29,7 +29,7 @@ export const handle = async ({ event, resolve }) => {
 
         const api = new API(event.fetch, access_token);
         resp = await api.user.me();
-        if (resp.ok) event.locals.user = await resp.json();
+        if (resp.ok) event.locals.user = (await resp.json()).data;
       } else {
         event.locals.user = undefined;
       }

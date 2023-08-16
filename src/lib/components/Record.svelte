@@ -26,7 +26,7 @@
 </script>
 
 <div
-  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass hover:shadow-primary-content overflow-hidden'}
+  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass hover:shadow-sm hover:shadow-primary-focus overflow-hidden'}
 >
   <a class="w-fit h-fit" href={`/records/${record.id}`}>
     {#if $songQ.isSuccess}

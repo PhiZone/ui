@@ -10,7 +10,7 @@
 <div
   class="card w-80 ${fixedHeight
     ? 'h-[460px]'
-    : ''} bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden"
+    : ''} bg-base-100 shadow-lg hover:shadow-sm hover:shadow-primary-focus overflow-hidden"
 >
   <a href="/chapters/{chapter.id}">
     <figure class="h-[180px]">

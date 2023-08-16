@@ -5,6 +5,22 @@
   "chapter": "Chapter",
   "composer": "Composer",
   "edition": "Edition",
+  "edition_types": {
+    "0": "Original Ver.",
+    "1": "Author's Edit",
+    "2": "First-Party Edit",
+    "3": "Licensed Edit",
+    "4": "Unlicensed Edit",
+    "5": "Third-Party Edit"
+  },
+  "edition_type_tips": {
+    "0": "This version is the original edition of the song.",
+    "1": "This version is an edition made by the song's author.",
+    "2": "This version is an edition made by a first party, licensed by the author.",
+    "3": "This version is an edition made by the uploader, licensed by the author.",
+    "4": "This version is an edition made by the uploader, not licensed by the author.",
+    "5": "This version is an edition made by a third party, not licensed by the author."
+  },
   "illustration": "Illustration",
   "illustrator": "Illustrator",
   "lyrics": "Lyrics",
