@@ -10,14 +10,13 @@ export const actions = {
     const email = formData.get('email') as string,
       password = formData.get('password') as string;
 
-    const data = new URLSearchParams();
-    data.append('client_id', CLIENT_ID);
-    data.append('client_secret', CLIENT_SECRET);
-    data.append('grant_type', 'password');
-    data.append('username', email);
-    data.append('password', password);
-
-    const resp = await api.session.token(data);
+    const resp = await api.auth.token({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      grant_type: 'password',
+      username: email,
+      password: password,
+    });
 
     if (!resp.ok) {
       const err = await resp.json();

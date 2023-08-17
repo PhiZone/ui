@@ -1,3 +1,9 @@
+export enum Gender {
+  Unset,
+  Male,
+  Female,
+}
+
 export interface UserDto {
   avatar: null | string;
   biography: null | string;
@@ -8,40 +14,23 @@ export interface UserDto {
   experience: number;
   followeeCount: number;
   followerCount: number;
-  gender: number;
-  id: number;
-  language: string;
-  region: string;
-  rks: number;
-  role: null | string;
-  tag: null | string;
-  userName: string;
-}
-
-export interface UserDetailedDto {
-  avatar: null | string;
-  biography: null | string;
-  dateFollowed: Date | null;
-  dateJoined: Date;
-  dateLastLoggedIn: Date | null;
-  dateOfBirth: Date | null;
-  email: null | string;
-  emailConfirmed: boolean;
-  experience: number;
-  followeeCount: number;
-  followerCount: number;
-  gender: number;
+  gender: Gender;
   id: number;
   language: null | string;
-  notifications: number;
-  phoneNumber: null | string;
-  phoneNumberConfirmed: boolean;
   region: null | string;
   rks: number;
   role: null | string;
   tag: null | string;
-  twoFactorEnabled: boolean;
   userName: null | string;
+}
+
+export interface UserDetailedDto extends UserDto {
+  email: null | string;
+  emailConfirmed: boolean;
+  notifications: number;
+  phoneNumber: null | string;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
 }
 
 export interface ChapterDto {

@@ -1,12 +1,7 @@
 import type { ChapterDto, SongAdmitteeDto } from '$lib/models';
 import queryString from 'query-string';
 import type API from '.';
-import {
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 
 // list
 export interface ListOpts extends ListOptsBase {
@@ -67,27 +62,29 @@ export interface CreateOpts {
 export default class ChapterAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('chapter.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChapterDto[]>>('/chapters?' + stringifyListOpts(opts));
-  });
+  list = createQueryCreator(
+    'chapter.list',
+    (opts: ListOpts): Q<ChapterDto[]> => this.api.GET('/chapters?' + stringifyListOpts(opts)),
+  );
 
-  listAll = createQueryCreator('chapter.listAll', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChapterDto[]>>('/chapters?' + stringifyListOpts(opts, true));
-  });
+  listAll = createQueryCreator(
+    'chapter.listAll',
+    (opts: ListOpts): Q<ChapterDto[]> => this.api.GET('/chapters?' + stringifyListOpts(opts, true)),
+  );
 
-  info = createQueryCreator('chapter.info', (opts: InfoOpts) => {
-    const { id, ...rest } = opts;
-    return this.api.GET<ResponseDto<ChapterDto>>(`/chapters/${id}?` + queryString.stringify(rest));
-  });
+  info = createQueryCreator(
+    'chapter.info',
+    ({ id, ...opts }: InfoOpts): Q<ChapterDto> =>
+      this.api.GET(`/chapters/${id}?` + queryString.stringify(opts)),
+  );
 
-  listSongs = createQueryCreator('chapter.listSongs', (opts: SongListOpts) => {
-    const { id, ...rest } = opts;
-    return this.api.GET<ResponseDto<SongAdmitteeDto[]>>(
-      `/chapters/${id}/songs?` + stringifyListOpts(rest, true),
-    );
-  });
+  listSongs = createQueryCreator(
+    'chapter.listSongs',
+    ({ id, ...rest }: SongListOpts): Q<SongAdmitteeDto[]> =>
+      this.api.GET(`/chapters/${id}/songs?` + stringifyListOpts(rest, true)),
+  );
 
-  create = createQueryCreator('chapter.create', (opts: CreateOpts) => {
-    return this.api.POST<CreateOpts, FormData>('/chapters', opts);
-  });
+  create(opts: CreateOpts) {
+    return this.api.POST('/chapters', opts);
+  }
 }

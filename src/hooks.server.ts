@@ -2,8 +2,9 @@ import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import { clearTokens, setTokens } from '$lib/utils';
 import { locale } from '$lib/translations/config';
+import type { Handle } from '@sveltejs/kit';
 
-export const handle = async ({ event, resolve }) => {
+export const handle = (async ({ event, resolve }) => {
   console.log(event.url.href);
   let access_token = event.cookies.get('access_token'),
     refresh_token = event.cookies.get('refresh_token');
@@ -15,13 +16,12 @@ export const handle = async ({ event, resolve }) => {
     if (resp.ok) {
       event.locals.user = (await resp.json()).data;
     } else {
-      const data = new URLSearchParams();
-      data.append('client_id', CLIENT_ID);
-      data.append('client_secret', CLIENT_SECRET);
-      data.append('grant_type', 'refresh_token');
-      data.append('refresh_token', refresh_token);
-
-      resp = await api.session.token(data);
+      resp = await api.auth.token({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type: 'refresh_token',
+        refresh_token,
+      });
 
       if (resp.ok) {
         ({ access_token, refresh_token } = await resp.json());
@@ -51,4 +51,4 @@ export const handle = async ({ event, resolve }) => {
   }
 
   return await resolve(event);
-};
+}) satisfies Handle;

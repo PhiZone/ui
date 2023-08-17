@@ -1,10 +1,5 @@
 import type { CommentDto } from '$lib/models';
-import {
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 import type API from '.';
 
 // list
@@ -32,22 +27,20 @@ export interface CreateOpts {
 export default class CommentAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('comment.list', (opts: ListOpts) => {
+  list = createQueryCreator('comment.list', (opts: ListOpts): Q<CommentDto[]> => {
     const { type, id, ...rest } = opts;
-    return this.api.GET<ResponseDto<CommentDto[]>>(
-      `/${type}/${id}/comments?` + stringifyListOpts(rest),
-    );
+    return this.api.GET(`/${type}/${id}/comments?` + stringifyListOpts(rest));
   });
 
-  info = createQueryCreator('comment.info', (opts: InfoOpts) => {
-    return this.api.GET<ResponseDto<CommentDto>>(`/comments/${opts.id}`);
+  info = createQueryCreator('comment.info', (opts: InfoOpts): Q<CommentDto> => {
+    return this.api.GET(`/comments/${opts.id}`);
   });
 
   remove(opts: InfoOpts) {
-    return this.api.DELETE<void>(`/comments/${opts.id}`);
+    return this.api.DELETE(`/comments/${opts.id}`);
   }
 
   create(opts: CreateOpts) {
-    return this.api.POST<CreateOpts, CommentDto>(`/${opts.type}/${opts.id}/comments`, opts);
+    return this.api.POST(`/${opts.type}/${opts.id}/comments`, opts);
   }
 }

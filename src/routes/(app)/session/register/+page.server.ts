@@ -6,7 +6,7 @@ export const actions = {
   default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.access_token, locals.user);
     const data = await request.formData();
-    const username = data.get('username') as string,
+    const userName = data.get('username') as string,
       email = data.get('email') as string,
       password = data.get('password') as string,
       confirm_password = data.get('confirm_password') as string,
@@ -14,7 +14,7 @@ export const actions = {
 
     if (password !== confirm_password) {
       return fail(400, {
-        username,
+        username: userName,
         email,
         password,
         confirm_password,
@@ -23,8 +23,8 @@ export const actions = {
       });
     }
 
-    const resp = await api.session.register({
-      username,
+    const resp = await api.user.register({
+      userName,
       email,
       password,
       language,
@@ -32,7 +32,7 @@ export const actions = {
     if (!resp.ok) {
       const err = await resp.json();
       return fail(resp.status, {
-        username,
+        userName,
         email,
         password,
         confirm_password,
