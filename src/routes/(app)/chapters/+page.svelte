@@ -17,8 +17,8 @@
 <div class="page">
   <h1 class="text-4xl font-bold mb-6">{$t('common.chapters')}</h1>
   {#if $query.isSuccess}
-    {@const { data, total } = $query.data}
-    {#if data && total && data.length > 0}
+    {@const { total, perPage, data } = $query.data}
+    {#if total && perPage && data && data.length > 0}
       <div class="result">
         {#each data as chapter}
           <div class="min-w-fit">
@@ -26,7 +26,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {page} {searchParams} />
+      <Pagination {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

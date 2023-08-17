@@ -52,16 +52,16 @@
     ]}
   />
   {#if $query.isSuccess}
-    {@const { data, total } = $query.data}
-    {#if data && data.length > 0}
+    {@const { total, perPage, data } = $query.data}
+    {#if total && perPage && data && data.length > 0}
       <div class="result">
         {#each data as user}
           <div class="w-80">
-            <User id={user.id} {user} fixedHeight />
+            <User id={user.id} initUser={user} fixedHeight />
           </div>
         {/each}
       </div>
-      <Pagination {total} {page} {searchParams} />
+      <Pagination {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

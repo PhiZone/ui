@@ -17,8 +17,8 @@
 <div class="pt-32 bg-base-200 page form-control justify-center">
   <h1 class="px-32 text-4xl font-bold mb-6">{$t('user.fans')}</h1>
   {#if $query.isSuccess}
-    {@const { data, total } = $query.data}
-    {#if data && data.length > 0}
+    {@const { total, perPage, data } = $query.data}
+    {#if total && perPage && data && data.length > 0}
       <div class="px-32 result">
         {#each data as user}
           <div class="w-80">
@@ -26,7 +26,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {page} {searchParams} />
+      <Pagination {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

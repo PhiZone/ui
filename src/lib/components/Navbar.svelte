@@ -58,7 +58,7 @@
       </ul>
     </div>
     <a class="title flex items-center normal-case font-extrabold text-2xl lg:text-4xl" href="/">
-      <img src="/favicon.ico" alt="logo" class="logo hidden lg:block" />
+      <img src="/favicon.ico" alt="Logo" class="logo hidden lg:block" />
       {$t('common.title')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
@@ -144,12 +144,12 @@
             }`}
           >
             <div class="w-12 rounded-full">
-              <img src={getAvatar(user.avatar)} alt="avatar" class="bg-white" />
+              <img src={getAvatar(user.avatar)} alt="Avatar" class="bg-white" />
             </div>
           </label>
           <ul
             tabindex="-1"
-            class="menu menu-compact lg:menu-normal dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            class="menu menu-compact lg:menu-normal dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box text-base w-52"
           >
             <li>
               <a class="justify-between" href={`/users/${user.id}`}>
@@ -183,10 +183,16 @@
         </div>
       {:else}
         <div class="flex">
-          <a class="btn btn-ghost btn-md text-base" href="/session/register">
+          <a
+            class="btn btn-ghost btn-md text-base"
+            href="/session/register?redirect={$page.url.pathname}"
+          >
             {$t('session.registration.register')}
           </a>
-          <a class="btn btn-outline btn-secondary btn-md text-base" href="/session/login">
+          <a
+            class="btn btn-outline btn-secondary btn-md text-base"
+            href="/session/login?redirect={$page.url.pathname}"
+          >
             {$t('session.login.login')}
           </a>
         </div>

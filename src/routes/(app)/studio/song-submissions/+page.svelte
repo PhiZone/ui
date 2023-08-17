@@ -60,12 +60,12 @@
       />
       <div class="min-w-fit form-control gap-4">
         {#if $query.isSuccess}
-          {@const { data, total } = $query.data}
-          {#if data && data.length > 0}
+          {@const { total, perPage, data } = $query.data}
+          {#if total && perPage && data && data.length > 0}
             {#each data as submission}
               <SongSubmission {submission} />
             {/each}
-            <Pagination {total} {page} {searchParams} />
+            <Pagination {total} {perPage} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}

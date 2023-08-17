@@ -1,3 +1,4 @@
+import { PAGINATION_PER_PAGE } from '$lib/constants';
 import type { FetchQueryOptions, QueryKey, QueryObserverOptions } from '@tanstack/svelte-query';
 import camelcaseKeys from 'camelcase-keys';
 import queryString from 'query-string';
@@ -113,7 +114,7 @@ export function stringifyListOpts<T extends ListOptsBase>(opts: T, all = false) 
     {
       order,
       desc,
-      perPage: all ? -1 : perPage,
+      perPage: all ? -1 : perPage ?? PAGINATION_PER_PAGE,
       ...rest,
     },
     { arrayFormat: 'comma', skipEmptyString: true },

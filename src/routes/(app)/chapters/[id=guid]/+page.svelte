@@ -46,7 +46,7 @@
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
     <div class="hero-overlay bg-opacity-60" />
     <div class="pt-32 pb-24 w-full flex justify-center">
-      <div class="w-full max-w-[1280px] mx-4">
+      <div class="w-full max-w-[1280px] mx-16">
         <h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">
           {chapter.title}
         </h1>

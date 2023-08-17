@@ -45,7 +45,7 @@
   ChartJS.defaults.font.family = "'Saira', sans-serif";
   ChartJS.defaults.font.size = 12;
   ChartJS.defaults.borderColor = 'rgba(127, 99, 132, 0.5)';
-  ChartJS.defaults.color = '#fff';
+  ChartJS.defaults.color = 'rgb(127, 99, 132)';
 </script>
 
 <Radar

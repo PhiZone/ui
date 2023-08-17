@@ -24,6 +24,43 @@
 
 {#if $song.isSuccess}
   {@const song = $song.data.data}
+
+  <input type="checkbox" id="license_{song.id}_modal" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box text-left min-w-fit">
+      <label
+        for="license_{song.id}_modal"
+        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      >
+        ✕
+      </label>
+      <div class="text-5xl py-3 flex font-bold items-center">
+        {song.title}
+        {#if song.isOriginal}
+          <button class="ml-2 btn btn-secondary btn-sm text-xl no-animation">
+            {$t('song.original')}
+          </button>
+        {/if}
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-accent btn-sm text-xl no-animation">
+          {$t(`song.edition_types.${song.editionType}`)}
+        </button>
+        {#if song.edition}
+          <p class="text-2xl font-semibold">
+            {song.edition}
+          </p>
+        {/if}
+      </div>
+      <p class="py-4">
+        {$t(`song.edition_type_tips.${song.editionType}`)}
+      </p>
+      {#if song.license}
+        <img src={song.license} alt="License" />
+      {/if}
+    </div>
+  </div>
+
   <div class="info-page">
     <div class="mx-4 min-w-[540px] max-w-7xl main-width">
       <div class="indicator w-full my-4">
@@ -54,7 +91,15 @@
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.edition')}
                       </span>
-                      {song.edition}
+                      <label
+                        for="license_{song.id}_modal"
+                        class="btn btn-xs btn-neutral text-sm font-normal"
+                      >
+                        {$t(`song.edition_types.${song.editionType}`)}
+                      </label>
+                      {#if song.edition}
+                        {song.edition}
+                      {/if}
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">

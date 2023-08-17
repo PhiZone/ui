@@ -14,11 +14,11 @@
   export let fixedHeight = false;
   export let showFollow = true;
 
-  $: query = createQuery(api.user.info({ id }));
+  $: query = createQuery(api.user.info({ id }, { enabled: !initUser }));
 </script>
 
 {#if kind === 'embedded' || kind === 'embedded-mini'}
-  {#if $query.isLoading}
+  {#if !initUser && $query.isLoading}
     <div class="avatar {kind === 'embedded' ? 'flex-col' : ''} items-center animate-pulse">
       <div class="{kind === 'embedded' ? 'w-[72px]' : 'w-10'} rounded-full bg-slate-200" />
       <p class="h-7 max-w-[120px] rounded bg-slate-200" />
@@ -26,37 +26,39 @@
     <div class="flex gap-1">
       <span class="h-4 w-6 bg-slate-200" />
     </div>
-  {:else if $query.isSuccess}
-    {@const user = $query.data.data}
-    <a
-      href="/users/{user.id}"
-      class="avatar {kind === 'embedded'
-        ? 'flex-col w-full'
-        : 'w-1/6 min-w-fit'} items-center gap-1"
-    >
-      <div
-        class="{kind === 'embedded'
-          ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
-          : 'w-10 border-2'} rounded-full {user.role == 'Administrator'
-          ? 'border-indigo-500'
-          : user.role == 'Volunteer'
-          ? 'border-emerald-500'
-          : user.role == 'Qualified'
-          ? 'border-sky-500'
-          : 'border-neutral-500'}"
+  {:else if initUser || $query.isSuccess}
+    {@const user = initUser ?? $query.data?.data}
+    {#if user}
+      <a
+        href="/users/{user.id}"
+        class="avatar {kind === 'embedded'
+          ? 'flex-col w-full'
+          : 'w-1/6 min-w-fit'} items-center gap-1"
       >
-        <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
-      </div>
-      <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center truncate w-full">
-        {user.userName}
-      </p>
-      {#if kind === 'embedded' && user.tag}
-        <div class="flex flex-wrap gap-1 !aspect-auto">
-          <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-          <span class="badge badge-sm badge-accent">{user.tag}</span>
+        <div
+          class="{kind === 'embedded'
+            ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
+            : 'w-10 border-2'} rounded-full {user.role == 'Administrator'
+            ? 'border-indigo-500'
+            : user.role == 'Volunteer'
+            ? 'border-emerald-500'
+            : user.role == 'Qualified'
+            ? 'border-sky-500'
+            : 'border-neutral-500'}"
+        >
+          <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
         </div>
-      {/if}
-    </a>
+        <p class="{kind === 'embedded' ? 'text-lg' : 'text-base'} text-center truncate w-full">
+          {user.userName}
+        </p>
+        {#if kind === 'embedded' && user.tag}
+          <div class="flex flex-wrap gap-1 !aspect-auto">
+            <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
+            <span class="badge badge-sm badge-accent">{user.tag}</span>
+          </div>
+        {/if}
+      </a>
+    {/if}
   {/if}
 {:else}
   <div class="card w-full shadow-lg bg-base-100" class:h-60={fixedHeight}>
@@ -64,7 +66,7 @@
       class="card-body py-3 px-4 items-center {kind === 'mini'
         ? 'flex-row gap-8 justify-between'
         : ''}"
-      class:animate-pulse={$query.isLoading}
+      class:animate-pulse={!initUser && $query.isLoading}
     >
       {#if !initUser && $query.isLoading}
         <div>

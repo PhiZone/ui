@@ -1,4 +1,4 @@
-export const PAGINATION_PER_PAGE = 30;
+export const PAGINATION_PER_PAGE = 36;
 
 export const USER_LEVELS = [
   { exp: 50, level: 1 },

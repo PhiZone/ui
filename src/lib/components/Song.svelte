@@ -33,7 +33,9 @@
 </script>
 
 {#if kind === 'full'}
-  <div class="card w-80 bg-base-100 hover:shadow-primary-content shadow-lg overflow-hidden">
+  <div
+    class="card w-80 bg-base-100 hover:shadow-sm hover:shadow-primary-focus shadow-lg overflow-hidden"
+  >
     <a href={`/songs/${song.id}`}>
       <figure class="h-[180px] relative">
         <img src={song.illustration} alt="Illustration" class="object-fill" />
@@ -51,7 +53,7 @@
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
-          {song.edition}
+          {song.edition ? song.edition : $t(`song.edition_types.${song.editionType}`)}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.composer')}</span>

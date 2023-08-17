@@ -81,9 +81,9 @@
   });
 </script>
 
-<div class="bg-white rounded-lg shadow-lg overflow-hidden bg-blur bg-opacity-50" style="background-image: url({illustration});">
+<div class="rounded-lg shadow-lg overflow-hidden">
   <div class="relative">
-    <img src={illustration} class="object-fill" alt="illustration" />
+    <img src={illustration} class="object-fill" alt="Illustration" />
     {#if line}
       <div
         class="absolute p-4 inset-0 flex form-control justify-end backdrop backdrop-blur-5 text-neutral-content"
@@ -95,7 +95,7 @@
     {/if}
   </div>
   {#if audio}
-    <div class="bg-base-100 px-3 pt-2">
+    <div class="px-3 pt-2">
       <input
         type="range"
         min="0"
@@ -111,7 +111,7 @@
         }}
       />
     </div>
-    <div class="flex justify-between text-xs font-semibold text-gray-500 px-4 py-1 bg-base-100">
+    <div class="flex justify-between text-xs font-semibold text-gray-500 px-4 py-1">
       <div class="w-9">
         <p class="text-left">
           {convertDuration(Math.min(time, duration))}

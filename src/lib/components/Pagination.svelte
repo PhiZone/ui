@@ -1,16 +1,15 @@
 <script lang="ts">
   import queryString, { type ParsedQuery } from 'query-string';
-  import { PAGINATION_PER_PAGE } from '$lib/constants';
   import { range } from '$lib/utils';
 
   export let studio = false;
-  export let total: number | null;
+  export let total: number;
+  export let perPage: number;
   export let page: number;
   export let pageName = 'page';
   export let searchParams: ParsedQuery<string | number | boolean>;
 
-  $: totalPages = Math.ceil((total ?? 0) / PAGINATION_PER_PAGE);
-  // let pages = range(1, total + 1);
+  $: totalPages = Math.ceil(total / perPage);
   $: nearbyPagesStart = page <= 5 ? 1 : page - 3;
   $: nearbyPagesEnd = page >= totalPages - 4 ? totalPages : page + 3;
   $: nearbyPages = range(nearbyPagesStart, nearbyPagesEnd + 1);

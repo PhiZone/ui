@@ -75,7 +75,7 @@
   <title>
     {$t('chart.chart')} -
     {$chart.data
-      ? `[${$chart.data.data.title ?? $song.data?.data.title} ${
+      ? `${$chart.data.data.title ?? $song.data?.data.title} [${
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
@@ -246,7 +246,7 @@
             <div
               class="tooltip tooltip-top tooltip-error w-full"
               class:tooltip-open={status === Status.ERROR}
-              data-tip={status === Status.ERROR ? form?.detail ?? $t('common.unknown_error') : null}
+              data-tip={status === Status.ERROR ? form?.error ?? $t('common.unknown_error') : null}
             >
               <button
                 type="submit"

@@ -21,7 +21,9 @@
 </script>
 
 {#if kind === 'full'}
-  <div class="card w-80 bg-base-100 shadow-lg hover:shadow-primary-content overflow-hidden">
+  <div
+    class="card w-80 bg-base-100 shadow-lg hover:shadow-sm hover:shadow-primary-focus overflow-hidden"
+  >
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[180px] relative">
         <img
@@ -116,7 +118,7 @@
       </div>
     </div>
     {#if showCharter}
-      <div class="hidden lg:flex w-1/3 max-w-1/3 text-lg">
+      <div class="hidden lg:inline w-1/3 max-w-1/3 text-lg">
         {#if chart.authorName}
           {@html $charter}
         {:else}
