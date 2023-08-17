@@ -18,7 +18,7 @@ export const actions = {
       });
     }
 
-    const resp = await api.session.password_reset.confirm({ password, token });
+    const resp = await api.auth.password_reset.confirm({ password, token });
     if (!resp.ok) {
       const err = await resp.json();
       return fail(resp.status, {

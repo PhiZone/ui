@@ -18,12 +18,3 @@ declare namespace App {
   // interface Session {}
   // interface Stuff {}
 }
-
-interface TypedResponse<T> extends Response {
-  json(): Promise<T>;
-}
-
-// type Fetch<R, E = import('$lib/api').CommonError> = (
-//   input: RequestInfo | URL,
-//   init?: RequestInit
-// ) => Promise<TypedResponse<R, E>>;

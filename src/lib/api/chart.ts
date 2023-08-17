@@ -1,12 +1,7 @@
 import type { ChartDto } from '$lib/models';
 import queryString from 'query-string';
-import {
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
-import ChartSubmissionAPI from './chart.submission';
+import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
+// import ChartSubmissionAPI from './chart.submission';
 import type API from '.';
 
 // list
@@ -50,21 +45,21 @@ export interface InfoOpts {
 
 export default class ChartAPI {
   constructor(private api: API) {
-    this.submission = new ChartSubmissionAPI(this.api);
+    // this.submission = new ChartSubmissionAPI(this.api);
   }
 
-  list = createQueryCreator('chart.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChartDto[]>>('/charts?' + stringifyListOpts(opts));
+  list = createQueryCreator('chart.list', (opts: ListOpts): Q<ChartDto[]> => {
+    return this.api.GET('/charts?' + stringifyListOpts(opts));
   });
 
-  listAll = createQueryCreator('chart.listAll', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChartDto[]>>('/charts?' + stringifyListOpts(opts, true));
+  listAll = createQueryCreator('chart.listAll', (opts: ListOpts): Q<ChartDto[]> => {
+    return this.api.GET('/charts?' + stringifyListOpts(opts, true));
   });
 
-  info = createQueryCreator('chart.info', (opts: InfoOpts) => {
+  info = createQueryCreator('chart.info', (opts: InfoOpts): Q<ChartDto> => {
     const { id, ...rest } = opts;
-    return this.api.GET<ResponseDto<ChartDto>>(`/charts/${id}?` + queryString.stringify(rest));
+    return this.api.GET(`/charts/${id}?` + queryString.stringify(rest));
   });
 
-  submission;
+  // submission;
 }

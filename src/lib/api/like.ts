@@ -17,11 +17,11 @@ export default class LikeAPI {
 
   create(opts: LikeOpts) {
     const { type, id } = opts;
-    return this.api.POST<void, ResponseDto<void>>(`/${type}/${id}/likes/`);
+    return this.api.POST(`/${type}/${id}/likes/`);
   }
 
   remove(opts: LikeOpts) {
     const { type, id } = opts;
-    return this.api.DELETE<ResponseDto<void>>(`/${type}/${id}/likes/`);
+    return this.api.DELETE(`/${type}/${id}/likes/`);
   }
 }

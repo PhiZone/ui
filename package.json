@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@tanstack/svelte-query": "^4.32.6",
+    "camelcase-keys": "^8.0.2",
     "chart.js": "^4.3.3",
     "cropperjs": "^1.5.13",
     "escape-goat": "^4.0.0",
