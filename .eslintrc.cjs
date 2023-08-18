@@ -33,7 +33,7 @@ module.exports = {
     quotes: ['error', 'single', { avoidEscape: true }],
     '@typescript-eslint/no-unused-vars': [
       'warn',
-      { argsIgnorePattern: '^_', varsIgnorePattern: '^\\$\\$' },
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^(\\$\\$|_)' },
     ],
     '@typescript-eslint/no-non-null-assertion': 'off',
     'svelte/no-at-html-tags': 'off',

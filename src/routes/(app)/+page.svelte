@@ -47,7 +47,7 @@
   {/if}
 {/if}
 
-<div class="hero min-h-screen" style:background-image="url(/background.webp);">
+<div class="hero min-h-screen" style:background-image="url(/background.webp)">
   <div class="hero-overlay bg-opacity-50" />
   <div class="w-5/6 max-w-4xl form-control text-center text-neutral-content">
     <img class="logo" src="/favicon.ico" alt="Logo" />

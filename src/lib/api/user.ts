@@ -4,8 +4,10 @@ import {
   stringifyListOpts,
   type ListOptsBase,
   createQueryCreator,
-  formdata,
   type Q,
+  formdata,
+  type TypedResponse,
+  type ResponseDtoError,
 } from './common';
 import type API from '.';
 
@@ -36,15 +38,15 @@ export interface RelationListOpts extends InfoOpts, ListOptsBase {
 
 // register
 export interface RegisterOpts {
-  userName: string;
-  email: string;
-  password: string;
-  avatar?: Blob | File;
-  gender?: Gender;
-  biography?: string;
-  language: string;
-  regionCode: string;
-  dateOfBirth?: string;
+  UserName: string;
+  Email: string;
+  Password: string;
+  Language: string;
+  RegionCode: string;
+  Avatar?: File;
+  Gender?: Gender;
+  Biography?: string;
+  DateOfBirth?: Date;
 }
 
 export default class UserAPI {
@@ -86,6 +88,8 @@ export default class UserAPI {
   }
 
   register(opts: RegisterOpts) {
-    return this.api.POST('/users', formdata(opts));
+    return this.api.POST('/users', formdata(opts)) as Promise<
+      TypedResponse<true, never> | TypedResponse<false, ResponseDtoError>
+    >;
   }
 }

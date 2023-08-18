@@ -1,19 +1,12 @@
 <script lang="ts">
+  import { superForm } from 'sveltekit-superforms/client';
   import { locales, t } from '$lib/translations/config';
-  import { Status } from '$lib/constants';
-  import { enhance } from '$app/forms';
 
-  let status = Status.WAITING;
-  let msg = '';
+  export let data;
 
-  const clear = () => {
-    if (status !== Status.WAITING) {
-      status = Status.WAITING;
-      msg = '';
-    }
-  };
-
-  export let form;
+  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
+    data.form,
+  );
 </script>
 
 <svelte:head>
@@ -32,37 +25,23 @@
     </div>
     <div class="card flex-shrink-0 w-full max-w-sm shadow-lg bg-base-100">
       <div class="card-body">
-        <form
-          method="POST"
-          class="w-full form-control"
-          on:focusin={clear}
-          use:enhance={() => {
-            status = Status.SENDING;
-
-            return async ({ result, update }) => {
-              if (result.type === 'failure') {
-                status = Status.ERROR;
-                msg = result.data?.detail ?? $t('common.correct_errors');
-              }
-              await update();
-            };
-          }}
-        >
+        <form method="POST" class="w-full form-control" use:enhance>
           <label class="label" for="username">
             <span class="label-text">{$t('session.username')}</span>
           </label>
           <input
             type="username"
             id="username"
-            name="username"
+            name="UserName"
             placeholder={$t('session.username')}
-            value={form?.username ?? ''}
+            bind:value={$form.UserName}
+            {...$constraints.UserName}
             class="input input-bordered"
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={form?.username_error}
-            data-tip={form?.username_error || null}
+            class:tooltip-open={!!$errors.UserName}
+            data-tip={$errors.UserName}
           />
           <label class="label" for="email">
             <span class="label-text">{$t('session.email')}</span>
@@ -70,16 +49,17 @@
           <input
             type="email"
             id="email"
-            name="email"
+            name="Email"
             placeholder={$t('session.email')}
-            value={form?.email ?? ''}
+            bind:value={$form.Email}
+            {...$constraints.Email}
             autocomplete="username"
             class="input input-bordered"
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={form?.email_error}
-            data-tip={form?.email_error || null}
+            class:tooltip-open={!!$errors.Email}
+            data-tip={$errors.Email}
           />
           <label class="label" for="password">
             <span class="label-text">{$t('session.password')}</span>
@@ -87,16 +67,17 @@
           <input
             type="password"
             id="password"
-            name="password"
+            name="Password"
             placeholder={$t('session.password')}
-            value={form?.password ?? ''}
+            bind:value={$form.Password}
+            {...$constraints.Password}
             autocomplete="new-password"
             class="input input-bordered"
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={form?.password_error}
-            data-tip={form?.password_error || null}
+            class:tooltip-open={!!$errors.Password}
+            data-tip={$errors.Password}
           />
           <label class="label" for="confirm_password">
             <span class="label-text">{$t('session.confirm_password')}</span>
@@ -104,43 +85,72 @@
           <input
             type="password"
             id="confirm_password"
-            name="confirm_password"
+            name="ConfirmPassword"
             placeholder={$t('session.confirm_password')}
-            value={form?.confirm_password ?? ''}
+            bind:value={$form.ConfirmPassword}
+            {...$constraints.ConfirmPassword}
             autocomplete="new-password"
             class="input input-bordered"
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={form?.confirm_password_error}
-            data-tip={form?.confirm_password_error || null}
+            class:tooltip-open={!!$errors.ConfirmPassword}
+            data-tip={$errors.ConfirmPassword}
           />
           <label class="label" for="language">
             <span class="label-text">{$t('session.registration.select_language')}</span>
           </label>
-          <select id="language" name="language" class="select select-bordered w-full max-w-xs">
+          <select
+            id="language"
+            name="Language"
+            bind:value={$form.Language}
+            {...$constraints.Language}
+            class="select select-bordered w-full max-w-xs"
+          >
             {#each $locales as value}
               <option {value}>{$t(`lang.${value}`)}</option>
             {/each}
           </select>
+          <div
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={!!$errors.Language}
+            data-tip={$errors.Language}
+          />
+          <label class="label" for="region">
+            <span class="label-text">{$t('session.registration.select_region')}</span>
+          </label>
+          <select
+            id="region"
+            name="RegionCode"
+            bind:value={$form.RegionCode}
+            {...$constraints.RegionCode}
+            class="select select-bordered w-full max-w-xs"
+          >
+            <option value="CN">CN</option>
+          </select>
+          <div
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={!!$errors.RegionCode}
+            data-tip={$errors.RegionCode}
+          />
           <div class="w-full flex justify-center mt-6">
             <div
               class="tooltip tooltip-bottom tooltip-error w-full"
-              class:tooltip-open={status === Status.ERROR}
-              data-tip={status === Status.ERROR ? msg : null}
+              class:tooltip-open={!!$message}
+              data-tip={$message}
             >
               <button
                 type="submit"
-                class="btn {status === Status.ERROR
+                class="btn {$allErrors.length > 0
                   ? 'btn-error'
-                  : status === Status.SENDING
+                  : $submitting
                   ? 'btn-ghost'
                   : 'btn-secondary btn-outline'} w-full"
-                disabled={status == Status.SENDING}
+                disabled={$submitting}
               >
-                {status === Status.ERROR
+                {$allErrors.length > 0
                   ? $t('common.error')
-                  : status === Status.SENDING
+                  : $submitting
                   ? $t('common.waiting')
                   : $t('session.registration.register')}
               </button>

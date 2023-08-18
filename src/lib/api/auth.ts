@@ -1,4 +1,5 @@
 import type API from '.';
+import type { TypedResponse } from './common';
 
 // token
 interface TokenBaseOpts {
@@ -76,7 +77,9 @@ export default class AuthAPI {
   }
 
   token(opts: TokenOpts) {
-    return this.api.POST('/auth/token', new URLSearchParams({ ...opts }));
+    return this.api.POST('/auth/token', new URLSearchParams({ ...opts })) as Promise<
+      TypedResponse<true, TokenResult> | TypedResponse<false>
+    >;
   }
 
   revokeToken(opts: RevokeTokenOpts) {

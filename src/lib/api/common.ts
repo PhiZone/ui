@@ -90,15 +90,10 @@ export type ResponseDtoError =
 
 export type ResponseDto<T> = ResponseDtoOk<T> | ResponseDtoError;
 
-export interface TypedResponse<T> extends Response {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface TypedResponse<OK extends boolean = boolean, T = any> extends Response {
+  ok: OK;
   json(): Promise<T>;
-}
-
-export type TypedResponseDtoResponse<T> = TypedResponse<ResponseDto<T>>;
-
-export interface TypedEmptyOkResponse<S extends 201 | 204> extends TypedResponse<never> {
-  ok: true;
-  status: S;
 }
 
 export interface ListOptsBase {
@@ -123,7 +118,8 @@ export function stringifyListOpts<T extends ListOptsBase>(opts: T, all = false) 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function formdata<T extends Record<string, any>>(obj: T) {
-  return serialize(camelcaseKeys(obj, { pascalCase: true }));
+  const form = new FormData();
+  return serialize(camelcaseKeys(obj, { pascalCase: true }), undefined, form);
 }
 
 type Options<TQueryFnData = unknown, TError = unknown, TQueryKey extends QueryKey = QueryKey> =
@@ -141,9 +137,11 @@ export type QueryCreator<T, O, K extends QueryKey> = (
   options?: Partial<QueryResponseDtoOptions<T, K>>,
 ) => QueryResponseDtoOptions<T, K>;
 
+export type Q<T> = Promise<TypedResponse<boolean, ResponseDto<T>>>;
+
 export function createQueryCreator<T, O, K extends string>(
   key: K,
-  func: (opts: O) => Promise<TypedResponseDtoResponse<T>>,
+  func: (opts: O) => Q<T>,
 ): QueryCreator<T, O, [K, O]> {
   return (opts, options) => ({
     queryKey: [key, opts],
@@ -157,5 +155,3 @@ export function createQueryCreator<T, O, K extends string>(
     ...options,
   });
 }
-
-export type Q<T> = Promise<TypedResponseDtoResponse<T>>;

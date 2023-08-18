@@ -17,22 +17,24 @@ import UserAPI from './user';
 import VoteAPI from './vote';
 import { browser } from '$app/environment';
 
-type Fetch = <R extends Response>(input: RequestInfo | URL, init?: RequestInit) => Promise<R>;
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
 
 export default class API {
   constructor(
-    public fetch: Fetch,
+    public fetch: typeof globalThis.fetch,
     public access_token?: string,
     public _user?: UserDetailedDto,
   ) {}
 
-  send<R extends Response>(path: string, method: string, body?: SendBody): Promise<R> {
+  send(path: string, method: string, body?: SendBody): Promise<Response> {
     const headers = new Headers();
 
-    if (!(body instanceof FormData || body instanceof URLSearchParams)) {
+    if (body instanceof FormData) {
+      // headers.append('Content-Type', ContentType.FORM_DATA);
+    } else if (body instanceof URLSearchParams) {
+      // headers.append('Content-Type', ContentType.FORM_URLENCODED);
+    } else {
       body = JSON.stringify(body);
       headers.append('Content-Type', ContentType.JSON);
     }
