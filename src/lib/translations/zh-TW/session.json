@@ -2,9 +2,11 @@
   "username": "使用者名稱",
   "email": "電子郵件",
   "password": "密碼",
-  "data_incomplete": "請填寫所有資訊！",
   "confirm_password": "確認密碼",
-  "passwords_differ": "兩次輸入的密碼不相同！",
+  "passwords_differ": "兩次輸入的密碼不相同。",
+  "invalid_email": "邮箱地址不合法。",
+  "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
+  "invalid_password": "密码必须至少包含 6 个字符，其中至少包含一个非字母数字字符、一个小写字母、一个大写字母、一个数字，并且不多于 18 个字符。",
   "login": {
     "login": "登入",
     "login_text": "登入以在 PhiZone 上遊玩譜面、參與社區交流！",
@@ -15,6 +17,7 @@
     "register": "註冊",
     "registration_text": "註冊 PhiZone 帳戶以遊玩譜面、參與社區交流！",
     "select_language": "選擇語言",
+    "select_region": "選擇地區",
     "success": "您的 PhiZone 帳號註冊成功！",
     "language_error": "語言選項出現問題。請更換瀏覽器重試。"
   },

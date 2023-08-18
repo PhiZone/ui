@@ -1,6 +1,7 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { locales, t } from '$lib/translations/config';
+  import { regions } from '$lib/constants';
 
   export let data;
 
@@ -35,7 +36,6 @@
             name="UserName"
             placeholder={$t('session.username')}
             bind:value={$form.UserName}
-            {...$constraints.UserName}
             class="input input-bordered"
           />
           <div
@@ -70,7 +70,6 @@
             name="Password"
             placeholder={$t('session.password')}
             bind:value={$form.Password}
-            {...$constraints.Password}
             autocomplete="new-password"
             class="input input-bordered"
           />
@@ -126,7 +125,9 @@
             {...$constraints.RegionCode}
             class="select select-bordered w-full max-w-xs"
           >
-            <option value="CN">CN</option>
+            {#each regions as region}
+              <option value={region}>{$t(`region.${region}`)}</option>
+            {/each}
           </select>
           <div
             class="tooltip tooltip-bottom tooltip-error"

@@ -25,7 +25,7 @@ export const actions = {
         password,
         confirm_password,
         password_error: err.password?.[0],
-        detail: err.detail,
+        error: err.code,
       });
     }
 

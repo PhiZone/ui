@@ -6,7 +6,7 @@
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
-  import { useQueryClient } from '@tanstack/svelte-query';
+  // import { useQueryClient } from '@tanstack/svelte-query';
 
   let status = Status.WAITING;
   let msg = '';
@@ -20,7 +20,7 @@
 
   export let form;
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 </script>
 
 <svelte:head>
@@ -50,7 +50,7 @@
               if (result.type === 'failure') {
                 status = Status.ERROR;
                 msg = $t(
-                  result.status == 400
+                  result.status == 400 || result.status == 404
                     ? 'session.login.invalid_credentials'
                     : 'common.unknown_error',
                 );

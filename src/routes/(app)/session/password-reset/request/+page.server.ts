@@ -10,7 +10,7 @@ export const actions = {
 
     if (!resp.ok) {
       const err = await resp.json();
-      return fail(resp.status, { email, detail: err.detail });
+      return fail(resp.status, { email, error: err.code });
     } else {
       return { email };
     }

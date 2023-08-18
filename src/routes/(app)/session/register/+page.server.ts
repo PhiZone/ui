@@ -12,9 +12,16 @@ const schema = z
       .string()
       .regex(
         /^([a-zA-Z0-9_\u4e00-\u9fff\u3041-\u309f\u30a0-\u30ff\uac00-\ud7a3]{3,12})|([\u4e00-\u9fff\u3041-\u309f\u30a0-\u30ff\uac00-\ud7a3]{2,12})|([A-Za-z0-9_]{4,18})$/,
+        {
+          message: t.get('session.invalid_username'),
+        },
       ),
-    Email: z.string().email(),
-    Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/),
+    Email: z.string().email({
+      message: t.get('session.invalid_email'),
+    }),
+    Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/, {
+      message: t.get('session.invalid_password'),
+    }),
     ConfirmPassword: z.string(),
     Language: z.string().default('zh-CN'),
     RegionCode: z.string().default('CN'),
@@ -51,9 +58,10 @@ export const actions = {
       throw redirect(303, '/session/email-confirmation' + url.search);
     } else {
       const error = await resp.json();
+      console.log(error);
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
-        form.message = error.code;
+        form.message = t.get(`error.${error.code}`);
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {

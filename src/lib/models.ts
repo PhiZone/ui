@@ -16,16 +16,16 @@ export interface UserDto {
   followerCount: number;
   gender: Gender;
   id: number;
-  language: null | string;
-  region: null | string;
+  language: string;
+  region: string;
   rks: number;
   role: null | string;
   tag: null | string;
-  userName: null | string;
+  userName: string;
 }
 
 export interface UserDetailedDto extends UserDto {
-  email: null | string;
+  email: string;
   emailConfirmed: boolean;
   notifications: number;
   phoneNumber: null | string;
@@ -41,21 +41,21 @@ export interface ChapterDto {
   dateUpdated: Date;
   description: null | string;
   id: string;
-  illustration: null | string;
-  illustrator: null | string;
+  illustration: string;
+  illustrator: string;
   isHidden: boolean;
   isLocked: boolean;
   likeCount: number;
   ownerId: number;
-  subtitle: null | string;
-  title: null | string;
+  subtitle: string;
+  title: string;
 }
 
 export interface SongDto {
   accessibility: number;
   authorName: string;
   bpm: number;
-  chartLevels: ChartLevelDto[] | null;
+  chartLevels: ChartLevelDto[];
   commentCount: number;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -80,14 +80,14 @@ export interface SongDto {
   ownerId: number;
   previewEnd: string;
   previewStart: string;
-  title: null | string;
+  title: string;
 }
 
 export interface SongAdmitteeDto {
   accessibility: number;
   authorName: string;
   bpm: number;
-  chartLevels: ChartLevelDto[] | null;
+  chartLevels: ChartLevelDto[];
   commentCount: number;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -96,7 +96,7 @@ export interface SongAdmitteeDto {
   duration: string;
   edition: null | string;
   editionType: number;
-  file: null | string;
+  file: string;
   id: string;
   illustration: string;
   illustrator: string;
@@ -113,7 +113,7 @@ export interface SongAdmitteeDto {
   ownerId: number;
   previewEnd: string;
   previewStart: string;
-  title: null | string;
+  title: string;
 }
 
 export interface AdmissionDto<T, R> {
@@ -128,7 +128,7 @@ export interface AdmissionDto<T, R> {
 
 export interface ChartDto {
   accessibility: number;
-  authorName: null | string;
+  authorName: string;
   commentCount: number;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -143,7 +143,7 @@ export interface ChartDto {
   isHidden: boolean;
   isLocked: boolean;
   isRanked: boolean;
-  level: null | string;
+  level: string;
   levelType: number;
   likeCount: number;
   noteCount: number;
@@ -190,7 +190,7 @@ export interface CommentDto {
   dateCreated: Date;
   dateLiked: Date | null;
   id: string;
-  language: null | string;
+  language: string;
   likeCount: number;
   ownerId: number;
   replyCount: number;

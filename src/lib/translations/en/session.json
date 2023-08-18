@@ -2,9 +2,11 @@
   "username": "Username",
   "email": "Email",
   "password": "Password",
-  "data_incomplete": "You have something unfilled in the blanks!",
   "confirm_password": "Confirm Password",
   "passwords_differ": "The two passwords differ from each other!",
+  "invalid_email": "The input value is not a valid email address.",
+  "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
+  "invalid_password": "The password should be at least 6 characters long, contain at least one non-alphanumeric character, have at least one lowercase letter, one uppercase letter, one digit, and can have a maximum length of 18 characters.",
   "login": {
     "login": "Log In",
     "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
@@ -15,6 +17,7 @@
     "register": "Register",
     "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
     "select_language": "Select Language",
+    "select_region": "Select Region",
     "success": "You've successfully registered an account on PhiZone!",
     "language_error": "Invalid language. Switch to another browser and retry."
   },
