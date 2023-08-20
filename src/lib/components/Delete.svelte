@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CommentDto, ReplyDto } from '$lib/models';
+  import type { CommentDto, ReplyDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
 

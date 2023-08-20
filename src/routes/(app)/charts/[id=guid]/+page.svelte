@@ -58,8 +58,8 @@
   $: song = createQuery(
     api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
   );
-  $: records = createQuery(api.record.list({ rangeChartId: [id], order: 'rks', desc: true }));
-  $: votes = createQuery(api.vote.listAll({ id }));
+  $: records = createQuery(api.record.listChart({ chartId: id, order: 'rks', desc: true }));
+  $: votes = createQuery(api.vote.listAll({ chartId: id }));
 
   $: charter = richtext($chart.data?.data.authorName ?? '', api);
 </script>

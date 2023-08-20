@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from '$lib/models';
+  import type { User } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
 

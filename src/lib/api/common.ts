@@ -3,115 +3,21 @@ import type { FetchQueryOptions, QueryKey, QueryObserverOptions } from '@tanstac
 import camelcaseKeys from 'camelcase-keys';
 import queryString from 'query-string';
 import { serialize } from 'object-to-formdata';
+import {
+  type FilterBase,
+  type ResponseDtoError,
+  type ResponseDtoOk,
+  type R,
+  ResponseDtoStatus,
+} from './types';
 
-export enum ResponseDtoStatus {
-  Ok,
-  ErrorBrief,
-  ErrorDetailed,
-  ErrorWithMessage,
-  ErrorTemporarilyUnavailable,
-  ErrorWithData,
-}
-
-interface ResponseDtoBase {
-  status: ResponseDtoStatus;
-  code: string;
-  total: number | null;
-  perPage: number | null;
-  hasNext: boolean | null;
-  hasPrevious: boolean | null;
-}
-
-interface ResponseDtoOk<T> extends ResponseDtoBase {
-  status: ResponseDtoStatus.Ok;
-  code: 'Ok';
-  data: T;
-  message: null;
-  errors: null;
-  dateAvailable: null;
-}
-
-interface ResponseDtoErrorBrief extends ResponseDtoBase {
-  status: ResponseDtoStatus.ErrorBrief;
-  code: string;
-  data: null;
-  message: null;
-  errors: null;
-  dateAvailable: null;
-}
-
-export interface ModelErrorDto {
-  field: string;
-  errors: string[];
-}
-
-interface ResponseDtoErrorDetailed extends ResponseDtoBase {
-  status: ResponseDtoStatus.ErrorDetailed;
-  code: string;
-  data: null;
-  message: null;
-  errors: ModelErrorDto[];
-  dateAvailable: null;
-}
-
-interface ResponseDtoErrorWithMessage extends ResponseDtoBase {
-  status: ResponseDtoStatus.ErrorWithMessage;
-  code: string;
-  data: null;
-  message: string;
-  errors: null;
-  dateAvailable: null;
-}
-
-interface ResponseDtoErrorTemporarilyUnavailable extends ResponseDtoBase {
-  status: ResponseDtoStatus.ErrorTemporarilyUnavailable;
-  code: string;
-  data: null;
-  message: null;
-  errors: null;
-  dateAvailable: string;
-}
-
-interface ResponseDtoErrorWithData extends ResponseDtoBase {
-  status: ResponseDtoStatus.ErrorWithData;
-  code: string;
-  data: unknown;
-  message: null;
-  errors: null;
-  dateAvailable: null;
-}
-
-export type ResponseDtoError =
-  | ResponseDtoErrorBrief
-  | ResponseDtoErrorDetailed
-  | ResponseDtoErrorWithMessage
-  | ResponseDtoErrorTemporarilyUnavailable
-  | ResponseDtoErrorWithData;
-
-export type ResponseDto<T> = ResponseDtoOk<T> | ResponseDtoError;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface TypedResponse<OK extends boolean = boolean, T = any> extends Response {
-  ok: OK;
-  json(): Promise<T>;
-}
-
-export interface ListOptsBase {
-  order?: string;
-  desc?: boolean;
-  page?: number;
-  perPage?: number;
-}
-
-export function stringifyListOpts<T extends ListOptsBase>(opts: T, all = false) {
-  const { order, desc, perPage, ...rest } = opts;
+export function stringifyFilter<T extends FilterBase>(opts: T, all = false) {
+  const { perPage, ...rest } = opts;
   return queryString.stringify(
-    {
-      order,
-      desc,
-      perPage: all ? -1 : perPage ?? PAGINATION_PER_PAGE,
-      ...rest,
-    },
+    camelcaseKeys(
+      { perPage: all ? -1 : perPage ?? PAGINATION_PER_PAGE, ...rest },
+      { pascalCase: true },
+    ),
     { arrayFormat: 'comma', skipEmptyString: true },
   );
 }
@@ -137,11 +43,9 @@ export type QueryCreator<T, O, K extends QueryKey> = (
   options?: Partial<QueryResponseDtoOptions<T, K>>,
 ) => QueryResponseDtoOptions<T, K>;
 
-export type Q<T> = Promise<TypedResponse<boolean, ResponseDto<T>>>;
-
 export function createQueryCreator<T, O, K extends string>(
   key: K,
-  func: (opts: O) => Q<T>,
+  func: (opts: O) => R<T>,
 ): QueryCreator<T, O, [K, O]> {
   return (opts, options) => ({
     queryKey: [key, opts],

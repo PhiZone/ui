@@ -3,7 +3,7 @@
   import * as api from '$lib/api';
   import { ContentType, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
-  import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/models';
+  import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/api';
   import Charter from '$lib/components/User.svelte';
   import { getLevelColor, parseRichText } from '$lib/utils';
 

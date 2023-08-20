@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import type { SongSubmission } from '$lib/models';
+  import type { SongSubmission } from '$lib/api';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
 

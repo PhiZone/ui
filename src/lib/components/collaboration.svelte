@@ -3,7 +3,7 @@
   import * as api from '$lib/api';
   import { goto, preloadData } from '$app/navigation';
   import { page } from '$app/stores';
-  import type { Collaboration, User } from '$lib/models';
+  import type { Collaboration, User } from '$lib/api';
   import UserCard from '$lib/components/User.svelte';
   import { getCompressedImage } from '$lib/utils';
 

@@ -6,7 +6,7 @@
   import Request from '$lib/components/recorder_request.svelte';
   import { getUserPrivilege } from '$lib/utils';
   import Pagination from '$lib/components/Pagination.svelte';
-  import type { RecorderRequest, User } from '$lib/models';
+  import type { RecorderRequest, User } from '$lib/api';
   import { page } from '$app/stores';
 
   export let data: import('./$types').PageData;

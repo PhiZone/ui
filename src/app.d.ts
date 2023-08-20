@@ -7,10 +7,10 @@ declare namespace App {
   interface Locals {
     access_token?: string;
     refresh_token?: string;
-    user?: import('$lib/models').User;
+    user?: import('$lib/api').UserDetailedDto;
   }
   interface PageData {
-    user?: import('$lib/models').UserDetailedDto;
+    user?: import('$lib/api').UserDetailedDto;
     api: import('$lib/api').default;
     queryClient?: import('@tanstack/svelte-query').QueryClient;
   }

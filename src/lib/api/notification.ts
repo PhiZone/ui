@@ -1,20 +1,28 @@
 import queryString from 'query-string';
-import { createQueryCreator, type Q } from './common';
+import { createQueryCreator, stringifyFilter } from './common';
+import type { FilterBase, R } from './types';
+import type { UserDto } from './user';
 import type API from '.';
-import type { NotificationDto } from '$lib/models';
 
-// list
-export interface ListOpts {
+export interface NotificationDto {
+  content: string;
+  dateCreated: Date;
+  dateRead: Date | null;
+  id: string;
+  operator: UserDto;
+  ownerId: number;
+  type: number;
+}
+
+export interface Filter extends FilterBase {
   markAsRead?: number;
 }
 
-// info
 export interface InfoOpts {
   id: number;
   markAsRead?: number;
 }
 
-// delete
 export interface DelOpts {
   id: number;
 }
@@ -22,20 +30,19 @@ export interface DelOpts {
 export default class NotificationAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('comment.list', (opts: ListOpts): Q<NotificationDto[]> => {
-    return this.api.GET('/notifications/?' + queryString.stringify(opts));
-  });
+  list = createQueryCreator(
+    'comment.list',
+    (opts: Filter): R<NotificationDto[]> =>
+      this.api.GET('/notifications/?' + stringifyFilter(opts)),
+  );
 
-  listAll = createQueryCreator('comment.listAll', (opts: ListOpts): Q<NotificationDto[]> => {
-    return this.api.GET('/notifications/?pagination=0&' + queryString.stringify(opts));
-  });
+  info = createQueryCreator(
+    'comment.info',
+    ({ id, ...rest }: InfoOpts): R<NotificationDto> =>
+      this.api.GET(`/notifications/${id}/?` + queryString.stringify(rest)),
+  );
 
-  info = createQueryCreator('comment.info', (opts: InfoOpts): Q<NotificationDto> => {
-    const { id, ...rest } = opts;
-    return this.api.GET(`/notifications/${id}/?` + queryString.stringify(rest));
-  });
-
-  del(opts: DelOpts) {
-    return this.api.DELETE(`/notifications/${opts.id}/`);
+  del({ id }: DelOpts) {
+    return this.api.DELETE(`/notifications/${id}/`);
   }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { ReplyDto, UserDto } from '$lib/models';
+  import type { ReplyDto, UserDto } from '$lib/api';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { t } from '$lib/translations/config';
   import { richtext } from '$lib/richtext';

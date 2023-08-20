@@ -1,5 +1,4 @@
 import API from '$lib/api';
-import type { ResponseDto } from '$lib/api/common';
 import { fail } from '@sveltejs/kit';
 import { useQueryClient } from '@tanstack/svelte-query';
 
@@ -8,7 +7,7 @@ export const actions = {
     const api = new API(fetch, locals.access_token, locals.user);
     const data = await request.formData();
     const resp = await api.vote.vote({
-      id: params.id,
+      chartId: params.id,
       arrangement: parseInt(data.get('arrangement') as string),
       feel: parseInt(data.get('feel') as string),
       visualEffects: parseInt(data.get('visualEffects') as string),
@@ -21,7 +20,7 @@ export const actions = {
       await queryClient.invalidateQueries(['chart.info', { id: params.id }]);
       return;
     }
-    const err = (await resp.json()) as unknown as ResponseDto<void>;
+    const err = await resp.json();
     return fail(resp.status, { error: err.code });
   },
 };

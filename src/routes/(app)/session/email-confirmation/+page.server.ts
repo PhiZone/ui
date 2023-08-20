@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import API from '$lib/api';
-import type { ResponseDtoError } from '$lib/api/common.js';
 
 export const actions = {
   default: async ({ request, url, fetch, locals }) => {
@@ -11,7 +10,7 @@ export const actions = {
     const resp = await api.auth.activate({ code });
 
     if (!resp.ok) {
-      const err = (await resp.json()) as unknown as ResponseDtoError;
+      const err = await resp.json();
       console.log(err);
       return fail(resp.status, { code, error: err.code });
     }

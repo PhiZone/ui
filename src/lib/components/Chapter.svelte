@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ChapterDto } from '$lib/models';
+  import type { ChapterDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import Like from './Like.svelte';
 

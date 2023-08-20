@@ -1,28 +1,29 @@
-import type { ReplyDto } from '$lib/models';
-import {
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
+import type { FilterBase, R } from './types';
 
-// list
-export interface ListOpts extends ListOptsBase {
+export interface ReplyDto {
   id: string;
-  // comment?: number | number[];
-  // user?: number | number[];
-  // content?: string;
-  // language?: string;
+  commentId: string;
+  content: string;
+  language: string;
+  ownerId: number;
+  dateCreated: Date;
+  likeCount: number;
+  dateLiked: Date | null;
 }
 
-// info
+export interface Filter extends FilterBase {
+  commentId: string;
+}
+
 export interface InfoOpts {
-  id: number;
+  id: string;
 }
 
 // post
 export interface CreateOpts {
+  commentId: string;
   content: string;
   language: string;
 }
@@ -30,26 +31,23 @@ export interface CreateOpts {
 export default class ReplyAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('reply.list', (opts: ListOpts) => {
-    const { id, ...rest } = opts;
-    return this.api.GET<ResponseDto<ReplyDto[]>>(
-      `/comments/${id}/replies?` + stringifyListOpts(rest),
-    );
+  list = createQueryCreator('reply.list', ({ commentId, ...rest }: Filter): R<ReplyDto[]> => {
+    return this.api.GET(`/comments/${commentId}/replies?` + stringifyFilter(rest));
   });
 
-  listAll = createQueryCreator('reply.listAll', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ReplyDto[]>>('/replies/?' + stringifyListOpts(opts, true));
+  listAll = createQueryCreator('reply.listAll', ({ commentId, ...rest }: Filter): R<ReplyDto[]> => {
+    return this.api.GET(`/comments/${commentId}/replies?` + stringifyFilter(rest, true));
   });
 
-  info = createQueryCreator('reply.info', (opts: InfoOpts) => {
-    return this.api.GET<ResponseDto<ReplyDto>>(`/replies/${opts.id}/`);
+  info = createQueryCreator('reply.info', ({ id }: InfoOpts): R<ReplyDto> => {
+    return this.api.GET(`/replies/${id}/`);
   });
 
   remove(opts: InfoOpts) {
-    return this.api.DELETE<void>(`/replies/${opts.id}`);
+    return this.api.DELETE(`/replies/${opts.id}`);
   }
 
-  create(id: string, opts: CreateOpts) {
-    return this.api.POST<CreateOpts, ReplyDto>(`/comments/${id}/replies`, opts);
+  create({ commentId, ...rest }: CreateOpts) {
+    return this.api.POST(`/comments/${commentId}/replies`, rest);
   }
 }

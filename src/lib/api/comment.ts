@@ -1,12 +1,22 @@
-import type { CommentDto } from '$lib/models';
-import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 import type API from '.';
+import { stringifyFilter, createQueryCreator } from './common';
+import type { FilterBase, R } from './types';
 
-// list
-export interface ListOpts extends ListOptsBase {
+export interface CommentDto {
+  id: string;
+  resourceId: string;
+  content: string;
+  language: string;
+  ownerId: number;
+  dateCreated: Date;
+  replyCount: number;
+  likeCount: number;
+  dateLiked: Date | null;
+}
+
+export interface Filter extends FilterBase {
   type: string;
   id: string;
-  page: number;
   rangeOwnerId?: number[];
   rangeResourceId?: string[];
 }
@@ -27,20 +37,22 @@ export interface CreateOpts {
 export default class CommentAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('comment.list', (opts: ListOpts): Q<CommentDto[]> => {
-    const { type, id, ...rest } = opts;
-    return this.api.GET(`/${type}/${id}/comments?` + stringifyListOpts(rest));
-  });
+  list = createQueryCreator(
+    'comment.list',
+    ({ type, id, ...rest }: Filter): R<CommentDto[]> =>
+      this.api.GET(`/${type}/${id}/comments?` + stringifyFilter(rest)),
+  );
 
-  info = createQueryCreator('comment.info', (opts: InfoOpts): Q<CommentDto> => {
-    return this.api.GET(`/comments/${opts.id}`);
-  });
+  info = createQueryCreator(
+    'comment.info',
+    ({ id }: InfoOpts): R<CommentDto> => this.api.GET(`/comments/${id}`),
+  );
 
-  remove(opts: InfoOpts) {
-    return this.api.DELETE(`/comments/${opts.id}`);
+  create({ type, id, ...rest }: CreateOpts): R {
+    return this.api.POST(`/${type}/${id}/comments`, rest);
   }
 
-  create(opts: CreateOpts) {
-    return this.api.POST(`/${opts.type}/${opts.id}/comments`, opts);
+  remove({ id }: InfoOpts): R {
+    return this.api.DELETE(`/comments/${id}`);
   }
 }

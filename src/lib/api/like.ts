@@ -1,11 +1,6 @@
 import type API from '.';
+import type { R } from './types';
 
-// info
-export interface InfoOpts {
-  id: number;
-}
-
-// like
 export interface LikeOpts {
   type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
   id: string;
@@ -14,13 +9,11 @@ export interface LikeOpts {
 export default class LikeAPI {
   constructor(private api: API) {}
 
-  create(opts: LikeOpts) {
-    const { type, id } = opts;
+  like({ type, id }: LikeOpts): R {
     return this.api.POST(`/${type}/${id}/likes/`);
   }
 
-  remove(opts: LikeOpts) {
-    const { type, id } = opts;
+  unlike({ type, id }: LikeOpts): R {
     return this.api.DELETE(`/${type}/${id}/likes/`);
   }
 }

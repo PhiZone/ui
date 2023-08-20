@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
-  import type { ChartDto, RecordDto, SongDto } from '$lib/models';
+  import type { ChartDto, RecordDto, SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
 

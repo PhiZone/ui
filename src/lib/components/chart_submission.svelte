@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ChartSubmission } from '$lib/models';
+  import type { ChartSubmission } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';

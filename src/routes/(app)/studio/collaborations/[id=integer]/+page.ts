@@ -1,5 +1,5 @@
 import * as api from '$lib/api';
-import type { Collaboration } from '$lib/models';
+import type { Collaboration } from '$lib/api';
 import { Status } from '$lib/constants';
 import { error } from '@sveltejs/kit';
 

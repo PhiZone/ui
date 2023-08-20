@@ -1,10 +1,27 @@
-import type { ChapterDto, SongAdmitteeDto } from '$lib/models';
-import queryString from 'query-string';
+import { stringifyFilter, createQueryCreator, formdata } from './common';
+import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
+import type { SongAdmitteeDto } from './song';
 import type API from '.';
-import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 
-// list
-export interface ListOpts extends ListOptsBase {
+export interface ChapterDto {
+  id: string;
+  title: string;
+  subtitle: string;
+  illustration: string;
+  illustrator: string;
+  description: string | null;
+  accessibility: Accessibility;
+  isHidden: boolean;
+  isLocked: boolean;
+  ownerId: number;
+  dateCreated: Date;
+  dateUpdated: Date;
+  commentCount: number;
+  likeCount: number;
+  dateLiked: Date | null;
+}
+
+export interface Filter extends PublicResourceFilterBase {
   order?:
     | 'id'
     | 'illustrator'
@@ -14,16 +31,11 @@ export interface ListOpts extends ListOptsBase {
     | 'subtitle'
     | 'dateCreated'
     | 'dateUpdated';
-  // id?: number | number[];
-  // title?: string;
-  // subtitle?: string;
-  // accessibility?: string;
-  // owner?: number | number[];
-  // query_owner?: number;
-  // query_songs?: number;
+  containsSubtitle?: string;
+  equalsSubtitle?: string;
 }
-// song list
-export interface SongListOpts extends ListOptsBase {
+
+export interface SongListFilter extends FilterBase {
   id: string;
   order?:
     | 'id'
@@ -34,29 +46,21 @@ export interface SongListOpts extends ListOptsBase {
     | 'authorName'
     | 'dateCreated'
     | 'dateUpdated';
-  // title?: string;
-  // subtitle?: string;
-  // accessibility?: string;
-  // owner?: number | number[];
-  // query_owner?: number;
-  // query_songs?: number;
 }
 
-// info
 export interface InfoOpts {
   id: string;
 }
 
-// create
 export interface CreateOpts {
-  subtitle: string;
   title: string;
+  subtitle: string;
   illustration: string;
   illustrator: string;
   description?: string;
-  owner?: number;
-  accessibility?: number;
-  events_incl?: number;
+  accessibility: Accessibility;
+  isHidden: boolean;
+  isLocked: boolean;
 }
 
 export default class ChapterAPI {
@@ -64,27 +68,26 @@ export default class ChapterAPI {
 
   list = createQueryCreator(
     'chapter.list',
-    (opts: ListOpts): Q<ChapterDto[]> => this.api.GET('/chapters?' + stringifyListOpts(opts)),
+    (opts: Filter): R<ChapterDto[]> => this.api.GET('/chapters?' + stringifyFilter(opts)),
   );
 
   listAll = createQueryCreator(
     'chapter.listAll',
-    (opts: ListOpts): Q<ChapterDto[]> => this.api.GET('/chapters?' + stringifyListOpts(opts, true)),
+    (opts: Filter): R<ChapterDto[]> => this.api.GET('/chapters?' + stringifyFilter(opts, true)),
   );
 
   info = createQueryCreator(
     'chapter.info',
-    ({ id, ...opts }: InfoOpts): Q<ChapterDto> =>
-      this.api.GET(`/chapters/${id}?` + queryString.stringify(opts)),
+    ({ id }: InfoOpts): R<ChapterDto> => this.api.GET(`/chapters/${id}`),
   );
 
   listSongs = createQueryCreator(
     'chapter.listSongs',
-    ({ id, ...rest }: SongListOpts): Q<SongAdmitteeDto[]> =>
-      this.api.GET(`/chapters/${id}/songs?` + stringifyListOpts(rest, true)),
+    ({ id, ...rest }: SongListFilter): R<SongAdmitteeDto[]> =>
+      this.api.GET(`/chapters/${id}/songs?` + stringifyFilter(rest, true)),
   );
 
-  create(opts: CreateOpts) {
-    return this.api.POST('/chapters', opts);
+  create(opts: CreateOpts): R {
+    return this.api.POST('/chapters', formdata(opts));
   }
 }

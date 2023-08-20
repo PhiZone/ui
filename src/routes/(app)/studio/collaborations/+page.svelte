@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import { Status } from '$lib/constants';
   import Pagination from '$lib/components/Pagination.svelte';
-  import type { Collaboration } from '$lib/models';
+  import type { Collaboration } from '$lib/api';
   import { afterNavigate, beforeNavigate, goto, preloadData } from '$app/navigation';
   import { page } from '$app/stores';
   import CollaborationCard from '$lib/components/collaboration.svelte';

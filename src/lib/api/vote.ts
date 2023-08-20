@@ -1,42 +1,31 @@
-import type { VoteDto } from '$lib/models';
-import {
-  createQueryCreator,
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-} from './common';
+import { createQueryCreator, stringifyFilter } from './common';
+import type { FilterBase, R } from './types';
 import type API from '.';
 
-// list
-export interface ListOpts extends ListOptsBase {
-  order?: 'ownerId' | 'score' | 'rating';
-  // id?: number | number[];
-  // chart?: number | number[];
-  // user?: number | number[];
-  // highest_total?: number;
-  // lowest_total?: number;
-  // highest_arrangement?: number;
-  // lowest_arrangement?: number;
-  // highest_feel?: number;
-  // lowest_feel?: number;
-  // highest_vfx?: number;
-  // lowest_vfx?: number;
-  // highest_creativity?: number;
-  // lowest_creativity?: number;
-  // highest_concord?: number;
-  // lowest_concord?: number;
-  // highest_impression?: number;
-  // lowest_impression?: number;
+export interface VoteDto {
+  arrangement: number;
+  chartId: string;
+  concord: number;
+  creativity: number;
+  dateCreated: Date;
+  feel: number;
+  id: string;
+  impression: number;
+  multiplier: number;
+  ownerId: number;
+  total: number;
+  visualEffects: number;
 }
 
-// info
-export interface InfoOpts {
-  id: string;
+// list
+export interface Filter extends FilterBase {
+  chartId: string;
+  order?: 'ownerId' | 'score' | 'rating';
 }
 
 // vote
 export interface VoteOpts {
-  id: string;
+  chartId: string;
   arrangement: number;
   feel: number;
   visualEffects: number;
@@ -47,31 +36,23 @@ export interface VoteOpts {
 
 // unvote
 export interface UnvoteOpts {
-  id: string;
+  chartId: string;
 }
 
 export default class VoteAPI {
   constructor(private api: API) {}
 
-  // list = createQueryCreator('vote.list', (opts: ListOpts) => {
-  //   return this.api.GET<ResponseDto<Vote>>('/votes?' + stringifyListOpts(opts));
-  // });
+  listAll = createQueryCreator(
+    'vote.listAll',
+    ({ chartId, ...rest }: Filter): R<VoteDto[]> =>
+      this.api.GET(`/charts/${chartId}/votes?` + stringifyFilter(rest, true)),
+  );
 
-  listAll = createQueryCreator('vote.listAll', (opts: InfoOpts & ListOpts) => {
-    return this.api.GET<ResponseDto<VoteDto[]>>(
-      `/charts/${opts.id}/votes?` + stringifyListOpts(opts, true),
-    );
-  });
-
-  // info = createQueryCreator('vote.info', (opts: InfoOpts) => {
-  //   return this.api.GET<Vote>(`/votes/${opts.id}`);
-  // });
-
-  vote(opts: VoteOpts) {
-    return this.api.POST<VoteOpts, void>(`/charts/${opts.id}/votes`, opts);
+  vote({ chartId, ...rest }: VoteOpts): R {
+    return this.api.POST(`/charts/${chartId}/votes`, rest);
   }
 
-  unvote(opts: InfoOpts) {
-    return this.api.DELETE<void>(`/charts/${opts.id}/votes`);
+  unvote({ chartId }: UnvoteOpts): R {
+    return this.api.DELETE(`/charts/${chartId}/votes`);
   }
 }

@@ -1,5 +1,5 @@
 import type API from '.';
-import type { TypedResponse } from './common';
+import type { R, TypedResponse } from './types';
 
 // token
 interface TokenBaseOpts {
@@ -76,25 +76,23 @@ export default class AuthAPI {
     // this.password_reset = new SessionPasswordResetAPI(api);
   }
 
-  token(opts: TokenOpts) {
-    return this.api.POST('/auth/token', new URLSearchParams({ ...opts })) as Promise<
-      TypedResponse<true, TokenResult> | TypedResponse<false>
-    >;
+  token(opts: TokenOpts): Promise<TypedResponse<true, TokenResult> | TypedResponse<false>> {
+    return this.api.POST('/auth/token', new URLSearchParams({ ...opts }));
   }
 
   revokeToken(opts: RevokeTokenOpts) {
     return this.api.POST('/auth/revoke', new URLSearchParams({ ...opts }));
   }
 
-  sendEmail(opts: SendEmailOpts) {
+  sendEmail(opts: SendEmailOpts): R {
     return this.api.POST('/auth/sendEmail', opts);
   }
 
-  resetPassword(opts: ResetPasswordOpts) {
+  resetPassword(opts: ResetPasswordOpts): R {
     return this.api.POST('/auth/resetPassword', opts);
   }
 
-  activate(opts: ActivateOpts) {
+  activate(opts: ActivateOpts): R {
     return this.api.POST('/auth/activate', opts);
   }
 
@@ -102,7 +100,7 @@ export default class AuthAPI {
     return this.api.POST('/auth/tapTap', opts);
   }
 
-  revokeAccount(opts: RevokeAccountOpts) {
+  revokeAccount(opts: RevokeAccountOpts): R {
     return this.api.POST('/auth/revokeAccount', opts);
   }
 }

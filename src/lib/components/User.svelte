@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserLevel } from '$lib/utils';
-  import type { UserDto } from '$lib/models';
+  import type { UserDto } from '$lib/api';
   import Follow from './Follow.svelte';
 
   $: ({ api } = $page.data);

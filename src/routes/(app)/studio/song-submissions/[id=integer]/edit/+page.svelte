@@ -3,7 +3,7 @@
   import * as api from '$lib/api';
   import { ContentType, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
-  import type { Chapter, SongSubmissionError } from '$lib/models';
+  import type { Chapter, SongSubmissionError } from '$lib/api';
   import { onMount } from 'svelte';
 
   export let data: import('./$types').PageData;

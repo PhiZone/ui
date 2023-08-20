@@ -1,6 +1,6 @@
 <script lang="ts">
   import { locale, t } from '$lib/translations/config';
-  import type { CommentDto, UserDto } from '$lib/models';
+  import type { CommentDto, UserDto } from '$lib/api';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import { page } from '$app/stores';
@@ -27,7 +27,7 @@
   const sendReply = async () => {
     if (replyText.length > 0) {
       disabled = true;
-      await api.reply.create(comment.id, { content: replyText, language: locale.get() });
+      await api.reply.create({ commentId: comment.id, content: replyText, language: locale.get() });
       disabled = false;
       replyText = '';
       await queryClient.invalidateQueries(['reply.list', { id: comment.id, page: replyPage }]);
@@ -35,7 +35,7 @@
   };
 
   $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
-  $: query = createQuery(api.reply.list({ id: comment.id, page: replyPage }));
+  $: query = createQuery(api.reply.list({ commentId: comment.id, page: replyPage }));
 
   const replyTo = async (user: UserDto) => {
     replyText = `${$t('common.reply_to')}[PZUser:${user.id}:${user.userName}:PZRT]${$t(

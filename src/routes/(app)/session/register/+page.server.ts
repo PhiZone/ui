@@ -1,10 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
-import API from '$lib/api';
+import API, { Gender } from '$lib/api';
 import { t } from '$lib/translations/config';
-import { Gender } from '$lib/models';
-import { ResponseDtoStatus } from '$lib/api/common';
+import { ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z
   .object({

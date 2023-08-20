@@ -9,7 +9,7 @@
     Filler,
   } from 'chart.js';
   import { t } from '$lib/translations/config';
-  import type { ChartDto } from '$lib/models';
+  import type { ChartDto } from '$lib/api';
 
   export let chart: ChartDto;
 

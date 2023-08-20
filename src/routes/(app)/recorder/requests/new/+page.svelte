@@ -3,7 +3,7 @@
   import * as api from '$lib/api';
   import { ContentType, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
-  import type { RecorderRequestError } from '$lib/models';
+  import type { RecorderRequestError } from '$lib/api';
 
   export let data: import('./$types').PageData;
   $: ({ access_token, user } = data);

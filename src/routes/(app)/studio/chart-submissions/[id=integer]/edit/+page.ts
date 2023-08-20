@@ -1,5 +1,5 @@
 import * as api from '$lib/api';
-import type { ChartSubmission } from '$lib/models';
+import type { ChartSubmission } from '$lib/api';
 import { Status } from '$lib/constants';
 import { error } from '@sveltejs/kit';
 

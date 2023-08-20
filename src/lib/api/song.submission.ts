@@ -1,8 +1,8 @@
 import { serialize } from 'object-to-formdata';
 import queryString from 'query-string';
-import type { SongSubmission } from '$lib/models';
+import type { SongSubmission } from '$lib/api';
 import {
-  stringifyListOpts,
+  stringifyFilter,
   type ListOptsBase,
   type ResponseDto,
   createQueryCreator,
@@ -67,12 +67,12 @@ export default class SongSubmissionAPI {
 
   list = createQueryCreator('song.submission.list', (opts: ListOpts) => {
     return this.api.GET<ResponseDto<SongSubmission>>(
-      '/song_submission/?' + stringifyListOpts(opts),
+      '/song_submission/?' + stringifyFilter(opts),
     );
   });
 
   listAll = createQueryCreator('song.submission.listAll', (opts: ListOpts) => {
-    return this.api.GET<SongSubmission[]>('/song_submission/?' + stringifyListOpts(opts, true));
+    return this.api.GET<SongSubmission[]>('/song_submission/?' + stringifyFilter(opts, true));
   });
 
   info = createQueryCreator('song.submission.info', (opts: InfoOpts) => {

@@ -3,7 +3,7 @@
   import * as api from '$lib/api';
   import { parseDateTime } from '$lib/utils';
   import { goto, preloadData } from '$app/navigation';
-  import type { UserInput } from '$lib/models';
+  import type { UserInput } from '$lib/api';
 
   export let input: UserInput, token: string | undefined;
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NotificationDto } from '$lib/models';
+  import type { NotificationDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';

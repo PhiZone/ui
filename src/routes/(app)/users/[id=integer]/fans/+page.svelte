@@ -7,7 +7,7 @@
   export let data;
   $: ({ searchParams, id, page, api } = data);
 
-  $: query = createQuery(api.user.listFollowers({ id, page }));
+  $: query = createQuery(api.user.followers({ id, page }));
 </script>
 
 <svelte:head>

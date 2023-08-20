@@ -1,6 +1,5 @@
 import { ContentType, defaultLocale } from '$lib/constants';
 import { locale } from '$lib/translations/config';
-import type { UserDetailedDto } from '$lib/models';
 import { PUBLIC_API_BASE } from '$env/static/public';
 import AuthAPI from './auth';
 import ChapterAPI from './chapter';
@@ -10,10 +9,9 @@ import HeadlineAPI from './headline';
 import LikeAPI from './like';
 import NotificationAPI from './notification';
 import RecordAPI from './record';
-import RelationAPI from './relation';
 import ReplyAPI from './reply';
 import SongAPI from './song';
-import UserAPI from './user';
+import UserAPI, { type UserDetailedDto } from './user';
 import VoteAPI from './vote';
 import { browser } from '$app/environment';
 
@@ -79,9 +77,18 @@ export default class API {
   like = new LikeAPI(this);
   notification = new NotificationAPI(this);
   record = new RecordAPI(this);
-  relation = new RelationAPI(this);
   reply = new ReplyAPI(this);
   song = new SongAPI(this);
   user = new UserAPI(this);
   vote = new VoteAPI(this);
 }
+
+export type { ChapterDto } from './chapter';
+export { ChartFormat, type ChartDto } from './chart';
+export type { CommentDto } from './comment';
+export type { NotificationDto } from './notification';
+export type { RecordDto } from './record';
+export type { ReplyDto } from './reply';
+export type { ChartLevelDto, SongDto, SongAdmitteeDto } from './song';
+export { Gender, type UserDto, type UserDetailedDto } from './user';
+export type { VoteDto } from './vote';

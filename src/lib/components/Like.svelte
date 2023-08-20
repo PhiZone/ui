@@ -20,7 +20,7 @@
   const like = async () => {
     liked = true;
     likes++;
-    const resp = await api.like.create({
+    const resp = await api.like.like({
       type,
       id,
     });
@@ -39,7 +39,7 @@
   const unlike = async () => {
     liked = false;
     likes--;
-    const resp = await api.like.remove({ type, id });
+    const resp = await api.like.unlike({ type, id });
     if (!resp.ok) {
       liked = true;
       likes++;

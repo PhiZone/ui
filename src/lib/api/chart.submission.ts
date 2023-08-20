@@ -1,7 +1,7 @@
-import type { ChartSubmission } from '$lib/models';
+import type { ChartSubmission } from '$lib/api';
 import { serialize } from 'object-to-formdata';
 import {
-  stringifyListOpts,
+  stringifyFilter,
   type ListOptsBase,
   type ResponseDto,
   createQueryCreator,
@@ -63,11 +63,11 @@ export default class ChartSubmissionAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator('chart.submission.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChartSubmission>>('/chart_uploads/?' + stringifyListOpts(opts));
+    return this.api.GET<ResponseDto<ChartSubmission>>('/chart_uploads/?' + stringifyFilter(opts));
   });
 
   listAll = createQueryCreator('chart.submission.listAll', (opts: ListOpts) => {
-    return this.api.GET<ChartSubmission[]>('/chart_uploads/?' + stringifyListOpts(opts, true));
+    return this.api.GET<ChartSubmission[]>('/chart_uploads/?' + stringifyFilter(opts, true));
   });
 
   info = createQueryCreator('chart.submission.info', (opts: InfoOpts) => {

@@ -1,11 +1,54 @@
-import type { ChartDto } from '$lib/models';
 import queryString from 'query-string';
-import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 // import ChartSubmissionAPI from './chart.submission';
+import type { Accessibility, FilterBase, R } from './types';
 import type API from '.';
 
+export enum ChartFormat {
+  RpeJson,
+  Pec,
+  PhiZone,
+  Phigrim,
+  Unsupported,
+}
+
+export interface ChartDto {
+  accessibility: Accessibility;
+  authorName: string;
+  commentCount: number;
+  dateCreated: Date;
+  dateLiked: Date | null;
+  dateUpdated: Date;
+  description: string | null;
+  difficulty: number;
+  file: string | null;
+  format: ChartFormat;
+  id: string;
+  illustration: string | null;
+  illustrator: string | null;
+  isHidden: boolean;
+  isLocked: boolean;
+  isRanked: boolean;
+  level: string;
+  levelType: number;
+  likeCount: number;
+  noteCount: number;
+  ownerId: number;
+  playCount: number;
+  rating: number;
+  ratingOnArrangement: number;
+  ratingOnConcord: number;
+  ratingOnCreativity: number;
+  ratingOnFeel: number;
+  ratingOnImpression: number;
+  ratingOnVisualEffects: number;
+  score: number;
+  songId: string;
+  title: string | null;
+}
+
 // list
-export interface ListOpts extends ListOptsBase {
+export interface Filter extends FilterBase {
   order?:
     | 'dateCreated'
     | 'dateUpdated'
@@ -20,27 +63,11 @@ export interface ListOpts extends ListOptsBase {
   rangeId?: string[];
   rangeSongId?: string[];
   rangeOwnerId?: number[];
-  // level?: string | string[];
-  // charter?: string;
-  // description?: string;
-  // ranked?: number;
-  // lowest_difficulty?: number;
-  // highest_difficulty?: number;
-  // lowest_note_count?: number;
-  // highest_note_count?: number;
-  // lowest_score?: number;
-  // highest_score?: number;
-  // lowest_rating?: number;
-  // highest_rating?: number;
-  // query_song?: number;
-  // query_owner?: number;
 }
 
 // info
 export interface InfoOpts {
   id: string;
-  // query_song?: number;
-  // query_owner?: number;
 }
 
 export default class ChartAPI {
@@ -48,18 +75,21 @@ export default class ChartAPI {
     // this.submission = new ChartSubmissionAPI(this.api);
   }
 
-  list = createQueryCreator('chart.list', (opts: ListOpts): Q<ChartDto[]> => {
-    return this.api.GET('/charts?' + stringifyListOpts(opts));
-  });
+  list = createQueryCreator(
+    'chart.list',
+    (opts: Filter): R<ChartDto[]> => this.api.GET('/charts?' + stringifyFilter(opts)),
+  );
 
-  listAll = createQueryCreator('chart.listAll', (opts: ListOpts): Q<ChartDto[]> => {
-    return this.api.GET('/charts?' + stringifyListOpts(opts, true));
-  });
+  listAll = createQueryCreator(
+    'chart.listAll',
+    (opts: Filter): R<ChartDto[]> => this.api.GET('/charts?' + stringifyFilter(opts, true)),
+  );
 
-  info = createQueryCreator('chart.info', (opts: InfoOpts): Q<ChartDto> => {
-    const { id, ...rest } = opts;
-    return this.api.GET(`/charts/${id}?` + queryString.stringify(rest));
-  });
+  info = createQueryCreator(
+    'chart.info',
+    ({ id, ...rest }: InfoOpts): R<ChartDto> =>
+      this.api.GET(`/charts/${id}?` + queryString.stringify(rest)),
+  );
 
   // submission;
 }

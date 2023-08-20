@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
-  import type { ChartDto } from '$lib/models';
+  import type { ChartDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
   import { richtext } from '$lib/richtext';

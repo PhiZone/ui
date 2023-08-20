@@ -5,7 +5,7 @@
   export let data;
   $: ({ api } = data);
 
-  $: headline = createQuery(api.headline.get_studio());
+  $: headline = createQuery(api.headline.getStudio());
 </script>
 
 <svelte:head>

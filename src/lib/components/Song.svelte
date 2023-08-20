@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SongDto } from '$lib/models';
+  import type { SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { convertDuration } from '$lib/utils';
   import Like from './Like.svelte';

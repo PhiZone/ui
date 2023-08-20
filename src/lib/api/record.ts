@@ -1,14 +1,42 @@
 import queryString from 'query-string';
-import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 import type API from '.';
-import type { RecordDto } from '$lib/models';
+import { stringifyFilter, createQueryCreator } from './common';
+import type { FilterBase, R } from './types';
+
+export interface RecordDto {
+  accuracy: number;
+  applicationId: string;
+  bad: number;
+  chartId: string;
+  dateCreated: Date;
+  dateLiked: Date | null;
+  goodEarly: number;
+  goodJudgment: number;
+  goodLate: number;
+  id: string;
+  isFullCombo: boolean;
+  likeCount: number;
+  maxCombo: number;
+  miss: number;
+  ownerId: number;
+  perfect: number;
+  perfectJudgment: number;
+  position: number;
+  rks: number;
+  score: number;
+  stdDeviation: number;
+}
 
 // list
-export interface ListOpts extends ListOptsBase {
+export interface Filter extends FilterBase {
   order?: 'ownerId' | 'score' | 'accuracy' | 'rks' | 'stdDeviation' | 'dateCreated';
   rangeId?: string[];
   rangeChartId?: string[];
   rangeOwnerId?: number[];
+}
+
+export interface FilterChart extends Filter {
+  chartId: string;
 }
 
 // info
@@ -19,16 +47,25 @@ export interface InfoOpts {
 export default class RecordAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('record.list', (opts: ListOpts): Q<RecordDto[]> => {
-    return this.api.GET('/records?' + stringifyListOpts(opts));
-  });
+  list = createQueryCreator(
+    'record.list',
+    (opts: Filter): R<RecordDto[]> => this.api.GET('/records?' + stringifyFilter(opts)),
+  );
 
-  listAll = createQueryCreator('record.listAll', (opts: ListOpts): Q<RecordDto[]> => {
-    return this.api.GET('/records?' + stringifyListOpts(opts, true));
-  });
+  listAll = createQueryCreator(
+    'record.listAll',
+    (opts: Filter): R<RecordDto[]> => this.api.GET('/records?' + stringifyFilter(opts, true)),
+  );
 
-  info = createQueryCreator('record.info', (opts: InfoOpts): Q<RecordDto> => {
-    const { id, ...rest } = opts;
-    return this.api.GET(`/records/${id}?` + queryString.stringify(rest));
-  });
+  listChart = createQueryCreator(
+    'record.listChart',
+    ({ chartId, ...rest }: FilterChart): R<RecordDto[]> =>
+      this.api.GET(`/chart/${chartId}/records?` + stringifyFilter(rest)),
+  );
+
+  info = createQueryCreator(
+    'record.info',
+    ({ id, ...rest }: InfoOpts): R<RecordDto> =>
+      this.api.GET(`/records/${id}?` + queryString.stringify(rest)),
+  );
 }
