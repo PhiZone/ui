@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Notification } from '$lib/models';
+  import type { NotificationDto } from '$lib/models';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
@@ -7,9 +7,9 @@
 
   $: ({ api } = $page.data);
 
-  export let notification: Notification;
+  export let notification: NotificationDto;
 
-  $: message = richtext(notification.message, api);
+  $: content = richtext(notification.content, api);
 </script>
 
 <div class="indicator w-full my-4">
@@ -20,24 +20,24 @@
   </span>
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
-      notification.read_at ? 'border' : 'border border-secondary'
+      notification.dateRead ? 'border' : 'border border-secondary'
     }`}
   >
     <div class="card-body w-[60%]">
       <h2 class="text-xl mb-3 min-w-fit inline">
-        {@html $message}
+        {@html $content}
       </h2>
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('notification.notified_at')}
           </span>
-          {parseDateTime(notification.notified_at)}
+          {parseDateTime(notification.dateCreated)}
         </p>
-        {#if notification.read_at}
+        {#if notification.dateRead}
           <p class="min-w-fit">
             <span class="badge badge-primary badge-outline mr-1">{$t('notification.read_at')}</span>
-            {parseDateTime(notification.read_at)}
+            {parseDateTime(notification.dateRead)}
           </p>
         {/if}
       </div>

@@ -1,17 +1,17 @@
-import type { Notification } from '$lib/models';
 import queryString from 'query-string';
-import { createQueryCreator, type ResponseDto } from './common';
+import { createQueryCreator, type Q } from './common';
 import type API from '.';
+import type { NotificationDto } from '$lib/models';
 
 // list
 export interface ListOpts {
-  mark_as_read?: number;
+  markAsRead?: number;
 }
 
 // info
 export interface InfoOpts {
   id: number;
-  mark_as_read?: number;
+  markAsRead?: number;
 }
 
 // delete
@@ -22,24 +22,20 @@ export interface DelOpts {
 export default class NotificationAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('comment.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<Notification>>(
-      '/notifications/?' + queryString.stringify(opts),
-    );
+  list = createQueryCreator('comment.list', (opts: ListOpts): Q<NotificationDto[]> => {
+    return this.api.GET('/notifications/?' + queryString.stringify(opts));
   });
 
-  listAll = createQueryCreator('comment.listAll', (opts: ListOpts) => {
-    return this.api.GET<Notification[]>(
-      '/notifications/?pagination=0&' + queryString.stringify(opts),
-    );
+  listAll = createQueryCreator('comment.listAll', (opts: ListOpts): Q<NotificationDto[]> => {
+    return this.api.GET('/notifications/?pagination=0&' + queryString.stringify(opts));
   });
 
-  info = createQueryCreator('comment.info', (opts: InfoOpts) => {
+  info = createQueryCreator('comment.info', (opts: InfoOpts): Q<NotificationDto> => {
     const { id, ...rest } = opts;
-    return this.api.GET<Notification>(`/notifications/${id}/?` + queryString.stringify(rest));
+    return this.api.GET(`/notifications/${id}/?` + queryString.stringify(rest));
   });
 
   del(opts: DelOpts) {
-    return this.api.DELETE<void>(`/notifications/${opts.id}/`);
+    return this.api.DELETE(`/notifications/${opts.id}/`);
   }
 }

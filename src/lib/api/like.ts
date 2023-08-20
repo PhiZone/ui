@@ -1,5 +1,4 @@
 import type API from '.';
-import type { ResponseDto } from './common';
 
 // info
 export interface InfoOpts {

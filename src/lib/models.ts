@@ -227,3 +227,13 @@ export interface VoteDto {
   total: number;
   visualEffects: number;
 }
+
+export interface NotificationDto {
+  content: string;
+  dateCreated: Date;
+  dateRead: Date | null;
+  id: string;
+  operator: UserDto;
+  ownerId: number;
+  type: number;
+}

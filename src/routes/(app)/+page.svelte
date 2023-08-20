@@ -10,9 +10,7 @@
   let type: 'chapters' | 'songs' | 'users' = 'songs';
   let text = '';
 
-  $: href = `/${type}?${
-    text ? `${type === 'chapters' ? 'title' : type === 'users' ? 'username' : 'name'}=${text}` : ''
-  }`;
+  $: href = `/${type}?${text ? `search=${text}` : ''}`;
 
   const search = () => goto(href);
 

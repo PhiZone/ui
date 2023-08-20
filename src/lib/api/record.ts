@@ -1,12 +1,7 @@
 import queryString from 'query-string';
-import type { RecordDto } from '$lib/models';
-import {
-  stringifyListOpts,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyListOpts, type ListOptsBase, createQueryCreator, type Q } from './common';
 import type API from '.';
+import type { RecordDto } from '$lib/models';
 
 // list
 export interface ListOpts extends ListOptsBase {
@@ -24,16 +19,16 @@ export interface InfoOpts {
 export default class RecordAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('record.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<RecordDto[]>>('/records?' + stringifyListOpts(opts));
+  list = createQueryCreator('record.list', (opts: ListOpts): Q<RecordDto[]> => {
+    return this.api.GET('/records?' + stringifyListOpts(opts));
   });
 
-  listAll = createQueryCreator('record.listAll', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<RecordDto[]>>('/records?' + stringifyListOpts(opts, true));
+  listAll = createQueryCreator('record.listAll', (opts: ListOpts): Q<RecordDto[]> => {
+    return this.api.GET('/records?' + stringifyListOpts(opts, true));
   });
 
-  info = createQueryCreator('record.info', (opts: InfoOpts) => {
+  info = createQueryCreator('record.info', (opts: InfoOpts): Q<RecordDto> => {
     const { id, ...rest } = opts;
-    return this.api.GET<ResponseDto<RecordDto>>(`/records/${id}?` + queryString.stringify(rest));
+    return this.api.GET(`/records/${id}?` + queryString.stringify(rest));
   });
 }
