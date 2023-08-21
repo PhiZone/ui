@@ -1,109 +1,135 @@
 import { htmlEscape } from 'escape-goat';
-import { createQueries } from '@tanstack/svelte-query';
-import { type Readable, derived, readable } from 'svelte/store';
-import type API from './api';
+import { type Readable, readable /*, derived */ } from 'svelte/store';
+// import { createQueries } from '@tanstack/svelte-query';
+// import type API from './api';
 
-export interface RichContext {
-  users?: Map<number, string>;
-}
+// export interface RichContext {
+//   users?: Map<number, string>;
+// }
+
+// export function preprocess(content: string): string {
+//   content = htmlEscape(content);
+//   let result = '';
+//   let level = 0;
+//   for (let i = 0; i < content.length; i++) {
+//     if (content[i] === '[') {
+//       if (level >= 1) result += '&#91;';
+//       else result += '[';
+//       level++;
+//     } else if (content[i] === ']') {
+//       level--;
+//       if (level >= 1) result += '&#93;';
+//       else result += ']';
+//     } else result += content[i];
+//   }
+//   return result.replaceAll(/\[PZ(.+?):PZRT\]/gi, '[PZ$1]');
+// }
 
 export function preprocess(content: string): string {
-  content = htmlEscape(content);
-  let result = '';
-  let level = 0;
-  for (let i = 0; i < content.length; i++) {
-    if (content[i] === '[') {
-      if (level >= 1) result += '&#91;';
-      else result += '[';
-      level++;
-    } else if (content[i] === ']') {
-      level--;
-      if (level >= 1) result += '&#93;';
-      else result += ']';
-    } else result += content[i];
-  }
-  return result.replaceAll(/\[PZ(.+?):PZRT\]/gi, '[PZ$1]');
+  return htmlEscape(content);
 }
 
-export function transform(content: string, ctx: RichContext): string {
+export function transform(content: string /*, ctx: RichContext*/): string {
   return (
     content
       // user
+      // .replaceAll(
+      //   /\[PZUser(Mention)?:(\d+)\]/gi,
+      //   (_, at: string | undefined, id: string) =>
+      //     `[PZUser${at ?? ''}:${id}:${ctx.users?.get(parseInt(id)) ?? id}]`,
+      // )
       .replaceAll(
-        /\[PZUser(At)?:(\d+)\]/gi,
-        (_, at: string | undefined, id: string) =>
-          `[PZUser${at ?? ''}:${id}:${ctx.users?.get(parseInt(id)) ?? id}]`,
-      )
-      .replaceAll(
-        /\[PZUser(At)?:(\d+):(.+?)\]/gi,
-        (_, at: string | undefined, id: string, name: string) =>
-          `<a href="/users/${id}" class="richtext-link richtext-user">${at ? '@' : ''}${name}</a>`,
+        /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
+        (_, at: string | undefined, id: string, display: string) =>
+          `<a href="/users/${id}" class="richtext-link richtext-user">${
+            at ? '@' : ''
+          }${display}</a>`,
       )
       // chapter
       .replaceAll(
-        /\[PZChapter:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/chapter/${id}" class="richtext-link richtext-chapter">${name}</a>`,
+        /\[PZChapter:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/chapters/${id}" class="richtext-link richtext-chapter">${display}</a>`,
       )
       // song
       .replaceAll(
-        /\[PZSong:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/song/${id}" class="richtext-link richtext-song">${name}</a>`,
+        /\[PZSong:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/songs/${id}" class="richtext-link richtext-song">${display}</a>`,
       )
       // chart
       .replaceAll(
-        /\[PZChart:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/chart/${id}" class="richtext-link richtext-chart">${name}</a>`,
+        /\[PZChart:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/charts/${id}" class="richtext-link richtext-chart">${display}</a>`,
       )
-      // song-upload
+      // comment
       .replaceAll(
-        /\[PZSongUpload:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/studio/song-submissions/${id}" class="richtext-link richtext-song-upload">${name}</a>`,
+        /\[PZComment:([-0-9a-fA-F]+):(.+):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/comments/${id}" class="richtext-link richtext-comment">${display.substring(
+            0,
+            200,
+          )}${display.length > 200 ? '...' : ''}</a>`,
       )
-      // chart-upload
+      // reply
       .replaceAll(
-        /\[PZChartUpload:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/studio/chart-submissions/${id}" class="richtext-link richtext-chart-upload">${name}</a>`,
+        /\[PZReply:([-0-9a-fA-F]+):(.+):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/replies/${id}" class="richtext-link richtext-reply">${display.substring(
+            0,
+            200,
+          )}${display.length > 200 ? '...' : ''}</a>`,
       )
-      // collab
+      // song submission
       .replaceAll(
-        /\[PZChartCollab:(\d+):(.+?)\]/gi,
-        (_, id: string, name: string) =>
-          `<a href="/studio/collaborations/${id}" class="richtext-link richtext-collab">${name}</a>`,
+        /\[PZSongSubmission:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/studio/song-submissions/${id}" class="richtext-link richtext-song-upload">${display}</a>`,
+      )
+      // chart submission
+      .replaceAll(
+        /\[PZChartSubmission:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/studio/chart-submissions/${id}" class="richtext-link richtext-chart-upload">${display}</a>`,
+      )
+      // collaboration
+      .replaceAll(
+        /\[PZCollaboration:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/studio/collaborations/${id}" class="richtext-link richtext-collab">${display}</a>`,
       )
   );
 }
 
-export function richtext(content: string, api?: API): Readable<string> {
+export function richtext(content: string /*, api?: API*/): Readable<string> {
   content = preprocess(content);
 
-  if (api) {
-    return derived(
-      [
-        // users
-        createQueries(
-          [
-            ...new Set(
-              [...content.matchAll(/\[PZUser(?:At)?:(\d+)\]/gi)].map((match) => parseInt(match[1])),
-            ),
-          ].map((id) => api.user.info({ id })),
-        ),
-      ],
-      ([users]) => {
-        const ctx: RichContext = {
-          users: users.reduce((map, query) => {
-            if (query.isSuccess) map.set(query.data.data.id, query.data.data.userName);
-            return map;
-          }, new Map<number, string>()),
-        };
-        return transform(content, ctx);
-      },
-    );
-  } else {
-    return readable(transform(content, {}));
-  }
+  // if (api) {
+  //   return derived(
+  //     [
+  //       // users
+  //       createQueries(
+  //         [
+  //           ...new Set(
+  //             [...content.matchAll(/\[PZUser(?:Mention)?:(\d+)\]/gi)].map((match) =>
+  //               parseInt(match[1]),
+  //             ),
+  //           ),
+  //         ].map((id) => api.user.info({ id })),
+  //       ),
+  //     ],
+  //     ([users]) => {
+  //       const ctx: RichContext = {
+  //         users: users.reduce((map, query) => {
+  //           if (query.isSuccess) map.set(query.data.data.id, query.data.data.userName);
+  //           return map;
+  //         }, new Map<number, string>()),
+  //       };
+  //       return transform(content, ctx);
+  //     },
+  //   );
+  // } else {
+  return readable(transform(content /*, {}*/));
+  // }
 }

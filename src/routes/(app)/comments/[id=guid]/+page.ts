@@ -3,7 +3,6 @@ import queryString from 'query-string';
 export const load = async ({ params, url, parent }) => {
   const { api, queryClient } = await parent();
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
-  const id = parseInt(params.id);
-  await queryClient.prefetchQuery(api.comment.info({ id }));
-  return { searchParams, id };
+  await queryClient.prefetchQuery(api.comment.info({ id: params.id }));
+  return { searchParams, id: params.id };
 };

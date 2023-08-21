@@ -17,7 +17,7 @@
   $: song = createQuery(api.song.info({ id: chart.songId }));
   $: owner = createQuery(api.user.info({ id: chart.ownerId }));
 
-  $: charter = richtext(chart.authorName ?? '', api);
+  $: charter = richtext(chart.authorName ?? '');
 </script>
 
 {#if kind === 'full'}

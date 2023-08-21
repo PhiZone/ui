@@ -60,7 +60,7 @@ export default class RecordAPI {
   listChart = createQueryCreator(
     'record.listChart',
     ({ chartId, ...rest }: FilterChart): R<RecordDto[]> =>
-      this.api.GET(`/chart/${chartId}/records?` + stringifyFilter(rest)),
+      this.api.GET(`/charts/${chartId}/records?` + stringifyFilter(rest)),
   );
 
   info = createQueryCreator(

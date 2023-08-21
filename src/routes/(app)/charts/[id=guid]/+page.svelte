@@ -61,7 +61,7 @@
   $: records = createQuery(api.record.listChart({ chartId: id, order: 'rks', desc: true }));
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
 
-  $: charter = richtext($chart.data?.data.authorName ?? '', api);
+  $: charter = richtext($chart.data?.data.authorName ?? '');
 </script>
 
 <!-- {#if $chart.isSuccess}
@@ -228,7 +228,7 @@
               {$t('chart.multiplier')}
             </span>
             <p class="text-xl font-bold w-3/4">
-              {getMultiplier(getUserLevel(user.exp)).toFixed(1)}
+              {getMultiplier(getUserLevel(user.experience)).toFixed(1)}
             </p>
           </div>
           <div class="flex gap-3">
@@ -238,7 +238,7 @@
             <p class="text-xl font-bold w-3/4">
               {(
                 (arrangement + feel + vfx + creativity + concord + impression) *
-                getMultiplier(getUserLevel(user.exp))
+                getMultiplier(getUserLevel(user.experience))
               ).toFixed(2)}
             </p>
           </div>

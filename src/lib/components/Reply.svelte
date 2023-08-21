@@ -15,7 +15,7 @@
   export let reply: ReplyDto;
   export let replyTo: (reply: UserDto) => void = (_) => {};
 
-  $: content = richtext(reply.content, api);
+  $: content = richtext(reply.content);
   $: owner = createQuery(api.user.info({ id: reply.ownerId }));
 </script>
 

@@ -14,7 +14,7 @@
 
   $: ({ user, api } = $page.data);
 
-  export let type: string;
+  export let type: string | undefined = undefined;
   export let comment: CommentDto;
   export let showUser = true;
   export let showSource = false;
@@ -30,7 +30,10 @@
       await api.reply.create({ commentId: comment.id, content: replyText, language: locale.get() });
       disabled = false;
       replyText = '';
-      await queryClient.invalidateQueries(['reply.list', { id: comment.id, page: replyPage }]);
+      await queryClient.invalidateQueries([
+        'reply.list',
+        { commentId: comment.id, page: replyPage },
+      ]);
     }
   };
 
@@ -38,13 +41,14 @@
   $: query = createQuery(api.reply.list({ commentId: comment.id, page: replyPage }));
 
   const replyTo = async (user: UserDto) => {
-    replyText = `${$t('common.reply_to')}[PZUser:${user.id}:${user.userName}:PZRT]${$t(
-      'common.colon',
-    )}`;
+    replyText = `${$t('common.reply_to')}@${user.userName}${$t('common.colon')}`;
+    // replyText = `${$t('common.reply_to')}[PZUserMention:${user.id}:${user.userName}:PZRT]${$t(
+    //   'common.colon',
+    // )}`;
   };
 
   $: source = `${type}/${comment.resourceId}`;
-  $: content = richtext(comment.content, api);
+  $: content = richtext(comment.content);
 </script>
 
 <input type="checkbox" id="comment-{comment.id}-replies" class="modal-toggle" />
@@ -142,7 +146,7 @@
             {$query.data.total}
           {/if}
         </label>
-        {#if showSource && source}
+        {#if showSource && type && source}
           <a class="btn btn-sm btn-primary btn-outline" href={source}>
             <svg
               fill="currentColor"

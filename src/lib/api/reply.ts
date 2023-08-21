@@ -21,7 +21,7 @@ export interface InfoOpts {
   id: string;
 }
 
-// post
+// create
 export interface CreateOpts {
   commentId: string;
   content: string;
