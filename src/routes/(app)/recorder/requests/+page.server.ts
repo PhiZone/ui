@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 export const load: import('./$types').PageServerLoad = async ({ url, locals, fetch }) => {
   const resp = await api.GET(
     `/recorder/requests/${url.search}`,
-    locals.access_token,
+    locals.accessToken,
     locals.user,
     fetch,
   );

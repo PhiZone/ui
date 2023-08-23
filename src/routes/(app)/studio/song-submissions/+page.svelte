@@ -25,10 +25,7 @@
           {$t('studio.song_submissions')}
         </h1>
         <div class="flex justify-between gap-3">
-          <a
-            href="/studio/song-submissions/new"
-            class="btn btn-accent text-lg btn-xl btn-outline glass"
-          >
+          <a href="/studio/song-submissions/new" class="btn btn-accent text-lg btn-xl btn-outline">
             {$t('studio.upload_song')}
           </a>
         </div>

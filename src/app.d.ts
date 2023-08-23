@@ -5,9 +5,10 @@
 // for information about these interfaces
 declare namespace App {
   interface Locals {
-    access_token?: string;
-    refresh_token?: string;
+    accessToken?: string;
+    refreshToken?: string;
     user?: import('$lib/api').UserDetailedDto;
+    lastRetrieval?: number;
   }
   interface PageData {
     user?: import('$lib/api').UserDetailedDto;

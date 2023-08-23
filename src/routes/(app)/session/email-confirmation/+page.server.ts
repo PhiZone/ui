@@ -3,7 +3,7 @@ import API from '$lib/api';
 
 export const actions = {
   default: async ({ request, url, fetch, locals }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const code = formData.get('code') as string;
 

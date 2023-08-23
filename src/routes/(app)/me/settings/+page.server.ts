@@ -1,10 +1,9 @@
 import API from '$lib/api';
-import type { ResponseDto } from '$lib/api/common';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request, fetch, locals }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
 
     const data = await request.formData();
     const username =
@@ -17,10 +16,11 @@ export const actions = {
       username,
       gender: data.get('gender') as string,
       language: data.get('language') as string,
+      regionCode: data.get('region') as string,
       bio: data.get('bio') as string,
     });
     if (resp.ok) return await resp.json();
-    const err = (await resp.json()) as unknown as ResponseDto<void>;
+    const err = await resp.json();
     return fail(resp.status, { error: err.code });
   },
 };

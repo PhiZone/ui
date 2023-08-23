@@ -4,10 +4,10 @@ import { Status } from '$lib/constants';
 import { error } from '@sveltejs/kit';
 
 export const load: import('./$types').PageLoad = async ({ params, parent, fetch }) => {
-  const { user, access_token } = await parent();
+  const { user, accessToken } = await parent();
   const resp = await api.GET(
     `/song_uploads/${params.id}/?query_chapters=1&query_uploader=1&query_reviewer=1`,
-    access_token,
+    accessToken,
     user,
     fetch,
   );

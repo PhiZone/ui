@@ -5,7 +5,7 @@ import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 
 export const actions = {
   default: async ({ request, cookies, url, fetch, locals }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const email = formData.get('email') as string,
       password = formData.get('password') as string;

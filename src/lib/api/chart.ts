@@ -3,6 +3,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 // import ChartSubmissionAPI from './chart.submission';
 import type { Accessibility, FilterBase, R } from './types';
 import type API from '.';
+import ChartSubmissionAPI from './chart.submission';
 
 export enum ChartFormat {
   RpeJson,
@@ -72,7 +73,7 @@ export interface InfoOpts {
 
 export default class ChartAPI {
   constructor(private api: API) {
-    // this.submission = new ChartSubmissionAPI(this.api);
+    this.submission = new ChartSubmissionAPI(api);
   }
 
   list = createQueryCreator(
@@ -91,5 +92,5 @@ export default class ChartAPI {
       this.api.GET(`/charts/${id}?` + queryString.stringify(rest)),
   );
 
-  // submission;
+  submission;
 }

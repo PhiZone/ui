@@ -23,7 +23,7 @@
   let open = false;
 </script>
 
-<div class="collapse collapse-arrow bg-base-100 m-4 rounded-box w-full self-center">
+<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center">
   <input type="checkbox" bind:checked={open} />
   <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
   <div class="collapse-content">

@@ -9,11 +9,14 @@
   "rks": "RKS",
   "bio": "简介",
   "gender": "性别",
-  "gender_0": "未设置",
-  "gender_1": "男",
-  "gender_2": "女",
+  "genders": {
+    "0": "未设置",
+    "1": "男",
+    "2": "女"
+  },
   "tag": "标签",
   "language": "语言",
+  "region": "地区",
   "last_login": "上次登录",
   "date_joined": "加入时间",
   "date_of_birth": "生日",

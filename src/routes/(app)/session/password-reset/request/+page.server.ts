@@ -3,7 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
     const data = await request.formData();
     const email = data.get('email') as string;
     const resp = await api.auth.password_reset.request({ email });

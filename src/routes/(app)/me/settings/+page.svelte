@@ -4,6 +4,7 @@
   import { locales, t } from '$lib/translations/config';
   import AvatarCropper from './AvatarCropper.svelte';
   import { enhance } from '$app/forms';
+  import { regions } from '$lib/constants';
 
   export let data;
 
@@ -52,19 +53,19 @@
           <div class="card-body gap-4 py-10">
             <div class="avatar gap-4 items-center min-w-fit h-fit">
               <span class="w-16 min-w-fit px-4 place-self-center">
-                {$t('getAvatar(user.avatar)')}
+                {$t('user.avatar')}
               </span>
               <div
-                class="mx-auto min-w-fit w-[140px] h-[140px] rounded-full m-2 overflow-hidden border-[4px] {user.type ==
+                class="mx-auto min-w-fit w-[140px] h-[140px] rounded-full m-2 overflow-hidden border-[4px] {user.role ==
                 'admin'
                   ? 'border-indigo-500'
-                  : user.type == 'volunteer'
+                  : user.role == 'volunteer'
                   ? 'border-emerald-500'
-                  : user.type == 'qualified'
+                  : user.role == 'qualified'
                   ? 'border-sky-500'
                   : 'border-neutral-500'}"
               >
-                <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
+                <img class="object-fill" src={user.avatar} alt="Avatar" />
               </div>
               <input
                 type="file"
@@ -91,17 +92,6 @@
               }}
             >
               <input type="number" name="id" value={user.id} hidden />
-              <input type="text" name="old_username" value={user.username} hidden />
-              <label class="join">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.username')}</span>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder={$t('user.username')}
-                  class="input input-primary join-item w-[88%] min-w-[180px]"
-                  value={user.username}
-                />
-              </label>
               <div class="flex items-center justify-between">
                 <span class="w-16 min-w-fit px-4 place-self-center">{$t('user.gender')}</span>
                 <div class="flex justify-between w-[60%]">
@@ -143,8 +133,23 @@
                   </div>
                 </div>
               </div>
+              <input type="text" name="old_username" value={user.userName} hidden />
               <label class="join">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.language')}</span>
+                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                  {$t('user.username')}
+                </span>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder={$t('user.username')}
+                  class="input input-primary join-item w-[88%] min-w-[180px]"
+                  value={user.userName}
+                />
+              </label>
+              <label class="join">
+                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                  {$t('user.language')}
+                </span>
                 <select
                   value={user.language}
                   name="language"
@@ -156,12 +161,26 @@
                 </select>
               </label>
               <label class="join">
+                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                  {$t('user.region')}
+                </span>
+                <select
+                  value={user.region}
+                  name="region"
+                  class="select input-primary join-item flex-shrink w-[88%] min-w-[180px]"
+                >
+                  {#each regions as region}
+                    <option value={region}>{$t(`region.${region}`)}</option>
+                  {/each}
+                </select>
+              </label>
+              <label class="join">
                 <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.bio')}</span>
                 <textarea
                   placeholder={$t('user.bio')}
                   name="bio"
-                  class="textarea textarea-secondary join-item rounded-none w-[88%] min-w-[180px] h-48"
-                  value={user.bio}
+                  class="textarea textarea-secondary join-item w-[88%] min-w-[180px] h-48"
+                  value={user.biography}
                 />
               </label>
               <div class="flex justify-center">

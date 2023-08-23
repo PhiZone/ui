@@ -1,94 +1,102 @@
 import { serialize } from 'object-to-formdata';
-import queryString from 'query-string';
-import type { SongSubmission } from '$lib/api';
-import {
-  stringifyFilter,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
+import type { FilterBase, R } from './types';
+
+export interface SongSubmissionDto {
+  accessibility: number;
+  authorName: null | string;
+  bpm: number;
+  dateCreated: Date;
+  dateUpdated: Date;
+  description: null | string;
+  duration: string;
+  edition: null | string;
+  editionType: number;
+  file: string;
+  id: string;
+  illustration: string;
+  illustrator: string;
+  license: null | string;
+  lyrics: null | string;
+  maxBpm: number;
+  message: null | string;
+  minBpm: number;
+  offset: number;
+  originalityProof: null | string;
+  ownerId: number;
+  previewEnd: string;
+  previewStart: string;
+  representationId: null | string;
+  status: number;
+  title: null | string;
+}
 
 // list
-export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'name' | 'composer' | 'illustrator' | 'chapters' | 'uploader' | 'reviewer';
-  id?: number | number[];
-  name?: string;
-  composer?: string;
-  illustrator?: string;
-  chapters?: number | number[];
-  status?: string;
-  uploader?: number | number[];
-  representation?: string;
-  accessibility?: string;
-  query_uploader?: number;
-  query_reviewer?: number;
-  query_chapters?: number;
+export interface Filter extends FilterBase {
+  order?: 'title' | 'authorName' | 'illustrator' | 'duration' | 'ownerId' | 'dateCreated';
+  rangeId?: string[];
+  rangeOwnerId?: number[];
 }
 
 // info
 export interface InfoOpts {
-  id: number;
-  query_uploader?: number;
-  query_reviewer?: number;
-  query_chapters?: number;
-}
-
-// upload
-export interface UploadOpts {
-  name: string;
-  song: Blob;
-  edition: string;
-  composer: string;
-  illustration: Blob;
-  lyrics?: string;
-  bpm: string;
-  offset: number;
-  preview_start: string;
-  preview_end: string;
-  chapters?: string;
-}
-
-// modify
-export interface ModifyOpts {
   id: string;
-  name?: string;
-  song?: Blob;
-  composer?: string;
-  illustration?: Blob;
-  illustrator?: string;
-  lyrics?: string;
-  bpm?: string;
-  accessibility?: number;
+}
+
+// create
+export interface CreateOpts {
+  accessibility: number;
+  authorName: null | string;
+  bpm: number;
+  description: null | string;
+  duration: string;
+  edition: null | string;
+  editionType: number;
+  file: Blob;
+  illustration: Blob;
+  illustrator: string;
+  license: null | string;
+  lyrics: null | string;
+  maxBpm: number;
+  minBpm: number;
+  offset: number;
+  originalityProof: null | Blob;
+  previewEnd: string;
+  previewStart: string;
+  title: null | string;
+}
+
+// delete
+export interface DeleteOpts {
+  id: string;
 }
 
 export default class SongSubmissionAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('song.submission.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<SongSubmission>>(
-      '/song_submission/?' + stringifyFilter(opts),
-    );
-  });
+  list = createQueryCreator(
+    'song.submission.list',
+    (opts: Filter): R<SongSubmissionDto[]> =>
+      this.api.GET('/studio/songs?' + stringifyFilter(opts)),
+  );
 
-  listAll = createQueryCreator('song.submission.listAll', (opts: ListOpts) => {
-    return this.api.GET<SongSubmission[]>('/song_submission/?' + stringifyFilter(opts, true));
-  });
+  listAll = createQueryCreator(
+    'song.submission.listAll',
+    (opts: Filter): R<SongSubmissionDto[]> =>
+      this.api.GET('/studio/songs?' + stringifyFilter(opts, true)),
+  );
 
-  info = createQueryCreator('song.submission.info', (opts: InfoOpts) => {
-    const { id, ...rest } = opts;
-    return this.api.GET<SongSubmission>(`/song_uploads/${id}/?` + queryString.stringify(rest));
-  });
+  info = createQueryCreator(
+    'song.submission.info',
+    ({ id }: InfoOpts): R<SongSubmissionDto> => this.api.GET(`/studio/songs/${id}`),
+  );
 
-  upload(opts: UploadOpts) {
-    return this.api.POST<FormData, void>('/song_uploads/', serialize(opts));
+  create(opts: CreateOpts): R {
+    return this.api.POST('/studio/songs/', serialize(opts));
   }
 
-  modify(opts: ModifyOpts) {
-    const { id, ...rest } = opts;
-    return this.api.PATCH<FormData | typeof rest, void>(
-      `/song_uploads/${id}/`,
-      rest.song || rest.illustration ? serialize(rest) : rest,
-    );
+  delete(opts: DeleteOpts): R {
+    return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
 }

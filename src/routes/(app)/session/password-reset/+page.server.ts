@@ -4,7 +4,7 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
     const data = await request.formData();
     const password = data.get('password') as string,
       confirm_password = data.get('confirm_password') as string,

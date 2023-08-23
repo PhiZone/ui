@@ -9,11 +9,14 @@
   "rks": "RKS",
   "bio": "Bio",
   "gender": "Gender",
-  "gender_0": "Unset",
-  "gender_1": "Male",
-  "gender_2": "Female",
+  "genders": {
+    "0": "Unset",
+    "1": "Male",
+    "2": "Female"
+  },
   "tag": "Tag",
   "language": "Language",
+  "region": "Region",
   "last_login": "Last Login",
   "date_joined": "Date Jonied",
   "date_of_birth": "Date of Birth",

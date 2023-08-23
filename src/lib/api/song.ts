@@ -1,8 +1,8 @@
 import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, R } from './types';
 import type { ChapterDto } from './chapter';
-// import SongSubmissionAPI from './song.submission';
 import type API from '.';
+import SongSubmissionAPI from './song.submission';
 
 export interface ChartLevelDto {
   count: number;
@@ -75,7 +75,7 @@ export interface AdmissionListOpts extends InfoOpts, FilterBase {
 
 export default class SongAPI {
   constructor(private api: API) {
-    // this.submission = new SongSubmissionAPI(api);
+    this.submission = new SongSubmissionAPI(api);
   }
 
   list = createQueryCreator(
@@ -99,5 +99,5 @@ export default class SongAPI {
     ({ id }: InfoOpts): R<SongDto> => this.api.GET(`/songs/${id}`),
   );
 
-  // submission;
+  submission;
 }

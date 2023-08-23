@@ -54,14 +54,11 @@
       <div class="mt-3 flex justify-center">
         <a
           href="/studio/chart-submissions/new"
-          class="btn btn-secondary text-lg btn-xl btn-outline glass mr-3"
+          class="btn btn-secondary lg:btn-lg btn-outline mr-3"
         >
           {$t('studio.upload_chart')}
         </a>
-        <a
-          href="/studio/song-submissions/new"
-          class="btn btn-accent text-lg btn-xl btn-outline glass ml-3"
-        >
+        <a href="/studio/song-submissions/new" class="btn btn-accent lg:btn-lg btn-outline ml-3">
           {$t('studio.upload_song')}
         </a>
       </div>

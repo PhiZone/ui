@@ -1,92 +1,90 @@
-import type { ChartSubmission } from '$lib/api';
 import { serialize } from 'object-to-formdata';
-import {
-  stringifyFilter,
-  type ListOptsBase,
-  type ResponseDto,
-  createQueryCreator,
-} from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
+import queryString from 'query-string';
+import type { Filter } from './song';
+import type { R } from './types';
 
-// list
-export interface ListOpts extends ListOptsBase {
-  order_by?: 'id' | 'level' | 'song';
-  id?: number | number[];
-  level?: string | string[];
-  song?: number | number[];
-  song_upload?: number | number[];
-  status?: number | number[];
-  uploader?: number | number[];
-  representation?: string;
-  highest_difficulty?: number;
-  lowest_difficulty?: number;
-  highest_note_count?: number;
-  lowest_note_count?: number;
+export interface ChartSubmissionDto {
+  accessibility: number;
+  admissionStatus: number;
+  authorName: string;
+  dateCreated: Date;
+  dateUpdated: Date;
+  dateVoted: Date | null;
+  description: null | string;
+  difficulty: number;
+  file: string;
+  format: number;
+  id: string;
+  illustration: null | string;
+  illustrator: null | string;
+  isRanked: boolean;
+  level: null | string;
+  levelType: number;
+  noteCount: number;
+  ownerId: number;
+  representationId: null | string;
+  songId: null | string;
+  songSubmissionId: null | string;
+  status: number;
+  title: null | string;
+  volunteerStatus: number;
 }
 
 // info
 export interface InfoOpts {
-  id: number;
+  id: string;
 }
 
-// upload
-export interface UploadOpts {
-  chart: Blob;
-  level: string;
+// create
+export interface CreateOpts {
+  accessibility: number;
+  authorName: string;
+  description: null | string;
   difficulty: number;
-  description?: string;
-  charter: number;
-  // notes: number;
-  song?: number;
-  song_upload?: number;
-}
-
-// modify
-export interface ModifyOpts {
-  id: number;
-  chart?: Blob;
-  level?: string;
-  difficulty?: number;
-  description?: string;
-  charter?: string;
-  // notes?: number;
-  song?: number;
-  song_upload?: number;
+  file: Blob;
+  illustration: null | string;
+  illustrator: null | string;
+  isRanked: boolean;
+  level: null | string;
+  levelType: number;
+  songId: null | string;
+  songSubmissionId: null | string;
+  title: null | string;
 }
 
 // delete
-export interface DelOpts {
-  id: number;
+export interface DeleteOpts {
+  id: string;
 }
 
 export default class ChartSubmissionAPI {
   constructor(private api: API) {}
 
-  list = createQueryCreator('chart.submission.list', (opts: ListOpts) => {
-    return this.api.GET<ResponseDto<ChartSubmission>>('/chart_uploads/?' + stringifyFilter(opts));
-  });
+  list = createQueryCreator(
+    'chart.submission.list',
+    (opts: Filter): R<ChartSubmissionDto[]> =>
+      this.api.GET('/studio/charts?' + stringifyFilter(opts)),
+  );
 
-  listAll = createQueryCreator('chart.submission.listAll', (opts: ListOpts) => {
-    return this.api.GET<ChartSubmission[]>('/chart_uploads/?' + stringifyFilter(opts, true));
-  });
+  listAll = createQueryCreator(
+    'chart.submission.listAll',
+    (opts: Filter): R<ChartSubmissionDto[]> =>
+      this.api.GET('/studio/charts?' + stringifyFilter(opts, true)),
+  );
 
-  info = createQueryCreator('chart.submission.info', (opts: InfoOpts) => {
-    return this.api.GET<ChartSubmission>(`/chart_uploads/${opts.id}`);
-  });
+  info = createQueryCreator(
+    'chart.submission.info',
+    ({ id, ...rest }: InfoOpts): R<ChartSubmissionDto> =>
+      this.api.GET(`/studio/charts/${id}?` + queryString.stringify(rest)),
+  );
 
-  upload(opts: UploadOpts) {
-    return this.api.POST<FormData, void>('/chart_uploads/', serialize(opts));
+  create(opts: CreateOpts): R {
+    return this.api.POST('/studio/charts/', serialize(opts));
   }
 
-  modify(opts: ModifyOpts) {
-    const { id, ...rest } = opts;
-    return this.api.PATCH<FormData | typeof rest, void>(
-      `/chart_uploads/${id}/`,
-      rest.chart ? serialize(rest) : rest,
-    );
-  }
-
-  del(opts: DelOpts) {
-    return this.api.DELETE<void>(`/chart_uploads/${opts.id}`);
+  delete(opts: DeleteOpts): R {
+    return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
 }

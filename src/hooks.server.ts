@@ -6,30 +6,34 @@ import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
   console.log(event.url.href);
-  let access_token = event.cookies.get('access_token'),
-    refresh_token = event.cookies.get('refresh_token');
+  let accessToken = event.cookies.get('access_token'),
+    refreshToken = event.cookies.get('refresh_token');
 
-  if (refresh_token) {
+  if (refreshToken) {
     let resp;
-    const api = new API(event.fetch, access_token, event.locals.user);
+    const api = new API(event.fetch, accessToken, event.locals.user);
     resp = await api.user.me();
     if (resp.ok) {
       event.locals.user = (await resp.json()).data as UserDetailedDto;
+      event.locals.lastRetrieval = Date.now();
     } else {
       resp = await api.auth.token({
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
         grant_type: 'refresh_token',
-        refresh_token,
+        refresh_token: refreshToken,
       });
 
       if (resp.ok) {
-        ({ access_token, refresh_token } = await resp.json());
-        setTokens(event.cookies, access_token, refresh_token);
+        ({ access_token: accessToken, refresh_token: refreshToken } = await resp.json());
+        setTokens(event.cookies, accessToken, refreshToken);
 
-        const api = new API(event.fetch, access_token);
+        const api = new API(event.fetch, accessToken);
         resp = await api.user.me();
-        if (resp.ok) event.locals.user = (await resp.json()).data as UserDetailedDto;
+        if (resp.ok) {
+          event.locals.user = (await resp.json()).data as UserDetailedDto;
+          event.locals.lastRetrieval = Date.now();
+        }
       } else {
         event.locals.user = undefined;
       }
@@ -39,8 +43,8 @@ export const handle = (async ({ event, resolve }) => {
   }
 
   if (event.locals.user) {
-    event.locals.access_token = access_token;
-    event.locals.refresh_token = refresh_token;
+    event.locals.accessToken = accessToken;
+    event.locals.refreshToken = refreshToken;
   } else {
     clearTokens(event.cookies);
   }

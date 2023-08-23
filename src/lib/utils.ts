@@ -224,12 +224,12 @@ export function getLevelDisplay(difficulty: number) {
   else return Math.floor(difficulty).toString();
 }
 
-export function setTokens(cookies: Cookies, access_token: string, refresh_token: string) {
-  cookies.set('access_token', access_token, {
+export function setTokens(cookies: Cookies, accessToken: string, refreshToken: string) {
+  cookies.set('access_token', accessToken, {
     path: '/',
     maxAge: 43200,
   });
-  cookies.set('refresh_token', refresh_token, {
+  cookies.set('refresh_token', refreshToken, {
     path: '/',
     maxAge: 1296000,
   });

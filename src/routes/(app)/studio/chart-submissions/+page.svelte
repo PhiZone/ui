@@ -2,13 +2,13 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Pagination from '$lib/components/Pagination.svelte';
-  import Submission from '$lib/components/chart_submission.svelte';
+  import ChartSubmission from '$lib/components/ChartSubmission.svelte';
   import SearchOptions from '$lib/components/SearchOptions.svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
 
-  $: query = createQuery(api.song.submission.list(searchParams));
+  $: query = createQuery(api.chart.submission.list(searchParams));
 </script>
 
 <svelte:head>
@@ -25,33 +25,44 @@
           {$t('studio.chart_submissions')}
         </h1>
         <div class="flex justify-between gap-3">
-          <label for="list-options" class="btn btn-secondary text-lg btn-xl btn-outline glass">
-            {$t('common.list_options')}
-          </label>
-          <a
-            href="/studio/chart-submissions/new"
-            class="btn btn-accent text-lg btn-xl btn-outline glass"
-          >
+          <a href="/studio/chart-submissions/new" class="btn btn-accent text-lg btn-xl btn-outline">
             {$t('studio.upload_chart')}
           </a>
         </div>
       </div>
+      <SearchOptions
+        params={searchParams}
+        filters={[
+          {
+            value: 'status',
+            name: $t('studio.submission.status'),
+            options: [
+              { value: '0', name: $t('studio.submission.statuses.0') },
+              { value: '1', name: $t('studio.submission.statuses.1') },
+              { value: '2', name: $t('studio.submission.statuses.2') },
+            ],
+          },
+          { value: 'uploader', name: $t('studio.submission.uploader_id'), options: 'number' },
+          { value: 'reviewer', name: $t('studio.submission.reviewer_id'), options: 'number' },
+          { value: 'chapter', name: $t('chart.chapter'), options: 'number' },
+        ]}
+        orders={[
+          { value: 'id', name: $t('chart.id') },
+          { value: 'name', name: $t('chart.name') },
+          { value: 'composer', name: $t('chart.composer') },
+          { value: 'illustrator', name: $t('chart.illustrator') },
+          { value: 'uploader', name: $t('studio.submission.uploader') },
+          { value: 'reviewer', name: $t('studio.submission.reviewer') },
+        ]}
+      />
       <div class="min-w-fit form-control gap-4">
-        {#if pageStatus === Status.OK && submissions}
-          {#if submissions.length > 0}
-            {#each submissions as submission}
-              <Submission {submission} {user} />
+        {#if $query.isSuccess}
+          {@const { total, perPage, data } = $query.data}
+          {#if total && perPage && data && data.length > 0}
+            {#each data as submission}
+              <ChartSubmission {submission} />
             {/each}
-            <Pagination
-              bind:previous={previousSubmissions}
-              bind:next={nextSubmissions}
-              bind:results={submissions}
-              bind:count={submissionCount}
-              bind:pageIndex
-              bind:status={pageStatus}
-              token={access_token}
-              {user}
-            />
+            <Pagination {total} {perPage} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}

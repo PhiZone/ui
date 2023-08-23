@@ -1,6 +1,7 @@
 export const load = async ({ locals }) => {
   return {
-    access_token: locals.access_token,
+    accessToken: locals.accessToken,
     user: locals.user,
+    lastRetrieval: locals.lastRetrieval,
   };
 };

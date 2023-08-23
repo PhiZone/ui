@@ -42,7 +42,7 @@ export const load = async () => {
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
-    const api = new API(fetch, locals.access_token, locals.user);
+    const api = new API(fetch, locals.accessToken, locals.user);
 
     const formData = await request.formData();
     const form = await superValidate(formData, schema);

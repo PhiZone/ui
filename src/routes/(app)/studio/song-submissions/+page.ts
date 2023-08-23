@@ -6,7 +6,8 @@ export const load = async ({ url, parent }) => {
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
   searchParams.page = page;
-  if (user && getUserPrivilege(user.type) < 3) searchParams.uploader = user.id;
+  searchParams.desc = searchParams.desc ?? true;
+  if (user && getUserPrivilege(user.role) < 3) searchParams.ownerId = user.id;
   await queryClient.prefetchQuery(api.song.submission.list(searchParams));
   return {
     searchParams,
