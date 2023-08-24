@@ -7,9 +7,9 @@
   <div class="drawer-content">
     <slot />
   </div>
-  <div class="pt-[64px] drawer-side bg-base-100">
+  <div class="pt-[60px] drawer-side">
     <label for="studio-sidebar" class="drawer-overlay" />
-    <ul class="menu px-4 min-w-fit w-72 text-base-content text-lg">
+    <ul class="menu px-4 min-w-fit w-72 h-full shadow-lg bg-base-200 bg-opacity-70 backdrop-blur-lg text-base-content text-lg">
       <li>
         <a href="/studio">{$t('studio.homepage')}</a>
       </li>

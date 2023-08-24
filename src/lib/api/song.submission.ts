@@ -28,6 +28,7 @@ export interface SongSubmissionDto {
   previewEnd: string;
   previewStart: string;
   representationId: null | string;
+  reviewerId: number | null;
   status: number;
   title: null | string;
 }

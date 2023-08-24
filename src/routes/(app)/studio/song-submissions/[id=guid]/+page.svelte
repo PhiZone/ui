@@ -2,58 +2,51 @@
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { onMount } from 'svelte';
-  import * as api from '$lib/api';
   import Chapter from '$lib/components/Chapter.svelte';
   import { goto, preloadData } from '$app/navigation';
+  import reply from '$lib/api/reply.js';
+  import { createQuery } from '@tanstack/svelte-query';
 
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  export let data;
 
-  let submissionStatus: number, reply: string;
+  $: ({ searchParams, id, user, api } = data);
 
-  onMount(() => {
-    if (status === Status.OK && content) {
-      submissionStatus = content.status;
-    } else if (error) {
-      console.log(error);
-    }
-  });
-  const handleSubmit = async () => {
-    const resp = await api.POST(
-      '/review/',
-      {
-        song_upload: content?.id,
-        attitude: submissionStatus,
-        message: reply,
-      },
-      access_token,
-      user,
-    );
-    if (resp.ok) {
-      window.location.reload();
-    } else {
-      console.log(await resp.json());
-    }
-  };
+  $: submission = createQuery(api.song.submission.info({ id }));
+  $: uploader = createQuery(
+    api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
+  );
+  $: reviewer = createQuery(
+    api.user.info(
+      { id: $submission.data?.data.reviewerId ?? 0 },
+      { enabled: $submission.isSuccess && !!$submission.data?.data.reviewerId },
+    ),
+  );
+  $: representation = createQuery(
+    api.song.info(
+      { id: $submission.data?.data.representationId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+    ),
+  );
 </script>
 
 <svelte:head>
   <title>
-    {$t('studio.song_submission')} - {content?.name} | {$t('common.title')}
+    {$t('studio.song_submission')} - {$submission.data?.data.title} | {$t('common.title')}
   </title>
 </svelte:head>
 
-{#if status === Status.OK && content !== null}
+{#if $submission.isSuccess}
+  {@const submission = $submission.data.data}
   <input type="checkbox" id="studio-song-submission" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100">
       <h3 class="font-bold text-lg">{$t('studio.submission.reply_v')}</h3>
+      <!-- svelte-ignore a11y-label-has-associated-control -->
       <label class="join my-2">
         <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
           {$t('studio.submission.status')}
         </span>
-        <select bind:value={submissionStatus} class="select select-primary join-item w-3/4">
+        <!-- <select bind:value={submissionStatus} class="select select-primary join-item w-3/4">
           <option value="1">{$t('studio.submission.volunteer_statuses.1')}</option>
           <option value="2">{$t('studio.submission.volunteer_statuses.2')}</option>
         </select>
@@ -80,7 +73,7 @@
         >
           {$t('common.submit')}
         </label>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="bg-base-200 min-h-screen py-24 px-12 justify-center flex">
@@ -94,21 +87,21 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold gap-4 items-center">
-              {content.name}
+              {submission.title}
             </div>
             <div>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.song_name')}
                 </span>
-                {content.name}
+                {submission.title}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.audio')}
                 </span>
                 <a
-                  href={content.song}
+                  href={submission.file}
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
@@ -122,7 +115,7 @@
                   {$t('common.form.illustration')}
                 </span>
                 <a
-                  href={content.illustration}
+                  href={submission.illustration}
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
@@ -133,104 +126,106 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
-                {content.edition}
+                {submission.edition}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.composer')}
                 </span>
-                {content.composer}
+                {submission.authorName}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.illustrator')}
                 </span>
-                {content.illustrator}
+                {submission.illustrator}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
-                {content.bpm}
+                {submission.bpm}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('song.offset')}</span>
-                {`${content.offset}ms`}
+                {`${submission.offset}ms`}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.preview_start')}
                 </span>
-                {content.preview_start.replace(/^00:/, '')}
+                {submission.previewStart.replace(/^00:/, '')}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.preview_end')}
                 </span>
-                {content.preview_end.replace(/^00:/, '')}
+                {submission.previewEnd.replace(/^00:/, '')}
               </p>
-              {#if getUserPrivilege(user.type) >= 3 && typeof content.uploader == 'object'}
+              {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
+                {@const uploader = $uploader.data.data}
                 <p class="min-w-fit">
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('studio.submission.uploader')}
                   </span>
-                  {content.uploader.username}
+                  {uploader.userName}
                 </p>
               {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.uploaded_at')}
                 </span>
-                {parseDateTime(content.time)}
+                {parseDateTime(submission.dateCreated)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.status')}
                 </span>
-                {$t(`studio.submission.volunteer_statuses.${content.status}`)}
+                {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
               </p>
-              {#if content.reviewer && typeof content.reviewer === 'object'}
+              {#if $reviewer.isSuccess}
+                {@const reviewer = $reviewer.data.data}
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('studio.submission.reviewer')}
                   </span>
-                  {content.reviewer.username}
+                  {reviewer.userName}
                 </p>
               {/if}
-              {#if content.message}
+              {#if submission.message}
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('studio.submission.reply')}
                   </span>
-                  {content.message}
+                  {submission.message}
                 </p>
               {/if}
-              {#if content.description}
-                <p class="content">
+              {#if submission.description}
+                <p class="submission">
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('common.description')}
                   </span>
-                  {content.description}
+                  {submission.description}
                 </p>
               {/if}
             </div>
-            <audio class="w-full" controls src={content.song} />
+            <audio class="w-full" controls src={submission.file} />
             <div class="card-actions flex items-center justify-end">
-              {#if (typeof content.uploader === 'object' && content.uploader.id === user.id) || getUserPrivilege(user.type) >= 3}
+              {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 3)}
                 <button
-                  class="btn btn-primary btn-outline glass text-lg w-32"
+                  class="btn btn-primary btn-outline text-lg w-32"
                   on:click={() => {
-                    goto(`/studio/song-submissions/${content?.id}/edit`);
+                    goto(`/studio/song-submissions/${submission?.id}/edit`);
                   }}
                   on:pointerenter={() => {
-                    preloadData(`/studio/song-submissions/${content?.id}/edit`);
+                    preloadData(`/studio/song-submissions/${submission?.id}/edit`);
                   }}
                 >
                   {$t('common.edit')}
                 </button>
               {/if}
-              {#if getUserPrivilege(user.type) >= 3}
+              {#if user && getUserPrivilege(user.role) >= 3}
                 <label
                   for="studio-song-submission"
-                  class="btn btn-primary btn-outline glass text-lg w-32"
+                  class="btn btn-primary btn-outline text-lg w-32"
                 >
                   {$t('studio.submission.reply_v')}
                 </label>
@@ -240,18 +235,6 @@
         </div>
       </div>
     </div>
-    {#if typeof content.chapters == 'object' && content.chapters.length > 0}
-      <div class="mx-4 w-80 form-control">
-        {#each content.chapters as chapter}
-          <div class="indicator my-4 w-full">
-            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
-              {$t('song.chapter')}
-            </span>
-            <Chapter {chapter} token={access_token} {user} />
-          </div>
-        {/each}
-      </div>
-    {/if}
   </div>
 {/if}
 

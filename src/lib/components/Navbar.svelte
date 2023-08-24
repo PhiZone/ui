@@ -62,7 +62,7 @@
       {$t('common.title')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
-      <label for="studio-sidebar" class="btn btn-primary btn-outline drawer-button lg:hidden">
+      <label for="studio-sidebar" class="btn btn-primary btn-outline drawer-button mx-4 lg:hidden">
         {$t('studio.drawer')}
       </label>
     {/if}
