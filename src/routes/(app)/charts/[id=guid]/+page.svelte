@@ -12,7 +12,7 @@
   import Comments from '$lib/components/Comments.svelte';
   import ChartRadar from '$lib/components/ChartRadar.svelte';
 
-  export let data;
+  export let data, form;
   $: ({ searchParams, id, user, api } = data);
 
   const getMultiplier = (level: number): number => {
@@ -51,8 +51,6 @@
   let concord = 0;
   let impression = 0;
   let open = false;
-
-  export let form;
 
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(

@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import Chapter from '$lib/components/Chapter.svelte';
-  import { goto, preloadData } from '$app/navigation';
-  import reply from '$lib/api/reply.js';
+  import { getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
@@ -74,6 +70,7 @@
           {$t('common.submit')}
         </label>
       </div> -->
+      </label>
     </div>
   </div>
   <div class="bg-base-200 min-h-screen py-24 px-12 justify-center flex">
@@ -124,9 +121,32 @@
                   {$t('common.download')}
                 </a>
               </p>
+              {#if submission.license}
+                <p>
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.form.license')}
+                  </span>
+                  <a
+                    href={submission.license}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="hover:underline"
+                    download
+                  >
+                    {$t('common.download')}
+                  </a>
+                </p>
+              {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
-                {submission.edition}
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('song.edition')}
+                </span>
+                <btn class="btn btn-xs btn-neutral text-sm font-normal no-animation">
+                  {$t(`song.edition_types.${submission.editionType}`)}
+                </btn>
+                {#if submission.edition}
+                  {submission.edition}
+                {/if}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
@@ -142,7 +162,11 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
-                {submission.bpm}
+                {#if submission.minBpm === submission.maxBpm}
+                  {submission.bpm}
+                {:else}
+                  {submission.minBpm} ~ {submission.maxBpm} ({submission.bpm})
+                {/if}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('song.offset')}</span>
@@ -210,17 +234,12 @@
             <audio class="w-full" controls src={submission.file} />
             <div class="card-actions flex items-center justify-end">
               {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 3)}
-                <button
+                <a
+                  href="/studio/song-submissions/${submission?.id}/edit"
                   class="btn btn-primary btn-outline text-lg w-32"
-                  on:click={() => {
-                    goto(`/studio/song-submissions/${submission?.id}/edit`);
-                  }}
-                  on:pointerenter={() => {
-                    preloadData(`/studio/song-submissions/${submission?.id}/edit`);
-                  }}
                 >
                   {$t('common.edit')}
-                </button>
+                </a>
               {/if}
               {#if user && getUserPrivilege(user.role) >= 3}
                 <label

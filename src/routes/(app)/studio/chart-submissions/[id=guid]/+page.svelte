@@ -1,64 +1,57 @@
 <script lang="ts">
-  import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
-  import {
-    getCompressedImage,
-    getLevelColor,
-    getUserLevel,
-    getUserPrivilege,
-    parseDateTime,
-    parseRichText,
-  } from '$lib/utils';
-  import { onMount } from 'svelte';
-  import * as api from '$lib/api';
   import Song from '$lib/components/Song.svelte';
   import { goto, preloadData } from '$app/navigation';
+  import { richtext } from '$lib/richtext.js';
+  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils.js';
+  import { createQuery } from '@tanstack/svelte-query';
 
-  export let data: import('./$types').PageData;
-  $: ({ status, content, error, access_token, user } = data);
+  export let data;
+  $: ({ searchParams, id, user, api } = data);
 
   let score = 0,
     message: string;
 
-  onMount(() => {
-    if (error) {
-      console.log(error);
-    }
-  });
-
   const levelTypes = ['EZ', 'HD', 'IN', 'AT', 'SP'];
 
-  const handleSubmit = async () => {
-    const resp = await api.POST(
-      '/volunteer_votes/',
-      {
-        chart: content?.id,
-        value: score,
-        message: message,
-      },
-      access_token,
-      user,
-    );
-    if (resp.ok) {
-      window.location.reload();
-    } else {
-      console.log(await resp.json());
-    }
-  };
+  $: submission = createQuery(api.chart.submission.info({ id }));
+  $: song = createQuery(
+    api.song.info(
+      { id: $submission.data?.data.songId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data.data.songId },
+    ),
+  );
+  $: songSubmission = createQuery(
+    api.song.submission.info(
+      { id: $submission.data?.data.songSubmissionId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data.data.songSubmissionId },
+    ),
+  );
+  $: uploader = createQuery(
+    api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
+  );
+  // $: votes = createQuery(api.volunteerVote.listAll({ chartId: id }));
+
+  $: charter = richtext($submission.data?.data.authorName ?? '');
 </script>
 
 <svelte:head>
   <title>
-    {$t('studio.chart_submission')} - {content?.song
-      ? content?.song.name
-      : content?.song_upload?.name}
-    {content
-      ? `[${content.level} ${content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}]`
+    {$t('studio.chart_submission')} - {$song.isSuccess
+      ? $song.data.data.title
+      : $songSubmission.isSuccess
+      ? $songSubmission.data.data.title
+      : ''}
+    {$submission.isSuccess
+      ? `[${$submission.data.data.level} ${
+          $submission.data.data.difficulty != 0 ? Math.floor($submission.data.data.difficulty) : '?'
+        }]`
       : ''} | {$t('common.title')}
   </title>
 </svelte:head>
 
-{#if status === Status.OK && content !== null}
+{#if $submission.isSuccess}
+  {@const submission = $submission.data.data}
   <input type="checkbox" id="studio-chart-submission" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100">
@@ -81,14 +74,14 @@
         <label for="studio-chart-submission" class="btn btn-primary btn-outline join-item text-lg">
           {$t('common.back')}
         </label>
-        <label
+        <!-- <label
           for="studio-chart-submission"
           class="btn btn-primary btn-outline join-item text-lg"
           on:click={handleSubmit}
           on:keyup
         >
           {$t('common.submit')}
-        </label>
+        </label> -->
       </div>
     </div>
   </div>
@@ -103,30 +96,30 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold gap-4 items-center">
-              {#if content.song}
+              {#if $song.isSuccess}
                 <a
                   class="hover:underline"
-                  href={`/songs/${content.song.id}`}
+                  href={`/songs/${$song.data.data.id}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {content.song.name}
+                  {$song.data.data.title}
                 </a>
-              {:else}
+              {:else if $songSubmission.isSuccess}
                 <a
                   class="hover:underline"
-                  href={`/studio/song-submissions/${content.song_upload?.id}`}
+                  href={`/studio/song-submissions/${$songSubmission.data.data.id}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {content.song_upload?.name}
+                  {$songSubmission.data.data.title}
                 </a>
               {/if}
               <button
-                class={`btn ${getLevelColor(content.level_type)} btn-sm text-2xl no-animation`}
+                class={`btn ${getLevelColor(submission.levelType)} btn-sm text-2xl no-animation`}
               >
-                {content.level}
-                {content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}
+                {submission.level}
+                {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
               </button>
             </div>
             <div>
@@ -134,20 +127,20 @@
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.chart_level')}
                 </span>
-                [{levelTypes[content.level_type]}] {content.level}
+                [{levelTypes[submission.levelType]}] {submission.level}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.chart_difficulty_2')}
                 </span>
-                {content.difficulty.toFixed(1)}
+                {submission.difficulty.toFixed(1)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.chart')}
                 </span>
                 <a
-                  href={content.chart}
+                  href={submission.file}
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
@@ -158,90 +151,70 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
-                {#each parseRichText(content.charter) as t}
-                  {#if t.id > 0}
-                    <a
-                      href={`/users/${t.id}`}
-                      class="text-accent hover:underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {t.text}
-                    </a>
-                  {:else}
-                    {t.text}
-                  {/if}
-                {/each}
+                {#if submission.authorName}
+                  {@html $charter}
+                {:else}
+                  {$t('common.anonymous')}
+                {/if}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
-                {content.notes}
+                {submission.noteCount}
               </p>
-              {#if getUserPrivilege(user.type) >= 3 && typeof content.uploader == 'object'}
+              {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
                 <p class="min-w-fit">
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('studio.submission.uploader')}
                   </span>
-                  {content.uploader.username}
+                  {$uploader.data.data.userName}
                 </p>
               {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.uploaded_at')}
                 </span>
-                {parseDateTime(content.time)}
-              </p>
-              <p>
-                <span class="badge badge-primary badge-outline mr-1">
-                  {$t('studio.submission.collab_status')}
-                </span>
-                {$t(`studio.submission.bi_statuses.${content.collab_status}`)}
+                {parseDateTime(submission.dateCreated)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.adm_status')}
                 </span>
-                {$t(`studio.submission.bi_statuses.${content.adm_status}`)}
+                {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.volunteer_status')}
                 </span>
-                {$t(`studio.submission.bi_statuses.${content.volunteer_status}`)}
+                {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.overall_status')}
                 </span>
-                {$t(`studio.submission.statuses.${content.status}`)}
+                {$t(`studio.submission.statuses.${submission.status}`)}
               </p>
-              {#if content.description}
+              {#if submission.description}
                 <p class="content">
                   <span class="badge badge-primary badge-outline mr-1">
                     {$t('chart.description')}
                   </span>
-                  {content.description}
+                  {submission.description}
                 </p>
               {/if}
             </div>
             <div class="card-actions flex items-center justify-end gap-2">
-              {#if (typeof content.uploader === 'object' && content.uploader.id === user.id) || getUserPrivilege(user.type) >= 3}
-                <button
-                  class="btn btn-primary btn-outline glass text-lg w-32"
-                  on:click={() => {
-                    goto(`/studio/chart-submissions/${content?.id}/edit`);
-                  }}
-                  on:pointerenter={() => {
-                    preloadData(`/studio/chart-submissions/${content?.id}/edit`);
-                  }}
+              {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 3)}
+                <a
+                  href="/studio/chart-submissions/${submission.id}/edit"
+                  class="btn btn-primary btn-outline text-lg w-32"
                 >
                   {$t('common.edit')}
-                </button>
+                </a>
               {/if}
-              {#if getUserPrivilege(user.type) >= 3}
+              {#if user && getUserPrivilege(user.role) >= 3}
                 <label
                   for="studio-chart-submission"
-                  class="btn btn-primary btn-outline glass text-lg w-32"
+                  class="btn btn-primary btn-outline text-lg w-32"
                 >
                   {$t('common.vote_v')}
                 </label>
@@ -250,7 +223,7 @@
           </div>
         </div>
       </div>
-      {#each content.votes as vote}
+      <!-- {#each submission.votes as vote}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
@@ -296,15 +269,16 @@
             </div>
           </div>
         </div>
-      {/each}
+      {/each} -->
     </div>
-    {#if content.song && typeof content.song == 'object'}
+    {#if $song.isSuccess}
+      {@const song = $song.data.data}
       <div class="mx-4 w-80 form-control">
         <div class="indicator my-4 w-full">
           <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
             {$t('song.song')}
           </span>
-          <Song song={content.song} token={access_token} {user} />
+          <Song {song} />
         </div>
       </div>
     {/if}

@@ -25,7 +25,7 @@
     <figure class="min-w-[30%] max-w-[30%]">
       <img
         class="object-cover w-full h-full"
-        src={getCompressedImage(submission.illustration)}
+        src={submission.illustration}
         alt="Illustration"
       />
     </figure>

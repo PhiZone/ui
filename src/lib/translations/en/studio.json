@@ -26,8 +26,8 @@
       "2": "Rejected"
     },
     "bi_statuses": {
-      "false": "Not (Yet) Approved",
-      "true": "Approved"
+      "0": "Not (Yet) Approved",
+      "1": "Approved"
     },
     "accessibilities": {
       "0": "Public",

@@ -78,6 +78,7 @@
     "audio": "曲目文件",
     "chart": "谱面文件",
     "illustration": "曲绘文件",
+    "license": "授权声明",
     "song_name": "曲目名称",
     "chart_level": "谱面等级",
     "level_preview": "谱面等级预览",
