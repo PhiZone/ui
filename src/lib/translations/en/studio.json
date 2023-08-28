@@ -37,7 +37,8 @@
     "volunteer_status": "Volunteer Status",
     "collab_status": "Collab Status",
     "adm_status": "Admission Status",
-    "uploaded_at": "Uploaded At",
+    "created_at": "Created At",
+    "updated_at": "Updated At",
     "approved_at": "Approved At",
     "reply": "Reply",
     "reply_v": "Reply",
@@ -64,7 +65,9 @@
     "original_audio": "Original Audio",
     "original_illustration": "Original Illustration",
     "reviewer": "Reviewer",
-    "reviewer_id": "Reviewer ID"
+    "reviewer_id": "Reviewer ID",
+    "is_original": "Is original",
+    "is_hidden": "Is hidden"
   },
   "request": {
     "accept": "Accept",

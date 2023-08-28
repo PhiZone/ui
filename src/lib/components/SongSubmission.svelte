@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, parseDateTime } from '$lib/utils';
+  import { parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
   import type { SongSubmissionDto } from '$lib/api/song.submission';
 
@@ -33,14 +33,6 @@
       <h2 class="card-title text-2xl mb-3 min-w-fit">
         {submission.title}
       </h2>
-      <div class="flex items-center min-w-fit">
-        <p class="min-w-fit">
-          <span class="badge badge-primary badge-outline mr-1">
-            {$t('studio.submission.status')}
-          </span>
-          {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
-        </p>
-      </div>
       {#if submission.message}
         <div class="flex items-center min-w-fit">
           <p class="min-w-fit">
@@ -53,6 +45,12 @@
       {/if}
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.status')}
+          </span>
+          {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
+        </p>
+        <p class="min-w-fit">
           {#if $uploader.isSuccess}
             {@const uploader = $uploader.data?.data}
             <span class="badge badge-primary badge-outline mr-1">
@@ -61,11 +59,19 @@
             {uploader.userName}
           {/if}
         </p>
+      </div>
+      <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
-            {$t('studio.submission.uploaded_at')}
+            {$t('studio.submission.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
+        </p>
+        <p class="min-w-fit">
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.updated_at')}
+          </span>
+          {parseDateTime(submission.dateUpdated)}
         </p>
       </div>
     </div>

@@ -39,19 +39,19 @@ export interface InfoOpts {
 
 // create
 export interface CreateOpts {
-  accessibility: number;
-  authorName: string;
-  description: null | string;
-  difficulty: number;
-  file: Blob;
-  illustration: null | string;
-  illustrator: null | string;
-  isRanked: boolean;
-  level: null | string;
-  levelType: number;
-  songId: null | string;
-  songSubmissionId: null | string;
-  title: null | string;
+  Accessibility: number;
+  AuthorName: string;
+  Description?: string | undefined;
+  Difficulty: number;
+  File: File;
+  Illustration?: File | undefined;
+  Illustrator?: string | undefined;
+  IsRanked: boolean;
+  Level?: string | undefined;
+  LevelType: number;
+  SongId?: string | undefined;
+  SongSubmissionId?: string | undefined;
+  Title?: string | undefined;
 }
 
 // delete
@@ -81,7 +81,7 @@ export default class ChartSubmissionAPI {
   );
 
   create(opts: CreateOpts): R {
-    return this.api.POST('/studio/charts/', serialize(opts));
+    return this.api.POST('/studio/charts', serialize(opts));
   }
 
   delete(opts: DeleteOpts): R {

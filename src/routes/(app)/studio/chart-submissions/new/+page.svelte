@@ -1,122 +1,34 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import * as api from '$lib/api';
-  import { ContentType, Status } from '$lib/constants';
-  import { goto } from '$app/navigation';
-  import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/api';
+  import { ContentType, LEVEL_TYPES, Status } from '$lib/constants';
   import Charter from '$lib/components/User.svelte';
-  import { getLevelColor, parseRichText } from '$lib/utils';
+  import { getLevelColor } from '$lib/utils';
+  import { error } from '@sveltejs/kit';
+  import { superForm } from 'sveltekit-superforms/client';
+  import { createQuery } from '@tanstack/svelte-query';
 
-  export let data: import('./$types').PageData;
-  $: ({ access_token, user } = data);
+  export let data;
 
-  let errorMsg = '',
-    levelType = 2,
-    level = '',
-    difficulty = '',
-    charter = '',
-    song = '',
-    songSubmission = '',
-    songSwitch = true,
-    description = '',
-    chart: File | null = null,
-    status = Status.OK,
-    dataIncomplete = false,
-    error: ChartSubmissionError,
-    songList: Song[] | null = null,
-    songSubmissionList: SongSubmission[],
-    newCharterId: number | null = null,
-    newCharter: User | null = null,
-    newCharterStatus = Status.OK,
-    newCharterErr = '',
-    newCharterText = '';
+  $: ({ user, api } = data);
 
-  const levelTypes = ['EZ', 'HD', 'IN', 'AT', 'SP'];
+  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
+    data.form,
+  );
 
-  const getSongs = async () => {
-    const resp = await api.GET('/songs/?order=-id&pagination=0', access_token, user);
-    if (resp.ok) {
-      songList = await resp.json();
-    } else {
-      console.log(await resp.json());
-    }
-  };
+  let charterName = '';
+  let newCharterId = 0;
+  let newCharterDisplay = '';
+  let queryCharter = false;
+  let songSwitch = false;
 
-  const getSongSubmissions = async () => {
-    const resp = await api.GET(
-      `/song_uploads/?order=-id&uploader=${user.id}&pagination=0`,
-      access_token,
-      user,
-    );
-    if (resp.ok) {
-      songSubmissionList = await resp.json();
-    } else {
-      console.log(await resp.json());
-    }
-  };
-
-  const getUser = async () => {
-    if (!newCharterId) {
-      return;
-    }
-    newCharterStatus = Status.RETRIEVING;
-    const resp = await api.GET(`/users/${newCharterId}/?query_relation=1`, access_token, user);
-    if (resp.ok) {
-      newCharter = await resp.json();
-      newCharterStatus = Status.OK;
-    } else {
-      newCharterErr = (await resp.json()).detail;
-      newCharterStatus = Status.ERROR;
-    }
-  };
-
-  const handleChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-    if (error?.chart) error.chart = [];
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      chart = target.files[0];
-    }
-  };
-
-  async function handleSubmit() {
-    dataIncomplete =
-      !(chart && level && difficulty && charter) ||
-      (songSwitch && !song) ||
-      (!songSwitch && !songSubmission);
-    if (dataIncomplete) {
-      errorMsg = 'data_incomplete';
-      status = Status.ERROR;
-      return;
-    }
-    let formData = new FormData();
-    formData.append('chart', chart as unknown as File);
-    formData.append('level_type', levelType.toString());
-    formData.append('level', level);
-    formData.append('difficulty', parseFloat(difficulty).toFixed(1));
-    formData.append('charter', charter);
-    formData.append(songSwitch ? 'song' : 'song_upload', songSwitch ? song : songSubmission);
-    formData.append('description', description);
-    status = Status.SENDING;
-    const resp = await api.POST(
-      '/chart_uploads/',
-      formData,
-      access_token,
-      user,
-      ContentType.FORM_DATA,
-    );
-    if (resp.ok) {
-      goto('/studio/chart-submissions');
-    } else {
-      error = await resp.json();
-      console.log(error);
-      if (resp.status == 400) {
-        errorMsg = 'data_invalid';
-      } else {
-        errorMsg = 'unknown_error';
-      }
-      status = Status.ERROR;
-    }
-  }
+  $: charter = createQuery(api.user.info({ id: newCharterId }, { enabled: queryCharter }));
+  $: song = createQuery(api.song.listAll({rangeAccessibility: [0, 1]}, { enabled: songSwitch }));
+  $: songSubmission = createQuery(
+    api.song.submission.listAll(
+      { rangeOwnerId: [user?.id ?? 0] },
+      { enabled: !songSwitch },
+    ),
+  );
 </script>
 
 <svelte:head>
@@ -127,9 +39,11 @@
   <div class="modal-box bg-base-100 form-control gap-3">
     <div class="flex gap-3 items-center">
       <h3 class="font-bold text-lg">{$t('studio.submission.add_charter')}</h3>
-      <p class="opacity-80">
-        ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
-      </p>
+      {#if user}
+        <p class="opacity-80">
+          ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
+        </p>
+      {/if}
     </div>
     <label
       for="studio-charter"
@@ -138,48 +52,49 @@
       ✕
     </label>
     <div
-      class={newCharterStatus === Status.ERROR && newCharterErr
+      class={$charter.isError
         ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
         : 'w-full my-2'}
-      data-tip={newCharterStatus === Status.ERROR && newCharterErr ? newCharterErr : ''}
+      data-tip={$charter.isError ? $t(`error.${$charter.error.code}`) : ''}
     >
       <label class="join">
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.charter_placeholder')}
           class={`input input-bordered join-item w-3/4 min-w-[180px] ${
-            (!songSubmission && dataIncomplete) ||
-            (newCharterStatus === Status.ERROR && newCharterErr)
+            $charter.isError
               ? 'input-error'
               : 'input-primary'
           }`}
           bind:value={newCharterId}
           on:input={() => {
-            newCharterStatus = Status.OK;
+            queryCharter = false;
           }}
         />
         <button
           class={`btn join-item ${
-            newCharterId && newCharterStatus !== Status.RETRIEVING
-              ? newCharterStatus === Status.ERROR
+            newCharterId && $charter.isLoading
+              ? $charter.isError
                 ? 'btn-error'
                 : 'btn-primary btn-outline'
               : 'btn-disabled'
           }`}
-          on:click={getUser}
+          on:click={() => {
+            queryCharter = true;
+          }}
         >
           {$t('common.fetch')}
         </button>
       </label>
     </div>
-    {#if newCharter !== null && newCharterStatus === Status.OK}
-      <Charter user={newCharter} token={access_token} operator={user} mini />
+    {#if newCharterId && $charter.isSuccess}
+      <Charter id={newCharterId} initUser={$charter.data.data} kind='mini' />
       <label class="join">
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.charter')}</span>
         <input
           placeholder={$t('common.form.charter')}
           class="input input-primary join-item w-3/4"
-          bind:value={newCharterText}
+          bind:value={newCharterDisplay}
         />
       </label>
     {/if}
@@ -188,7 +103,7 @@
         for="studio-charter"
         class="btn btn-primary btn-outline join-item text-lg"
         on:click={() => {
-          charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
+          charterName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
         }}
         on:keyup
       >
@@ -204,26 +119,22 @@
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
-          <div
-            class="form-control"
-            on:focusin={() => {
-              status = Status.OK;
-            }}
-          >
+          <form method="POST" class="w-full form-control" use:enhance>
             <div class="flex">
               <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
               <input
                 type="file"
+                id="file"
+                name="File"
                 accept=".json, .pec"
                 class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-                  (!chart && dataIncomplete) || (status === Status.ERROR && error?.chart)
+                  !!$errors.File
                     ? 'input-error file:btn-error'
                     : 'input-primary file:btn-outline file:bg-primary'
                 }`}
-                on:change={handleChart}
               />
-              {#if status === Status.ERROR && error?.chart}
-                <span class="place-self-center text-error">{error.chart}</span>
+              {#if !!$errors.File}
+                <span class="place-self-center text-error">{$errors.File}</span>
               {:else}
                 <span class="place-self-center">{$t('common.form.tips.chart')}</span>
               {/if}
@@ -237,7 +148,6 @@
                   name="song-switch"
                   value={true}
                   class="radio radio-primary"
-                  on:change={getSongs}
                 />
                 <p>{$t('song.song')}</p>
               </div>
@@ -248,22 +158,16 @@
                   name="song-switch"
                   value={false}
                   class="radio radio-primary"
-                  on:change={getSongSubmissions}
                 />
                 <p>{$t('studio.song_submission')}</p>
               </div>
             </div>
             {#if songSwitch}
               <div
-                class={status === Status.ERROR && error?.song
+                class={$song.isError
                   ? 'tooltip tooltip-open tooltip-right tooltip-error'
                   : ''}
-                data-tip={status === Status.ERROR && error?.song ? error.song : ''}
-                on:pointerenter={() => {
-                  if (songList === null) {
-                    getSongs();
-                  }
-                }}
+                data-tip={$song.isError ? $t(`error.${$song.error.code}`) : ''}
               >
                 <label class="join my-2">
                   <span class="btn no-animation join-item w-1/4 min-w-[64px]">
@@ -271,17 +175,16 @@
                   </span>
                   <select
                     class={`select select-bordered join-item w-3/4 min-w-[180px] ${
-                      (!song && dataIncomplete) || (status === Status.ERROR && error?.song)
+                      $song.isError
                         ? 'select-error'
                         : 'select-primary'
                     }`}
-                    bind:value={song}
                   >
-                    {#if songList}
-                      {#each songList as song}
+                    {#if $song.isSuccess}
+                      {#each $song.data.data as song}
                         <option value={song.id}>
                           [{$t(`studio.submission.accessibilities.${song.accessibility}`)}] {song.id}.
-                          {song.composer} - {song.name} ({song.edition})
+                          {song.authorName} - {song.title} ({song.edition})
                         </option>
                       {/each}
                     {/if}
@@ -290,10 +193,10 @@
               </div>
             {:else}
               <div
-                class={status === Status.ERROR && error?.song_upload
+                class={$songSubmission.isError
                   ? 'tooltip tooltip-open tooltip-right tooltip-error'
                   : ''}
-                data-tip={status === Status.ERROR && error?.song_upload ? error.song_upload : ''}
+                data-tip={$songSubmission.isError ? $t(`error.${$songSubmission.error.code}`) : ''}
               >
                 <label class="join my-2">
                   <span class="btn no-animation join-item w-1/4 min-w-[64px]">
@@ -301,17 +204,15 @@
                   </span>
                   <select
                     class={`select select-bordered join-item w-3/4 min-w-[180px] ${
-                      (!songSubmission && dataIncomplete) ||
-                      (status === Status.ERROR && error?.song_upload)
+                      $songSubmission.isError
                         ? 'select-error'
                         : 'select-primary'
                     }`}
-                    bind:value={songSubmission}
                   >
-                    {#if songSubmissionList}
-                      {#each songSubmissionList as song}
+                    {#if $songSubmission.isSuccess}
+                      {#each $songSubmission.data.data as song}
                         <option value={song.id}>
-                          {song.id}. {song.composer} - {song.name} ({song.edition})
+                          {song.id}. {song.authorName} - {song.title} ({song.edition})
                         </option>
                       {/each}
                     {/if}
@@ -337,7 +238,7 @@
                   }`}
                   bind:value={levelType}
                 >
-                  {#each levelTypes as type, i}
+                  {#each LEVEL_TYPES as type, i}
                     <option value={i}>{type}</option>
                   {/each}
                 </select>
@@ -465,22 +366,22 @@
                 />
               </label>
             </div>
-          </div>
+            <button
+              class={`btn btn-outline ${
+                status === Status.ERROR
+                  ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
+                  : status === Status.SENDING
+                  ? 'btn btn-ghost btn-disabled'
+                  : 'btn-primary'
+              } float-right my-5 text-lg`}
+              data-tip={$t(`common.form.errors.${errorMsg}`)}
+              on:click={handleSubmit}
+            >
+              {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
+            </button>
+          </form>
         </div>
       </div>
-      <button
-        class={`btn btn-outline ${
-          status === Status.ERROR
-            ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
-            : status === Status.SENDING
-            ? 'btn btn-ghost btn-disabled glass'
-            : 'btn-primary'
-        } glass float-right my-5 text-lg`}
-        data-tip={$t(`common.form.errors.${errorMsg}`)}
-        on:click={handleSubmit}
-      >
-        {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
-      </button>
     </div>
   </div>
 </div>

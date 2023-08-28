@@ -23,7 +23,7 @@ export interface InfoOpts {
   markAsRead?: number;
 }
 
-export interface DelOpts {
+export interface DeleteOpts {
   id: number;
 }
 
@@ -42,7 +42,7 @@ export default class NotificationAPI {
       this.api.GET(`/notifications/${id}/?` + queryString.stringify(rest)),
   );
 
-  del({ id }: DelOpts) {
+  del({ id }: DeleteOpts) {
     return this.api.DELETE(`/notifications/${id}/`);
   }
 }

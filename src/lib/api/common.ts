@@ -34,7 +34,7 @@ type Options<TQueryFnData = unknown, TError = unknown, TQueryKey extends QueryKe
 
 type QueryResponseDtoOptions<T, K extends QueryKey> = Options<
   ResponseDtoOk<T>,
-  ResponseDtoError | Error,
+  ResponseDtoError,
   K
 >;
 

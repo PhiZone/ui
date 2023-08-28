@@ -1,10 +1,9 @@
 <script lang="ts">
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
   import { createQuery } from '@tanstack/svelte-query';
-  import SongSubmission from './SongSubmission.svelte';
 
   export let submission: ChartSubmissionDto;
 
@@ -70,8 +69,6 @@
           </span>
           {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
         </p>
-      </div>
-      <div class="flex items-center min-w-fit">
         {#if $uploader.isSuccess}
           {@const uploader = $uploader.data?.data}
           <p class="min-w-fit">
@@ -81,11 +78,19 @@
             {uploader.userName}
           </p>
         {/if}
+      </div>
+      <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
-            {$t('studio.submission.uploaded_at')}
+            {$t('studio.submission.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
+        </p>
+        <p class="min-w-fit">
+          <span class="badge badge-primary badge-outline mr-1">
+            {$t('studio.submission.updated_at')}
+          </span>
+          {parseDateTime(submission.dateUpdated)}
         </p>
       </div>
     </div>

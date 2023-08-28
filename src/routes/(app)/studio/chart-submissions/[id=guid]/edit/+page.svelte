@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import * as api from '$lib/api';
-  import { ContentType, Status } from '$lib/constants';
+  import { ContentType, LEVEL_TYPES, Status } from '$lib/constants';
   import { goto } from '$app/navigation';
   import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/api';
   import Charter from '$lib/components/User.svelte';
@@ -30,8 +30,6 @@
     newCharterStatus = Status.OK,
     newCharterErr = '',
     newCharterText = '';
-
-  const levelTypes = ['EZ', 'HD', 'IN', 'AT', 'SP'];
 
   const getSongs = async () => {
     const resp = await api.GET('/songs/?order=-id&pagination=0', access_token, user);
@@ -378,7 +376,7 @@
                       : 'select-primary'}"
                     bind:value={levelType}
                   >
-                    {#each levelTypes as type, i}
+                    {#each LEVEL_TYPES as type, i}
                       <option value={i}>{type}</option>
                     {/each}
                   </select>

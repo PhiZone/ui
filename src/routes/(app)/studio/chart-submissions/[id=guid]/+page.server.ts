@@ -6,18 +6,14 @@ export const actions = {
   vote: async ({ request, params, fetch, locals }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
     const data = await request.formData();
-    const resp = await api.vote.create({
+    const resp = await api.vote.volunteer.create({
       chartId: params.id,
-      arrangement: parseInt(data.get('arrangement') as string),
-      feel: parseInt(data.get('feel') as string),
-      visualEffects: parseInt(data.get('visualEffects') as string),
-      creativity: parseInt(data.get('creativity') as string),
-      concord: parseInt(data.get('concord') as string),
-      impression: parseInt(data.get('impression') as string),
+      score: parseInt(data.get('score') as string),
+      message: data.get('message') as string
     });
     if (resp.ok) {
       const queryClient = useQueryClient();
-      await queryClient.invalidateQueries(['chart.info', { id: params.id }]);
+      await queryClient.invalidateQueries(['chart.submission.info', { id: params.id }]);
       return;
     }
     const err = await resp.json();

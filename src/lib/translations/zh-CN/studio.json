@@ -37,7 +37,8 @@
     "volunteer_status": "审核状态",
     "collab_status": "合作状态",
     "adm_status": "收录状态",
-    "uploaded_at": "上传时间",
+    "created_at": "创建时间",
+    "updated_at": "更新时间",
     "approved_at": "通过时间",
     "reply": "回复",
     "reply_v": "回复",
@@ -64,7 +65,9 @@
     "original_audio": "原音源",
     "original_illustration": "原曲绘",
     "reviewer": "处理人",
-    "reviewer_id": "处理人 ID"
+    "reviewer_id": "处理人 ID",
+    "is_original": "是否为原创",
+    "is_hidden": "是否隐藏"
   },
   "request": {
     "accept": "接受",

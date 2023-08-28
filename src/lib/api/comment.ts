@@ -52,7 +52,7 @@ export default class CommentAPI {
     return this.api.POST(`/${type}/${id}/comments`, rest);
   }
 
-  remove({ id }: InfoOpts): R {
+  delete({ id }: InfoOpts): R {
     return this.api.DELETE(`/comments/${id}`);
   }
 }

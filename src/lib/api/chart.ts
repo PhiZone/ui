@@ -13,6 +13,15 @@ export enum ChartFormat {
   Unsupported,
 }
 
+export enum ChartLevel
+{
+    EZ,
+    HD,
+    IN,
+    AT,
+    SP
+}
+
 export interface ChartDto {
   accessibility: Accessibility;
   authorName: string;
@@ -64,6 +73,7 @@ export interface Filter extends FilterBase {
   rangeId?: string[];
   rangeSongId?: string[];
   rangeOwnerId?: number[];
+  rangeAccessibility?: number[];
 }
 
 // info

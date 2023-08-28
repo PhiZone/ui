@@ -1,18 +1,21 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import Song from '$lib/components/Song.svelte';
-  import { goto, preloadData } from '$app/navigation';
   import { richtext } from '$lib/richtext.js';
   import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils.js';
   import { createQuery } from '@tanstack/svelte-query';
+  import VolunteerVote from '$lib/components/VolunteerVote.svelte';
+  import { LEVEL_TYPES, Status } from '$lib/constants.js';
+  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
+  import { enhance } from '$app/forms';
 
-  export let data;
+  export let data, form;
   $: ({ searchParams, id, user, api } = data);
 
-  let score = 0,
-    message: string;
-
-  const levelTypes = ['EZ', 'HD', 'IN', 'AT', 'SP'];
+  let status = Status.WAITING;
+  let score = 0;
+  let message: string;
+  let open = false;
 
   $: submission = createQuery(api.chart.submission.info({ id }));
   $: song = createQuery(
@@ -30,7 +33,7 @@
   $: uploader = createQuery(
     api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
   );
-  // $: votes = createQuery(api.volunteerVote.listAll({ chartId: id }));
+  $: votes = createQuery(api.vote.volunteer.listAll({ chartId: id }));
 
   $: charter = richtext($submission.data?.data.authorName ?? '');
 </script>
@@ -52,37 +55,86 @@
 
 {#if $submission.isSuccess}
   {@const submission = $submission.data.data}
-  <input type="checkbox" id="studio-chart-submission" class="modal-toggle" />
+  <input type="checkbox" id="studio-chart-submission" class="modal-toggle" bind:checked={open} />
   <div class="modal">
     <div class="modal-box bg-base-100">
-      <h3 class="font-bold text-lg">{$t('common.vote_v')}</h3>
-      <div class="flex min-w-full items-center">
-        <input type="range" min="-3" max="3" bind:value={score} class="range min-w-auto" step="1" />
-        <p class="w-8 text-right text-xl font-bold">{score}</p>
-      </div>
-      <label class="join my-2">
-        <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-          {$t('studio.submission.message')}
-        </span>
-        <textarea
-          class="textarea textarea-secondary join-item w-full h-48"
-          placeholder={$t('studio.submission.write_message')}
-          bind:value={message}
-        />
+      <label
+        for="studio-chart-submission"
+        class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
+      >
+        ✕
       </label>
-      <div class="modal-action join join-horizontal">
-        <label for="studio-chart-submission" class="btn btn-primary btn-outline join-item text-lg">
-          {$t('common.back')}
+      <h2 class="font-bold text-xl mb-4">{$t('common.vote_v')}</h2>
+      <form
+        class="form-control"
+        method="POST"
+        action="?/vote"
+        use:enhance={() => {
+          status = Status.SENDING;
+
+          return async ({ result, update }) => {
+            if (result.type === 'failure') {
+              status = Status.ERROR;
+            } else if (result.type === 'success') {
+              status = Status.OK;
+              // TODO: toast
+              open = false;
+            }
+            await update();
+          };
+        }}
+      >
+        <div class="flex min-w-full items-center">
+          <input
+            id="score"
+            name="score"
+            type="range"
+            min="-3"
+            max="3"
+            bind:value={score}
+            class="range min-w-auto"
+            step="1"
+          />
+          <p class="w-8 text-right text-xl font-bold">{score}</p>
+        </div>
+        <label class="join my-4">
+          <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+            {$t('studio.submission.message')}
+          </span>
+          <textarea
+            id="message"
+            name="message"
+            class="textarea textarea-secondary join-item w-full h-48"
+            placeholder={$t('studio.submission.write_message')}
+            bind:value={message}
+          />
         </label>
-        <!-- <label
-          for="studio-chart-submission"
-          class="btn btn-primary btn-outline join-item text-lg"
-          on:click={handleSubmit}
-          on:keyup
-        >
-          {$t('common.submit')}
-        </label> -->
-      </div>
+        <div class="modal-action">
+          <div
+            class="tooltip tooltip-top tooltip-error w-full"
+            class:tooltip-open={status === Status.ERROR}
+            data-tip={status === Status.ERROR
+              ? $t(`error.${form?.error}`) ?? $t('common.unknown_error')
+              : null}
+          >
+            <button
+              type="submit"
+              class="btn {status === Status.ERROR
+                ? 'btn-error'
+                : status === Status.SENDING
+                ? 'btn-ghost'
+                : 'btn-secondary btn-outline'} w-full"
+              disabled={status == Status.SENDING}
+            >
+              {status === Status.ERROR
+                ? $t('common.error')
+                : status === Status.SENDING
+                ? $t('common.waiting')
+                : $t('common.submit')}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="bg-base-200 min-h-screen py-24 px-12 justify-center flex">
@@ -127,7 +179,7 @@
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('common.form.chart_level')}
                 </span>
-                [{levelTypes[submission.levelType]}] {submission.level}
+                [{LEVEL_TYPES[submission.levelType]}] {submission.level}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
@@ -171,9 +223,15 @@
               {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
-                  {$t('studio.submission.uploaded_at')}
+                  {$t('studio.submission.created_at')}
                 </span>
                 {parseDateTime(submission.dateCreated)}
+              </p>
+              <p>
+                <span class="badge badge-primary badge-outline mr-1">
+                  {$t('studio.submission.updated_at')}
+                </span>
+                {parseDateTime(submission.dateUpdated)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
@@ -219,57 +277,34 @@
                   {$t('common.vote_v')}
                 </label>
               {/if}
+              {#if $song.isSuccess || $songSubmission.isSuccess}
+                {@const song = $song.data?.data ?? $songSubmission.data?.data}
+                <a
+                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&chart={encodeURI(
+                    submission.file,
+                  )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
+                    song?.illustration ?? '',
+                  )}&name={submission.title ??
+                    song?.title}&level={submission.level}&difficulty={submission.difficulty != 0
+                    ? Math.floor(submission.difficulty)
+                    : '?'}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}"
+                  class="btn btn-primary btn-outline text-lg w-32"
+                  target="_target"
+                >
+                  {$t('common.preview')}
+                </a>
+              {/if}
             </div>
           </div>
         </div>
       </div>
-      <!-- {#each submission.votes as vote}
-        <div class="indicator w-full my-4">
-          <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
-          >
-            {$t('studio.submission.volunteer_vote')}
-          </span>
-          <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
-            <figure class="w-1/6 min-w-fit">
-              <div
-                class="relative inline-flex items-center justify-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
-              >
-                <p class="opacity-80">{$t('studio.submission.score')}</p>
-                <p class="text-4xl font-extrabold">
-                  {vote.value}
-                </p>
-              </div>
-            </figure>
-            <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
-              <p class="w-full content text-lg">
-                {vote.message}
-              </p>
-              <div class="w-full mt-4 flex justify-between items-center">
-                <p class="text-base opacity-70">
-                  {#if vote.id}
-                    #{vote.id}
-                  {/if}
-                </p>
-                <p class="text-sm opacity-70 text-right">
-                  {#if vote.user}
-                    <a
-                      href={`/users/${vote.user.id}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      class="hover:underline"
-                    >
-                      {vote.user.username}
-                    </a>
-                    @
-                  {/if}
-                  {parseDateTime(vote.time)}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      {/each} -->
+      {#if $votes.isSuccess}
+        {@const votes = $votes.data.data}
+
+        {#each votes as vote}
+          <VolunteerVote {vote} />
+        {/each}
+      {/if}
     </div>
     {#if $song.isSuccess}
       {@const song = $song.data.data}

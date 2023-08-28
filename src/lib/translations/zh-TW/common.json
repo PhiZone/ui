@@ -79,6 +79,7 @@
     "chart": "譜面文件",
     "illustration": "曲繪文件",
     "license": "授權聲明",
+    "originality_proof": "原創性證明",
     "song_name": "曲目名稱",
     "chart_level": "譜面等級",
     "level_preview": "谱面等級預覽",
@@ -127,5 +128,6 @@
   "yes": "是",
   "no": "否",
   "optional": "（選填）",
-  "search_options": "搜索選項"
+  "search_options": "搜索選項",
+  "preview": "預覽"
 }

@@ -38,6 +38,7 @@ export interface Filter extends FilterBase {
   order?: 'title' | 'authorName' | 'illustrator' | 'duration' | 'ownerId' | 'dateCreated';
   rangeId?: string[];
   rangeOwnerId?: number[];
+  rangeAccessibility?: number[];
 }
 
 // info
@@ -73,6 +74,15 @@ export interface DeleteOpts {
   id: string;
 }
 
+// review
+export interface ReviewOpts {
+  id: string;
+  status: number;
+  isOriginal: boolean;
+  isHidden: boolean;
+  message: string | null;
+}
+
 export default class SongSubmissionAPI {
   constructor(private api: API) {}
 
@@ -99,5 +109,10 @@ export default class SongSubmissionAPI {
 
   delete(opts: DeleteOpts): R {
     return this.api.DELETE(`/studio/charts/${opts.id}`);
+  }
+
+  review({id, ...rest}: ReviewOpts): R {
+    console.log(rest);
+    return this.api.POST(`/studio/songs/${id}/review`, rest)
   }
 }

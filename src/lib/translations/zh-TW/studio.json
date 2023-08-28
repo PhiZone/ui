@@ -37,7 +37,8 @@
     "volunteer_status": "審核狀態",
     "collab_status": "合作狀態",
     "adm_status": "收錄狀態",
-    "uploaded_at": "上傳於",
+    "created_at": "創建於",
+    "updated_at": "更新於",
     "approved_at": "通過於",
     "reply": "回覆",
     "reply_v": "回覆",
@@ -64,7 +65,9 @@
     "original_audio": "原音源",
     "original_illustration": "原曲繪",
     "reviewer": "處理者",
-    "reviewer_id": "處理者 ID"
+    "reviewer_id": "處理者 ID",
+    "is_original": "是否為原創",
+    "is_hidden": "是否隱藏"
   },
   "request": {
     "accept": "接受",

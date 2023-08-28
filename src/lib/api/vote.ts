@@ -1,6 +1,7 @@
 import { createQueryCreator, stringifyFilter } from './common';
 import type { FilterBase, R } from './types';
 import type API from '.';
+import VolunteerVoteAPI from './vote.volunteer';
 
 export interface VoteDto {
   arrangement: number;
@@ -23,8 +24,8 @@ export interface Filter extends FilterBase {
   order?: 'ownerId' | 'score' | 'rating';
 }
 
-// vote
-export interface VoteOpts {
+// create
+export interface CreateOpts {
   chartId: string;
   arrangement: number;
   feel: number;
@@ -34,13 +35,15 @@ export interface VoteOpts {
   impression: number;
 }
 
-// unvote
-export interface UnvoteOpts {
+// delete
+export interface DeleteOpts {
   chartId: string;
 }
 
 export default class VoteAPI {
-  constructor(private api: API) {}
+  constructor(private api: API) {
+    this.volunteer = new VolunteerVoteAPI(api);
+  }
 
   listAll = createQueryCreator(
     'vote.listAll',
@@ -48,11 +51,13 @@ export default class VoteAPI {
       this.api.GET(`/charts/${chartId}/votes?` + stringifyFilter(rest, true)),
   );
 
-  vote({ chartId, ...rest }: VoteOpts): R {
+  create({ chartId, ...rest }: CreateOpts): R {
     return this.api.POST(`/charts/${chartId}/votes`, rest);
   }
 
-  unvote({ chartId }: UnvoteOpts): R {
+  delete({ chartId }: DeleteOpts): R {
     return this.api.DELETE(`/charts/${chartId}/votes`);
   }
+
+  volunteer;
 }

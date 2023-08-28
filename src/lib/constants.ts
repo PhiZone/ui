@@ -13,6 +13,8 @@ export const USER_LEVELS = [
   { exp: 100000, level: 10 },
 ];
 
+export const LEVEL_TYPES = ['EZ', 'HD', 'IN', 'AT', 'SP'];
+
 export enum Status {
   OK,
   RETRIEVING, // Retrieving data from API
@@ -30,12 +32,6 @@ export enum ContentType {
   JSON = 'application/json',
   FORM_DATA = 'multipart/form-data',
   FORM_URLENCODED = 'application/x-www-form-urlencoded',
-}
-
-export enum Size {
-  SMALL,
-  MEDIUM,
-  LARGE,
 }
 
 export const defaultLocale = 'zh-CN';

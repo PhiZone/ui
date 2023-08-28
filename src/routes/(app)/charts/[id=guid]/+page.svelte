@@ -105,7 +105,7 @@
               if (result.type === 'failure') {
                 status = Status.ERROR;
               } else if (result.type === 'success') {
-                status = Status.SENDING;
+                status = Status.OK;
                 // TODO: toast
                 open = false;
               }
@@ -244,7 +244,9 @@
             <div
               class="tooltip tooltip-top tooltip-error w-full"
               class:tooltip-open={status === Status.ERROR}
-              data-tip={status === Status.ERROR ? form?.error ?? $t('common.unknown_error') : null}
+              data-tip={status === Status.ERROR
+                ? $t(`error.${form?.error}`) ?? $t('common.unknown_error')
+                : null}
             >
               <button
                 type="submit"

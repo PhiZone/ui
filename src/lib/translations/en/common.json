@@ -79,6 +79,7 @@
     "chart": "Chart File",
     "illustration": "Illustration File",
     "license": "License File",
+    "originality_proof": "Originality Proof",
     "song_name": "Song Name",
     "chart_level": "Chart Level",
     "level_preview": "Level Preview",
@@ -127,5 +128,6 @@
   "yes": "Yes",
   "no": "No",
   "optional": " (Optional)",
-  "search_options": "Search Options"
+  "search_options": "Search Options",
+  "preview": "Preview"
 }

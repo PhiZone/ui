@@ -79,6 +79,7 @@
     "chart": "谱面文件",
     "illustration": "曲绘文件",
     "license": "授权声明",
+    "originality_proof": "原创性证明",
     "song_name": "曲目名称",
     "chart_level": "谱面等级",
     "level_preview": "谱面等级预览",
@@ -127,5 +128,6 @@
   "yes": "是",
   "no": "否",
   "optional": "（选填）",
-  "search_options": "搜索选项"
+  "search_options": "搜索选项",
+  "preview": "预览"
 }

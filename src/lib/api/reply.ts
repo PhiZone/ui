@@ -43,7 +43,7 @@ export default class ReplyAPI {
     return this.api.GET(`/replies/${id}/`);
   });
 
-  remove(opts: InfoOpts) {
+  delete(opts: InfoOpts) {
     return this.api.DELETE(`/replies/${opts.id}`);
   }
 
