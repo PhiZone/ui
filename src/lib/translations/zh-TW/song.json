@@ -28,13 +28,11 @@
   "offset": "延遲參考值",
   "duration": "時長",
   "original": "原創",
-  "accessibility": "公開狀態",
-  "public": "公開",
-  "public_tip": "該曲接受任何譜面投稿。",
-  "review_required": "需審核",
-  "review_required_tip": "該曲接受經曲目上傳者審核通過後的譜面投稿。",
-  "private": "私人",
-  "private_tip": "該曲接受任何譜面投稿。",
+  "accessibility_tips": {
+    "0": "该曲目接受任何谱面投递。",
+    "1": "该曲目接受经曲目上传者审核通过后的谱面投递。",
+    "2": "该曲目不接受任何谱面投递。"
+  },
   "time": "上傳時間",
   "uploader": "上傳者",
   "author": "作者",

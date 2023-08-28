@@ -176,7 +176,7 @@ export function getLevelColor(type: number) {
     case 1:
       return 'btn-warning';
     case 2:
-      return 'btn-secondary';
+      return 'btn-primary';
     case 3:
       return '';
     default:

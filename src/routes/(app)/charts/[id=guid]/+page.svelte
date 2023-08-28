@@ -281,18 +281,18 @@
           <div class="card-body py-10">
             <div class="text-5xl py-3 flex font-bold items-center">
               {$song.data?.data.title}
-              <div class="ml-2 min-w-fit flex gap-1 align-middle">
+              <div class="ml-4 min-w-fit flex gap-1 align-middle">
                 <div class="join join-horizontal">
                   <button
                     class="btn {getLevelColor(
                       chart.levelType,
-                    )} btn-sm join-item text-2xl no-animation"
+                    )} join-item text-3xl no-animation"
                   >
                     {chart.level}
                     {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                   </button>
                   {#if chart.isRanked}
-                    <button class="btn btn-primary btn-sm join-item text-2xl no-animation">
+                    <button class="btn btn-success join-item text-3xl no-animation">
                       {$t('chart.ranked')}
                     </button>
                   {/if}

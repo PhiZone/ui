@@ -25,7 +25,7 @@
     class="card w-80 bg-base-100 shadow-lg hover:shadow-sm hover:shadow-primary-focus overflow-hidden"
   >
     <a href={`/charts/${chart.id}`}>
-      <figure class="h-[180px] relative">
+      <figure class="h-[168px] relative">
         <img
           src={chart.illustration ?? ($song.isSuccess ? $song.data.data.illustration : null)}
           alt="Illustration"
@@ -40,7 +40,7 @@
               {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
             </button>
             {#if chart.isRanked}
-              <button class="btn btn-primary btn-sm join-item text-xl no-animation">
+              <button class="btn btn-success btn-sm join-item text-xl no-animation">
                 {$t('chart.ranked')}
               </button>
             {/if}
@@ -111,7 +111,7 @@
           {getLevelDisplay(chart.difficulty)}
         </button>
         {#if chart.isRanked}
-          <button class="btn btn-primary btn-sm join-item text-lg no-animation">
+          <button class="btn btn-success btn-sm join-item text-lg no-animation">
             {$t('chart.ranked')}
           </button>
         {/if}

@@ -4,24 +4,18 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
 import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
-import { ChartLevel } from '$lib/api/chart';
 
 const schema = z
   .object({
     Title: z
-      .string().length(100, t.get('error.ValueTooLong')).optional(),
-    LevelType: z.nativeEnum(ChartLevel),
-    Level: z.string(),
-    Difficulty: z.number(),
+      .string().length(100, t.get('error.ValueTooLong')),
+    Edition: z.string().optional(),
     File: z.custom<File>(),
     AuthorName: z.string(),
     Illustration: z.custom<File>((file) => file instanceof File).optional(),
     Illustrator: z.string().optional(),
     Description: z.string().optional(),
     Accessibility: z.nativeEnum(Accessibility),
-    IsRanked: z.boolean(),
-    SongId: z.string(),
-    SongSubmissionId: z.string()
   });
 
 type Schema = z.infer<typeof schema>;
@@ -41,11 +35,11 @@ export const actions = {
       console.log(form.errors)
       return fail(400, { form });
     }
-    const resp = await api.chart.submission.create(form.data);
+    const resp = await api.song.submission.create(form.data);
     console.log('submitted')
     if (resp.ok) {
       console.log('cool!')
-      throw redirect(303, '/studio/chart-submissions' + url.search);
+      throw redirect(303, '/studio/song-submissions' + url.search);
     } else {
       console.log('error!')
       const error = await resp.json();

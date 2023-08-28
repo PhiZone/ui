@@ -30,7 +30,7 @@
         ? 'bg-error-content'
         : (user && getUserPrivilege(user.role) < 3) || submission.dateVoted
         ? 'bg-base-100'
-        : 'bg-warn'
+        : 'bg-warning-content'
     } shadow-lg hover:shadow-sm hover:shadow-primary-focus`}
   >
     <figure class="min-w-[30%] max-w-[30%]">

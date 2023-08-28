@@ -28,13 +28,11 @@
   "offset": "Offset Ref.",
   "duration": "Duration",
   "original": "Original",
-  "accessibility": "Accessibility",
-  "public": "Public",
-  "public_tip": "This song accepts any chart admission.",
-  "review_required": "Review Required",
-  "review_required_tip": "This song accepts chart admissions after being carefully reviewed.",
-  "private": "Private",
-  "private_tip": "This song doesn't accept any chart admission at the moment.",
+  "accessibility_tips": {
+    "0": "This song accepts any chart admission.",
+    "1": "This song accepts chart admissions carefully reviewed.",
+    "2": "This song doesn't accept any chart admission."
+  },
   "time": "Time",
   "uploader": "Uploader",
   "author": "Author",

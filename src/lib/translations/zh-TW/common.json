@@ -94,7 +94,9 @@
       "image": "6MB 或更小的 JPG / JPEG / PNG",
       "chart": "僅支援 PE / RPE 創作的譜面",
       "illustration": "6MB 或更小的 JPG / JPEG / PNG，長寬比必須為 16:9，解析度不得低於 960×540",
-      "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……"
+      "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
+      "ranked": "游玩该谱后，结算时数据计入 RKS；谱面审核较为严格",
+      "unranked": "游玩该谱后，结算时数据不计入 RKS；谱面审核较为宽松"
     },
     "errors": {
       "data_incomplete": "輸入的資訊不完整！",
@@ -129,5 +131,11 @@
   "no": "否",
   "optional": "（選填）",
   "search_options": "搜索選項",
-  "preview": "預覽"
+  "preview": "預覽",
+  "accessibility": "开放度",
+  "accessibilities": {
+    "0": "公开",
+    "1": "需审核",
+    "2": "私有"
+  }
 }

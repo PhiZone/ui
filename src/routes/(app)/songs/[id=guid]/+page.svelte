@@ -143,17 +143,17 @@
                     {/if}
                   </div>
                 </div>
-                <div class="flex gap-2 items-end w-full justify-start">
+                <div class="flex items-end w-full justify-start {user ? "join join-horizontal" : ""}">
                   <Like
                     id={song.id}
                     likes={song.likeCount}
                     type="songs"
                     liked={song.dateLiked != null}
-                    class="btn-md"
+                    class="btn-md {user ? "join-item" : ""}"
                   />
                   {#if user}
                     <a href={song.file} target="_blank" rel="noreferrer" download>
-                      <button class="btn btn-primary btn-outline flex gap-1">
+                      <button class="btn btn-primary btn-outline flex gap-1 join-item">
                         <svg
                           fill="currentColor"
                           width="14px"

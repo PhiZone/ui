@@ -16,6 +16,10 @@
     "3": "Phigrim 谱面",
     "4": "未受支持"
   },
+  "accessibility_tips": {
+    "0": "该谱面接受任何游玩记录上传。",
+    "2": "该谱面不接受任何游玩记录上传。"
+  },
   "score": "总分",
   "rating": "评分",
   "equivalent_vote_count": "等效票数",

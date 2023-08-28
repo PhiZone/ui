@@ -48,25 +48,24 @@ export interface InfoOpts {
 
 // create
 export interface CreateOpts {
-  accessibility: number;
-  authorName: null | string;
-  bpm: number;
-  description: null | string;
-  duration: string;
-  edition: null | string;
-  editionType: number;
-  file: Blob;
-  illustration: Blob;
-  illustrator: string;
-  license: null | string;
-  lyrics: null | string;
-  maxBpm: number;
-  minBpm: number;
-  offset: number;
-  originalityProof: null | Blob;
-  previewEnd: string;
-  previewStart: string;
-  title: null | string;
+  Accessibility: number;
+  AuthorName: string;
+  Bpm: number;
+  Description?: string | undefined;
+  Edition?: string | undefined;
+  EditionType: number;
+  File: Blob;
+  Illustration: Blob;
+  Illustrator: string;
+  License?: Blob | undefined;
+  Lyrics?: string | undefined;
+  MaxBpm: number;
+  MinBpm: number;
+  Offset: number;
+  OriginalityProof?: Blob | undefined;
+  PreviewEnd: string;
+  PreviewStart: string;
+  Title: string;
 }
 
 // delete

@@ -16,6 +16,10 @@
     "3": "Phigrim 譜面",
     "4": "不支援"
   },
+  "accessibility_tips": {
+    "0": "该谱面接受任何游玩记录上传。",
+    "2": "该谱面不接受任何游玩记录上传。"
+  },
   "score": "總分",
   "rating": "評分",
   "equivalent_vote_count": "等效票數",

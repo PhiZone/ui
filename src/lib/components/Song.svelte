@@ -37,7 +37,7 @@
     class="card w-80 bg-base-100 hover:shadow-sm hover:shadow-primary-focus shadow-lg overflow-hidden"
   >
     <a href={`/songs/${song.id}`}>
-      <figure class="h-[180px] relative">
+      <figure class="h-[168px] relative">
         <img src={song.illustration} alt="Illustration" class="object-fill" />
         {#if song.isOriginal}
           <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">

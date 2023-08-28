@@ -13,6 +13,7 @@
   export let kind: 'full' | 'mini' | 'embedded' | 'embedded-mini' = 'full';
   export let fixedHeight = false;
   export let showFollow = true;
+  export let target = '_self';
 
   $: query = createQuery(api.user.info({ id }, { enabled: !initUser }));
 </script>
@@ -31,6 +32,7 @@
     {#if user}
       <a
         href="/users/{user.id}"
+        {target}
         class="avatar {kind === 'embedded'
           ? 'flex-col w-full'
           : 'w-1/6 min-w-fit'} items-center gap-1"
@@ -93,7 +95,7 @@
       {:else if initUser || $query.isSuccess}
         {@const user = initUser ?? $query.data?.data}
         {#if user}
-          <a href="/users/{user.id}">
+          <a href="/users/{user.id}" {target}>
             <div class="avatar flex items-center min-w-fit">
               <div
                 class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
