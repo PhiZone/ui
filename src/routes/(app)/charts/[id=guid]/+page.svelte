@@ -284,9 +284,7 @@
               <div class="ml-4 min-w-fit flex gap-1 align-middle">
                 <div class="join join-horizontal">
                   <button
-                    class="btn {getLevelColor(
-                      chart.levelType,
-                    )} join-item text-3xl no-animation"
+                    class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                   >
                     {chart.level}
                     {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}

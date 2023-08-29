@@ -13,9 +13,9 @@
 <svelte:head>
   <title>
     {$t('common.studio')} - {$t('studio.collaborations')}
-    {!!searchParams.rangeInviterId
+    {searchParams.rangeInviterId
       ? `- ${$t('studio.request.sent')}`
-      : !!searchParams.rangeInviteeId
+      : searchParams.rangeInviteeId
       ? `- ${$t('studio.request.received')}`
       : ''} | {$t('common.title')}
   </title>
@@ -27,9 +27,9 @@
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-4xl font-bold">
           {$t('studio.collaborations')}
-          {!!searchParams.rangeInviterId
+          {searchParams.rangeInviterId
             ? `- ${$t('studio.request.sent')}`
-            : !!searchParams.rangeInviteeId
+            : searchParams.rangeInviteeId
             ? `- ${$t('studio.request.received')}`
             : ''}
         </h1>

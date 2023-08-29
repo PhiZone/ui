@@ -6,23 +6,21 @@ import { t } from '$lib/translations/config';
 import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 import { ChartLevel } from '$lib/api/chart';
 
-const schema = z
-  .object({
-    Title: z
-      .string().length(100, t.get('error.ValueTooLong')).optional(),
-    LevelType: z.nativeEnum(ChartLevel),
-    Level: z.string(),
-    Difficulty: z.number(),
-    File: z.custom<File>(),
-    AuthorName: z.string(),
-    Illustration: z.custom<File>((file) => file instanceof File).optional(),
-    Illustrator: z.string().optional(),
-    Description: z.string().optional(),
-    Accessibility: z.nativeEnum(Accessibility),
-    IsRanked: z.boolean(),
-    SongId: z.string(),
-    SongSubmissionId: z.string()
-  });
+const schema = z.object({
+  Title: z.string().length(100, t.get('error.ValueTooLong')).optional(),
+  LevelType: z.nativeEnum(ChartLevel),
+  Level: z.string(),
+  Difficulty: z.number(),
+  File: z.custom<File>(),
+  AuthorName: z.string(),
+  Illustration: z.custom<File>((file) => file instanceof File).optional(),
+  Illustrator: z.string().optional(),
+  Description: z.string().optional(),
+  Accessibility: z.nativeEnum(Accessibility),
+  IsRanked: z.boolean(),
+  SongId: z.string(),
+  SongSubmissionId: z.string(),
+});
 
 type Schema = z.infer<typeof schema>;
 
@@ -38,16 +36,16 @@ export const actions = {
     const form = await superValidate(formData, schema);
 
     if (!form.valid) {
-      console.log(form.errors)
+      console.log(form.errors);
       return fail(400, { form });
     }
     const resp = await api.chart.submission.create(form.data);
-    console.log('submitted')
+    console.log('submitted');
     if (resp.ok) {
-      console.log('cool!')
+      console.log('cool!');
       throw redirect(303, '/studio/chart-submissions' + url.search);
     } else {
-      console.log('error!')
+      console.log('error!');
       const error = await resp.json();
       console.log(error);
       form.valid = false;

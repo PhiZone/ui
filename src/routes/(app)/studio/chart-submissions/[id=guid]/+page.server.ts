@@ -9,7 +9,7 @@ export const actions = {
     const resp = await api.vote.volunteer.create({
       chartId: params.id,
       score: parseInt(data.get('score') as string),
-      message: data.get('message') as string
+      message: data.get('message') as string,
     });
     if (resp.ok) {
       const queryClient = useQueryClient();

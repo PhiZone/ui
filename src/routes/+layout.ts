@@ -1,4 +1,4 @@
-import API, { type UserDetailedDto } from '$lib/api';
+import API from '$lib/api';
 import { defaultLocale } from '$lib/constants';
 import { locale, loadTranslations } from '$lib/translations/config';
 import { browser } from '$app/environment';

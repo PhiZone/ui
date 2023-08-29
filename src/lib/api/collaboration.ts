@@ -40,12 +40,12 @@ export interface ReviewOpts {
 }
 
 export default class CollaborationAPI {
-  constructor(private api: API) { }
+  constructor(private api: API) {}
 
   list = createQueryCreator(
     'collaboration.list',
     (opts: Filter): R<CollaborationDto[]> =>
-      this.api.GET(`/collaborations?` + stringifyFilter(opts)),
+      this.api.GET('/collaborations?' + stringifyFilter(opts)),
   );
 
   info = createQueryCreator(

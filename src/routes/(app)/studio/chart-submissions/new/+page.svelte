@@ -151,7 +151,7 @@
                 name="File"
                 accept=".json, .pec"
                 class={`mb-2 w-1/2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-                  !!$errors.File
+                  $errors.File
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}

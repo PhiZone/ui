@@ -36,13 +36,21 @@
     <figure class="min-w-[30%] max-w-[30%]">
       <img
         class="object-cover w-full h-full"
-        src={$song.isSuccess ? $song.data.data.illustration : $songSubmission.isSuccess ? $songSubmission.data.data.illustration : ''}
+        src={$song.isSuccess
+          ? $song.data.data.illustration
+          : $songSubmission.isSuccess
+          ? $songSubmission.data.data.illustration
+          : ''}
         alt="Illustration"
       />
     </figure>
     <div class="card-body w-[70%] max-h-fit">
       <h2 class="card-title text-2xl mb-3 min-w-fit">
-        {$song.isSuccess ? $song.data.data.title : $songSubmission.isSuccess ? $songSubmission.data.data.title : ''}
+        {$song.isSuccess
+          ? $song.data.data.title
+          : $songSubmission.isSuccess
+          ? $songSubmission.data.data.title
+          : ''}
         <button class={`btn ${getLevelColor(submission.levelType)} btn-sm text-xl no-animation`}>
           {submission.level}
           {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}

@@ -5,18 +5,16 @@ import API from '$lib/api';
 import { t } from '$lib/translations/config';
 import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 
-const schema = z
-  .object({
-    Title: z
-      .string().length(100, t.get('error.ValueTooLong')),
-    Edition: z.string().optional(),
-    File: z.custom<File>(),
-    AuthorName: z.string(),
-    Illustration: z.custom<File>((file) => file instanceof File).optional(),
-    Illustrator: z.string().optional(),
-    Description: z.string().optional(),
-    Accessibility: z.nativeEnum(Accessibility),
-  });
+const schema = z.object({
+  Title: z.string().length(100, t.get('error.ValueTooLong')),
+  Edition: z.string().optional(),
+  File: z.custom<File>(),
+  AuthorName: z.string(),
+  Illustration: z.custom<File>((file) => file instanceof File).optional(),
+  Illustrator: z.string().optional(),
+  Description: z.string().optional(),
+  Accessibility: z.nativeEnum(Accessibility),
+});
 
 type Schema = z.infer<typeof schema>;
 
@@ -32,16 +30,16 @@ export const actions = {
     const form = await superValidate(formData, schema);
 
     if (!form.valid) {
-      console.log(form.errors)
+      console.log(form.errors);
       return fail(400, { form });
     }
     const resp = await api.song.submission.create(form.data);
-    console.log('submitted')
+    console.log('submitted');
     if (resp.ok) {
-      console.log('cool!')
+      console.log('cool!');
       throw redirect(303, '/studio/song-submissions' + url.search);
     } else {
-      console.log('error!')
+      console.log('error!');
       const error = await resp.json();
       console.log(error);
       form.valid = false;
