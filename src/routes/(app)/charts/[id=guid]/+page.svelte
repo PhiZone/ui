@@ -13,7 +13,7 @@
   import ChartRadar from '$lib/components/ChartRadar.svelte';
 
   export let data, form;
-  $: ({ searchParams, id, user, api } = data);
+  $: ({ searchParams, id, user, api, queryClient } = data);
 
   const getMultiplier = (level: number): number => {
     switch (level) {
@@ -106,6 +106,7 @@
                 status = Status.ERROR;
               } else if (result.type === 'success') {
                 status = Status.OK;
+                await queryClient.invalidateQueries(['chart.info', { id }]);
                 // TODO: toast
                 open = false;
               }
