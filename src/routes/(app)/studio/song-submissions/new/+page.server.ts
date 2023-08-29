@@ -3,19 +3,41 @@ import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
-import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
+import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z
   .object({
     Title: z
-      .string().length(100, t.get('error.ValueTooLong')),
+      .string().max(100, t.get('error.ValueTooLong')),
+    EditionType: z.nativeEnum(EditionType),
     Edition: z.string().optional(),
     File: z.custom<File>(),
     AuthorName: z.string(),
-    Illustration: z.custom<File>((file) => file instanceof File).optional(),
-    Illustrator: z.string().optional(),
+    Illustration: z.custom<File>(),
+    Illustrator: z.string(),
     Description: z.string().optional(),
     Accessibility: z.nativeEnum(Accessibility),
+    Bpm: z.number(),
+    MinBpm: z.number(),
+    MaxBpm: z.number(),
+    Lyrics: z.string().optional(),
+    License: z.custom<File>().optional(),
+    OriginalityProof: z.custom<File>().optional(),
+    Offset: z.number(),
+    PreviewStart: z.string(),
+    PreviewEnd: z.string()
+  }).refine(({ EditionType, Edition }) => EditionType !in [2, 5] || Edition, {
+    message: t.get('error.FieldEmpty'),
+    path: ['Edition'],
+  }).refine(({ EditionType, License }) => EditionType !== 3 || License, {
+    message: t.get('error.FieldEmpty'),
+    path: ['License'],
+  }).refine(({ MinBpm, Bpm }) => MinBpm <= Bpm, {
+    message: t.get('common.form.errors.min_bpm'),
+    path: ['MinBpm'],
+  }).refine(({ MaxBpm, Bpm }) => MaxBpm >= Bpm, {
+    message: t.get('common.form.errors.max_bpm'),
+    path: ['MaxBpm'],
   });
 
 type Schema = z.infer<typeof schema>;
@@ -30,6 +52,9 @@ export const actions = {
     const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
+
+    console.log(formData);
+    console.log(form.data);
 
     if (!form.valid) {
       console.log(form.errors)

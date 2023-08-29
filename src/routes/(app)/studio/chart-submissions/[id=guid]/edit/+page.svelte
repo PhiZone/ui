@@ -145,7 +145,7 @@
         <label class="join">
           <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
           <input
-            placeholder={$t('studio.submission.charter_placeholder')}
+            placeholder={$t('studio.submission.author_placeholder')}
             class="input input-bordered join-item w-3/4 min-w-[180px] {newCharterStatus ===
               Status.ERROR && newCharterErr
               ? 'input-error'

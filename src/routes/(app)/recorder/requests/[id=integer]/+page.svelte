@@ -139,7 +139,7 @@
             <div>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
-                  {$t('common.form.song_name')}
+                  {$t('common.form.song_title')}
                 </span>
                 {content.name}
               </p>

@@ -53,6 +53,7 @@
     "chart.js": "^4.3.3",
     "cropperjs": "^1.5.13",
     "escape-goat": "^4.0.0",
+    "nouislider": "^15.7.1",
     "object-to-formdata": "^4.5.1",
     "query-string": "^8.1.0",
     "svelte-chartjs": "^3.1.2"

@@ -65,7 +65,7 @@
       <label class="join w-full">
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
-          placeholder={$t('studio.submission.charter_placeholder')}
+          placeholder={$t('studio.submission.author_placeholder')}
           class={`input input-secondary join-item w-3/4 min-w-[180px] ${
             $charter.isError ? 'input-error' : 'input-secondary'
           }`}
@@ -124,9 +124,28 @@
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
+            <div class="flex">
+              <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
+              <input
+                type="file"
+                id="file"
+                name="File"
+                accept=".json, .pec"
+                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  !!$errors.File
+                    ? 'input-error file:btn-error'
+                    : 'input-secondary file:btn-outline file:bg-secondary'
+                }`}
+              />
+              {#if !!$errors.File}
+                <span class="place-self-center w-2/3 text-error">{$errors.File}</span>
+              {:else}
+                <span class="place-self-center w-2/3">{$t('common.form.tips.chart')}</span>
+              {/if}
+            </div>
             <div class="flex justify-start items-center my-2 w-full">
               <span class="w-32 px-4 place-self-center">{$t('chart.ranked')}</span>
-              <div class="flex w-1/2">
+              <div class="flex w-1/3">
                 <input
                   type="checkbox"
                   id="is_ranked"
@@ -136,35 +155,16 @@
                 />
               </div>
               {#if !!$errors.IsRanked}
-                <span class="place-self-center w-1/2 text-error">{$errors.IsRanked}</span>
+                <span class="place-self-center w-2/3 text-error">{$errors.IsRanked}</span>
               {:else}
-                <span class="place-self-center w-1/2">
+                <span class="place-self-center w-2/3">
                   {$t(`common.form.tips.${isRanked ? 'ranked' : 'unranked'}`)}
                 </span>
               {/if}
             </div>
-            <div class="flex">
-              <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
-              <input
-                type="file"
-                id="file"
-                name="File"
-                accept=".json, .pec"
-                class={`mb-2 w-1/2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-                  !!$errors.File
-                    ? 'input-error file:btn-error'
-                    : 'input-secondary file:btn-outline file:bg-secondary'
-                }`}
-              />
-              {#if !!$errors.File}
-                <span class="place-self-center w-1/2 text-error">{$errors.File}</span>
-              {:else}
-                <span class="place-self-center w-1/2">{$t('common.form.tips.chart')}</span>
-              {/if}
-            </div>
             <div class="flex justify-start items-center my-2 w-full">
               <span class="w-32 px-4 place-self-center">{$t('studio.submission.song_type')}</span>
-              <div class="flex w-1/2 gap-2">
+              <div class="flex w-1/3 gap-2">
                 <input
                   type="radio"
                   bind:group={songSwitch}
@@ -174,7 +174,7 @@
                 />
                 <p>{$t('song.song')}</p>
               </div>
-              <div class="flex w-1/2 gap-2">
+              <div class="flex w-2/3 gap-2">
                 <input
                   type="radio"
                   bind:group={songSwitch}
@@ -262,8 +262,8 @@
                     $errors.Accessibility ? 'select-error' : 'select-secondary'
                   }`}
                 >
-                  <option value="0">{$t('studio.submission.accessibilities.0')}</option>
-                  <option value="2">{$t('studio.submission.accessibilities.2')}</option>
+                  <option value="0">{$t('common.accessibilities.0')} - {$t('chart.accessibility_tips.0')}</option>
+                  <option value="2">{$t('common.accessibilities.2')} - {$t('chart.accessibility_tips.2')}</option>
                 </select>
               </label>
             </div>

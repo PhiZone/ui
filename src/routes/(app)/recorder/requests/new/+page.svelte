@@ -312,11 +312,11 @@
             >
               <label class="join my-2">
                 <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.song_name')}
+                  {$t('common.form.song_title')}
                 </span>
                 <input
                   type="text"
-                  placeholder={$t('common.form.song_name')}
+                  placeholder={$t('common.form.song_title')}
                   class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                     (!songName && dataIncomplete) || (status === Status.ERROR && error?.name)
                       ? 'input-error'

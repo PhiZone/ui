@@ -1,7 +1,7 @@
 {
   "song": "Song",
   "id": "Song ID",
-  "name": "Song Name",
+  "name": "Song Title",
   "chapter": "Chapter",
   "composer": "Composer",
   "edition": "Edition",
@@ -29,9 +29,9 @@
   "duration": "Duration",
   "original": "Original",
   "accessibility_tips": {
-    "0": "This song accepts any chart admission.",
-    "1": "This song accepts chart admissions carefully reviewed.",
-    "2": "This song doesn't accept any chart admission."
+    "0": "This song accepts any chart admission",
+    "1": "This song accepts chart admissions carefully reviewed",
+    "2": "This song doesn't accept any chart admission"
   },
   "time": "Time",
   "uploader": "Uploader",

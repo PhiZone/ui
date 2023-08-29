@@ -9,13 +9,13 @@ import { ChartLevel } from '$lib/api/chart';
 const schema = z
   .object({
     Title: z
-      .string().length(100, t.get('error.ValueTooLong')).optional(),
+      .string().max(100, t.get('error.ValueTooLong')).optional(),
     LevelType: z.nativeEnum(ChartLevel),
     Level: z.string(),
     Difficulty: z.number(),
     File: z.custom<File>(),
     AuthorName: z.string(),
-    Illustration: z.custom<File>((file) => file instanceof File).optional(),
+    Illustration: z.custom<File>().optional(),
     Illustrator: z.string().optional(),
     Description: z.string().optional(),
     Accessibility: z.nativeEnum(Accessibility),

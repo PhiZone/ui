@@ -207,7 +207,7 @@
               >
                 <label class="join my-2">
                   <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                    {$t('common.form.song_name')}
+                    {$t('common.form.song_title')}
                   </span>
                   <input
                     type="text"
