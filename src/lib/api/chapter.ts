@@ -1,7 +1,8 @@
-import { stringifyFilter, createQueryCreator, formdata } from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type { SongAdmitteeDto } from './song';
 import type API from '.';
+import { serialize } from 'object-to-formdata';
 
 export interface ChapterDto {
   id: string;
@@ -53,14 +54,14 @@ export interface InfoOpts {
 }
 
 export interface CreateOpts {
-  title: string;
-  subtitle: string;
-  illustration: string;
-  illustrator: string;
-  description?: string;
-  accessibility: Accessibility;
-  isHidden: boolean;
-  isLocked: boolean;
+  Title: string;
+  Subtitle: string;
+  Illustration: string;
+  Illustrator: string;
+  Description?: string;
+  Accessibility: Accessibility;
+  IsHidden: boolean;
+  IsLocked: boolean;
 }
 
 export default class ChapterAPI {
@@ -88,6 +89,6 @@ export default class ChapterAPI {
   );
 
   create(opts: CreateOpts): R {
-    return this.api.POST('/chapters', formdata(opts));
+    return this.api.POST('/chapters', serialize(opts));
   }
 }

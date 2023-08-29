@@ -1,6 +1,7 @@
-import { stringifyFilter, createQueryCreator, formdata } from './common';
+import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
 import type API from '.';
+import { serialize } from 'object-to-formdata';
 
 export enum Gender {
   Unset,
@@ -66,6 +67,12 @@ export interface RegisterOpts {
   DateOfBirth?: Date;
 }
 
+// update avatar
+export interface UpdateAvatarOpts {
+  id: number;
+  Avatar: Blob;
+}
+
 export default class UserAPI {
   constructor(private api: API) {}
 
@@ -95,15 +102,19 @@ export default class UserAPI {
       this.api.GET(`/users/${id}/followees?` + stringifyFilter(opts)),
   );
 
-  follow(opts: InfoOpts): R {
-    return this.api.POST(`/users/${opts.id}/follow`);
+  follow({ id }: InfoOpts): R {
+    return this.api.POST(`/users/${id}/follow`);
   }
 
-  unfollow(opts: InfoOpts): R {
-    return this.api.POST(`/users/${opts.id}/unfollow`);
+  unfollow({ id }: InfoOpts): R {
+    return this.api.POST(`/users/${id}/unfollow`);
   }
 
   register(opts: RegisterOpts): R {
-    return this.api.POST('/users', formdata(opts));
+    return this.api.POST('/users', serialize(opts));
+  }
+
+  updateAvatar({ id, ...rest }: UpdateAvatarOpts): R {
+    return this.api.PATCH(`/users/${id}/avatar`, serialize(rest));
   }
 }

@@ -6,7 +6,7 @@ export const load = async ({ params, url, parent }) => {
   const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
   searchParams.page = page;
   const id = parseInt(params.id);
-  await queryClient.prefetchQuery(api.user.listFollowers({ id, page }));
+  await queryClient.prefetchQuery(api.user.followers({ id, page }));
 
   return { searchParams, id, page };
 };

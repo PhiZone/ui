@@ -90,7 +90,9 @@ export interface TypedResponse<OK extends boolean = boolean, T = any> extends Re
   json(): Promise<T>;
 }
 
-export type R<T = void> = Promise<TypedResponse<boolean, ResponseDto<T>>>;
+export type R<T = void> = Promise<
+  TypedResponse<true, ResponseDtoOk<T>> | TypedResponse<false, ResponseDtoError>
+>;
 
 export interface FilterBase {
   order?: string;

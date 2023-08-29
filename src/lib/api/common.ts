@@ -2,7 +2,6 @@ import { PAGINATION_PER_PAGE } from '$lib/constants';
 import type { FetchQueryOptions, QueryKey, QueryObserverOptions } from '@tanstack/svelte-query';
 import camelcaseKeys from 'camelcase-keys';
 import queryString from 'query-string';
-import { serialize } from 'object-to-formdata';
 import {
   type FilterBase,
   type ResponseDtoError,
@@ -20,12 +19,6 @@ export function stringifyFilter<T extends FilterBase>(opts: T, all = false) {
     ),
     { arrayFormat: 'comma', skipEmptyString: true },
   );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function formdata<T extends Record<string, any>>(obj: T) {
-  const form = new FormData();
-  return serialize(camelcaseKeys(obj, { pascalCase: true }), undefined, form);
 }
 
 type Options<TQueryFnData = unknown, TError = unknown, TQueryKey extends QueryKey = QueryKey> =
