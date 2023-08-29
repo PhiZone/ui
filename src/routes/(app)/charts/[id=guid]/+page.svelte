@@ -13,7 +13,7 @@
   import ChartRadar from '$lib/components/ChartRadar.svelte';
 
   export let data, form;
-  $: ({ searchParams, id, user, api } = data);
+  $: ({ searchParams, id, user, api, queryClient } = data);
 
   const getMultiplier = (level: number): number => {
     switch (level) {
@@ -106,6 +106,7 @@
                 status = Status.ERROR;
               } else if (result.type === 'success') {
                 status = Status.OK;
+                await queryClient.invalidateQueries(['chart.info', { id }]);
                 // TODO: toast
                 open = false;
               }
@@ -284,9 +285,7 @@
               <div class="ml-4 min-w-fit flex gap-1 align-middle">
                 <div class="join join-horizontal">
                   <button
-                    class="btn {getLevelColor(
-                      chart.levelType,
-                    )} join-item text-3xl no-animation"
+                    class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                   >
                     {chart.level}
                     {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}

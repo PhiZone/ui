@@ -1,6 +1,5 @@
 import API from '$lib/api';
 import { fail } from '@sveltejs/kit';
-import { useQueryClient } from '@tanstack/svelte-query';
 
 export const actions = {
   vote: async ({ request, params, fetch, locals }) => {
@@ -16,8 +15,6 @@ export const actions = {
       impression: parseInt(data.get('impression') as string),
     });
     if (resp.ok) {
-      const queryClient = useQueryClient();
-      await queryClient.invalidateQueries(['chart.info', { id: params.id }]);
       return;
     }
     const err = await resp.json();

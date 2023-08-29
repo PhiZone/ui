@@ -172,7 +172,9 @@
             />
           </div>
           <label class="join my-2">
-            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">{$t('song.name')}</span>
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('song.name')}
+            </span>
             <input
               type="text"
               placeholder={$t('song.name')}
@@ -181,7 +183,9 @@
             />
           </label>
           <label class="join my-2">
-            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">{$t('chart.level')}</span>
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('chart.level')}
+            </span>
             <input
               type="text"
               placeholder="IN"

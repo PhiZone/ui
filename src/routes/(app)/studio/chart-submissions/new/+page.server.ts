@@ -38,16 +38,16 @@ export const actions = {
     const form = await superValidate(formData, schema);
 
     if (!form.valid) {
-      console.log(form.errors)
+      console.log(form.errors);
       return fail(400, { form });
     }
     const resp = await api.chart.submission.create(form.data);
-    console.log('submitted')
+    console.log('submitted');
     if (resp.ok) {
-      console.log('cool!')
+      console.log('cool!');
       throw redirect(303, '/studio/chart-submissions' + url.search);
     } else {
-      console.log('error!')
+      console.log('error!');
       const error = await resp.json();
       console.log(error);
       form.valid = false;

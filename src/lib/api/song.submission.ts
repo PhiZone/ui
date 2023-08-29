@@ -110,8 +110,8 @@ export default class SongSubmissionAPI {
     return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
 
-  review({id, ...rest}: ReviewOpts): R {
+  review({ id, ...rest }: ReviewOpts): R {
     console.log(rest);
-    return this.api.POST(`/studio/songs/${id}/review`, rest)
+    return this.api.POST(`/studio/songs/${id}/review`, rest);
   }
 }

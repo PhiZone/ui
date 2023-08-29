@@ -1,4 +1,4 @@
-import API, { type UserDetailedDto } from '$lib/api';
+import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import { clearTokens, setTokens } from '$lib/utils';
 import { locale } from '$lib/translations/config';
@@ -14,7 +14,7 @@ export const handle = (async ({ event, resolve }) => {
     const api = new API(event.fetch, accessToken, event.locals.user);
     resp = await api.user.me();
     if (resp.ok) {
-      event.locals.user = (await resp.json()).data as UserDetailedDto;
+      event.locals.user = (await resp.json()).data;
       event.locals.lastRetrieval = Date.now();
     } else {
       resp = await api.auth.token({
@@ -31,7 +31,7 @@ export const handle = (async ({ event, resolve }) => {
         const api = new API(event.fetch, accessToken);
         resp = await api.user.me();
         if (resp.ok) {
-          event.locals.user = (await resp.json()).data as UserDetailedDto;
+          event.locals.user = (await resp.json()).data;
           event.locals.lastRetrieval = Date.now();
         }
       } else {

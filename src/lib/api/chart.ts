@@ -13,13 +13,12 @@ export enum ChartFormat {
   Unsupported,
 }
 
-export enum ChartLevel
-{
-    EZ,
-    HD,
-    IN,
-    AT,
-    SP
+export enum ChartLevel {
+  EZ,
+  HD,
+  IN,
+  AT,
+  SP,
 }
 
 export interface ChartDto {

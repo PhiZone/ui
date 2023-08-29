@@ -1,4 +1,4 @@
-import API, { type UserDetailedDto } from '$lib/api';
+import API from '$lib/api';
 import { defaultLocale } from '$lib/constants';
 import { locale, loadTranslations } from '$lib/translations/config';
 import { browser } from '$app/environment';
@@ -34,7 +34,7 @@ export const load = async ({ url, data, fetch }) => {
   if (data.accessToken && (!data.lastRetrieval || Date.now() - data.lastRetrieval > 30000)) {
     const resp = await api.user.me();
     if (resp.ok) {
-      data.user = (await resp.json()).data as UserDetailedDto;
+      data.user = (await resp.json()).data;
       data.lastRetrieval = Date.now();
     } else {
       data.accessToken = undefined;

@@ -143,13 +143,15 @@
                     {/if}
                   </div>
                 </div>
-                <div class="flex items-end w-full justify-start {user ? "join join-horizontal" : ""}">
+                <div
+                  class="flex items-end w-full justify-start {user ? 'join join-horizontal' : ''}"
+                >
                   <Like
                     id={song.id}
                     likes={song.likeCount}
                     type="songs"
                     liked={song.dateLiked != null}
-                    class="btn-md {user ? "join-item" : ""}"
+                    class="btn-md {user ? 'join-item' : ''}"
                   />
                   {#if user}
                     <a href={song.file} target="_blank" rel="noreferrer" download>

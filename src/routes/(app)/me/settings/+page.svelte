@@ -1,10 +1,10 @@
 <script lang="ts">
   import { useQueryClient } from '@tanstack/svelte-query';
   import { invalidateAll } from '$app/navigation';
-  import { locales, t } from '$lib/translations/config';
-  import AvatarCropper from './AvatarCropper.svelte';
   import { enhance } from '$app/forms';
+  import { locales, t } from '$lib/translations/config';
   import { regions } from '$lib/constants';
+  import Cropper from '$lib/components/ImageCropper.svelte';
 
   export let data;
 
@@ -12,6 +12,7 @@
   const queryClient = useQueryClient();
 
   $: user = data.user!;
+  $: ({ id } = user);
 
   let avatarFiles: FileList;
   let avatarCropping = false;
@@ -34,7 +35,24 @@
 </svelte:head>
 
 {#if avatarCropping}
-  <AvatarCropper id={user.id} bind:open={avatarCropping} src={avatarSrc} />
+  <Cropper
+    bind:open={avatarCropping}
+    title={$t('user.crop_avatar')}
+    src={avatarSrc}
+    aspectRatio={1}
+    on:submit={async (e) => {
+      const resp = await api.user.updateAvatar({ id, Avatar: e.detail });
+      if (resp.ok) {
+        await invalidateAll();
+        await queryClient.invalidateQueries(['user.info', { id }]);
+        avatarCropping = false;
+      } else {
+        const error = await resp.json();
+        // TODO: toast
+        console.error(error);
+      }
+    }}
+  />
 {/if}
 
 <div class="bg-base-200 page">
@@ -85,13 +103,13 @@
                     // TODO: ?
                   } else if (result.type === 'success') {
                     await invalidateAll();
-                    await queryClient.invalidateQueries(['user.info', { id: user.id }]);
+                    await queryClient.invalidateQueries(['user.info', { id }]);
                   }
                   await update();
                 };
               }}
             >
-              <input type="number" name="id" value={user.id} hidden />
+              <input type="number" name="id" value={id} hidden />
               <div class="flex items-center justify-between">
                 <span class="w-16 min-w-fit px-4 place-self-center">{$t('user.gender')}</span>
                 <div class="flex justify-between w-[60%]">
