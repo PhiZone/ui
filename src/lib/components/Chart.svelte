@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import type { ChartDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getLevelColor, getLevelDisplay } from '$lib/utils';
+  import { getCompressedImage, getLevelColor, getLevelDisplay } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
 
@@ -27,7 +27,7 @@
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[168px] relative">
         <img
-          src={chart.illustration ?? ($song.isSuccess ? $song.data.data.illustration : null)}
+          src={getCompressedImage(chart.illustration ?? $song.data?.data.illustration)}
           alt="Illustration"
           class="object-fill"
         />

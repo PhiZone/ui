@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
   import { t } from '$lib/translations/config';
-  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
   import { createQuery } from '@tanstack/svelte-query';
 
@@ -36,11 +36,11 @@
     <figure class="min-w-[30%] max-w-[30%]">
       <img
         class="object-cover w-full h-full"
-        src={$song.isSuccess
+        src={getCompressedImage($song.isSuccess
           ? $song.data.data.illustration
           : $songSubmission.isSuccess
           ? $songSubmission.data.data.illustration
-          : ''}
+          : '')}
         alt="Illustration"
       />
     </figure>

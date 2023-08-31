@@ -147,9 +147,8 @@ export function getPath(input: string) {
   return url.pathname + url.search;
 }
 
-// TODO implement this
-export function getCompressedImage(input: string | undefined) {
-  return input;
+export function getCompressedImage(input: string | undefined, quality = 20) {
+  return `${input}?imageslim&imageMogr2/quality/${quality}`
 }
 
 export function getUserColor(type: string | null) {
@@ -193,8 +192,8 @@ export function getUserLevel(exp: number) {
   return USER_LEVELS[USER_LEVELS.length - 1].level;
 }
 
-export function getAvatar(avatar: string | null) {
-  return avatar ?? PUBLIC_AVATAR;
+export function getAvatar(avatar: string | null, quality = 15) {
+  return getCompressedImage(avatar ?? PUBLIC_AVATAR, quality);
 }
 
 export function getGrade(score: number, fullCombo: boolean) {

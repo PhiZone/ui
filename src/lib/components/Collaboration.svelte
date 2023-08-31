@@ -4,6 +4,7 @@
   import User from '$lib/components/User.svelte';
   import type { CollaborationDto } from '$lib/api/collaboration';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+    import { getCompressedImage } from '$lib/utils';
 
   export let collaboration: CollaborationDto;
 
@@ -44,7 +45,7 @@
       : $songSubmission.data?.data}
     {@const song = $song.isSuccess ? $song.data.data : $songSubmission.data?.data}
     <figure class="min-w-[30%] max-w-[30%]">
-      <img class="object-cover w-full h-full" src={song?.illustration} alt="Illustration" />
+      <img class="object-cover w-full h-full" src={getCompressedImage(song?.illustration)} alt="Illustration" />
     </figure>
     <div class="card-body w-[70%]">
       <h2 class="card-title text-2xl mb-3 min-w-fit w-20 max-w-[150px] h-1/2">

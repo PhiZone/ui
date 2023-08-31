@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import type { ChartDto, RecordDto, SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
+  import { getCompressedImage, getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
 
   $: ({ api } = $page.data);
 
@@ -32,7 +32,7 @@
     {#if $songQ.isSuccess}
       <img
         class="object-fill w-full h-full blur opacity-40"
-        src={$songQ.data.data.illustration}
+        src={getCompressedImage($songQ.data.data.illustration, 1)}
         alt="Illustration"
       />
     {/if}
