@@ -48,6 +48,8 @@
     "description_placeholder": "Description (Optional; it's advised that you attach a link to your chart's preview video)",
     "preview_start": "Start Time of Preview",
     "preview_end": "End Time of Preview",
+    "start": "Start",
+    "end": "End",
     "preview_placeholder": "In the format of mm:ss (e.g. 01:14), used to specify the preview section in players",
     "chapters": "Associated Chapters",
     "uploader": "Uploader",
@@ -68,7 +70,10 @@
     "reviewer": "Reviewer",
     "reviewer_id": "Reviewer ID",
     "is_original": "Is original",
-    "is_hidden": "Is hidden"
+    "is_hidden": "Is hidden",
+    "min_bpm": "Minimum BPM",
+    "main_bpm": "Main BPM",
+    "max_bpm": "Maximum BPM"
   },
   "request": {
     "accept": "Accept",

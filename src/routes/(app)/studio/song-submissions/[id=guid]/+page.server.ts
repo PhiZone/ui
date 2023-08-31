@@ -1,6 +1,5 @@
 import API from '$lib/api';
 import { fail } from '@sveltejs/kit';
-import { useQueryClient } from '@tanstack/svelte-query';
 
 export const actions = {
   review: async ({ request, params, fetch, locals }) => {
@@ -14,8 +13,6 @@ export const actions = {
       message: data.get('message') as string,
     });
     if (resp.ok) {
-      const queryClient = useQueryClient();
-      await queryClient.invalidateQueries(['song.submission.info', { id: params.id }]);
       return;
     }
     const err = await resp.json();

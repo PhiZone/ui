@@ -9,7 +9,7 @@ export interface NotificationDto {
   dateCreated: Date;
   dateRead: Date | null;
   id: string;
-  operator: UserDto;
+  operator: UserDto | null;
   ownerId: number;
   type: number;
 }

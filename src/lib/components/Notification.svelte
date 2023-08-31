@@ -31,7 +31,7 @@
       <div
         class="relative inline-flex flex-col items-center justify-center border-r border-base-200 px-3 py-3 mx-auto my-auto w-full"
       >
-        <User id={notification.operator.id ?? 1} initUser={notification.operator} kind="embedded" />
+        <User id={notification.operator?.id ?? 1} initUser={notification.operator ?? undefined} kind="embedded" />
       </div>
     </figure>
     <div class="card-body w-3/4 md:w-5/6 pt-4 pl-6 pb-4 pr-6 flex-col justify-center">

@@ -1,5 +1,7 @@
 export const PAGINATION_PER_PAGE = 36;
 
+export const MB = 1 << 20;
+
 export const USER_LEVELS = [
   { exp: 50, level: 1 },
   { exp: 100, level: 2 },

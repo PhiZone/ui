@@ -48,6 +48,8 @@
     "description_placeholder": "简介（选填，建议在此标注视频平台上的谱面预览视频的链接）",
     "preview_start": "预览开始时间",
     "preview_end": "预览结束时间",
+    "start": "开始",
+    "end": "结束",
     "preview_placeholder": "用于游玩器内预览播放，须以 mm:ss 格式填写（如 01:14）",
     "chapters": "收录章节",
     "uploader": "上传者",
@@ -68,7 +70,10 @@
     "reviewer": "处理人",
     "reviewer_id": "处理人 ID",
     "is_original": "是否为原创",
-    "is_hidden": "是否隐藏"
+    "is_hidden": "是否隐藏",
+    "min_bpm": "最小 BPM",
+    "main_bpm": "主要 BPM",
+    "max_bpm": "最大 BPM"
   },
   "request": {
     "accept": "接受",

@@ -83,6 +83,7 @@
     "song_title": "曲目標題",
     "song_edition": "曲目版本",
     "chart_level": "譜面等級",
+    "song_preview": "曲目預覽",
     "level_preview": "譜面等級預覽",
     "chart_difficulty_1": "谱面定級",
     "chart_difficulty_2": "谱面定數",
@@ -93,12 +94,12 @@
     "charter_preview": "譜師名義（馬甲）預覽",
     "illustrator": "畫師名義（馬甲）",
     "tips": {
-      "audio": "30MB 或更小的 MP3 / FLAC / WAV / OGG",
-      "image": "10MB 或更小的 JPG / JPEG / PNG / WEBP",
-      "chart": "僅支援 PE / RPE 創作的譜面",
-      "illustration": "10MB 或更小的 JPG / JPEG / PNG / WEBP，長寬比必須為 16:9，解析度不得低於 960×540",
-      "license": "须上传图片文件以证明本次上传已经作者授权",
-      "originality_proof": "须上传 ZIP 压缩文件（例：内含分轨音频文件）以证明曲目的原创性质",
+      "audio": "30 MB 或更小的 MP3 / FLAC / WAV / OGG",
+      "image": "10 MB 或更小的 JPG / JPEG / PNG / WEBP",
+      "chart": "僅支援 PE / RPE 創作的譜面，不大於 50 MB",
+      "illustration": "10 MB 或更小的 JPG / JPEG / PNG / WEBP，長寬比必須為 16:9，解析度不得低於 960×540",
+      "license": "须上传图片文件（不大于 10 MB）以证明本次上传已经作者授权",
+      "originality_proof": "须上传 ZIP 压缩文件（不大于 200 MB）（例：内含分轨音频文件）以证明曲目的原创性质",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "ranked": "游玩该谱后，结算时数据计入 RKS；谱面审核较为严格",
       "unranked": "游玩该谱后，结算时数据不计入 RKS；谱面审核较为宽松",
@@ -108,6 +109,9 @@
     "errors": {
       "data_incomplete": "輸入的資訊不完整！",
       "data_invalid": "輸入的訊息不合法！",
+      "min_bpm": "最小 BPM 大于主要 BPM！",
+      "max_bpm": "最大 BPM 小于主要 BPM！",
+      "file_too_large": "输入的文件大小过大！",
       "unknown_error": "發生了未知錯誤！"
     }
   },

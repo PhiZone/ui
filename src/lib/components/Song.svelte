@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { convertDuration } from '$lib/utils';
+  import { convertTime } from '$lib/utils';
   import Like from './Like.svelte';
 
   export let song: SongDto;
@@ -69,7 +69,7 @@
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.duration')}</span>
-          {convertDuration(song.duration)}
+          {convertTime(song.duration)}
         </p>
         <!-- <p class="whitespace-nowrap overflow-hidden text-ellipsis">
         <span class="badge badge-primary badge-outline mr-1">

@@ -54,8 +54,8 @@ export interface CreateOpts {
   Description?: string | undefined;
   Edition?: string | undefined;
   EditionType: number;
-  File: Blob;
-  Illustration: Blob;
+  File?: Blob | undefined;
+  Illustration?: Blob | undefined;
   Illustrator: string;
   License?: Blob | undefined;
   Lyrics?: string | undefined;

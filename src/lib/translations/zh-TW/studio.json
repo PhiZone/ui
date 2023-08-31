@@ -48,6 +48,8 @@
     "description_placeholder": "簡介（選填，建議在此標註影音平台上譜面預覽影片的連結）",
     "preview_start": "預覽開始時間",
     "preview_end": "預覽結束時間",
+    "start": "開始",
+    "end": "結束",
     "preview_placeholder": "用於遊玩器內預覽播放，須以 mm:ss 格式填寫（如 01:14）",
     "chapters": "收錄章節",
     "uploader": "上傳者",
@@ -68,7 +70,10 @@
     "reviewer": "處理者",
     "reviewer_id": "處理者 ID",
     "is_original": "是否為原創",
-    "is_hidden": "是否隱藏"
+    "is_hidden": "是否隱藏",
+    "min_bpm": "最小 BPM",
+    "main_bpm": "主要 BPM",
+    "max_bpm": "最大 BPM"
   },
   "request": {
     "accept": "接受",

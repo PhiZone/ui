@@ -26,7 +26,6 @@
   if (browser) {
     const language = locale.get() || data.user?.language || window.navigator.language;
     locale.set(language);
-    console.log('Language:', language);
   }
 </script>
 

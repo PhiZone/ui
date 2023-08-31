@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import type { Chapter, SongSubmissionError } from '$lib/api';
   import { onMount } from 'svelte';
+    import { convertTime } from '$lib/utils';
 
   export let data: import('./$types').PageData;
   $: ({ content, access_token, user } = data);
@@ -58,7 +59,7 @@
 
   const handleSong = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.song) error.song = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       song = target.files[0];
     }
@@ -66,7 +67,7 @@
 
   const handleIllustration = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.illustration) error.illustration = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       illustration = target.files[0];
       const reader = new FileReader();
@@ -335,7 +336,7 @@
                   </span>
                   <input
                     type="text"
-                    placeholder={content.preview_start.replace(/^00:/, '')}
+                    placeholder={convertTime(content.preview_start)}
                     class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                       status === Status.ERROR && error?.preview_start
                         ? 'input-error'
@@ -359,7 +360,7 @@
                   </span>
                   <input
                     type="text"
-                    placeholder={content.preview_end.replace(/^00:/, '')}
+                    placeholder={convertTime(content.preview_end)}
                     class={`input input-bordered join-item w-3/4 min-w-[180px] ${
                       status === Status.ERROR && error?.preview_end
                         ? 'input-error'

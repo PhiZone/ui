@@ -70,7 +70,7 @@
 
   const handleChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.chart) error.chart = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       chart = target.files[0];
     }

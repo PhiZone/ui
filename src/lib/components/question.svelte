@@ -69,21 +69,21 @@
     difficulty: number | null = null;
 
   const handleChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       chart = target.files[0];
     }
   };
 
   const handleSong = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       song = target.files[0];
     }
   };
 
   const handleIllustration = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       illustration = target.files[0];
       const reader = new FileReader();

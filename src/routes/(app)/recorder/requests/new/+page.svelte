@@ -71,7 +71,7 @@
 
   const handleChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.chart) error.chart = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       chart = target.files[0];
     }
@@ -79,7 +79,7 @@
 
   const handleSong = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.song) error.song = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       song = target.files[0];
     }
@@ -87,7 +87,7 @@
 
   const handleIllustration = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.illustration) error.illustration = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       illustration = target.files[0];
       const reader = new FileReader();
@@ -100,7 +100,7 @@
 
   const handleConfig = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.config) error.config = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       config = target.files[0];
     }
@@ -108,7 +108,7 @@
 
   const handleAvatar = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (error?.avatar) error.avatar = [];
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       avatar = target.files[0];
     }

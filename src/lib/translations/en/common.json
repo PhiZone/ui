@@ -83,6 +83,7 @@
     "song_title": "Song Title",
     "song_edition": "Song Edition",
     "chart_level": "Chart Level",
+    "song_preview": "Song Preview",
     "level_preview": "Level Preview",
     "chart_difficulty_1": "Chart Difficulty Tier",
     "chart_difficulty_2": "Chart Difficulty",
@@ -94,11 +95,11 @@
     "illustrator": "Illustrator's Name",
     "tips": {
       "audio": "MP3 / FLAC / WAV / OGG, no larger than 30 MB",
-      "image": "JPG / JPEG / PNG / WEBP, no larger than 10MB",
-      "chart": "Only charts made with PE / RPE are supported",
-      "illustration": "JPG / JPEG / PNG / WEBP, no larger than 10MB, 16:9, no smaller than 960×540",
-      "license": "Must upload an image of the license to proove that this submission is licensed by the author",
-      "originality_proof": "ZIP file (e.g. containing sub-track audio files) is required to proove the originality",
+      "image": "JPG / JPEG / PNG / WEBP, no larger than 10 MB",
+      "chart": "Only charts made with PE / RPE are supported, no larger than 50 MB",
+      "illustration": "JPG / JPEG / PNG / WEBP, no larger than 10 MB, 16:9, no smaller than 960×540",
+      "license": "Must upload an image (no larger than 10 MB) of the license to proove that this submission is licensed by the author",
+      "originality_proof": "ZIP file (no larger than 200 MB) (e.g. containing sub-track audio files) is required to proove the originality",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "ranked": "Play results on this chart are counted in players' RKS; the reviewal is strict",
       "unranked": "Play results on this chart are not counted in players' RKS; the reviewal is lenient",
@@ -110,6 +111,7 @@
       "data_invalid": "The input data is invalid!",
       "min_bpm": "The minimum BPM is larger than the main BPM!",
       "max_bpm": "The maximum BPM is smaller than the main BPM!",
+      "file_too_large": "The input file is larger than the maximum allowed!",
       "unknown_error": "An unknown error has occurred!"
     }
   },

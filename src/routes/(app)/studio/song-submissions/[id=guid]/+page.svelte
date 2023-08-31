@@ -3,7 +3,7 @@
   import reply from '$lib/api/reply.js';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
-  import { getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { convertTime, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
 
   export let data, form;
@@ -263,13 +263,13 @@
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.preview_start')}
                 </span>
-                {submission.previewStart.replace(/^00:/, '')}
+                {convertTime(submission.previewStart)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.preview_end')}
                 </span>
-                {submission.previewEnd.replace(/^00:/, '')}
+                {convertTime(submission.previewEnd)}
               </p>
               {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
                 {@const uploader = $uploader.data.data}

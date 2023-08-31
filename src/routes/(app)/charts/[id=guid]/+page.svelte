@@ -368,17 +368,17 @@
               <div class="divider divider-horizontal" />
               <div class="w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
-                <div class="flex justify-center gap-2">
+                <div class="flex justify-center join">
                   <Like
                     id={chart.id}
                     likes={chart.likeCount}
                     type="charts"
                     liked={chart.dateLiked != null}
-                    class="btn-md"
+                    class="btn-md join-item"
                   />
                   <label
                     for="chart-vote"
-                    class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline flex gap-1"
+                    class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline join-item flex gap-1"
                   >
                     <svg
                       fill="currentColor"
@@ -396,7 +396,7 @@
                   </label>
                   {#if chart.file && user}
                     <a href={chart.file} target="_blank" rel="noreferrer" download>
-                      <button class="btn btn-primary btn-outline flex gap-1 min-w-fit">
+                      <button class="btn btn-primary btn-outline join-item flex gap-1 min-w-fit">
                         <svg
                           fill="currentColor"
                           width="14px"

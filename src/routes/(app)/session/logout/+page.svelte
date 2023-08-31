@@ -13,7 +13,6 @@
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
           await goto($page.url.searchParams.get('redirect') ?? '/');
         } catch (e) {
-          console.log('Failed to log out gracefully', e);
           window.location.href = $page.url.searchParams.get('redirect') ?? '/';
         }
       }, 1000);

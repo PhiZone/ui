@@ -68,7 +68,7 @@ export function getUserPrivilege(type: string | null | undefined) {
   }
 }
 
-export function convertDuration<T>(input: T) {
+export function convertTime<T>(input: T) {
   let minutes = 0,
     seconds = 0;
 
@@ -76,21 +76,21 @@ export function convertDuration<T>(input: T) {
     const list = input.split(':');
     const hours = parseInt(list[0]);
     minutes = parseInt(list[1]) + hours * 60;
-    seconds = parseInt(list[2]);
+    seconds = parseFloat(list[2]);
   } else if (typeof input === 'number') {
-    const num = Math.floor(input);
-    minutes = Math.floor(num / 60);
-    seconds = num % 60;
+    minutes = Math.floor(input / 60);
+    seconds = input % 60;
   }
 
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toFixed(2).padStart(5, '0')}`;
 }
 
-export function parseDuration(input: string) {
+export function parseTime(input: string) {
   const list = input.split(':');
-  const hours = parseInt(list[0]);
-  const minutes = parseInt(list[1]) + hours * 60;
-  const seconds = parseInt(list[2]);
+  const hasHour = list.length > 2;
+  const hours = hasHour ? parseInt(list[0]) : 0;
+  const minutes = parseInt(list[hasHour ? 1 : 0]) + hours * 60;
+  const seconds = parseFloat(list[hasHour ? 2 : 1]);
   return minutes * 60 + seconds;
 }
 

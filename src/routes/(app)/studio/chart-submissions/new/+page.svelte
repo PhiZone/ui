@@ -132,7 +132,7 @@
                 name="File"
                 accept=".json, .pec"
                 class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-                  !!$errors.File
+                  $errors.File
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
@@ -262,8 +262,12 @@
                     $errors.Accessibility ? 'select-error' : 'select-secondary'
                   }`}
                 >
-                  <option value="0">{$t('common.accessibilities.0')} - {$t('chart.accessibility_tips.0')}</option>
-                  <option value="2">{$t('common.accessibilities.2')} - {$t('chart.accessibility_tips.2')}</option>
+                  <option value="0">
+                    {$t('common.accessibilities.0')} - {$t('chart.accessibility_tips.0')}
+                  </option>
+                  <option value="2">
+                    {$t('common.accessibilities.2')} - {$t('chart.accessibility_tips.2')}
+                  </option>
                 </select>
               </label>
             </div>
@@ -293,6 +297,11 @@
                 </select>
                 <input
                   type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
                   id="level"
                   name="Level"
                   placeholder={$t('common.form.tips.chart_level')}
@@ -313,6 +322,11 @@
                 </span>
                 <input
                   type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
                   id="difficulty"
                   name="Difficulty"
                   placeholder={(Math.random() * (16.9 - 11.9) + 11.9).toFixed(1)}
@@ -344,6 +358,11 @@
                 </span>
                 <input
                   type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.charter')}

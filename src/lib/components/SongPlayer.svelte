@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { t } from '$lib/translations/config';
-  import { convertDuration } from '$lib/utils';
+  import { convertTime } from '$lib/utils';
 
   export let song: string;
   export let illustration: string;
@@ -42,14 +42,14 @@
     line = lyrics[lyricsIndex].line;
   };
 
-  let timer: number;
+  let timer: NodeJS.Timer;
 
   const playAudio = () => {
     audio.currentTime = time;
     syncLyrics();
     audio.play();
     playing = true;
-    timer = window.setInterval(() => {
+    timer = setInterval(() => {
       time = audio ? audio.currentTime : 0;
       if (lyrics && lyricsIndex < lyrics.length - 1 && lyrics[lyricsIndex + 1].time < time) {
         line = lyrics[++lyricsIndex].line;
@@ -114,7 +114,7 @@
     <div class="flex justify-between text-xs font-semibold text-gray-500 px-4 py-1">
       <div class="w-9">
         <p class="text-left">
-          {convertDuration(Math.min(time, duration))}
+          {convertTime(Math.min(time, duration))}
         </p>
       </div>
       <div>
@@ -241,7 +241,7 @@
       </div>
       <div class="w-9">
         <p class="text-right">
-          {convertDuration(duration)}
+          {convertTime(duration)}
         </p>
       </div>
     </div>

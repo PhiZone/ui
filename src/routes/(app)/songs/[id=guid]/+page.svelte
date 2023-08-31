@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import { convertDuration, parseDuration, parseLyrics, parseDateTime } from '$lib/utils';
+  import { convertTime, parseTime, parseLyrics, parseDateTime } from '$lib/utils';
   import Comments from '$lib/components/Comments.svelte';
   import User from '$lib/components/User.svelte';
   import Like from '$lib/components/Like.svelte';
@@ -127,7 +127,7 @@
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.duration')}
                       </span>
-                      {convertDuration(song.duration)}
+                      {convertTime(song.duration)}
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">{$t('song.time')}</span>
@@ -178,7 +178,7 @@
                 <Player
                   song={song.file}
                   illustration={song.illustration}
-                  duration={parseDuration(song.duration)}
+                  duration={parseTime(song.duration)}
                   lyrics={song.lyrics ? parseLyrics(song.lyrics) : null}
                 />
               </div>
