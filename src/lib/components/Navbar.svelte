@@ -45,16 +45,6 @@
         <li>
           <a href="/records">{$t('common.records')}</a>
         </li>
-        <!-- <li><a href="/apps">{$t("common.navbar.apps")}</a></li>
-				<li><a href="/discussions">{$t("common.discussions")}</a></li> -->
-        <li>
-          <a href="/recorder">{$t('common.navbar.recorder')}</a>
-        </li>
-        <!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
-					<li>
-						<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
-					</li>
-				{/if} -->
       </ul>
     </div>
     <a class="title flex items-center normal-case font-extrabold text-2xl lg:text-4xl" href="/">
@@ -84,20 +74,6 @@
       <li>
         <a href="/records">{$t('common.records')}</a>
       </li>
-      <!-- <li class="rounded-full">
-				<a href="/apps">{$t("common.navbar.apps")}</a>
-			</li>
-			<li class="rounded-full">
-				<a href="/discussions">{$t("common.discussions")}</a>
-			</li> -->
-      <li>
-        <a href="/recorder">{$t('common.navbar.recorder')}</a>
-      </li>
-      <!-- {#if user && getUserPrivilege(user?.type?.toString()) < 2}
-				<li class="rounded-full">
-					<a href="/challenge">{$t("common.navbar.privilege_escalation")}</a>
-				</li>
-			{/if} -->
     </ul>
   </div>
   <div class="navbar-end flex-grow">
@@ -171,9 +147,6 @@
                 <a href="/studio">{$t('common.studio')}</a>
               </li>
             {/if}
-            <li>
-              <a href="/me/settings">{$t('common.settings')}</a>
-            </li>
             <li>
               <a data-sveltekit-preload-data="off" href="/session/logout">
                 {$t('common.navbar.logout')}

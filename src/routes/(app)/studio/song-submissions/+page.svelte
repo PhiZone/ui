@@ -3,7 +3,6 @@
   import { t } from '$lib/translations/config';
   import Pagination from '$lib/components/Pagination.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
-  import SearchOptions from '$lib/components/SearchOptions.svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
@@ -30,31 +29,6 @@
           </a>
         </div>
       </div>
-      <SearchOptions
-        params={searchParams}
-        filters={[
-          {
-            value: 'status',
-            name: $t('studio.submission.status'),
-            options: [
-              { value: '0', name: $t('studio.submission.statuses.0') },
-              { value: '1', name: $t('studio.submission.statuses.1') },
-              { value: '2', name: $t('studio.submission.statuses.2') },
-            ],
-          },
-          { value: 'uploader', name: $t('studio.submission.uploader_id'), options: 'number' },
-          { value: 'reviewer', name: $t('studio.submission.reviewer_id'), options: 'number' },
-          { value: 'chapter', name: $t('song.chapter'), options: 'number' },
-        ]}
-        orders={[
-          { value: 'id', name: $t('song.id') },
-          { value: 'name', name: $t('song.name') },
-          { value: 'composer', name: $t('song.composer') },
-          { value: 'illustrator', name: $t('song.illustrator') },
-          { value: 'uploader', name: $t('studio.submission.uploader') },
-          { value: 'reviewer', name: $t('studio.submission.reviewer') },
-        ]}
-      />
       <div class="min-w-fit form-control gap-4">
         {#if $query.isSuccess}
           {@const { total, perPage, data } = $query.data}

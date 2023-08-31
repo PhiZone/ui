@@ -261,14 +261,6 @@
               {/if}
             </div>
             <div class="card-actions flex items-center justify-end gap-2">
-              {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 3)}
-                <a
-                  href="/studio/chart-submissions/${submission.id}/edit"
-                  class="btn btn-primary btn-outline text-lg w-32"
-                >
-                  {$t('common.edit')}
-                </a>
-              {/if}
               {#if user && getUserPrivilege(user.role) >= 3}
                 <label
                   for="studio-chart-submission"

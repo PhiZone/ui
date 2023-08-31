@@ -3,7 +3,6 @@
   import { t } from '$lib/translations/config';
   import Chart from '$lib/components/Chart.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import SearchOptions from '$lib/components/SearchOptions.svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
@@ -17,48 +16,6 @@
 
 <div class="page">
   <h1 class="text-4xl font-bold mb-6">{$t('common.charts')}</h1>
-  <SearchOptions
-    params={searchParams}
-    filters={[
-      { value: 'id', name: 'id', options: 'number' },
-      { value: 'song', name: 'song id', options: 'number' },
-      { value: 'owner', name: 'owner id', options: 'number' },
-      {
-        value: 'level',
-        name: 'Level',
-        options: [
-          { value: 'EZ', name: 'EZ' },
-          { value: 'HD', name: 'HD' },
-          { value: 'IN', name: 'IN' },
-          { value: 'AT', name: 'AT' },
-        ],
-      },
-      { value: 'charter', name: 'charter', options: 'text' },
-      { value: 'description', name: 'description', options: 'text' },
-      {
-        value: 'ranked',
-        name: 'ranked',
-        options: [
-          { value: '1', name: 'yes' },
-          { value: '0', name: 'no' },
-        ],
-      },
-      { value: 'difficulty', name: 'difficulty', options: 'range' },
-      { value: 'note_count', name: 'note_count', options: 'range' },
-      { value: 'score', name: 'score', options: 'range' },
-      { value: 'rating', name: 'rating', options: 'range' },
-    ]}
-    orders={[
-      { value: 'id', name: 'id' },
-      { value: 'song', name: 'song' },
-      { value: 'owner', name: 'owner' },
-      { value: 'charter', name: 'charter' },
-      { value: 'level', name: 'level' },
-      { value: 'difficulty', name: 'difficulty' },
-      { value: 'note_count', name: 'note_count' },
-      { value: 'score', name: 'score' },
-    ]}
-  />
   {#if $query.isSuccess}
     {@const { total, perPage, data } = $query.data}
     {#if total && perPage && data && data.length > 0}

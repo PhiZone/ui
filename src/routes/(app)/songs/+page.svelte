@@ -3,7 +3,6 @@
   import { t } from '$lib/translations/config';
   import Song from '$lib/components/Song.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
-  import SearchOptions from '$lib/components/SearchOptions.svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
@@ -17,33 +16,6 @@
 
 <div class="page">
   <h1 class="text-4xl font-bold mb-6">{$t('common.songs')}</h1>
-  <SearchOptions
-    params={searchParams}
-    filters={[
-      { value: 'id', name: $t('song.id'), options: 'number' },
-      { value: 'name', name: $t('song.name'), options: 'text' },
-      { value: 'composer', name: $t('song.composer'), options: 'text' },
-      { value: 'illustrator', name: $t('song.illustrator'), options: 'text' },
-      { value: 'uploader', name: $t('song.uploader'), options: 'number' },
-      { value: 'duration', name: $t('song.duration'), options: 'range' },
-      {
-        value: 'original',
-        name: $t('song.original'),
-        options: [
-          { value: '1', name: $t('common.yes') },
-          { value: '0', name: $t('common.no') },
-        ],
-      },
-    ]}
-    orders={[
-      { value: 'id', name: $t('song.id') },
-      { value: 'name', name: $t('song.name') },
-      { value: 'composer', name: $t('song.composer') },
-      { value: 'illustrator', name: $t('song.illustrator') },
-      { value: 'uploader', name: $t('song.uploader') },
-      { value: 'duration', name: $t('song.duration') },
-    ]}
-  />
   {#if $query.isSuccess}
     {@const { total, perPage, data } = $query.data}
     {#if total && perPage && data.length > 0}

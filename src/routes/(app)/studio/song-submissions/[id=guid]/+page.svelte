@@ -326,14 +326,6 @@
             </div>
             <audio class="w-full" controls src={submission.file} />
             <div class="card-actions flex items-center justify-end">
-              {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 3)}
-                <a
-                  href="/studio/song-submissions/${submission?.id}/edit"
-                  class="btn btn-primary btn-outline text-lg w-32"
-                >
-                  {$t('common.edit')}
-                </a>
-              {/if}
               {#if user && getUserPrivilege(user.role) >= 3}
                 <label
                   for="studio-song-submission"
