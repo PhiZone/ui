@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import Collaboration from '$lib/components/collaboration.svelte';
+  import Collaboration from '$lib/components/Collaboration.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
 
   export let data;
