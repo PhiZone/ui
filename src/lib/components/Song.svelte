@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { convertTime } from '$lib/utils';
+  import { convertTime, getCompressedImage } from '$lib/utils';
   import Like from './Like.svelte';
 
   export let song: SongDto;
@@ -38,7 +38,7 @@
   >
     <a href={`/songs/${song.id}`}>
       <figure class="h-[168px] relative">
-        <img src={song.illustration} alt="Illustration" class="object-fill" />
+        <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
         {#if song.isOriginal}
           <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
             <button class="btn btn-secondary btn-sm text-xl no-animation">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ChapterDto } from '$lib/api';
   import { t } from '$lib/translations/config';
+    import { getCompressedImage } from '$lib/utils';
   import Like from './Like.svelte';
 
   export let chapter: ChapterDto;
@@ -14,7 +15,7 @@
 >
   <a href="/chapters/{chapter.id}">
     <figure class="h-[180px]">
-      <img src={chapter.illustration} alt="Illustration" class="object-fill" />
+      <img src={getCompressedImage(chapter.illustration)} alt="Illustration" class="object-fill" />
     </figure>
     <div class="card-body {fixedHeight ? 'h-[280px]' : ''} gap-0.5">
       <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">

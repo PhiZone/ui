@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import { parseDateTime } from '$lib/utils';
+  import { getCompressedImage, parseDateTime } from '$lib/utils';
   import { page } from '$app/stores';
   import type { SongSubmissionDto } from '$lib/api/song.submission';
 
@@ -23,7 +23,7 @@
     } shadow-lg hover:shadow-sm hover:shadow-primary-focus`}
   >
     <figure class="min-w-[30%] max-w-[30%]">
-      <img class="object-cover w-full h-full" src={submission.illustration} alt="Illustration" />
+      <img class="object-cover w-full h-full" src={getCompressedImage(submission.illustration)} alt="Illustration" />
     </figure>
     <div class="card-body w-[70%] max-h-fit">
       <h2 class="card-title text-2xl mb-3 min-w-fit">

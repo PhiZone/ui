@@ -50,7 +50,7 @@
                     : 'border-neutral-500'
                 }`}
               >
-                <img src={getAvatar(user.avatar)} alt="Avatar" />
+                <img src={getAvatar(user.avatar, 60)} alt="Avatar" />
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">
