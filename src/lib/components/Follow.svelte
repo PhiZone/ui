@@ -32,12 +32,17 @@
 </script>
 
 {#if !user.dateFollowed}
-  <button class="w-fit btn btn-outline btn-primary text-sm" disabled={!api._user} on:click={follow}>
+  <button
+    type="button"
+    class="w-fit btn btn-outline btn-primary text-sm"
+    disabled={!api._user}
+    on:click={follow}
+  >
     {$t('user.follow')}
     {user.followerCount}
   </button>
 {:else}
-  <button class="w-fit btn btn-outline btn-ghost text-sm" on:click={unfollow}>
+  <button type="button" class="w-fit btn btn-outline btn-ghost text-sm" on:click={unfollow}>
     {$t('user.unfollow')}
     {user.followerCount}
   </button>

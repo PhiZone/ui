@@ -6,6 +6,9 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext.js';
+  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
+  import type { SongDto } from '$lib/api/song.js';
+  import type { SongSubmissionDto } from '$lib/api/song.submission.js';
 
   export let data;
 
@@ -23,17 +26,34 @@
   let newCharterId: number | null = null;
   let newCharterDisplay = '';
   let queryCharter = false;
-  $: songSwitch = false;
+  let chart = '';
+  let songSwitch = false;
+  let parent: SongDto | SongSubmissionDto | undefined;
 
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
   );
-  $: song = createQuery(api.song.listAll({ desc: true }, { enabled: songSwitch }));
+  $: song = createQuery(api.song.listAll({ order: 'title' }, { enabled: songSwitch }));
   $: songSubmission = createQuery(
     api.song.submission.listAll({ rangeOwnerId: [user?.id ?? 0] }, { enabled: !songSwitch }),
   );
-
   $: charterPreview = richtext(authorName ?? '');
+
+  const loadChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+    const target = e.currentTarget;
+    if (target.files && target.files.length > 0) {
+      chart = URL.createObjectURL(target.files[0]);
+    }
+  };
+
+  const resolveSong = (e: Event & { currentTarget: EventTarget & HTMLSelectElement }) => {
+    parent =
+      songSwitch && $song.isSuccess
+        ? $song.data.data.find((value) => value.id === e.currentTarget.value)
+        : $songSubmission.isSuccess
+        ? $songSubmission.data.data.find((value) => value.id === e.currentTarget.value)
+        : undefined;
+  };
 </script>
 
 <svelte:head>
@@ -123,6 +143,21 @@
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
+          <a
+            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${
+                  parent?.file
+                }&illustration=${parent?.illustration}&name=${
+                  parent?.title
+                }&level=${level}&difficulty=${
+                  parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'
+                }&composer=${parent?.authorName}&illustrator=${
+                  parent?.illustrator
+                }&charter=${authorName}`}
+            target="_blank"
+            class="px-4 mb-2 link link-hover"
+          >
+            {$t('studio.submission.offset_helper')}
+          </a>
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex">
               <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
@@ -136,6 +171,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
+                on:input={loadChart}
               />
               {#if !!$errors.File}
                 <span class="place-self-center w-2/3 text-error">{$errors.File}</span>
@@ -200,14 +236,16 @@
                     class={`select select-secondary join-item w-3/4 min-w-[180px] ${
                       $song.isError ? 'select-error' : 'select-secondary'
                     }`}
+                    value=""
+                    on:input={resolveSong}
                   >
                     {#if $song.isSuccess}
                       {#each $song.data.data as song}
                         <option value={song.id}>
                           [{$t(`studio.submission.accessibilities.${song.accessibility}`)}]
-                          {song.authorName} - {song.title} [{$t(
-                            `song.edition_types.${song.editionType}`,
-                          )}{song.edition ? ` (${song.edition})` : ''}]
+                          {song.title} [{$t(`song.edition_types.${song.editionType}`)}{song.edition
+                            ? ` (${song.edition})`
+                            : ''}] - {song.authorName}
                         </option>
                       {/each}
                     {/if}
@@ -231,13 +269,15 @@
                     class={`select select-secondary join-item w-3/4 min-w-[180px] ${
                       $songSubmission.isError ? 'select-error' : 'select-secondary'
                     }`}
+                    value=""
+                    on:input={resolveSong}
                   >
                     {#if $songSubmission.isSuccess}
                       {#each $songSubmission.data.data as song}
                         <option value={song.id}>
-                          {song.authorName} - {song.title} [{$t(
-                            `song.edition_types.${song.editionType}`,
-                          )}{song.edition ? ` (${song.edition})` : ''}]
+                          {song.title} [{$t(`song.edition_types.${song.editionType}`)}{song.edition
+                            ? ` (${song.edition})`
+                            : ''}] - {song.authorName}
                         </option>
                       {/each}
                     {/if}
@@ -426,7 +466,7 @@
                     : $submitting
                     ? 'btn-ghost'
                     : 'btn-primary btn-outline'} w-full"
-                  disabled={$submitting}
+                  disabled={$submitting || !chart}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')

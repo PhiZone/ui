@@ -61,6 +61,7 @@
     "song_type": "Type of Song",
     "add_composer": "Add Composer",
     "add_charter": "Add Charter",
+    "add_collaborator": "Add Collaborator",
     "your_id": "Your ID",
     "author_placeholder": "Integers only; the specified user needs qualified",
     "original_chart": "Original Chart",
@@ -73,7 +74,8 @@
     "is_hidden": "Is hidden",
     "min_bpm": "Minimum BPM",
     "main_bpm": "Main BPM",
-    "max_bpm": "Maximum BPM"
+    "max_bpm": "Maximum BPM",
+    "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file."
   },
   "request": {
     "accept": "Accept",

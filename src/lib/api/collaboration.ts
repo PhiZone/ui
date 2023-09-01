@@ -57,8 +57,8 @@ export default class CollaborationAPI {
     return this.api.POST(`/studio/${type}/${id}/collaborations`, rest);
   }
 
-  review({ id, ...rest }: ReviewOpts): R {
-    return this.api.POST(`/collaborations/${id}/review`, rest);
+  review({ id, approve }: ReviewOpts): R {
+    return this.api.POST(`/collaborations/${id}/review?approve=${approve}`);
   }
 
   delete({ id }: InfoOpts): R {
