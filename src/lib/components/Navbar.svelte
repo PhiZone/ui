@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
-  import { getAvatar, getUserPrivilege } from '$lib/utils';
+  import { getAvatar, getUserColor, getUserPrivilege } from '$lib/utils';
 </script>
 
 <div
@@ -109,15 +109,9 @@
           <!-- svelte-ignore a11y-label-has-associated-control -->
           <label
             tabindex="-1"
-            class={`btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 ${
-              user.role == 'Administrator'
-                ? 'bg-indigo-500'
-                : user.role == 'Volunteer'
-                ? 'bg-emerald-500'
-                : user.role == 'Qualified'
-                ? 'bg-sky-500'
-                : ''
-            }`}
+            class={`btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 bg-${getUserColor(
+              user.role,
+            )}`}
           >
             <div class="w-12 rounded-full">
               <img src={getAvatar(user.avatar)} alt="Avatar" class="bg-white" />

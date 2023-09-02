@@ -4,6 +4,7 @@ import type API from '.';
 import queryString from 'query-string';
 import type { Filter } from './song';
 import type { R } from './types';
+import type { CollaborationDto } from './collaboration';
 
 export interface ChartSubmissionDto {
   accessibility: number;
@@ -74,10 +75,15 @@ export default class ChartSubmissionAPI {
       this.api.GET('/studio/charts?' + stringifyFilter(opts, true)),
   );
 
+  listAllCollaborations = createQueryCreator(
+    'collaboration.list',
+    ({ id }: InfoOpts): R<CollaborationDto[]> =>
+      this.api.GET(`/collaborations?rangeSubmissionId=${id}`),
+  );
+
   info = createQueryCreator(
     'chart.submission.info',
-    ({ id, ...rest }: InfoOpts): R<ChartSubmissionDto> =>
-      this.api.GET(`/studio/charts/${id}?` + queryString.stringify(rest)),
+    ({ id }: InfoOpts): R<ChartSubmissionDto> => this.api.GET(`/studio/charts/${id}`),
   );
 
   create(opts: CreateOpts): R {

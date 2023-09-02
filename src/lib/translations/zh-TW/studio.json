@@ -61,6 +61,7 @@
     "song_type": "曲目類型",
     "add_composer": "關聯曲師",
     "add_charter": "關聯譜師",
+    "add_collaborator": "关联合作成员",
     "your_id": "您的 ID",
     "author_placeholder": "僅整數；對應用戶須已認證",
     "original_chart": "原譜面",
@@ -73,7 +74,8 @@
     "is_hidden": "是否隱藏",
     "min_bpm": "最小 BPM",
     "main_bpm": "主要 BPM",
-    "max_bpm": "最大 BPM"
+    "max_bpm": "最大 BPM",
+    "offset_helper": "在上传谱面文件之前，请先选择曲目并填写谱面信息，然后点击此处调整延迟，随后将校正延迟后的文件上传。"
   },
   "request": {
     "accept": "接受",

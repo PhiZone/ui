@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { getAvatar, getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
+  import { getAvatar, getUserColor, getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import Record from '$lib/components/Record.svelte';
   import Follow from '$lib/components/Follow.svelte';
@@ -40,15 +40,7 @@
           >
             <div class="avatar min-w-fit h-fit">
               <div
-                class={`mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] ${
-                  user.role == 'admin'
-                    ? 'border-indigo-500'
-                    : user.role == 'volunteer'
-                    ? 'border-emerald-500'
-                    : user.role == 'qualified'
-                    ? 'border-sky-500'
-                    : 'border-neutral-500'
-                }`}
+                class="mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] border-{getUserColor(user.role)}"
               >
                 <img src={getAvatar(user.avatar, 60)} alt="Avatar" />
               </div>

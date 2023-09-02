@@ -148,5 +148,7 @@
     "0": "Public",
     "1": "Review Required",
     "2": "Private"
-  }
+  },
+  "collaborators": "Collaborators",
+  "position": "Position"
 }

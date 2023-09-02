@@ -22,7 +22,7 @@
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
       notification.dateRead &&
-      new Date().getTime() - new Date(notification.dateRead).getTime() > 2500
+      new Date().getTime() - new Date(notification.dateRead).getTime() > 4800
         ? 'border'
         : 'border border-secondary'
     }`}

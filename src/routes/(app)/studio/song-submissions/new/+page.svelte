@@ -22,6 +22,7 @@
   }
 
   let audio: HTMLAudioElement | undefined;
+  let illustration = false;
   let slider: TargetElement;
   let isOriginal = false;
   let showPreview = 0;
@@ -254,6 +255,11 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
+                on:input={(e) => {
+                  if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                    illustration = true;
+                  }
+                }}
               />
               {#if !!$errors.Illustration}
                 <span class="place-self-center w-2/3 text-error">{$errors.Illustration}</span>
@@ -697,7 +703,7 @@
                     : $submitting
                     ? 'btn-ghost'
                     : 'btn-primary btn-outline'} w-full"
-                  disabled={$submitting}
+                  disabled={$submitting || !audio || !illustration}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')

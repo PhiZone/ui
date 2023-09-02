@@ -2,6 +2,8 @@ import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
 import type { FilterBase, R } from './types';
+import queryString from 'query-string';
+import type { CollaborationDto } from './collaboration';
 
 export interface SongSubmissionDto {
   accessibility: number;
@@ -97,13 +99,18 @@ export default class SongSubmissionAPI {
       this.api.GET('/studio/songs?' + stringifyFilter(opts, true)),
   );
 
+  listAllCollaborations = createQueryCreator(
+    'collaboration.list',
+    ({ id }: InfoOpts): R<CollaborationDto[]> => this.api.GET(`/collaborations?rangeSubmissionId=${id}`),
+  );
+
   info = createQueryCreator(
     'song.submission.info',
     ({ id }: InfoOpts): R<SongSubmissionDto> => this.api.GET(`/studio/songs/${id}`),
   );
 
   create(opts: CreateOpts): R {
-    return this.api.POST('/studio/songs/', serialize(opts));
+    return this.api.POST('/studio/songs', serialize(opts));
   }
 
   delete(opts: DeleteOpts): R {

@@ -148,23 +148,25 @@ export function getPath(input: string) {
 }
 
 export function getCompressedImage(input: string | undefined, quality = 20) {
-  return `${input}?imageslim&imageMogr2/quality/${quality}`
+  return `${input}?imageslim&imageMogr2/quality/${quality}`;
 }
 
 export function getUserColor(type: string | null) {
   switch (type) {
-    case 'banned':
-      return 'stone-800';
-    case 'member':
+    case 'Member':
       return 'neutral-500';
-    case 'qualified':
+    case 'Sponsor':
+      return 'amber-500';
+    case 'Qualified':
       return 'teal-500';
-    case 'volunteer':
+    case 'Volunteer':
+      return 'orange-500';
+    case 'Moderator':
       return 'emerald-500';
-    case 'admin':
+    case 'Administrator':
       return 'indigo-500';
     default:
-      return 'neutral-500';
+      return 'stone-500';
   }
 }
 

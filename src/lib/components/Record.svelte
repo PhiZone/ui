@@ -31,7 +31,7 @@
   <a class="w-fit h-fit" href={`/records/${record.id}`}>
     {#if $songQ.isSuccess}
       <img
-        class="object-fill w-full h-full blur opacity-40"
+        class="object-fill w-full h-full blur-lg opacity-40"
         src={getCompressedImage($songQ.data.data.illustration, 1)}
         alt="Illustration"
       />

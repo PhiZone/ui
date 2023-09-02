@@ -65,7 +65,7 @@
           clearInterval(timer);
         }
       }
-    }, 50);
+    }, 10);
   };
 
   const pauseAudio = () => {
@@ -112,12 +112,12 @@
       />
     </div>
     <div class="flex justify-between text-xs font-semibold text-gray-500 px-4 py-1">
-      <div class="w-9">
+      <div class="w-1/6">
         <p class="text-left">
           {convertTime(Math.min(time, duration))}
         </p>
       </div>
-      <div>
+      <div class="w-2/3 flex justify-center">
         <div class="flex items-center space-x-3 p-2">
           <button
             class="btn btn-circle btn-sm btn-primary {loop
@@ -239,7 +239,7 @@
           </div>
         </div>
       </div>
-      <div class="w-9">
+      <div class="w-1/6">
         <p class="text-right">
           {convertTime(duration)}
         </p>
