@@ -378,7 +378,9 @@
                   />
                   <label
                     for="chart-vote"
-                    class="btn {user ? 'btn-primary' : 'btn-disabled'} btn-outline join-item flex gap-1"
+                    class="btn {user
+                      ? 'btn-primary'
+                      : 'btn-disabled'} btn-outline join-item flex gap-1"
                   >
                     <svg
                       fill="currentColor"
@@ -422,14 +424,12 @@
       <Comments type="charts" id={chart.id} {searchParams} />
     </div>
     <div class="mx-4 w-80 form-control">
-      {#if chart.ownerId}
-        <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
-            {$t('chart.owner')}
-          </span>
-          <User id={chart.ownerId} />
-        </div>
-      {/if}
+      <div class="indicator my-4 w-full">
+        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          {$t('chart.owner')}
+        </span>
+        <User id={chart.ownerId} />
+      </div>
       {#if $song.isSuccess}
         {@const song = $song.data.data}
         <div class="indicator my-4 w-full">

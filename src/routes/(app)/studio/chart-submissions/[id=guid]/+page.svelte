@@ -341,14 +341,6 @@
                 <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
                 {submission.noteCount}
               </p>
-              {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
-                <p class="min-w-fit">
-                  <span class="badge badge-primary badge-outline mr-1">
-                    {$t('studio.submission.uploader')}
-                  </span>
-                  {$uploader.data.data.userName}
-                </p>
-              {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.created_at')}
@@ -434,18 +426,20 @@
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <label
-              for="new-collaborator"
-              class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2 text-md"
-            >
-              ＋
-            </label>
+            {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
+              <label
+                for="new-collaborator"
+                class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2 text-md"
+              >
+                ＋
+              </label>
+            {/if}
             {#if $collaborations.isLoading}
               <div />
             {:else if $collaborations.isSuccess}
               {#if $collaborations.data.data.length > 0}
                 {#each $collaborations.data.data as collaboration}
-                  <Collaboration {collaboration} kind="mini" />
+                  <Collaboration {collaboration} kind="mini" showInvitee />
                 {/each}
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
@@ -462,17 +456,25 @@
         {/each}
       {/if}
     </div>
-    {#if $song.isSuccess}
-      {@const song = $song.data.data}
-      <div class="mx-4 w-80 form-control">
+    <div class="mx-4 w-80 form-control">
+      {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
+        <div class="indicator my-4 w-full">
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('studio.submission.uploader')}
+          </span>
+          <User id={$uploader.data.data.id} initUser={$uploader.data.data} />
+        </div>
+      {/if}
+      {#if $song.isSuccess}
+        {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
           <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
             {$t('song.song')}
           </span>
           <Song {song} />
         </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 {/if}
 

@@ -5,6 +5,7 @@
   import { t } from '$lib/translations/config';
   import { convertTime, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
+  import User from '$lib/components/User.svelte';
 
   export let data, form;
 
@@ -271,15 +272,6 @@
                 </span>
                 {convertTime(submission.previewEnd)}
               </p>
-              {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
-                {@const uploader = $uploader.data.data}
-                <p class="min-w-fit">
-                  <span class="badge badge-primary badge-outline mr-1">
-                    {$t('studio.submission.uploader')}
-                  </span>
-                  {uploader.userName}
-                </p>
-              {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.created_at')}
@@ -346,6 +338,16 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="mx-4 w-80 form-control">
+      {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
+        <div class="indicator my-4 w-full">
+          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            {$t('studio.submission.uploader')}
+          </span>
+          <User id={$uploader.data.data.id} initUser={$uploader.data.data} />
+        </div>
+      {/if}
     </div>
   </div>
 {/if}

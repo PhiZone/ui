@@ -40,13 +40,9 @@
         <div
           class="{kind === 'embedded'
             ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
-            : 'w-10 border-2'} rounded-full {user.role == 'Administrator'
-            ? 'border-indigo-500'
-            : user.role == 'Volunteer'
-            ? 'border-emerald-500'
-            : user.role == 'Qualified'
-            ? 'border-sky-500'
-            : 'border-neutral-500'}"
+            : 'w-10 border-2'} rounded-full border-{getUserColor(
+                  user.role
+                )}"
         >
           <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
         </div>
@@ -99,12 +95,12 @@
             <div class="avatar flex items-center min-w-fit">
               <div
                 class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                  user.role,
+                  user.role
                 )}"
               >
                 <img src={getAvatar(user.avatar)} alt="Avatar" />
               </div>
-              <p class="text-lg ml-2 text-[{getUserColor(user.role)}] flex gap-1 items-center">
+              <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
                 {user.userName}
                 <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
                 {#if user.tag}

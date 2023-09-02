@@ -8,6 +8,7 @@
 
   export let collaboration: CollaborationDto;
   export let kind: 'mini' | 'full' = 'full';
+  export let showInvitee = false;
 
   const queryClient = useQueryClient();
 
@@ -75,7 +76,7 @@
         </h2>
         <div class="flex gap-3 justify-between h-1/2 items-center">
           <div class="max-w-fit">
-            {#if user && collaboration.inviteeId == user.id}
+            {#if !showInvitee && user && collaboration.inviteeId == user.id}
               <User id={collaboration.inviterId} kind="mini" />
             {:else}
               <User id={collaboration.inviteeId} kind="mini" />
@@ -140,14 +141,14 @@
 {:else}
   <div class="flex gap-3 justify-between items-center">
     <div class="max-w-fit">
-      {#if user && collaboration.inviteeId == user.id}
+      {#if !showInvitee && user && collaboration.inviteeId == user.id}
         <User id={collaboration.inviterId} kind="mini" />
       {:else}
         <User id={collaboration.inviteeId} kind="mini" />
       {/if}
     </div>
     {#if collaboration.position}
-      <p class="text-xl">{collaboration.position}</p>
+      <div class="badge badge-secondary">{collaboration.position}</div>
     {/if}
     {#if !disabled && collaboration.status === 0}
       {#if user && collaboration.inviteeId === user.id}
