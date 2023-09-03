@@ -7,22 +7,6 @@
 
   export let data;
 
-  // if (
-  //   !$page.data.access_token &&
-  //   $page.data.refresh_token &&
-  //   browser &&
-  //   !$page.url.pathname.startsWith('/session') &&
-  //   !$page.url.pathname.startsWith('/auth')
-  // ) {
-  //   window.location.href = `/session/refresh?redirect=${encodeURIComponent(
-  //     $page.url.pathname + $page.url.search
-  //   )}`;
-  // }
-
-  // if (!$page.data.user && $page.data.access_token && $page.data.refresh_token && browser) {
-  //   window.location.reload();
-  // }
-
   if (browser) {
     const language = locale.get() || data.user?.language || window.navigator.language;
     locale.set(language);
@@ -32,3 +16,18 @@
 <QueryClientProvider client={data.queryClient}>
   <slot />
 </QueryClientProvider>
+
+<div class="border-indigo-500" hidden />
+<div class="border-emerald-500" hidden />
+<div class="border-orange-500" hidden />
+<div class="border-teal-500" hidden />
+<div class="border-amber-500" hidden />
+<div class="border-neutral-500" hidden />
+<div class="border-stone-500" hidden />
+<div class="bg-indigo-500" hidden />
+<div class="bg-emerald-500" hidden />
+<div class="bg-orange-500" hidden />
+<div class="bg-teal-500" hidden />
+<div class="bg-amber-500" hidden />
+<div class="bg-neutral-500" hidden />
+<div class="bg-stone-500" hidden />

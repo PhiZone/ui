@@ -133,9 +133,9 @@
           <!-- svelte-ignore a11y-label-has-associated-control -->
           <label
             tabindex="-1"
-            class={`btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 bg-${getUserColor(
+            class="btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 bg-{getUserColor(
               user.role,
-            )}`}
+            )}"
           >
             <div class="w-12 rounded-full">
               <img src={getAvatar(user.avatar)} alt="Avatar" class="bg-white" />

@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { SongDto } from '$lib/api';
+    import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getCompressedImage } from '$lib/utils';
+    import { readable } from 'svelte/store';
   import Like from './Like.svelte';
 
   export let song: SongDto;
@@ -30,6 +32,10 @@
   //       (anotherCount ? anotherCount : 0) -
   //       (specialCount ? specialCount : 0)
   //     : 0;
+
+  $: composer = song.isOriginal
+    ? richtext(song.authorName ?? '')
+    : readable(song.authorName);
 </script>
 
 {#if kind === 'full'}
@@ -57,7 +63,7 @@
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.composer')}</span>
-          {song.authorName}
+          {@html $composer}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.illustrator')}</span>
@@ -69,7 +75,7 @@
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('song.duration')}</span>
-          {convertTime(song.duration)}
+          {convertTime(song.duration, true)}
         </p>
         <!-- <p class="whitespace-nowrap overflow-hidden text-ellipsis">
         <span class="badge badge-primary badge-outline mr-1">

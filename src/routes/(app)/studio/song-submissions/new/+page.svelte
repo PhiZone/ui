@@ -23,6 +23,7 @@
 
   let audio: HTMLAudioElement | undefined;
   let illustration = false;
+  let originalityProof = false;
   let slider: TargetElement;
   let isOriginal = false;
   let showPreview = 0;
@@ -282,6 +283,11 @@
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
+                  on:input={(e) => {
+                    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                      originalityProof = true;
+                    }
+                  }}
                 />
                 {#if !!$errors.OriginalityProof}
                   <span class="place-self-center w-2/3 text-error">{$errors.OriginalityProof}</span>
@@ -595,7 +601,9 @@
               </label>
             </div>
             <div
-              class={$errors.MinBpm || $errors.Bpm || $errors.MaxBpm ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
+              class={$errors.MinBpm || $errors.Bpm || $errors.MaxBpm
+                ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                : ''}
               data-tip={$errors.MinBpm ?? $errors.Bpm ?? $errors.MaxBpm ?? ''}
             >
               <label class="join my-2 w-full">
@@ -703,7 +711,10 @@
                     : $submitting
                     ? 'btn-ghost'
                     : 'btn-primary btn-outline'} w-full"
-                  disabled={$submitting || !audio || !illustration}
+                  disabled={$submitting ||
+                    !audio ||
+                    !illustration ||
+                    (isOriginal && !originalityProof)}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')

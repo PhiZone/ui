@@ -58,7 +58,7 @@
       <figure class="min-w-[30%] max-w-[30%]">
         <img
           class="object-cover w-full h-full"
-          src={getCompressedImage(song?.illustration)}
+          src={getCompressedImage(submission?.illustration ?? song?.illustration)}
           alt="Illustration"
         />
       </figure>
@@ -82,6 +82,16 @@
               <User id={collaboration.inviteeId} kind="mini" />
             {/if}
           </div>
+          {#if collaboration.position}
+            <label class="join">
+              <span class="btn no-animation join-item">
+                {$t('common.position')}
+              </span>
+              <button class="btn no-animation join-item text-xl">
+                {collaboration.position}
+              </button>
+            </label>
+          {/if}
           <a
             href="/studio/{$chartSubmission.isSuccess
               ? 'chart'
@@ -148,7 +158,14 @@
       {/if}
     </div>
     {#if collaboration.position}
-      <div class="badge badge-secondary">{collaboration.position}</div>
+      <label class="join">
+        <span class="btn no-animation join-item">
+          {$t('common.position')}
+        </span>
+        <button class="btn no-animation join-item text-xl">
+          {collaboration.position}
+        </button>
+      </label>
     {/if}
     {#if !disabled && collaboration.status === 0}
       {#if user && collaboration.inviteeId === user.id}

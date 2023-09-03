@@ -35,7 +35,7 @@ export const actions = {
 
     if (!voteForm.valid) {
       console.log(voteForm.errors);
-      return fail(400, { form: voteForm });
+      return fail(400, { voteForm });
     }
     const resp = await api.vote.volunteer.create(voteForm.data);
     if (resp.ok) {
@@ -70,7 +70,7 @@ export const actions = {
 
     if (!collabForm.valid) {
       console.log(collabForm.errors);
-      return fail(400, { form: collabForm });
+      return fail(400, { collabForm });
     }
     const resp = await api.collaboration.create(collabForm.data);
     if (resp.ok) {

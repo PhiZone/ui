@@ -81,7 +81,7 @@ export interface ReviewOpts {
   status: number;
   isOriginal: boolean;
   isHidden: boolean;
-  message: string | null;
+  message?: string | undefined;
 }
 
 export default class SongSubmissionAPI {
@@ -114,7 +114,7 @@ export default class SongSubmissionAPI {
   }
 
   delete(opts: DeleteOpts): R {
-    return this.api.DELETE(`/studio/charts/${opts.id}`);
+    return this.api.DELETE(`/studio/songs/${opts.id}`);
   }
 
   review({ id, ...rest }: ReviewOpts): R {

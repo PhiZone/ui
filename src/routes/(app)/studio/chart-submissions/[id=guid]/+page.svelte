@@ -10,6 +10,7 @@
   import Collaboration from '$lib/components/Collaboration.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import User from '$lib/components/User.svelte';
+  import Chart from '$lib/components/Chart.svelte';
 
   export let data;
   $: ({ searchParams, id, user, api } = data);
@@ -38,13 +39,6 @@
   let voteOpen = false;
   let collabOpen = false;
 
-  $: collaborator = createQuery(
-    api.user.info(
-      { id: newCollaboratorId ?? 0 },
-      { enabled: !!newCollaboratorId && queryCollaborator },
-    ),
-  );
-
   $: submission = createQuery(api.chart.submission.info({ id }));
   $: song = createQuery(
     api.song.info(
@@ -62,6 +56,18 @@
     api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
   );
   $: votes = createQuery(api.vote.volunteer.listAll({ chartId: id }));
+  $: representation = createQuery(
+    api.chart.info(
+      { id: $submission.data?.data.representationId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+    ),
+  );
+  $: collaborator = createQuery(
+    api.user.info(
+      { id: newCollaboratorId ?? 0 },
+      { enabled: !!newCollaboratorId && queryCollaborator },
+    ),
+  );
   $: collaborations = createQuery(api.chart.submission.listAllCollaborations({ id }));
 
   $: charter = richtext($submission.data?.data.authorName ?? '');
@@ -295,12 +301,21 @@
                   {$songSubmission.data.data.title}
                 </a>
               {/if}
-              <button
-                class={`btn ${getLevelColor(submission.levelType)} btn-sm text-2xl no-animation`}
-              >
-                {submission.level}
-                {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
-              </button>
+              <div class="ml-4 min-w-fit flex gap-1 align-middle">
+                <div class="join join-horizontal">
+                  <button
+                    class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
+                  >
+                    {submission.level}
+                    {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+                  </button>
+                  {#if submission.isRanked}
+                    <button class="btn btn-success join-item text-3xl no-animation">
+                      {$t('chart.ranked')}
+                    </button>
+                  {/if}
+                </div>
+              </div>
             </div>
             <div>
               <p>
@@ -473,6 +488,9 @@
           </span>
           <Song {song} />
         </div>
+      {/if}
+      {#if $representation.isSuccess}
+        <Chart chart={$representation.data.data} />
       {/if}
     </div>
   </div>
