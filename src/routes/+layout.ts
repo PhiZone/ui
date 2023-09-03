@@ -9,13 +9,10 @@ export const load = async ({ url, data, fetch }) => {
   if (browser && window.localStorage.getItem('lang')) {
     lang = window.localStorage.getItem('lang');
   }
-
   lang ||= locale.get();
-
   if (browser) {
     lang ||= window.navigator.language;
   }
-
   lang ||= defaultLocale;
 
   await loadTranslations(lang, url.pathname);
@@ -31,13 +28,13 @@ export const load = async ({ url, data, fetch }) => {
 
   const api = new API(fetch, data.accessToken, data.user);
 
-  if (data.accessToken && (!data.lastRetrieval || Date.now() - data.lastRetrieval > 30000)) {
+  if (data.accessToken && (!data.lastRetrieval || Date.now() - data.lastRetrieval > 10000)) {
     const resp = await api.user.me();
     if (resp.ok) {
       data.user = (await resp.json()).data;
       data.lastRetrieval = Date.now();
     } else {
-      data.accessToken = undefined;
+      window.location.reload();
     }
   }
 

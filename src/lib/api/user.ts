@@ -1,5 +1,5 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { FilterBase, R } from './types';
+import type { FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 
@@ -112,6 +112,10 @@ export default class UserAPI {
 
   register(opts: RegisterOpts): R {
     return this.api.POST('/users', serialize(opts));
+  }
+  
+  update({ id }: InfoOpts, patch: PatchElement[]): R {
+    return this.api.POST(`/users/${id}`, patch);
   }
 
   updateAvatar({ id, ...rest }: UpdateAvatarOpts): R {

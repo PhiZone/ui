@@ -36,11 +36,13 @@
     <figure class="min-w-[30%] max-w-[30%]">
       <img
         class="object-cover w-full h-full"
-        src={getCompressedImage($song.isSuccess
-          ? $song.data.data.illustration
-          : $songSubmission.isSuccess
-          ? $songSubmission.data.data.illustration
-          : '')}
+        src={getCompressedImage(
+          $song.isSuccess
+            ? $song.data.data.illustration
+            : $songSubmission.isSuccess
+            ? $songSubmission.data.data.illustration
+            : '',
+        )}
         alt="Illustration"
       />
     </figure>
@@ -51,10 +53,21 @@
           : $songSubmission.isSuccess
           ? $songSubmission.data.data.title
           : ''}
-        <button class={`btn ${getLevelColor(submission.levelType)} btn-sm text-xl no-animation`}>
-          {submission.level}
-          {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
-        </button>
+        <div class="join join-horizontal">
+          <button
+            class={`btn ${getLevelColor(
+              submission.levelType,
+            )} btn-sm join-item text-xl no-animation`}
+          >
+            {submission.level}
+            {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+          </button>
+          {#if submission.isRanked}
+            <button class="btn btn-success btn-sm join-item text-xl no-animation">
+              {$t('chart.ranked')}
+            </button>
+          {/if}
+        </div>
       </h2>
       <div class="flex items-center min-w-fit">
         <p>

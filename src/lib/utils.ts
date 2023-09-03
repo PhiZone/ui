@@ -68,7 +68,7 @@ export function getUserPrivilege(type: string | null | undefined) {
   }
 }
 
-export function convertTime<T>(input: T) {
+export function convertTime<T>(input: T, round = false) {
   let minutes = 0,
     seconds = 0;
 
@@ -82,7 +82,9 @@ export function convertTime<T>(input: T) {
     seconds = input % 60;
   }
 
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toFixed(2).padStart(5, '0')}`;
+  return `${minutes.toString().padStart(2, '0')}:${
+    round ? Math.round(seconds).toString().padStart(2, '0') : seconds.toFixed(2).padStart(5, '0')
+  }`;
 }
 
 export function parseTime(input: string) {

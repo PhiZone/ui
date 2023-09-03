@@ -15,7 +15,7 @@
 </svelte:head>
 
 <div class="bg-base-200 page">
-  <div class="max-w-7xl min-w-20">
+  <div class="min-w-20">
     <h1 class="text-4xl font-bold mb-6">
       {$t('notification.notifications')}
     </h1>

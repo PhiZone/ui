@@ -8,6 +8,8 @@
   import Chapter from '$lib/components/Chapter.svelte';
   import Player from '$lib/components/SongPlayer.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import { richtext } from '$lib/richtext.js';
+  import { readable } from 'svelte/store';
 
   export let data;
 
@@ -16,6 +18,9 @@
   $: song = createQuery(api.song.info({ id }));
   $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
   $: chapters = createQuery(api.song.listAllAdmitters({ id }));
+  $: composer = $song.data?.data.isOriginal
+    ? richtext($song.data?.data.authorName ?? '')
+    : readable($song.data?.data.authorName);
 </script>
 
 <svelte:head>
@@ -37,7 +42,7 @@
       <div class="text-5xl py-3 flex font-bold items-center">
         {song.title}
         {#if song.isOriginal}
-          <button class="ml-2 btn btn-secondary btn-sm text-xl no-animation">
+          <button class="ml-2 btn btn-secondary text-3xl no-animation">
             {$t('song.original')}
           </button>
         {/if}
@@ -74,7 +79,7 @@
             <div class="text-5xl py-3 flex font-bold items-center">
               {song.title}
               {#if song.isOriginal}
-                <button class="ml-2 btn btn-secondary btn-sm text-xl no-animation">
+                <button class="ml-2 btn btn-secondary text-3xl no-animation">
                   {$t('song.original')}
                 </button>
               {/if}
@@ -105,7 +110,7 @@
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.composer')}
                       </span>
-                      {song.authorName}
+                      {@html $composer}
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
@@ -121,13 +126,13 @@
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.offset')}
                       </span>
-                      {song.offset}ms
+                      {song.offset} ms
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.duration')}
                       </span>
-                      {convertTime(song.duration)}
+                      {convertTime(song.duration, true)}
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">{$t('song.time')}</span>

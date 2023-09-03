@@ -126,6 +126,12 @@ export interface PublicResourceFilterBase {
   rangeLikeCount?: number[];
 }
 
+export interface PatchElement {
+  op: 'add' | 'replace' | 'remove';
+  path: string;
+  value: any;
+}
+
 export enum Accessibility {
   Public,
   ReviewRequired,
