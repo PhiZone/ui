@@ -1,6 +1,12 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { getAvatar, getUserColor, getUserLevel, parseDateTime, parseMonthAndDay } from '$lib/utils';
+  import {
+    getAvatar,
+    getUserColor,
+    getUserLevel,
+    parseDateTime,
+    parseMonthAndDay,
+  } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import Record from '$lib/components/Record.svelte';
   import Follow from '$lib/components/Follow.svelte';
@@ -40,7 +46,9 @@
           >
             <div class="avatar min-w-fit h-fit">
               <div
-                class="mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] border-{getUserColor(user.role)}"
+                class="mx-auto w-[140px] h-[140px] rounded-full m-2 border-[4px] border-{getUserColor(
+                  user.role,
+                )}"
               >
                 <img src={getAvatar(user.avatar, 60)} alt="Avatar" />
               </div>
@@ -92,7 +100,7 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.role')}</span>
-                {$t(`user.roles.${user.role}`)}
+                {$t(`user.roles.${user.role !== '' ? user.role : 'Unactivated'}`)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>

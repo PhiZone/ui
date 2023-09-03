@@ -15,6 +15,7 @@
   let el: HTMLImageElement;
   let cropper: Cropper;
   let croppable = false;
+  let submitting = false;
 
   onMount(() => {
     croppable = false;
@@ -29,19 +30,33 @@
   });
 
   const submit = () => {
+    submitting = true;
     cropper.getCroppedCanvas().toBlob((blob) => dispatch('submit', blob!));
   };
 </script>
 
 <input type="checkbox" id="imagecropper" class="modal-toggle" bind:checked={open} />
-<label for="imagecropper" class="modal cursor-pointer">
-  <label class="modal-box flex flex-col gap-2 relative" for="">
+<div class="modal">
+  <div class="modal-box flex flex-col gap-2 relative">
+    <label for="imagecropper" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+      ✕
+    </label>
     <h3 class="text-lg font-bold">{title}</h3>
     <div class="w-full">
       <img bind:this={el} {src} alt="" class="w-full" />
     </div>
-    <button class="btn btn-primary" disabled={!croppable} on:click={submit}>
-      {$t('common.submit')}
+    <button
+      class="btn {!submitting ? 'btn-primary' : 'btn-ghost'}"
+      disabled={!croppable || submitting}
+      on:click={submit}
+    >
+      {$t(!submitting ? 'common.submit' : 'common.waiting')}
     </button>
-  </label>
-</label>
+  </div>
+</div>
+
+<style>
+  * {
+    font-family: 'Saira', 'Noto Sans SC', sans-serif;
+  }
+</style>

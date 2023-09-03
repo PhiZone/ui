@@ -8,7 +8,7 @@
   export let data;
 
   if (browser) {
-    const language = locale.get() || data.user?.language || window.navigator.language;
+    const language = $locale || data.user?.language || window.navigator.language;
     locale.set(language);
   }
 </script>

@@ -53,7 +53,6 @@
   "reply": "回覆",
   "write_reply": "留下一則回覆",
   "reply_to": "回覆給 ",
-  "text_too_long": "留言文字過多！",
   "input_null": "輸入內容為空白！",
   "vote": "投票",
   "vote_v": "投票",
@@ -98,7 +97,7 @@
       "image": "10 MB 或更小的 JPG / JPEG / PNG / WEBP",
       "chart": "僅支援 PE / RPE 創作的譜面，不大於 50 MB",
       "illustration": "10 MB 或更小的 JPG / JPEG / PNG / WEBP，長寬比必須為 16:9，解析度不得低於 960×540",
-      "license": "须上传图片文件（不大于 10 MB）以证明本次上传已经作者授权",
+      "license": "须上传图片文件（不大于 10 MB）以证明该改编版本已经作者授权",
       "originality_proof": "须上传 ZIP 压缩文件（不大于 200 MB）（例：内含分轨音频文件）以证明曲目的原创性质",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "ranked": "游玩该谱后，结算时数据计入 RKS；谱面审核较为严格",
@@ -150,5 +149,9 @@
     "2": "私有"
   },
   "collaborators": "合作成员",
-  "position": "职能"
+  "position": "职能",
+  "date_available": "可用日期",
+  "success": "成功",
+  "update_success": "成功更新信息！",
+  "image_cropper": "图片裁剪"
 }

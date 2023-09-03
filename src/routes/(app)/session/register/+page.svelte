@@ -1,12 +1,23 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import { locales, t } from '$lib/translations/config';
+  import { locales, locale, t } from '$lib/translations/config';
   import { regions } from '$lib/constants';
 
   export let data;
 
   const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
     data.form,
+  );
+
+  const regionMap: Map<string, string> = new Map(
+    [
+      ...regions
+        .reduce((map, region) => {
+          map.set(region, $t(`region.${region}`));
+          return map;
+        }, new Map<string, string>())
+        .entries(),
+    ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 </script>
 
@@ -125,8 +136,8 @@
             {...$constraints.RegionCode}
             class="select select-bordered w-full max-w-xs"
           >
-            {#each regions as region}
-              <option value={region}>{$t(`region.${region}`)}</option>
+            {#each regionMap as region}
+              <option value={region[0]}>{region[1]}</option>
             {/each}
           </select>
           <div

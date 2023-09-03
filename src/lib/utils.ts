@@ -1,8 +1,9 @@
 import type { Cookies } from '@sveltejs/kit';
 import { USER_LEVELS } from './constants';
 import { PUBLIC_AVATAR } from '$env/static/public';
+import type { PatchElement } from './api/types';
 
-export function parseLatex(input: string) {
+export const parseLatex = (input: string) => {
   const result = input.matchAll(/(\$[^$]+\$)/g);
   let element = result.next();
   const latex = [];
@@ -47,9 +48,9 @@ export function parseLatex(input: string) {
     });
   }
   return array;
-}
+};
 
-export function getUserPrivilege(type: string | null | undefined) {
+export const getUserPrivilege = (type: string | null | undefined) => {
   switch (type) {
     case 'Member':
       return 1;
@@ -66,9 +67,9 @@ export function getUserPrivilege(type: string | null | undefined) {
     default:
       return 0;
   }
-}
+};
 
-export function convertTime<T>(input: T, round = false) {
+export const convertTime = <T>(input: T, round = false) => {
   let minutes = 0,
     seconds = 0;
 
@@ -85,18 +86,18 @@ export function convertTime<T>(input: T, round = false) {
   return `${minutes.toString().padStart(2, '0')}:${
     round ? Math.round(seconds).toString().padStart(2, '0') : seconds.toFixed(2).padStart(5, '0')
   }`;
-}
+};
 
-export function parseTime(input: string) {
+export const parseTime = (input: string) => {
   const list = input.split(':');
   const hasHour = list.length > 2;
   const hours = hasHour ? parseInt(list[0]) : 0;
   const minutes = parseInt(list[hasHour ? 1 : 0]) + hours * 60;
   const seconds = parseFloat(list[hasHour ? 2 : 1]);
   return minutes * 60 + seconds;
-}
+};
 
-export function parseLyrics(input: string) {
+export const parseLyrics = (input: string) => {
   const lyrics = [{ time: 0, line: '' }];
   let offset;
   try {
@@ -120,9 +121,9 @@ export function parseLyrics(input: string) {
     element = result.next();
   }
   return lyrics;
-}
+};
 
-export function parseDateTime(input: string | Date, precise = false) {
+export const parseDateTime = (input: string | Date, precise = false) => {
   const date = new Date(input);
   if (precise) {
     return date.toLocaleString();
@@ -134,26 +135,26 @@ export function parseDateTime(input: string | Date, precise = false) {
     hour: 'numeric',
     minute: 'numeric',
   });
-}
+};
 
-export function parseMonthAndDay(input: string | Date) {
+export const parseMonthAndDay = (input: string | Date) => {
   const date = new Date(input);
   return date.toLocaleDateString(undefined, {
     month: 'long',
     day: 'numeric',
   });
-}
+};
 
-export function getPath(input: string) {
+export const getPath = (input: string) => {
   const url = new URL(input);
   return url.pathname + url.search;
-}
+};
 
-export function getCompressedImage(input: string | undefined, quality = 20) {
+export const getCompressedImage = (input: string | undefined, quality = 20) => {
   return `${input}?imageslim&imageMogr2/quality/${quality}`;
-}
+};
 
-export function getUserColor(type: string | null) {
+export const getUserColor = (type: string | null) => {
   switch (type) {
     case 'Member':
       return 'neutral-500';
@@ -170,9 +171,9 @@ export function getUserColor(type: string | null) {
     default:
       return 'stone-500';
   }
-}
+};
 
-export function getLevelColor(type: number) {
+export const getLevelColor = (type: number) => {
   switch (type) {
     case 0:
       return 'btn-info';
@@ -185,22 +186,22 @@ export function getLevelColor(type: number) {
     default:
       return 'btn-accent';
   }
-}
+};
 
-export function getUserLevel(exp: number) {
+export const getUserLevel = (exp: number) => {
   for (let i = 0; i < USER_LEVELS.length; ++i) {
     if (exp < USER_LEVELS[i].exp) {
       return USER_LEVELS[i].level - 1;
     }
   }
   return USER_LEVELS[USER_LEVELS.length - 1].level;
-}
+};
 
-export function getAvatar(avatar: string | null, quality = 15) {
+export const getAvatar = (avatar: string | null, quality = 15) => {
   return getCompressedImage(avatar ?? PUBLIC_AVATAR, quality);
-}
+};
 
-export function getGrade(score: number, fullCombo: boolean) {
+export const getGrade = (score: number, fullCombo: boolean) => {
   if (score === 1000000) {
     return 'P';
   }
@@ -220,14 +221,14 @@ export function getGrade(score: number, fullCombo: boolean) {
     return 'C';
   }
   return 'F';
-}
+};
 
-export function getLevelDisplay(difficulty: number) {
+export const getLevelDisplay = (difficulty: number) => {
   if (difficulty === 0) return '?';
   else return Math.floor(difficulty).toString();
-}
+};
 
-export function setTokens(cookies: Cookies, accessToken: string, refreshToken: string) {
+export const setTokens = (cookies: Cookies, accessToken: string, refreshToken: string) => {
   cookies.set('access_token', accessToken, {
     path: '/',
     maxAge: 43200,
@@ -236,27 +237,29 @@ export function setTokens(cookies: Cookies, accessToken: string, refreshToken: s
     path: '/',
     maxAge: 1296000,
   });
-}
+};
 
-export function clearTokens(cookies: Cookies) {
+export const clearTokens = (cookies: Cookies) => {
   cookies.delete('access_token', { path: '/' });
   cookies.delete('refresh_token', { path: '/' });
-}
+};
 
-export function range(start: number, end: number) {
+export const range = (start: number, end: number) => {
   return [...Array(end - start).keys()].map((x) => x + start);
-}
+};
 
-// class Test {
-//   constructor(b: number);
-//   constructor(a: string, b: number);
-//   constructor(ab: number | string, b?: number) {
-//     if (b !== undefined) {
-//       const a = ab as string;
-//       // balabala
-//     } else {
-//       b = ab as number;
-//       // balabala
-//     }
-//   }
-// }
+export const applyPatch = (
+  patch: PatchElement[],
+  op: 'add' | 'replace' | 'remove',
+  path: string,
+  value?: any,
+) => {
+  var i = patch.findIndex((value) => value.path === path);
+  if (i === -1) {
+    patch.push({ op, path, value });
+  } else {
+    patch[i] = { op, path, value };
+  }
+  console.log('patch updated', patch);
+  return patch;
+};

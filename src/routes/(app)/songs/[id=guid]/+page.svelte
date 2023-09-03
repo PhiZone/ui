@@ -8,7 +8,7 @@
   import Chapter from '$lib/components/Chapter.svelte';
   import Player from '$lib/components/SongPlayer.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import { richtext } from '$lib/richtext.js';
+  import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
 
   export let data;

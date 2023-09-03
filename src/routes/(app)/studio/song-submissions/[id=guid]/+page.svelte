@@ -6,7 +6,7 @@
   import User from '$lib/components/User.svelte';
   import Song from '$lib/components/Song.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-  import { richtext } from '$lib/richtext.js';
+  import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
 
   export let data;

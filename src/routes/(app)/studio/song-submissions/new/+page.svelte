@@ -4,10 +4,10 @@
   import User from '$lib/components/User.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext.js';
+  import { richtext } from '$lib/richtext';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import { convertTime, parseTime } from '$lib/utils.js';
+  import { convertTime, parseTime } from '$lib/utils';
 
   export let data;
 
@@ -195,7 +195,7 @@
 </div>
 
 <div class="bg-base-200 min-h-screen">
-  <div class="pt-32 flex justify-center">
+  <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_song')}</h1>
       <div class="card w-full bg-base-100 shadow-lg">
@@ -621,7 +621,7 @@
                     id="min_bpm"
                     name="MinBpm"
                     placeholder={$t('studio.submission.min_bpm')}
-                    class={`input input-secondary join-item w-1/3 min-w-[180px] ${
+                    class={`input input-secondary join-item w-1/3 ${
                       $errors.MinBpm ? 'input-error' : 'input-secondary'
                     }`}
                   />
@@ -635,7 +635,7 @@
                     id="bpm"
                     name="Bpm"
                     placeholder={$t('studio.submission.main_bpm')}
-                    class={`input input-secondary join-item w-1/3 min-w-[180px] ${
+                    class={`input input-secondary join-item w-1/3 ${
                       $errors.Bpm ? 'input-error' : 'input-secondary'
                     }`}
                   />
@@ -649,7 +649,7 @@
                     id="max_bpm"
                     name="MaxBpm"
                     placeholder={$t('studio.submission.max_bpm')}
-                    class={`input input-secondary join-item w-1/3 min-w-[180px] ${
+                    class={`input input-secondary join-item w-1/3 ${
                       $errors.MaxBpm ? 'input-error' : 'input-secondary'
                     }`}
                   />

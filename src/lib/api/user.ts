@@ -17,7 +17,7 @@ export interface UserDto {
   region: string;
   language: string;
   biography: string | null;
-  role: string | null;
+  role: string;
   experience: number;
   tag: string | null;
   rks: number;
@@ -115,7 +115,7 @@ export default class UserAPI {
   }
   
   update({ id }: InfoOpts, patch: PatchElement[]): R {
-    return this.api.POST(`/users/${id}`, patch);
+    return this.api.PATCH(`/users/${id}`, patch);
   }
 
   updateAvatar({ id, ...rest }: UpdateAvatarOpts): R {

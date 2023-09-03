@@ -27,7 +27,7 @@
   const sendReply = async () => {
     if (replyText.length > 0) {
       disabled = true;
-      await api.reply.create({ commentId: comment.id, content: replyText, language: locale.get() });
+      await api.reply.create({ commentId: comment.id, content: replyText, language: $locale });
       disabled = false;
       replyText = '';
       await queryClient.invalidateQueries([

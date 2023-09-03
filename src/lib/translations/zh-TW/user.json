@@ -27,7 +27,8 @@
     "Volunteer": "志願者",
     "Qualified": "認證使用者",
     "Sponsor": "贊助者",
-    "Member": "普通使用者"
+    "Member": "普通使用者",
+    "Unactivated": "未激活"
   },
   "following": "關注",
   "fans": "粉絲",

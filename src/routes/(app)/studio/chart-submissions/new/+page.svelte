@@ -5,10 +5,10 @@
   import { getLevelColor } from '$lib/utils';
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext.js';
+  import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
-  import type { SongDto } from '$lib/api/song.js';
-  import type { SongSubmissionDto } from '$lib/api/song.submission.js';
+  import type { SongDto } from '$lib/api/song';
+  import type { SongSubmissionDto } from '$lib/api/song.submission';
 
   export let data;
 
@@ -138,7 +138,7 @@
 </div>
 
 <div class="bg-base-200 min-h-screen">
-  <div class="pt-32 flex justify-center">
+  <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
       <div class="card w-full bg-base-100 shadow-lg">
