@@ -101,7 +101,8 @@ export default class SongSubmissionAPI {
 
   listAllCollaborations = createQueryCreator(
     'collaboration.list',
-    ({ id }: InfoOpts): R<CollaborationDto[]> => this.api.GET(`/collaborations?rangeSubmissionId=${id}`),
+    ({ id }: InfoOpts): R<CollaborationDto[]> =>
+      this.api.GET(`/collaborations?all=true&rangeSubmissionId=${id}`),
   );
 
   info = createQueryCreator(
