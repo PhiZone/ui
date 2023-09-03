@@ -142,6 +142,9 @@
               </li>
             {/if}
             <li>
+              <a href="/me/settings">{$t('common.settings')}</a>
+            </li>
+            <li>
               <a data-sveltekit-preload-data="off" href="/session/logout">
                 {$t('common.navbar.logout')}
               </a>
