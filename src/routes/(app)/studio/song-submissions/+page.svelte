@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="bg-base-200 min-h-screen">
-  <div class="pt-32 flex justify-center">
+  <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-7xl min-w-20">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-4xl font-bold">

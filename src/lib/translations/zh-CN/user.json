@@ -27,7 +27,8 @@
     "Volunteer": "志愿者",
     "Qualified": "认证用户",
     "Sponsor": "赞助者",
-    "Member": "普通用户"
+    "Member": "普通用户",
+    "Unactivated": "未激活"
   },
   "following": "关注",
   "fans": "粉丝",

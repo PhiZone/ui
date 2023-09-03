@@ -10,7 +10,7 @@
 
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
-    api.chart.info({ id: $record.data?.data.chartId ?? 0 }, { enabled: $record.isSuccess }),
+    api.chart.info({ id: $record.data?.data.chartId ?? '' }, { enabled: $record.isSuccess }),
   );
 </script>
 
@@ -53,14 +53,14 @@
               <span class="badge badge-primary badge-outline mr-1">{$t('record.perfect')}</span>
               {record.perfect}
               <span class="opacity-70">
-                (±{record.perfectJudgment}ms)
+                (± {record.perfectJudgment} ms)
               </span>
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.good')}</span>
               {record.goodEarly + record.goodLate} [E{record.goodEarly} · L{record.goodLate}]
               <span class="opacity-70">
-                (±{record.goodJudgment}ms)
+                (± {record.goodJudgment} ms)
               </span>
             </p>
             <p>
@@ -74,6 +74,10 @@
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.rks')}</span>
               {record.rks.toFixed(3)}
+            </p>
+            <p>
+              <span class="badge badge-primary badge-outline mr-1">{$t('record.std_deviation')}</span>
+              {record.stdDeviation.toFixed(3)} ms
             </p>
             <p>
               <span class="badge badge-primary badge-outline mr-1">{$t('record.time')}</span>

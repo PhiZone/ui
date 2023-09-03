@@ -53,7 +53,6 @@
   "reply": "Reply",
   "write_reply": "Write a reply",
   "reply_to": "Replying to ",
-  "text_too_long": "The text is too long!",
   "input_null": "You have an empty input!",
   "vote": "Vote",
   "vote_v": "Vote",
@@ -98,7 +97,7 @@
       "image": "JPG / JPEG / PNG / WEBP, no larger than 10 MB",
       "chart": "Only charts made with PE / RPE are supported, no larger than 50 MB",
       "illustration": "JPG / JPEG / PNG / WEBP, no larger than 10 MB, 16:9, no smaller than 960×540",
-      "license": "Must upload an image (no larger than 10 MB) of the license to proove that this submission is licensed by the author",
+      "license": "Must upload an image (no larger than 10 MB) of the license to proove that this edition is licensed by the author",
       "originality_proof": "ZIP file (no larger than 200 MB) (e.g. containing sub-track audio files) is required to proove the originality",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "ranked": "Play results on this chart are counted in players' RKS; the reviewal is strict",
@@ -150,5 +149,9 @@
     "2": "Private"
   },
   "collaborators": "Collaborators",
-  "position": "Position"
+  "position": "Position",
+  "date_available": "Date Available",
+  "success": "Success",
+  "update_success": "Information has been successfully updated!",
+  "image_cropper": "Image Cropper"
 }

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import Song from '$lib/components/Song.svelte';
-  import { richtext } from '$lib/richtext.js';
-  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils.js';
+  import { richtext } from '$lib/richtext';
+  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import VolunteerVote from '$lib/components/VolunteerVote.svelte';
-  import { LEVEL_TYPES, Status } from '$lib/constants.js';
+  import { LEVEL_TYPES, Status } from '$lib/constants';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import Collaboration from '$lib/components/Collaboration.svelte';
   import { superForm } from 'sveltekit-superforms/client';
