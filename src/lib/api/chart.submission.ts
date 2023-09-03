@@ -78,7 +78,7 @@ export default class ChartSubmissionAPI {
   listAllCollaborations = createQueryCreator(
     'collaboration.list',
     ({ id }: InfoOpts): R<CollaborationDto[]> =>
-      this.api.GET(`/collaborations?rangeSubmissionId=${id}`),
+      this.api.GET(`/collaborations?all=true&rangeSubmissionId=${id}`),
   );
 
   info = createQueryCreator(
