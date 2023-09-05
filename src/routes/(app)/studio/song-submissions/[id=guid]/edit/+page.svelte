@@ -91,8 +91,8 @@
       handlePreview();
       slider.noUiSlider?.on('slide', handlePreview);
       slider.noUiSlider?.on('set', () => {
-        patch = applyPatch(patch, 'replace', '/previewStart', song.previewStart);
-        patch = applyPatch(patch, 'replace', '/previewEnd', song.previewEnd);
+        patch = applyPatch(patch, 'replace', '/previewStart', parsePreviewTime(song.previewStart));
+        patch = applyPatch(patch, 'replace', '/previewEnd', parsePreviewTime(song.previewEnd));
       });
     });
   };
@@ -153,6 +153,10 @@
   };
 
   let patch = new Array<PatchElement>();
+
+  const parsePreviewTime = (time: string) => {
+    return /^\d{1,2}:\d{1,2}.\d+$/g.test(time) ? `00:${time}` : time;
+  };
 
   const update = async () => {
     status = Status.SENDING;

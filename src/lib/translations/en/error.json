@@ -38,10 +38,10 @@
   "InvalidOperation": "The operation is invalid.",
   "InvalidTimeRelation": "The time relation is invalid.",
   "Locked": "The resource is currently locked.",
-  "Blacklisted": "User has been blacklisted by the target user / resource owner.",
+  "Blacklisted": "You have been blacklisted by the target user / resource owner.",
   "InvalidAuthorInfo": "You are not present in the author name!",
   "ParentIsPrivate": "The parent resource is private.",
   "RemoteFailure": "Errors occurred whilst contacting remote servers.",
   "BindingOccupied": "The remote account has already been bound to another user.",
-  "ContentProhibited": "There exists prohibited content in the user's input text."
+  "ContentProhibited": "There exists prohibited content in your input text."
 }

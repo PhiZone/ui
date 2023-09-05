@@ -12,7 +12,9 @@
 
   $: ({ user, api } = $page.data);
 
-  $: chartSubmission = createQuery(api.chart.submission.info({ id: collaboration.submissionId }));
+  $: chartSubmission = createQuery(
+    api.chart.submission.info({ id: collaboration.submissionId }, { enabled: kind === 'full' }),
+  );
   $: song = createQuery(
     api.song.info(
       { id: $chartSubmission.data?.data.songId ?? '' },
@@ -25,7 +27,7 @@
   $: songSubmission = createQuery(
     api.song.submission.info(
       {
-        id: $chartSubmission.data?.data.songId ?? collaboration.submissionId,
+        id: $chartSubmission.data?.data.songSubmissionId ?? collaboration.submissionId,
       },
       { enabled: kind === 'full' },
     ),
@@ -48,7 +50,7 @@
 
 {#if kind === 'full'}
   <div class="card min-w-[500px] card-side overflow-hidden bg-base-100 shadow-lg">
-    {#if $chartSubmission.isSuccess || $songSubmission.isSuccess}
+    {#if $song.isSuccess || $songSubmission.isSuccess}
       {@const submission = $chartSubmission.isSuccess
         ? $chartSubmission.data.data
         : $songSubmission.data?.data}
@@ -81,14 +83,21 @@
             {/if}
           </div>
           {#if collaboration.position}
-            <label class="join">
-              <span class="btn no-animation join-item">
-                {$t('common.position')}
-              </span>
-              <button class="btn no-animation join-item text-xl">
-                {collaboration.position}
-              </button>
-            </label>
+            <div
+              class={collaboration.position.length > 8 ? 'tooltip tooltip-bottom' : ''}
+              data-tip={collaboration.position}
+            >
+              <label class="join">
+                <span class="btn btn-ghost no-animation join-item">
+                  {$t('common.position')}
+                </span>
+                <button class="btn btn-ghost no-animation join-item text-xl">
+                  {collaboration.position.length > 8
+                    ? `${collaboration.position.substring(0, 8)}...`
+                    : collaboration.position}
+                </button>
+              </label>
+            </div>
           {/if}
           <a
             href="/studio/{$chartSubmission.isSuccess
@@ -156,14 +165,21 @@
       {/if}
     </div>
     {#if collaboration.position}
-      <label class="join">
-        <span class="btn no-animation join-item">
-          {$t('common.position')}
-        </span>
-        <button class="btn no-animation join-item text-xl">
-          {collaboration.position}
-        </button>
-      </label>
+      <div
+        class={collaboration.position.length > 8 ? 'tooltip tooltip-bottom' : ''}
+        data-tip={collaboration.position}
+      >
+        <label class="join">
+          <span class="btn btn-ghost no-animation join-item">
+            {$t('common.position')}
+          </span>
+          <button class="btn btn-ghost no-animation join-item text-xl">
+            {collaboration.position.length > 8
+              ? `${collaboration.position.substring(0, 8)}...`
+              : collaboration.position}
+          </button>
+        </label>
+      </div>
     {/if}
     {#if !disabled && collaboration.status === 0}
       {#if user && collaboration.inviteeId === user.id}

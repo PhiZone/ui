@@ -219,20 +219,16 @@
                 {$songSubmission.data.data.title}
               </a>
             {/if}
-            <div class="ml-4 min-w-fit flex gap-1 align-middle">
-              <div class="join join-horizontal">
-                <button
-                  class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
-                >
-                  {chart.level}
-                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+            <div class="join join-horizontal">
+              <button class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation">
+                {chart.level}
+                {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+              </button>
+              {#if chart.isRanked}
+                <button class="btn btn-success join-item text-3xl no-animation">
+                  {$t('chart.ranked')}
                 </button>
-                {#if chart.isRanked}
-                  <button class="btn btn-success join-item text-3xl no-animation">
-                    {$t('chart.ranked')}
-                  </button>
-                {/if}
-              </div>
+              {/if}
             </div>
           </div>
           <a

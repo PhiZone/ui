@@ -159,7 +159,12 @@
                     class="btn-md {user ? 'join-item' : ''}"
                   />
                   {#if user}
-                    <a href={song.file} target="_blank" rel="noreferrer" download>
+                    <a
+                      href={song.file}
+                      target="_blank"
+                      rel="noreferrer"
+                      download={song.file.split('/').pop()}
+                    >
                       <button class="btn btn-primary btn-outline flex gap-1 join-item">
                         <svg
                           fill="currentColor"

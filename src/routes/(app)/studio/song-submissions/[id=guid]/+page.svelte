@@ -11,7 +11,7 @@
 
   export let data;
 
-  $: ({ searchParams, id, user, api } = data);
+  $: ({ id, user, api } = data);
 
   const {
     form: reviewForm,
@@ -302,7 +302,7 @@
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
-                  download
+                  download={submission.file.split('/').pop()}
                 >
                   {$t('common.download')}
                 </a>
@@ -316,7 +316,7 @@
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
-                  download
+                  download={submission.illustration.split('/').pop()}
                 >
                   {$t('common.download')}
                 </a>
@@ -331,7 +331,7 @@
                     target="_blank"
                     rel="noreferrer"
                     class="hover:underline"
-                    download
+                    download={submission.license.split('/').pop()}
                   >
                     {$t('common.download')}
                   </a>
@@ -347,7 +347,7 @@
                     target="_blank"
                     rel="noreferrer"
                     class="hover:underline"
-                    download
+                    download={submission.originalityProof.split('/').pop()}
                   >
                     {$t('common.download')}
                   </a>

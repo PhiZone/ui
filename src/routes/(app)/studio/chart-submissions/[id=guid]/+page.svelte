@@ -293,22 +293,18 @@
                   {$songSubmission.data.data.title}
                 </a>
               {/if}
-              <div class="ml-4 min-w-fit flex gap-1 align-middle">
-                <div class="join join-horizontal">
-                  <button
-                    class="btn {getLevelColor(
-                      submission.levelType,
-                    )} join-item text-3xl no-animation"
-                  >
-                    {submission.level}
-                    {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+              <div class="join join-horizontal">
+                <button
+                  class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
+                >
+                  {submission.level}
+                  {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+                </button>
+                {#if submission.isRanked}
+                  <button class="btn btn-success join-item text-3xl no-animation">
+                    {$t('chart.ranked')}
                   </button>
-                  {#if submission.isRanked}
-                    <button class="btn btn-success join-item text-3xl no-animation">
-                      {$t('chart.ranked')}
-                    </button>
-                  {/if}
-                </div>
+                {/if}
               </div>
             </div>
             <div>
@@ -333,7 +329,7 @@
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline"
-                  download
+                  download={submission.file.split('/').pop()}
                 >
                   {$t('common.download')}
                 </a>

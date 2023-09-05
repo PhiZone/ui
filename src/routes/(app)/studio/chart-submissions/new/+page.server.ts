@@ -56,9 +56,11 @@ export const actions = {
           form.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
           form.errors = {};
-          error.errors.forEach(
-            ({ field, errors }) => void (form.errors[field as keyof Schema] = errors),
-          );
+          error.errors.forEach(({ field, errors }) => {
+            form.errors[field as keyof Schema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
         }
 
         return fail(resp.status, { form });

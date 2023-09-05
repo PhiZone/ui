@@ -5,7 +5,7 @@
 
   export let data;
 
-  $: ({ searchParams, id, api } = data);
+  $: ({ id, api } = data);
 
   $: query = createQuery(api.collaboration.info({ id }));
 </script>

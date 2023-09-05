@@ -52,9 +52,11 @@ export const actions = {
           reviewForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
           reviewForm.errors = {};
-          error.errors.forEach(
-            ({ field, errors }) => void (reviewForm.errors[field as keyof ReviewSchema] = errors),
-          );
+          error.errors.forEach(({ field, errors }) => {
+            reviewForm.errors[field as keyof ReviewSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
         }
 
         return fail(resp.status, { reviewForm });
@@ -86,9 +88,11 @@ export const actions = {
           collabForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
           collabForm.errors = {};
-          error.errors.forEach(
-            ({ field, errors }) => void (collabForm.errors[field as keyof CollabSchema] = errors),
-          );
+          error.errors.forEach(({ field, errors }) => {
+            collabForm.errors[field as keyof CollabSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
         }
 
         return fail(resp.status, { collabForm });

@@ -50,9 +50,11 @@ export const actions = {
           voteForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
           voteForm.errors = {};
-          error.errors.forEach(
-            ({ field, errors }) => void (voteForm.errors[field as keyof VoteSchema] = errors),
-          );
+          error.errors.forEach(({ field, errors }) => {
+            voteForm.errors[field as keyof VoteSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
         }
 
         return fail(resp.status, { voteForm });
@@ -84,9 +86,11 @@ export const actions = {
           collabForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
           collabForm.errors = {};
-          error.errors.forEach(
-            ({ field, errors }) => void (collabForm.errors[field as keyof CollabSchema] = errors),
-          );
+          error.errors.forEach(({ field, errors }) => {
+            collabForm.errors[field as keyof CollabSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
         }
 
         return fail(resp.status, { collabForm });

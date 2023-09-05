@@ -19,13 +19,13 @@
     "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
     "select_language": "选择语言",
     "select_region": "选择地区",
-    "success": "你的 PhiZone 账号注册成功！",
+    "success": "你的 PhiZone 账户注册成功！",
     "language_error": "语言选项出现问题。请更换浏览器重试。"
   },
   "email_confirmation": {
     "email_confirmation": "确认邮箱地址",
-    "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入以下输入框中，以便激活你的账号。",
-    "activate": "激活账号",
+    "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入以下输入框中，以便激活你的账户。",
+    "activate": "激活账户",
     "code_not_numeric": "验证码须为六位数字！"
   },
   "password_reset": {

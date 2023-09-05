@@ -5,7 +5,7 @@ import { locale } from '$lib/translations/config';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
-  console.log(event.url.href);
+  console.log(event.url.pathname);
   let accessToken = event.cookies.get('access_token'),
     refreshToken = event.cookies.get('refresh_token');
 
