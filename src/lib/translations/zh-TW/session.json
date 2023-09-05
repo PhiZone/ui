@@ -4,6 +4,7 @@
   "password": "密碼",
   "confirm_password": "確認密碼",
   "passwords_differ": "兩次輸入的密碼不相同。",
+  "code": "驗證碼",
   "invalid_email": "邮箱地址不合法。",
   "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
   "invalid_password": "密码必须至少包含 6 个字符，其中至少包含一个非字母数字字符、一个小写字母、一个大写字母、一个数字，并且不多于 18 个字符。",
@@ -23,16 +24,14 @@
   },
   "email_confirmation": {
     "email_confirmation": "驗證電子郵件地址",
-    "email_confirmation_text": "我們向你的電子郵件發送了一封信，內含驗證電子郵件地址所需的六位數代碼。請將代碼填入以下輸入框中，已啟用你的帳戶。",
-    "code": "確認代碼",
+    "email_confirmation_text": "我們向你的電子郵件發送了一封信，內含驗證電子郵件地址所需的六位數代碼。請將代碼填入以下輸入框中，以啟用你的帳戶。",
     "activate": "啟用帳戶",
     "code_not_numeric": "驗證碼必須為六位數字！"
   },
   "password_reset": {
     "password_reset": "重設密碼",
-    "password_reset_text1": "請在下方輸入你註冊時輸入的電子郵件。",
-    "password_reset_text2": "郵件已發送！請點擊郵件中的連結以繼續。",
-    "password_reset_text3": "請在下方輸入你希望為你的帳戶設定的新密碼。",
+    "password_reset_text_1": "請在下方輸入你註冊時輸入的電子郵件。",
+    "password_reset_text_2": "請在下方輸入郵件驗證碼與你希望為你的帳戶設定的新密碼。",
     "new_password": "新密碼"
   },
   "logging_out": "登出中",

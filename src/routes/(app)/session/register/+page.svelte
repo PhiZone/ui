@@ -9,7 +9,7 @@
     data.form,
   );
 
-  const regionMap: Map<string, string> = new Map(
+  $: regionMap = new Map(
     [
       ...regions
         .reduce((map, region) => {
@@ -19,6 +19,8 @@
         .entries(),
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
+
+  let regionCode = data.user?.region;
 </script>
 
 <svelte:head>
@@ -132,7 +134,7 @@
           <select
             id="region"
             name="RegionCode"
-            bind:value={$form.RegionCode}
+            bind:value={regionCode}
             {...$constraints.RegionCode}
             class="select select-bordered w-full max-w-xs"
           >

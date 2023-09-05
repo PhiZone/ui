@@ -43,15 +43,15 @@
       <p class="text-lg pt-6 whitespace-pre-wrap">
         {$t('studio.description')}
       </p>
-      <a
+      <!-- <a
         href="/studio_guide.html"
         target="_blank"
         rel="noreferrer"
-        class="text-lg hover:underline max-w-fit mx-auto my-3"
+        class="text-lg hover:underline max-w-fit mx-auto mt-3"
       >
         {$t('studio.view_guide')}
-      </a>
-      <div class="mt-3 flex justify-center">
+      </a> -->
+      <div class="mt-6 flex justify-center">
         <a
           href="/studio/chart-submissions/new"
           class="btn btn-secondary lg:btn-lg btn-outline mr-3"

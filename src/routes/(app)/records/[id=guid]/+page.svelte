@@ -76,7 +76,9 @@
               {record.rks.toFixed(3)}
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.std_deviation')}</span>
+              <span class="badge badge-primary badge-outline mr-1">
+                {$t('record.std_deviation')}
+              </span>
               {record.stdDeviation.toFixed(3)} ms
             </p>
             <p>

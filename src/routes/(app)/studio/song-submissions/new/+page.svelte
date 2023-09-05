@@ -1,6 +1,5 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { LEVEL_TYPES } from '$lib/constants';
   import User from '$lib/components/User.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
@@ -13,9 +12,7 @@
 
   $: ({ user, api } = data);
 
-  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
-    data.form,
-  );
+  const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
   interface TargetElement extends HTMLElement {
     noUiSlider?: API;
@@ -55,7 +52,7 @@
     previewTime = previewStart;
   };
 
-  const loadAudio = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+  const handleAudio = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       audio = new Audio(URL.createObjectURL(target.files[0]));
@@ -64,6 +61,7 @@
         if (!audio) return;
         showPreview = 2;
         audio.volume = 0.5;
+        slider.noUiSlider?.destroy();
         noUiSlider.create(slider, {
           start: [0.2 * audio.duration, 0.8 * audio.duration],
           connect: true,
@@ -135,7 +133,7 @@
     </label>
     <div
       class={$composer.isError
-        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
+        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
         : 'w-full my-2 px-4'}
       data-tip={$composer.isError ? $t(`error.${$composer.error.code}`) : ''}
     >
@@ -202,7 +200,7 @@
         <div class="card-body">
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 px-4 place-self-center">{$t('song.original')}</span>
+              <span class="w-32 place-self-center">{$t('song.original')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -225,7 +223,7 @@
               </span>
             </div>
             <div class="flex">
-              <span class="w-32 px-4 place-self-center">{$t('common.form.audio')}</span>
+              <span class="w-32 place-self-center">{$t('common.form.audio')}</span>
               <input
                 type="file"
                 id="file"
@@ -236,7 +234,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:change={loadAudio}
+                on:change={handleAudio}
               />
               {#if !!$errors.File}
                 <span class="place-self-center w-2/3 text-error">{$errors.File}</span>
@@ -245,7 +243,7 @@
               {/if}
             </div>
             <div class="flex">
-              <span class="w-32 px-4 place-self-center">{$t('common.form.illustration')}</span>
+              <span class="w-32 place-self-center">{$t('common.form.illustration')}</span>
               <input
                 type="file"
                 id="illustration"
@@ -270,7 +268,7 @@
             </div>
             {#if isOriginal}
               <div class="flex">
-                <span class="w-32 px-4 place-self-center">
+                <span class="w-32 place-self-center">
                   {$t('common.form.originality_proof')}
                 </span>
                 <input
@@ -300,7 +298,7 @@
             {/if}
             {#if editionType === 3}
               <div class="flex">
-                <span class="w-32 px-4 place-self-center">{$t('common.form.license')}</span>
+                <span class="w-32 place-self-center">{$t('common.form.license')}</span>
                 <input
                   type="file"
                   id="license"
@@ -321,7 +319,7 @@
             {/if}
             {#if showPreview}
               <div class="flex">
-                <span class="w-32 px-4 place-self-center">{$t('common.form.song_preview')}</span>
+                <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
                     <button
@@ -480,7 +478,7 @@
             </div>
             {#if edition}
               <div class="flex my-2">
-                <span class="w-1/4 px-4 place-self-center">
+                <span class="w-1/4 place-self-center">
                   {$t('common.form.edition_preview')}
                 </span>
                 <div class="w-3/4">
@@ -568,7 +566,7 @@
             </div>
             {#if isOriginal && authorName}
               <div class="flex my-2">
-                <span class="w-1/4 px-4 place-self-center">
+                <span class="w-1/4 place-self-center">
                   {$t('common.form.composer_preview')}
                 </span>
                 <p class="w-3/4 content">

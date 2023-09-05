@@ -10,9 +10,9 @@ export const actions = {
     const resp = await api.auth.activate({ code });
 
     if (!resp.ok) {
-      const err = await resp.json();
-      console.log(err);
-      return fail(resp.status, { code, error: err.code });
+      const error = await resp.json();
+      console.log(error);
+      return fail(resp.status, { code, error: error.code });
     }
 
     throw redirect(303, url.searchParams.get('redirect') ?? '/');

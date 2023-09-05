@@ -1,18 +1,52 @@
 import API from '$lib/api';
+import { z } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
+import { SendEmailMode } from '$lib/api/auth.js';
 import { fail, redirect } from '@sveltejs/kit';
+import { t } from '$lib/translations/config';
+import { ResponseDtoStatus } from '$lib/api/types';
+
+const schema = z.object({
+  Email: z.string(),
+});
+
+type Schema = z.infer<typeof schema>;
+
+export const load = async () => {
+  const form = await superValidate(schema);
+  return { form };
+};
 
 export const actions = {
-  default: async ({ request, locals, fetch }) => {
+  default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
-    const data = await request.formData();
-    const email = data.get('email') as string;
-    const resp = await api.auth.password_reset.request({ email });
 
-    if (!resp.ok) {
-      const err = await resp.json();
-      return fail(resp.status, { email, error: err.code });
+    const formData = await request.formData();
+    const form = await superValidate(formData, schema);
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    const resp = await api.auth.sendEmail({ ...form.data, Mode: SendEmailMode.PasswordReset });
+    if (resp.ok) {
+      throw redirect(303, '/session/password-reset' + url.search);
     } else {
-      return { email };
+      const error = await resp.json();
+      console.log(error);
+      form.valid = false;
+      if (error.status === ResponseDtoStatus.ErrorBrief) {
+        form.message = t.get(`error.${error.code}`);
+      } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+        form.message = error.message;
+      } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        form.errors = {};
+        error.errors.forEach(
+          ({ field, errors }) => void (form.errors[field as keyof Schema] = errors),
+        );
+      }
+
+      return fail(resp.status, { form });
     }
   },
 };

@@ -36,9 +36,9 @@ export const actions = {
     const form = await superValidate(formData, schema);
 
     if (!form.valid) {
-      console.log(form.errors);
       return fail(400, { form });
     }
+    // eslint-disable-next-line prefer-const
     let { File, Illustration, ...rest } = form.data;
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;

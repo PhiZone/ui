@@ -1,9 +1,8 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import queryString from 'query-string';
 import type { Filter } from './song';
-import type { R } from './types';
+import type { FileUpdateOpts, PatchElement, R } from './types';
 import type { CollaborationDto } from './collaboration';
 
 export interface ChartSubmissionDto {
@@ -88,6 +87,14 @@ export default class ChartSubmissionAPI {
 
   create(opts: CreateOpts): R {
     return this.api.POST('/studio/charts', serialize(opts));
+  }
+
+  update({ id }: InfoOpts, patch: PatchElement[]): R {
+    return this.api.PATCH(`/studio/charts/${id}`, patch);
+  }
+
+  updateChart({ id, ...rest }: FileUpdateOpts): R {
+    return this.api.PATCH(`/studio/charts/${id}/file`, serialize(rest));
   }
 
   delete(opts: DeleteOpts): R {

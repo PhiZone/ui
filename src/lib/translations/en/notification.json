@@ -10,5 +10,8 @@
     "5": "System Notifications"
   },
   "notified_at": "Notified At",
-  "read_at": "Read At"
+  "read_at": "Read At",
+  "read": "Read",
+  "view_read": "View Read",
+  "view_unread": "View Unread"
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ChapterDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-    import { getCompressedImage } from '$lib/utils';
+  import { getCompressedImage } from '$lib/utils';
   import Like from './Like.svelte';
 
   export let chapter: ChapterDto;

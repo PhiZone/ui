@@ -40,9 +40,7 @@
         <div
           class="{kind === 'embedded'
             ? 'w-full max-w-[72px] border-[3px] border-opacity-80'
-            : 'w-10 border-2'} rounded-full border-{getUserColor(
-                  user.role
-                )}"
+            : 'w-10 border-2'} rounded-full border-{getUserColor(user.role)}"
         >
           <img class="object-fill" src={getAvatar(user.avatar)} alt="Avatar" />
         </div>
@@ -95,7 +93,7 @@
             <div class="avatar flex items-center min-w-fit">
               <div
                 class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                  user.role
+                  user.role,
                 )}"
               >
                 <img src={getAvatar(user.avatar)} alt="Avatar" />

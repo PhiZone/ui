@@ -28,13 +28,12 @@ export const load = async () => {
 };
 
 export const actions = {
-  vote: async ({ request, url, locals, fetch }) => {
+  vote: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const voteForm = await superValidate(formData, voteSchema);
 
     if (!voteForm.valid) {
-      console.log(voteForm.errors);
       return fail(400, { voteForm });
     }
     const resp = await api.vote.volunteer.create(voteForm.data);
@@ -63,13 +62,12 @@ export const actions = {
     }
   },
 
-  collab: async ({ request, url, locals, fetch }) => {
+  collab: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const collabForm = await superValidate(formData, collabSchema);
 
     if (!collabForm.valid) {
-      console.log(collabForm.errors);
       return fail(400, { collabForm });
     }
     const resp = await api.collaboration.create(collabForm.data);

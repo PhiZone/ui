@@ -35,13 +35,13 @@
         </h1>
         <div class="join">
           <a
-            href="/studio/collaborations/?rangeInviteeId={user?.id}"
+            href="/studio/collaborations?rangeInviteeId={user?.id}"
             class="btn btn-primary btn-outline join-item"
           >
             {$t('studio.request.received')}
           </a>
           <a
-            href="/studio/collaborations/?rangeInviterId={user?.id}"
+            href="/studio/collaborations?rangeInviterId={user?.id}"
             class="btn btn-primary btn-outline join-item"
           >
             {$t('studio.request.sent')}

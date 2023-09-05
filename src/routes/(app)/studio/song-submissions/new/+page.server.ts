@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { fail, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -59,14 +60,9 @@ export const actions = {
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
 
-    console.log(formData);
-    console.log(form.data);
-
     if (!form.valid) {
-      console.log(form.errors);
       return fail(400, { form });
     }
-    // eslint-disable-next-line prefer-const
     let {
       EditionType,
       Edition,
@@ -130,7 +126,7 @@ export const actions = {
         return fail(resp.status, { form });
       } catch (e) {
         const error = await respBackup.text();
-        console.log(error)
+        console.log(error);
         return fail(resp.status, { error });
       }
     }

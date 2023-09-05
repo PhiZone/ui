@@ -78,7 +78,7 @@
     </label>
     <div
       class={$charter.isError
-        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
+        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
         : 'w-full my-2 px-4'}
       data-tip={$charter.isError ? $t(`error.${$charter.error.code}`) : ''}
     >
@@ -145,22 +145,22 @@
         <div class="card-body">
           <a
             href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${
-                  parent?.file
-                }&illustration=${parent?.illustration}&name=${
-                  parent?.title
-                }&level=${level}&difficulty=${
-                  parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'
-                }&composer=${parent?.authorName}&illustrator=${
-                  parent?.illustrator
-                }&charter=${authorName}`}
+              parent?.file
+            }&illustration=${parent?.illustration}&name=${
+              parent?.title
+            }&level=${level}&difficulty=${
+              parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'
+            }&composer=${parent?.authorName}&illustrator=${
+              parent?.illustrator
+            }&charter=${authorName}`}
             target="_blank"
-            class="px-4 mb-2 link link-hover"
+            class="mb-2 link link-hover"
           >
             {$t('studio.submission.offset_helper')}
           </a>
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex">
-              <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
+              <span class="w-32 place-self-center">{$t('common.form.chart')}</span>
               <input
                 type="file"
                 id="file"
@@ -180,7 +180,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 px-4 place-self-center">{$t('chart.ranked')}</span>
+              <span class="w-32 place-self-center">{$t('chart.ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -199,7 +199,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 px-4 place-self-center">{$t('studio.submission.song_type')}</span>
+              <span class="w-32 place-self-center">{$t('studio.submission.song_type')}</span>
               <div class="flex w-1/3 gap-2">
                 <input
                   type="radio"
@@ -379,7 +379,7 @@
             </div>
             {#if level && difficulty}
               <div class="flex my-2">
-                <span class="w-1/4 px-4 place-self-center">{$t('common.form.level_preview')}</span>
+                <span class="w-1/4 place-self-center">{$t('common.form.level_preview')}</span>
                 <div class="w-3/4">
                   <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
                     {level}
@@ -427,7 +427,7 @@
             </div>
             {#if authorName}
               <div class="flex my-2">
-                <span class="w-1/4 px-4 place-self-center">
+                <span class="w-1/4 place-self-center">
                   {$t('common.form.charter_preview')}
                 </span>
                 <p class="w-3/4 content">

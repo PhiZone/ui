@@ -1,537 +1,534 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import * as api from '$lib/api';
-  import { ContentType, LEVEL_TYPES, Status } from '$lib/constants';
-  import { goto } from '$app/navigation';
-  import type { Song, ChartSubmissionError, SongSubmission, User } from '$lib/api';
-  import Charter from '$lib/components/User.svelte';
-  import { getLevelColor, parseRichText } from '$lib/utils';
+  import { LEVEL_TYPES, Status } from '$lib/constants';
+  import User from '$lib/components/User.svelte';
+  import { applyPatch, getLevelColor } from '$lib/utils';
+  import { createQuery } from '@tanstack/svelte-query';
+  import { richtext } from '$lib/richtext';
+  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
+  import { invalidateAll } from '$app/navigation';
+  import type { PatchElement } from '$lib/api/types';
+  import type { ChartSubmissionDto } from '$lib/api/chart.submission';
 
-  export let data: import('./$types').PageData;
-  $: ({ content, access_token, user } = data);
+  export let data;
 
-  let errorMsg = '',
-    levelType = -1,
-    level = '',
-    difficulty = '',
-    charter = '',
-    song = '',
-    songSubmission = '',
-    songSwitch = true,
-    description = '',
-    emptyDescription = false,
-    chart: File | null = null,
-    status = Status.OK,
-    error: ChartSubmissionError,
-    songList: Song[] | null = null,
-    songSubmissionList: SongSubmission[],
-    newCharterId: number | null = null,
-    newCharter: User | null = null,
-    newCharterStatus = Status.OK,
-    newCharterErr = '',
-    newCharterText = '';
+  $: ({ id, user, api } = data);
 
-  const getSongs = async () => {
-    const resp = await api.GET('/songs/?order=-id&pagination=0', access_token, user);
-    if (resp.ok) {
-      songList = await resp.json();
-    } else {
-      console.log(await resp.json());
-    }
-  };
+  let chart: ChartSubmissionDto;
+  let newCharterId: number | null = null;
+  let newCharterDisplay = '';
+  let queryCharter = false;
+  let status = Status.WAITING;
+  let errorCode = '';
+  let errors: Map<string, string> | undefined = undefined;
 
-  const getSongSubmissions = async () => {
-    const resp = await api.GET(
-      `/song_uploads/?order=-id&uploader=${user.id}&pagination=0`,
-      access_token,
-      user,
-    );
-    if (resp.ok) {
-      songSubmissionList = await resp.json();
-    } else {
-      console.log(await resp.json());
-    }
-  };
+  $: submission = createQuery(api.chart.submission.info({ id }));
+  $: charter = createQuery(
+    api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
+  );
+  $: charterPreview = richtext(chart.authorName ?? '');
+  $: song = createQuery(
+    api.song.info(
+      { id: $submission.data?.data.songId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data.data.songId },
+    ),
+  );
+  $: songSubmission = createQuery(
+    api.song.submission.info(
+      { id: $submission.data?.data.songSubmissionId ?? '' },
+      { enabled: $submission.isSuccess && !!$submission.data.data.songSubmissionId },
+    ),
+  );
+  $: parent = $song.isSuccess
+    ? $song.data.data
+    : $songSubmission.isSuccess
+    ? $songSubmission.data.data
+    : undefined;
 
-  const getUser = async () => {
-    if (!newCharterId) {
-      return;
-    }
-    newCharterStatus = Status.RETRIEVING;
-    const resp = await api.GET(`/users/${newCharterId}/?query_relation=1`, access_token, user);
-    if (resp.ok) {
-      newCharter = await resp.json();
-      newCharterStatus = Status.OK;
-    } else {
-      newCharterErr = (await resp.json()).detail;
-      newCharterStatus = Status.ERROR;
-    }
-  };
+  $: if (!chart && $submission.isSuccess) {
+    chart = $submission.data.data;
+  }
 
-  const handleChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-    if (error?.chart) error.chart = [];
+  const handleChart = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
-      chart = target.files[0];
+      status = Status.SENDING;
+      errorCode = '';
+      const resp = await api.chart.submission.updateChart({ id, File: target.files[0] });
+      if (resp.ok) {
+        invalidateAll();
+        status = Status.OK;
+      } else {
+        status = Status.ERROR;
+        const data = await resp.json();
+        errorCode = data.code;
+        console.error(data);
+      }
     }
   };
 
-  async function handleSubmit() {
-    let formData = new FormData();
-    if (chart) formData.append('chart', chart as unknown as File);
-    if (levelType !== -1) formData.append('level_type', levelType.toString());
-    if (level) formData.append('level', level);
-    if (difficulty) formData.append('difficulty', parseFloat(difficulty).toFixed(1));
-    if (charter) formData.append('charter', charter);
-    if ((songSwitch && song) || (!songSwitch && songSubmission))
-      formData.append(songSwitch ? 'song' : 'song_upload', songSwitch ? song : songSubmission);
-    if (emptyDescription || description) formData.append('description', description);
+  let patch = new Array<PatchElement>();
+
+  const update = async () => {
     status = Status.SENDING;
-    const resp = await api.PATCH(
-      `/chart_uploads/${content?.id}/`,
-      formData,
-      access_token,
-      user,
-      ContentType.FORM_DATA,
-    );
+    errorCode = '';
+    errors = undefined;
+    const resp = await api.chart.submission.update({ id }, patch);
     if (resp.ok) {
-      window.location.href = `/studio/chart-submissions/${content?.id}`;
+      status = Status.OK;
+      invalidateAll();
+      patch = [];
     } else {
-      error = await resp.json();
-      console.log(error);
-      if (resp.status == 400) {
-        errorMsg = 'data_invalid';
-      } else {
-        errorMsg = 'unknown_error';
-      }
       status = Status.ERROR;
+      const data = await resp.json();
+      errorCode = data.code;
+      errors = data.errors?.reduce((map, error) => {
+        map.set(error.field, $t(`error.${error.errors[0]}`));
+        return map;
+      }, new Map<string, string>());
+      console.error(errors);
     }
-  }
+  };
 </script>
 
 <svelte:head>
-  <title>
-    {$t('studio.chart_submission')} - {content?.song
-      ? content?.song.name
-      : content?.song_upload?.name}
-    {content
-      ? `[${content.level} ${content.difficulty != 0 ? Math.floor(content.difficulty) : '?'}]`
-      : ''} - {$t('common.edit')} | {$t('common.title')}
-  </title>
+  <title>{$t('common.studio')} - {$t('studio.edit_chart')} | {$t('common.title')}</title>
 </svelte:head>
 
-{#if content !== null}
-  <input type="checkbox" id="studio-charter" class="modal-toggle" />
-  <div class="modal">
-    <div class="modal-box bg-base-100 form-control gap-3">
-      <div class="flex gap-3 items-center">
-        <h3 class="font-bold text-lg">{$t('studio.submission.add_charter')}</h3>
+<input type="checkbox" id="update-success" class="modal-toggle" checked={status === Status.OK} />
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{$t('common.success')}</h3>
+    <p class="py-4">{$t('common.update_success')}</p>
+    <div class="modal-action">
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <btn
+        class="btn btn-success btn-outline"
+        on:click={() => {
+          status = Status.WAITING;
+        }}
+        on:keyup
+      >
+        {$t('common.confirm')}
+      </btn>
+    </div>
+  </div>
+</div>
+
+<input type="checkbox" id="studio-charter" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box bg-base-100 form-control gap-3">
+    <div class="flex gap-3 items-center">
+      <h3 class="font-bold text-lg">{$t('studio.submission.add_charter')}</h3>
+      {#if user}
         <p class="opacity-80">
           ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
         </p>
-      </div>
-      <label
-        for="studio-charter"
-        class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
-      >
-        ✕
-      </label>
-      <div
-        class={newCharterStatus === Status.ERROR && newCharterErr
-          ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
-          : 'w-full my-2'}
-        data-tip={newCharterStatus === Status.ERROR && newCharterErr ? newCharterErr : ''}
-      >
-        <label class="join">
-          <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
-          <input
-            placeholder={$t('studio.submission.author_placeholder')}
-            class="input input-bordered join-item w-3/4 min-w-[180px] {newCharterStatus ===
-              Status.ERROR && newCharterErr
-              ? 'input-error'
-              : 'input-primary'}"
-            bind:value={newCharterId}
-            on:input={() => {
-              newCharterStatus = Status.OK;
-            }}
-          />
-          <button
-            class={`btn ${
-              newCharterId && newCharterStatus !== Status.RETRIEVING
-                ? newCharterStatus === Status.ERROR
-                  ? 'btn-error'
-                  : 'btn-primary btn-outline'
-                : 'btn-disabled'
-            }`}
-            on:click={getUser}
-          >
-            {$t('common.fetch')}
-          </button>
-        </label>
-      </div>
-      {#if newCharter !== null && newCharterStatus === Status.OK}
-        <Charter user={newCharter} token={access_token} operator={user} mini />
-        <label class="join">
-          <span class="btn no-animation join-item w-1/4 min-w-fit">
-            {$t('common.form.charter')}
-          </span>
-          <input
-            placeholder={$t('common.form.charter')}
-            class="input input-primary join-item w-3/4"
-            bind:value={newCharterText}
-          />
-        </label>
       {/if}
-      <div class="modal-action mt-3 join join-horizontal">
+    </div>
+    <label
+      for="studio-charter"
+      class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <div
+      class={$charter.isError
+        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
+        : 'w-full my-2 px-4'}
+      data-tip={$charter.isError ? $t(`error.${$charter.error.code}`) : ''}
+    >
+      <label class="join w-full">
+        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
+        <input
+          placeholder={$t('studio.submission.author_placeholder')}
+          class={`input input-secondary join-item w-3/4 min-w-[180px] ${
+            $charter.isError ? 'input-error' : 'input-secondary'
+          }`}
+          bind:value={newCharterId}
+          on:input={() => {
+            queryCharter = false;
+          }}
+        />
+        <button
+          class={`btn join-item ${
+            newCharterId || $charter.isLoading
+              ? $charter.isError
+                ? 'btn-error'
+                : 'btn-secondary btn-outline'
+              : 'btn-disabled'
+          }`}
+          on:click={() => {
+            queryCharter = true;
+          }}
+        >
+          {$t('common.fetch')}
+        </button>
+      </label>
+    </div>
+    {#if newCharterId && $charter.isSuccess}
+      <User id={newCharterId} initUser={$charter.data.data} kind="mini" target="_blank" />
+      <label class="join w-full px-4">
+        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.charter')}</span>
+        <input
+          placeholder={$t('common.form.charter')}
+          class="input input-secondary join-item w-3/4"
+          bind:value={newCharterDisplay}
+        />
+      </label>
+      <div class="modal-action mt-3 px-4">
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-charter"
-          class="btn btn-primary btn-outline join-item text-lg"
+          class="btn btn-secondary btn-outline"
           on:click={() => {
-            charter += `[PZUser:${newCharter?.id}:${newCharterText}:PZRT]`;
+            chart.authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
           on:keyup
         >
           {$t('common.submit')}
         </label>
       </div>
-    </div>
+    {/if}
   </div>
+</div>
 
-  <div class="bg-base-200 min-h-screen">
-    <div class="pt-32 flex justify-center">
-      <div class="w-3/4 max-w-6xl min-w-20">
-        <h1 class="text-4xl font-bold mb-6">
-          {$t('studio.chart_submission')} - {$t('common.edit')}
-        </h1>
-        <div class="card w-full bg-base-100 shadow-lg">
-          <div class="card-body">
-            <div
-              class="form-control"
-              on:focusin={() => {
-                status = Status.OK;
-              }}
-            >
-              {#if content.chart}
-                <div class="flex justify-start items-center my-2">
-                  <span class="w-32 px-4 place-self-center">
-                    {$t('studio.submission.original_chart')}
-                  </span>
-                  <a
-                    href={content.chart}
-                    target="_blank"
-                    rel="noreferrer"
-                    class="hover:underline place-self-center min-w-fit mr-4"
-                    download
-                  >
-                    {$t('common.download')}
-                  </a>
-                </div>
-              {/if}
-              <div class="flex">
-                <span class="w-32 px-4 place-self-center">{$t('common.form.chart')}</span>
-                <input
-                  type="file"
-                  accept=".json, .pec"
-                  class={`mb-2 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
-                    status === Status.ERROR && error?.chart
-                      ? 'input-error file:btn-error'
-                      : 'input-primary file:btn-outline file:bg-primary'
-                  }`}
-                  on:change={handleChart}
-                />
-                {#if status === Status.ERROR && error?.chart}
-                  <span class="place-self-center text-error">{error.chart}</span>
-                {:else}
-                  <span class="place-self-center">{$t('common.form.tips.chart')}</span>
-                {/if}
-              </div>
-              <div class="flex justify-start items-center my-2">
-                <span class="w-32 px-4 place-self-center">
-                  {$t('studio.submission.original_song')}
-                </span>
-                {#if content.song}
-                  <a
-                    href={`/songs/${content.song.id}`}
-                    class="hover:underline"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    [{$t('song.song')}] [{$t(
-                      `studio.submission.accessibilities.${content.song.accessibility}`,
-                    )}] {content.song.id}. {content.song.composer} - {content.song.name} ({content
-                      .song.edition})
-                  </a>
-                {:else}
-                  <a
-                    href={`/studio/song-submissions/${content.song_upload?.id}`}
-                    class="hover:underline"
-                  >
-                    [{$t('studio.song_submission')}] {content.song_upload?.id}. {content.song_upload
-                      ?.composer} - {content.song_upload?.name} ({content.song_upload?.edition})
-                  </a>
-                {/if}
-              </div>
-              <div class="flex justify-start items-center my-2">
-                <span class="w-32 px-4 place-self-center">{$t('studio.submission.song_type')}</span>
-                <div class="flex w-1/3 gap-2">
-                  <input
-                    type="radio"
-                    bind:group={songSwitch}
-                    name="song-switch"
-                    value={true}
-                    class="radio radio-primary"
-                    on:change={getSongs}
-                  />
-                  <p>{$t('song.song')}</p>
-                </div>
-                <div class="flex w-1/3 gap-2">
-                  <input
-                    type="radio"
-                    bind:group={songSwitch}
-                    name="song-switch"
-                    value={false}
-                    class="radio radio-primary"
-                    on:change={getSongSubmissions}
-                  />
-                  <p>{$t('studio.song_submission')}</p>
-                </div>
-              </div>
-              {#if songSwitch}
-                <div
-                  class={status === Status.ERROR && error?.song
-                    ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                    : ''}
-                  data-tip={status === Status.ERROR && error?.song ? error.song : ''}
-                  on:pointerenter={() => {
-                    if (songList === null) {
-                      getSongs();
-                    }
-                  }}
-                >
-                  <label class="join my-2">
-                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                      {$t('song.song')}
-                    </span>
-                    <select
-                      class="select select-bordered join-item w-3/4 min-w-[180px] {status ===
-                        Status.ERROR && error?.song
-                        ? 'select-error'
-                        : 'select-primary'}"
-                      bind:value={song}
-                    >
-                      {#if songList}
-                        {#each songList as song}
-                          <option value={song.id}>
-                            [{$t(`studio.submission.accessibilities.${song.accessibility}`)}] {song.id}.
-                            {song.composer} - {song.name} ({song.edition})
-                          </option>
-                        {/each}
-                      {/if}
-                    </select>
-                  </label>
-                </div>
-              {:else}
-                <div
-                  class={status === Status.ERROR && error?.song_upload
-                    ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                    : ''}
-                  data-tip={status === Status.ERROR && error?.song_upload ? error.song_upload : ''}
-                >
-                  <label class="join my-2">
-                    <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                      {$t('studio.song_submission')}
-                    </span>
-                    <select
-                      class="select select-bordered join-item w-3/4 min-w-[180px] {status ===
-                        Status.ERROR && error?.song_upload
-                        ? 'select-error'
-                        : 'select-primary'}"
-                      bind:value={songSubmission}
-                    >
-                      {#if songSubmissionList}
-                        {#each songSubmissionList as song}
-                          <option value={song.id}>
-                            {song.id}. {song.composer} - {song.name} ({song.edition})
-                          </option>
-                        {/each}
-                      {/if}
-                    </select>
-                  </label>
-                </div>
-              {/if}
-              <div
-                class={status === Status.ERROR && error?.level
-                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                  : ''}
-                data-tip={status === Status.ERROR && error?.level ? error.level : ''}
+<div class="bg-base-200 min-h-screen">
+  <div class="pt-32 pb-4 flex justify-center">
+    <div class="w-3/4 max-w-6xl min-w-20">
+      <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_chart')}</h1>
+      <div class="card w-full bg-base-100 shadow-lg">
+        <div class="card-body">
+          <div class="text-5xl py-3 flex font-bold gap-4 items-center">
+            {#if $song.isSuccess}
+              <a
+                class="hover:underline"
+                href={`/songs/${$song.data.data.id}`}
+                target="_blank"
+                rel="noreferrer"
               >
-                <label class="join my-2">
-                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                    {$t('common.form.chart_level')}
-                  </span>
-                  <select
-                    class="select select-bordered join-item w-1/6 {status === Status.ERROR &&
-                    error?.level_type
-                      ? 'select-error'
-                      : 'select-primary'}"
-                    bind:value={levelType}
-                  >
-                    {#each LEVEL_TYPES as type, i}
-                      <option value={i}>{type}</option>
-                    {/each}
-                  </select>
-                  <input
-                    type="text"
-                    placeholder={$t('common.form.tips.chart_level')}
-                    class="input input-bordered join-item w-7/12 min-w-[180px] {status ===
-                      Status.ERROR && error?.level
-                      ? 'input-error'
-                      : 'input-primary'}"
-                    bind:value={level}
-                  />
-                </label>
-              </div>
-              <div
-                class={status === Status.ERROR && error?.difficulty
-                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                  : ''}
-                data-tip={status === Status.ERROR && error?.difficulty ? error.difficulty : ''}
+                {$song.data.data.title}
+              </a>
+            {:else if $songSubmission.isSuccess}
+              <a
+                class="hover:underline"
+                href={`/studio/song-submissions/${$songSubmission.data.data.id}`}
+                target="_blank"
+                rel="noreferrer"
               >
-                <label class="join my-2">
-                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                    {$t('common.form.chart_difficulty_2')}
-                  </span>
-                  <input
-                    type="text"
-                    placeholder={content.difficulty.toFixed(1)}
-                    class={`input input-bordered join-item w-3/4 min-w-[180px] ${
-                      status === Status.ERROR && error?.difficulty ? 'input-error' : 'input-primary'
-                    }`}
-                    bind:value={difficulty}
-                  />
-                </label>
-              </div>
-              {#if level && difficulty}
-                <div class="flex">
-                  <span class="w-1/4 px-4 place-self-center">
-                    {$t('common.form.level_preview')}
-                  </span>
-                  <div class="w-3/4">
-                    <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
-                      {level}
-                      {parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'}
-                    </button>
-                  </div>
-                </div>
-              {/if}
-              <div
-                class={status === Status.ERROR && error?.charter
-                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                  : ''}
-                data-tip={status === Status.ERROR && error?.charter ? error.charter : ''}
-              >
-                <label class="join my-2">
-                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                    {$t('common.form.charter')}
-                  </span>
-                  <input
-                    type="text"
-                    placeholder={content.charter}
-                    class={`input input-bordered join-item w-7/12 min-w-[180px] ${
-                      status === Status.ERROR && error?.charter ? 'input-error' : 'input-primary'
-                    }`}
-                    bind:value={charter}
-                  />
-                  <label
-                    for="studio-charter"
-                    class="btn btn-primary btn-outline join-item w-1/6 min-w-fit"
-                    on:click={() => {
-                      newCharterId = null;
-                      newCharter = null;
-                      newCharterText = '';
-                    }}
-                    on:keyup
-                  >
-                    {$t('studio.submission.add_charter')}
-                  </label>
-                </label>
-              </div>
-              {#if charter}
-                <div class="flex">
-                  <span class="w-1/4 px-4 place-self-center">
-                    {$t('common.form.charter_preview')}
-                  </span>
-                  <p class="w-3/4 px-4 content">
-                    {#each parseRichText(charter) as t}
-                      {#if t.id > 0}
-                        <a
-                          href={`/users/${t.id}`}
-                          class="text-accent hover:underline"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {t.text}
-                        </a>
-                      {:else}
-                        {t.text}
-                      {/if}
-                    {/each}
-                  </p>
-                </div>
-              {/if}
-              <div
-                class={status === Status.ERROR && error?.description
-                  ? 'tooltip tooltip-open tooltip-right tooltip-error relative'
-                  : 'relative'}
-                data-tip={status === Status.ERROR && error?.description ? error.description : ''}
-              >
-                <label class="join my-2">
-                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                    {$t('common.description')}
-                  </span>
-                  <textarea
-                    class={`textarea ${
-                      status === Status.ERROR && error?.description
-                        ? 'textarea-error'
-                        : 'textarea-secondary'
-                    } w-3/4 h-28`}
-                    placeholder={!emptyDescription ? content.description : ''}
-                    bind:value={description}
-                    on:input={() => {
-                      emptyDescription = false;
-                    }}
-                  />
-                </label>
+                {$songSubmission.data.data.title}
+              </a>
+            {/if}
+            <div class="ml-4 min-w-fit flex gap-1 align-middle">
+              <div class="join join-horizontal">
                 <button
-                  class="absolute right-0 top-2 btn btn-accent btn-outline btn-sm"
-                  on:click={() => {
-                    emptyDescription = true;
-                    description = '';
-                  }}
+                  class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                 >
-                  {$t('common.empty_v')}
+                  {chart.level}
+                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
                 </button>
+                {#if chart.isRanked}
+                  <button class="btn btn-success join-item text-3xl no-animation">
+                    {$t('chart.ranked')}
+                  </button>
+                {/if}
               </div>
             </div>
           </div>
+          <a
+            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset&chart=${
+              $submission.data?.data.file
+            }&song=${parent?.file}&illustration=${parent?.illustration}&name=${
+              parent?.title
+            }&level=${chart.level}&difficulty=${
+              chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'
+            }&composer=${parent?.authorName}&illustrator=${parent?.illustrator}&charter=${
+              chart.authorName
+            }`}
+            target="_blank"
+            class="mb-2 link link-hover"
+          >
+            {$t('studio.submission.offset_helper')}
+          </a>
+          <form class="w-full form-control">
+            <div class="flex">
+              <span class="w-32 place-self-center">{$t('common.form.chart')}</span>
+              <input
+                type="file"
+                id="file"
+                name="File"
+                accept=".json, .pec"
+                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  errors?.get('File')
+                    ? 'input-error file:btn-error'
+                    : 'input-secondary file:btn-outline file:bg-secondary'
+                }`}
+                on:input={handleChart}
+              />
+              {#if !!errors?.get('File')}
+                <span class="place-self-center w-2/3 text-error">{errors?.get('File')}</span>
+              {:else}
+                <span class="place-self-center w-2/3">{$t('common.form.tips.chart')}</span>
+              {/if}
+            </div>
+            <div class="flex justify-start items-center my-2 w-full">
+              <span class="w-32 place-self-center">{$t('chart.ranked')}</span>
+              <div class="flex w-1/3">
+                <input
+                  type="checkbox"
+                  id="is_ranked"
+                  name="IsRanked"
+                  class="toggle {errors?.get('IsRanked') ? 'toggle-error' : 'toggle-secondary'}"
+                  bind:checked={chart.isRanked}
+                  on:input={(e) => {
+                    patch = applyPatch(
+                      patch,
+                      'replace',
+                      '/isRanked',
+                      e.currentTarget.value === 'on',
+                    );
+                  }}
+                />
+              </div>
+              {#if !!errors?.get('IsRanked')}
+                <span class="place-self-center w-2/3 text-error">{errors?.get('IsRanked')}</span>
+              {:else}
+                <span class="place-self-center w-2/3">
+                  {$t(`common.form.tips.${chart.isRanked ? 'ranked' : 'unranked'}`)}
+                </span>
+              {/if}
+            </div>
+            <div
+              class={errors?.get('Accessibility')
+                ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                : ''}
+              data-tip={errors?.get('Accessibility')}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.accessibility')}
+                </span>
+                <select
+                  id="accessibility"
+                  name="Accessibility"
+                  class={`select select-secondary join-item w-3/4 ${
+                    errors?.get('Accessibility') ? 'select-error' : 'select-secondary'
+                  }`}
+                  on:input={(e) => {
+                    patch = applyPatch(
+                      patch,
+                      'replace',
+                      '/accessibility',
+                      parseInt(e.currentTarget.value),
+                    );
+                  }}
+                >
+                  <option value="0">
+                    {$t('common.accessibilities.0')} - {$t('chart.accessibility_tips.0')}
+                  </option>
+                  <option value="2">
+                    {$t('common.accessibilities.2')} - {$t('chart.accessibility_tips.2')}
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div
+              class={errors?.get('LevelType') || errors?.get('Level')
+                ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                : ''}
+              data-tip={errors?.get('LevelType') ?? errors?.get('Level') ?? ''}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_level')}
+                </span>
+                <select
+                  id="level_type"
+                  name="LevelType"
+                  class={`select select-secondary join-item w-1/6 ${
+                    errors?.get('LevelType') ? 'select-error' : 'select-secondary'
+                  }`}
+                  bind:value={chart.levelType}
+                  on:input={(e) => {
+                    patch = applyPatch(patch, 'replace', '/levelType', e.currentTarget.value);
+                  }}
+                >
+                  {#each LEVEL_TYPES as type, i}
+                    <option value={i}>{type}</option>
+                  {/each}
+                </select>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
+                  id="level"
+                  name="Level"
+                  placeholder={$t('common.form.tips.chart_level')}
+                  class={`input input-secondary join-item w-7/12 min-w-[180px] ${
+                    errors?.get('Level') ? 'input-error' : 'input-secondary'
+                  }`}
+                  bind:value={chart.level}
+                  on:input={(e) => {
+                    patch = applyPatch(patch, 'replace', '/level', e.currentTarget.value);
+                  }}
+                />
+              </label>
+            </div>
+            <div
+              class={errors?.get('Difficulty')
+                ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                : ''}
+              data-tip={errors?.get('Difficulty')}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.chart_difficulty_2')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
+                  id="difficulty"
+                  name="Difficulty"
+                  placeholder={(Math.random() * (16.9 - 11.9) + 11.9).toFixed(1)}
+                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Difficulty') ? 'input-error' : 'input-secondary'
+                  }`}
+                  bind:value={chart.difficulty}
+                  on:input={(e) => {
+                    patch = applyPatch(
+                      patch,
+                      'replace',
+                      '/difficulty',
+                      parseFloat(e.currentTarget.value),
+                    );
+                  }}
+                />
+              </label>
+            </div>
+            <div
+              class={errors?.get('AuthorName')
+                ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                : ''}
+              data-tip={errors?.get('AuthorName')}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.form.charter')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
+                  id="author_name"
+                  name="AuthorName"
+                  placeholder={$t('common.form.charter')}
+                  class={`input input-secondary join-item w-7/12 min-w-[180px] ${
+                    errors?.get('AuthorName') ? 'input-error' : 'input-secondary'
+                  }`}
+                  bind:value={chart.authorName}
+                  on:input={(e) => {
+                    patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
+                  }}
+                />
+                <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                <label
+                  for="studio-charter"
+                  class="btn btn-outline btn-secondary join-item w-1/6"
+                  on:click={() => {
+                    newCharterId = null;
+                    newCharterDisplay = '';
+                  }}
+                  on:keyup
+                >
+                  {$t('studio.submission.add_charter')}
+                </label>
+              </label>
+            </div>
+            {#if chart.authorName}
+              <div class="flex my-2">
+                <span class="w-1/4 place-self-center">
+                  {$t('common.form.charter_preview')}
+                </span>
+                <p class="w-3/4 content">
+                  {@html $charterPreview}
+                </p>
+              </div>
+            {/if}
+            <div
+              class={errors?.get('Description')
+                ? 'tooltip tooltip-open tooltip-right tooltip-error relative my-2'
+                : 'relative my-2'}
+              data-tip={errors?.get('Description')}
+            >
+              <label class="join w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.description')}{$t('common.optional')}
+                </span>
+                <textarea
+                  id="description"
+                  name="Description"
+                  class={`textarea join-item ${
+                    errors?.get('Description') ? 'textarea-error' : 'textarea-secondary'
+                  } w-3/4 h-28`}
+                  placeholder={$t('studio.submission.description_placeholder')}
+                  bind:value={chart.description}
+                  on:input={(e) => {
+                    patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
+                  }}
+                />
+              </label>
+              <button
+                type="button"
+                class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                on:click={() => {
+                  chart.description = '';
+                  patch = applyPatch(patch, 'remove', '/description');
+                }}
+              >
+                {$t('common.empty_v')}
+              </button>
+            </div>
+            <div class="w-full flex justify-center mt-6">
+              <div
+                class="tooltip tooltip-top tooltip-error w-full"
+                class:tooltip-open={status === Status.ERROR}
+                data-tip={status === Status.ERROR
+                  ? $t(`error.${errorCode}`) ?? $t('common.unknown_error')
+                  : null}
+              >
+                <button
+                  class="btn {status === Status.ERROR
+                    ? 'btn-error'
+                    : status === Status.SENDING
+                    ? 'btn-ghost'
+                    : 'btn-secondary btn-outline'} w-full"
+                  disabled={status == Status.SENDING}
+                  on:click={update}
+                >
+                  {status === Status.ERROR
+                    ? $t('common.error')
+                    : status === Status.SENDING
+                    ? $t('common.waiting')
+                    : $t('common.submit')}
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <button
-          class={`btn btn-outline ${
-            status === Status.ERROR
-              ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
-              : status === Status.SENDING
-              ? 'btn btn-ghost btn-disabled glass'
-              : 'btn-primary'
-          } glass float-right my-5 text-lg`}
-          data-tip={$t(`common.form.errors.${errorMsg}`)}
-          on:click={handleSubmit}
-        >
-          {$t(status === Status.SENDING ? 'common.waiting' : 'common.submit')}
-        </button>
       </div>
     </div>
   </div>
-{/if}
+</div>
 
 <style>
   * {

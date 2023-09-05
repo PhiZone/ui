@@ -1,5 +1,5 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { FilterBase, PatchElement, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 
@@ -67,12 +67,6 @@ export interface RegisterOpts {
   DateOfBirth?: Date;
 }
 
-// update avatar
-export interface UpdateAvatarOpts {
-  id: number;
-  Avatar: Blob;
-}
-
 export default class UserAPI {
   constructor(private api: API) {}
 
@@ -113,12 +107,12 @@ export default class UserAPI {
   register(opts: RegisterOpts): R {
     return this.api.POST('/users', serialize(opts));
   }
-  
+
   update({ id }: InfoOpts, patch: PatchElement[]): R {
     return this.api.PATCH(`/users/${id}`, patch);
   }
 
-  updateAvatar({ id, ...rest }: UpdateAvatarOpts): R {
+  updateAvatar({ id, ...rest }: FileUpdateOpts): R {
     return this.api.PATCH(`/users/${id}/avatar`, serialize(rest));
   }
 }

@@ -64,11 +64,11 @@
             : valid
             ? 'success'
             : 'info'} mx-auto text-center"
-          placeholder={$t('session.email_confirmation.code')}
+          placeholder={$t('session.code')}
           bind:value={code}
           on:input={oninput}
         />
-        <div class="mt-6">
+        <div class="mt-10">
           <div
             class="tooltip tooltip-bottom tooltip-error"
             class:tooltip-open={msg}

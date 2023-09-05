@@ -1,34 +1,63 @@
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
+import { z } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
 import { fail, redirect } from '@sveltejs/kit';
+import { t } from '$lib/translations/config';
+import { ResponseDtoStatus } from '$lib/api/types';
+
+const schema = z
+  .object({
+    Code: z.string(),
+    Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/, {
+      message: t.get('session.invalid_password'),
+    }),
+    ConfirmPassword: z.string(),
+  })
+  .refine(({ Password, ConfirmPassword }) => Password === ConfirmPassword, {
+    message: t.get('session.passwords_differ'),
+    path: ['ConfirmPassword'],
+  });
+
+type Schema = z.infer<typeof schema>;
+
+export const load = async () => {
+  const form = await superValidate(schema);
+  return { form };
+};
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
-    const data = await request.formData();
-    const password = data.get('password') as string,
-      confirm_password = data.get('confirm_password') as string,
-      token = data.get('token') as string;
 
-    if (password !== confirm_password) {
-      return fail(400, {
-        password,
-        confirm_password,
-        confirm_password_error: t.get('session.passwords_differ'),
-      });
+    const formData = await request.formData();
+    const form = await superValidate(formData, schema);
+
+    if (!form.valid) {
+      return fail(400, { form });
     }
 
-    const resp = await api.auth.password_reset.confirm({ password, token });
-    if (!resp.ok) {
-      const err = await resp.json();
-      return fail(resp.status, {
-        password,
-        confirm_password,
-        password_error: err.password?.[0],
-        error: err.code,
-      });
-    }
+    const { ConfirmPassword: _, ...opts } = form.data;
+    const resp = await api.auth.resetPassword(opts);
+    if (resp.ok) {
+      throw redirect(303, '/session/login' + url.search);
+    } else {
+      const error = await resp.json();
+      console.log(error);
+      form.valid = false;
+      if (error.status === ResponseDtoStatus.ErrorBrief) {
+        form.message = t.get(`error.${error.code}`);
+      } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+        form.message = error.message;
+      } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        form.errors = {};
+        error.errors.forEach(({ field, errors }) => {
+          form.errors[field as keyof Schema] = errors.map((value) => {
+            return t.get(`error.${value}`);
+          });
+        });
+      }
 
-    throw redirect(303, '/session/login' + url.search);
+      return fail(resp.status, { form });
+    }
   },
 };

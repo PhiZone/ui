@@ -1,17 +1,10 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
+  import { superForm } from 'sveltekit-superforms/client';
 
-  export let form;
+  export let data;
 
-  let status = Status.WAITING;
-  let msg = '';
-
-  const clear = () => {
-    status = Status.WAITING;
-    msg = '';
-  };
+  const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
 </script>
 
 <svelte:head>
@@ -24,67 +17,49 @@
       <h1 class="text-5xl font-bold">
         {$t('session.password_reset.password_reset')}
       </h1>
-      {#if status !== Status.OK}
-        <form
-          method="POST"
-          on:focus={clear}
-          use:enhance={() => {
-            status = Status.SENDING;
-
-            return async ({ result, update }) => {
-              if (result.type === 'success') {
-                status = Status.OK;
-              } else if (result.type === 'failure') {
-                status = Status.ERROR;
-                msg = result.data?.detail ?? $t('common.unknown_error');
-              }
-
-              await update();
-            };
-          }}
-        >
-          <p class="py-6">
-            {$t('session.password_reset.password_reset_text1')}
-          </p>
+      <form method="POST" use:enhance>
+        <p class="py-6">
+          {$t('session.password_reset.password_reset_text_1')}
+        </p>
+        <input
+          type="email"
+          id="email"
+          name="Email"
+          placeholder={$t('session.email')}
+          value={$form.Email}
+          class="input input-bordered input-lg {$errors.Email
+            ? 'input-error'
+            : 'input-info'} w-full text-center"
+        />
+        <div
+          class="tooltip tooltip-bottom tooltip-error"
+          class:tooltip-open={!!$errors.Email}
+          data-tip={$errors.Email}
+        />
+        <div class="mt-10">
           <div
-            class="tooltip tooltip-right tooltip-error w-full"
-            class:tooltip-open={status === Status.ERROR}
-            data-tip={status === Status.ERROR ? msg : null}
+            class="tooltip tooltip-bottom tooltip-error w-full"
+            class:tooltip-open={!!$message}
+            data-tip={$message}
           >
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder={$t('session.email')}
-              value={form?.email ?? ''}
-              class="input input-bordered input-lg {form?.detail
-                ? 'input-error'
-                : 'input-info'} w-full text-center"
-            />
-          </div>
-          <div class="mt-6">
             <button
               type="submit"
-              class="btn {status === Status.ERROR
+              class="btn {$allErrors.length > 0
                 ? 'btn-error'
-                : status === Status.SENDING
+                : $submitting
                 ? 'btn-ghost'
                 : 'btn-secondary btn-outline'} w-full"
-              disabled={status == Status.SENDING}
+              disabled={$submitting}
             >
-              {status === Status.ERROR
+              {$allErrors.length > 0
                 ? $t('common.error')
-                : status === Status.SENDING
+                : $submitting
                 ? $t('common.waiting')
                 : $t('common.submit')}
             </button>
           </div>
-        </form>
-      {:else}
-        <p class="py-6">
-          {$t('session.password_reset.password_reset_text2')}
-        </p>
-      {/if}
+        </div>
+      </form>
     </div>
   </div>
 </div>

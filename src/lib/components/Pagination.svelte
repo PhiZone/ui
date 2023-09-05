@@ -14,87 +14,11 @@
   $: nearbyPagesEnd = page >= totalPages - 4 ? totalPages : page + 3;
   $: nearbyPages = range(nearbyPagesStart, nearbyPagesEnd + 1);
 
-  // let preloaded: number | null = null,
-  //   total = Math.ceil(count / PAGINATION_PER_PAGE),
-  //   resp: { json: () => any; ok: any },
-  //   nearbyPages = [
-  //     ...Array(pageIndex > 3 ? Math.min(pageIndex + 4, total + 1) : Math.min(total + 1, 8)).keys(),
-  //   ].slice(Math.max(1, pageIndex <= total - 3 ? pageIndex - 3 : total - 6)),
-  //   allPages = [...Array(total + 1).keys()].slice(1);
-
-  // const preload = async (url: string, page: number) => {
-  //   resp = await api.GET(getPath(url), token, user);
-  //   preloaded = page;
-  // };
-
-  // const get = async (url: string, page: number) => {
-  //   status = Status.RETRIEVING;
-  //   results = null;
-  //   if (preloaded === null || preloaded != page) {
-  //     resp = await api.GET(getPath(url), token, user);
-  //   }
-  //   const json = await resp.json();
-  //   if (!resp.ok) {
-  //     status = Status.ERROR;
-  //     console.log(json);
-  //   }
-  //   count = json.count;
-  //   previous = json.previous;
-  //   next = json.next;
-  //   results = json.results;
-  //   total = Math.ceil(count / PAGINATION_PER_PAGE);
-  //   preloaded = null;
-  //   setTimeout(() => {
-  //     status = Status.OK;
-  //   }, 1);
-  // };
   const getSearch = (page: number) => {
     return queryString.stringify({ ...searchParams, [pageName]: page });
   };
 </script>
 
-<!-- <input type="checkbox" id="pagination" class="modal-toggle" />
-<div class="modal">
-  <div
-    class="modal-box bg-base-100 max-h-[90vh] {$_page.url.pathname.startsWith('/studio')
-      ? 'w-[40vw]'
-      : 'w-[70vw]'} max-w-[1800px]"
-  >
-    <label
-      for="pagination"
-      class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2">✕</label
-    >
-    <h2 class="font-bold text-xl mb-4">{$t('common.jump_to')}</h2>
-    <div class="page-btn-grid">
-      {#each pages as p}
-        <label
-          for="pagination"
-          class="btn btn-sm btn-circle {page == p ? 'btn-disabled' : 'btn-outline'}"
-          on:click={async () => {
-            let url = next ? next : previous ? previous : null;
-            if (url) {
-              await get(url.replace(/page=\d+/, `page=${p}`), p);
-              pageIndex = p;
-              results = results;
-              previous = previous;
-              next = next;
-            }
-          }}
-          on:pointerenter={() => {
-            if (total > 20) {
-              return;
-            }
-            let url = next ? next : previous ? previous : null;
-            if (url) {
-              preload(url.replace(/page=\d+/, `page=${p}`), p);
-            }
-          }}
-          on:keyup>{p}</label
-        >
-      {/each}
-    </div>
-  </div>
-</div> -->
 <div class="{studio ? 'pt-4 pb-16' : 'py-4'} min-w-fit flex justify-center">
   <div class="dropdown dropdown-hover dropdown-bottom w-full mt-3">
     <div class="join flex justify-center">
@@ -149,11 +73,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* .page-btn-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
-    grid-gap: 1rem;
-  } */
-</style>

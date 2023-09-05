@@ -30,20 +30,18 @@ export const load = async () => {
 };
 
 export const actions = {
-  review: async ({ request, url, locals, fetch }) => {
+  review: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const reviewForm = await superValidate(formData, reviewSchema);
 
     if (!reviewForm.valid) {
-      console.log(reviewForm.errors);
       return fail(400, { reviewForm });
     }
     const resp = await api.song.submission.review(reviewForm.data);
     if (resp.ok) {
       return;
     } else {
-      console.log('error!')
       try {
         const error = await resp.json();
         console.log(error);
@@ -66,13 +64,12 @@ export const actions = {
     }
   },
 
-  collab: async ({ request, url, locals, fetch }) => {
+  collab: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
     const formData = await request.formData();
     const collabForm = await superValidate(formData, collabSchema);
 
     if (!collabForm.valid) {
-      console.log(collabForm.errors);
       return fail(400, { collabForm });
     }
     const resp = await api.collaboration.create(collabForm.data);

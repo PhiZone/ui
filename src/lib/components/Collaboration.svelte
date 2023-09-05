@@ -3,14 +3,12 @@
   import { page } from '$app/stores';
   import User from '$lib/components/User.svelte';
   import type { CollaborationDto } from '$lib/api/collaboration';
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import { createQuery } from '@tanstack/svelte-query';
   import { getCompressedImage } from '$lib/utils';
 
   export let collaboration: CollaborationDto;
   export let kind: 'mini' | 'full' = 'full';
   export let showInvitee = false;
-
-  const queryClient = useQueryClient();
 
   $: ({ user, api } = $page.data);
 

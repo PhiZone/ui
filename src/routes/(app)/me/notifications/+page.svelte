@@ -16,9 +16,21 @@
 
 <div class="bg-base-200 page">
   <div class="min-w-20">
-    <h1 class="text-4xl font-bold mb-6">
-      {$t('notification.notifications')}
-    </h1>
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-4xl font-bold">
+        {$t('notification.notifications')}
+        {searchParams.getRead ? `- ${$t('notification.read')}` : ''}
+      </h1>
+      {#if searchParams.getRead}
+        <a href="/me/notifications" class="btn btn-primary btn-outline">
+          {$t('notification.view_unread')}
+        </a>
+      {:else}
+        <a href="/me/notifications?getRead=true" class="btn btn-primary btn-outline">
+          {$t('notification.view_read')}
+        </a>
+      {/if}
+    </div>
     <div class="py-4 min-w-fit">
       {#if $query.isSuccess}
         {@const { total, perPage, data } = $query.data}

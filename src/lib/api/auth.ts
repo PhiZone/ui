@@ -44,14 +44,14 @@ export enum SendEmailMode {
 }
 
 export interface SendEmailOpts {
-  email: string;
-  mode: SendEmailMode;
+  Email: string;
+  Mode: SendEmailMode;
 }
 
 // resetPassword
 export interface ResetPasswordOpts {
-  code: string;
-  password: string;
+  Code: string;
+  Password: string;
 }
 
 // activate
@@ -72,9 +72,7 @@ export interface RevokeAccountOpts {
 }
 
 export default class AuthAPI {
-  constructor(private api: API) {
-    // this.password_reset = new SessionPasswordResetAPI(api);
-  }
+  constructor(private api: API) {}
 
   token(opts: TokenOpts): Promise<TypedResponse<true, TokenResult> | TypedResponse<false>> {
     return this.api.POST('/auth/token', new URLSearchParams({ ...opts }));

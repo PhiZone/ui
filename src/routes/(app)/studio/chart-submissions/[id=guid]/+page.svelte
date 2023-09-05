@@ -5,7 +5,7 @@
   import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import VolunteerVote from '$lib/components/VolunteerVote.svelte';
-  import { LEVEL_TYPES, Status } from '$lib/constants';
+  import { LEVEL_TYPES } from '$lib/constants';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import Collaboration from '$lib/components/Collaboration.svelte';
   import { superForm } from 'sveltekit-superforms/client';
@@ -13,10 +13,9 @@
   import Chart from '$lib/components/Chart.svelte';
 
   export let data;
-  $: ({ searchParams, id, user, api } = data);
+  $: ({ id, user, api } = data);
 
   const {
-    form: voteForm,
     enhance: voteEnhance,
     errors: voteErrors,
     message: voteMessage,
@@ -24,14 +23,7 @@
     allErrors: voteAllErrors,
   } = superForm(data.voteForm);
 
-  const {
-    form: collabForm,
-    enhance: collabEnhance,
-    errors: collabErrors,
-    message: collabMessage,
-    submitting: collabSubmitting,
-    allErrors: collabAllErrors,
-  } = superForm(data.collabForm);
+  const { enhance: collabEnhance } = superForm(data.collabForm);
 
   let score = 0;
   let queryCollaborator = false;
@@ -207,7 +199,7 @@
         <input type="text" id="id" name="id" class="hidden" value={id} />
         <div
           class={$collaborator.isError
-            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
             : 'w-full my-2 px-4'}
           data-tip={$collaborator.isError ? $t(`error.${$collaborator.error.code}`) : ''}
         >
@@ -304,7 +296,9 @@
               <div class="ml-4 min-w-fit flex gap-1 align-middle">
                 <div class="join join-horizontal">
                   <button
-                    class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
+                    class="btn {getLevelColor(
+                      submission.levelType,
+                    )} join-item text-3xl no-animation"
                   >
                     {submission.level}
                     {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
@@ -398,7 +392,7 @@
             <div class="card-actions flex items-center justify-end gap-2">
               {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 3)}
                 <a
-                  href="/studio/chart-submissions/${submission.id}/edit"
+                  href="/studio/chart-submissions/{submission.id}/edit"
                   class="btn btn-primary btn-outline text-lg w-32"
                 >
                   {$t('common.edit')}
