@@ -74,6 +74,26 @@
       <li>
         <a href="/records">{$t('common.records')}</a>
       </li>
+      <!-- <li class="rounded-full">
+				<a href="/apps">{$t("common.navbar.apps")}</a>
+			</li>
+			<li class="rounded-full">
+				<a href="/discussions">{$t("common.discussions")}</a>
+			</li> -->
+      <!-- <li>
+        <a href="/recorder">{$t('common.navbar.recorder')}</a>
+      </li> -->
+      {#if !$page.url.pathname.startsWith('/session')}
+        {@const { user } = $page.data}
+        {#if user && getUserPrivilege(user.role) < 2}
+          <li class="rounded-full">
+            <a href="https://ks.wjx.top/vm/myjK5Pl.aspx" target="_blank">
+              {$t('common.navbar.privilege_escalation')}
+            </a>
+            <!-- <a href="/challenge">{$t('common.navbar.privilege_escalation')}</a> -->
+          </li>
+        {/if}
+      {/if}
     </ul>
   </div>
   <div class="navbar-end flex-grow">

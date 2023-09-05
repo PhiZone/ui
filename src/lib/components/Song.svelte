@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { SongDto } from '$lib/api';
-    import { richtext } from '$lib/richtext';
+  import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getCompressedImage } from '$lib/utils';
-    import { readable } from 'svelte/store';
+  import { readable } from 'svelte/store';
   import Like from './Like.svelte';
 
   export let song: SongDto;
@@ -33,9 +33,7 @@
   //       (specialCount ? specialCount : 0)
   //     : 0;
 
-  $: composer = song.isOriginal
-    ? richtext(song.authorName ?? '')
-    : readable(song.authorName);
+  $: composer = song.isOriginal ? richtext(song.authorName ?? '') : readable(song.authorName);
 </script>
 
 {#if kind === 'full'}

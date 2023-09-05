@@ -4,7 +4,7 @@
   import { locales, locale, t } from '$lib/translations/config';
   import { Status, regions } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import { applyPatch, getUserColor } from '$lib/utils';
+  import { applyPatch, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
 
   export let data;
@@ -23,7 +23,7 @@
   let dateAvailable: Date | undefined = undefined;
   let errors: Map<string, string> | undefined = undefined;
 
-  const regionMap: Map<string, string> = new Map(
+  $: regionMap = new Map(
     [
       ...regions
         .reduce((map, region) => {
@@ -101,10 +101,10 @@
     src={avatarSrc}
     aspectRatio={1}
     on:submit={async (e) => {
-      const resp = await api.user.updateAvatar({ id, Avatar: e.detail });
+      const resp = await api.user.updateAvatar({ id, File: e.detail });
       if (resp.ok) {
-        await invalidateAll();
-        await queryClient.invalidateQueries(['user.info', { id }]);
+        invalidateAll();
+        queryClient.invalidateQueries(['user.info', { id }]);
         avatarCropping = false;
         status = Status.OK;
       } else {
@@ -131,7 +131,7 @@
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body gap-4 py-10">
             <div class="avatar gap-4 items-center w-full">
-              <span class="w-1/6 min-w-fit px-4 place-self-center">
+              <span class="w-1/6 min-w-fit place-self-center">
                 {$t('user.avatar')}
               </span>
               <div
@@ -139,12 +139,16 @@
                   user.role,
                 )}"
               >
-                <img class="object-fill w-[140px] h-[140px]" src={user.avatar} alt="Avatar" />
+                <img
+                  class="object-fill w-[140px] h-[140px]"
+                  src={getAvatar(user.avatar, 100)}
+                  alt="Avatar"
+                />
               </div>
               <input
                 type="file"
                 accept=".jpg, .jpeg, .png, .webp"
-                class="mb-2 w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-primary file:btn-outline file:bg-primary"
+                class="mb-2 w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
                 bind:files={avatarFiles}
                 on:change={handleAvatar}
               />
@@ -153,7 +157,7 @@
             <form class="form-control gap-4">
               <input type="number" name="id" value={id} hidden />
               <div class="flex items-center justify-between">
-                <span class="w-16 min-w-fit px-4 place-self-center">{$t('user.gender')}</span>
+                <span class="w-16 min-w-fit place-self-center">{$t('user.gender')}</span>
                 <div class="flex justify-between w-[60%]">
                   <div class="flex gap-2 w-1/3">
                     <input
@@ -161,7 +165,7 @@
                       bind:group={user.gender}
                       name="gender"
                       value={0}
-                      class="radio radio-primary"
+                      class="radio radio-secondary"
                       on:input={() => {
                         patch = applyPatch(patch, 'replace', '/gender', 0);
                       }}
@@ -176,7 +180,7 @@
                       bind:group={user.gender}
                       name="gender"
                       value={1}
-                      class="radio radio-primary"
+                      class="radio radio-secondary"
                       on:input={() => {
                         patch = applyPatch(patch, 'replace', '/gender', 1);
                       }}
@@ -191,7 +195,7 @@
                       bind:group={user.gender}
                       name="gender"
                       value={2}
-                      class="radio radio-primary"
+                      class="radio radio-secondary"
                       on:input={() => {
                         patch = applyPatch(patch, 'replace', '/gender', 2);
                       }}
@@ -215,7 +219,7 @@
                   type="text"
                   name="username"
                   placeholder={$t('user.username')}
-                  class="input input-primary join-item w-[88%] min-w-[180px]"
+                  class="input input-secondary join-item w-[88%] min-w-[180px]"
                   value={user.userName}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
@@ -232,9 +236,9 @@
                   {$t('user.language')}
                 </span>
                 <select
-                  value={user.language}
+                  bind:value={$locale}
                   name="language"
-                  class="select input-primary join-item flex-shrink w-[88%] min-w-[180px]"
+                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
                   on:input={(e) => {
                     locale.set(e.currentTarget.value);
                     patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
@@ -255,9 +259,9 @@
                   {$t('user.region')}
                 </span>
                 <select
-                  value={user.region}
+                  bind:value={user.region}
                   name="region"
-                  class="select input-primary join-item flex-shrink w-[88%] min-w-[180px]"
+                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                   }}
@@ -286,7 +290,8 @@
                   />
                 </label>
                 <button
-                  class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm"
+                  type="button"
+                  class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
                   on:click={() => {
                     user.biography = '';
                     patch = applyPatch(patch, 'remove', '/biography');
@@ -305,7 +310,11 @@
                   class="tooltip tooltip-top tooltip-error w-full"
                   class:tooltip-open={status === Status.ERROR}
                   data-tip={status === Status.ERROR
-                    ? $t(`error.${errorCode}`) ?? $t('common.unknown_error')
+                    ? dateAvailable
+                      ? `${$t(`error.${errorCode}`) ?? $t('common.unknown_error')}\n\n${$t(
+                          'common.date_available',
+                        )}${$t('common.colon')}${parseDateTime(dateAvailable)}`
+                      : $t(`error.${errorCode}`) ?? $t('common.unknown_error')
                     : null}
                 >
                   <button
@@ -313,7 +322,7 @@
                       ? 'btn-error'
                       : status === Status.SENDING
                       ? 'btn-ghost'
-                      : 'btn-secondary btn-outline'} w-full"
+                      : 'btn-primary btn-outline'} w-full"
                     disabled={status == Status.SENDING}
                     on:click={update}
                   >

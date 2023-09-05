@@ -10,5 +10,8 @@
     "5": "系統通知"
   },
   "notified_at": "通知於",
-  "read_at": "閱讀於"
+  "read_at": "閱讀於",
+  "read": "已讀",
+  "view_read": "查看已讀",
+  "view_unread": "查看未讀"
 }

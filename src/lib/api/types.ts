@@ -129,7 +129,12 @@ export interface PublicResourceFilterBase {
 export interface PatchElement {
   op: 'add' | 'replace' | 'remove';
   path: string;
-  value: any;
+  value: unknown;
+}
+
+export interface FileUpdateOpts {
+  id: number | string;
+  File: Blob;
 }
 
 export enum Accessibility {

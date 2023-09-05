@@ -3,7 +3,13 @@
   import { page } from '$app/stores';
   import type { ChartDto, RecordDto, SongDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getGrade, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
+  import {
+    getCompressedImage,
+    getGrade,
+    getLevelColor,
+    getLevelDisplay,
+    parseDateTime,
+  } from '$lib/utils';
 
   $: ({ api } = $page.data);
 

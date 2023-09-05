@@ -19,7 +19,7 @@
   "UnsupportedLanguage": "The specified language is not supported.",
   "InvalidRegionCode": "The input value is not a valid region code.",
   "UnsupportedRegion": "The specified region is not supported.",
-  "UnsupportedChartFormat": "The format of the specified chart is not supported.",
+  "UnsupportedChartFormat": "The format of the specified chart file is not supported.",
   "UnsupportedLyricsFormat": "The format of the specified lyrics is not supported.",
   "ValueTooLong": "The input value is longer than the maximum length allowed.",
   "ValueTooShort": "The input value is shorter than the minimum length allowed.",

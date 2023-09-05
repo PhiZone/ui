@@ -4,6 +4,7 @@
   "password": "Password",
   "confirm_password": "Confirm Password",
   "passwords_differ": "The two passwords differ from each other!",
+  "code": "Verification Code",
   "invalid_email": "The input value is not a valid email address.",
   "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
   "invalid_password": "The password should be at least 6 characters long, contain at least one non-alphanumeric character, have at least one lowercase letter, one uppercase letter, one digit, and can have a maximum length of 18 characters.",
@@ -24,15 +25,13 @@
   "email_confirmation": {
     "email_confirmation": "Confirm Email Address",
     "email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the following blank so that we can activate your account.",
-    "code": "Confirmation Code",
     "activate": "Activate Account",
     "code_not_numeric": "The code must be a six-digit number!"
   },
   "password_reset": {
     "password_reset": "Reset Password",
-    "password_reset_text1": "Please enter your email address.",
-    "password_reset_text2": "We've sent an email to your mailbox. Please click the link in the email so that you can reset your password.",
-    "password_reset_text3": "Please enter your new password.",
+    "password_reset_text_1": "Please enter your email address.",
+    "password_reset_text_2": "Please enter the code we've just sent you along with your new password.",
     "new_password": "New Password"
   },
   "logging_out": "Logging Out",

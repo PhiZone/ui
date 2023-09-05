@@ -38,7 +38,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     'svelte/no-at-html-tags': 'off',
   },
-  global: {
-    NodeJS: true
-  }
+  globals: {
+    NodeJS: true,
+  },
 };

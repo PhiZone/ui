@@ -75,9 +75,10 @@ export const convertTime = <T>(input: T, round = false) => {
 
   if (typeof input === 'string') {
     const list = input.split(':');
-    const hours = parseInt(list[0]);
-    minutes = parseInt(list[1]) + hours * 60;
-    seconds = parseFloat(list[2]);
+    const hasHour = list.length > 2;
+    const hours = hasHour ? parseInt(list[0]) : 0;
+    minutes = parseInt(list[hasHour ? 1 : 0]) + hours * 60;
+    seconds = parseFloat(list[hasHour ? 2 : 1]);
   } else if (typeof input === 'number') {
     minutes = Math.floor(input / 60);
     seconds = input % 60;
@@ -252,14 +253,13 @@ export const applyPatch = (
   patch: PatchElement[],
   op: 'add' | 'replace' | 'remove',
   path: string,
-  value?: any,
+  value?: unknown,
 ) => {
-  var i = patch.findIndex((value) => value.path === path);
+  const i = patch.findIndex((value) => value.path === path);
   if (i === -1) {
     patch.push({ op, path, value });
   } else {
     patch[i] = { op, path, value };
   }
-  console.log('patch updated', patch);
   return patch;
 };

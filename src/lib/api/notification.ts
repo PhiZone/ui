@@ -16,6 +16,7 @@ export interface NotificationDto {
 
 export interface Filter extends FilterBase {
   markAsRead?: number;
+  getRead?: boolean;
 }
 
 export interface InfoOpts {
@@ -31,15 +32,14 @@ export default class NotificationAPI {
   constructor(private api: API) {}
 
   list = createQueryCreator(
-    'comment.list',
-    (opts: Filter): R<NotificationDto[]> =>
-      this.api.GET('/notifications/?' + stringifyFilter(opts)),
+    'notification.list',
+    (opts: Filter): R<NotificationDto[]> => this.api.GET('/notifications?' + stringifyFilter(opts)),
   );
 
   info = createQueryCreator(
-    'comment.info',
+    'notification.info',
     ({ id, ...rest }: InfoOpts): R<NotificationDto> =>
-      this.api.GET(`/notifications/${id}/?` + queryString.stringify(rest)),
+      this.api.GET(`/notifications/${id}?` + queryString.stringify(rest)),
   );
 
   del({ id }: DeleteOpts) {

@@ -204,7 +204,7 @@
         <input type="text" id="id" name="id" class="hidden" value={id} />
         <div
           class={$collaborator.isError
-            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
             : 'w-full my-2 px-4'}
           data-tip={$collaborator.isError ? $t(`error.${$collaborator.error.code}`) : ''}
         >
@@ -446,6 +446,14 @@
             </div>
             <audio class="w-full" controls src={submission.file} />
             <div class="card-actions flex items-center justify-end">
+              {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 3)}
+                <a
+                  href="/studio/song-submissions/{submission?.id}/edit"
+                  class="btn btn-primary btn-outline text-lg w-32"
+                >
+                  {$t('common.edit')}
+                </a>
+              {/if}
               {#if user && getUserPrivilege(user.role) >= 3}
                 <label
                   for="studio-song-submission"

@@ -1,13 +1,13 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { FilterBase, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import queryString from 'query-string';
 import type { CollaborationDto } from './collaboration';
 
 export interface SongSubmissionDto {
   accessibility: number;
-  authorName: null | string;
+  authorName: string;
   bpm: number;
   dateCreated: Date;
   dateUpdated: Date;
@@ -32,7 +32,7 @@ export interface SongSubmissionDto {
   representationId: null | string;
   reviewerId: number | null;
   status: number;
-  title: null | string;
+  title: string;
 }
 
 // list
@@ -112,6 +112,14 @@ export default class SongSubmissionAPI {
 
   create(opts: CreateOpts): R {
     return this.api.POST('/studio/songs', serialize(opts));
+  }
+
+  update({ id }: InfoOpts, patch: PatchElement[]): R {
+    return this.api.PATCH(`/studio/songs/${id}`, patch);
+  }
+
+  updateFile(type: string, { id, ...rest }: FileUpdateOpts): R {
+    return this.api.PATCH(`/studio/songs/${id}/${type}`, serialize(rest));
   }
 
   delete(opts: DeleteOpts): R {
