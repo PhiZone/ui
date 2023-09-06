@@ -245,7 +245,7 @@
                   }}
                 >
                   {#each $locales as value}
-                    <option {value}>{$t(`lang.${value}`)}</option>
+                    <option {value}>{$t(`common.lang.${value}`)}</option>
                   {/each}
                 </select>
               </label>
