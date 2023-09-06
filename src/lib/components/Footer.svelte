@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
 
-  const email_address = 'contact@phi.zone';
+  const email_address = 'contact@phizone.cn';
 </script>
 
 <footer class="footer pt-[23px] pb-3 px-10 border-t bg-base-200 border-base-300 text-base">
@@ -29,11 +29,11 @@
 	</div> -->
   <div>
     <span class="footer-title text-lg">{$t('common.footer.external_links')}</span>
-    <a href="https://www.pigeongames.cn/" target="_blank" rel="noreferrer" class="link link-hover">
-      {$t('common.footer.pigeon_games')}
-    </a>
     <a href="https://www.phigrim.cn/" target="_blank" rel="noreferrer" class="link link-hover">
       {$t('common.footer.phigrim')}
+    </a>
+    <a href="https://phitogether.fun/" target="_blank" rel="noreferrer" class="link link-hover">
+      {$t('common.footer.phitogether')}
     </a>
     <!-- <a href="/" class="link link-hover"
 				>{$t("common.footer.phifans")}</a
