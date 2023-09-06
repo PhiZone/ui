@@ -174,7 +174,7 @@
                 {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
-                    href="/charts?owner={user.id}"
+                    href="/charts?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
                   </a>
@@ -200,7 +200,7 @@
                 {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
-                    href="/songs?uploader={user.id}"
+                    href="/songs?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
                   </a>
@@ -226,7 +226,7 @@
                 {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
-                    href="/records?player={user.id}"
+                    href="/records?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
                   </a>
@@ -252,7 +252,7 @@
                 {#if total && total > 10}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
-                    href="/records?player={user.id}&order=-rks"
+                    href="/records?rangeOwnerId={user.id}&order=-rks"
                   >
                     {$t('common.all')}
                   </a>
