@@ -12,6 +12,7 @@
   import Follow from '$lib/components/Follow.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Song from '$lib/components/Song.svelte';
+    import { PAGINATION_PER_PAGE } from '$lib/constants.js';
 
   export let data;
 
@@ -166,12 +167,12 @@
           <div class="card-body pt-3 max-w-full">
             {#if $charts.isSuccess}
               {@const total = $charts.data.total}
-              {@const charts = $charts.data.data.slice(0, 10)}
+              {@const charts = $charts.data.data}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.charts')}
                 </h2>
-                {#if total && total > 10}
+                {#if total && total > PAGINATION_PER_PAGE}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/charts?rangeOwnerId={user.id}"
@@ -192,12 +193,12 @@
             {/if}
             {#if $songs.isSuccess}
               {@const total = $songs.data.total}
-              {@const songs = $songs.data.data.slice(0, 10)}
+              {@const songs = $songs.data.data}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.songs')}
                 </h2>
-                {#if total && total > 10}
+                {#if total && total > PAGINATION_PER_PAGE}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/songs?rangeOwnerId={user.id}"
@@ -218,12 +219,12 @@
             {/if}
             {#if $recentRecords.isSuccess}
               {@const total = $recentRecords.data.total}
-              {@const recent_records = $recentRecords.data.data.slice(0, 10)}
+              {@const recent_records = $recentRecords.data.data}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.recent_records')}
                 </h2>
-                {#if total && total > 10}
+                {#if total && total > PAGINATION_PER_PAGE}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
                     href="/records?rangeOwnerId={user.id}"
@@ -244,15 +245,15 @@
             {/if}
             {#if $bestRecords.isSuccess}
               {@const total = $bestRecords.data.total}
-              {@const best_records = $bestRecords.data.data.slice(0, 10)}
+              {@const best_records = $bestRecords.data.data}
               <div class="flex items-center mt-6 mb-2">
                 <h2 class="text-3xl font-bold w-full">
                   {$t('user.best_records')}
                 </h2>
-                {#if total && total > 10}
+                {#if total && total > PAGINATION_PER_PAGE}
                   <a
                     class="min-w-fit btn btn-sm btn-primary btn-outline"
-                    href="/records?rangeOwnerId={user.id}&order=-rks"
+                    href="/records?rangeOwnerId={user.id}&order=rks&desc=true"
                   >
                     {$t('common.all')}
                   </a>
