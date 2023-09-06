@@ -12,7 +12,7 @@
   import Follow from '$lib/components/Follow.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Song from '$lib/components/Song.svelte';
-    import { PAGINATION_PER_PAGE } from '$lib/constants.js';
+  import { PAGINATION_PER_PAGE } from '$lib/constants';
 
   export let data;
 
