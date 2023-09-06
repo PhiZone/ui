@@ -12,6 +12,7 @@
   "MailError": "A mail service error has occurred.",
   "FieldEmpty": "No value is present on the field.",
   "InvalidEmailAddress": "The input value is not a valid email address.",
+  "InvalidUserName": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
   "InvalidUrl": "The input value is not a valid URL.",
   "InvalidPhoneNumber": "The input value is not a valid phone number.",
   "InvalidDate": "The input value is not a valid date.",

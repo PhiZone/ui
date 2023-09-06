@@ -12,6 +12,7 @@
   "MailError": "出现邮件服务错误。",
   "FieldEmpty": "字段为空。",
   "InvalidEmailAddress": "输入的内容不是合法的电子邮件地址。",
+  "InvalidUserName": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
   "InvalidUrl": "输入的内容不是合法的 URL。",
   "InvalidPhoneNumber": "输入的内容不是合法的手机号。",
   "InvalidDate": "输入的内容不是合法的日期。",

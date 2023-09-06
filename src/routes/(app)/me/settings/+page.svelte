@@ -211,100 +211,106 @@
                 class:tooltip-open={!!errors?.get('Gender')}
                 data-tip={errors?.get('Gender')}
               />
-              <label class="join">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
-                  {$t('user.username')}
-                </span>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder={$t('user.username')}
-                  class="input input-secondary join-item w-[88%] min-w-[180px]"
-                  value={user.userName}
-                  on:input={(e) => {
-                    patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
-                  }}
-                />
-              </label>
               <div
                 class="tooltip tooltip-bottom tooltip-error"
                 class:tooltip-open={!!errors?.get('UserName')}
                 data-tip={errors?.get('UserName')}
-              />
-              <label class="join">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
-                  {$t('user.language')}
-                </span>
-                <select
-                  bind:value={$locale}
-                  name="language"
-                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
-                  on:input={(e) => {
-                    locale.set(e.currentTarget.value);
-                    patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
-                  }}
-                >
-                  {#each $locales as value}
-                    <option {value}>{$t(`common.lang.${value}`)}</option>
-                  {/each}
-                </select>
-              </label>
+              >
+                <label class="join">
+                  <span class="btn no-animation join-item w-[12%] min-w-fit">
+                    {$t('user.username')}
+                  </span>
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder={$t('user.username')}
+                    class="input input-secondary join-item w-[88%] min-w-[180px]"
+                    value={user.userName}
+                    on:input={(e) => {
+                      patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
+                    }}
+                  />
+                </label>
+              </div>
               <div
                 class="tooltip tooltip-bottom tooltip-error"
                 class:tooltip-open={!!errors?.get('Language')}
                 data-tip={errors?.get('Language')}
-              />
-              <label class="join">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
-                  {$t('user.region')}
-                </span>
-                <select
-                  bind:value={user.region}
-                  name="region"
-                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
-                  on:input={(e) => {
-                    patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
-                  }}
-                >
-                  {#each regionMap as region}
-                    <option value={region[0]}>{region[1]}</option>
-                  {/each}
-                </select>
-              </label>
+              >
+                <label class="join">
+                  <span class="btn no-animation join-item w-[12%] min-w-fit">
+                    {$t('user.language')}
+                  </span>
+                  <select
+                    bind:value={$locale}
+                    name="language"
+                    class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
+                    on:input={(e) => {
+                      locale.set(e.currentTarget.value);
+                      patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
+                    }}
+                  >
+                    {#each $locales as value}
+                      <option {value}>{$t(`common.lang.${value}`)}</option>
+                    {/each}
+                  </select>
+                </label>
+              </div>
               <div
                 class="tooltip tooltip-bottom tooltip-error"
                 class:tooltip-open={!!errors?.get('RegionCode')}
                 data-tip={errors?.get('RegionCode')}
-              />
-              <div class="relative">
-                <label class="join w-full">
-                  <span class="btn no-animation join-item w-[12%] min-w-fit">{$t('user.bio')}</span>
-                  <textarea
-                    placeholder={$t('user.bio')}
-                    name="bio"
-                    class="textarea textarea-secondary join-item w-[88%] min-w-[180px] h-48"
-                    bind:value={user.biography}
+              >
+                <label class="join">
+                  <span class="btn no-animation join-item w-[12%] min-w-fit">
+                    {$t('user.region')}
+                  </span>
+                  <select
+                    bind:value={user.region}
+                    name="region"
+                    class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
                     on:input={(e) => {
-                      patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);
+                      patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                     }}
-                  />
+                  >
+                    {#each regionMap as region}
+                      <option value={region[0]}>{region[1]}</option>
+                    {/each}
+                  </select>
                 </label>
-                <button
-                  type="button"
-                  class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
-                  on:click={() => {
-                    user.biography = '';
-                    patch = applyPatch(patch, 'remove', '/biography');
-                  }}
-                >
-                  {$t('common.empty_v')}
-                </button>
               </div>
               <div
                 class="tooltip tooltip-bottom tooltip-error"
                 class:tooltip-open={!!errors?.get('Biography')}
                 data-tip={errors?.get('Biography')}
-              />
+              >
+                <div class="relative">
+                  <label class="join w-full">
+                    <span class="btn no-animation join-item w-[12%] min-w-fit">
+                      {$t('user.bio')}
+                    </span>
+                    <textarea
+                      placeholder={$t('user.bio')}
+                      name="bio"
+                      class="textarea textarea-secondary join-item w-[88%] min-w-[180px] h-48"
+                      bind:value={user.biography}
+                      on:input={(e) => {
+                        patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);
+                      }}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                    on:click={() => {
+                      user.biography = '';
+                      patch = applyPatch(patch, 'remove', '/biography');
+                    }}
+                  >
+                    {$t('common.empty_v')}
+                  </button>
+                </div>
+              </div>
               <div class="flex justify-center">
                 <div
                   class="tooltip tooltip-top tooltip-error w-full"
