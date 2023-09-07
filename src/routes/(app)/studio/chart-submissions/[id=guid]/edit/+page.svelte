@@ -232,11 +232,11 @@
             </div>
           </div>
           <a
-            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset&chart=${
-              $submission.data?.data.file
-            }&song=${parent?.file}&illustration=${parent?.illustration}&name=${
-              parent?.title
-            }&level=${chart.level}&difficulty=${
+            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset&chart=${encodeURI(
+              $submission.data?.data.file ?? '',
+            )}&song=${encodeURI(parent?.file ?? '')}&illustration=${encodeURI(
+              parent?.illustration ?? '',
+            )}&name=${parent?.title}&level=${chart.level}&difficulty=${
               chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'
             }&composer=${parent?.authorName}&illustrator=${parent?.illustrator}&charter=${
               chart.authorName

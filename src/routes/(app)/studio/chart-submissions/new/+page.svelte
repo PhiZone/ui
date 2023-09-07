@@ -14,9 +14,7 @@
 
   $: ({ user, api } = data);
 
-  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
-    data.form,
-  );
+  const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
   let isRanked = false;
   let authorName = '';
@@ -144,9 +142,9 @@
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
           <a
-            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${
-              parent?.file
-            }&illustration=${parent?.illustration}&name=${
+            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${encodeURI(
+              parent?.file ?? '',
+            )}&illustration=${encodeURI(parent?.illustration ?? '')}&name=${
               parent?.title
             }&level=${level}&difficulty=${
               parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'
