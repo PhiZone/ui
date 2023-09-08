@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
   import User from '$lib/components/User.svelte';
-  import { createQuery } from '@tanstack/svelte-query';
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
@@ -52,6 +52,8 @@
       createAudio(song.file);
     }
   });
+
+  const queryClient = useQueryClient();
 
   const handlePreview = () => {
     pausePreview();
@@ -142,6 +144,7 @@
       const resp = await api.song.submission.updateFile(type, { id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
+        await queryClient.invalidateQueries(['song.submission.info', { id }]);
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -166,6 +169,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
+      await queryClient.invalidateQueries(['song.submission.info', { id }]);
       patch = [];
     } else {
       status = Status.ERROR;

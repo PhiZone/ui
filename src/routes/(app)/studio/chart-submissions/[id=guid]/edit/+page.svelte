@@ -3,7 +3,7 @@
   import { LEVEL_TYPES, Status } from '$lib/constants';
   import User from '$lib/components/User.svelte';
   import { applyPatch, getLevelColor } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import { invalidateAll } from '$app/navigation';
@@ -49,6 +49,8 @@
     chart = $submission.data.data;
   }
 
+  const queryClient = useQueryClient();
+
   const handleChart = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
@@ -57,6 +59,7 @@
       const resp = await api.chart.submission.updateChart({ id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
+        await queryClient.invalidateQueries(['chart.submission.info', { id }]);
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -77,6 +80,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
+      await queryClient.invalidateQueries(['chart.submission.info', { id }]);
       patch = [];
     } else {
       status = Status.ERROR;
