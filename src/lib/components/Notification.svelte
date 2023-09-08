@@ -21,10 +21,7 @@
   </span>
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
-      notification.dateRead &&
-      new Date().getTime() - new Date(notification.dateRead).getTime() > 4800
-        ? 'border'
-        : 'border border-secondary'
+      notification.dateRead ? 'border' : 'border border-secondary'
     }`}
   >
     <figure class="w-1/4 xs:w-1/6">

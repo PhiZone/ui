@@ -15,7 +15,6 @@ export interface NotificationDto {
 }
 
 export interface Filter extends FilterBase {
-  markAsRead?: number;
   getRead?: boolean;
 }
 
@@ -35,6 +34,10 @@ export default class NotificationAPI {
     'notification.list',
     (opts: Filter): R<NotificationDto[]> => this.api.GET('/notifications?' + stringifyFilter(opts)),
   );
+
+  readList(opts: Filter) {
+    return this.api.POST('/notifications/read?' + stringifyFilter(opts));
+  }
 
   info = createQueryCreator(
     'notification.info',

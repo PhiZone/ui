@@ -3,11 +3,16 @@
   import { t } from '$lib/translations/config';
   import Notification from '$lib/components/Notification.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
+  import { onMount } from 'svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
 
   $: query = createQuery(api.notification.list(searchParams));
+
+  onMount(() => {
+    api.notification.readList(searchParams);
+  });
 </script>
 
 <svelte:head>
