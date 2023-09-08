@@ -40,7 +40,6 @@
   "event_part": "Event",
   "song": "Song",
   "charter": "Charter(s)",
-  "time": "Time",
   "owner": "Owner",
   "owner_id": "Owner ID",
   "lowest_score": "Lowest Score",

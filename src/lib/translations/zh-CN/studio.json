@@ -28,7 +28,7 @@
       "2": "已退回"
     },
     "bi_statuses": {
-      "0": "未通过",
+      "0": "（暂）未通过",
       "1": "已通过"
     },
     "accessibilities": {
@@ -39,8 +39,6 @@
     "volunteer_status": "审核状态",
     "collab_status": "合作状态",
     "adm_status": "收录状态",
-    "created_at": "创建时间",
-    "updated_at": "更新时间",
     "approved_at": "通过时间",
     "reply": "回复",
     "reply_v": "回复",

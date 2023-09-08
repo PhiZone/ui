@@ -154,5 +154,7 @@
   "date_available": "可用日期",
   "success": "成功",
   "update_success": "成功更新信息！",
-  "image_cropper": "图片裁剪"
+  "image_cropper": "图片裁剪",
+  "created_at": "创建时间",
+  "updated_at": "更新时间"
 }

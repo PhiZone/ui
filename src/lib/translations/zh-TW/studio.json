@@ -28,7 +28,7 @@
       "2": "已退回"
     },
     "bi_statuses": {
-      "0": "未通過",
+      "0": "（暫）未通過",
       "1": "已通過"
     },
     "accessibilities": {
@@ -39,8 +39,6 @@
     "volunteer_status": "審核狀態",
     "collab_status": "合作狀態",
     "adm_status": "收錄狀態",
-    "created_at": "創建於",
-    "updated_at": "更新於",
     "approved_at": "通過於",
     "reply": "回覆",
     "reply_v": "回覆",
@@ -56,7 +54,7 @@
     "chapters": "收錄章節",
     "uploader": "上傳者",
     "uploader_id": "上傳者 ID",
-    "volunteer_vote": "志願者投票",
+    "volunteer_vote": "志工投票",
     "score": "評分",
     "message": "留言",
     "write_message": "對這張譜面進行評價",

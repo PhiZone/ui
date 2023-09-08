@@ -17,8 +17,8 @@
     "4": "不支援"
   },
   "accessibility_tips": {
-    "0": "该谱面接受任何游玩记录上传",
-    "2": "该谱面不接受任何游玩记录上传"
+    "0": "該譜面接受任何遊玩記錄上傳",
+    "2": "該譜面不接受任何遊玩記錄上傳"
   },
   "score": "總分",
   "rating": "評分",
@@ -40,9 +40,8 @@
   "event_part": "活動",
   "song": "曲目",
   "charter": "譜師",
-  "time": "上傳時間",
-  "owner": "擁有者",
-  "owner_id": "擁有者 ID",
+  "owner": "所有者",
+  "owner_id": "所有者 ID",
   "lowest_score": "最低總分",
   "highest_score": "最高總分",
   "lowest_rating": "最低評分",

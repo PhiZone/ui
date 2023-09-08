@@ -285,7 +285,12 @@
 <div class="bg-base-200 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
-      <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
+      <div class="flex justify-between">
+        <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
+        <a href="/studio/song-submissions/{song.id}" class="btn btn-secondary btn-outline">
+          {$t('common.back')}
+        </a>
+      </div>
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
           <form class="w-full form-control">

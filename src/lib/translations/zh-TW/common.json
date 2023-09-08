@@ -25,7 +25,7 @@
     "about": "關於",
     "donate": "贊助",
     "feedback": "回饋",
-    "pigeon_games": "鴿游",
+    "pigeon_games": "鴿遊",
     "phigrim": "Phigrim",
     "phitogether": "PhiTogether",
     "phifans": "PhiFans",
@@ -154,5 +154,7 @@
   "date_available": "可用日期",
   "success": "成功",
   "update_success": "成功更新訊息！",
-  "image_cropper": "图片裁剪"
+  "image_cropper": "图片裁剪",
+  "created_at": "創建於",
+  "updated_at": "更新於"
 }

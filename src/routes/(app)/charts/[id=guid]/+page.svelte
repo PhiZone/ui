@@ -351,8 +351,16 @@
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.time')}</span>
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.created_at')}
+                  </span>
                   {parseDateTime(chart.dateCreated)}
+                </p>
+                <p>
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('common.updated_at')}
+                  </span>
+                  {parseDateTime(chart.dateUpdated)}
                 </p>
                 {#if chart.description}
                   <p class="content">

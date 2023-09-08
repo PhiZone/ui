@@ -124,19 +124,27 @@
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
+                        {$t('song.duration')}
+                      </span>
+                      {convertTime(song.duration, true)}
+                    </p>
+                    <p>
+                      <span class="badge badge-primary badge-outline mr-1">
                         {$t('song.offset')}
                       </span>
                       {song.offset} ms
                     </p>
                     <p>
                       <span class="badge badge-primary badge-outline mr-1">
-                        {$t('song.duration')}
+                        {$t('common.created_at')}
                       </span>
-                      {convertTime(song.duration, true)}
+                      {parseDateTime(song.dateCreated)}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">{$t('song.time')}</span>
-                      {parseDateTime(song.dateCreated)}
+                      <span class="badge badge-primary badge-outline mr-1">
+                        {$t('common.updated_at')}
+                      </span>
+                      {parseDateTime(song.dateUpdated)}
                     </p>
                     {#if song.description && song.description.length < 172}
                       <p class="content">

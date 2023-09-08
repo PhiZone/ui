@@ -103,13 +103,13 @@
       <div class="flex items-center min-w-fit">
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
-            {$t('studio.submission.created_at')}
+            {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
-            {$t('studio.submission.updated_at')}
+            {$t('common.updated_at')}
           </span>
           {parseDateTime(submission.dateUpdated)}
         </p>

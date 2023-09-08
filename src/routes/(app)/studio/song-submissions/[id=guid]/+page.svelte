@@ -402,13 +402,13 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
-                  {$t('studio.submission.created_at')}
+                  {$t('common.created_at')}
                 </span>
                 {parseDateTime(submission.dateCreated)}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
-                  {$t('studio.submission.updated_at')}
+                  {$t('common.updated_at')}
                 </span>
                 {parseDateTime(submission.dateUpdated)}
               </p>

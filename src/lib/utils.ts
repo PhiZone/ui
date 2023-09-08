@@ -232,11 +232,11 @@ export const getLevelDisplay = (difficulty: number) => {
 export const setTokens = (cookies: Cookies, accessToken: string, refreshToken: string) => {
   cookies.set('access_token', accessToken, {
     path: '/',
-    maxAge: 43200,
+    maxAge: 21600,
   });
   cookies.set('refresh_token', refreshToken, {
     path: '/',
-    maxAge: 1296000,
+    maxAge: 1209600,
   });
 };
 
