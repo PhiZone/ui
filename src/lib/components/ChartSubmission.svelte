@@ -28,7 +28,8 @@
         ? 'bg-success-content'
         : submission.status === 2
         ? 'bg-error-content'
-        : (user && getUserPrivilege(user.role) < 3) || submission.dateVoted
+        : (user && getUserPrivilege(user.role) < 3) ||
+          (submission.dateVoted && submission.dateVoted > submission.dateUpdated)
         ? 'bg-base-100'
         : 'bg-warning-content'
     } shadow-lg hover:shadow-sm hover:shadow-primary-focus`}
