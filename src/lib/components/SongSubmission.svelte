@@ -49,13 +49,13 @@
         </div>
       {/if}
       <div class="flex items-center min-w-fit">
-        <p class="min-w-fit">
+        <p class="w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('studio.submission.status')}
           </span>
           {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
         </p>
-        <p class="min-w-fit">
+        <p class="w-1/2">
           {#if $uploader.isSuccess}
             {@const uploader = $uploader.data?.data}
             <span class="badge badge-primary badge-outline mr-1">
@@ -66,13 +66,13 @@
         </p>
       </div>
       <div class="flex items-center min-w-fit">
-        <p class="min-w-fit">
+        <p class="w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
-        <p class="min-w-fit">
+        <p class="w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.updated_at')}
           </span>
