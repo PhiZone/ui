@@ -281,13 +281,8 @@
                   name="IsRanked"
                   class="toggle {errors?.get('IsRanked') ? 'toggle-error' : 'toggle-secondary'}"
                   bind:checked={chart.isRanked}
-                  on:input={(e) => {
-                    patch = applyPatch(
-                      patch,
-                      'replace',
-                      '/isRanked',
-                      e.currentTarget.value === 'on',
-                    );
+                  on:input={() => {
+                    patch = applyPatch(patch, 'replace', '/isRanked', !chart.isRanked);
                   }}
                 />
               </div>
