@@ -8,8 +8,10 @@ export const handle = (async ({ event, resolve }) => {
   console.log(
     '[DBG] handle invoked with',
     event.locals.user?.userName,
-    'and access_token',
-    event.locals.accessToken,
+    'and IP',
+    event.request.headers.get('HTTP_X_REAL_IP'),
+    event.request.headers.get('HTTP_CF_CONNECTING_IP'),
+    event.request.headers.get('HTTP_X_FORWARDED_FOR'),
   );
   console.log(event.url.pathname);
   let accessToken = event.cookies.get('access_token'),
