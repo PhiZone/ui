@@ -28,7 +28,7 @@ export const handle = (async ({ event, resolve }) => {
       '[DBG 3] token refreshed for',
       event.locals.user?.userName,
       'with access_token',
-      event.locals.accessToken,
+      accessToken,
     );
 
     if (resp.ok) {
@@ -44,16 +44,16 @@ export const handle = (async ({ event, resolve }) => {
           '[DBG 4] obtained new user',
           event.locals.user?.userName,
           'with access_token',
-          event.locals.accessToken,
+          accessToken,
         );
       }
     } else {
       event.locals.user = undefined;
-      console.log('[DBG 5] token refresh failed', 'with access_token', event.locals.accessToken);
+      console.log('[DBG 5] token refresh failed', 'with access_token', accessToken);
     }
   } else {
     event.locals.user = undefined;
-    console.log('[DBG 6] no refresh_token present', 'with access_token', event.locals.accessToken);
+    console.log('[DBG 6] no refresh_token present', 'with access_token', accessToken);
   }
 
   if (event.locals.user) {
