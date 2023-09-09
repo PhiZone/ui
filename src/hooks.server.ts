@@ -6,12 +6,10 @@ import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
   console.log(
-    '[DBG] handle invoked with',
+    '[DBG 1] handle invoked with',
     event.locals.user?.userName,
-    'and IP',
-    event.request.headers.get('HTTP_X_REAL_IP'),
-    event.request.headers.get('HTTP_CF_CONNECTING_IP'),
-    event.request.headers.get('HTTP_X_FORWARDED_FOR'),
+    'and access_token',
+    event.locals.accessToken,
   );
   console.log(event.url.pathname);
   let accessToken = event.cookies.get('access_token'),
@@ -27,10 +25,10 @@ export const handle = (async ({ event, resolve }) => {
       refresh_token: refreshToken,
     });
     console.log(
-      '[DBG] token refreshed for',
+      '[DBG 3] token refreshed for',
       event.locals.user?.userName,
-      'with IP',
-      event.getClientAddress(),
+      'with access_token',
+      event.locals.accessToken,
     );
 
     if (resp.ok) {
@@ -43,19 +41,19 @@ export const handle = (async ({ event, resolve }) => {
         event.locals.user = (await resp.json()).data;
         event.locals.lastRetrieval = Date.now();
         console.log(
-          '[DBG] obtained new user',
+          '[DBG 4] obtained new user',
           event.locals.user?.userName,
-          'with IP',
-          event.getClientAddress(),
+          'with access_token',
+          event.locals.accessToken,
         );
       }
     } else {
       event.locals.user = undefined;
-      console.log('[DBG] token refresh failed', 'with IP', event.getClientAddress());
+      console.log('[DBG 5] token refresh failed', 'with access_token', event.locals.accessToken);
     }
   } else {
     event.locals.user = undefined;
-    console.log('[DBG] no refresh_token present', 'with IP', event.getClientAddress());
+    console.log('[DBG 6] no refresh_token present', 'with access_token', event.locals.accessToken);
   }
 
   if (event.locals.user) {
