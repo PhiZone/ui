@@ -11,26 +11,31 @@ export const handle = (async ({ event, resolve }) => {
 
   if (refreshToken) {
     let resp;
-    const api = new API(event.fetch, accessToken, event.locals.user);
-    resp = await api.auth.token({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    });
 
-    if (resp.ok) {
-      ({ access_token: accessToken, refresh_token: refreshToken } = await resp.json());
-      setTokens(event.cookies, accessToken, refreshToken);
+    if (!accessToken) {
+      const api = new API(event.fetch);
+      resp = await api.auth.token({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      });
 
+      if (resp.ok) {
+        ({ access_token: accessToken, refresh_token: refreshToken } = await resp.json());
+        setTokens(event.cookies, accessToken, refreshToken);
+      } else {
+        event.locals.user = undefined;
+      }
+    }
+
+    if (accessToken) {
       const api = new API(event.fetch, accessToken);
       resp = await api.user.me();
       if (resp.ok) {
         event.locals.user = (await resp.json()).data;
         event.locals.lastRetrieval = Date.now();
       }
-    } else {
-      event.locals.user = undefined;
     }
   } else {
     event.locals.user = undefined;

@@ -2,7 +2,6 @@ import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
 import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
-import queryString from 'query-string';
 import type { CollaborationDto } from './collaboration';
 
 export interface SongSubmissionDto {
