@@ -34,12 +34,10 @@ export const load = async ({ url, data, fetch }) => {
       url.pathname.startsWith('/me/notifications') ||
       Date.now() - data.lastRetrieval > 20000)
   ) {
-    console.log('[DBG] condition satisfied and loading new user');
     const resp = await api.user.me();
     if (resp.ok) {
       data.user = (await resp.json()).data;
       data.lastRetrieval = Date.now();
-      console.log('[DBG] new user success', data.user.userName);
     } else {
       window.location.reload();
     }

@@ -13,7 +13,6 @@ import ReplyAPI from './reply';
 import SongAPI from './song';
 import UserAPI, { type UserDetailedDto } from './user';
 import VoteAPI from './vote';
-import { browser } from '$app/environment';
 import CollaborationAPI from './collaboration';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,7 +36,7 @@ export default class API {
       body = JSON.stringify(body);
       headers.append('Content-Type', ContentType.JSON);
     }
-    if (!browser || import.meta.env.DEV) console.log(path, body);
+    if (import.meta.env.DEV) console.log(path, body);
 
     if (this.access_token) headers.append('Authorization', `Bearer ${this.access_token}`);
     headers.append('User-Agent', 'PhiZoneRegularAccess');
