@@ -2,8 +2,7 @@ import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import { clearTokens, setTokens } from '$lib/utils';
 import { locale } from '$lib/translations/config';
-import type { Handle, HandleFetch } from '@sveltejs/kit';
-import { PUBLIC_API_BASE, PUBLIC_LOCAL_API_BASE } from '$env/static/public';
+import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
   console.log(event.url.pathname);
@@ -51,11 +50,3 @@ export const handle = (async ({ event, resolve }) => {
 
   return await resolve(event);
 }) satisfies Handle;
-
-export const handleFetch = (({ request, fetch }) => {
-  if (request.url.startsWith(PUBLIC_API_BASE)) {
-    request = new Request(request.url.replace(PUBLIC_API_BASE, PUBLIC_LOCAL_API_BASE), request);
-  }
-
-  return fetch(request);
-}) satisfies HandleFetch;
