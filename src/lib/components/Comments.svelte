@@ -38,7 +38,9 @@
 </script>
 
 <div class="indicator w-full my-4">
-  <span class="indicator-item indicator-start badge badge-secondary badge-lg w-20 h-8 text-lg">
+  <span
+    class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+  >
     {$t('common.comments')}
   </span>
   <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">

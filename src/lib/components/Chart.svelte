@@ -111,9 +111,7 @@
           {getLevelDisplay(chart.difficulty)}
         </button>
         {#if chart.isRanked}
-          <button class="btn btn-success btn-sm join-item text-lg no-animation">
-            {$t('chart.ranked')}
-          </button>
+          <button class="btn btn-success btn-sm join-item text-lg no-animation">R</button>
         {/if}
       </div>
     </div>

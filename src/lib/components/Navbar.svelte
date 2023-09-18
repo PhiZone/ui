@@ -87,7 +87,10 @@
         {@const { user } = $page.data}
         {#if user && getUserPrivilege(user.role) < 2}
           <li class="rounded-full">
-            <a href="https://ks.wjx.top/vm/myjK5Pl.aspx" target="_blank">
+            <a
+              href="https://phi-zone.feishu.cn/share/base/form/shrcniSUPXn7kEhpM1p8BmtrYKc"
+              target="_blank"
+            >
               {$t('common.navbar.privilege_escalation')}
             </a>
             <!-- <a href="/challenge">{$t('common.navbar.privilege_escalation')}</a> -->

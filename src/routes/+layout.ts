@@ -1,21 +1,13 @@
 import API from '$lib/api';
 import { defaultLocale } from '$lib/constants';
-import { locale, loadTranslations } from '$lib/translations/config';
+import { loadTranslations, locale } from '$lib/translations/config';
 import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
 
 export const load = async ({ url, data, fetch }) => {
-  let lang;
-  if (browser && window.localStorage.getItem('lang')) {
-    lang = window.localStorage.getItem('lang');
-  }
-  lang ||= locale.get();
-  if (browser) {
-    lang ||= window.navigator.language;
-  }
-  lang ||= defaultLocale;
+  const language = data.user?.language ?? window.navigator.language ?? defaultLocale;
 
-  await loadTranslations(lang, url.pathname);
+  await loadTranslations(language, url.pathname);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -37,6 +29,7 @@ export const load = async ({ url, data, fetch }) => {
     const resp = await api.user.me();
     if (resp.ok) {
       data.user = (await resp.json()).data;
+      locale.set(data.user.language);
       data.lastRetrieval = Date.now();
     } else {
       window.location.reload();

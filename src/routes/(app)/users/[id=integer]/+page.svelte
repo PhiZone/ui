@@ -109,7 +109,7 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-                {user.experience}
+                {user.experience.toLocaleString()}
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.language')}</span>
@@ -182,7 +182,7 @@
                 {/if}
               </div>
               {#if charts.length > 0}
-                <ul class="menu bg-base-100 w-full border border-base-300">
+                <ul class="menu bg-base-100 w-full p-0">
                   {#each charts as chart}
                     <li><Chart {chart} kind="inline" /></li>
                   {/each}
@@ -208,7 +208,7 @@
                 {/if}
               </div>
               {#if songs.length > 0}
-                <ul class="menu bg-base-100 w-full border border-base-300">
+                <ul class="menu bg-base-100 w-full p-0">
                   {#each songs as song}
                     <li><Song {song} kind="inline" /></li>
                   {/each}

@@ -6,12 +6,12 @@
   import { onMount } from 'svelte';
 
   export let data;
-  $: ({ searchParams, page, api } = data);
+  $: ({ searchParams, page, api, queryClient } = data);
 
   $: query = createQuery(api.notification.list(searchParams));
 
   onMount(() => {
-    api.notification.readList(searchParams);
+    if ($query.isSuccess) api.notification.readList(searchParams);
   });
 </script>
 
@@ -27,11 +27,27 @@
         {searchParams.getRead ? `- ${$t('notification.read')}` : ''}
       </h1>
       {#if searchParams.getRead}
-        <a href="/me/notifications" class="btn btn-primary btn-outline">
+        <a
+          href="/me/notifications"
+          class="btn btn-primary btn-outline"
+          on:click={async () => {
+            await queryClient.invalidateQueries({
+              queryKey: ['notification.list', { searchParams }],
+            });
+          }}
+        >
           {$t('notification.view_unread')}
         </a>
       {:else}
-        <a href="/me/notifications?getRead=true" class="btn btn-primary btn-outline">
+        <a
+          href="/me/notifications?getRead=true"
+          class="btn btn-primary btn-outline"
+          on:click={async () => {
+            await queryClient.invalidateQueries({
+              queryKey: ['notification.list', { searchParams }],
+            });
+          }}
+        >
           {$t('notification.view_read')}
         </a>
       {/if}

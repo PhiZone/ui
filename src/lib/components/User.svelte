@@ -115,7 +115,7 @@
               </p>
               <p>
                 <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
-                {user.experience}
+                {user.experience.toLocaleString()}
               </p>
               {#if user.biography}
                 <p class="content bio">

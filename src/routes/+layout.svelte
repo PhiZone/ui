@@ -1,16 +1,9 @@
 <script lang="ts">
   import '../app.css';
   import 'cropperjs/dist/cropper.min.css';
-  import { locale } from '$lib/translations/config';
-  import { browser } from '$app/environment';
   import { QueryClientProvider } from '@tanstack/svelte-query';
 
   export let data;
-
-  if (browser) {
-    const language = $locale || data.user?.language || window.navigator.language;
-    locale.set(language);
-  }
 </script>
 
 <QueryClientProvider client={data.queryClient}>

@@ -210,7 +210,9 @@
               </p>
             {/if}
             {#if $charts.isSuccess}
-              <div class="collapse collapse-arrow border border-secondary bg-base-100 rounded-box">
+              <div
+                class="collapse collapse-arrow border border-secondary bg-base-100 rounded-box mt-3"
+              >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
                 <div class="collapse-content">
