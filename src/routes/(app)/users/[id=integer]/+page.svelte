@@ -41,9 +41,11 @@
         >
           {$t('user.user')}
         </span>
-        <div class="card card-side min-w-fit w-full bg-base-100 border border-base-300 shadow-lg">
+        <div
+          class="card card-side flex-col md:flex-row min-w-fit w-full bg-base-100 border border-base-300 shadow-lg"
+        >
           <figure
-            class="min-w-[150px] max-w-[28%] px-6 py-6 form-control border-r border-base-300 mx-auto overflow-visible"
+            class="min-w-[150px] border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control border-base-300 mx-auto overflow-visible"
           >
             <div class="avatar min-w-fit h-fit">
               <div
@@ -234,7 +236,7 @@
                 {/if}
               </div>
               {#if recent_records.length > 0}
-                <div class="grid-result">
+                <div class="result">
                   {#each recent_records as record}
                     <Record {record} />
                   {/each}
@@ -295,9 +297,10 @@
   * {
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
   }
-  .grid-result {
+  .result {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-gap: 1rem;
+    justify-items: center;
   }
 </style>

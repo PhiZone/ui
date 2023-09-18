@@ -67,7 +67,7 @@
   </div>
 
   <div class="info-page">
-    <div class="mx-4 min-w-[540px] max-w-7xl main-width">
+    <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
@@ -76,16 +76,16 @@
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold items-center">
+            <div class="text-5xl py-3 flex font-bold items-center content">
               {song.title}
               {#if song.isOriginal}
-                <button class="ml-2 btn btn-secondary text-3xl no-animation">
+                <button class="ml-2 btn btn-secondary text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
             </div>
-            <div class="flex">
-              <div class="w-1/3">
+            <div class="flex gap-2 flex-col lg:flex-row">
+              <div class="lg:w-1/3">
                 <div class="info">
                   <div class="form-control gap-1">
                     <!-- <p>
@@ -157,7 +157,9 @@
                   </div>
                 </div>
                 <div
-                  class="flex items-end w-full justify-start {user ? 'join join-horizontal' : ''}"
+                  class="mb-2 flex items-end w-full justify-start {user
+                    ? 'join join-horizontal'
+                    : ''}"
                 >
                   <Like
                     id={song.id}
@@ -171,6 +173,7 @@
                       href={song.file}
                       target="_blank"
                       rel="noreferrer"
+                      class="min-w-fit"
                       download={song.file.split('/').pop()}
                     >
                       <button class="btn btn-primary btn-outline flex gap-1 join-item">
@@ -192,7 +195,7 @@
                   {/if}
                 </div>
               </div>
-              <div class="w-2/3 float-right">
+              <div class="lg:w-2/3">
                 <Player
                   song={song.file}
                   illustration={song.illustration}
@@ -240,9 +243,11 @@
       </div>
       <Comments type="songs" {id} {searchParams} />
     </div>
-    <div class="mx-4 w-80 form-control">
+    <div class="mx-auto lg:mx-4 w-80 form-control">
       <div class="indicator my-4 w-full">
-        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+        <span
+          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+        >
           {$t(song.isOriginal ? 'song.author' : 'song.uploader')}
         </span>
         <User id={song.ownerId} />
@@ -250,7 +255,9 @@
       {#if $chapters.isSuccess}
         {#each $chapters.data.data as chapter}
           <div class="indicator my-4 w-full">
-            <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+            <span
+              class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            >
               {$t('song.chapter')}
             </span>
             <Chapter chapter={chapter.admitter} />
@@ -264,10 +271,6 @@
 <style>
   * {
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
-  .main-width {
-    width: calc(100% - 80px);
   }
 
   .info {

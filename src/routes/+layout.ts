@@ -5,7 +5,7 @@ import { browser } from '$app/environment';
 import { QueryClient } from '@tanstack/svelte-query';
 
 export const load = async ({ url, data, fetch }) => {
-  const language = data.user?.language ?? window.navigator.language ?? defaultLocale;
+  const language = data.user?.language ?? globalThis.navigator?.language ?? defaultLocale;
 
   await loadTranslations(language, url.pathname);
 
@@ -31,7 +31,7 @@ export const load = async ({ url, data, fetch }) => {
       data.user = (await resp.json()).data;
       locale.set(data.user.language);
       data.lastRetrieval = Date.now();
-    } else {
+    } else if (window) {
       window.location.reload();
     }
   }

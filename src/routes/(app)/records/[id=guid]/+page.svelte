@@ -22,7 +22,7 @@
   {@const record = $record.data.data}
   {@const grade = getGrade(record.score, record.isFullCombo)}
   <div class="info-page">
-    <div class="mx-4 min-w-fit max-w-xl main-width">
+    <div class="mx-auto lg:mx-4 min-w-fit w-[40vw]">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
@@ -89,16 +89,20 @@
         </div>
       </div>
     </div>
-    <div class="mx-4 w-80 form-control">
+    <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator my-4 w-full">
-        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+        <span
+          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+        >
           {$t('record.player')}
         </span>
         <User id={record.ownerId} />
       </div>
       {#if $chart.isSuccess}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          <span
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          >
             {$t('chart.chart')}
           </span>
           <Chart chart={$chart.data.data} />
@@ -114,8 +118,5 @@
   }
   .grade {
     font-family: 'Black Ops One', cursive;
-  }
-  .main-width {
-    width: calc(100% - 80px);
   }
 </style>

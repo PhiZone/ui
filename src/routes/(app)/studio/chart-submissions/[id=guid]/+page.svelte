@@ -328,7 +328,7 @@
                   href={submission.file}
                   target="_blank"
                   rel="noreferrer"
-                  class="hover:underline"
+                  class="hover:underline min-w-fit"
                   download={submission.file.split('/').pop()}
                 >
                   {$t('common.download')}

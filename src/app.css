@@ -15,7 +15,7 @@
 
 .info-page {
   min-height: calc(100vh - 200px);
-  @apply bg-base-200 py-24 px-12 justify-center flex;
+  @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row;
 }
 
 .content {

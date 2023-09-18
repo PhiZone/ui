@@ -39,7 +39,7 @@
       <h2 class="text-xl mb-3 min-w-fit inline">
         {@html $content}
       </h2>
-      <div class="flex items-center min-w-fit">
+      <div class="flex gap-2 flex-col lg:flex-row min-w-fit">
         <p class="min-w-fit">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('notification.notified_at')}

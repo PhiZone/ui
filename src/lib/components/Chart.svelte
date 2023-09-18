@@ -6,6 +6,7 @@
   import { getCompressedImage, getLevelColor, getLevelDisplay } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
+  import Rating from './Rating.svelte';
 
   $: ({ api } = $page.data);
 
@@ -48,9 +49,12 @@
         </div>
       </figure>
       <div class="card-body gap-0.5">
-        <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
-          {$song.isSuccess ? $song.data.data.title : ''}
-        </h2>
+        <div class="w-full">
+          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+            {$song.isSuccess ? $song.data.data.title : ''}
+          </h2>
+          <Rating rating={chart.rating} />
+        </div>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
           {#if chart.authorName}
@@ -66,10 +70,6 @@
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge badge-primary badge-outline mr-1">{$t('chart.score')}</span>
           {chart.score.toFixed(2)}
-        </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chart.rating')}</span>
-          {chart.rating.toFixed(2)}
         </p>
         {#if $owner.isSuccess}
           <p class="whitespace-nowrap overflow-hidden text-ellipsis">
@@ -125,12 +125,8 @@
       </div>
     {/if}
     <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
-      <div
-        class="radial-progress text-primary hidden xl:grid"
-        style:--value={(chart.rating / 5) * 100}
-        style:--size="48px"
-      >
-        {chart.rating.toFixed(1)}
+      <div class="hidden sm:inline">
+        <Rating rating={chart.rating} direction="left" />
       </div>
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
@@ -153,10 +149,8 @@
 
 <style>
   .title {
-    gap: 0.5rem /* 8px */;
     font-size: 1.25rem /* 20px */;
     line-height: 1.75rem /* 28px */;
     font-weight: 600;
-    margin-bottom: 4px;
   }
 </style>

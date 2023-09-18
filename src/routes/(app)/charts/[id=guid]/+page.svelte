@@ -11,6 +11,7 @@
   import Record from '$lib/components/Record.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import ChartRadar from '$lib/components/ChartRadar.svelte';
+  import Rating from '$lib/components/Rating.svelte';
 
   export let data, form;
   $: ({ searchParams, id, user, api, queryClient } = data);
@@ -271,7 +272,7 @@
     </div>
   {/if}
   <div class="info-page">
-    <div class="mx-4 min-w-[540px] max-w-7xl main-width">
+    <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
@@ -280,9 +281,9 @@
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold gap-4 items-center">
+            <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
               {$song.data?.data.title}
-              <div class="join join-horizontal">
+              <div class="join join-vertical lg:join-horizontal min-w-fit">
                 <button
                   class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                 >
@@ -296,12 +297,11 @@
                 {/if}
               </div>
             </div>
-            <div class="flex">
-              <div class="w-1/2">
-                <!-- <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.id')}</span>
-                  {chart.id}
-                </p> -->
+            <div class="flex flex-col lg:flex-row">
+              <div class="lg:w-1/2">
+                <div class="pb-2">
+                  <Rating rating={chart.rating} size="lg" />
+                </div>
                 <p>
                   <span class="badge badge-primary badge-outline mr-1">{$t('chart.level')}</span>
                   {chart.level}
@@ -371,10 +371,10 @@
                   </p>
                 {/if}
               </div>
-              <div class="divider divider-horizontal" />
-              <div class="w-1/2 float-right p-4 form-control gap-3">
+              <div class="divider lg:divider-horizontal" />
+              <div class="lg:w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
-                <div class="flex justify-center join">
+                <div class="justify-center join join-vertical md:join-horizontal">
                   <Like
                     id={chart.id}
                     likes={chart.likeCount}
@@ -407,9 +407,10 @@
                       href={chart.file}
                       target="_blank"
                       rel="noreferrer"
+                      class="min-w-fit join-item"
                       download={chart.file.split('/').pop()}
                     >
-                      <button class="btn btn-primary btn-outline join-item flex gap-1 min-w-fit">
+                      <button class="btn btn-primary btn-outline join-item w-full flex gap-1">
                         <svg
                           fill="currentColor"
                           width="14px"
@@ -434,9 +435,11 @@
       </div>
       <Comments type="charts" id={chart.id} {searchParams} />
     </div>
-    <div class="mx-4 w-80 form-control">
+    <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator my-4 w-full">
-        <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+        <span
+          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+        >
           {$t('chart.owner')}
         </span>
         <User id={chart.ownerId} />
@@ -444,7 +447,9 @@
       {#if $song.isSuccess}
         {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          <span
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          >
             {$t('song.song')}
           </span>
           <Song {song} />
@@ -454,7 +459,7 @@
           {#if records.length > 0}
             <div class="indicator my-4 w-full">
               <span
-                class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+                class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
               >
                 {$t('common.records')}
               </span>

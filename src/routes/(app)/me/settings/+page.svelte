@@ -118,7 +118,7 @@
 
 <div class="bg-base-200 page">
   <div class="pb-24 flex justify-center">
-    <div class="mx-4 min-w-[890px] w-[60vw] max-w-[1150px]">
+    <div class="mx-4 min-w-fit w-[60vw] max-w-[1150px]">
       <h1 class="text-4xl font-bold mb-6">
         {$t('common.settings')}
       </h1>
@@ -135,7 +135,7 @@
                 {$t('user.avatar')}
               </span>
               <div
-                class="mx-auto w-1/6 rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
+                class="mx-auto w-1/4 md:w-1/6 rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
                   user.role,
                 )}"
               >
@@ -148,17 +148,17 @@
               <input
                 type="file"
                 accept=".jpg, .jpeg, .png, .webp"
-                class="mb-2 w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
+                class="mb-2 w-7/12 md:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
                 bind:files={avatarFiles}
                 on:change={handleAvatar}
               />
-              <span class="w-1/3">{$t('common.form.tips.image')}</span>
+              <span class="hidden md:inline md:w-1/3">{$t('common.form.tips.image')}</span>
             </div>
             <form class="form-control">
               <input type="number" name="id" value={id} hidden />
               <div class="flex items-center justify-between mb-2">
                 <span class="w-16 min-w-fit place-self-center">{$t('user.gender')}</span>
-                <div class="flex justify-between w-[60%]">
+                <div class="flex flex-col md:flex-row justify-between w-[60%]">
                   <div class="flex gap-2 w-1/3">
                     <input
                       type="radio"

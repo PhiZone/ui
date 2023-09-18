@@ -302,7 +302,7 @@
                     href={submission.file}
                     target="_blank"
                     rel="noreferrer"
-                    class="hover:underline"
+                    class="hover:underline min-w-fit"
                     download={submission.file.split('/').pop()}
                   >
                     {$t('common.download')}
@@ -316,7 +316,7 @@
                     href={submission.illustration}
                     target="_blank"
                     rel="noreferrer"
-                    class="hover:underline"
+                    class="hover:underline min-w-fit"
                     download={submission.illustration.split('/').pop()}
                   >
                     {$t('common.download')}
@@ -331,7 +331,7 @@
                       href={submission.license}
                       target="_blank"
                       rel="noreferrer"
-                      class="hover:underline"
+                      class="hover:underline min-w-fit"
                       download={submission.license.split('/').pop()}
                     >
                       {$t('common.download')}
@@ -347,7 +347,7 @@
                       href={submission.originalityProof}
                       target="_blank"
                       rel="noreferrer"
-                      class="hover:underline"
+                      class="hover:underline min-w-fit"
                       download={submission.originalityProof.split('/').pop()}
                     >
                       {$t('common.download')}
@@ -448,7 +448,7 @@
               <div class="w-2/3 flex flex-col justify-between">
                 <img
                   src={submission.illustration}
-                  class="h-fit rounded-lg shadow-2xl"
+                  class="h-fit rounded-lg shadow-2xl my-2"
                   alt="Illustration"
                 />
                 <div class="flex flex-col gap-2">
