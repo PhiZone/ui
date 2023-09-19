@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-export const load = async ({ params, url, parent }) => {
+export const load = async ({ params, url, parent, data }) => {
   const { api, queryClient } = await parent();
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   await Promise.allSettled([
@@ -10,5 +10,6 @@ export const load = async ({ params, url, parent }) => {
   return {
     searchParams,
     id: params.id,
+    ...data,
   };
 };

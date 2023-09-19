@@ -277,7 +277,7 @@
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold gap-4 items-center">
+            <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
               {#if $song.isSuccess}
                 <a
                   class="hover:underline"
@@ -297,7 +297,7 @@
                   {$songSubmission.data.data.title}
                 </a>
               {/if}
-              <div class="join join-horizontal">
+              <div class="join join-vertical lg:join-horizontal min-w-fit">
                 <button
                   class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
                 >

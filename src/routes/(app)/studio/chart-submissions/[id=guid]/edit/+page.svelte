@@ -208,7 +208,7 @@
       </div>
       <div class="card w-full bg-base-100 shadow-lg">
         <div class="card-body">
-          <div class="text-5xl py-3 flex font-bold gap-4 items-center">
+          <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
             {#if $song.isSuccess}
               <a
                 class="hover:underline"
@@ -228,7 +228,7 @@
                 {$songSubmission.data.data.title}
               </a>
             {/if}
-            <div class="join join-horizontal">
+            <div class="join join-vertical lg:join-horizontal min-w-fit">
               <button class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation">
                 {chart.level}
                 {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}

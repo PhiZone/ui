@@ -113,8 +113,8 @@
           </select>
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$reviewErrors.attitude}
-            data-tip={$reviewErrors.attitude}
+            class:tooltip-open={!!$reviewErrors.status}
+            data-tip={$reviewErrors.status}
           />
         </label>
         <label class="join my-2">
@@ -282,10 +282,10 @@
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold gap-4 items-center">
+            <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
               {submission.title}
               {#if submission.originalityProof}
-                <button class="btn btn-secondary text-3xl no-animation">
+                <button class="btn btn-secondary text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}

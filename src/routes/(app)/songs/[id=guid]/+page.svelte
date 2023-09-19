@@ -39,10 +39,10 @@
       >
         ✕
       </label>
-      <div class="text-5xl py-3 flex font-bold items-center">
+      <div class="text-5xl py-3 flex font-bold items-center content">
         {song.title}
         {#if song.isOriginal}
-          <button class="ml-2 btn btn-secondary text-3xl no-animation">
+          <button class="ml-2 btn btn-secondary text-3xl no-animation min-w-fit">
             {$t('song.original')}
           </button>
         {/if}
