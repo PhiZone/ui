@@ -267,17 +267,18 @@
       </form>
     </div>
   </div>
-  <div class="bg-base-200 min-h-screen py-24 px-12 justify-center flex">
-    <div class="mx-4 min-w-[340px] max-w-7xl main-width">
+  <div class="bg-base-200 info-page min-h-screen py-24 px-12">
+    <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('studio.chart_submission')}
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
+            <div class="text-5xl py-3 font-bold gap-4 items-center content inline-block">
               {#if $song.isSuccess}
                 <a
                   class="hover:underline"
@@ -430,6 +431,7 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('common.collaborators')}
         </span>
@@ -465,10 +467,13 @@
         {/each}
       {/if}
     </div>
-    <div class="mx-4 w-80 form-control">
+    <div class="mx-auto lg:mx-4 w-80 form-control">
       {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          <span
+            class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            style:--tw-translate-x="0"
+          >
             {$t('studio.submission.uploader')}
           </span>
           <User id={$uploader.data.data.id} initUser={$uploader.data.data} />
@@ -477,7 +482,10 @@
       {#if $song.isSuccess}
         {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
-          <span class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg">
+          <span
+            class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            style:--tw-translate-x="0"
+          >
             {$t('song.song')}
           </span>
           <Song {song} />
@@ -489,9 +497,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-  .main-width {
-    width: calc(min(100%, 880px) - 80px);
-  }
-</style>

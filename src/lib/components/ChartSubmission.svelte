@@ -48,44 +48,45 @@
       />
     </figure>
     <div class="card-body w-[70%] max-h-fit">
-      <h2 class="card-title text-2xl mb-3 min-w-fit">
-        {$song.isSuccess
-          ? $song.data.data.title
-          : $songSubmission.isSuccess
-          ? $songSubmission.data.data.title
-          : ''}
-        <div class="join join-horizontal">
+      <h2 class="card-title text-2xl mb-3 min-w-fit content inline-block">
+        {submission.title ??
+          ($song.isSuccess
+            ? $song.data.data.title
+            : $songSubmission.isSuccess
+            ? $songSubmission.data.data.title
+            : '')}
+        <div class="join join-vertical md:join-horizontal min-w-fit">
           <button
             class={`btn ${getLevelColor(
               submission.levelType,
-            )} btn-sm join-item text-xl no-animation`}
+            )} btn-sm join-item text-xl no-animation min-w-fit`}
           >
             {submission.level}
             {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
           </button>
           {#if submission.isRanked}
-            <button class="btn btn-success btn-sm join-item text-xl no-animation">
-              {$t('chart.ranked')}
+            <button class="btn btn-success btn-sm join-item text-xl no-animation min-w-fit">
+              R
             </button>
           {/if}
         </div>
       </h2>
-      <div class="flex items-center min-w-fit">
-        <p class="w-1/2">
+      <div class="flex flex-col md:flex-row min-w-fit">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('studio.submission.overall_status')}
           </span>
           {$t(`studio.submission.statuses.${submission.status}`)}
         </p>
-        <p class="w-1/2">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('studio.submission.volunteer_status')}
           </span>
           {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
         </p>
       </div>
-      <div class="flex items-center min-w-fit">
-        <p class="w-1/2">
+      <div class="flex flex-col md:flex-row min-w-fit">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('studio.submission.adm_status')}
           </span>
@@ -93,7 +94,7 @@
         </p>
         {#if $uploader.isSuccess}
           {@const uploader = $uploader.data?.data}
-          <p class="w-1/2">
+          <p class="md:w-1/2">
             <span class="badge badge-primary badge-outline mr-1">
               {$t('studio.submission.uploader')}
             </span>
@@ -101,14 +102,14 @@
           </p>
         {/if}
       </div>
-      <div class="flex items-center min-w-fit">
-        <p class="w-1/2">
+      <div class="flex flex-col md:flex-row min-w-fit">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
-        <p class="w-1/2">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.updated_at')}
           </span>

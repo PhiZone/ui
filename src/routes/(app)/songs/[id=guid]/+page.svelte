@@ -71,15 +71,20 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('song.song')}
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold items-center content">
-              {song.title}
+            <div class="py-3 flex-col sm:flex-row gap-4 items-center">
+              <h2 class="text-5xl font-bold content md:inline-block">
+                {song.title}
+              </h2>
               {#if song.isOriginal}
-                <button class="ml-2 btn btn-secondary text-3xl no-animation min-w-fit">
+                <button
+                  class="btn btn-secondary text-3xl no-animation mt-2 md:mt-0 md:ml-2 min-w-fit"
+                >
                   {$t('song.original')}
                 </button>
               {/if}
@@ -247,6 +252,7 @@
       <div class="indicator my-4 w-full">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t(song.isOriginal ? 'song.author' : 'song.uploader')}
         </span>
@@ -257,6 +263,7 @@
           <div class="indicator my-4 w-full">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+              style:--tw-translate-x="0"
             >
               {$t('song.chapter')}
             </span>

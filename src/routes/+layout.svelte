@@ -24,3 +24,4 @@
 <div class="bg-amber-500" hidden />
 <div class="bg-neutral-500" hidden />
 <div class="bg-stone-500" hidden />
+<div class="rating-lg" hidden />

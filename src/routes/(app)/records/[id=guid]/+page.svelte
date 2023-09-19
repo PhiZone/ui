@@ -26,6 +26,7 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('record.record')}
         </span>
@@ -93,6 +94,7 @@
       <div class="indicator my-4 w-full">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('record.player')}
         </span>
@@ -102,6 +104,7 @@
         <div class="indicator my-4 w-full">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            style:--tw-translate-x="0"
           >
             {$t('chart.chart')}
           </span>

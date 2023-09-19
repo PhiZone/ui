@@ -30,7 +30,7 @@
       />
     </figure>
     <div class="card-body w-[70%] max-h-fit">
-      <h2 class="card-title text-2xl mb-3 min-w-fit">
+      <h2 class="card-title text-2xl mb-3 min-w-fit content inline-block">
         {submission.title}
         {#if submission.originalityProof}
           <button class="btn btn-secondary btn-sm text-xl no-animation">
@@ -48,14 +48,14 @@
           </p>
         </div>
       {/if}
-      <div class="flex items-center min-w-fit">
-        <p class="w-1/2">
+      <div class="flex flex-col md:flex-row min-w-fit">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('studio.submission.status')}
           </span>
           {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
         </p>
-        <p class="w-1/2">
+        <p class="md:w-1/2">
           {#if $uploader.isSuccess}
             {@const uploader = $uploader.data?.data}
             <span class="badge badge-primary badge-outline mr-1">
@@ -65,14 +65,14 @@
           {/if}
         </p>
       </div>
-      <div class="flex items-center min-w-fit">
-        <p class="w-1/2">
+      <div class="flex flex-col md:flex-row min-w-fit">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
-        <p class="w-1/2">
+        <p class="md:w-1/2">
           <span class="badge badge-primary badge-outline mr-1">
             {$t('common.updated_at')}
           </span>

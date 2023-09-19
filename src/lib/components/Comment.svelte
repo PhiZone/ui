@@ -108,24 +108,24 @@
     <p class="w-full content text-lg">
       {@html $content}
     </p>
-    <div class="card-actions mt-4 flex justify-between items-center">
-      <p class="text-sm opacity-70">
+    <div class="card-actions mt-4 flex flex-col sm:flex-row justify-between items-center">
+      <p class="text-xs lg:text-sm opacity-70">
         {parseDateTime(comment.dateCreated)}
       </p>
-      <div class="items-center join join-vertical md:join-horizontal">
+      <div class="items-center join join-vertical sm:join-horizontal">
         {#if user && (getUserPrivilege(user.role) >= 4 || user.id === comment.ownerId)}
-          <Delete target={comment} class="btn-sm w-full md:w-fit join-item" />
+          <Delete target={comment} class="btn-sm w-full sm:w-fit join-item" />
         {/if}
         <Like
           id={comment.id}
           likes={comment.likeCount}
           type="comments"
           liked={comment.dateLiked != null}
-          class="btn-sm w-full md:w-fit join-item"
+          class="btn-sm w-full sm:w-fit join-item"
         />
         <label
           for="comment-{comment.id}-replies"
-          class="btn btn-sm btn-primary btn-outline gap-2 w-full md:w-fit join-item"
+          class="btn btn-sm btn-primary btn-outline gap-2 w-full sm:w-fit join-item"
           class:animate-pulse={!$query.isSuccess}
         >
           <svg

@@ -276,14 +276,17 @@
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('chart.chart')}
         </span>
         <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
           <div class="card-body py-10">
-            <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
-              {$song.data?.data.title}
-              <div class="join join-vertical lg:join-horizontal min-w-fit">
+            <div class="py-3 flex-col sm:flex-row gap-4 items-center">
+              <h2 class="text-5xl font-bold content md:inline-block">
+                {$song.data?.data.title}
+              </h2>
+              <div class="join join-vertical md:join-horizontal mt-2 md:mt-0 md:ml-2 min-w-fit">
                 <button
                   class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                 >
@@ -439,6 +442,7 @@
       <div class="indicator my-4 w-full">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          style:--tw-translate-x="0"
         >
           {$t('chart.owner')}
         </span>
@@ -449,6 +453,7 @@
         <div class="indicator my-4 w-full">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            style:--tw-translate-x="0"
           >
             {$t('song.song')}
           </span>
@@ -460,6 +465,7 @@
             <div class="indicator my-4 w-full">
               <span
                 class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+                style:--tw-translate-x="0"
               >
                 {$t('common.records')}
               </span>
