@@ -24,7 +24,7 @@
 <div class="bg-base-200 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-7xl min-w-20">
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex flex-wrap gap-2 justify-between mb-6">
         <h1 class="text-4xl font-bold">
           {$t('studio.collaborations')}
           {searchParams.rangeInviterId
@@ -33,16 +33,16 @@
             ? `- ${$t('studio.request.received')}`
             : ''}
         </h1>
-        <div class="join">
+        <div class="join join-vertical md:join-horizontal min-w-fit max-w-fit">
           <a
             href="/studio/collaborations?rangeInviteeId={user?.id}"
-            class="btn btn-primary btn-outline join-item"
+            class="btn btn-primary btn-outline join-item min-w-fit"
           >
             {$t('studio.request.received')}
           </a>
           <a
             href="/studio/collaborations?rangeInviterId={user?.id}"
-            class="btn btn-primary btn-outline join-item"
+            class="btn btn-primary btn-outline join-item min-w-fit"
           >
             {$t('studio.request.sent')}
           </a>
