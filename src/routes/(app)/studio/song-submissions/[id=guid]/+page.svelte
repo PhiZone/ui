@@ -14,22 +14,26 @@
   $: ({ id, user, api } = data);
 
   const {
-    form: reviewForm,
+    // form: reviewForm,
     enhance: reviewEnhance,
     errors: reviewErrors,
     message: reviewMessage,
     submitting: reviewSubmitting,
     allErrors: reviewAllErrors,
-  } = superForm(data.reviewForm);
+  } = superForm(data.reviewForm, {
+    id: 'song-review',
+  });
 
   const {
-    form: collabForm,
+    // form: collabForm,
     enhance: collabEnhance,
-    errors: collabErrors,
-    message: collabMessage,
-    submitting: collabSubmitting,
-    allErrors: collabAllErrors,
-  } = superForm(data.collabForm);
+    // errors: collabErrors,
+    // message: collabMessage,
+    // submitting: collabSubmitting,
+    // allErrors: collabAllErrors,
+  } = superForm(data.collabForm, {
+    id: 'song-collab',
+  });
 
   let queryCollaborator = false;
   let newCollaboratorId: number | null = null;

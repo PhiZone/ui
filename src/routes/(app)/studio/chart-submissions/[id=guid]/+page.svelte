@@ -21,9 +21,13 @@
     message: voteMessage,
     submitting: voteSubmitting,
     allErrors: voteAllErrors,
-  } = superForm(data.voteForm);
+  } = superForm(data.voteForm, {
+    id: 'chart-vote',
+  });
 
-  const { enhance: collabEnhance } = superForm(data.collabForm);
+  const { enhance: collabEnhance } = superForm(data.collabForm, {
+    id: 'chart-collab',
+  });
 
   let score = 0;
   let queryCollaborator = false;

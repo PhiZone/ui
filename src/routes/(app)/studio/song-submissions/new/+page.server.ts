@@ -50,6 +50,7 @@ export const load = async () => {
   const form = await superValidate(schema);
   return { form };
 };
+
 const parsePreviewTime = (time: string) => {
   return /^\d{1,2}:\d{1,2}.\d+$/g.test(time) ? `00:${time}` : time;
 };
