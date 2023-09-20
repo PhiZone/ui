@@ -57,7 +57,6 @@ export interface SongAdmitteeDto extends SongDto {
 
 // list
 export interface Filter extends FilterBase {
-  order?: 'title' | 'authorName' | 'illustrator' | 'duration' | 'ownerId' | 'dateCreated';
   rangeId?: string[];
   rangeOwnerId?: number[];
   rangeAccessibility?: number[];

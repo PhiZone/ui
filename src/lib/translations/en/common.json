@@ -35,6 +35,7 @@
     "copyright": "© PhiZone. All rights reserved."
   },
   "waiting": "Waiting",
+  "pending": "Pending",
   "error": "Error",
   "unknown_error": "Something went wrong. Please try again later.",
   "previous": "Previous",

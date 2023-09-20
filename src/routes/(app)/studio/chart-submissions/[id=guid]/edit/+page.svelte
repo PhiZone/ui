@@ -253,7 +253,7 @@
             target="_blank"
             class="mb-2 link link-hover"
           >
-            {$t('studio.submission.offset_helper')}
+            {$t('studio.submission.adjust_offset')}
           </a>
           <form class="w-full form-control">
             <div class="flex">

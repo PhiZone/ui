@@ -23,7 +23,7 @@
 
 <a href={`/studio/chart-submissions/${submission.id}`}>
   <div
-    class={`card min-w-[500px] card-side overflow-hidden ${
+    class={`card card-side overflow-hidden ${
       submission.status === 1
         ? 'bg-success-content'
         : submission.status === 2
@@ -66,7 +66,7 @@
           </button>
           {#if submission.isRanked}
             <button class="btn btn-success btn-sm join-item text-xl no-animation min-w-fit">
-              R
+              {$t('chart.ranked')}
             </button>
           {/if}
         </div>

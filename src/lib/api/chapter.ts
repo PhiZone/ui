@@ -23,30 +23,13 @@ export interface ChapterDto {
 }
 
 export interface Filter extends PublicResourceFilterBase {
-  order?:
-    | 'id'
-    | 'illustrator'
-    | 'likeCount'
-    | 'ownerId'
-    | 'title'
-    | 'subtitle'
-    | 'dateCreated'
-    | 'dateUpdated';
+  order?: string[];
   containsSubtitle?: string;
   equalsSubtitle?: string;
 }
 
 export interface SongListFilter extends FilterBase {
   id: string;
-  order?:
-    | 'id'
-    | 'illustrator'
-    | 'likeCount'
-    | 'ownerId'
-    | 'title'
-    | 'authorName'
-    | 'dateCreated'
-    | 'dateUpdated';
 }
 
 export interface InfoOpts {

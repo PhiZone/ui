@@ -35,6 +35,7 @@
     "copyright": "© PhiZone。保留所有權利。"
   },
   "waiting": "正在等待回應",
+  "pending": "等待處理",
   "error": "錯誤",
   "unknown_error": "發生了錯誤。請稍後重試。",
   "previous": "上一頁",

@@ -19,15 +19,13 @@
 <div class="bg-base-200 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-7xl min-w-20">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-4xl font-bold">
+      <div class="flex flex-wrap gap-2 justify-between items-center mb-6">
+        <h1 class="text-4xl font-bold content">
           {$t('studio.chart_submissions')}
         </h1>
-        <div class="flex justify-between gap-3">
-          <a href="/studio/chart-submissions/new" class="btn btn-accent text-lg btn-xl btn-outline">
-            {$t('studio.upload_chart')}
-          </a>
-        </div>
+        <a href="/studio/chart-submissions/new" class="btn btn-accent text-lg btn-xl btn-outline">
+          {$t('studio.upload_chart')}
+        </a>
       </div>
       <div class="min-w-fit form-control gap-4">
         {#if $query.isSuccess}

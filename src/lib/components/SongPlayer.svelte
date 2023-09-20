@@ -95,10 +95,7 @@
     {/if}
   </div>
   {#if audio}
-    <div
-      class="bg-cover bg-center bg-no-repeat"
-      style:background="transparent url({illustration}) no-repeat scroll 20% 20%"
-    >
+    <div class="bg-cover bg-center bg-no-repeat" style:background-image="url({illustration})">
       <div
         class="backdrop-blur-3xl bg-base-100 bg-opacity-50"
         style:--tw-backdrop-blur="blur(192px)"

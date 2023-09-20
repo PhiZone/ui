@@ -21,7 +21,6 @@ export interface VoteDto {
 // list
 export interface Filter extends FilterBase {
   chartId: string;
-  order?: 'ownerId' | 'score' | 'rating';
 }
 
 // create

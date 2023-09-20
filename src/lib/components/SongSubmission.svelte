@@ -14,7 +14,7 @@
 
 <a href={`/studio/song-submissions/${submission.id}`}>
   <div
-    class={`card min-w-[500px] card-side overflow-hidden ${
+    class={`card card-side overflow-hidden ${
       submission.status === 1
         ? 'bg-success-content'
         : submission.status === 2

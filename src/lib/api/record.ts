@@ -29,7 +29,6 @@ export interface RecordDto {
 
 // list
 export interface Filter extends FilterBase {
-  order?: 'ownerId' | 'score' | 'accuracy' | 'rks' | 'stdDeviation' | 'dateCreated';
   rangeId?: string[];
   rangeChartId?: string[];
   rangeOwnerId?: number[];

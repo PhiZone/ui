@@ -39,9 +39,7 @@ export interface UserDetailedDto extends UserDto {
 }
 
 // list
-export interface Filter extends FilterBase {
-  order?: 'id' | 'userName' | 'gender' | 'rks' | 'experience' | 'dateJoined' | 'dateOfBirth';
-}
+export interface Filter extends FilterBase {}
 
 // info
 export interface InfoOpts {

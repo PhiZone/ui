@@ -17,7 +17,7 @@ export function stringifyFilter<T extends FilterBase>(opts: T, all = false) {
       { perPage: all ? -1 : perPage ?? PAGINATION_PER_PAGE, ...rest },
       { pascalCase: true },
     ),
-    { arrayFormat: 'comma', skipEmptyString: true },
+    { arrayFormat: 'none', skipEmptyString: true },
   );
 }
 

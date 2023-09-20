@@ -13,7 +13,10 @@
   $: ({ user, api } = $page.data);
 
   $: chartSubmission = createQuery(
-    api.chart.submission.info({ id: collaboration.submissionId }, { enabled: kind === 'full' }),
+    api.chart.submission.info(
+      { id: collaboration.submissionId },
+      { enabled: kind === 'full', retry: 0 },
+    ),
   );
   $: song = createQuery(
     api.song.info(
@@ -21,6 +24,7 @@
       {
         enabled:
           kind === 'full' && $chartSubmission.isSuccess && !!$chartSubmission.data.data.songId,
+        retry: 0,
       },
     ),
   );
@@ -29,7 +33,7 @@
       {
         id: $chartSubmission.data?.data.songSubmissionId ?? collaboration.submissionId,
       },
-      { enabled: kind === 'full' },
+      { enabled: kind === 'full', retry: 0 },
     ),
   );
 
@@ -69,7 +73,7 @@
           </h2>
           {#if $chartSubmission.isSuccess}
             {@const chart = $chartSubmission.data.data}
-            <div class="join min-w-fit ml-2">
+            <div class="join join-vertical md:join-horizontal min-w-fit ml-2">
               <button
                 class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation"
               >
@@ -84,7 +88,7 @@
             </div>
           {/if}
         </div>
-        <div class="flex flex-col sm:flex-row gap-2 justify-between items-center">
+        <div class="flex flex-wrap gap-2 justify-between items-center">
           <div class="max-w-fit">
             {#if !showInvitee && user && collaboration.inviteeId == user.id}
               <User id={collaboration.inviterId} kind="mini" showFollow={false} />
@@ -150,6 +154,10 @@
                     {$t('studio.request.reject')}
                   </button>
                 </div>
+              {:else}
+                <button class="btn btn-disabled">
+                  {$t('common.pending')}
+                </button>
               {/if}
             {:else}
               <button class="btn btn-disabled">
@@ -213,6 +221,10 @@
             {$t('studio.request.reject')}
           </button>
         </div>
+      {:else}
+        <button class="btn btn-disabled">
+          {$t('common.pending')}
+        </button>
       {/if}
     {:else}
       <button class="btn btn-disabled">

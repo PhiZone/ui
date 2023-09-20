@@ -57,7 +57,9 @@
   $: song = createQuery(
     api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
   );
-  $: records = createQuery(api.record.listChart({ chartId: id, order: 'rks', desc: true }));
+  $: records = createQuery(
+    api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
+  );
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
 
   $: charter = richtext($chart.data?.data.authorName ?? '');

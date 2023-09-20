@@ -75,6 +75,7 @@
     "min_bpm": "最小 BPM",
     "main_bpm": "主要 BPM",
     "max_bpm": "最大 BPM",
+    "adjust_offset": "点击此处调整谱面延迟",
     "offset_helper": "在上传谱面文件之前，请先选择曲目并填写谱面信息，然后点击此处调整延迟，随后将校正延迟后的文件上传。"
   },
   "request": {

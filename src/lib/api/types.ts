@@ -95,8 +95,8 @@ export type R<T = void> = Promise<
 >;
 
 export interface FilterBase {
-  order?: string;
-  desc?: boolean;
+  order?: string[];
+  desc?: boolean[];
   page?: number;
   perPage?: number;
   search?: string;

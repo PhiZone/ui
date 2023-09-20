@@ -14,7 +14,6 @@ export interface VolunteerVoteDto {
 // list
 export interface Filter extends FilterBase {
   chartId: string;
-  order?: 'ownerId' | 'score' | 'dateCreated';
 }
 
 // create

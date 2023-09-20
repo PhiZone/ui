@@ -22,9 +22,9 @@
   $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
   $: songs = createQuery(api.song.list({ rangeOwnerId: [id] }));
   $: recentRecords = createQuery(
-    api.record.list({ rangeOwnerId: [id], order: 'dateCreated', desc: true }),
+    api.record.list({ rangeOwnerId: [id], order: ['dateCreated'], desc: [true] }),
   );
-  $: bestRecords = createQuery(api.record.list({ rangeOwnerId: [id], order: 'rks', desc: true }));
+  $: bestRecords = createQuery(api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }));
 </script>
 
 <svelte:head>

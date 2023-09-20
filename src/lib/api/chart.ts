@@ -58,17 +58,6 @@ export interface ChartDto {
 
 // list
 export interface Filter extends FilterBase {
-  order?:
-    | 'dateCreated'
-    | 'dateUpdated'
-    | 'ownerId'
-    | 'authorName'
-    | 'level'
-    | 'ranked'
-    | 'difficulty'
-    | 'noteCount'
-    | 'score'
-    | 'rating';
   rangeId?: string[];
   rangeSongId?: string[];
   rangeOwnerId?: number[];

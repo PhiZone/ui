@@ -75,6 +75,7 @@
     "min_bpm": "Minimum BPM",
     "main_bpm": "Main BPM",
     "max_bpm": "Maximum BPM",
+    "adjust_offset": "Click here to adjust your chart's offset",
     "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file."
   },
   "request": {
