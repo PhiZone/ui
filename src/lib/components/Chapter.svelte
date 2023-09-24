@@ -1,11 +1,17 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import type { ChapterDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
+  import { createQuery } from '@tanstack/svelte-query';
   import Like from './Like.svelte';
+
+  $: ({ api } = $page.data);
 
   export let chapter: ChapterDto;
   export let fixedHeight = false;
+
+  $: owner = createQuery(api.user.info({ id: chapter.ownerId }));
 </script>
 
 <div
@@ -28,10 +34,12 @@
         <span class="badge badge-primary badge-outline mr-1">{$t('chapter.illustrator')}</span>
         {chapter.illustrator}
       </p>
-      <!-- <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-        <span class="badge badge-primary badge-outline mr-1">{$t('chapter.owner')}</span>
-        {chapter.owner}
-      </p> -->
+      {#if $owner.isSuccess}
+        <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
+          <span class="badge badge-primary badge-outline mr-1">{$t('chapter.owner')}</span>
+          {$owner.data.data.userName}
+        </p>
+      {/if}
       {#if chapter.description}
         <p class="content description grow-0">
           <span class="badge badge-primary badge-outline mr-1">{$t('chapter.description')}</span>

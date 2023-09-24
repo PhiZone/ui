@@ -19,12 +19,11 @@ export interface Filter extends FilterBase {
 }
 
 export interface InfoOpts {
-  id: number;
-  markAsRead?: number;
+  id: string;
 }
 
 export interface DeleteOpts {
-  id: number;
+  id: string;
 }
 
 export default class NotificationAPI {
@@ -45,7 +44,11 @@ export default class NotificationAPI {
       this.api.GET(`/notifications/${id}?` + queryString.stringify(rest)),
   );
 
+  read({ id }: InfoOpts) {
+    return this.api.POST(`/notifications/${id}/read`);
+  }
+
   del({ id }: DeleteOpts) {
-    return this.api.DELETE(`/notifications/${id}/`);
+    return this.api.DELETE(`/notifications/${id}`);
   }
 }

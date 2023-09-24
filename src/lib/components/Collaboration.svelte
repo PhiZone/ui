@@ -176,7 +176,7 @@
     {/if}
   </div>
 {:else}
-  <div class="flex gap-3 justify-between items-center">
+  <div class="flex flex-wrap gap-3 justify-between items-center">
     <div class="max-w-fit">
       {#if !showInvitee && user && collaboration.inviteeId == user.id}
         <User id={collaboration.inviterId} kind="mini" showFollow={false} />

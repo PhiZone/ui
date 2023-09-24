@@ -63,6 +63,12 @@ export function transform(content: string /*, ctx: RichContext*/): string {
         (_, id: string, display: string) =>
           `<a href="/charts/${id}" class="richtext-link richtext-chart">${display}</a>`,
       )
+      // record
+      .replaceAll(
+        /\[PZRecord:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/records/${id}" class="richtext-link richtext-chart">${display}</a>`,
+      )
       // comment
       .replaceAll(
         /\[PZComment:([-0-9a-fA-F]+):(.+):PZRT\]/gi,

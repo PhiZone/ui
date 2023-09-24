@@ -59,7 +59,12 @@
     {/if}
   {/if}
 {:else}
-  <div class="card w-full shadow-lg bg-base-100" class:h-60={fixedHeight}>
+  <a
+    href={initUser || $query.isSuccess ? `/users/${initUser?.id ?? $query.data?.data.id}` : '#'}
+    {target}
+    class="card w-full shadow-lg hover:shadow-sm hover:shadow-primary-focus bg-base-100"
+    class:h-60={fixedHeight}
+  >
     <div
       class="card-body py-3 px-4 items-center {kind === 'mini'
         ? 'flex-row gap-8 justify-between'
@@ -89,24 +94,22 @@
       {:else if initUser || $query.isSuccess}
         {@const user = initUser ?? $query.data?.data}
         {#if user}
-          <a href="/users/{user.id}" {target}>
-            <div class="avatar flex items-center min-w-fit">
-              <div
-                class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
-                  user.role,
-                )}"
-              >
-                <img src={getAvatar(user.avatar)} alt="Avatar" />
-              </div>
-              <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
-                {user.userName}
-                <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-                {#if user.tag}
-                  <span class="badge badge-sm badge-accent">{user.tag}</span>
-                {/if}
-              </p>
+          <div class="avatar flex items-center min-w-fit">
+            <div
+              class="w-12 rounded-full border-[3px] border-opacity-80 border-{getUserColor(
+                user.role,
+              )}"
+            >
+              <img src={getAvatar(user.avatar)} alt="Avatar" />
             </div>
-          </a>
+            <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
+              {user.userName}
+              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
+              {#if user.tag}
+                <span class="badge badge-sm badge-accent">{user.tag}</span>
+              {/if}
+            </p>
+          </div>
           {#if kind === 'full'}
             <div class="px-3 w-full text-left {fixedHeight ? 'h-3/4' : ''}">
               <p>
@@ -126,12 +129,20 @@
             </div>
           {/if}
           {#if showFollow}
-            <Follow {user} />
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div
+              on:click={(e) => {
+                e.preventDefault();
+              }}
+              on:keyup
+            >
+              <Follow {user} />
+            </div>
           {/if}
         {/if}
       {/if}
     </div>
-  </div>
+  </a>
 {/if}
 
 <style>

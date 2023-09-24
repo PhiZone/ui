@@ -24,7 +24,9 @@
   $: recentRecords = createQuery(
     api.record.list({ rangeOwnerId: [id], order: ['dateCreated'], desc: [true] }),
   );
-  $: bestRecords = createQuery(api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }));
+  $: bestRecords = createQuery(
+    api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }),
+  );
 </script>
 
 <svelte:head>
@@ -163,7 +165,7 @@
             </div>
             <div>
               <div class="flex justify-center my-3 h-fit">
-                <Follow {user} />
+                <Follow {user} instantResp={false} />
               </div>
             </div>
           </figure>
@@ -263,7 +265,7 @@
                 {/if}
               </div>
               {#if best_records.length > 0}
-                <div class="grid-result">
+                <div class="result">
                   {#each best_records as record}
                     <Record {record} />
                   {/each}

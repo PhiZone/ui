@@ -17,7 +17,6 @@
 
   $: song = createQuery(api.song.info({ id: chart.songId }));
   $: owner = createQuery(api.user.info({ id: chart.ownerId }));
-
   $: charter = richtext(chart.authorName ?? '');
 </script>
 
@@ -101,7 +100,7 @@
   <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
     <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
       {#if showSong}
-        <div class="hidden md:flex md:w-1/2 2xl:w-2/3 text-xl font-bold">
+        <div class="hidden sm:flex sm:w-1/2 2xl:w-2/3 sm:text-xl sm:font-bold ellipsis-2">
           {$song.data?.data.title}
         </div>
       {/if}
@@ -111,12 +110,14 @@
           {getLevelDisplay(chart.difficulty)}
         </button>
         {#if chart.isRanked}
-          <button class="btn btn-success btn-sm join-item text-lg no-animation">R</button>
+          <button class="btn btn-success btn-sm join-item text-lg no-animation">
+            {showSong ? 'R' : $t('chart.ranked')}
+          </button>
         {/if}
       </div>
     </div>
     {#if showCharter}
-      <div class="hidden lg:inline w-1/3 max-w-1/3 text-lg">
+      <div class="hidden lg:inline w-1/3 max-w-1/3 lg:text-lg lg:ellipsis-2">
         {#if chart.authorName}
           {@html $charter}
         {:else}
@@ -152,5 +153,14 @@
     font-size: 1.25rem /* 20px */;
     line-height: 1.75rem /* 28px */;
     font-weight: 600;
+  }
+  .ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media (min-width: 640px) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 </style>

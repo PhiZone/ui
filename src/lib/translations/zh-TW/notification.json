@@ -11,7 +11,9 @@
   },
   "notified_at": "通知於",
   "read_at": "閱讀於",
-  "read": "已讀",
+  "read_adj": "已讀",
+  "read_v": "閲讀",
+  "read_page": "閲讀本頁",
   "view_read": "查看已讀",
   "view_unread": "查看未讀"
 }

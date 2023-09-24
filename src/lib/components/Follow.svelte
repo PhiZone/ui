@@ -7,27 +7,42 @@
   $: ({ api } = $page.data);
 
   export let user: UserDto;
+  export let instantResp = true;
 
   const queryClient = useQueryClient();
 
   const follow = async () => {
+    if (instantResp) {
+      user.followerCount++;
+      user.dateFollowed = new Date();
+    }
     const resp = await api.user.follow({ id: user.id });
     if (resp.ok) {
       await queryClient.invalidateQueries({ queryKey: ['user.info', { id: user.id }] });
-      // await queryClient.invalidateQueries({
-      //   queryKey: ['relation.listAll', { followee: id, follower: api._user!.id }],
-      // });
-    } else console.error(await resp.json());
+    } else {
+      if (instantResp) {
+        user.followerCount--;
+        user.dateFollowed = null;
+      }
+      console.error(await resp.json());
+    }
   };
 
   const unfollow = async () => {
+    if (instantResp) {
+      user.followerCount--;
+      user.dateFollowed = null;
+    }
     const resp = await api.user.unfollow({ id: user.id });
     if (resp.ok) {
       await queryClient.invalidateQueries({ queryKey: ['user.info', { id: user.id }] });
-      // await queryClient.invalidateQueries({
-      //   queryKey: ['relation.listAll', { followee: user.id, follower: api._user!.id }],
-      // });
-    } else console.error(await resp.json());
+    } else {
+      if (instantResp) {
+        user.followerCount++;
+        user.dateFollowed = new Date();
+      }
+      console.error(await resp.json());
+    }
   };
 </script>
 

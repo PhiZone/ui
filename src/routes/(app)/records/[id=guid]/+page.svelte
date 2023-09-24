@@ -4,9 +4,11 @@
   import { getGrade, parseDateTime } from '$lib/utils';
   import User from '$lib/components/User.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import Comments from '$lib/components/Comments.svelte';
+  import Like from '$lib/components/Like.svelte';
 
   export let data;
-  $: ({ id, api } = data);
+  $: ({ searchParams, id, api } = data);
 
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
@@ -86,9 +88,17 @@
               <span class="badge badge-primary badge-outline mr-1">{$t('record.time')}</span>
               {parseDateTime(record.dateCreated)}
             </p>
+            <Like
+              id={record.id}
+              likes={record.likeCount}
+              type="records"
+              liked={record.dateLiked != null}
+              class="btn-md w-36 text-lg"
+            />
           </div>
         </div>
       </div>
+      <Comments type="records" id={record.id} {searchParams} />
     </div>
     <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator my-4 w-full">

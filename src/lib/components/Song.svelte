@@ -148,7 +148,7 @@
 {:else if kind === 'inline'}
   <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
     <div class="w-11/12 md:w-1/2">
-      <div class="text-xl font-bold">
+      <div class="text-xl font-bold ellipsis-2">
         {song.title}
         {#if song.isOriginal}
           <button class="btn btn-secondary btn-sm text-lg no-animation">
@@ -158,7 +158,7 @@
       </div>
     </div>
     <div class="w-0 md:w-5/12">
-      <div class="text-lg hidden md:flex">
+      <div class="text-lg hidden md:flex ellipsis-2">
         {song.authorName}
       </div>
     </div>
@@ -188,5 +188,12 @@
     line-height: 1.75rem /* 28px */;
     font-weight: 600;
     margin-bottom: 4px;
+  }
+  .ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 </style>

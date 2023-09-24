@@ -11,7 +11,9 @@
   },
   "notified_at": "Notified At",
   "read_at": "Read At",
-  "read": "Read",
+  "read_adj": "Read",
+  "read_v": "Read",
+  "read_page": "Read Page",
   "view_read": "View Read",
   "view_unread": "View Unread"
 }

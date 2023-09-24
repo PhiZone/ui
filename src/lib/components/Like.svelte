@@ -5,14 +5,14 @@
   $: ({ api } = $page.data);
 
   interface $$Props {
-    type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
+    type: 'comments' | 'replies' | 'records' | 'charts' | 'songs' | 'chapters';
     id: string;
     likes: number;
     liked: boolean;
     class: string;
   }
 
-  export let type: 'comments' | 'replies' | 'charts' | 'songs' | 'chapters';
+  export let type: 'comments' | 'replies' | 'records' | 'charts' | 'songs' | 'chapters';
   export let id: string;
   export let likes: number;
   export let liked: boolean;
