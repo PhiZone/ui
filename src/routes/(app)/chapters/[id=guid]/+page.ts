@@ -12,8 +12,8 @@ export const load = async ({ params, url, parent }) => {
         type: 'chapters',
         id: params.id,
         page: 1,
-        order: ['dateCreated'],
-        desc: [true],
+        order: ['likeCount', 'dateCreated'],
+        desc: [true, true],
       }),
     ),
   ]);

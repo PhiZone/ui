@@ -61,7 +61,6 @@
     api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
   );
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
-
   $: charter = richtext($chart.data?.data.authorName ?? '');
 </script>
 

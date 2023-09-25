@@ -11,8 +11,8 @@ export const load = async ({ params, url, parent }) => {
         type: 'songs',
         id: params.id,
         page: 1,
-        order: ['likeCount'],
-        desc: [true],
+        order: ['likeCount', 'dateCreated'],
+        desc: [true, true],
       }),
     ),
   ]);

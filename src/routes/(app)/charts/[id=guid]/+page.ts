@@ -6,7 +6,16 @@ export const load = async ({ params, url, parent }) => {
   const id = params.id;
   await queryClient.prefetchQuery(api.chart.info({ id }));
   await queryClient.prefetchQuery(
-    api.comment.list({ type: 'charts', id: id, page: 1, order: ['likeCount'], desc: [true] }),
+    api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
+  );
+  await queryClient.prefetchQuery(
+    api.comment.list({
+      type: 'charts',
+      id: id,
+      page: 1,
+      order: ['likeCount', 'dateCreated'],
+      desc: [true, true],
+    }),
   );
 
   return {

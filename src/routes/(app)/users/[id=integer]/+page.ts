@@ -14,7 +14,6 @@ export const load = async ({ params, url, parent }) => {
     queryClient.prefetchQuery(
       api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }),
     ),
-    // queryClient.prefetchQuery(api.comment.list({ rangeOwnerId: [id] })),
   ]);
   return { searchParams, id };
 };
