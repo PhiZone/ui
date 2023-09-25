@@ -31,7 +31,7 @@
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
   );
-  $: song = createQuery(api.song.listAll({ order: ['title' }, { enabled: songSwitch }));
+  $: song = createQuery(api.song.listAll({ order: ['title'] }, { enabled: songSwitch }));
   $: songSubmission = createQuery(
     api.song.submission.listAll({ rangeOwnerId: [user?.id ?? 0] }, { enabled: !songSwitch }),
   );
