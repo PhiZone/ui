@@ -271,7 +271,7 @@
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('studio.chart_submission')}
@@ -363,6 +363,14 @@
                 </span>
                 {parseDateTime(submission.dateUpdated)}
               </p>
+              {#if submission.description}
+                <p class="content">
+                  <span class="badge badge-primary badge-outline mr-1">
+                    {$t('chart.description')}
+                  </span>
+                  {submission.description}
+                </p>
+              {/if}
               <p>
                 <span class="badge badge-primary badge-outline mr-1">
                   {$t('studio.submission.adm_status')}
@@ -381,14 +389,6 @@
                 </span>
                 {$t(`studio.submission.statuses.${submission.status}`)}
               </p>
-              {#if submission.description}
-                <p class="content">
-                  <span class="badge badge-primary badge-outline mr-1">
-                    {$t('chart.description')}
-                  </span>
-                  {submission.description}
-                </p>
-              {/if}
             </div>
             <div class="card-actions flex items-center justify-end gap-2">
               {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 3)}
@@ -430,7 +430,7 @@
       </div>
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('common.collaborators')}
@@ -471,7 +471,7 @@
       {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
         <div class="indicator my-4 w-full">
           <span
-            class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.uploader')}
@@ -483,7 +483,7 @@
         {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
           <span
-            class="indicator-item badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}

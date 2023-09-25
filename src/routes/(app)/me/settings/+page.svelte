@@ -124,7 +124,7 @@
       </h1>
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg text-lg"
           style:--tw-translate-x="0"
         >
           {$t('common.profile')}
@@ -157,65 +157,37 @@
             </div>
             <form class="form-control">
               <input type="number" name="id" value={id} hidden />
-              <div class="flex items-center justify-between mb-2">
-                <span class="w-16 min-w-fit place-self-center">{$t('user.gender')}</span>
-                <div class="flex flex-col md:flex-row justify-between w-[60%]">
-                  <div class="flex gap-2 w-1/3">
-                    <input
-                      type="radio"
-                      bind:group={user.gender}
-                      name="gender"
-                      value={0}
-                      class="radio radio-secondary"
-                      on:input={() => {
-                        patch = applyPatch(patch, 'replace', '/gender', 0);
-                      }}
-                    />
-                    <p>
-                      {$t('user.genders.0')}
-                    </p>
-                  </div>
-                  <div class="flex gap-2 w-1/3">
-                    <input
-                      type="radio"
-                      bind:group={user.gender}
-                      name="gender"
-                      value={1}
-                      class="radio radio-secondary"
-                      on:input={() => {
-                        patch = applyPatch(patch, 'replace', '/gender', 1);
-                      }}
-                    />
-                    <p>
-                      {$t('user.genders.1')}
-                    </p>
-                  </div>
-                  <div class="flex gap-2 w-1/3">
-                    <input
-                      type="radio"
-                      bind:group={user.gender}
-                      name="gender"
-                      value={2}
-                      class="radio radio-secondary"
-                      on:input={() => {
-                        patch = applyPatch(patch, 'replace', '/gender', 2);
-                      }}
-                    />
-                    <p>
-                      {$t('user.genders.2')}
-                    </p>
-                  </div>
-                </div>
-              </div>
               <label class="join w-full mt-2">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                <span
+                  class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                >
+                  {$t('user.gender')}
+                </span>
+                <select
+                  bind:value={user.gender}
+                  name="gender"
+                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
+                  on:input={(e) => {
+                    locale.set(e.currentTarget.value);
+                    patch = applyPatch(patch, 'replace', '/gender', e.currentTarget.value);
+                  }}
+                >
+                  {#each [0, 1, 2] as value}
+                    <option {value}>{$t(`user.genders.${value}`)}</option>
+                  {/each}
+                </select>
+              </label>
+              <label class="join w-full mt-2">
+                <span
+                  class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                >
                   {$t('user.username')}
                 </span>
                 <input
                   type="text"
                   name="username"
                   placeholder={$t('user.username')}
-                  class="input input-secondary join-item w-[88%] min-w-[180px]"
+                  class="input input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   value={user.userName}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
@@ -228,13 +200,15 @@
                 data-tip={errors?.get('UserName')}
               />
               <label class="join w-full mt-2">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                <span
+                  class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                >
                   {$t('user.language')}
                 </span>
                 <select
                   bind:value={$locale}
                   name="language"
-                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
+                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     locale.set(e.currentTarget.value);
                     patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
@@ -251,13 +225,15 @@
                 data-tip={errors?.get('Language')}
               />
               <label class="join w-full mt-2">
-                <span class="btn no-animation join-item w-[12%] min-w-fit">
+                <span
+                  class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                >
                   {$t('user.region')}
                 </span>
                 <select
                   bind:value={user.region}
                   name="region"
-                  class="select input-secondary join-item flex-shrink w-[88%] min-w-[180px]"
+                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                   }}
@@ -274,13 +250,15 @@
               />
               <div class="relative mt-2">
                 <label class="join w-full">
-                  <span class="btn no-animation join-item w-[12%] min-w-fit">
+                  <span
+                    class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                  >
                     {$t('user.bio')}
                   </span>
                   <textarea
                     placeholder={$t('user.bio')}
                     name="bio"
-                    class="textarea textarea-secondary join-item w-[88%] min-w-[180px] h-48"
+                    class="textarea textarea-secondary join-item w-2/3 md:w-5/6 h-48"
                     bind:value={user.biography}
                     on:input={(e) => {
                       patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);

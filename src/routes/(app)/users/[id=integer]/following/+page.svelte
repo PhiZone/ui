@@ -14,12 +14,12 @@
   <title>{$t('user.user')} - {$t('user.following')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="pt-32 bg-base-200 page form-control justify-center">
-  <h1 class="px-32 text-4xl font-bold mb-6">{$t('user.following')}</h1>
+<div class="page">
+  <h1 class="text-4xl font-bold mb-6">{$t('user.following')}</h1>
   {#if $query.isSuccess}
     {@const { total, perPage, data } = $query.data}
     {#if total && perPage && data && data.length > 0}
-      <div class="px-32 result">
+      <div class="result">
         {#each data as user}
           <div class="w-80">
             <User id={user.id} initUser={user} fixedHeight />
@@ -36,10 +36,5 @@
 <style>
   * {
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-  .result {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 1.5rem;
   }
 </style>

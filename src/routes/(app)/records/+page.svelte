@@ -15,7 +15,7 @@
 </svelte:head>
 
 <div class="page">
-  <h1 class="text-4xl font-bold">{$t('common.records')}</h1>
+  <h1 class="text-4xl font-bold mb-6">{$t('common.records')}</h1>
   {#if $query.isSuccess}
     {@const { total, perPage, data } = $query.data}
     {#if total && perPage && data && data.length > 0}
@@ -34,11 +34,5 @@
 <style>
   * {
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-  .result {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 1.5rem;
-    justify-items: center;
   }
 </style>

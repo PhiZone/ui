@@ -277,7 +277,7 @@
     <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.chart')}
@@ -443,7 +443,7 @@
     <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator my-4 w-full">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.owner')}
@@ -454,7 +454,7 @@
         {@const song = $song.data.data}
         <div class="indicator my-4 w-full">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}
@@ -466,7 +466,7 @@
           {#if records.length > 0}
             <div class="indicator my-4 w-full">
               <span
-                class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+                class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
                 style:--tw-translate-x="0"
               >
                 {$t('common.records')}

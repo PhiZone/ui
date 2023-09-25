@@ -23,8 +23,15 @@
   word-break: break-word;
 }
 
+.result {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-gap: 1.5rem;
+  justify-items: center;
+}
+
 .richtext-link {
-  @apply text-accent hover:underline;
+  @apply text-emerald-300 hover:underline;
 }
 
 .cropper-view-box,

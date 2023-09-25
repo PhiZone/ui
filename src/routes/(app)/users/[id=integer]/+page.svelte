@@ -39,7 +39,7 @@
     <div class="mx-4 w-full max-w-[1800px]">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('user.user')}
@@ -299,11 +299,5 @@
 <style>
   * {
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-  .result {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    grid-gap: 1rem;
-    justify-items: center;
   }
 </style>

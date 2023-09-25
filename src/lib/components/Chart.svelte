@@ -100,7 +100,7 @@
   <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
     <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
       {#if showSong}
-        <div class="hidden sm:flex sm:w-1/2 2xl:w-2/3 sm:text-xl sm:font-bold ellipsis-2">
+        <div class="hidden sm:flex sm:w-1/2 2xl:w-2/3 sm:text-xl sm:font-bold ellipsis-2-md">
           {$song.data?.data.title}
         </div>
       {/if}
@@ -117,7 +117,7 @@
       </div>
     </div>
     {#if showCharter}
-      <div class="hidden lg:inline w-1/3 max-w-1/3 lg:text-lg lg:ellipsis-2">
+      <div class="hidden lg:inline w-1/3 max-w-1/3 lg:text-lg ellipsis-2-lg">
         {#if chart.authorName}
           {@html $charter}
         {:else}
@@ -154,10 +154,19 @@
     line-height: 1.75rem /* 28px */;
     font-weight: 600;
   }
-  .ellipsis-2 {
+  .ellipsis-2-md {
     overflow: hidden;
     text-overflow: ellipsis;
     @media (min-width: 640px) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  .ellipsis-2-lg {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media (min-width: 1024px) {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;

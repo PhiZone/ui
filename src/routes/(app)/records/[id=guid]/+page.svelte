@@ -27,7 +27,7 @@
     <div class="mx-auto lg:mx-4 min-w-fit w-[40vw]">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('record.record')}
@@ -103,7 +103,7 @@
     <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator my-4 w-full">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('record.player')}
@@ -113,7 +113,7 @@
       {#if $chart.isSuccess}
         <div class="indicator my-4 w-full">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit w-20 h-8 text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('chart.chart')}

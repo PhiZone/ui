@@ -158,7 +158,7 @@
       </div>
     </div>
     <div class="w-0 md:w-5/12">
-      <div class="text-lg hidden md:flex ellipsis-2">
+      <div class="text-lg hidden md:flex ellipsis-2-md">
         {song.authorName}
       </div>
     </div>
@@ -195,5 +195,14 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+  .ellipsis-2-md {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media (min-width: 640px) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 </style>
