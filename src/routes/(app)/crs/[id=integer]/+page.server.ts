@@ -12,9 +12,10 @@ interface Vote {
   date: Date;
 }
 
+const official = 'b55y6u83e6bmyu9eryehie24bg4h6n2mu8s';
+const fanmade = 'rv7t590oie5yb64u3t4gh82hu1eg0dopthl';
+
 export const load = async ({ params, url, cookies }) => {
-  const official = 'b55y6u83e6bmyu9eryehie24bg4h6n2mu8s';
-  const fanmade = 'rv7t590oie5yb64u3t4gh82hu1eg0dopthl';
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   if (
     searchParams.secToken != official &&
@@ -59,7 +60,7 @@ export const load = async ({ params, url, cookies }) => {
 };
 
 export const actions = {
-  vote: async ({ params, request }) => {
+  vote: async ({ params, request, cookies }) => {
     const client = createClient({
       url: REDIS_CONNECTION,
     });
@@ -72,7 +73,7 @@ export const actions = {
     const data = await request.formData();
     const vote: Vote = {
       id: crypto.randomUUID(),
-      official: data.get('official') == 'true',
+      official: cookies.get('sec_token') == official,
       score: parseInt(data.get('score') as string),
       message: data.get('message') as string,
       name: data.get('name') as string,
