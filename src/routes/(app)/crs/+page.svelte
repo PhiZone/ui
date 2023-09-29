@@ -66,7 +66,7 @@
     <h1 class="text-4xl font-bold mb-6">示例谱面评分征集</h1>
     <div class="result">
       {#each range(0, charts.length) as i}
-        <div class="card w-[430px] bg-base-100 shadow-xl">
+        <div class="card lg:w-[430px] w-full bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title">{charts[i].title}</h2>
             <p>{charts[i].description}</p>
@@ -94,9 +94,11 @@
     font-family: 'Saira', 'Noto Sans SC', sans-serif;
   }
   .result {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(415px, 1fr));
-    grid-gap: 1.5rem;
-    justify-items: center;
+    @media (min-width: 640px) {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(415px, 1fr));
+      grid-gap: 1.5rem;
+      justify-items: center;
+    }
   }
 </style>
