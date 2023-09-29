@@ -19,20 +19,26 @@ export const load = async ({ params, url, cookies }) => {
   if (
     searchParams.secToken != official &&
     searchParams.secToken != fanmade &&
-    cookies.get('secToken') != official &&
-    cookies.get('secToken') != fanmade
+    cookies.get('sec_token') != official &&
+    cookies.get('sec_token') != fanmade
   ) {
     return {
       official: null,
       data: null,
     };
   }
+
+  let token = '';
   if (searchParams.secToken) {
-    cookies.set('secToken', searchParams.secToken as string, {
+    cookies.set('sec_token', searchParams.secToken as string, {
       path: '/',
       maxAge: 1209600,
     });
+    token = searchParams.secToken as string;
+  } else {
+    token = cookies.get('sec_token') as string;
   }
+
   const client = createClient({
     url: REDIS_CONNECTION,
   });
@@ -47,7 +53,7 @@ export const load = async ({ params, url, cookies }) => {
   );
   client.quit();
   return {
-    official: searchParams.secToken == official,
+    official: token == official,
     data,
   };
 };
