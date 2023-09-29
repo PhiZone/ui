@@ -410,7 +410,7 @@
               {#if $song.isSuccess || $songSubmission.isSuccess}
                 {@const song = $song.data?.data ?? $songSubmission.data?.data}
                 <a
-                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&chart={encodeURI(
+                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
                     submission.file,
                   )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
                     song?.illustration ?? '',

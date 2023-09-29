@@ -241,7 +241,7 @@
             </div>
           </div>
           <a
-            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset&chart=${encodeURI(
+            href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset,noRequestingFullscreen&chart=${encodeURI(
               $submission.data?.data.file ?? '',
             )}&song=${encodeURI(parent?.file ?? '')}&illustration=${encodeURI(
               parent?.illustration ?? '',
