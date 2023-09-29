@@ -4,13 +4,13 @@ import { clearTokens } from '$lib/utils';
 
 export const load = async ({ cookies, locals, fetch }) => {
   const api = new API(fetch, locals.accessToken, locals.user);
-  const refresh_token = locals.refresh_token!;
+  const refreshToken = locals.refreshToken!;
   await api.auth.revokeToken({
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    token: refresh_token,
+    token: refreshToken,
   });
-  locals.user = null;
+  locals.user = undefined;
   clearTokens(cookies);
 
   return {
