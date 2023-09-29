@@ -46,7 +46,6 @@ export const load = async ({ params, url, cookies }) => {
     (str) => JSON.parse(str) as Vote,
   );
   client.quit();
-  console.log(data);
   return {
     official: searchParams.secToken == official,
     data,
@@ -74,7 +73,6 @@ export const actions = {
       user: data.get('user') ? parseInt(data.get('user') as string) : undefined,
       date: new Date(),
     };
-    console.log(params.id, vote);
     client.rPush(`crs:${params.id}`, JSON.stringify(vote));
     client.quit();
   },

@@ -28,6 +28,14 @@
       realScores[2] * 0.2 +
       realScores[3] * 0.2 +
       realScores[4] * 0.3;
+    const disqualifiedCount = realScores.filter((s) => s == -3).length;
+    if (disqualifiedCount === 1) {
+      realScore = Math.min(realScore, 1);
+    } else if (disqualifiedCount === 2) {
+      realScore = Math.min(realScore, 0);
+    } else if (disqualifiedCount >= 3) {
+      realScore = Math.min(realScore, -1);
+    }
     score = Math.round(realScore);
   };
 </script>
