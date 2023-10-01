@@ -32,6 +32,9 @@
     <a href="https://www.phigrim.cn/" target="_blank" rel="noreferrer" class="link link-hover">
       {$t('common.footer.phigrim')}
     </a>
+    <a href="https://phira.moe/" target="_blank" rel="noreferrer" class="link link-hover">
+      {$t('common.footer.phira')}
+    </a>
     <a href="https://phitogether.fun/" target="_blank" rel="noreferrer" class="link link-hover">
       {$t('common.footer.phitogether')}
     </a>
