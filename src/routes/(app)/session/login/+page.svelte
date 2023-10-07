@@ -86,12 +86,20 @@
             class="input input-bordered"
           />
           <div class="label flex justify-between">
-            <a
-              href="/session/password-reset/request{$page.url.search}"
-              class="label-text-alt link link-hover"
-            >
-              {$t('session.login.forgot_password')}
-            </a>
+            <div class="flex">
+              <a
+                href="/session/password-reset/request{$page.url.search}"
+                class="label-text-alt link link-hover"
+              >
+                {$t('session.login.forgot_password')}
+              </a>
+              <a
+                href="/session/email-confirmation/request{$page.url.search}"
+                class="label-text-alt link link-hover"
+              >
+                {$t('session.login.not_activated')}
+              </a>
+            </div>
             <a href="/session/register{$page.url.search}" class="label-text-alt link link-hover">
               {$t('session.registration.register')}
             </a>

@@ -13,6 +13,7 @@
     "login": "登录",
     "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
     "forgot_password": "忘记密码？",
+    "not_activated": "还未激活？",
     "invalid_credentials": "你的凭据有误。请仔细检查。"
   },
   "registration": {
