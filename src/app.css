@@ -8,13 +8,13 @@
 @tailwind utilities;
 
 .page {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 219px);
   max-width: 1600px;
   @apply bg-base-200 flex flex-col pt-32 px-4 md:px-32 mx-auto justify-start;
 }
 
 .info-page {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 219px);
   @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row;
 }
 

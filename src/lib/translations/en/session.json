@@ -5,6 +5,7 @@
   "confirm_password": "Confirm Password",
   "passwords_differ": "The two passwords differ from each other!",
   "code": "Verification Code",
+  "enter_email": "Please enter your email address.",
   "invalid_email": "The input value is not a valid email address.",
   "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
   "invalid_password": "The password should be at least 6 characters long, contain at least one non-alphanumeric character, have at least one lowercase letter, one uppercase letter, one digit, and can have a maximum length of 18 characters.",
@@ -30,8 +31,7 @@
   },
   "password_reset": {
     "password_reset": "Reset Password",
-    "password_reset_text_1": "Please enter your email address.",
-    "password_reset_text_2": "Please enter the code we've just sent you along with your new password.",
+    "password_reset_text": "Please enter the code we've just sent you along with your new password.",
     "new_password": "New Password"
   },
   "logging_out": "Logging Out",

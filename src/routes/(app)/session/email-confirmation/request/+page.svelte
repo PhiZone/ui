@@ -8,13 +8,13 @@
 </script>
 
 <svelte:head>
-  <title>{$t('session.password_reset.password_reset')} | {$t('common.title')}</title>
+  <title>{$t('session.email_confirmation.email_confirmation')} | {$t('common.title')}</title>
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-200">
   <div class="hero-content flex-col text-center w-[50vw] max-w-lg">
     <h1 class="text-5xl font-bold">
-      {$t('session.password_reset.password_reset')}
+      {$t('session.email_confirmation.email_confirmation')}
     </h1>
     <form method="POST" class="w-full form-control" use:enhance>
       <p class="py-6">

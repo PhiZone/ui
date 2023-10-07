@@ -5,6 +5,7 @@
   "confirm_password": "确认密码",
   "passwords_differ": "两次输入的密码不相同。",
   "code": "验证码",
+  "enter_email": "请在下方输入你注册时输入的邮箱。",
   "invalid_email": "邮箱地址不合法。",
   "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
   "invalid_password": "密码必须至少包含 6 个字符，其中至少包含一个非字母数字字符、一个小写字母、一个大写字母、一个数字，并且不多于 18 个字符。",
@@ -30,8 +31,7 @@
   },
   "password_reset": {
     "password_reset": "重置密码",
-    "password_reset_text_1": "请在下方输入你注册时输入的邮箱。",
-    "password_reset_text_2": "请在下方输入邮箱验证码以及你希望为你的账户设置的新密码。",
+    "password_reset_text": "请在下方输入邮箱验证码以及你希望为你的账户设置的新密码。",
     "new_password": "新密码"
   },
   "logging_out": "登出中",
