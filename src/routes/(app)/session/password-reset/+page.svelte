@@ -17,7 +17,7 @@
       {$t('session.password_reset.password_reset')}
     </h1>
     <p class="py-6">
-      {$t('session.password_reset.password_reset_text_2')}
+      {$t('session.password_reset.password_reset_text')}
     </p>
     <form method="POST" class="w-full form-control" use:enhance>
       <input

@@ -5,6 +5,7 @@
   "confirm_password": "確認密碼",
   "passwords_differ": "兩次輸入的密碼不相同。",
   "code": "驗證碼",
+  "enter_email": "請在下方輸入你註冊時輸入的電子郵件。",
   "invalid_email": "電子郵件地址不合法。",
   "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
   "invalid_password": "密碼必須至少包含 6 個字符，其中至少包含一個非字母數字字符、一個小寫字母、一個大寫字母、一個數字，並且不多於 18 個字符。",
@@ -30,8 +31,7 @@
   },
   "password_reset": {
     "password_reset": "重設密碼",
-    "password_reset_text_1": "請在下方輸入你註冊時輸入的電子郵件。",
-    "password_reset_text_2": "請在下方輸入郵件驗證碼與你希望為你的帳戶設定的新密碼。",
+    "password_reset_text": "請在下方輸入郵件驗證碼與你希望為你的帳戶設定的新密碼。",
     "new_password": "新密碼"
   },
   "logging_out": "登出中",

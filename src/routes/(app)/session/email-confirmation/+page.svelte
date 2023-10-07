@@ -68,15 +68,21 @@
           bind:value={code}
           on:input={oninput}
         />
-        <div class="mt-10">
+        <div class="mt-10 join">
+          <a
+            href="/session/email-confirmation/request"
+            class="btn btn-secondary btn-outline join-item w-1/4"
+          >
+            {$t('common.back')}
+          </a>
           <div
-            class="tooltip tooltip-bottom tooltip-error"
+            class="tooltip tooltip-bottom tooltip-error w-3/4"
             class:tooltip-open={msg}
             data-tip={msg || null}
           >
             <button
               type="submit"
-              class="btn {msg ? 'btn-error' : 'btn-accent btn-outline'}"
+              class="btn join-item {msg ? 'btn-error' : 'btn-accent btn-outline'}"
               disabled={!valid}
               on:click={() => {
                 if (form) {
