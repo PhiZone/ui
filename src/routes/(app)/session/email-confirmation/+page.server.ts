@@ -15,6 +15,6 @@ export const actions = {
       return fail(resp.status, { code, error: error.code });
     }
 
-    throw redirect(303, url.searchParams.get('redirect') ?? '/');
+    throw redirect(303, url.searchParams.get('redirect') ?? '/session/login');
   },
 };
