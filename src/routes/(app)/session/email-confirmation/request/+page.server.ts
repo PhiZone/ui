@@ -30,7 +30,7 @@ export const actions = {
 
     const resp = await api.auth.sendEmail({ ...form.data, Mode: SendEmailMode.EmailConfirmation });
     if (resp.ok) {
-      throw redirect(303, '/session/activate' + url.search);
+      throw redirect(303, '/session/email-confirmation' + url.search);
     } else {
       const error = await resp.json();
       console.log(error);
