@@ -41,7 +41,7 @@
       {#if submission.message}
         <div class="flex items-center min-w-fit">
           <p class="min-w-fit">
-            <span class="badge badge-primary badge-outline mr-1">
+            <span class="badge mr-1">
               {$t('studio.submission.message')}
             </span>
             {submission.message}
@@ -50,7 +50,7 @@
       {/if}
       <div class="flex flex-col md:flex-row min-w-fit">
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('studio.submission.status')}
           </span>
           {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
@@ -58,7 +58,7 @@
         <p class="md:w-1/2">
           {#if $uploader.isSuccess}
             {@const uploader = $uploader.data?.data}
-            <span class="badge badge-primary badge-outline mr-1">
+            <span class="badge mr-1">
               {$t('studio.submission.uploader')}
             </span>
             {uploader.userName}
@@ -67,13 +67,13 @@
       </div>
       <div class="flex flex-col md:flex-row min-w-fit">
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('common.updated_at')}
           </span>
           {parseDateTime(submission.dateUpdated)}

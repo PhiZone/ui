@@ -298,13 +298,13 @@
             <div class="flex flex-col md:flex-row">
               <div class="md:w-1/3">
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.song_title')}
                   </span>
                   {submission.title}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.audio')}
                   </span>
                   <a
@@ -318,7 +318,7 @@
                   </a>
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.illustration')}
                   </span>
                   <a
@@ -333,7 +333,7 @@
                 </p>
                 {#if submission.license}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.form.license')}
                     </span>
                     <a
@@ -349,7 +349,7 @@
                 {/if}
                 {#if submission.originalityProof}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.form.originality_proof')}
                     </span>
                     <a
@@ -364,7 +364,7 @@
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('song.edition')}
                   </span>
                   <btn class="btn btn-xs btn-neutral text-sm font-normal no-animation">
@@ -375,19 +375,19 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.composer')}
                   </span>
                   {@html $composer}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.illustrator')}
                   </span>
                   {submission.illustrator}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+                  <span class="badge mr-1">{$t('song.bpm')}</span>
                   {#if submission.minBpm === submission.maxBpm}
                     {submission.bpm}
                   {:else}
@@ -395,43 +395,43 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('song.offset')}</span>
+                  <span class="badge mr-1">{$t('song.offset')}</span>
                   {`${submission.offset} ms`}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.preview_start')}
                   </span>
                   {convertTime(submission.previewStart)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.preview_end')}
                   </span>
                   {convertTime(submission.previewEnd)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.created_at')}
                   </span>
                   {parseDateTime(submission.dateCreated)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.updated_at')}
                   </span>
                   {parseDateTime(submission.dateUpdated)}
                 </p>
                 {#if submission.description}
                   <p class="submission">
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.description')}
                     </span>
                     {submission.description}
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.status')}
                   </span>
                   {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
@@ -439,7 +439,7 @@
                 {#if $reviewer.isSuccess}
                   {@const reviewer = $reviewer.data.data}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('studio.submission.reviewer')}
                     </span>
                     {reviewer.userName}
@@ -447,7 +447,7 @@
                 {/if}
                 {#if submission.message}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('studio.submission.message')}
                     </span>
                     {submission.message}

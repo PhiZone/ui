@@ -1,0 +1,22 @@
+{
+  "title": "PhiZone 权限晋升测试",
+  "description": "为了访问 PhiZone 提供的所有功能，你须首先参加该测试。测试包含 15 道客观题和 3 道主观题。此外，你还需要向我们提供一张你制作的谱面，以便我们能够真正评估你的能力。",
+  "start": "开始",
+  "already_passed": "你已通过该测试！",
+  "objective": "客观题",
+  "subjective": "主观题",
+  "chart_question": "请在此输入谱面预览视频的链接。如有需要，亦可在此对谱面某些部分进行详细说明",
+  "placeholder": "输入答案",
+  "time_up": "时间到！请刷新页面以重新作答。",
+  "view_history": "查看历史",
+  "manage": "管理答卷",
+  "answers": "PET 答卷",
+  "answer": {
+    "answer": "PET 答卷",
+    "objective_score": "客观题分数",
+    "subjective_score": "主观题分数",
+    "total_score": "总分数",
+    "chart": "谱面",
+    "answerer": "作答人"
+  }
+}

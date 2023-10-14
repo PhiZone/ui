@@ -7,6 +7,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Saira', 'Noto Sans SC', sans-serif;
+}
+
 .page {
   min-height: calc(100vh - 219px);
   max-width: 1600px;

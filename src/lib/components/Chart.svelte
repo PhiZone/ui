@@ -55,7 +55,7 @@
           <Rating rating={chart.rating} />
         </div>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
+          <span class="badge mr-1">{$t('chart.charter')}</span>
           {#if chart.authorName}
             {@html $charter}
           {:else}
@@ -63,16 +63,16 @@
           {/if}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
+          <span class="badge mr-1">{$t('chart.notes')}</span>
           {chart.noteCount}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chart.score')}</span>
+          <span class="badge mr-1">{$t('chart.score')}</span>
           {chart.score.toFixed(2)}
         </p>
         {#if $owner.isSuccess}
           <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-            <span class="badge badge-primary badge-outline mr-1">{$t('chart.owner')}</span>
+            <span class="badge mr-1">{$t('chart.owner')}</span>
             {$owner.data.data.userName}
           </p>
         {/if}

@@ -14,6 +14,7 @@ import SongAPI from './song';
 import UserAPI, { type UserDetailedDto } from './user';
 import VoteAPI from './vote';
 import CollaborationAPI from './collaboration';
+import PetAPI from './pet';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -82,6 +83,7 @@ export default class API {
   user = new UserAPI(this);
   vote = new VoteAPI(this);
   collaboration = new CollaborationAPI(this);
+  pet = new PetAPI(this);
 }
 
 export type { ChapterDto } from './chapter';

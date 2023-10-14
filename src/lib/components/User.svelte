@@ -113,16 +113,16 @@
           {#if kind === 'full'}
             <div class="px-3 w-full text-left {fixedHeight ? 'h-3/4' : ''}">
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
+                <span class="badge mr-1">{$t('user.rks')}</span>
                 {user.rks.toFixed(3)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
+                <span class="badge mr-1">{$t('user.exp')}</span>
                 {user.experience.toLocaleString()}
               </p>
               {#if user.biography}
                 <p class="content bio">
-                  <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
+                  <span class="badge mr-1">{$t('user.bio')}</span>
                   {user.biography}
                 </p>
               {/if}

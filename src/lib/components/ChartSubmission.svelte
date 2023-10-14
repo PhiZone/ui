@@ -73,13 +73,13 @@
       </h2>
       <div class="flex flex-col md:flex-row min-w-fit">
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('studio.submission.overall_status')}
           </span>
           {$t(`studio.submission.statuses.${submission.status}`)}
         </p>
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('studio.submission.volunteer_status')}
           </span>
           {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
@@ -87,7 +87,7 @@
       </div>
       <div class="flex flex-col md:flex-row min-w-fit">
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('studio.submission.adm_status')}
           </span>
           {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
@@ -95,7 +95,7 @@
         {#if $uploader.isSuccess}
           {@const uploader = $uploader.data?.data}
           <p class="md:w-1/2">
-            <span class="badge badge-primary badge-outline mr-1">
+            <span class="badge mr-1">
               {$t('studio.submission.uploader')}
             </span>
             {uploader.userName}
@@ -104,13 +104,13 @@
       </div>
       <div class="flex flex-col md:flex-row min-w-fit">
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('common.created_at')}
           </span>
           {parseDateTime(submission.dateCreated)}
         </p>
         <p class="md:w-1/2">
-          <span class="badge badge-primary badge-outline mr-1">
+          <span class="badge mr-1">
             {$t('common.updated_at')}
           </span>
           {parseDateTime(submission.dateUpdated)}

@@ -307,17 +307,17 @@
                   <Rating rating={chart.rating} size="lg" />
                 </div>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.level')}</span>
+                  <span class="badge mr-1">{$t('chart.level')}</span>
                   {chart.level}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('chart.difficulty')}
                   </span>
                   {chart.difficulty.toFixed(1)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
+                  <span class="badge mr-1">{$t('chart.charter')}</span>
                   {#if chart.authorName}
                     {@html $charter}
                   {:else}
@@ -325,50 +325,50 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
+                  <span class="badge mr-1">{$t('chart.notes')}</span>
                   {chart.noteCount}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.format')}</span>
+                  <span class="badge mr-1">{$t('chart.format')}</span>
                   {$t(`chart.formats.${chart.format}`)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.score')}</span>
+                  <span class="badge mr-1">{$t('chart.score')}</span>
                   {chart.score.toFixed(2)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('chart.rating')}</span>
+                  <span class="badge mr-1">{$t('chart.rating')}</span>
                   {chart.rating.toFixed(2)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('chart.equivalent_vote_count')}
                   </span>
                   {chart.rating > 0 ? (chart.score / chart.rating).toFixed(2) : 0}
                 </p>
                 {#if $votes.isSuccess}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('chart.real_vote_count')}
                     </span>
                     {$votes.data?.total}
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.created_at')}
                   </span>
                   {parseDateTime(chart.dateCreated)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.updated_at')}
                   </span>
                   {parseDateTime(chart.dateUpdated)}
                 </p>
                 {#if chart.description}
                   <p class="content">
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.description')}
                     </span>
                     {chart.description}
@@ -486,10 +486,6 @@
 {/if}
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .main-width {
     width: calc(100% - 80px);
   }

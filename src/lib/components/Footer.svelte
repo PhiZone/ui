@@ -114,10 +114,6 @@
 </footer>
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   footer {
     padding-left: 3%;
     padding-right: 3%;

@@ -1,0 +1,22 @@
+{
+  "title": "PhiZone 權限晉升測試",
+  "description": "為了存取 PhiZone 的所有功能，您必須先参加本測試。測試包含 15 道客觀題和 3 道主觀題。此外，您還必須提供一張由您本人制作的譜面，以便我們能夠正確評估你的能力。",
+  "start": "開始",
+  "already_passed": "您已通過該測試！",
+  "objective": "客觀題",
+  "subjective": "主觀題",
+  "chart_question": "請在此鍵入譜面預覽影片的連結。如有需要，亦可在此對譜面某些部分進行詳細説明",
+  "placeholder": "輸入答案",
+  "time_up": "時間到！請重新整理頁面以重新作答。",
+  "view_history": "查看歷史",
+  "manage": "管理答卷",
+  "answers": "PET 答卷",
+  "answer": {
+    "answer": "PET 答卷",
+    "objective_score": "客觀題分數",
+    "subjective_score": "主觀題分數",
+    "total_score": "總分數",
+    "chart": "譜面",
+    "answerer": "作答人"
+  }
+}

@@ -51,7 +51,7 @@
                 status = Status.ERROR;
                 msg = $t(
                   result.status == 400 || result.status == 404
-                    ? 'session.login.invalid_credentials'
+                    ? `session.login.${result.data?.error}`
                     : 'common.unknown_error',
                 );
               } else if (result.type === 'redirect') {
@@ -132,9 +132,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-</style>

@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import queryString from 'query-string';
 
 export const load = async ({ url, cookies }) => {
@@ -10,9 +11,7 @@ export const load = async ({ url, cookies }) => {
     cookies.get('sec_token') != official &&
     cookies.get('sec_token') != fanmade
   ) {
-    return {
-      official: null,
-    };
+    throw redirect(303, '/');
   }
 
   let token = '';

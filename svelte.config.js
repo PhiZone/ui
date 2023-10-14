@@ -11,6 +11,8 @@ const config = {
     }),
   ],
 
+  extensions: ['.svelte'],
+
   kit: {
     adapter: adapter(),
     // csp: {

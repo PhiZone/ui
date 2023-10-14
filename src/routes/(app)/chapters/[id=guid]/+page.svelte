@@ -168,9 +168,6 @@
 {/if}
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
   .background {
     background-attachment: fixed;
     display: grid;

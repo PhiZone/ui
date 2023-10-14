@@ -49,43 +49,43 @@
               </div>
             </div>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.acc')}</span>
+              <span class="badge mr-1">{$t('record.acc')}</span>
               {(record.accuracy * 100).toFixed(2)}%
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.perfect')}</span>
+              <span class="badge mr-1">{$t('record.perfect')}</span>
               {record.perfect}
               <span class="opacity-70">
                 (± {record.perfectJudgment} ms)
               </span>
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.good')}</span>
+              <span class="badge mr-1">{$t('record.good')}</span>
               {record.goodEarly + record.goodLate} [E{record.goodEarly} · L{record.goodLate}]
               <span class="opacity-70">
                 (± {record.goodJudgment} ms)
               </span>
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.bad')}</span>
+              <span class="badge mr-1">{$t('record.bad')}</span>
               {record.bad}
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.miss')}</span>
+              <span class="badge mr-1">{$t('record.miss')}</span>
               {record.miss}
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.rks')}</span>
+              <span class="badge mr-1">{$t('record.rks')}</span>
               {record.rks.toFixed(3)}
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">
+              <span class="badge mr-1">
                 {$t('record.std_deviation')}
               </span>
               {record.stdDeviation.toFixed(3)} ms
             </p>
             <p>
-              <span class="badge badge-primary badge-outline mr-1">{$t('record.time')}</span>
+              <span class="badge mr-1">{$t('record.time')}</span>
               {parseDateTime(record.dateCreated)}
             </p>
             <Like
@@ -126,9 +126,6 @@
 {/if}
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
   .grade {
     font-family: 'Black Ops One', cursive;
   }

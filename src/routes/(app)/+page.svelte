@@ -92,9 +92,6 @@
 </div>
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
   .logo {
     margin: 10px auto 20px;
     display: block;

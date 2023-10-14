@@ -31,18 +31,18 @@
         {chapter.subtitle}
       </h2>
       <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-        <span class="badge badge-primary badge-outline mr-1">{$t('chapter.illustrator')}</span>
+        <span class="badge mr-1">{$t('chapter.illustrator')}</span>
         {chapter.illustrator}
       </p>
       {#if $owner.isSuccess}
         <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chapter.owner')}</span>
+          <span class="badge mr-1">{$t('chapter.owner')}</span>
           {$owner.data.data.userName}
         </p>
       {/if}
       {#if chapter.description}
         <p class="content description grow-0">
-          <span class="badge badge-primary badge-outline mr-1">{$t('chapter.description')}</span>
+          <span class="badge mr-1">{$t('chapter.description')}</span>
           {chapter.description}
         </p>
       {/if}

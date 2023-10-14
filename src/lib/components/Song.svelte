@@ -56,27 +56,27 @@
           {song.title}
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
+          <span class="badge mr-1">{$t('song.edition')}</span>
           {song.edition ? song.edition : $t(`song.edition_types.${song.editionType}`)}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.composer')}</span>
+          <span class="badge mr-1">{$t('song.composer')}</span>
           {@html $composer}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.illustrator')}</span>
+          <span class="badge mr-1">{$t('song.illustrator')}</span>
           {song.illustrator}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+          <span class="badge mr-1">{$t('song.bpm')}</span>
           {song.bpm}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.duration')}</span>
+          <span class="badge mr-1">{$t('song.duration')}</span>
           {convertTime(song.duration, true)}
         </p>
         <!-- <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge badge-primary badge-outline mr-1">
+        <span class="badge mr-1">
           {$t(song.original ? 'song.author' : 'song.uploader')}
         </span>
         {song.uploader.username}

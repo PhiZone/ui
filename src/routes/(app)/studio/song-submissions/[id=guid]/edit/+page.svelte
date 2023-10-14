@@ -925,10 +925,6 @@
 </div>
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .noUi-target {
     --tw-border-opacity: 0.5;
     --tw-bg-opacity: 1;

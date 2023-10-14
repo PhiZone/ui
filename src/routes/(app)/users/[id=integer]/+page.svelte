@@ -101,27 +101,27 @@
             </div>
             <div class="mt-4 w-full form-control gap-0.5 h-fit">
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.id')}</span>
+                <span class="badge mr-1">{$t('user.id')}</span>
                 {user.id}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.role')}</span>
+                <span class="badge mr-1">{$t('user.role')}</span>
                 {$t(`user.roles.${user.role !== '' ? user.role : 'Unactivated'}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.rks')}</span>
+                <span class="badge mr-1">{$t('user.rks')}</span>
                 {user.rks.toFixed(3)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.exp')}</span>
+                <span class="badge mr-1">{$t('user.exp')}</span>
                 {user.experience.toLocaleString()}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.language')}</span>
+                <span class="badge mr-1">{$t('user.language')}</span>
                 {$t(`common.lang.${user.language}`)}
               </p>
               <a href="/users/{user.id}/following" class="group">
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('user.following')}
                 </span>
                 <span class="group-hover:underline">
@@ -129,7 +129,7 @@
                 </span>
               </a>
               <a href="/users/{user.id}/fans" class="group">
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('user.fans')}
                 </span>
                 <span class="group-hover:underline">
@@ -138,7 +138,7 @@
               </a>
               {#if user.dateOfBirth}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('user.date_of_birth')}
                   </span>
                   {parseMonthAndDay(user.dateOfBirth)}
@@ -146,19 +146,19 @@
               {/if}
               {#if user.dateLastLoggedIn}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('user.last_login')}
                   </span>
                   {parseDateTime(user.dateLastLoggedIn)}
                 </p>
               {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('user.date_joined')}</span>
+                <span class="badge mr-1">{$t('user.date_joined')}</span>
                 {parseDateTime(user.dateJoined)}
               </p>
               {#if user.biography}
                 <p class="content">
-                  <span class="badge badge-primary badge-outline mr-1">{$t('user.bio')}</span>
+                  <span class="badge mr-1">{$t('user.bio')}</span>
                   {user.biography}
                 </p>
               {/if}
@@ -295,9 +295,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-</style>

@@ -14,7 +14,9 @@
     "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
     "forgot_password": "忘记密码？",
     "not_activated": "还未激活？",
-    "invalid_credentials": "你的凭据有误。请仔细检查。"
+    "invalid_token": "与该邮箱地址关联的账号不存在。",
+    "invalid_grant": "输入的密码不正确。",
+    "insufficient_access": "账号未激活。请在登录之前先激活账号。"
   },
   "registration": {
     "register": "注册",

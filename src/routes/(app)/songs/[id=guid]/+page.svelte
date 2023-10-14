@@ -94,11 +94,11 @@
                 <div class="info">
                   <div class="form-control gap-1">
                     <!-- <p>
-                      <span class="badge badge-primary badge-outline mr-1">{$t('song.id')}</span>
+                      <span class="badge mr-1">{$t('song.id')}</span>
                       {song.id}
                     </p> -->
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.edition')}
                       </span>
                       <label
@@ -112,48 +112,48 @@
                       {/if}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.composer')}
                       </span>
                       {@html $composer}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.illustrator')}
                       </span>
                       {song.illustrator}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+                      <span class="badge mr-1">{$t('song.bpm')}</span>
                       {song.bpm}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.duration')}
                       </span>
                       {convertTime(song.duration, true)}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.offset')}
                       </span>
                       {song.offset} ms
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('common.created_at')}
                       </span>
                       {parseDateTime(song.dateCreated)}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('common.updated_at')}
                       </span>
                       {parseDateTime(song.dateUpdated)}
                     </p>
                     {#if song.description && song.description.length < 172}
                       <p class="content">
-                        <span class="badge badge-primary badge-outline mr-1">
+                        <span class="badge mr-1">
                           {$t('common.description')}
                         </span>
                         {song.description}
@@ -211,7 +211,7 @@
             </div>
             {#if song.description && song.description.length >= 172}
               <p class="mt-2 content">
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.description')}
                 </span>
                 {song.description}
@@ -276,10 +276,6 @@
 {/if}
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .info {
     height: calc(100% - 48px);
   }

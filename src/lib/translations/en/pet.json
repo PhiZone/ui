@@ -1,0 +1,22 @@
+{
+  "title": "PhiZone Privilege Escalation Test",
+  "description": "In order to access all features that PhiZone provides, you must first take this test so as to unlock them. There are 15 objective questions and 3 subjective questions. Plus, you'll also need to provide us with a chart you've made so that we can truly assess your proficiency.",
+  "start": "Get Started",
+  "already_passed": "You've already passed this test!",
+  "objective": "Objective Questions",
+  "subjective": "Subjective Questions",
+  "chart_question": "Please enter a valid link to an autoplay of your chart. You may explain in detail about some parts of the chart if necessary.",
+  "placeholder": "Answer here",
+  "time_up": "Time is up! Please refresh the page to restart the test.",
+  "view_history": "View History",
+  "manage": "Manage Answers",
+  "answers": "PET Answers",
+  "answer": {
+    "answer": "PET Answer",
+    "objective_score": "Objective Score",
+    "subjective_score": "Subjective Score",
+    "total_score": "Total Score",
+    "chart": "Chart",
+    "answerer": "Answerer"
+  }
+}

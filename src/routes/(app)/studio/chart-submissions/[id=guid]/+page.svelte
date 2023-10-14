@@ -314,19 +314,19 @@
             </div>
             <div>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.form.chart_level')}
                 </span>
                 [{LEVEL_TYPES[submission.levelType]}] {submission.level}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.form.chart_difficulty_2')}
                 </span>
                 {submission.difficulty.toFixed(1)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.form.chart')}
                 </span>
                 <a
@@ -340,7 +340,7 @@
                 </a>
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('chart.charter')}</span>
+                <span class="badge mr-1">{$t('chart.charter')}</span>
                 {#if submission.authorName}
                   {@html $charter}
                 {:else}
@@ -348,43 +348,43 @@
                 {/if}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">{$t('chart.notes')}</span>
+                <span class="badge mr-1">{$t('chart.notes')}</span>
                 {submission.noteCount}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.created_at')}
                 </span>
                 {parseDateTime(submission.dateCreated)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.updated_at')}
                 </span>
                 {parseDateTime(submission.dateUpdated)}
               </p>
               {#if submission.description}
                 <p class="content">
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('chart.description')}
                   </span>
                   {submission.description}
                 </p>
               {/if}
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('studio.submission.adm_status')}
                 </span>
                 {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('studio.submission.volunteer_status')}
                 </span>
                 {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
               </p>
               <p>
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('studio.submission.overall_status')}
                 </span>
                 {$t(`studio.submission.statuses.${submission.status}`)}
