@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import VolunteerVoteHelper from '$lib/components/VolunteerVoteHelper.svelte';
-  import { parseDateTime } from '$lib/utils.js';
+  import { parseDateTime } from '$lib/utils';
 
   export let data;
   $: ({ data: votes, official, user } = data);

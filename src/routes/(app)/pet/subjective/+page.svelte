@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PetQuestionDto } from '$lib/api/pet.js';
+  import type { PetQuestionDto } from '$lib/api/pet';
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';
   import { superForm } from 'sveltekit-superforms/client';

@@ -1,5 +1,5 @@
 import API from '$lib/api';
-import type { PetQuestionDto } from '$lib/api/pet.js';
+import type { PetQuestionDto } from '$lib/api/pet';
 import { t } from '$lib/translations/config';
 import { fail } from '@sveltejs/kit';
 import { compile } from 'mdsvex';
