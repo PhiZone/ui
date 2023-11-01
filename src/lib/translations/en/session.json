@@ -14,13 +14,16 @@
     "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
     "forgot_password": "Forgot your password?",
     "not_activated": "Not activated?",
-    "invalid_credentials": "You might have entered something wrong. Please carefully check your credentials."
+    "invalid_token": "We can't find an account associated with this email address.",
+    "invalid_grant": "The password is incorrect.",
+    "insufficient_access": "Your account is not activated. Please first activate your account before logging in."
   },
   "registration": {
     "register": "Register",
     "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
     "select_language": "Select Language",
     "select_region": "Select Region",
+    "email_confirmation_code": "Email Confirmation Code",
     "success": "You've successfully registered an account on PhiZone!",
     "language_error": "Invalid language. Switch to another browser and retry."
   },

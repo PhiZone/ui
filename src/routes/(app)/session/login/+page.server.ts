@@ -21,7 +21,7 @@ export const actions = {
     if (!resp.ok) {
       const error = await resp.json();
       console.log(error);
-      return fail(resp.status, { email, password, error: error.code });
+      return fail(resp.status, { email, password, error: error.error as string });
     }
 
     const { access_token, refresh_token } = await resp.json();

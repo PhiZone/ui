@@ -96,9 +96,3 @@
     </form>
   </div>
 </div>
-
-<style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-</style>

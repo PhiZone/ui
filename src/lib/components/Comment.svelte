@@ -63,7 +63,7 @@
     <h2 class="font-bold text-xl mb-4">{$t('common.replies')}</h2>
     <div class="flex items-center mx-5 mb-3">
       <textarea
-        class="mr-3 textarea textarea-secondary w-11/12"
+        class="mr-3 textarea transition border-2 border-gray-700 hover:textarea-secondary w-11/12"
         placeholder={$t('common.write_reply')}
         {disabled}
         bind:value={replyText}
@@ -94,11 +94,11 @@
   </div>
 </div>
 
-<div class="card card-side w-full bg-base-100 border border-base-200 shadow-lg">
+<div class="card card-side w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg">
   {#if showUser}
     <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center justify-center border-r border-base-200 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center justify-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={comment.ownerId} kind="embedded" />
       </div>
@@ -112,10 +112,10 @@
       <p class="text-xs lg:text-sm opacity-70">
         {parseDateTime(comment.dateCreated)}
       </p>
+      {#if user && (getUserPrivilege(user.role) >= 5 || user.id === comment.ownerId)}
+        <Delete target={comment} class="btn-sm btn-square" />
+      {/if}
       <div class="items-center join join-vertical sm:join-horizontal">
-        {#if user && (getUserPrivilege(user.role) >= 4 || user.id === comment.ownerId)}
-          <Delete target={comment} class="btn-sm w-full sm:w-fit join-item" />
-        {/if}
         <Like
           id={comment.id}
           likes={comment.likeCount}

@@ -27,7 +27,7 @@
   let previewStart = 0;
   let previewEnd = 0;
   let previewStatus = 0;
-  let previewTimer: NodeJS.Timer;
+  let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = 0;
   let authorName = '';
@@ -730,10 +730,6 @@
 </div>
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .noUi-target {
     --tw-border-opacity: 0.5;
     --tw-bg-opacity: 1;

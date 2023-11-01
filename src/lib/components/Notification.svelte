@@ -22,13 +22,13 @@
     {$t(`notification.types.${notification.type}`)}
   </span>
   <div
-    class={`card w-full min-w-fit h-fit card-side bg-base-100 shadow-lg overflow-hidden ${
-      notification.dateRead ? 'border' : 'border border-secondary'
+    class={`card w-full min-w-fit h-fit card-side bg-base-100 transition hover:shadow-lg overflow-hidden border-2 ${
+      notification.dateRead ? 'border-gray-700' : 'border-secondary'
     }`}
   >
     <figure class="w-1/4 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center justify-center border-r border-base-200 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center justify-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
       >
         <User
           id={notification.operator?.id ?? 1}
@@ -45,14 +45,14 @@
           </h2>
           <div class="flex gap-2 flex-col lg:flex-row min-w-fit">
             <p class="min-w-fit">
-              <span class="badge badge-primary badge-outline mr-1">
+              <span class="badge mr-1">
                 {$t('notification.notified_at')}
               </span>
               {parseDateTime(notification.dateCreated)}
             </p>
             {#if notification.dateRead}
               <p class="min-w-fit">
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('notification.read_at')}
                 </span>
                 {parseDateTime(notification.dateRead)}

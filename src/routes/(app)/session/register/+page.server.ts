@@ -4,8 +4,9 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API, { Gender } from '$lib/api';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { SendEmailMode } from '$lib/api/auth';
 
-const schema = z
+const registrationSchema = z
   .object({
     UserName: z
       .string()
@@ -27,25 +28,34 @@ const schema = z
     Gender: z.nativeEnum(Gender).optional(),
     Biography: z.string().optional(),
     DateOfBirth: z.date().optional(),
+    EmailConfirmationCode: z.string(),
   })
   .refine(({ Password, ConfirmPassword }) => Password === ConfirmPassword, {
     message: t.get('session.passwords_differ'),
     path: ['ConfirmPassword'],
   });
 
-type Schema = z.infer<typeof schema>;
+const emailConfirmationSchema = z.object({
+  Email: z.string(),
+  UserName: z.string(),
+  Language: z.string(),
+});
+
+type RegistrationSchema = z.infer<typeof registrationSchema>;
+type EmailConfirmationSchema = z.infer<typeof emailConfirmationSchema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
-  return { form };
+  const registrationForm = await superValidate(registrationSchema);
+  const emailConfirmationForm = await superValidate(emailConfirmationSchema);
+  return { registrationForm, emailConfirmationForm };
 };
 
 export const actions = {
-  default: async ({ request, url, locals, fetch }) => {
+  register: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, registrationSchema);
 
     if (!form.valid) {
       return fail(400, { form });
@@ -54,7 +64,7 @@ export const actions = {
 
     const resp = await api.user.register(opts);
     if (resp.ok) {
-      throw redirect(303, '/session/email-confirmation' + url.search);
+      throw redirect(303, '/session/login' + url.search);
     } else {
       const error = await resp.json();
       console.log(error);
@@ -66,7 +76,40 @@ export const actions = {
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
-          form.errors[field as keyof Schema] = errors.map((value) => {
+          form.errors[field as keyof RegistrationSchema] = errors.map((value) => {
+            return t.get(`error.${value}`);
+          });
+        });
+      }
+
+      return fail(resp.status, { form });
+    }
+  },
+  confirmEmail: async ({ request, locals, fetch }) => {
+    const api = new API(fetch, locals.accessToken, locals.user);
+
+    const formData = await request.formData();
+    const form = await superValidate(formData, emailConfirmationSchema);
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    const resp = await api.auth.sendEmail({ ...form.data, Mode: SendEmailMode.EmailConfirmation });
+    if (resp.ok) {
+      return;
+    } else {
+      const error = await resp.json();
+      console.log(error);
+      form.valid = false;
+      if (error.status === ResponseDtoStatus.ErrorBrief) {
+        form.message = t.get(`error.${error.code}`);
+      } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+        form.message = error.message;
+      } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        form.errors = {};
+        error.errors.forEach(({ field, errors }) => {
+          form.errors[field as keyof EmailConfirmationSchema] = errors.map((value) => {
             return t.get(`error.${value}`);
           });
         });

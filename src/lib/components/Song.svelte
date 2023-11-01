@@ -38,10 +38,10 @@
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 hover:shadow-sm hover:shadow-primary-focus shadow-lg overflow-hidden"
+    class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
   >
     <a href={`/songs/${song.id}`}>
-      <figure class="h-[168px] relative">
+      <figure class="h-[167px] relative">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
         {#if song.isOriginal}
           <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
@@ -51,96 +51,45 @@
           </div>
         {/if}
       </figure>
-      <div class="card-body gap-0.5">
+      <div class="card-body pt-6 gap-0.5">
         <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
           {song.title}
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.edition')}</span>
+          <span class="badge mr-1">{$t('song.edition')}</span>
           {song.edition ? song.edition : $t(`song.edition_types.${song.editionType}`)}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.composer')}</span>
+          <span class="badge mr-1">{$t('song.composer')}</span>
           {@html $composer}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.illustrator')}</span>
+          <span class="badge mr-1">{$t('song.illustrator')}</span>
           {song.illustrator}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+          <span class="badge mr-1">{$t('song.bpm')}</span>
           {song.bpm}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-          <span class="badge badge-primary badge-outline mr-1">{$t('song.duration')}</span>
+          <span class="badge mr-1">{$t('song.duration')}</span>
           {convertTime(song.duration, true)}
         </p>
-        <!-- <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge badge-primary badge-outline mr-1">
-          {$t(song.original ? 'song.author' : 'song.uploader')}
-        </span>
-        {song.uploader.username}
-      </p> -->
-        <p />
-        <div class="card-actions flex items-center justify-end">
-          <!-- {#if easyCount}
-          <a href={`/charts?song=${song.id}&level=EZ`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              EZ ({easyCount})
-            </button>
-          </a>
-        {/if}
-        {#if hardCount}
-          <a href={`/charts?song=${song.id}&level=HD`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              HD ({hardCount})
-            </button>
-          </a>
-        {/if}
-        {#if insaneCount}
-          <a href={`/charts?song=${song.id}&level=IN`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              IN ({insaneCount})
-            </button>
-          </a>
-        {/if}
-        {#if anotherCount}
-          <a href={`/charts?song=${song.id}&level=AT`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              AT ({anotherCount})
-            </button>
-          </a>
-        {/if}
-        {#if specialCount}
-          <a href={`/charts?song=${song.id}&level=SP`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              SP ({specialCount})
-            </button>
-          </a>
-        {/if}
-        {#if otherCount}
-          <a href={`/charts?song=${song.id}`}>
-            <button class="btn btn-sm btn-primary btn-outline gap-2">
-              OTH ({otherCount})
-            </button>
-          </a>
-        {/if} -->
-
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
-            <Like
-              id={song.id}
-              likes={song.likeCount}
-              type="songs"
-              liked={song.dateLiked != null}
-              class="btn-sm"
-            />
-          </div>
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          class="absolute bottom-8 right-8"
+          on:click={(e) => {
+            e.preventDefault();
+          }}
+          on:keyup
+        >
+          <Like
+            id={song.id}
+            likes={song.likeCount}
+            type="songs"
+            liked={song.dateLiked != null}
+            class="btn-sm"
+          />
         </div>
       </div>
     </a>

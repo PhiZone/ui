@@ -102,7 +102,7 @@
           reviewOpen = false;
         }}
       >
-        <input type="text" id="id" name="id" class="hidden" value={id} />
+        <input type="hidden" id="id" name="id" value={id} />
         <label class="join my-2">
           <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
             {$t('studio.submission.status')}
@@ -204,8 +204,8 @@
           collabOpen = false;
         }}
       >
-        <input type="text" id="type" name="type" class="hidden" value="songs" />
-        <input type="text" id="id" name="id" class="hidden" value={id} />
+        <input type="hidden" id="type" name="type" value="songs" />
+        <input type="hidden" id="id" name="id" value={id} />
         <div
           class={$collaborator.isError
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
@@ -298,13 +298,13 @@
             <div class="flex flex-col md:flex-row">
               <div class="md:w-1/3">
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.song_title')}
                   </span>
                   {submission.title}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.audio')}
                   </span>
                   <a
@@ -318,7 +318,7 @@
                   </a>
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.illustration')}
                   </span>
                   <a
@@ -333,7 +333,7 @@
                 </p>
                 {#if submission.license}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.form.license')}
                     </span>
                     <a
@@ -349,7 +349,7 @@
                 {/if}
                 {#if submission.originalityProof}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.form.originality_proof')}
                     </span>
                     <a
@@ -364,7 +364,7 @@
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('song.edition')}
                   </span>
                   <btn class="btn btn-xs btn-neutral text-sm font-normal no-animation">
@@ -375,19 +375,19 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.composer')}
                   </span>
                   {@html $composer}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.form.illustrator')}
                   </span>
                   {submission.illustrator}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+                  <span class="badge mr-1">{$t('song.bpm')}</span>
                   {#if submission.minBpm === submission.maxBpm}
                     {submission.bpm}
                   {:else}
@@ -395,43 +395,43 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">{$t('song.offset')}</span>
+                  <span class="badge mr-1">{$t('song.offset')}</span>
                   {`${submission.offset} ms`}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.preview_start')}
                   </span>
                   {convertTime(submission.previewStart)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.preview_end')}
                   </span>
                   {convertTime(submission.previewEnd)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.created_at')}
                   </span>
                   {parseDateTime(submission.dateCreated)}
                 </p>
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('common.updated_at')}
                   </span>
                   {parseDateTime(submission.dateUpdated)}
                 </p>
                 {#if submission.description}
                   <p class="submission">
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('common.description')}
                     </span>
                     {submission.description}
                   </p>
                 {/if}
                 <p>
-                  <span class="badge badge-primary badge-outline mr-1">
+                  <span class="badge mr-1">
                     {$t('studio.submission.status')}
                   </span>
                   {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
@@ -439,7 +439,7 @@
                 {#if $reviewer.isSuccess}
                   {@const reviewer = $reviewer.data.data}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('studio.submission.reviewer')}
                     </span>
                     {reviewer.userName}
@@ -447,7 +447,7 @@
                 {/if}
                 {#if submission.message}
                   <p>
-                    <span class="badge badge-primary badge-outline mr-1">
+                    <span class="badge mr-1">
                       {$t('studio.submission.message')}
                     </span>
                     {submission.message}
@@ -463,7 +463,7 @@
                 <div class="flex flex-col gap-2">
                   <audio class="w-full" controls src={submission.file} />
                   <div class="flex gap-2 items-center justify-end">
-                    {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 3)}
+                    {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 4)}
                       <a
                         href="/studio/song-submissions/{submission?.id}/edit"
                         class="btn btn-primary btn-outline text-lg w-32"
@@ -471,7 +471,7 @@
                         {$t('common.edit')}
                       </a>
                     {/if}
-                    {#if user && getUserPrivilege(user.role) >= 3}
+                    {#if user && getUserPrivilege(user.role) >= 4}
                       <label
                         for="studio-song-submission"
                         class="btn btn-primary btn-outline text-lg w-32"
@@ -521,7 +521,7 @@
       {/if}
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
-      {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
+      {#if $uploader.isSuccess}
         <div class="indicator my-4 w-full">
           <span
             class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"

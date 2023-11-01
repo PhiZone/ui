@@ -1,13 +1,15 @@
 import API from '$lib/api';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
-import { SendEmailMode } from '$lib/api/auth.js';
+import { SendEmailMode } from '$lib/api/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z.object({
   Email: z.string(),
+  UserName: z.string(),
+  Language: z.string(),
 });
 
 type Schema = z.infer<typeof schema>;

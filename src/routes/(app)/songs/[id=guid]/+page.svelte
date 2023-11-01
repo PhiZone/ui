@@ -94,11 +94,11 @@
                 <div class="info">
                   <div class="form-control gap-1">
                     <!-- <p>
-                      <span class="badge badge-primary badge-outline mr-1">{$t('song.id')}</span>
+                      <span class="badge mr-1">{$t('song.id')}</span>
                       {song.id}
                     </p> -->
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.edition')}
                       </span>
                       <label
@@ -112,48 +112,48 @@
                       {/if}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.composer')}
                       </span>
                       {@html $composer}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.illustrator')}
                       </span>
                       {song.illustrator}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">{$t('song.bpm')}</span>
+                      <span class="badge mr-1">{$t('song.bpm')}</span>
                       {song.bpm}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.duration')}
                       </span>
                       {convertTime(song.duration, true)}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('song.offset')}
                       </span>
                       {song.offset} ms
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('common.created_at')}
                       </span>
                       {parseDateTime(song.dateCreated)}
                     </p>
                     <p>
-                      <span class="badge badge-primary badge-outline mr-1">
+                      <span class="badge mr-1">
                         {$t('common.updated_at')}
                       </span>
                       {parseDateTime(song.dateUpdated)}
                     </p>
                     {#if song.description && song.description.length < 172}
                       <p class="content">
-                        <span class="badge badge-primary badge-outline mr-1">
+                        <span class="badge mr-1">
                           {$t('common.description')}
                         </span>
                         {song.description}
@@ -178,24 +178,22 @@
                       href={song.file}
                       target="_blank"
                       rel="noreferrer"
-                      class="min-w-fit"
                       download={song.file.split('/').pop()}
+                      class="btn btn-primary btn-outline flex gap-1 join-item"
                     >
-                      <button class="btn btn-primary btn-outline flex gap-1 join-item">
-                        <svg
-                          fill="currentColor"
-                          width="14px"
-                          height="28px"
-                          viewBox="0 0 16 32"
-                          version="1.1"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M13.48 17.6c-0.48 0-0.84 0.36-0.84 0.84v3.92c0 0.48-0.36 0.84-0.84 0.84h-9.28c-0.48 0-0.84-0.36-0.84-0.84v-3.92c0-0.44-0.36-0.84-0.84-0.84s-0.84 0.4-0.84 0.84v3.92c0 1.4 1.12 2.52 2.52 2.52h9.28c1.4 0 2.52-1.12 2.52-2.52v-3.92c0-0.44-0.36-0.84-0.84-0.84zM6.56 18.48c0.040 0.040 0.2 0.28 0.6 0.28s0.56-0.24 0.6-0.28l3.52-3.52c0.32-0.32 0.32-0.84 0-1.2-0.32-0.32-0.84-0.32-1.2 0l-2.080 2.12v-7.92c0-0.48-0.36-0.84-0.84-0.84s-0.84 0.36-0.84 0.84v7.92l-2.080-2.080c-0.32-0.32-0.84-0.32-1.2 0-0.32 0.32-0.32 0.84 0 1.2l3.52 3.48z"
-                          />
-                        </svg>
-                        {$t('common.download')}
-                      </button>
+                      <svg
+                        fill="currentColor"
+                        width="14px"
+                        height="28px"
+                        viewBox="0 0 16 32"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M13.48 17.6c-0.48 0-0.84 0.36-0.84 0.84v3.92c0 0.48-0.36 0.84-0.84 0.84h-9.28c-0.48 0-0.84-0.36-0.84-0.84v-3.92c0-0.44-0.36-0.84-0.84-0.84s-0.84 0.4-0.84 0.84v3.92c0 1.4 1.12 2.52 2.52 2.52h9.28c1.4 0 2.52-1.12 2.52-2.52v-3.92c0-0.44-0.36-0.84-0.84-0.84zM6.56 18.48c0.040 0.040 0.2 0.28 0.6 0.28s0.56-0.24 0.6-0.28l3.52-3.52c0.32-0.32 0.32-0.84 0-1.2-0.32-0.32-0.84-0.32-1.2 0l-2.080 2.12v-7.92c0-0.48-0.36-0.84-0.84-0.84s-0.84 0.36-0.84 0.84v7.92l-2.080-2.080c-0.32-0.32-0.84-0.32-1.2 0-0.32 0.32-0.32 0.84 0 1.2l3.52 3.48z"
+                        />
+                      </svg>
+                      {$t('common.download')}
                     </a>
                   {/if}
                 </div>
@@ -211,7 +209,7 @@
             </div>
             {#if song.description && song.description.length >= 172}
               <p class="mt-2 content">
-                <span class="badge badge-primary badge-outline mr-1">
+                <span class="badge mr-1">
                   {$t('common.description')}
                 </span>
                 {song.description}
@@ -219,7 +217,7 @@
             {/if}
             {#if $charts.isSuccess}
               <div
-                class="collapse collapse-arrow border border-secondary bg-base-100 rounded-box mt-3"
+                class="collapse collapse-arrow transition border-2 border-gray-700 hover:border-secondary bg-base-100 rounded-box mt-3"
               >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
@@ -276,10 +274,6 @@
 {/if}
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .info {
     height: calc(100% - 48px);
   }

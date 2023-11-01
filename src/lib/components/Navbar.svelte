@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] shadow-lg bg-base-100 bg-opacity-70 backdrop-blur-lg text-base"
+  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] bg-base-100 bg-opacity-70 backdrop-blur-lg text-base shadow-lg"
 >
   <div class="navbar-start w-[160px] lg:w-1/2 z-20">
     <div class="dropdown">
@@ -85,15 +85,9 @@
       </li> -->
       {#if !$page.url.pathname.startsWith('/session')}
         {@const { user } = $page.data}
-        {#if user && getUserPrivilege(user.role) < 2}
+        {#if user}
           <li class="rounded-full">
-            <a
-              href="https://phi-zone.feishu.cn/share/base/form/shrcniSUPXn7kEhpM1p8BmtrYKc"
-              target="_blank"
-            >
-              {$t('common.navbar.privilege_escalation')}
-            </a>
-            <!-- <a href="/challenge">{$t('common.navbar.privilege_escalation')}</a> -->
+            <a href="/pet">{$t('common.navbar.privilege_escalation')}</a>
           </li>
         {/if}
       {/if}
@@ -150,7 +144,7 @@
                 <!-- <span class="badge">{userDetail.tag}</span> -->
               </a>
             </li>
-            {#if getUserPrivilege(user.role) < 2}
+            {#if getUserPrivilege(user.role) < 3}
               <li class="disabled">
                 <div
                   class="tooltip tooltip-left tooltip-warning text-left"
@@ -178,15 +172,15 @@
         <div class="flex">
           <a
             class="btn btn-ghost btn-md text-base"
-            href="/session/register?redirect={$page.url.pathname}"
-          >
-            {$t('session.registration.register')}
-          </a>
-          <a
-            class="btn btn-outline btn-secondary btn-md text-base"
             href="/session/login?redirect={$page.url.pathname}"
           >
             {$t('session.login.login')}
+          </a>
+          <a
+            class="btn btn-outline btn-secondary btn-md text-base"
+            href="/session/register?redirect={$page.url.pathname}"
+          >
+            {$t('session.registration.register')}
           </a>
         </div>
       {/if}

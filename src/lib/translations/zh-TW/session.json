@@ -14,13 +14,16 @@
     "login_text": "登入以在 PhiZone 上遊玩譜面、參與社區交流！",
     "forgot_password": "忘記密碼？",
     "not_activated": "還未激活？",
-    "invalid_credentials": "您的資料有誤。請仔細檢查。"
+    "invalid_token": "無法找到與該郵件地址關聯的賬號。",
+    "invalid_grant": "輸入的密碼不正確。",
+    "insufficient_access": "賬號未激活。請在登入之前先激活賬號。"
   },
   "registration": {
     "register": "註冊",
     "registration_text": "註冊 PhiZone 帳戶以遊玩譜面、參與社區交流！",
     "select_language": "選擇語言",
     "select_region": "選擇地區",
+    "email_confirmation_code": "郵件驗證碼",
     "success": "您的 PhiZone 帳戶註冊成功！",
     "language_error": "語言選項出現問題。請更換瀏覽器重試。"
   },

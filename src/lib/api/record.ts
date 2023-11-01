@@ -1,4 +1,3 @@
-import queryString from 'query-string';
 import type API from '.';
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
@@ -64,7 +63,6 @@ export default class RecordAPI {
 
   info = createQueryCreator(
     'record.info',
-    ({ id, ...rest }: InfoOpts): R<RecordDto> =>
-      this.api.GET(`/records/${id}?` + queryString.stringify(rest)),
+    ({ id }: InfoOpts): R<RecordDto> => this.api.GET(`/records/${id}`),
   );
 }

@@ -42,7 +42,7 @@
     line = lyrics[lyricsIndex].line;
   };
 
-  let timer: NodeJS.Timer;
+  let timer: NodeJS.Timeout;
 
   const playAudio = () => {
     audio.currentTime = time;
@@ -254,9 +254,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-</style>

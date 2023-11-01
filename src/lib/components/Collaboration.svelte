@@ -53,7 +53,9 @@
 </script>
 
 {#if kind === 'full'}
-  <div class="card card-side overflow-hidden bg-base-100 shadow-lg">
+  <div
+    class="card card-side overflow-hidden bg-base-100 border-2 border-gray-700 transition hover:shadow-lg"
+  >
     {#if $song.isSuccess || $songSubmission.isSuccess}
       {@const submission = $chartSubmission.isSuccess
         ? $chartSubmission.data.data

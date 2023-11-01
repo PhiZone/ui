@@ -51,7 +51,7 @@
                 status = Status.ERROR;
                 msg = $t(
                   result.status == 400 || result.status == 404
-                    ? 'session.login.invalid_credentials'
+                    ? `session.login.${result.data?.error}`
                     : 'common.unknown_error',
                 );
               } else if (result.type === 'redirect') {
@@ -86,20 +86,12 @@
             class="input input-bordered"
           />
           <div class="label flex justify-between">
-            <div class="flex">
-              <a
-                href="/session/password-reset/request{$page.url.search}"
-                class="label-text-alt link link-hover"
-              >
-                {$t('session.login.forgot_password')}
-              </a>
-              <a
-                href="/session/email-confirmation/request{$page.url.search}"
-                class="label-text-alt link link-hover"
-              >
-                {$t('session.login.not_activated')}
-              </a>
-            </div>
+            <a
+              href="/session/password-reset/request{$page.url.search}"
+              class="label-text-alt link link-hover"
+            >
+              {$t('session.login.forgot_password')}
+            </a>
             <a href="/session/register{$page.url.search}" class="label-text-alt link link-hover">
               {$t('session.registration.register')}
             </a>
@@ -132,9 +124,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-</style>

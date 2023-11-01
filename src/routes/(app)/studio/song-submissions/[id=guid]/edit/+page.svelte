@@ -26,7 +26,7 @@
   let slider: TargetElement;
   let showPreview = 0;
   let previewStatus = 0;
-  let previewTimer: NodeJS.Timer;
+  let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = 0;
   let newComposerId: number | null = null;
@@ -883,7 +883,7 @@
               </label>
               <button
                 type="button"
-                class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                class="absolute right-2 bottom-2 btn btn-accent btn-outline btn-sm backdrop-blur"
                 on:click={() => {
                   song.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
@@ -925,10 +925,6 @@
 </div>
 
 <style>
-  * {
-    font-family: 'Saira', 'Noto Sans SC', sans-serif;
-  }
-
   .noUi-target {
     --tw-border-opacity: 0.5;
     --tw-bg-opacity: 1;
