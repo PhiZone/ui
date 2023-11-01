@@ -32,7 +32,9 @@
         >
           {$t('record.record')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body py-10">
             <div class="text-5xl py-1 flex gap-5 items-center font-bold">
               {record.score}

@@ -45,6 +45,8 @@ export enum SendEmailMode {
 
 export interface SendEmailOpts {
   Email: string;
+  UserName: string;
+  Language: string;
   Mode: SendEmailMode;
 }
 

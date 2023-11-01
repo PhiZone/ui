@@ -1,26 +1,30 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { locales, locale, t } from '$lib/translations/config';
-  import { regions } from '$lib/constants';
+  import { Status, regions } from '$lib/constants';
+  import { SendEmailMode } from '$lib/api/auth';
+  import { ResponseDtoStatus } from '$lib/api/types';
+  import { parseDateTime } from '$lib/utils';
 
   export let data;
 
   const {
     form,
-    enhance: registrationEnhance,
-    message,
-    errors: registrationErrors,
+    enhance: enhance,
+    message: message,
+    errors: errors,
     constraints,
-    submitting: registrationSubmitting,
-    allErrors: registrationAllErrors,
-  } = superForm(data.registrationForm);
+    submitting: submitting,
+    allErrors: allErrors,
+  } = superForm(data.form);
 
-  const {
-    enhance: emailConfirmationEnhance,
-    errors: emailConfirmationErrors,
-    submitting: emailConfirmationSubmitting,
-    allErrors: emailConfirmationAllErrors,
-  } = superForm(data.emailConfirmationForm);
+  let emailConfirmationResult: {
+    status?: Status;
+    message?: string;
+    errors: { [id: string]: string[] | undefined };
+  } = {
+    errors: {},
+  };
 
   $: regionMap = new Map(
     [
@@ -34,11 +38,92 @@
   );
 
   let regionCode = data.user?.region;
+
+  let min = 0,
+    sec = 54,
+    emailConfirmationAvailable = true,
+    emailConfirmationTimer: NodeJS.Timeout,
+    emailConfirmationModal = false;
+
+  const confirmEmail = async () => {
+    emailConfirmationResult = {
+      status: Status.SENDING,
+      errors: {},
+    };
+    const resp = await data.api.auth.sendEmail({
+      Email: $form.Email,
+      UserName: $form.UserName,
+      Language: $form.Language,
+      Mode: SendEmailMode.EmailConfirmation,
+    });
+    if (resp.ok) {
+      emailConfirmationResult = {
+        status: Status.OK,
+        errors: {},
+      };
+      emailConfirmationModal = true;
+      emailConfirmationAvailable = false;
+      min = 4;
+      sec = 59;
+      emailConfirmationTimer = setInterval(() => {
+        if (sec == 0) {
+          if (min == 0) {
+            clearInterval(emailConfirmationTimer);
+            emailConfirmationAvailable = true;
+          } else {
+            min--;
+            sec = 59;
+          }
+        } else {
+          sec--;
+        }
+      }, 1000);
+    } else {
+      const error = await resp.json();
+      emailConfirmationResult = {
+        status: Status.ERROR,
+        errors: {},
+      };
+      if (error.status === ResponseDtoStatus.ErrorBrief) {
+        emailConfirmationResult.message = t.get(`error.${error.code}`);
+      } else if (error.status === ResponseDtoStatus.ErrorTemporarilyUnavailable) {
+        emailConfirmationResult.message = `${t.get(`error.${error.code}`)}\n\n${t.get(
+          'common.date_available',
+        )}${t.get('common.colon')}${parseDateTime(error.dateAvailable)}`;
+      } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+        emailConfirmationResult.message = error.message;
+      } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        error.errors.forEach(({ field, errors }) => {
+          emailConfirmationResult.errors[field] = errors.map((value) => {
+            return t.get(`error.${value}`);
+          });
+        });
+      }
+    }
+  };
 </script>
 
 <svelte:head>
   <title>{$t('session.registration.register')} | {$t('common.title')}</title>
 </svelte:head>
+
+<input
+  type="checkbox"
+  id="email-confirmation"
+  class="modal-toggle"
+  bind:checked={emailConfirmationModal}
+/>
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{$t('session.email_confirmation.email_confirmation')}</h3>
+    <p class="py-4">{$t('session.email_confirmation.email_confirmation_text')}</p>
+    <div class="modal-action">
+      <label for="email-confirmation" class="btn btn-success btn-outline">
+        {$t('common.confirm')}
+      </label>
+    </div>
+  </div>
+</div>
 
 <div class="hero min-h-screen bg-base-200">
   <div class="hero-content form-control lg:flex-row-reverse">
@@ -50,26 +135,11 @@
         {$t('session.registration.registration_text')}
       </p>
     </div>
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-lg bg-base-100">
+    <div
+      class="card flex-shrink-0 max-w-[80vw] w-96 border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+    >
       <div class="card-body">
-        <form
-          method="POST"
-          id="confirmEmail"
-          action="?/confirmEmail"
-          class="hidden"
-          use:emailConfirmationEnhance
-        >
-          <input type="hidden" id="username" name="UserName" bind:value={$form.UserName} />
-          <input type="hidden" id="email" name="Email" bind:value={$form.Email} />
-          <input type="hidden" id="language" name="Language" bind:value={$form.Language} />
-        </form>
-        <form
-          method="POST"
-          id="register"
-          action="?/register"
-          class="w-full form-control"
-          use:registrationEnhance
-        >
+        <form method="POST" class="w-full form-control" use:enhance>
           <label class="label" for="username">
             <span class="label-text">{$t('session.username')}</span>
           </label>
@@ -83,8 +153,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={$registrationErrors.UserName || $emailConfirmationErrors.UserName}
-            data-tip={$registrationErrors.UserName ?? $emailConfirmationErrors.UserName}
+            class:tooltip-open={$errors.UserName || emailConfirmationResult.errors.UserName}
+            data-tip={$errors.UserName ?? emailConfirmationResult.errors.UserName}
           />
           <label class="label" for="email">
             <span class="label-text">{$t('session.email')}</span>
@@ -101,8 +171,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={$registrationErrors.Email || $emailConfirmationErrors.Email}
-            data-tip={$registrationErrors.Email ?? $emailConfirmationErrors.Email}
+            class:tooltip-open={$errors.Email || emailConfirmationResult.errors.Email}
+            data-tip={$errors.Email ?? emailConfirmationResult.errors.Email}
           />
           <label class="label" for="password">
             <span class="label-text">{$t('session.password')}</span>
@@ -118,8 +188,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$registrationErrors.Password}
-            data-tip={$registrationErrors.Password}
+            class:tooltip-open={!!$errors.Password}
+            data-tip={$errors.Password}
           />
           <label class="label" for="confirm_password">
             <span class="label-text">{$t('session.confirm_password')}</span>
@@ -136,8 +206,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$registrationErrors.ConfirmPassword}
-            data-tip={$registrationErrors.ConfirmPassword}
+            class:tooltip-open={!!$errors.ConfirmPassword}
+            data-tip={$errors.ConfirmPassword}
           />
           <label class="label" for="language">
             <span class="label-text">{$t('session.registration.select_language')}</span>
@@ -155,8 +225,8 @@
           </select>
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={$registrationErrors.Language || $emailConfirmationErrors.Language}
-            data-tip={$registrationErrors.Language ?? $emailConfirmationErrors.Language}
+            class:tooltip-open={$errors.Language || emailConfirmationResult.errors.Language}
+            data-tip={$errors.Language ?? emailConfirmationResult.errors.Language}
           />
           <label class="label" for="region">
             <span class="label-text">{$t('session.registration.select_region')}</span>
@@ -184,32 +254,43 @@
               bind:value={$form.EmailConfirmationCode}
               class="input input-bordered join-item w-3/5"
             />
-            <button
-              type="submit"
-              class="btn {$emailConfirmationAllErrors.length > 0
-                ? 'btn-error'
-                : $emailConfirmationSubmitting
-                ? 'btn-ghost'
-                : 'btn-secondary btn-outline'} join-item w-2/5"
-              disabled={$emailConfirmationSubmitting}
-              form="confirmEmail"
+            <div
+              class="tooltip tooltip-bottom tooltip-error w-2/5"
+              class:tooltip-open={!!emailConfirmationResult.message}
+              data-tip={emailConfirmationResult.message}
             >
-              {$emailConfirmationAllErrors.length > 0
-                ? $t('common.error')
-                : $emailConfirmationSubmitting
-                ? $t('common.waiting')
-                : $t('common.fetch')}
-            </button>
+              <button
+                type="submit"
+                class="btn {emailConfirmationResult.status === Status.ERROR
+                  ? 'btn-error'
+                  : emailConfirmationResult.status === Status.SENDING
+                  ? !emailConfirmationAvailable
+                    ? 'btn-ghost font-mono'
+                    : 'btn-ghost'
+                  : 'btn-secondary btn-outline'} join-item w-full"
+                disabled={emailConfirmationResult.status === Status.SENDING ||
+                  !emailConfirmationAvailable}
+                on:click={confirmEmail}
+              >
+                {!emailConfirmationAvailable
+                  ? `${min}m ${sec}s`
+                  : emailConfirmationResult.status === Status.ERROR
+                  ? $t('common.error')
+                  : emailConfirmationResult.status === Status.SENDING
+                  ? $t('common.waiting')
+                  : $t('common.fetch')}
+              </button>
+            </div>
           </div>
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$registrationErrors.EmailConfirmationCode}
-            data-tip={$registrationErrors.EmailConfirmationCode}
+            class:tooltip-open={!!$errors.EmailConfirmationCode}
+            data-tip={$errors.EmailConfirmationCode}
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$registrationErrors.RegionCode}
-            data-tip={$registrationErrors.RegionCode}
+            class:tooltip-open={!!$errors.RegionCode}
+            data-tip={$errors.RegionCode}
           />
           <div class="w-full flex justify-center mt-6">
             <div
@@ -219,16 +300,16 @@
             >
               <button
                 type="submit"
-                class="btn {$registrationAllErrors.length > 0
+                class="btn {$allErrors.length > 0
                   ? 'btn-error'
-                  : $registrationSubmitting || $emailConfirmationAllErrors.length > 0
+                  : $submitting || emailConfirmationResult.status === Status.ERROR
                   ? 'btn-ghost'
                   : 'btn-secondary btn-outline'} w-full"
-                disabled={$registrationSubmitting || $emailConfirmationAllErrors.length > 0}
+                disabled={$submitting || emailConfirmationResult.status === Status.ERROR}
               >
-                {$registrationAllErrors.length > 0
+                {$allErrors.length > 0
                   ? $t('common.error')
-                  : $registrationSubmitting
+                  : $submitting
                   ? $t('common.waiting')
                   : $t('session.registration.register')}
               </button>

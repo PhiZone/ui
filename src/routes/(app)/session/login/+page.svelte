@@ -37,7 +37,9 @@
         {$t('session.login.login_text')}
       </p>
     </div>
-    <div class="card flex-shrink-0 w-full max-w-sm shadow-lg bg-base-100">
+    <div
+      class="card flex-shrink-0 w-full max-w-sm border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+    >
       <div class="card-body">
         <form
           method="POST"

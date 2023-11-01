@@ -40,10 +40,10 @@
   };
 </script>
 
-<input type="checkbox" id="vote_helper" class="modal-toggle" />
+<input type="checkbox" id="vote-helper" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
-    <label for="vote_helper" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+    <label for="vote-helper" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
       ✕
     </label>
     <h3 class="font-bold text-lg mb-3">谱面评分助手</h3>
@@ -154,7 +154,7 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
           <label
-            for="vote_helper"
+            for="vote-helper"
             class="btn btn-outline btn-primary join-item"
             on:click={() => {
               calculate();

@@ -29,9 +29,7 @@
   },
   "email_confirmation": {
     "email_confirmation": "Confirm Email Address",
-    "email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the following blank so that we can activate your account.",
-    "activate": "Activate Account",
-    "code_not_numeric": "The code must be a six-digit number!"
+    "email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the blank."
   },
   "password_reset": {
     "password_reset": "Reset Password",

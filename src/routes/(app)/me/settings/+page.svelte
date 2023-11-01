@@ -129,7 +129,9 @@
         >
           {$t('common.profile')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body gap-4 py-10">
             <div class="avatar gap-4 items-center w-full">
               <span class="w-1/6 min-w-fit place-self-center">

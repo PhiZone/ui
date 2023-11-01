@@ -83,10 +83,12 @@
       <ul class="menu p-0 gap-2 md:w-2/3">
         {#if votes && votes.length > 0}
           {#each votes as vote}
-            <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
+            <div
+              class="card card-side w-full bg-base-100 border-2 border-gray-700 transition hover:shadow-lg"
+            >
               <figure class="w-1/6 min-w-fit">
                 <div
-                  class="relative inline-flex items-center justify-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
+                  class="relative inline-flex items-center justify-center form-control border-r border-gray-700 px-3 py-3 mx-auto my-auto"
                 >
                   <p class="opacity-80">分数</p>
                   <p class="text-4xl font-extrabold">
