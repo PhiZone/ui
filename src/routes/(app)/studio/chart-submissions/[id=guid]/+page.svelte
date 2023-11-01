@@ -276,7 +276,9 @@
         >
           {$t('studio.chart_submission')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body py-10">
             <div class="text-5xl py-3 font-bold gap-4 items-center content inline-block">
               {#if $song.isSuccess}
@@ -435,7 +437,9 @@
         >
           {$t('common.collaborators')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body py-10">
             {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
               <label

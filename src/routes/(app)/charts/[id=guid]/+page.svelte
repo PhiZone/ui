@@ -281,7 +281,9 @@
         >
           {$t('chart.chart')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body py-10">
             <div class="py-3 flex-col sm:flex-row gap-4 items-center">
               <h2 class="text-5xl font-bold content md:inline-block">

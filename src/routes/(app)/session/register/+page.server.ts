@@ -4,9 +4,8 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API, { Gender } from '$lib/api';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { SendEmailMode } from '$lib/api/auth';
 
-const registrationSchema = z
+const schema = z
   .object({
     UserName: z
       .string()
@@ -35,27 +34,19 @@ const registrationSchema = z
     path: ['ConfirmPassword'],
   });
 
-const emailConfirmationSchema = z.object({
-  Email: z.string(),
-  UserName: z.string(),
-  Language: z.string(),
-});
-
-type RegistrationSchema = z.infer<typeof registrationSchema>;
-type EmailConfirmationSchema = z.infer<typeof emailConfirmationSchema>;
+type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const registrationForm = await superValidate(registrationSchema);
-  const emailConfirmationForm = await superValidate(emailConfirmationSchema);
-  return { registrationForm, emailConfirmationForm };
+  const form = await superValidate(schema);
+  return { form };
 };
 
 export const actions = {
-  register: async ({ request, url, locals, fetch }) => {
+  default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken, locals.user);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, registrationSchema);
+    const form = await superValidate(formData, schema);
 
     if (!form.valid) {
       return fail(400, { form });
@@ -76,40 +67,7 @@ export const actions = {
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
-          form.errors[field as keyof RegistrationSchema] = errors.map((value) => {
-            return t.get(`error.${value}`);
-          });
-        });
-      }
-
-      return fail(resp.status, { form });
-    }
-  },
-  confirmEmail: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
-
-    const formData = await request.formData();
-    const form = await superValidate(formData, emailConfirmationSchema);
-
-    if (!form.valid) {
-      return fail(400, { form });
-    }
-
-    const resp = await api.auth.sendEmail({ ...form.data, Mode: SendEmailMode.EmailConfirmation });
-    if (resp.ok) {
-      return;
-    } else {
-      const error = await resp.json();
-      console.log(error);
-      form.valid = false;
-      if (error.status === ResponseDtoStatus.ErrorBrief) {
-        form.message = t.get(`error.${error.code}`);
-      } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
-        form.message = error.message;
-      } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
-        form.errors = {};
-        error.errors.forEach(({ field, errors }) => {
-          form.errors[field as keyof EmailConfirmationSchema] = errors.map((value) => {
+          form.errors[field as keyof Schema] = errors.map((value) => {
             return t.get(`error.${value}`);
           });
         });

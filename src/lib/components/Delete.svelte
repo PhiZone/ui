@@ -17,13 +17,10 @@
   let deleted = false;
 </script>
 
-<input type="checkbox" id="delete_{target.id}_modal" class="modal-toggle" />
+<input type="checkbox" id="delete-{target.id}" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box text-left">
-    <label
-      for="delete_{target.id}_modal"
-      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-    >
+    <label for="delete-{target.id}" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
       ✕
     </label>
     <h3 class="font-bold text-lg">{$t('common.delete')}</h3>
@@ -34,7 +31,7 @@
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <label
-        for="delete_{target.id}_modal"
+        for="delete-{target.id}"
         class="btn"
         on:click={async () => {
           const resp = await api.DELETE(`/${typePlural}/${target.id}`);
@@ -52,7 +49,7 @@
 </div>
 
 <label
-  for="delete_{target.id}_modal"
+  for="delete-{target.id}"
   class="btn {deleted
     ? 'btn-ghost btn-disabled'
     : 'btn-ghost'} btn-sm flex gap-1 items-center {$$restProps.class}"

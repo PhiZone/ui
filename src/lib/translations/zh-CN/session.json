@@ -29,9 +29,7 @@
   },
   "email_confirmation": {
     "email_confirmation": "确认邮箱地址",
-    "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入以下输入框中，以便激活你的账户。",
-    "activate": "激活账户",
-    "code_not_numeric": "验证码须为六位数字！"
+    "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入输入框中。"
   },
   "password_reset": {
     "password_reset": "重置密码",

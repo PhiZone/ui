@@ -29,9 +29,7 @@
   },
   "email_confirmation": {
     "email_confirmation": "驗證電子郵件地址",
-    "email_confirmation_text": "我們向你的電子郵件發送了一封信，內含驗證電子郵件地址所需的六位數代碼。請將代碼填入以下輸入框中，以啟用你的帳戶。",
-    "activate": "啟用帳戶",
-    "code_not_numeric": "驗證碼必須為六位數字！"
+    "email_confirmation_text": "我們向你的電子郵件發送了一封信，內含驗證電子郵件地址所需的六位數代碼。請將代碼填入輸入框中。"
   },
   "password_reset": {
     "password_reset": "重設密碼",

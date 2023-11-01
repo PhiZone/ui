@@ -30,13 +30,10 @@
 {#if $song.isSuccess}
   {@const song = $song.data.data}
 
-  <input type="checkbox" id="license_{song.id}_modal" class="modal-toggle" />
+  <input type="checkbox" id="license-{song.id}" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box text-left min-w-fit">
-      <label
-        for="license_{song.id}_modal"
-        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-      >
+      <label for="license-{song.id}" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
         ✕
       </label>
       <div class="text-5xl py-3 flex font-bold items-center content">
@@ -75,7 +72,9 @@
         >
           {$t('song.song')}
         </span>
-        <div class="card flex-shrink-0 w-full shadow-lg bg-base-100">
+        <div
+          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        >
           <div class="card-body py-10">
             <div class="py-3 flex-col sm:flex-row gap-4 items-center">
               <h2 class="text-5xl font-bold content md:inline-block">
@@ -102,7 +101,7 @@
                         {$t('song.edition')}
                       </span>
                       <label
-                        for="license_{song.id}_modal"
+                        for="license-{song.id}"
                         class="btn btn-xs btn-neutral text-sm font-normal"
                       >
                         {$t(`song.edition_types.${song.editionType}`)}
