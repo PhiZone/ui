@@ -23,6 +23,7 @@
     "registration_text": "註冊 PhiZone 帳戶以遊玩譜面、參與社區交流！",
     "select_language": "選擇語言",
     "select_region": "選擇地區",
+    "email_confirmation_code": "郵件驗證碼",
     "success": "您的 PhiZone 帳戶註冊成功！",
     "language_error": "語言選項出現問題。請更換瀏覽器重試。"
   },

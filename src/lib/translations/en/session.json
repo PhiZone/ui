@@ -23,6 +23,7 @@
     "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
     "select_language": "Select Language",
     "select_region": "Select Region",
+    "email_confirmation_code": "Email Confirmation Code",
     "success": "You've successfully registered an account on PhiZone!",
     "language_error": "Invalid language. Switch to another browser and retry."
   },

@@ -111,7 +111,7 @@
           voteOpen = false;
         }}
       >
-        <input type="text" id="chart_id" name="chartId" class="hidden" value={id} />
+        <input type="hidden" id="chart_id" name="chartId" value={id} />
         <div class="flex min-w-full items-center">
           <input
             id="score"
@@ -199,8 +199,8 @@
           collabOpen = false;
         }}
       >
-        <input type="text" id="type" name="type" class="hidden" value="charts" />
-        <input type="text" id="id" name="id" class="hidden" value={id} />
+        <input type="hidden" id="type" name="type" value="charts" />
+        <input type="hidden" id="id" name="id" value={id} />
         <div
           class={$collaborator.isError
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
@@ -391,7 +391,7 @@
               </p>
             </div>
             <div class="card-actions flex items-center justify-end gap-2">
-              {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 3)}
+              {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 4)}
                 <a
                   href="/studio/chart-submissions/{submission.id}/edit"
                   class="btn btn-primary btn-outline text-lg w-32"
@@ -399,7 +399,7 @@
                   {$t('common.edit')}
                 </a>
               {/if}
-              {#if user && getUserPrivilege(user.role) >= 3}
+              {#if user && getUserPrivilege(user.role) >= 4}
                 <label
                   for="studio-chart-submission"
                   class="btn btn-primary btn-outline text-lg w-32"
@@ -468,7 +468,7 @@
       {/if}
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
-      {#if user && getUserPrivilege(user.role) >= 3 && $uploader.isSuccess}
+      {#if $uploader.isSuccess}
         <div class="indicator my-4 w-full">
           <span
             class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"

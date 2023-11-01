@@ -47,13 +47,13 @@
     class="card fixed top-20 right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-red-600' : ''}`}>
+      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
         <span style={`--value:${min};`} />
       </span>
       min
     </div>
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-red-600' : ''}`}>
+      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
         <span style={`--value:${sec};`} />
       </span>
       sec
@@ -113,7 +113,7 @@
       </form>
     {:else}
       <div class="text-center">
-        <p class="text-lg text-red-600 my-8">
+        <p class="text-lg text-error my-8">
           {$t(error ? `error.${error}` : 'common.unknown_error')}
         </p>
         <a href="/pet">

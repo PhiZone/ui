@@ -27,7 +27,7 @@
   let previewStart = 0;
   let previewEnd = 0;
   let previewStatus = 0;
-  let previewTimer: NodeJS.Timer;
+  let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = 0;
   let authorName = '';

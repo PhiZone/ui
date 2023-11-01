@@ -55,7 +55,7 @@
   for="delete_{target.id}_modal"
   class="btn {deleted
     ? 'btn-ghost btn-disabled'
-    : 'btn-accent btn-outline'} btn-sm flex gap-1 items-center {$$restProps.class}"
+    : 'btn-ghost'} btn-sm flex gap-1 items-center {$$restProps.class}"
 >
   <svg
     width="16px"

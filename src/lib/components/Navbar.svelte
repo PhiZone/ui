@@ -85,15 +85,9 @@
       </li> -->
       {#if !$page.url.pathname.startsWith('/session')}
         {@const { user } = $page.data}
-        {#if user && getUserPrivilege(user.role) < 3}
+        {#if user}
           <li class="rounded-full">
-            <a
-              href="https://phi-zone.feishu.cn/share/base/form/shrcniSUPXn7kEhpM1p8BmtrYKc"
-              target="_blank"
-            >
-              {$t('common.navbar.privilege_escalation')}
-            </a>
-            <!-- <a href="/pet">{$t('common.navbar.privilege_escalation')}</a> -->
+            <a href="/pet">{$t('common.navbar.privilege_escalation')}</a>
           </li>
         {/if}
       {/if}
@@ -150,7 +144,7 @@
                 <!-- <span class="badge">{userDetail.tag}</span> -->
               </a>
             </li>
-            {#if getUserPrivilege(user.role) < 2}
+            {#if getUserPrivilege(user.role) < 3}
               <li class="disabled">
                 <div
                   class="tooltip tooltip-left tooltip-warning text-left"
@@ -178,15 +172,15 @@
         <div class="flex">
           <a
             class="btn btn-ghost btn-md text-base"
-            href="/session/register?redirect={$page.url.pathname}"
-          >
-            {$t('session.registration.register')}
-          </a>
-          <a
-            class="btn btn-outline btn-secondary btn-md text-base"
             href="/session/login?redirect={$page.url.pathname}"
           >
             {$t('session.login.login')}
+          </a>
+          <a
+            class="btn btn-outline btn-secondary btn-md text-base"
+            href="/session/register?redirect={$page.url.pathname}"
+          >
+            {$t('session.registration.register')}
           </a>
         </div>
       {/if}

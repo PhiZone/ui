@@ -12,7 +12,7 @@ export const load = async ({ fetch, locals }) => {
   if (!resp.ok) {
     const error = await resp.json();
     console.log(error);
-    return fail(resp.status, { error: error.code });
+    throw fail(resp.status, { error: error.code });
   }
   const questions = (await resp.json()).data;
   for (let i = 0; i < questions.length; i++) {

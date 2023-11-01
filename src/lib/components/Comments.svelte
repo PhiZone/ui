@@ -54,7 +54,7 @@
     <div class="card-body py-10">
       <div class="flex items-center">
         <textarea
-          class="mr-3 textarea textarea-secondary w-11/12"
+          class="mr-3 textarea transition border-2 border-gray-700 hover:textarea-secondary w-11/12"
           placeholder={$t('common.write_comment')}
           bind:value={commentText}
           {disabled}

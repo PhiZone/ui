@@ -5,9 +5,22 @@
 
   export let data;
 
-  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
-    data.form,
-  );
+  const {
+    form,
+    enhance: registrationEnhance,
+    message,
+    errors: registrationErrors,
+    constraints,
+    submitting: registrationSubmitting,
+    allErrors: registrationAllErrors,
+  } = superForm(data.registrationForm);
+
+  const {
+    enhance: emailConfirmationEnhance,
+    errors: emailConfirmationErrors,
+    submitting: emailConfirmationSubmitting,
+    allErrors: emailConfirmationAllErrors,
+  } = superForm(data.emailConfirmationForm);
 
   $: regionMap = new Map(
     [
@@ -39,7 +52,24 @@
     </div>
     <div class="card flex-shrink-0 w-full max-w-sm shadow-lg bg-base-100">
       <div class="card-body">
-        <form method="POST" class="w-full form-control" use:enhance>
+        <form
+          method="POST"
+          id="confirmEmail"
+          action="?/confirmEmail"
+          class="hidden"
+          use:emailConfirmationEnhance
+        >
+          <input type="hidden" id="username" name="UserName" bind:value={$form.UserName} />
+          <input type="hidden" id="email" name="Email" bind:value={$form.Email} />
+          <input type="hidden" id="language" name="Language" bind:value={$form.Language} />
+        </form>
+        <form
+          method="POST"
+          id="register"
+          action="?/register"
+          class="w-full form-control"
+          use:registrationEnhance
+        >
           <label class="label" for="username">
             <span class="label-text">{$t('session.username')}</span>
           </label>
@@ -53,8 +83,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.UserName}
-            data-tip={$errors.UserName}
+            class:tooltip-open={$registrationErrors.UserName || $emailConfirmationErrors.UserName}
+            data-tip={$registrationErrors.UserName ?? $emailConfirmationErrors.UserName}
           />
           <label class="label" for="email">
             <span class="label-text">{$t('session.email')}</span>
@@ -71,8 +101,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.Email}
-            data-tip={$errors.Email}
+            class:tooltip-open={$registrationErrors.Email || $emailConfirmationErrors.Email}
+            data-tip={$registrationErrors.Email ?? $emailConfirmationErrors.Email}
           />
           <label class="label" for="password">
             <span class="label-text">{$t('session.password')}</span>
@@ -88,8 +118,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.Password}
-            data-tip={$errors.Password}
+            class:tooltip-open={!!$registrationErrors.Password}
+            data-tip={$registrationErrors.Password}
           />
           <label class="label" for="confirm_password">
             <span class="label-text">{$t('session.confirm_password')}</span>
@@ -106,8 +136,8 @@
           />
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.ConfirmPassword}
-            data-tip={$errors.ConfirmPassword}
+            class:tooltip-open={!!$registrationErrors.ConfirmPassword}
+            data-tip={$registrationErrors.ConfirmPassword}
           />
           <label class="label" for="language">
             <span class="label-text">{$t('session.registration.select_language')}</span>
@@ -125,8 +155,8 @@
           </select>
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.Language}
-            data-tip={$errors.Language}
+            class:tooltip-open={$registrationErrors.Language || $emailConfirmationErrors.Language}
+            data-tip={$registrationErrors.Language ?? $emailConfirmationErrors.Language}
           />
           <label class="label" for="region">
             <span class="label-text">{$t('session.registration.select_region')}</span>
@@ -142,10 +172,44 @@
               <option value={region[0]}>{region[1]}</option>
             {/each}
           </select>
+          <label class="label" for="email_confirmation_code">
+            <span class="label-text">{$t('session.registration.email_confirmation_code')}</span>
+          </label>
+          <div class="join">
+            <input
+              type="text"
+              id="emailConfirmationCode"
+              name="EmailConfirmationCode"
+              placeholder={$t('session.registration.email_confirmation_code')}
+              bind:value={$form.EmailConfirmationCode}
+              class="input input-bordered join-item w-3/5"
+            />
+            <button
+              type="submit"
+              class="btn {$emailConfirmationAllErrors.length > 0
+                ? 'btn-error'
+                : $emailConfirmationSubmitting
+                ? 'btn-ghost'
+                : 'btn-secondary btn-outline'} join-item w-2/5"
+              disabled={$emailConfirmationSubmitting}
+              form="confirmEmail"
+            >
+              {$emailConfirmationAllErrors.length > 0
+                ? $t('common.error')
+                : $emailConfirmationSubmitting
+                ? $t('common.waiting')
+                : $t('common.fetch')}
+            </button>
+          </div>
           <div
             class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={!!$errors.RegionCode}
-            data-tip={$errors.RegionCode}
+            class:tooltip-open={!!$registrationErrors.EmailConfirmationCode}
+            data-tip={$registrationErrors.EmailConfirmationCode}
+          />
+          <div
+            class="tooltip tooltip-bottom tooltip-error"
+            class:tooltip-open={!!$registrationErrors.RegionCode}
+            data-tip={$registrationErrors.RegionCode}
           />
           <div class="w-full flex justify-center mt-6">
             <div
@@ -155,16 +219,16 @@
             >
               <button
                 type="submit"
-                class="btn {$allErrors.length > 0
+                class="btn {$registrationAllErrors.length > 0
                   ? 'btn-error'
-                  : $submitting
+                  : $registrationSubmitting || $emailConfirmationAllErrors.length > 0
                   ? 'btn-ghost'
                   : 'btn-secondary btn-outline'} w-full"
-                disabled={$submitting}
+                disabled={$registrationSubmitting || $emailConfirmationAllErrors.length > 0}
               >
-                {$allErrors.length > 0
+                {$registrationAllErrors.length > 0
                   ? $t('common.error')
-                  : $submitting
+                  : $registrationSubmitting
                   ? $t('common.waiting')
                   : $t('session.registration.register')}
               </button>

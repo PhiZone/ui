@@ -44,8 +44,8 @@
         {parseDateTime(reply.dateCreated)}
       </p>
       <div class="min-w-fit text-right flex items-center gap-1">
-        {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
-          <Delete target={reply} class="btn-sm" />
+        {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
+          <Delete target={reply} class="btn-sm btn-square" />
         {/if}
         <Like
           id={reply.id}
@@ -58,15 +58,17 @@
     </div>
   </li>
 {:else}
-  <div class="card card-side w-full bg-base-100 border border-base-300 shadow-lg">
-    <figure class="w-1/3 min-w-fit">
+  <div
+    class="card card-side w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg"
+  >
+    <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center border-r border-base-300 px-3 py-3 mx-auto my-auto"
+        class="relative inline-flex flex-col items-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={reply.ownerId} kind="embedded" />
       </div>
     </figure>
-    <div class="card-body w-2/3 pt-6 pl-6 pb-4 pr-4">
+    <div class="card-body w-2/3 md:w-5/6 pt-6 pl-6 pb-4 pr-4">
       <p class="w-full content text-lg">
         {@html $content}
       </p>
@@ -74,19 +76,22 @@
         <p class="text-sm opacity-70">
           {parseDateTime(reply.dateCreated)}
         </p>
-        <div class="flex items-center gap-1">
-          {#if user && (getUserPrivilege(user.role) >= 4 || user.id === reply.ownerId)}
-            <Delete target={reply} class="btn-sm" />
-          {/if}
+        {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
+          <Delete target={reply} class="btn-sm btn-square" />
+        {/if}
+        <div class="items-center join join-vertical sm:join-horizontal">
           <Like
             id={reply.id}
             likes={reply.likeCount}
             type="replies"
             liked={reply.dateLiked != null}
-            class="btn-sm"
+            class="btn-sm w-full sm:w-fit join-item"
           />
           {#if reply.commentId}
-            <a class="btn btn-sm btn-primary btn-outline" href="/comments/{reply.commentId}">
+            <a
+              class="btn btn-sm btn-primary btn-outline join-item"
+              href="/comments/{reply.commentId}"
+            >
               <svg
                 fill="currentColor"
                 width="25px"

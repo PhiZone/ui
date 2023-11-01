@@ -23,7 +23,7 @@
 
 <a href={`/studio/chart-submissions/${submission.id}`}>
   <div
-    class={`card card-side overflow-hidden ${
+    class={`card card-side ${
       submission.status === 1
         ? 'bg-success-content'
         : submission.status === 2
@@ -32,7 +32,7 @@
           (submission.dateVoted && submission.dateVoted > submission.dateUpdated)
         ? 'bg-base-100'
         : 'bg-warning-content'
-    } shadow-lg hover:shadow-sm hover:shadow-primary-focus`}
+    } overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg`}
   >
     <figure class="min-w-[30%] max-w-[30%]">
       <img

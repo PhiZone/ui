@@ -20,12 +20,12 @@
     {$t('pet.answer.answer')}
   </span>
   <a
-    class="card card-side w-full bg-base-100 border border-base-300 shadow-lg hover:shadow-sm hover:shadow-primary-focus"
+    class="card card-side w-full bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
     href={`/pet/answers/${answer.id}`}
   >
     <figure class="w-1/6 min-w-fit">
       <div
-        class="relative inline-flex items-center justify-center form-control border-r border-base-300 px-3 py-3 mx-auto my-auto"
+        class="relative inline-flex items-center justify-center form-control border-r border-gray-700 px-3 py-3 mx-auto my-auto"
       >
         <p class="opacity-80">
           {$t(answer.totalScore ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
@@ -52,7 +52,7 @@
         <span class="badge mr-1">A 19</span>
         {answer.chart}
       </p>
-      <div class="w-full mt-4 flex justify-between items-center">
+      <div class="w-full flex justify-between items-center">
         <p class="text-sm opacity-70 text-right">
           <a
             href={`/users/${answer.ownerId}`}

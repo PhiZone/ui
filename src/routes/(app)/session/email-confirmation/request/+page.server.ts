@@ -8,6 +8,8 @@ import { ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z.object({
   Email: z.string(),
+  UserName: z.string(),
+  Language: z.string(),
 });
 
 type Schema = z.infer<typeof schema>;

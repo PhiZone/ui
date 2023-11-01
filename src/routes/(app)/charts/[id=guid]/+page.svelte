@@ -411,24 +411,22 @@
                       href={chart.file}
                       target="_blank"
                       rel="noreferrer"
-                      class="min-w-fit join-item"
                       download={chart.file.split('/').pop()}
+                      class="btn btn-primary btn-outline join-item flex gap-1"
                     >
-                      <button class="btn btn-primary btn-outline join-item w-full flex gap-1">
-                        <svg
-                          fill="currentColor"
-                          width="14px"
-                          height="28px"
-                          viewBox="0 0 16 32"
-                          version="1.1"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M13.48 17.6c-0.48 0-0.84 0.36-0.84 0.84v3.92c0 0.48-0.36 0.84-0.84 0.84h-9.28c-0.48 0-0.84-0.36-0.84-0.84v-3.92c0-0.44-0.36-0.84-0.84-0.84s-0.84 0.4-0.84 0.84v3.92c0 1.4 1.12 2.52 2.52 2.52h9.28c1.4 0 2.52-1.12 2.52-2.52v-3.92c0-0.44-0.36-0.84-0.84-0.84zM6.56 18.48c0.040 0.040 0.2 0.28 0.6 0.28s0.56-0.24 0.6-0.28l3.52-3.52c0.32-0.32 0.32-0.84 0-1.2-0.32-0.32-0.84-0.32-1.2 0l-2.080 2.12v-7.92c0-0.48-0.36-0.84-0.84-0.84s-0.84 0.36-0.84 0.84v7.92l-2.080-2.080c-0.32-0.32-0.84-0.32-1.2 0-0.32 0.32-0.32 0.84 0 1.2l3.52 3.48z"
-                          />
-                        </svg>
-                        {$t('common.download')}
-                      </button>
+                      <svg
+                        fill="currentColor"
+                        width="14px"
+                        height="28px"
+                        viewBox="0 0 16 32"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M13.48 17.6c-0.48 0-0.84 0.36-0.84 0.84v3.92c0 0.48-0.36 0.84-0.84 0.84h-9.28c-0.48 0-0.84-0.36-0.84-0.84v-3.92c0-0.44-0.36-0.84-0.84-0.84s-0.84 0.4-0.84 0.84v3.92c0 1.4 1.12 2.52 2.52 2.52h9.28c1.4 0 2.52-1.12 2.52-2.52v-3.92c0-0.44-0.36-0.84-0.84-0.84zM6.56 18.48c0.040 0.040 0.2 0.28 0.6 0.28s0.56-0.24 0.6-0.28l3.52-3.52c0.32-0.32 0.32-0.84 0-1.2-0.32-0.32-0.84-0.32-1.2 0l-2.080 2.12v-7.92c0-0.48-0.36-0.84-0.84-0.84s-0.84 0.36-0.84 0.84v7.92l-2.080-2.080c-0.32-0.32-0.84-0.32-1.2 0-0.32 0.32-0.32 0.84 0 1.2l3.52 3.48z"
+                        />
+                      </svg>
+                      {$t('common.download')}
                     </a>
                   {/if}
                 </div>
@@ -470,7 +468,7 @@
               >
                 {$t('common.records')}
               </span>
-              <div class="card w-80 bg-base-100 shadow-lg overflow-hidden">
+              <div class="card w-80 bg-base-100 shadow-lg">
                 <div class="card-body gap-2 items-center justify-center">
                   {#each records as record}
                     <Record {record} {chart} {song} rank={record.position} showChart={false} />

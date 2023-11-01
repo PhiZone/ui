@@ -16,16 +16,15 @@
   export let showCharter: boolean = true;
 
   $: song = createQuery(api.song.info({ id: chart.songId }));
-  $: owner = createQuery(api.user.info({ id: chart.ownerId }));
   $: charter = richtext(chart.authorName ?? '');
 </script>
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 shadow-lg hover:shadow-sm hover:shadow-primary-focus overflow-hidden"
+    class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
   >
     <a href={`/charts/${chart.id}`}>
-      <figure class="h-[168px] relative">
+      <figure class="h-[167px] relative">
         <img
           src={getCompressedImage(chart.illustration ?? $song.data?.data.illustration)}
           alt="Illustration"
@@ -47,7 +46,7 @@
           </div>
         </div>
       </figure>
-      <div class="card-body gap-0.5">
+      <div class="card-body pt-6 gap-0.5">
         <div class="w-full">
           <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
             {$song.isSuccess ? $song.data.data.title : ''}
@@ -70,28 +69,25 @@
           <span class="badge mr-1">{$t('chart.score')}</span>
           {chart.score.toFixed(2)}
         </p>
-        {#if $owner.isSuccess}
-          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-            <span class="badge mr-1">{$t('chart.owner')}</span>
-            {$owner.data.data.userName}
-          </p>
-        {/if}
-        <div class="card-actions flex items-center justify-end">
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
-            <Like
-              id={chart.id}
-              likes={chart.likeCount}
-              type="charts"
-              liked={chart.dateLiked != null}
-              class="btn-sm"
-            />
-          </div>
+        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+          <span class="badge mr-1">{$t('chart.rating')}</span>
+          {chart.rating.toFixed(2)}
+        </p>
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          class="absolute bottom-8 right-8"
+          on:click={(e) => {
+            e.preventDefault();
+          }}
+          on:keyup
+        >
+          <Like
+            id={chart.id}
+            likes={chart.likeCount}
+            type="charts"
+            liked={chart.dateLiked != null}
+            class="btn-sm"
+          />
         </div>
       </div>
     </a>

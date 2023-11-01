@@ -32,9 +32,9 @@
 </script>
 
 <div
-  class={'card m-1 w-[288px] h-40 card-side relative bg-base-100 shadow-lg glass hover:shadow-sm hover:shadow-primary-focus overflow-hidden'}
+  class={'card m-1 w-[288px] h-40 card-side relative overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg'}
 >
-  <a class="w-fit h-fit" href={`/records/${record.id}`}>
+  <a class="w-full h-full glass" href={`/records/${record.id}`}>
     {#if $songQ.isSuccess}
       <img
         class="object-fill w-full h-full blur-lg opacity-40"

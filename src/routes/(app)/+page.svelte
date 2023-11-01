@@ -47,9 +47,9 @@
 
 <div class="hero min-h-screen" style:background-image="url(/background.webp)">
   <div class="hero-overlay bg-opacity-50" />
-  <div class="w-5/6 max-w-4xl form-control text-center text-neutral-content">
+  <div class="w-5/6 max-w-4xl form-control text-center">
     <img class="logo" src="/favicon.ico" alt="Logo" />
-    <h1 class="mb-5 text-7xl font-bold">{$t('common.title')}</h1>
+    <h1 class="mb-3 text-8xl font-bold">{$t('common.title')}</h1>
     <p class="mb-5 text-lg">
       {$t('home.description')}
     </p>

@@ -65,6 +65,12 @@ export interface InfoOpts {
   id: string;
 }
 
+// assess
+export interface AssessOpts {
+  id: string;
+  score: number;
+}
+
 export default class PetAPI {
   constructor(private api: API) {}
 
@@ -92,4 +98,8 @@ export default class PetAPI {
     'pet.answer.list',
     (opts: Filter): R<PetAnswerDto[]> => this.api.GET('/pet/answers?' + stringifyFilter(opts)),
   );
+
+  assess({ id, ...rest }: AssessOpts): R {
+    return this.api.PATCH(`/pet/answers/${id}`, rest);
+  }
 }

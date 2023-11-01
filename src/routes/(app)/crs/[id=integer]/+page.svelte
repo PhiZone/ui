@@ -35,20 +35,8 @@
             };
           }}
         >
-          <input
-            id="name"
-            name="name"
-            type="text"
-            class="hidden"
-            value={user ? user.userName : '匿名用户'}
-          />
-          <input
-            id="user"
-            name="user"
-            type="text"
-            class="hidden"
-            value={user ? user.id : undefined}
-          />
+          <input id="name" name="name" type="hidden" value={user ? user.userName : '匿名用户'} />
+          <input id="user" name="user" type="hidden" value={user ? user.id : undefined} />
           <div class="flex gap-2">
             <div class="w-full">
               <input

@@ -22,7 +22,7 @@
   {@const chapter = $chapter.data.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
-    <div class="modal-box bg-base-100 p-0 max-w-[1600px]">
+    <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
       <label
         for="illustration"
         class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
@@ -39,12 +39,12 @@
           </div>
         </div>
       </div>
-      <img src={chapter.illustration} alt="Illustration" class="object-contain" />
+      <img src={chapter.illustration} alt="Illustration" class="object-cover" />
     </div>
   </div>
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
-    <div class="hero-overlay bg-opacity-60" />
+    <div class="hero-overlay bg-base-200 bg-opacity-50" />
     <div class="pt-32 pb-24 w-full flex justify-center">
       <div class="w-full max-w-[1280px] mx-16">
         <h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">

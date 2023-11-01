@@ -11,12 +11,15 @@
   "view_history": "查看歷史",
   "manage": "管理答卷",
   "answers": "PET 答卷",
+  "points": "分",
   "answer": {
     "answer": "PET 答卷",
     "objective_score": "客觀題分數",
     "subjective_score": "主觀題分數",
     "total_score": "總分數",
     "chart": "譜面",
-    "answerer": "作答人"
+    "answerer": "作答人",
+    "assessor": "閱卷人",
+    "assess": "評閲"
   }
 }

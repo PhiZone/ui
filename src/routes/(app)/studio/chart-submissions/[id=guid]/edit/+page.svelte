@@ -489,7 +489,7 @@
               </label>
               <button
                 type="button"
-                class="absolute right-2 top-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                class="absolute right-2 bottom-2 btn btn-accent btn-outline btn-sm backdrop-blur"
                 on:click={() => {
                   chart.description = '';
                   patch = applyPatch(patch, 'remove', '/description');

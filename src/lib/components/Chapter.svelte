@@ -17,10 +17,10 @@
 <div
   class="card w-80 ${fixedHeight
     ? 'h-[460px]'
-    : ''} bg-base-100 shadow-lg hover:shadow-sm hover:shadow-primary-focus overflow-hidden"
+    : ''} bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
 >
   <a href="/chapters/{chapter.id}">
-    <figure class="h-[168px] relative">
+    <figure class="h-[167px] relative">
       <img src={getCompressedImage(chapter.illustration)} alt="Illustration" class="object-fill" />
     </figure>
     <div class="card-body {fixedHeight ? 'h-[280px]' : ''} gap-0.5">
