@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '$lib/translations/config';
   import { range } from '$lib/utils';
 
   export let data;
@@ -73,9 +74,13 @@
   ];
 </script>
 
+<svelte:head>
+  <title>示例谱面评分征集</title>
+</svelte:head>
+
 {#if data.official !== null}
   <div class="page pb-24">
-    <h1 class="text-4xl font-bold mb-6">示例谱面评分征集</h1>
+    <h1 class="text-4xl font-bold mb-6">示例谱面评分征集 | {$t('common.title')}</h1>
     <div class="result">
       {#each range(0, charts.length) as i}
         <div class="card lg:w-[430px] w-full bg-base-100 shadow-xl">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import VolunteerVoteHelper from '$lib/components/VolunteerVoteHelper.svelte';
+  import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
   export let data;
@@ -10,6 +11,10 @@
   let message = '';
   let disabled = false;
 </script>
+
+<svelte:head>
+  <title>示例谱面评分征集 - {official ? '官方谱组' : '自制谱组'}投票 | {$t('common.title')}</title>
+</svelte:head>
 
 {#if data.data !== null}
   <VolunteerVoteHelper bind:score bind:message />
@@ -70,7 +75,7 @@
             bind:value={message}
           />
           <div class="join join-vertical">
-            <label for="vote_helper" class="btn btn-outline btn-primary join-item">评分助手</label>
+            <label for="vote-helper" class="btn btn-outline btn-primary join-item">评分助手</label>
             <button
               class="w-full btn btn-outline btn-primary join-item"
               disabled={disabled || message.length === 0}
