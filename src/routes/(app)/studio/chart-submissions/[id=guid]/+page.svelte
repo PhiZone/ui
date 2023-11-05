@@ -377,13 +377,13 @@
                 <span class="badge mr-1">
                   {$t('studio.submission.adm_status')}
                 </span>
-                {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
+                {$t(`studio.submission.statuses.${submission.admissionStatus}`)}
               </p>
               <p>
                 <span class="badge mr-1">
                   {$t('studio.submission.volunteer_status')}
                 </span>
-                {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
+                {$t(`studio.submission.statuses.${submission.volunteerStatus}`)}
               </p>
               <p>
                 <span class="badge mr-1">

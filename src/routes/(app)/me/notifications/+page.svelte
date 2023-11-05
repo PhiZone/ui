@@ -36,10 +36,10 @@
               if ($query.data.data.length === 0) return;
               const resp = await api.notification.readList(searchParams);
               if (resp.ok) {
+                invalidateAll();
                 await queryClient.invalidateQueries({
                   queryKey: ['notification.list', { searchParams }],
                 });
-                invalidateAll();
               }
             }}
           >

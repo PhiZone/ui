@@ -82,7 +82,7 @@
           <span class="badge mr-1">
             {$t('studio.submission.volunteer_status')}
           </span>
-          {$t(`studio.submission.bi_statuses.${submission.volunteerStatus}`)}
+          {$t(`studio.submission.statuses.${submission.volunteerStatus}`)}
         </p>
       </div>
       <div class="flex flex-col md:flex-row min-w-fit">
@@ -90,7 +90,7 @@
           <span class="badge mr-1">
             {$t('studio.submission.adm_status')}
           </span>
-          {$t(`studio.submission.bi_statuses.${submission.admissionStatus}`)}
+          {$t(`studio.submission.statuses.${submission.admissionStatus}`)}
         </p>
         {#if $uploader.isSuccess}
           {@const uploader = $uploader.data?.data}

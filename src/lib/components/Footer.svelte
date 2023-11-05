@@ -4,7 +4,7 @@
   const email_address = 'contact@phizone.cn';
 </script>
 
-<footer class="footer pt-[23px] pb-3 px-10 border-t bg-base-200 border-base-300 text-base">
+<footer class="footer pt-[24px] pb-3 px-10 bg-base-200 text-base">
   <div>
     <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
     <a href="https://www.phi.zone/" target="_blank" rel="noreferrer" class="link link-hover">
