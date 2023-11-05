@@ -104,7 +104,7 @@
       const resp = await api.user.updateAvatar({ id, File: e.detail });
       if (resp.ok) {
         invalidateAll();
-        queryClient.invalidateQueries(['user.info', { id }]);
+        await queryClient.invalidateQueries(['user.info', { id }]);
         avatarCropping = false;
         status = Status.OK;
       } else {

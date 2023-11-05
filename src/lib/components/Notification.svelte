@@ -63,10 +63,10 @@
         <button
           class="btn btn-secondary btn-outline {notification.dateRead ? 'hidden' : ''}"
           on:click={async () => {
+            notification.dateRead = new Date();
             const resp = await api.notification.read({ id: notification.id });
             if (resp.ok) {
-              notification.dateRead = new Date();
-              await invalidateAll();
+              invalidateAll();
             } else {
               console.error(await resp.json());
             }
