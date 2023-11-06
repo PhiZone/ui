@@ -1,11 +1,10 @@
 import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import { clearTokens, setTokens } from '$lib/utils';
+import { clearTokens, getUserPrivilege, setTokens } from '$lib/utils';
 import { locale } from '$lib/translations/config';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
-  console.log(event.url.pathname);
   let accessToken = event.cookies.get('access_token'),
     refreshToken = event.cookies.get('refresh_token');
 
@@ -52,6 +51,34 @@ export const handle = (async ({ event, resolve }) => {
   if (lang) {
     locale.set(lang);
   }
-
+  const userColors = [
+    '\x1b[0m',
+    '\x1b[100m',
+    '\x1b[43m',
+    '\x1b[46m',
+    '\x1b[41m',
+    '\x1b[42m',
+    '\x1b[45m',
+  ];
+  if (event.url.pathname.includes('undefined')) {
+    console.warn(
+      `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`,
+      (event.locals.user
+        ? userColors[getUserPrivilege(event.locals.user.role)] +
+          event.locals.user.userName +
+          '\x1b[0m '
+        : '') + 'encountered undefined in pathname',
+      event.url.pathname,
+    );
+    return new Response();
+  }
+  console.log(
+    `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`,
+    (event.locals.user
+      ? userColors[getUserPrivilege(event.locals.user.role)] +
+        event.locals.user.userName +
+        '\x1b[0m '
+      : '') + event.url.pathname,
+  );
   return await resolve(event);
 }) satisfies Handle;

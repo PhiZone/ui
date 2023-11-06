@@ -18,7 +18,7 @@
     {id} ({question.type == 0 ? 2 : question.type == 1 ? 4 : id == 19 ? 30 : 10}
     {$t('pet.points')})
   </span>
-  <div class="card w-full bg-base-100 shadow-lg">
+  <div class="card w-full bg-base-100 border-2 border-gray-700 transition hover:shadow-lg">
     <div class="card-body">
       {#if question.content}
         <div class="pb-2 text-xl {question.type == 2 && answer ? 'opacity-60' : ''}">

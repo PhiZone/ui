@@ -45,7 +45,7 @@ export const load = async ({ params, url, cookies }) => {
   });
 
   client.on('err', (err) => {
-    console.log('redis client error: ', err);
+    console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, 'redis client: ', err);
   });
 
   client.connect();
@@ -66,7 +66,7 @@ export const actions = {
     });
 
     client.on('err', (err) => {
-      console.log('redis client error: ', err);
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, 'redis client: ', err);
     });
 
     client.connect();

@@ -32,7 +32,7 @@
           use:enhance={() => {
             return async ({ result }) => {
               if (result.type === 'failure') {
-                console.log(result.data);
+                console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, result.data);
               } else if (result.type === 'success') {
                 alert('投票成功');
                 window.location.reload();
