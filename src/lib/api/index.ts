@@ -37,7 +37,11 @@ export default class API {
       body = JSON.stringify(body);
       headers.append('Content-Type', ContentType.JSON);
     }
-    if (import.meta.env.DEV) console.log(path, body);
+    if (import.meta.env.DEV)
+      console.log(
+        `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[44mAPI\x1b[0m`,
+        path + (body ? ` ${body}` : ''),
+      );
 
     if (this.access_token) headers.append('Authorization', `Bearer ${this.access_token}`);
     headers.append('User-Agent', 'PhiZoneRegularAccess');

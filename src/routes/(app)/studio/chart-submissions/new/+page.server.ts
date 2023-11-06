@@ -48,7 +48,7 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.log(error);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);

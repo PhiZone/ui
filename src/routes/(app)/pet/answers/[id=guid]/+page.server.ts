@@ -6,7 +6,6 @@ import { compile } from 'mdsvex';
 import rehypeKatexSvelte from 'rehype-katex-svelte';
 import remarkMath from 'remark-math';
 import type { Plugin } from 'unified';
-import type { KatexOptions } from 'katex';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { ResponseDtoStatus } from '$lib/api/types';
@@ -23,7 +22,7 @@ export const load = async ({ params, locals, fetch }) => {
   const resp = await api.pet.getAnswer({ id: params.id });
   if (!resp.ok) {
     const error = await resp.json();
-    console.log(error);
+    console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
     throw fail(resp.status, t.get(`error.${error.code}`));
   }
   const answer = (await resp.json()).data;
@@ -52,7 +51,7 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.log(error);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);
@@ -80,7 +79,7 @@ const compileQuestion = async (question: PetQuestionDto) => {
     (
       await compile(question.content ?? '', {
         remarkPlugins: [remarkMath],
-        rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
+        rehypePlugins: [rehypeKatexSvelte as Plugin],
       })
     )?.code
       .replaceAll('\\', '')

@@ -20,7 +20,7 @@ export const actions = {
 
     if (!resp.ok) {
       const error = await resp.json();
-      console.log(error);
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
       return fail(resp.status, { email, password, error: error.error as string });
     }
 

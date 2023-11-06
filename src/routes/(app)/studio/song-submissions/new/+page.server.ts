@@ -111,7 +111,7 @@ export const actions = {
       const respBackup = resp.clone();
       try {
         const error = await resp.json();
-        console.log(error);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);
@@ -129,7 +129,7 @@ export const actions = {
         return fail(resp.status, { form });
       } catch (e) {
         const error = await respBackup.text();
-        console.log(error);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
         return fail(resp.status, { error });
       }
     }

@@ -11,7 +11,7 @@ export const load = async ({ fetch, locals }) => {
   const resp = await api.pet.listObjective();
   if (!resp.ok) {
     const error = await resp.json();
-    console.log(error);
+    console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
     throw fail(resp.status, { error: error.code });
   }
   const questions = (await resp.json()).data;

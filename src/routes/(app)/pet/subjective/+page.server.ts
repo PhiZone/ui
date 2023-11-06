@@ -37,7 +37,6 @@ export const load = async ({ url, fetch, locals }) => {
     return { status: 2, error: error.code, form };
   }
   const questions = (await resp.json()).data;
-  console.log(questions);
   for (let i = 0; i < questions.length; i++) {
     questions[i].content =
       (
@@ -87,7 +86,7 @@ export const actions = {
       throw redirect(303, '/pet/answers');
     } else {
       const error = await resp.json();
-      console.log(error);
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
         form.message = t.get(`error.${error.code}`);
