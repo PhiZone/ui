@@ -45,7 +45,7 @@
         class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
       >
         <div class="card-body py-10">
-          <div class="stats">
+          <div class="stats stats-vertical sm:stats-horizontal">
             <div class="stat place-items-center">
               <div class="stat-title">{$t('pet.answer.objective_score')}</div>
               <div class="stat-value text-5xl">{answer.objectiveScore}</div>
