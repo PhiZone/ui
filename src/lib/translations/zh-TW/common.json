@@ -11,15 +11,14 @@
   "settings": "設定",
   "navbar": {
     "apps": "應用",
-    "recorder": "譜面錄製",
-    "privilege_escalation": "權限晉升",
+    "pet": "權限晉升",
     "studio_inaccessible": "請先完成 PhiZone 權限晉升測驗以使用該功能！",
     "logout": "登出"
   },
   "footer": {
     "internal_links": "內部連結",
     "external_links": "外部連結",
-    "legal": "條款",
+    "legal": "法律條款",
     "contact": "聯繫我們",
     "main": "主站點",
     "insider": "内測站點",
@@ -33,10 +32,12 @@
     "phira": "Phira",
     "phitogether": "PhiTogether",
     "phifans": "PhiFans",
-    "terms_of_use": "使用條款",
-    "privacy_policy": "隱私政策",
-    "cookie_policy": "Cookie 政策",
     "copyright": "© PhiZone。保留所有權利。"
+  },
+  "legal": {
+    "terms_of_service": "服務條款",
+    "privacy_policy": "隱私政策",
+    "copyright_policy": "版權政策"
   },
   "waiting": "正在等待回應",
   "pending": "等待處理",

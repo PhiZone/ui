@@ -22,6 +22,10 @@ body {
   @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row;
 }
 
+.studio-info-page {
+  @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row min-h-screen;
+}
+
 .content {
   white-space: pre-line;
   word-break: break-word;

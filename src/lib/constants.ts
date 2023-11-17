@@ -36,7 +36,7 @@ export enum ContentType {
   FORM_URLENCODED = 'application/x-www-form-urlencoded',
 }
 
-export const defaultLocale = 'zh-CN';
+export const defaultLocale = 'en';
 
 export const regions = [
   'AF',

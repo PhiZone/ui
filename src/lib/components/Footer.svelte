@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
+  import { locale, t } from '$lib/translations/config';
 
   const email_address = 'contact@phizone.cn';
 </script>
@@ -19,12 +19,18 @@
     <!-- <a href="/about" class="link link-hover">{$t('common.footer.about')}</a>
     <a href="/feedback" class="link link-hover">{$t('common.footer.feedback')}</a> -->
   </div>
-  <!-- <div>
+  <div>
     <span class="footer-title text-lg">{$t('common.footer.legal')}</span>
-    <a href="/legal/terms-of-use" class="link link-hover">{$t('common.footer.terms_of_use')}</a>
-    <a href="/legal/privacy-policy" class="link link-hover">{$t('common.footer.privacy_policy')}</a>
-    <a href="/legal/cookie-policy" class="link link-hover">{$t('common.footer.cookie_policy')}</a>
-  </div> -->
+    <a href="/legal/{$locale}/terms-of-service" class="link link-hover">
+      {$t('common.legal.terms_of_service')}
+    </a>
+    <a href="/legal/{$locale}/privacy-policy" class="link link-hover">
+      {$t('common.legal.privacy_policy')}
+    </a>
+    <a href="/legal/{$locale}/copyright-policy" class="link link-hover">
+      {$t('common.legal.copyright_policy')}
+    </a>
+  </div>
   <div>
     <span class="footer-title text-lg">{$t('common.footer.external_links')}</span>
     <a href="https://www.phigrim.cn/" target="_blank" rel="noreferrer" class="link link-hover">

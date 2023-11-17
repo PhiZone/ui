@@ -1,6 +1,7 @@
 import I18n from 'sveltekit-i18n';
 import type { Translations } from '@sveltekit-i18n/base';
 import lang from './lang.json';
+import { defaultLocale } from '$lib/constants';
 
 const createLoaders = (
   lang: string,
@@ -17,8 +18,8 @@ const createLoaders = (
 };
 
 export const { t, locale, locales, loading, loadTranslations } = new I18n({
-  initLocale: 'zh-CN',
-  fallbackLocale: 'en',
+  initLocale: defaultLocale,
+  fallbackLocale: defaultLocale,
   translations: {
     en: { lang },
     'zh-CN': { lang },
