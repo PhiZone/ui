@@ -272,7 +272,7 @@
       </form>
     </div>
   </div>
-  <div class="info-page bg-base-200 min-h-screen py-24 px-12 justify-center flex">
+  <div class="studio-info-page bg-base-200 min-h-screen py-24 px-12 justify-center flex">
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
@@ -425,7 +425,7 @@
                   {parseDateTime(submission.dateUpdated)}
                 </p>
                 {#if submission.description}
-                  <p class="submission">
+                  <p class="content">
                     <span class="badge mr-1">
                       {$t('common.description')}
                     </span>

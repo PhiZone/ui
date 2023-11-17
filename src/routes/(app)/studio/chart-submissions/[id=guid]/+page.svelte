@@ -267,7 +267,7 @@
       </form>
     </div>
   </div>
-  <div class="bg-base-200 info-page min-h-screen py-24 px-12">
+  <div class="studio-info-page bg-base-200 min-h-screen py-24 px-12 justify-center flex">
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span

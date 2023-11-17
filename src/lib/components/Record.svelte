@@ -2,7 +2,6 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { page } from '$app/stores';
   import type { ChartDto, RecordDto, SongDto } from '$lib/api';
-  import { t } from '$lib/translations/config';
   import {
     getCompressedImage,
     getGrade,
@@ -95,7 +94,7 @@
         {#if $player.isSuccess}
           {@const player = $player.data.data}
           <a href={`/users/${player.id}`} class="hover:underline">
-            {$t(player.userName)}
+            {player.userName}
           </a>
         {/if}
         {parseDateTime(record.dateCreated)}

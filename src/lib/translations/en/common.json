@@ -11,9 +11,8 @@
   "settings": "Settings",
   "navbar": {
     "apps": "Apps",
-    "recorder": "Chart Recording",
-    "privilege_escalation": "Privilege Escalation",
-    "studio_inaccessible": "Please first take the PhiZone Privilege Escalation Test in order to access this feature!",
+    "pet": "PET",
+    "studio_inaccessible": "Please first take the Privilege Escalation Test in order to access this feature!",
     "logout": "Logout"
   },
   "footer": {
@@ -33,10 +32,12 @@
     "phira": "Phira",
     "phitogether": "PhiTogether",
     "phifans": "PhiFans",
-    "terms_of_use": "Terms of Use",
-    "privacy_policy": "Privacy Policy",
-    "cookie_policy": "Cookie Policy",
     "copyright": "© PhiZone. All rights reserved."
+  },
+  "legal": {
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "copyright_policy": "Copyright Policy"
   },
   "waiting": "Waiting",
   "pending": "Pending",
@@ -78,7 +79,7 @@
   "source": "Source",
   "all": "View all »",
   "anonymous": "[ ANONYMOUS ]",
-  "records": "Play Records",
+  "records": "Records",
   "form": {
     "audio": "Audio File",
     "chart": "Chart File",
@@ -106,8 +107,8 @@
       "license": "Must upload an image (no larger than 10 MB) of the license to proove that this edition is licensed by the author",
       "originality_proof": "ZIP file (no larger than 200 MB) (e.g. containing sub-track audio files) is required to proove the originality",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
-      "ranked": "Play results on this chart are counted in players' RKS; the reviewal is strict",
-      "unranked": "Play results on this chart are not counted in players' RKS; the reviewal is lenient",
+      "ranked": "Scores on this chart are counted in players' RKS; the review is strict",
+      "unranked": "Scores on this chart are not counted in players' RKS; the review is lenient",
       "original": "This is an original piece of music produced by you / your team",
       "reposted": "This is a piece of music produced by someone else"
     },

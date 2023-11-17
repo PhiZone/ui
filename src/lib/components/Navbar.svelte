@@ -52,7 +52,7 @@
       {$t('common.title')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
-      <label for="studio-sidebar" class="btn btn-primary btn-outline drawer-button mx-4 lg:hidden">
+      <label for="studio-sidebar" class="btn btn-primary btn-outline drawer-button mx-4 xl:hidden">
         {$t('studio.drawer')}
       </label>
     {/if}
@@ -87,7 +87,7 @@
         {@const { user } = $page.data}
         {#if user}
           <li class="rounded-full">
-            <a href="/pet">{$t('common.navbar.privilege_escalation')}</a>
+            <a href="/pet">{$t('common.navbar.pet')}</a>
           </li>
         {/if}
       {/if}

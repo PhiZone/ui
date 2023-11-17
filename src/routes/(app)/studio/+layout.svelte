@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
 </script>
 
-<div class="drawer lg:drawer-open">
+<div class="drawer xl:drawer-open">
   <input id="studio-sidebar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
     <slot />
