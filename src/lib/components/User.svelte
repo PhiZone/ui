@@ -62,7 +62,8 @@
   <a
     href={initUser || $query.isSuccess ? `/users/${initUser?.id ?? $query.data?.data.id}` : '#'}
     {target}
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class="card bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class:w-80={kind === 'full'}
     class:h-60={fixedHeight}
   >
     <div
@@ -104,9 +105,11 @@
             </div>
             <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
               {user.userName}
-              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
+              <span class="hidden sm:flex badge badge-sm font-bold">
+                LV{getUserLevel(user.experience)}
+              </span>
               {#if user.tag}
-                <span class="badge badge-sm badge-accent">{user.tag}</span>
+                <span class="hidden sm:flex badge badge-sm badge-accent">{user.tag}</span>
               {/if}
             </p>
           </div>

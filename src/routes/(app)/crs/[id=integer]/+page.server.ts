@@ -49,7 +49,7 @@ export const load = async ({ params, url, cookies }) => {
   });
 
   client.connect();
-  const data: Vote[] = (await client.lRange(`crs:${params.id}`, 0, -1)).map(
+  const data: Vote[] = (await client.lRange(`phizone:crs:${params.id}`, 0, -1)).map(
     (str) => JSON.parse(str) as Vote,
   );
   client.quit();
@@ -80,7 +80,7 @@ export const actions = {
       user: data.get('user') ? parseInt(data.get('user') as string) : undefined,
       date: new Date(),
     };
-    client.rPush(`crs:${params.id}`, JSON.stringify(vote));
+    client.rPush(`phizone:crs:${params.id}`, JSON.stringify(vote));
     client.quit();
   },
 };

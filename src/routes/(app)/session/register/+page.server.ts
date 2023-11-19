@@ -2,7 +2,6 @@ import { fail, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import API, { Gender } from '$lib/api';
-import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z
@@ -12,14 +11,14 @@ const schema = z
       .regex(
         /^([a-zA-Z0-9_\u4e00-\u9fff\u3041-\u309f\u30a0-\u30ff\uac00-\ud7a3]{3,12})|([\u4e00-\u9fff\u3041-\u309f\u30a0-\u30ff\uac00-\ud7a3]{2,12})|([A-Za-z0-9_]{4,18})$/,
         {
-          message: t.get('session.invalid_username'),
+          message: 'session.invalid_username',
         },
       ),
     Email: z.string().email({
-      message: t.get('session.invalid_email'),
+      message: 'session.invalid_email',
     }),
     Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/, {
-      message: t.get('session.invalid_password'),
+      message: 'session.invalid_password',
     }),
     ConfirmPassword: z.string(),
     Language: z.string().default('zh-CN'),
@@ -30,7 +29,7 @@ const schema = z
     EmailConfirmationCode: z.string(),
   })
   .refine(({ Password, ConfirmPassword }) => Password === ConfirmPassword, {
-    message: t.get('session.passwords_differ'),
+    message: 'session.passwords_differ',
     path: ['ConfirmPassword'],
   });
 
@@ -61,14 +60,14 @@ export const actions = {
       console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
-        form.message = t.get(`error.${error.code}`);
+        form.message = `error.${error.code}`;
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
           form.errors[field as keyof Schema] = errors.map((value) => {
-            return t.get(`error.${value}`);
+            return `error.${value}`;
           });
         });
       }

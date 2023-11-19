@@ -96,11 +96,11 @@
   <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
     <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
       {#if showSong}
-        <div class="hidden sm:flex sm:w-1/2 2xl:w-2/3 sm:text-xl sm:font-bold ellipsis-2-md">
+        <div class="sm:w-1/2 2xl:w-2/3 text-xl font-bold ellipsis-2-md">
           {$song.data?.data.title}
         </div>
       {/if}
-      <div class="join join-horizontal items-center">
+      <div class="hidden sm:flex join join-horizontal items-center">
         <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}

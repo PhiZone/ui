@@ -120,55 +120,56 @@
           <form id="review" class="card-body" method="POST" action="?/assess" use:enhance>
             <input type="hidden" id="id" name="id" value={answer.id} />
             <h2 class="card-title">{$t('pet.answer.subjective_score')}</h2>
-            <div class="flex gap-2 items-center">
-              <input type="range" min="0" max="60" bind:value={score} class="range w-3/4" />
-              <input
-                type="text"
-                id="score"
-                name="score"
-                placeholder=""
-                bind:value={score}
-                class="input w-1/4 text-right text-xl font-bold"
-                on:input={(e) => {
-                  if (!/^\d+$/.test(e.currentTarget.value)) {
-                    e.currentTarget.value = `${score}`;
-                    return;
-                  }
-                  if (parseInt(e.currentTarget.value) < 0) {
-                    e.currentTarget.value = '0';
-                  } else if (parseInt(e.currentTarget.value) > 60) {
-                    e.currentTarget.value = '60';
-                  }
-                }}
+            <div class="flex">
+              <div class="flex gap-2 items-center w-full">
+                <input type="range" min="0" max="60" bind:value={score} class="range w-3/4" />
+                <input
+                  type="text"
+                  id="score"
+                  name="score"
+                  placeholder=""
+                  bind:value={score}
+                  class="input w-1/4 text-right text-xl font-bold"
+                  on:input={(e) => {
+                    if (!/^\d+$/.test(e.currentTarget.value)) {
+                      e.currentTarget.value = `${score}`;
+                      return;
+                    }
+                    if (parseInt(e.currentTarget.value) < 0) {
+                      e.currentTarget.value = '0';
+                    } else if (parseInt(e.currentTarget.value) > 60) {
+                      e.currentTarget.value = '60';
+                    }
+                  }}
+                />
+              </div>
+              <div
+                class="tooltip tooltip-right tooltip-error"
+                class:tooltip-open={!!$errors.score}
+                data-tip={$errors.score}
               />
             </div>
-            <div
-              class="tooltip tooltip-bottom tooltip-error"
-              class:tooltip-open={!!$errors.score}
-              data-tip={$errors.score}
-            />
             <div class="card-actions justify-end">
+              <button
+                type="submit"
+                class="btn {$allErrors.length > 0
+                  ? 'btn-error'
+                  : $submitting
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
+                disabled={$submitting}
+              >
+                {$allErrors.length > 0
+                  ? $t('common.error')
+                  : $submitting
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
+              </button>
               <div
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}
                 data-tip={$message}
-              >
-                <button
-                  type="submit"
-                  class="btn {$allErrors.length > 0
-                    ? 'btn-error'
-                    : $submitting
-                    ? 'btn-ghost'
-                    : 'btn-secondary btn-outline'} w-full"
-                  disabled={$submitting}
-                >
-                  {$allErrors.length > 0
-                    ? $t('common.error')
-                    : $submitting
-                    ? $t('common.waiting')
-                    : $t('common.submit')}
-                </button>
-              </div>
+              />
             </div>
           </form>
         </div>

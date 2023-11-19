@@ -25,7 +25,8 @@
     "select_region": "选择地区",
     "email_confirmation_code": "邮箱验证码",
     "success": "你的 PhiZone 账户注册成功！",
-    "language_error": "语言选项出现问题。请更换浏览器重试。"
+    "language_error": "语言选项出现问题。请更换浏览器重试。",
+    "legal_agreement": "我已阅读并同意{{terms_of_service}}与{{privacy_policy}}。"
   },
   "email_confirmation": {
     "email_confirmation": "确认邮箱地址",

@@ -194,7 +194,7 @@
   <h2 id="attribution">Attribution</h2>
   <p>
     Part of this text is based on "
-    <a href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Privacy/en.md">
+    <a target="_blank" href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Privacy/en.md">
       osu! privacy policy
     </a>
     ", which is licensed under CC-BY-NC 4.0.
@@ -306,7 +306,9 @@
   <h2 id="归属">归属</h2>
   <p>
     本文部分内容基于“
-    <a href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Privacy/zh.md">osu! 隐私政策</a>
+    <a target="_blank" href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Privacy/zh.md">
+      osu! 隐私政策
+    </a>
     ”，并已通过 CC-BY-NC 4.0 获得许可。
   </p>
 {/if}
@@ -317,11 +319,11 @@
   }
 
   h2 {
-    @apply text-4xl font-bold mb-4 mt-6;
+    @apply text-4xl font-bold mb-4 mt-7;
   }
 
   h3 {
-    @apply text-2xl font-bold mb-3 mt-4;
+    @apply text-2xl font-bold mb-3 mt-5;
   }
 
   p {

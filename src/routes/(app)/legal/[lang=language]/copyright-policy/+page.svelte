@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.legal.copyrigt_policy')} | {$t('common.title')}</title>
+  <title>{$t('common.legal.copyright_policy')} | {$t('common.title')}</title>
 </svelte:head>
 
 <select
@@ -142,7 +142,10 @@
   <h2 id="attribution">Attribution</h2>
   <p>
     Part of this text is based on "
-    <a href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/en.md">
+    <a
+      target="_blank"
+      href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/en.md"
+    >
       osu! copyright policy
     </a>
     ", which is licensed under CC-BY-NC 4.0.
@@ -221,7 +224,7 @@ People's Republic of China
     </li>
   </ol>
   <p>
-    若指定代理人收到反对通知书，PhiZone
+    若指定代理人收到反通知，PhiZone
     会向原始举报者发送一份反通知的副本以声明被移除或被禁用访问的内容可能在 10
     个工作日内被恢复或解除访问禁用。除非版权所有者针对内容提供者、社区成员或用户提起诉讼寻求法院命令，否则在收到反通知后的
     10 ~ 14 个工作日或更长时间内，PhiZone
@@ -230,7 +233,10 @@ People's Republic of China
   <h2 id="归属">归属</h2>
   <p>
     本文部分内容基于“
-    <a href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/zh.md">
+    <a
+      target="_blank"
+      href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/zh.md"
+    >
       osu! 版权政策
     </a>
     ”，并已通过 CC-BY-NC 4.0 获得许可。
@@ -255,7 +261,7 @@ PhiZone 指定代理人	收
   }
 
   h2 {
-    @apply text-4xl font-bold mb-4 mt-6;
+    @apply text-4xl font-bold mb-4 mt-7;
   }
 
   p {
