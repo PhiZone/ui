@@ -23,10 +23,10 @@ export interface UserDto {
   rks: number;
   followerCount: number;
   followeeCount: number;
-  dateJoined: Date;
-  dateLastLoggedIn: Date | null;
-  dateOfBirth: Date | null;
-  dateFollowed: Date | null;
+  dateJoined: string;
+  dateLastLoggedIn: string | null;
+  dateOfBirth: string | null;
+  dateFollowed: string | null;
 }
 
 export interface UserDetailedDto extends UserDto {

@@ -33,13 +33,13 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.Email}
-        data-tip={$errors.Email}
+        data-tip={$t(($errors.Email ?? [])[0])}
       />
       <div class="mt-10">
         <div
           class="tooltip tooltip-bottom tooltip-error w-full"
           class:tooltip-open={!!$message}
-          data-tip={$message}
+          data-tip={$t($message)}
         >
           <button
             type="submit"

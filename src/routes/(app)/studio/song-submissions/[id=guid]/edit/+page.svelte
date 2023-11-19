@@ -425,20 +425,23 @@
                 <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
-                    <button
-                      type="button"
-                      class="btn btn-secondary btn-square btn-sm btn-outline"
-                      on:click={handlePreviewPlay}
-                    >
-                      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        {#if previewStatus == 2}
-                          <polygon points="5 3 10 3 10 21 5 21 5 3" />
-                          <polygon points="14 3 19 3 19 21 14 21 14 3" />
-                        {:else}
-                          <polygon points="5 3 19 12 5 21 5 3" />
-                        {/if}
-                      </svg>
-                    </button>
+                    {#if previewStatus == 2}
+                      <button
+                        type="button"
+                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        on:click={handlePreviewPlay}
+                      >
+                        <i class="fa-solid fa-pause fa-xl"></i>
+                      </button>
+                    {:else}
+                      <button
+                        type="button"
+                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        on:click={handlePreviewPlay}
+                      >
+                        <i class="fa-solid fa-play fa-lg"></i>
+                      </button>
+                    {/if}
                   </div>
                   {#if !errors?.get('PreviewStart') && !errors?.get('PreviewEnd') && showPreview === 2}
                     <input

@@ -69,8 +69,8 @@
         />
       </figure>
       <div class="card-body w-[70%]">
-        <div class="py-3 flex-col sm:flex-row gap-4 items-center">
-          <h2 class="card-title text-2xl mb-3 content inline-block">
+        <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
+          <h2 class="card-title text-2xl content inline-block">
             {song?.title}
           </h2>
           {#if $chartSubmission.isSuccess}
@@ -122,18 +122,7 @@
                 : 'song'}-submissions/{collaboration.submissionId}"
               class="btn btn-primary btn-outline min-w-fit"
             >
-              <svg
-                fill="currentColor"
-                width="25px"
-                height="25px"
-                viewBox="-5.5 0 32 32"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.52 23.72v0c-1.2 0-2.36-0.48-3.2-1.32-0.84-0.88-1.32-2-1.32-3.2s0.48-2.36 1.32-3.2l4.24-4.24c0.8-0.8 1.88-1.28 3.040-1.32 0.48 0 0.84 0.36 0.88 0.8 0 0.48-0.36 0.84-0.8 0.88-0.72 0.040-1.4 0.32-1.92 0.84l-4.24 4.2c-0.52 0.52-0.84 1.24-0.84 2s0.28 1.48 0.84 2c0.52 0.52 1.24 0.84 2 0.84s1.48-0.28 2-0.84l4.24-4.24c0.52-0.52 0.84-1.24 0.84-2 0-0.48 0.36-0.84 0.84-0.84s0.84 0.36 0.84 0.84c0 1.2-0.48 2.36-1.32 3.2l-4.24 4.24c-0.88 0.88-2 1.36-3.2 1.36zM12 21.56c-0.44 0-0.8-0.36-0.84-0.8 0-0.48 0.32-0.84 0.8-0.88 0.72-0.040 1.4-0.32 1.88-0.84l4.28-4.24c1.12-1.12 1.12-2.92 0-4-1.12-1.12-2.92-1.12-4 0l-4.28 4.24c-0.52 0.52-0.8 1.2-0.84 1.92 0 0.48-0.4 0.8-0.88 0.8s-0.84-0.4-0.8-0.88c0.040-1.16 0.52-2.24 1.32-3.040l4.28-4.24c1.76-1.76 4.64-1.76 6.4 0s1.76 4.64 0 6.4l-4.28 4.24c-0.8 0.8-1.84 1.28-3.040 1.32 0.040 0 0 0 0 0z"
-                />
-              </svg>
+              <i class="fa-solid fa-link"></i>
               {$t('common.source')}
             </a>
             {#if !disabled && collaboration.status === 0}

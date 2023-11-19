@@ -20,12 +20,13 @@
   },
   "registration": {
     "register": "Register",
-    "registration_text": "Register an account to participate in player communications and to play charts on PhiZone!",
+    "registration_text": "Register an account to participate in the PhiZone community!",
     "select_language": "Select Language",
     "select_region": "Select Region",
     "email_confirmation_code": "Email Confirmation Code",
     "success": "You've successfully registered an account on PhiZone!",
-    "language_error": "Invalid language. Switch to another browser and retry."
+    "language_error": "Invalid language. Switch to another browser and retry.",
+    "legal_agreement": "I have read and agree to the {{terms_of_service}} and {{privacy_policy}}."
   },
   "email_confirmation": {
     "email_confirmation": "Confirm Email Address",

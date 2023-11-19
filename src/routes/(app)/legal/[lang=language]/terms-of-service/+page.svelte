@@ -96,7 +96,7 @@
     accuracy or reliability of any information obtained through PhiZone's services, regarding any
     goods or services purchased or obtained through PhiZone's services, regarding any transactions
     entered into through PhiZone's services or that PhiZone's services will meet any user's
-    requirements, be uninterrupted, timely, secure or error free.
+    requirements, be uninterrupted, timely, secure or error-free.
   </p>
   <p>
     The links to third-party sites on PhiZone are for your convenience only, and the inclusion of
@@ -196,7 +196,7 @@
     the necessary licenses, rights, consents, and permissions to use and authorize PhiZone to use
     all patent, trademark, trade secret, copyright or other proprietary rights in and to any and all
     User Submissions to enable inclusion and use of the User Submissions in the manner contemplated
-    by the Website and these Terms of Service.
+    by the Service and these Terms of Service.
   </p>
   <p>
     In connection with User Submissions, you further agree that you will not submit material that is
@@ -257,7 +257,7 @@
   <h2 id="attribution">Attribution</h2>
   <p>
     Part of this text is based on "
-    <a href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Terms/en.md">
+    <a target="_blank" href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Terms/en.md">
       osu! terms of service
     </a>
     ", which is licensed under CC-BY-NC 4.0.
@@ -376,7 +376,7 @@
     在与用户发布内容相关的事项上，你确认、声明和/或保证：你拥有或具备必要的许可、权利和权限，以使用并授权
     PhiZone
     使用一切用户发布内容中的专利、商标、商业秘密、版权或其他专有权利，以使用户发布内容能够按照
-    PhiZone 与服务条款所设计的方式包含和使用。
+    服务与服务条款所设计的方式包含和使用。
   </p>
   <p>
     在与用户发布内容相关的事项上，你同时同意，除非你是此类权利的所有者（或由合法所有者授权）并授予
@@ -425,7 +425,9 @@
   <h2 id="归属">归属</h2>
   <p>
     本文部分内容基于“
-    <a href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Terms/zh.md">osu! 服务条款</a>
+    <a target="_blank" href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Terms/zh.md">
+      osu! 服务条款
+    </a>
     ”，并已通过 CC-BY-NC 4.0 获得许可。
   </p>
 {/if}
@@ -436,7 +438,7 @@
   }
 
   h2 {
-    @apply text-4xl font-bold mb-4 mt-6;
+    @apply text-4xl font-bold mb-4 mt-7;
   }
 
   p {

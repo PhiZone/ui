@@ -26,19 +26,7 @@
   {#if headline}
     <div class="flex justify-center">
       <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          class="stroke-current flex-shrink-0 w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <i class="fa-solid fa-circle-info fa-xl"></i>
         <span class="content">{headline}</span>
       </div>
     </div>
@@ -71,20 +59,7 @@
           bind:value={text}
         />
         <a class="btn lg:btn-lg btn-square btn-primary join-item bg-opacity-80" {href}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <i class="fa-solid fa-magnifying-glass fa-xl"></i>
         </a>
       </div>
     </form>

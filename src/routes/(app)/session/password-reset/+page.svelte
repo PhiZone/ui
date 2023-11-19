@@ -30,7 +30,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.Code}
-        data-tip={$errors.Code}
+        data-tip={$t(($errors.Code ?? [])[0])}
       />
       <input
         type="password"
@@ -43,7 +43,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.Password}
-        data-tip={$errors.Password}
+        data-tip={$t(($errors.Password ?? [])[0])}
       />
       <input
         type="password"
@@ -56,7 +56,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.ConfirmPassword}
-        data-tip={$errors.ConfirmPassword}
+        data-tip={$t(($errors.ConfirmPassword ?? [])[0])}
       />
       <div class="mt-10 join">
         <a
@@ -68,7 +68,7 @@
         <div
           class="tooltip tooltip-bottom tooltip-error w-3/4"
           class:tooltip-open={!!$message}
-          data-tip={$message}
+          data-tip={$t($message)}
         >
           <button
             type="submit"

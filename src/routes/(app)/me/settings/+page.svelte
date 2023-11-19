@@ -34,6 +34,11 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
+  $: regionCode = user?.region;
+  $: year = (user?.dateOfBirth ? new Date(user?.dateOfBirth) : new Date()).getUTCFullYear();
+  $: month = (user?.dateOfBirth ? new Date(user?.dateOfBirth) : new Date()).getUTCMonth() + 1;
+  $: day = (user?.dateOfBirth ? new Date(user?.dateOfBirth) : new Date()).getUTCDate();
+
   const handleAvatar = () => {
     if (avatarFiles.length > 0) {
       const reader = new FileReader();
@@ -42,6 +47,15 @@
         avatarSrc = reader.result as string;
         avatarCropping = true;
       };
+    }
+  };
+
+  const handleDateOfBirth = () => {
+    console.log(year, month, day);
+    if (year && month && day) {
+      const dateOfBirth = new Date(Date.UTC(year, month - 1, day));
+      console.log(dateOfBirth);
+      patch = applyPatch(patch, 'replace', '/dateOfBirth', dateOfBirth.toISOString());
     }
   };
 
@@ -118,7 +132,7 @@
 
 <div class="bg-base-200 page">
   <div class="pb-24 flex justify-center">
-    <div class="mx-4 min-w-fit w-[60vw] max-w-[1150px]">
+    <div class="mx-4 lg:w-[60vw] max-w-7xl">
       <h1 class="text-4xl font-bold mb-6">
         {$t('common.settings')}
       </h1>
@@ -133,29 +147,31 @@
           class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body gap-4 py-10">
-            <div class="avatar gap-4 items-center w-full">
-              <span class="w-1/6 min-w-fit place-self-center">
+            <div class="flex gap-2 items-center w-full">
+              <span class="w-1/6">
                 {$t('user.avatar')}
               </span>
-              <div
-                class="mx-auto w-1/4 md:w-1/6 rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
-                  user.role,
-                )}"
-              >
-                <img
-                  class="object-fill w-[140px] h-[140px]"
-                  src={getAvatar(user.avatar, 100)}
-                  alt="Avatar"
+              <div class="avatar w-5/6 flex flex-col sm:flex-row items-center">
+                <div
+                  class="mx-auto w-1/2 sm:w-1/6 rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
+                    user.role,
+                  )}"
+                >
+                  <img
+                    class="object-fill w-[140px] h-[140px]"
+                    src={getAvatar(user.avatar, 100)}
+                    alt="Avatar"
+                  />
+                </div>
+                <input
+                  type="file"
+                  accept=".jpg, .jpeg, .png, .webp"
+                  class="mb-2 w-full sm:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
+                  bind:files={avatarFiles}
+                  on:change={handleAvatar}
                 />
+                <span class="hidden sm:inline sm:w-1/3">{$t('common.form.tips.image')}</span>
               </div>
-              <input
-                type="file"
-                accept=".jpg, .jpeg, .png, .webp"
-                class="mb-2 w-7/12 md:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
-                bind:files={avatarFiles}
-                on:change={handleAvatar}
-              />
-              <span class="hidden md:inline md:w-1/3">{$t('common.form.tips.image')}</span>
             </div>
             <form class="form-control">
               <input type="number" name="id" value={id} hidden />
@@ -167,7 +183,7 @@
                 </span>
                 <select
                   bind:value={user.gender}
-                  name="gender"
+                  name="Gender"
                   class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     locale.set(e.currentTarget.value);
@@ -179,6 +195,11 @@
                   {/each}
                 </select>
               </label>
+              <div
+                class="tooltip tooltip-bottom tooltip-error mb-2"
+                class:tooltip-open={!!errors?.get('Gender')}
+                data-tip={errors?.get('Gender')}
+              />
               <label class="join w-full mt-2">
                 <span
                   class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
@@ -187,7 +208,7 @@
                 </span>
                 <input
                   type="text"
-                  name="username"
+                  name="UserName"
                   placeholder={$t('user.username')}
                   class="input input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   value={user.userName}
@@ -209,10 +230,9 @@
                 </span>
                 <select
                   bind:value={$locale}
-                  name="language"
+                  name="Language"
                   class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
-                    locale.set(e.currentTarget.value);
                     patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
                   }}
                 >
@@ -233,8 +253,8 @@
                   {$t('user.region')}
                 </span>
                 <select
-                  bind:value={user.region}
-                  name="region"
+                  bind:value={regionCode}
+                  name="RegionCode"
                   class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
@@ -250,6 +270,62 @@
                 class:tooltip-open={!!errors?.get('RegionCode')}
                 data-tip={errors?.get('RegionCode')}
               />
+              <label class="join w-full mt-2">
+                <span
+                  class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
+                >
+                  {$t('user.date_of_birth')}
+                </span>
+                <div class="join w-2/3 md:w-5/6">
+                  <select
+                    name="YearOfBirth"
+                    class="select input-secondary join-item flex-shrink w-1/3"
+                    on:input={(e) => {
+                      year = parseInt(e.currentTarget.value);
+                      handleDateOfBirth();
+                    }}
+                  >
+                    {#each Array.from({ length: 121 }, (_, i) => new Date().getUTCFullYear() - 120 + i) as y}
+                      <option value={y} selected={y == year}>
+                        {y}
+                      </option>
+                    {/each}
+                  </select>
+                  <select
+                    name="MonthOfBirth"
+                    class="select input-secondary join-item flex-shrink w-1/3"
+                    on:input={(e) => {
+                      month = parseInt(e.currentTarget.value);
+                      handleDateOfBirth();
+                    }}
+                  >
+                    {#each Array.from({ length: 12 }, (_, i) => i + 1) as m}
+                      <option value={m} selected={m == month}>
+                        {m}
+                      </option>
+                    {/each}
+                  </select>
+                  <select
+                    name="YearOfBirth"
+                    class="select input-secondary join-item flex-shrink w-1/3"
+                    on:input={(e) => {
+                      day = parseInt(e.currentTarget.value);
+                      handleDateOfBirth();
+                    }}
+                  >
+                    {#each Array.from({ length: new Date(year, month, 0).getDate() }, (_, i) => i + 1) as d}
+                      <option value={d} selected={d == day}>
+                        {d}
+                      </option>
+                    {/each}
+                  </select>
+                </div>
+              </label>
+              <div
+                class="tooltip tooltip-bottom tooltip-error mb-2"
+                class:tooltip-open={!!errors?.get('DateOfBirth')}
+                data-tip={errors?.get('DateOfBirth')}
+              />
               <div class="relative mt-2">
                 <label class="join w-full">
                   <span
@@ -259,7 +335,7 @@
                   </span>
                   <textarea
                     placeholder={$t('user.bio')}
-                    name="bio"
+                    name="Bio"
                     class="textarea textarea-secondary join-item w-2/3 md:w-5/6 h-48"
                     bind:value={user.biography}
                     on:input={(e) => {

@@ -14,7 +14,7 @@
   const follow = async () => {
     if (instantResp) {
       user.followerCount++;
-      user.dateFollowed = new Date();
+      user.dateFollowed = new Date().toISOString();
     }
     const resp = await api.user.follow({ id: user.id });
     if (resp.ok) {
@@ -39,7 +39,7 @@
     } else {
       if (instantResp) {
         user.followerCount++;
-        user.dateFollowed = new Date();
+        user.dateFollowed = new Date().toISOString();
       }
       console.error(await resp.json());
     }
