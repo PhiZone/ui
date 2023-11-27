@@ -16,6 +16,7 @@
     "not_activated": "还未激活？",
     "invalid_token": "与该邮箱地址关联的账号不存在。",
     "invalid_grant": "输入的密码不正确。",
+    "invalid_request": "请求无效。请检查凭据并重试。",
     "insufficient_access": "账号未激活。请在登录之前先激活账号。"
   },
   "registration": {

@@ -152,7 +152,7 @@ export const getPath = (input: string) => {
 };
 
 export const getCompressedImage = (input: string | undefined, quality = 20) => {
-  return `${input}?imageslim&imageMogr2/quality/${quality}`;
+  return input ? `${input}?imageslim&imageMogr2/quality/${quality}` : undefined;
 };
 
 export const getUserColor = (type: string | null) => {
@@ -243,6 +243,24 @@ export const setTokens = (cookies: Cookies, accessToken: string, refreshToken: s
 export const clearTokens = (cookies: Cookies) => {
   cookies.delete('access_token', { path: '/' });
   cookies.delete('refresh_token', { path: '/' });
+};
+
+export const parseAcceptLanguage = (acceptLanguageHeader: string | null): string[] => {
+  if (!acceptLanguageHeader) {
+    return [];
+  }
+
+  const languageTags = acceptLanguageHeader
+    .split(',')
+    .map((language) => {
+      const [tag, q] = language.trim().split(';q=');
+      const quality = q ? parseFloat(q) : 1.0;
+      return { tag, quality };
+    })
+    .filter(({ tag }) => tag !== '*')
+    .sort((a, b) => b.quality - a.quality)
+    .map(({ tag }) => tag);
+  return languageTags;
 };
 
 export const range = (start: number, end: number) => {

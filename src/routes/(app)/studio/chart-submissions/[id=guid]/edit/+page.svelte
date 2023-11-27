@@ -42,8 +42,8 @@
   $: parent = $song.isSuccess
     ? $song.data.data
     : $songSubmission.isSuccess
-    ? $songSubmission.data.data
-    : undefined;
+      ? $songSubmission.data.data
+      : undefined;
 
   $: if (!chart && $submission.isSuccess) {
     chart = $submission.data.data;
@@ -197,7 +197,7 @@
   </div>
 </div>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-300 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <div class="flex justify-between">
@@ -256,14 +256,14 @@
             {$t('studio.submission.adjust_offset')}
           </a>
           <form class="w-full form-control">
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.chart')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.chart')}</span>
               <input
                 type="file"
                 id="file"
                 name="File"
                 accept=".json, .pec"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   errors?.get('File')
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -271,13 +271,13 @@
                 on:input={handleChart}
               />
               {#if !!errors?.get('File')}
-                <span class="place-self-center w-2/3 text-error">{errors?.get('File')}</span>
+                <span class="w-2/3 text-error">{errors?.get('File')}</span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.chart')}</span>
+                <span class="w-2/3">{$t('common.form.tips.chart')}</span>
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 place-self-center">{$t('chart.ranked')}</span>
+              <span class="w-32">{$t('chart.ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -510,16 +510,16 @@
                   class="btn {status === Status.ERROR
                     ? 'btn-error'
                     : status === Status.SENDING
-                    ? 'btn-ghost'
-                    : 'btn-secondary btn-outline'} w-full"
+                      ? 'btn-ghost'
+                      : 'btn-secondary btn-outline'} w-full"
                   disabled={status == Status.SENDING}
                   on:click={update}
                 >
                   {status === Status.ERROR
                     ? $t('common.error')
                     : status === Status.SENDING
-                    ? $t('common.waiting')
-                    : $t('common.submit')}
+                      ? $t('common.waiting')
+                      : $t('common.submit')}
                 </button>
               </div>
             </div>

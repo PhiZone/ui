@@ -16,7 +16,7 @@
   </title>
 </svelte:head>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-300 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-7xl min-w-20">
       <div class="flex flex-wrap gap-2 justify-between items-center mb-6">
@@ -27,19 +27,19 @@
           {$t('studio.upload_chart')}
         </a>
       </div>
-      <div class="min-w-fit form-control gap-4">
-        {#if $query.isSuccess}
-          {@const { total, perPage, data } = $query.data}
-          {#if total && perPage && data && data.length > 0}
-            {#each data as submission}
-              <ChartSubmission {submission} />
+      {#if $query.isSuccess}
+        {@const { total, perPage, data } = $query.data}
+        {#if total && perPage && data && data.length > 0}
+          <div class="result">
+            {#each data as chart}
+              <ChartSubmission {chart} />
             {/each}
-            <Pagination {total} {perPage} {page} {searchParams} />
-          {:else}
-            <p class="py-3 text-center">{$t('common.empty')}</p>
-          {/if}
+          </div>
+          <Pagination {total} {perPage} {page} {searchParams} />
+        {:else}
+          <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}
-      </div>
+      {/if}
     </div>
   </div>
 </div>

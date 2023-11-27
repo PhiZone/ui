@@ -8,6 +8,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
 
   export let data;
 
@@ -54,6 +55,18 @@
     api.song.info(
       { id: $submission.data?.data.representationId ?? '' },
       { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+    ),
+  );
+  $: resourceRecords = createQuery(
+    api.resourceRecord.listAll(
+      {
+        equalsTitle: $submission.data?.data.title,
+        equalsAuthorName: $submission.data?.data.authorName,
+        rangeEditionType: $submission.data ? [$submission.data.data.editionType] : undefined,
+        containsEdition: $submission.data?.data.edition ?? undefined,
+        rangeStrategy: [1, 2, 3, 4],
+      },
+      { enabled: $submission.isSuccess },
     ),
   );
   $: collaborator = createQuery(
@@ -103,14 +116,21 @@
         }}
       >
         <input type="hidden" id="id" name="id" value={id} />
-        <label class="join my-2">
-          <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-            {$t('studio.submission.status')}
-          </span>
-          <select id="status" name="status" class="select select-primary join-item w-3/4" value="1">
-            <option value="1">{$t('studio.submission.volunteer_statuses.1')}</option>
-            <option value="2">{$t('studio.submission.volunteer_statuses.2')}</option>
-          </select>
+        <label class="flex flex-col my-2">
+          <div class="join w-full">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('studio.submission.status')}
+            </span>
+            <select
+              id="status"
+              name="status"
+              class="select select-primary join-item w-3/4"
+              value="1"
+            >
+              <option value="1">{$t('studio.submission.statuses.1')}</option>
+              <option value="2">{$t('studio.submission.statuses.2')}</option>
+            </select>
+          </div>
           <div
             class="tooltip tooltip-bottom tooltip-error"
             class:tooltip-open={!!$reviewErrors.status}
@@ -134,6 +154,15 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$reviewErrors.isHidden}
           data-tip={$reviewErrors.isHidden}
+        />
+        <label class="join my-2">
+          <p class="w-1/4">{$t('studio.submission.is_locked')}</p>
+          <input id="is_locked" name="isLocked" type="checkbox" class="toggle" />
+        </label>
+        <div
+          class="tooltip tooltip-bottom tooltip-error"
+          class:tooltip-open={!!$reviewErrors.isLocked}
+          data-tip={$reviewErrors.isLocked}
         />
         <label class="join my-2">
           <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
@@ -162,15 +191,15 @@
               class="btn {$reviewAllErrors.length > 0
                 ? 'btn-error'
                 : $reviewSubmitting
-                ? 'btn-ghost'
-                : 'btn-secondary btn-outline'} w-full"
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
               disabled={$reviewSubmitting}
             >
               {$reviewAllErrors.length > 0
                 ? $t('common.error')
                 : $reviewSubmitting
-                ? $t('common.waiting')
-                : $t('common.submit')}
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
             </button>
           </div>
         </div>
@@ -272,7 +301,7 @@
       </form>
     </div>
   </div>
-  <div class="studio-info-page bg-base-200 min-h-screen py-24 px-12 justify-center flex">
+  <div class="studio-info-page bg-base-300 min-h-screen py-24 px-12 justify-center flex">
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
@@ -285,14 +314,12 @@
           class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="py-3 flex-col sm:flex-row gap-4 items-center">
+            <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
               <h2 class="text-5xl font-bold content md:inline-block">
                 {submission.title}
               </h2>
               {#if submission.originalityProof}
-                <button
-                  class="btn btn-secondary text-3xl no-animation mt-2 md:mt-0 md:ml-2 min-w-fit"
-                >
+                <button class="btn btn-secondary text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
@@ -314,7 +341,7 @@
                     target="_blank"
                     rel="noreferrer"
                     class="hover:underline min-w-fit"
-                    download={submission.file.split('/').pop()}
+                    download={submission.file?.split('/').pop()}
                   >
                     {$t('common.download')}
                   </a>
@@ -328,7 +355,7 @@
                     target="_blank"
                     rel="noreferrer"
                     class="hover:underline min-w-fit"
-                    download={submission.illustration.split('/').pop()}
+                    download={submission.illustration?.split('/').pop()}
                   >
                     {$t('common.download')}
                   </a>
@@ -436,7 +463,7 @@
                   <span class="badge mr-1">
                     {$t('studio.submission.status')}
                   </span>
-                  {$t(`studio.submission.volunteer_statuses.${submission.status}`)}
+                  {$t(`studio.submission.statuses.${submission.status}`)}
                 </p>
                 {#if $reviewer.isSuccess}
                   {@const reviewer = $reviewer.data.data}
@@ -519,6 +546,25 @@
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
               {/if}
+            </div>
+          </div>
+        </div>
+      {/if}
+      {#if $resourceRecords.isSuccess && $resourceRecords.data.data.length > 0}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('studio.submission.copyright_alert')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body py-10 result">
+              {#each $resourceRecords.data.data as resourceRecord}
+                <ResourceRecord {resourceRecord} />
+              {/each}
             </div>
           </div>
         </div>

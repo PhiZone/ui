@@ -1,6 +1,6 @@
 import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, R } from './types';
-import type { ChapterDto } from './chapter';
+import type { ChapterAdmitterDto } from './chapter';
 import type API from '.';
 import SongSubmissionAPI from './song.submission';
 
@@ -41,16 +41,6 @@ export interface SongDto {
   title: string;
 }
 
-export interface AdmissionDto<T, R> {
-  admittee: T;
-  admitter: R;
-  dateCreated: Date;
-  label: null | string;
-  requesteeId: number;
-  requesterId: number;
-  status: number;
-}
-
 export interface SongAdmitteeDto extends SongDto {
   label: null | string;
 }
@@ -58,8 +48,20 @@ export interface SongAdmitteeDto extends SongDto {
 // list
 export interface Filter extends FilterBase {
   rangeId?: string[];
+  containsTitle?: string;
+  equalsTitle?: string;
+  minEditionType?: number;
+  maxEditionType?: number;
+  rangeEditionType?: number[];
+  containsEdition?: string;
+  equalsEdition?: string;
+  containsAuthorName?: string;
+  equalsAuthorName?: string;
+  containsIllustrator?: string;
+  equalsIllustrator?: string;
   rangeOwnerId?: number[];
   rangeAccessibility?: number[];
+  minDuration?: number;
 }
 
 // info
@@ -90,7 +92,7 @@ export default class SongAPI {
 
   listAllAdmitters = createQueryCreator(
     'song.listAll',
-    ({ id, ...rest }: AdmissionListOpts): R<AdmissionDto<SongDto, ChapterDto>[]> =>
+    ({ id, ...rest }: AdmissionListOpts): R<ChapterAdmitterDto[]> =>
       this.api.GET(`/songs/${id}/chapters?` + stringifyFilter(rest, true)),
   );
 

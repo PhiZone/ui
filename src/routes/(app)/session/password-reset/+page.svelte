@@ -11,7 +11,7 @@
   <title>{$t('session.password_reset.password_reset')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content flex-col text-center w-[50vw] max-w-lg">
     <h1 class="text-5xl font-bold">
       {$t('session.password_reset.password_reset')}
@@ -30,7 +30,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.Code}
-        data-tip={$t(($errors.Code ?? [])[0])}
+        data-tip={$errors.Code}
       />
       <input
         type="password"
@@ -43,7 +43,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.Password}
-        data-tip={$t(($errors.Password ?? [])[0])}
+        data-tip={$errors.Password}
       />
       <input
         type="password"
@@ -56,7 +56,7 @@
       <div
         class="tooltip tooltip-bottom tooltip-error"
         class:tooltip-open={!!$errors.ConfirmPassword}
-        data-tip={$t(($errors.ConfirmPassword ?? [])[0])}
+        data-tip={$errors.ConfirmPassword}
       />
       <div class="mt-10 join">
         <a
@@ -68,22 +68,22 @@
         <div
           class="tooltip tooltip-bottom tooltip-error w-3/4"
           class:tooltip-open={!!$message}
-          data-tip={$t($message)}
+          data-tip={$message}
         >
           <button
             type="submit"
             class="btn {$allErrors.length > 0
               ? 'btn-error'
               : $submitting
-              ? 'btn-ghost'
-              : 'btn-primary btn-outline'} w-full join-item"
+                ? 'btn-ghost'
+                : 'btn-primary btn-outline'} w-full join-item"
             disabled={$submitting}
           >
             {$allErrors.length > 0
               ? $t('common.error')
               : $submitting
-              ? $t('common.waiting')
-              : $t('common.submit')}
+                ? $t('common.waiting')
+                : $t('common.submit')}
           </button>
         </div>
       </div>

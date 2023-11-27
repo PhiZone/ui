@@ -6,7 +6,7 @@ export const load = async ({ parent }) => {
   if (!user) {
     throw error(401, 'Unauthorized');
   }
-  if (user && getUserPrivilege(user.role) < 4) {
+  if (user && getUserPrivilege(user.role) < 3) {
     throw error(403, 'Forbidden');
   }
 };

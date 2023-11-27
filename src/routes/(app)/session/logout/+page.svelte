@@ -24,7 +24,7 @@
   <title>{$t('session.logging_out')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content text-center">
     <div class="max-w-md">
       <h1 class="text-5xl font-bold my-4">{$t('session.logging_out')}</h1>

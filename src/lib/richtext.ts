@@ -105,6 +105,24 @@ export function transform(content: string /*, ctx: RichContext*/): string {
         (_, id: string, display: string) =>
           `<a href="/studio/collaborations/${id}" class="richtext-link richtext-collab">${display}</a>`,
       )
+      // chapter admission
+      .replaceAll(
+        /\[PZChapterAdmission:([-0-9a-fA-F]+):([-0-9a-fA-F]+):(.+?):PZCRT\]/gi,
+        (_, id1: string, id2: string, display: string) =>
+          `<a href="/studio/admissions/chapters/${id1}/${id2}" class="richtext-link richtext-admission">${display}</a>`,
+      )
+      // song admission
+      .replaceAll(
+        /\[PZSongAdmission:([-0-9a-fA-F]+):([-0-9a-fA-F]+):(.+?):PZCRT\]/gi,
+        (_, id1: string, id2: string, display: string) =>
+          `<a href="/studio/admissions/songs/${id1}/${id2}" class="richtext-link richtext-admission">${display}</a>`,
+      )
+      // song submission admission
+      .replaceAll(
+        /\[PZSongSubmissionAdmission:([-0-9a-fA-F]+):([-0-9a-fA-F]+):(.+?):PZCRT\]/gi,
+        (_, id1: string, id2: string, display: string) =>
+          `<a href="/studio/admissions/song-submissions/${id1}/${id2}" class="richtext-link richtext-admission">${display}</a>`,
+      )
   );
 }
 

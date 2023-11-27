@@ -1,10 +1,10 @@
 {
   "chapter": "章節",
   "id": "章節 ID",
-  "illustration": "插圖",
-  "view_illustration": "查看插圖",
+  "illustration": "插畫",
+  "view_illustration": "查看插畫",
   "illustrator": "畫師",
-  "description": "簡介",
   "owner": "所有者",
-  "songs": "收錄曲目"
+  "songs": "收錄曲目",
+  "label": "標簽"
 }

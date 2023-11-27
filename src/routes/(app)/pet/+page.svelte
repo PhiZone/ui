@@ -10,7 +10,7 @@
   <title>{$t('pet.title')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content text-center">
     <div class="max-w-3xl">
       <h1 class="text-5xl font-bold">{$t('pet.title')}</h1>

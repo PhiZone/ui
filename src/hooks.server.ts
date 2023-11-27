@@ -1,8 +1,8 @@
 import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import { clearTokens, getUserPrivilege, setTokens } from '$lib/utils';
-import { locale } from '$lib/translations/config';
+import { clearTokens, getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
 import type { Handle } from '@sveltejs/kit';
+import { locales } from '$lib/translations/config';
 
 export const handle = (async ({ event, resolve }) => {
   let accessToken = event.cookies.get('access_token'),
@@ -39,17 +39,25 @@ export const handle = (async ({ event, resolve }) => {
   } else {
     event.locals.user = undefined;
   }
+  const language =
+    event.locals.user?.language ??
+    event.url.searchParams.get('language') ??
+    event.cookies.get('language') ??
+    parseAcceptLanguage(event.request.headers.get('Accept-Language')).find((tag) =>
+      locales
+        .get()
+        .map((str) => str.toLowerCase())
+        .includes(tag.toLowerCase()),
+    );
+  if (language) {
+    event.cookies.set('language', language, { path: '/' });
+  }
 
   if (event.locals.user) {
     event.locals.accessToken = accessToken;
     event.locals.refreshToken = refreshToken;
   } else {
     clearTokens(event.cookies);
-  }
-
-  const lang = event.locals.user?.language;
-  if (lang) {
-    locale.set(lang);
   }
   const userColors = [
     '\x1b[0m',

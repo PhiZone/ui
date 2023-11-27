@@ -15,7 +15,7 @@
   <title>{$t('notification.notifications')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="bg-base-200 page">
+<div class="page">
   <div class="min-w-20">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-4xl font-bold">

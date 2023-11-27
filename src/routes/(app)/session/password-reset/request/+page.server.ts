@@ -4,6 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { SendEmailMode } from '$lib/api/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { t } from '$lib/translations/config';
 
 const schema = z.object({
   Email: z.string(),
@@ -35,14 +36,14 @@ export const actions = {
       console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
-        form.message = `error.${error.code}`;
+        form.message = t.get(`error.${error.code}`);
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
           form.errors[field as keyof Schema] = errors.map((value) => {
-            return `error.${value}`;
+            return t.get(`error.${value}`);
           });
         });
       }

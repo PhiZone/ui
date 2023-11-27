@@ -14,7 +14,7 @@
   <title>{$t('common.reply')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="w-5/6 form-control mx-auto">
     {#if $query.isSuccess}
       {@const reply = $query.data.data}

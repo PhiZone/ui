@@ -9,6 +9,7 @@
   "search": "Search",
   "studio": "Creator's Studio",
   "settings": "Settings",
+  "resource_records": "Resource Records",
   "navbar": {
     "apps": "Apps",
     "pet": "PET",
@@ -109,8 +110,8 @@
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "ranked": "Scores on this chart are counted in players' RKS; the review is strict",
       "unranked": "Scores on this chart are not counted in players' RKS; the review is lenient",
-      "original": "This is an original piece of music produced by you / your team",
-      "reposted": "This is a piece of music produced by someone else"
+      "original": "This is an original track produced by you / your team",
+      "reposted": "This is a track produced by someone else"
     },
     "errors": {
       "data_incomplete": "The input data is incomplete!",

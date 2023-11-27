@@ -1,6 +1,5 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import Song from '$lib/components/Song.svelte';
   import { richtext } from '$lib/richtext';
   import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
@@ -10,6 +9,8 @@
   import Collaboration from '$lib/components/Collaboration.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import User from '$lib/components/User.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import SongSubmission from '$lib/components/SongSubmission.svelte';
   import Chart from '$lib/components/Chart.svelte';
 
   export let data;
@@ -74,8 +75,8 @@
     {$t('studio.chart_submission')} - {$song.isSuccess
       ? $song.data.data.title
       : $songSubmission.isSuccess
-      ? $songSubmission.data.data.title
-      : ''}
+        ? $songSubmission.data.data.title
+        : ''}
     {$submission.isSuccess
       ? `[${$submission.data.data.level} ${
           $submission.data.data.difficulty != 0 ? Math.floor($submission.data.data.difficulty) : '?'
@@ -157,15 +158,15 @@
               class="btn {$voteAllErrors.length > 0
                 ? 'btn-error'
                 : $voteSubmitting
-                ? 'btn-ghost'
-                : 'btn-secondary btn-outline'} w-full"
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
               disabled={$voteSubmitting}
             >
               {$voteAllErrors.length > 0
                 ? $t('common.error')
                 : $voteSubmitting
-                ? $t('common.waiting')
-                : $t('common.submit')}
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
             </button>
           </div>
         </div>
@@ -267,7 +268,7 @@
       </form>
     </div>
   </div>
-  <div class="studio-info-page bg-base-200 min-h-screen py-24 px-12 justify-center flex">
+  <div class="studio-info-page bg-base-300 min-h-screen py-24 px-12 justify-center flex">
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
@@ -280,22 +281,17 @@
           class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="text-5xl py-3 font-bold gap-4 items-center content inline-block">
-              {#if $song.isSuccess}
-                <a
-                  class="hover:underline"
-                  href={`/songs/${$song.data.data.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+            <div class="text-5xl py-3 font-bold gap-4 items-center content flex">
+              {#if submission.title}
+                {submission.title}
+              {:else if $song.isSuccess}
+                <a class="hover:underline" href={`/songs/${$song.data.data.id}`}>
                   {$song.data.data.title}
                 </a>
               {:else if $songSubmission.isSuccess}
                 <a
                   class="hover:underline"
                   href={`/studio/song-submissions/${$songSubmission.data.data.id}`}
-                  target="_blank"
-                  rel="noreferrer"
                 >
                   {$songSubmission.data.data.title}
                 </a>
@@ -336,7 +332,7 @@
                   target="_blank"
                   rel="noreferrer"
                   class="hover:underline min-w-fit"
-                  download={submission.file.split('/').pop()}
+                  download={submission.file?.split('/').pop()}
                 >
                   {$t('common.download')}
                 </a>
@@ -354,6 +350,10 @@
                 {submission.noteCount}
               </p>
               <p>
+                <span class="badge mr-1">{$t('chart.format')}</span>
+                {$t(`chart.formats.${submission.format}`)}
+              </p>
+              <p>
                 <span class="badge mr-1">
                   {$t('common.created_at')}
                 </span>
@@ -368,7 +368,7 @@
               {#if submission.description}
                 <p class="content">
                   <span class="badge mr-1">
-                    {$t('chart.description')}
+                    {$t('common.description')}
                   </span>
                   {submission.description}
                 </p>
@@ -465,7 +465,6 @@
       </div>
       {#if $votes.isSuccess}
         {@const votes = $votes.data.data}
-
         {#each votes as vote}
           <VolunteerVote {vote} />
         {/each}
@@ -493,6 +492,18 @@
             {$t('song.song')}
           </span>
           <Song {song} />
+        </div>
+      {/if}
+      {#if $songSubmission.isSuccess}
+        {@const song = $songSubmission.data.data}
+        <div class="indicator my-4 w-full">
+          <span
+            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('studio.song_submission')}
+          </span>
+          <SongSubmission {song} />
         </div>
       {/if}
       {#if $representation.isSuccess}

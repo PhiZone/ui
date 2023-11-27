@@ -21,6 +21,8 @@ export interface VoteDto {
 // list
 export interface Filter extends FilterBase {
   chartId: string;
+  rangeId?: string[];
+  rangeOwnerId?: number[];
 }
 
 // create

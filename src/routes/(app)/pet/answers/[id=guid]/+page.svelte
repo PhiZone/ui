@@ -155,15 +155,15 @@
                 class="btn {$allErrors.length > 0
                   ? 'btn-error'
                   : $submitting
-                  ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                    ? 'btn-ghost'
+                    : 'btn-secondary btn-outline'} w-full"
                 disabled={$submitting}
               >
                 {$allErrors.length > 0
                   ? $t('common.error')
                   : $submitting
-                  ? $t('common.waiting')
-                  : $t('common.submit')}
+                    ? $t('common.waiting')
+                    : $t('common.submit')}
               </button>
               <div
                 class="tooltip tooltip-bottom tooltip-error w-full"

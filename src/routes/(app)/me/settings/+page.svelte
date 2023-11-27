@@ -51,10 +51,8 @@
   };
 
   const handleDateOfBirth = () => {
-    console.log(year, month, day);
     if (year && month && day) {
       const dateOfBirth = new Date(Date.UTC(year, month - 1, day));
-      console.log(dateOfBirth);
       patch = applyPatch(patch, 'replace', '/dateOfBirth', dateOfBirth.toISOString());
     }
   };
@@ -130,7 +128,7 @@
   />
 {/if}
 
-<div class="bg-base-200 page">
+<div class="page">
   <div class="pb-24 flex justify-center">
     <div class="mx-4 lg:w-[60vw] max-w-7xl">
       <h1 class="text-4xl font-bold mb-6">
@@ -166,7 +164,7 @@
                 <input
                   type="file"
                   accept=".jpg, .jpeg, .png, .webp"
-                  class="mb-2 w-full sm:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
+                  class="w-full sm:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
                   bind:files={avatarFiles}
                   on:change={handleAvatar}
                 />
@@ -186,7 +184,6 @@
                   name="Gender"
                   class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
-                    locale.set(e.currentTarget.value);
                     patch = applyPatch(patch, 'replace', '/gender', e.currentTarget.value);
                   }}
                 >
@@ -375,16 +372,16 @@
                     class="btn {status === Status.ERROR
                       ? 'btn-error'
                       : status === Status.SENDING
-                      ? 'btn-ghost'
-                      : 'btn-primary btn-outline'} w-full"
+                        ? 'btn-ghost'
+                        : 'btn-primary btn-outline'} w-full"
                     disabled={status == Status.SENDING}
                     on:click={update}
                   >
                     {status === Status.ERROR
                       ? $t('common.error')
                       : status === Status.SENDING
-                      ? $t('common.waiting')
-                      : $t('common.submit')}
+                        ? $t('common.waiting')
+                        : $t('common.submit')}
                   </button>
                 </div>
               </div>

@@ -163,10 +163,6 @@
 </div>
 
 <style>
-  * {
-    font-family: 'Saira', sans-serif;
-  }
-
   .logo {
     max-height: 60px;
     margin-right: 10px;

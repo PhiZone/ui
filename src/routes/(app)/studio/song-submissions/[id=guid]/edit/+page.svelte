@@ -7,7 +7,7 @@
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
   import { applyPatch, convertTime, parseTime } from '$lib/utils';
-  import type { SongSubmissionDto } from '$lib/api/song.submission';
+  import type { SongSubmissionDto } from '$lib/api';
   import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
   import { onMount } from 'svelte';
@@ -286,7 +286,7 @@
   </div>
 </div>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-300 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <div class="flex justify-between">
@@ -321,14 +321,14 @@
                 {$t(`common.form.tips.${isOriginal ? 'original' : 'reposted'}`)}
               </span>
             </div>
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.audio')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.audio')}</span>
               <input
                 type="file"
                 id="file"
                 name="File"
                 accept=".mp3, .wav, .flac, .ogg"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   errors?.get('File')
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -337,19 +337,19 @@
                 on:input={handleFile}
               />
               {#if !!errors?.get('File')}
-                <span class="place-self-center w-2/3 text-error">{errors?.get('File')}</span>
+                <span class="w-2/3 text-error">{errors?.get('File')}</span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.audio')}</span>
+                <span class="w-2/3">{$t('common.form.tips.audio')}</span>
               {/if}
             </div>
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.illustration')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.illustration')}</span>
               <input
                 type="file"
                 id="illustration"
                 name="Illustration"
                 accept=".jpg, .jpeg, .png, .webp"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   errors?.get('Illustration')
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -359,16 +359,16 @@
                 }}
               />
               {#if !!errors?.get('Illustration')}
-                <span class="place-self-center w-2/3 text-error">
+                <span class="w-2/3 text-error">
                   {errors?.get('Illustration')}
                 </span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.illustration')}</span>
+                <span class="w-2/3">{$t('common.form.tips.illustration')}</span>
               {/if}
             </div>
             {#if isOriginal}
-              <div class="flex">
-                <span class="w-32 place-self-center">
+              <div class="flex items-center my-2">
+                <span class="w-32">
                   {$t('common.form.originality_proof')}
                 </span>
                 <input
@@ -376,7 +376,7 @@
                   id="originality_proof"
                   name="OriginalityProof"
                   accept=".zip"
-                  class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                     errors?.get('OriginalityProof')
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
@@ -386,25 +386,25 @@
                   }}
                 />
                 {#if !!errors?.get('OriginalityProof')}
-                  <span class="place-self-center w-2/3 text-error">
+                  <span class="w-2/3 text-error">
                     {errors?.get('OriginalityProof')}
                   </span>
                 {:else}
-                  <span class="place-self-center w-2/3">
+                  <span class="w-2/3">
                     {$t('common.form.tips.originality_proof')}
                   </span>
                 {/if}
               </div>
             {/if}
             {#if song.editionType === 3}
-              <div class="flex">
-                <span class="w-32 place-self-center">{$t('common.form.license')}</span>
+              <div class="flex items-center my-2">
+                <span class="w-32">{$t('common.form.license')}</span>
                 <input
                   type="file"
                   id="license"
                   name="License"
                   accept=".jpg, .jpeg, .png, .webp"
-                  class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                     errors?.get('License')
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
@@ -414,14 +414,14 @@
                   }}
                 />
                 {#if !!errors?.get('License')}
-                  <span class="place-self-center w-2/3 text-error">{errors?.get('License')}</span>
+                  <span class="w-2/3 text-error">{errors?.get('License')}</span>
                 {:else}
-                  <span class="place-self-center w-2/3">{$t('common.form.tips.license')}</span>
+                  <span class="w-2/3">{$t('common.form.tips.license')}</span>
                 {/if}
               </div>
             {/if}
             {#if showPreview}
-              <div class="flex">
+              <div class="flex my-2">
                 <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
@@ -907,16 +907,16 @@
                   class="btn {status === Status.ERROR
                     ? 'btn-error'
                     : status === Status.SENDING
-                    ? 'btn-ghost'
-                    : 'btn-secondary btn-outline'} w-full"
+                      ? 'btn-ghost'
+                      : 'btn-secondary btn-outline'} w-full"
                   disabled={status == Status.SENDING}
                   on:click={update}
                 >
                   {status === Status.ERROR
                     ? $t('common.error')
                     : status === Status.SENDING
-                    ? $t('common.waiting')
-                    : $t('common.submit')}
+                      ? $t('common.waiting')
+                      : $t('common.submit')}
                 </button>
               </div>
             </div>

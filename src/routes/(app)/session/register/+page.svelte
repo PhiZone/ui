@@ -127,7 +127,7 @@
   </div>
 </div>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content form-control lg:flex-row-reverse">
     <div class="px-10 text-center lg:text-left">
       <h1 class="text-5xl font-bold">
@@ -157,7 +157,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={$errors.UserName || emailConfirmationResult.errors.UserName}
-              data-tip={$t(($errors.UserName ?? [])[0] ?? emailConfirmationResult.errors.UserName)}
+              data-tip={$errors.UserName ?? emailConfirmationResult.errors.UserName}
             />
           </div>
           <label class="label" for="email">
@@ -177,7 +177,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={$errors.Email || emailConfirmationResult.errors.Email}
-              data-tip={$t(($errors.Email ?? [])[0] ?? emailConfirmationResult.errors.Email)}
+              data-tip={$errors.Email ?? emailConfirmationResult.errors.Email}
             />
           </div>
           <label class="label" for="password">
@@ -196,7 +196,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={!!$errors.Password}
-              data-tip={$t(($errors.Password ?? [])[0])}
+              data-tip={$errors.Password}
             />
           </div>
           <label class="label" for="confirm_password">
@@ -216,7 +216,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={!!$errors.ConfirmPassword}
-              data-tip={$t(($errors.ConfirmPassword ?? [])[0])}
+              data-tip={$errors.ConfirmPassword}
             />
           </div>
           <label class="label" for="language">
@@ -240,7 +240,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={$errors.Language || emailConfirmationResult.errors.Language}
-              data-tip={$t(($errors.Language ?? [])[0] ?? emailConfirmationResult.errors.Language)}
+              data-tip={$errors.Language ?? emailConfirmationResult.errors.Language}
             />
           </div>
           <label class="label" for="region">
@@ -261,7 +261,7 @@
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={!!$errors.RegionCode}
-              data-tip={$t(($errors.RegionCode ?? [])[0])}
+              data-tip={$errors.RegionCode}
             />
           </div>
           <label class="label" for="email_confirmation_code">
@@ -287,10 +287,10 @@
                   class="btn {emailConfirmationResult.status === Status.ERROR
                     ? 'btn-error'
                     : emailConfirmationResult.status === Status.SENDING
-                    ? !emailConfirmationAvailable
-                      ? 'btn-ghost font-mono'
-                      : 'btn-ghost'
-                    : 'btn-secondary btn-outline'} join-item w-full"
+                      ? !emailConfirmationAvailable
+                        ? 'btn-ghost font-mono'
+                        : 'btn-ghost'
+                      : 'btn-secondary btn-outline'} join-item w-full"
                   disabled={emailConfirmationResult.status === Status.SENDING ||
                     !emailConfirmationAvailable}
                   on:click={confirmEmail}
@@ -298,17 +298,17 @@
                   {!emailConfirmationAvailable
                     ? `${min}m ${sec}s`
                     : emailConfirmationResult.status === Status.ERROR
-                    ? $t('common.error')
-                    : emailConfirmationResult.status === Status.SENDING
-                    ? $t('common.waiting')
-                    : $t('common.fetch')}
+                      ? $t('common.error')
+                      : emailConfirmationResult.status === Status.SENDING
+                        ? $t('common.waiting')
+                        : $t('common.fetch')}
                 </button>
               </div>
             </div>
             <div
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={!!$errors.EmailConfirmationCode}
-              data-tip={$t(($errors.EmailConfirmationCode ?? [])[0])}
+              data-tip={$errors.EmailConfirmationCode}
             />
           </div>
           <div class="form-control">
@@ -338,8 +338,8 @@
               class="btn {$allErrors.length > 0
                 ? 'btn-error'
                 : $submitting || emailConfirmationResult.status === Status.ERROR
-                ? 'btn-ghost'
-                : 'btn-secondary btn-outline'} w-full"
+                  ? 'btn-ghost'
+                  : 'btn-secondary btn-outline'} w-full"
               disabled={!legalAgreement ||
                 $submitting ||
                 emailConfirmationResult.status === Status.ERROR}
@@ -347,13 +347,13 @@
               {$allErrors.length > 0
                 ? $t('common.error')
                 : $submitting
-                ? $t('common.waiting')
-                : $t('session.registration.register')}
+                  ? $t('common.waiting')
+                  : $t('session.registration.register')}
             </button>
             <div
               class="tooltip tooltip-bottom tooltip-error w-full"
               class:tooltip-open={!!$message}
-              data-tip={$t($message)}
+              data-tip={$message}
             />
           </div>
         </form>

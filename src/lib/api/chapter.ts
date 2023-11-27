@@ -32,6 +32,10 @@ export interface SongListFilter extends FilterBase {
   id: string;
 }
 
+export interface ChapterAdmitterDto extends ChapterDto {
+  label: null | string;
+}
+
 export interface InfoOpts {
   id: string;
 }

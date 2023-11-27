@@ -27,7 +27,7 @@
   <title>{$t('session.login.login')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content form-control lg:flex-row-reverse">
     <div class="px-10 text-center lg:text-left">
       <h1 class="text-5xl font-bold">
@@ -109,15 +109,15 @@
                 class="btn {status === Status.ERROR
                   ? 'btn-error'
                   : status === Status.SENDING
-                  ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                    ? 'btn-ghost'
+                    : 'btn-secondary btn-outline'} w-full"
                 disabled={status == Status.SENDING}
               >
                 {status === Status.ERROR
                   ? $t('common.error')
                   : status === Status.SENDING
-                  ? $t('common.waiting')
-                  : $t('session.login.login')}
+                    ? $t('common.waiting')
+                    : $t('session.login.login')}
               </button>
             </div>
           </div>

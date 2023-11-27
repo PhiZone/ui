@@ -15,6 +15,8 @@ import UserAPI, { type UserDetailedDto } from './user';
 import VoteAPI from './vote';
 import CollaborationAPI from './collaboration';
 import PetAPI from './pet';
+import AdmissionAPI from './admission';
+import ResourceRecordAPI from './resourceRecord';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -87,15 +89,19 @@ export default class API {
   user = new UserAPI(this);
   vote = new VoteAPI(this);
   collaboration = new CollaborationAPI(this);
+  admission = new AdmissionAPI(this);
+  resourceRecord = new ResourceRecordAPI(this);
   pet = new PetAPI(this);
 }
 
 export type { ChapterDto } from './chapter';
 export { ChartFormat, type ChartDto } from './chart';
+export type { ChartSubmissionDto } from './chart.submission';
 export type { CommentDto } from './comment';
 export type { NotificationDto } from './notification';
 export type { RecordDto } from './record';
 export type { ReplyDto } from './reply';
 export type { ChartLevelDto, SongDto, SongAdmitteeDto } from './song';
+export type { SongSubmissionDto } from './song.submission';
 export { Gender, type UserDto, type UserDetailedDto } from './user';
 export type { VoteDto } from './vote';

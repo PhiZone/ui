@@ -1,8 +1,7 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { Filter } from './song';
-import type { FileUpdateOpts, PatchElement, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type { CollaborationDto } from './collaboration';
 
 export interface ChartSubmissionDto {
@@ -30,6 +29,16 @@ export interface ChartSubmissionDto {
   status: number;
   title: null | string;
   volunteerStatus: number;
+}
+
+// list
+export interface Filter extends FilterBase {
+  rangeId?: string[];
+  rangeOwnerId?: number[];
+  earliestDateCreated?: Date;
+  latestDateCreated?: Date;
+  earliestDateUpdated?: Date;
+  latestDateUpdated?: Date;
 }
 
 // info

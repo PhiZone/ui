@@ -20,12 +20,12 @@
 
 {#if kind === 'embedded' || kind === 'embedded-mini'}
   {#if !initUser && $query.isLoading}
-    <div class="avatar {kind === 'embedded' ? 'flex-col' : ''} items-center animate-pulse">
-      <div class="{kind === 'embedded' ? 'w-[72px]' : 'w-10'} rounded-full bg-slate-200" />
-      <p class="h-7 max-w-[120px] rounded bg-slate-200" />
+    <div class="avatar {kind === 'embedded' ? 'flex-col' : ''} items-center">
+      <div class="{kind === 'embedded' ? 'w-[72px]' : 'w-10'} rounded-full skeleton" />
+      <p class="h-7 max-w-[120px] rounded skeleton" />
     </div>
     <div class="flex gap-1">
-      <span class="h-4 w-6 bg-slate-200" />
+      <span class="h-4 w-6 skeleton" />
     </div>
   {:else if initUser || $query.isSuccess}
     {@const user = initUser ?? $query.data?.data}
@@ -70,23 +70,22 @@
       class="card-body py-3 px-4 items-center {kind === 'mini'
         ? 'flex-row gap-8 justify-between'
         : ''}"
-      class:animate-pulse={!initUser && $query.isLoading}
     >
       {#if !initUser && $query.isLoading}
         <div>
           <div class="avatar flex items-center min-w-fit">
-            <div class="w-12 rounded-full bg-slate-200" />
+            <div class="w-12 rounded-full skeleton" />
             <p class="ml-2 flex gap-1 items-center">
-              <span class="rounded h-5 w-16 bg-slate-200" />
-              <span class="rounded h-5 w-10 bg-slate-200" />
+              <span class="rounded h-5 w-16 skeleton" />
+              <span class="rounded h-5 w-10 skeleton" />
             </p>
           </div>
         </div>
         {#if kind === 'full'}
           <div class="px-3 w-full flex flex-col gap-2 {fixedHeight ? 'h-3/4' : ''}">
-            <span class="rounded h-6 w-full bg-slate-200" />
-            <span class="rounded h-6 w-full bg-slate-200" />
-            <span class="rounded h-6 w-full bg-slate-200" />
+            <span class="rounded h-6 w-full skeleton" />
+            <span class="rounded h-6 w-full skeleton" />
+            <span class="rounded h-6 w-full skeleton" />
           </div>
         {/if}
         {#if showFollow}
@@ -103,7 +102,9 @@
             >
               <img src={getAvatar(user.avatar)} alt="Avatar" />
             </div>
-            <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
+            <p
+              class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center min-w-fit"
+            >
               {user.userName}
               <span class="hidden sm:flex badge badge-sm font-bold">
                 LV{getUserLevel(user.experience)}

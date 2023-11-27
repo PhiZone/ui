@@ -39,6 +39,10 @@ export interface Filter extends FilterBase {
   rangeId?: string[];
   rangeOwnerId?: number[];
   rangeAccessibility?: number[];
+  earliestDateCreated?: Date;
+  latestDateCreated?: Date;
+  earliestDateUpdated?: Date;
+  latestDateUpdated?: Date;
 }
 
 // info
@@ -79,6 +83,7 @@ export interface ReviewOpts {
   status: number;
   isOriginal: boolean;
   isHidden: boolean;
+  isLocked: boolean;
   message?: string | undefined;
 }
 

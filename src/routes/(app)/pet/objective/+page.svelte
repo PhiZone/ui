@@ -32,7 +32,7 @@
   <title>{$t('pet.title')} - {$t('pet.objective')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="bg-base-200 page">
+<div class="page">
   <div
     class="card fixed top-20 right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >

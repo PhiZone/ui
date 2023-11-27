@@ -24,7 +24,7 @@
   {/if}
 {/if}
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content w-full">
     <div class="w-5/6 form-control text-center">
       <h1 class="text-6xl font-bold">{$t('common.studio')}</h1>

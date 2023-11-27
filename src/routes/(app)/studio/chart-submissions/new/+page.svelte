@@ -8,7 +8,7 @@
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import type { SongDto } from '$lib/api/song';
-  import type { SongSubmissionDto } from '$lib/api/song.submission';
+  import type { SongSubmissionDto } from '$lib/api';
 
   export let data;
 
@@ -33,7 +33,7 @@
   );
   $: song = createQuery(api.song.listAll({ order: ['title'] }, { enabled: songSwitch }));
   $: songSubmission = createQuery(
-    api.song.submission.listAll({ rangeOwnerId: [user?.id ?? 0] }, { enabled: !songSwitch }),
+    api.song.submission.listAll({ order: ['dateCreated'], desc: [true] }, { enabled: !songSwitch }),
   );
   $: charterPreview = richtext(authorName ?? '');
 
@@ -49,8 +49,8 @@
       songSwitch && $song.isSuccess
         ? $song.data.data.find((value) => value.id === e.currentTarget.value)
         : $songSubmission.isSuccess
-        ? $songSubmission.data.data.find((value) => value.id === e.currentTarget.value)
-        : undefined;
+          ? $songSubmission.data.data.find((value) => value.id === e.currentTarget.value)
+          : undefined;
   };
 </script>
 
@@ -135,7 +135,7 @@
   </div>
 </div>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-300 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
@@ -157,14 +157,14 @@
             {$t('studio.submission.offset_helper')}
           </a>
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.chart')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.chart')}</span>
               <input
                 type="file"
                 id="file"
                 name="File"
                 accept=".json, .pec"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   $errors.File
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -172,9 +172,9 @@
                 on:input={loadChart}
               />
               {#if !!$errors.File}
-                <span class="place-self-center w-2/3 text-error">{$errors.File}</span>
+                <span class="w-2/3 text-error">{$errors.File}</span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.chart')}</span>
+                <span class="w-2/3">{$t('common.form.tips.chart')}</span>
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
@@ -462,15 +462,15 @@
                   class="btn {$allErrors.length > 0
                     ? 'btn-error'
                     : $submitting
-                    ? 'btn-ghost'
-                    : 'btn-primary btn-outline'} w-full"
+                      ? 'btn-ghost'
+                      : 'btn-primary btn-outline'} w-full"
                   disabled={$submitting || !chart}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')
                     : $submitting
-                    ? $t('common.waiting')
-                    : $t('common.submit')}
+                      ? $t('common.waiting')
+                      : $t('common.submit')}
                 </button>
               </div>
             </div>
