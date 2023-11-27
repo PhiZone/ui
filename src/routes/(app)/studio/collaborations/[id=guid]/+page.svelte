@@ -14,7 +14,7 @@
   <title>{$t('studio.collaboration')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="w-5/6 form-control mx-auto max-w-[1200px]">
     {#if $query.isSuccess}
       {@const collaboration = $query.data.data}

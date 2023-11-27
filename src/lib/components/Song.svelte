@@ -8,6 +8,7 @@
 
   export let song: SongDto;
   export let kind: 'full' | 'inline' = 'full';
+  export let showLike = true;
 
   // let easyCount = song.levels.find((e) => {
   //     return e.level === 'EZ';
@@ -51,13 +52,13 @@
           </div>
         {/if}
       </figure>
-      <div class="card-body pt-6 gap-0.5">
-        <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
+      <div class="card-body py-6 gap-0.5">
+        <h2 class="title w-full mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
           {song.title}
         </h2>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge mr-1">{$t('song.edition')}</span>
-          {song.edition ? song.edition : $t(`song.edition_types.${song.editionType}`)}
+          {song.edition ?? $t(`song.edition_types.${song.editionType}`)}
         </p>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
           <span class="badge mr-1">{$t('song.composer')}</span>
@@ -75,28 +76,30 @@
           <span class="badge mr-1">{$t('song.duration')}</span>
           {convertTime(song.duration, true)}
         </p>
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="absolute bottom-8 right-8"
-          on:click={(e) => {
-            e.preventDefault();
-          }}
-          on:keyup
-        >
-          <Like
-            id={song.id}
-            likes={song.likeCount}
-            type="songs"
-            liked={song.dateLiked != null}
-            class="btn-sm"
-          />
-        </div>
+        {#if showLike}
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            class="absolute bottom-8 right-8"
+            on:click={(e) => {
+              e.preventDefault();
+            }}
+            on:keyup
+          >
+            <Like
+              id={song.id}
+              likes={song.likeCount}
+              type="songs"
+              liked={song.dateLiked != null}
+              class="btn-sm"
+            />
+          </div>
+        {/if}
       </div>
     </a>
   </div>
 {:else if kind === 'inline'}
   <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
-    <div class="w-11/12 md:w-1/2">
+    <div class="w-11/12 md:w-7/12">
       <div class="text-xl font-bold ellipsis-2">
         {song.title}
         {#if song.isOriginal}
@@ -106,38 +109,33 @@
         {/if}
       </div>
     </div>
-    <div class="w-0 md:w-5/12">
+    <div class="w-0 md:w-1/3">
       <div class="text-lg hidden md:flex ellipsis-2-md">
-        {song.authorName}
+        {@html $composer}
       </div>
     </div>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      class="w-1/12 min-w-fit"
-      on:click={(e) => {
-        e.preventDefault();
-      }}
-      on:keyup
-    >
-      <Like
-        id={song.id}
-        likes={song.likeCount}
-        type="songs"
-        liked={song.dateLiked != null}
-        class="btn-sm w-24"
-      />
-    </div>
+    {#if showLike}
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        class="w-1/12 min-w-fit"
+        on:click={(e) => {
+          e.preventDefault();
+        }}
+        on:keyup
+      >
+        <Like
+          id={song.id}
+          likes={song.likeCount}
+          type="songs"
+          liked={song.dateLiked != null}
+          class="btn-sm w-24"
+        />
+      </div>
+    {/if}
   </a>
 {/if}
 
 <style>
-  .title {
-    gap: 0.5rem /* 8px */;
-    font-size: 1.25rem /* 20px */;
-    line-height: 1.75rem /* 28px */;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
   .ellipsis-2 {
     overflow: hidden;
     text-overflow: ellipsis;

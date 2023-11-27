@@ -12,8 +12,9 @@
 
   export let chart: ChartDto;
   export let kind: 'full' | 'inline' = 'full';
-  export let showSong: boolean = true;
-  export let showCharter: boolean = true;
+  export let showSong = true;
+  export let showCharter = true;
+  export let showLike = true;
 
   $: song = createQuery(api.song.info({ id: chart.songId }));
   $: charter = richtext(chart.authorName ?? '');
@@ -25,11 +26,15 @@
   >
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[167px] relative">
-        <img
-          src={getCompressedImage(chart.illustration ?? $song.data?.data.illustration)}
-          alt="Illustration"
-          class="object-fill"
-        />
+        {#if chart.illustration || $song.isSuccess}
+          <img
+            src={getCompressedImage(chart.illustration ?? $song.data?.data.illustration)}
+            alt="Illustration"
+            class="object-fill"
+          />
+        {:else}
+          <div class="skeleton rounded-none w-full h-full"></div>
+        {/if}
         <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
           <div class="join join-horizontal">
             <button
@@ -46,11 +51,15 @@
           </div>
         </div>
       </figure>
-      <div class="card-body pt-6 gap-0.5">
+      <div class="card-body py-6 gap-0.5">
         <div class="w-full">
-          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
-            {$song.isSuccess ? $song.data.data.title : ''}
-          </h2>
+          {#if chart.title || $song.isSuccess}
+            <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+              {chart.title ?? $song.data?.data.title}
+            </h2>
+          {:else}
+            <div class="skeleton h-7"></div>
+          {/if}
           <Rating rating={chart.rating} />
         </div>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
@@ -73,22 +82,24 @@
           <span class="badge mr-1">{$t('chart.rating')}</span>
           {chart.rating.toFixed(2)}
         </p>
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="absolute bottom-8 right-8"
-          on:click={(e) => {
-            e.preventDefault();
-          }}
-          on:keyup
-        >
-          <Like
-            id={chart.id}
-            likes={chart.likeCount}
-            type="charts"
-            liked={chart.dateLiked != null}
-            class="btn-sm"
-          />
-        </div>
+        {#if showLike}
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <div
+            class="absolute bottom-8 right-8"
+            on:click={(e) => {
+              e.preventDefault();
+            }}
+            on:keyup
+          >
+            <Like
+              id={chart.id}
+              likes={chart.likeCount}
+              type="charts"
+              liked={chart.dateLiked != null}
+              class="btn-sm"
+            />
+          </div>
+        {/if}
       </div>
     </a>
   </div>
@@ -96,9 +107,13 @@
   <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
     <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
       {#if showSong}
-        <div class="sm:w-1/2 2xl:w-2/3 text-xl font-bold ellipsis-2-md">
-          {$song.data?.data.title}
-        </div>
+        {#if chart.title || $song.isSuccess}
+          <div class="sm:w-1/2 2xl:w-2/3 text-xl font-bold ellipsis-2-md">
+            {$song.data?.data.title}
+          </div>
+        {:else}
+          <div class="skeleton sm:w-1/2 2xl:w-2/3 h-7 ellipsis-2-md"></div>
+        {/if}
       {/if}
       <div class="hidden sm:flex join join-horizontal items-center">
         <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
@@ -125,31 +140,28 @@
       <div class="hidden sm:inline">
         <Rating rating={chart.rating} direction="left" />
       </div>
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        on:click={(e) => {
-          e.preventDefault();
-        }}
-        on:keyup
-      >
-        <Like
-          id={chart.id}
-          likes={chart.likeCount}
-          type="charts"
-          liked={chart.dateLiked != null}
-          class="btn-sm w-24"
-        />
-      </div>
+      {#if showLike}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          on:click={(e) => {
+            e.preventDefault();
+          }}
+          on:keyup
+        >
+          <Like
+            id={chart.id}
+            likes={chart.likeCount}
+            type="charts"
+            liked={chart.dateLiked != null}
+            class="btn-sm w-24"
+          />
+        </div>
+      {/if}
     </div>
   </a>
 {/if}
 
 <style>
-  .title {
-    font-size: 1.25rem /* 20px */;
-    line-height: 1.75rem /* 28px */;
-    font-weight: 600;
-  }
   .ellipsis-2-md {
     overflow: hidden;
     text-overflow: ellipsis;

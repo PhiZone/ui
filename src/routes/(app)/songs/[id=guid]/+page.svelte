@@ -76,14 +76,12 @@
           class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="py-3 flex-col sm:flex-row gap-4 items-center">
+            <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
               <h2 class="text-5xl font-bold content md:inline-block">
                 {song.title}
               </h2>
               {#if song.isOriginal}
-                <button
-                  class="btn btn-secondary text-3xl no-animation mt-2 md:mt-0 md:ml-2 min-w-fit"
-                >
+                <button class="btn btn-secondary text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
@@ -177,7 +175,7 @@
                       href={song.file}
                       target="_blank"
                       rel="noreferrer"
-                      download={song.file.split('/').pop()}
+                      download={song.file?.split('/').pop()}
                       class="btn btn-primary btn-outline flex gap-1 join-item"
                     >
                       <i class="fa-solid fa-file-arrow-down fa-lg"></i>
@@ -253,7 +251,7 @@
             >
               {$t('song.chapter')}
             </span>
-            <Chapter chapter={chapter.admitter} />
+            <Chapter {chapter} />
           </div>
         {/each}
       {/if}

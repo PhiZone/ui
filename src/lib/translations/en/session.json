@@ -16,6 +16,7 @@
     "not_activated": "Not activated?",
     "invalid_token": "We can't find an account associated with this email address.",
     "invalid_grant": "The password is incorrect.",
+    "invalid_request": "The request is invalid. Check your credentials and try again.",
     "insufficient_access": "Your account is not activated. Please first activate your account before logging in."
   },
   "registration": {

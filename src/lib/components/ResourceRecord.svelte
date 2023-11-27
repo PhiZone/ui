@@ -1,0 +1,63 @@
+<script lang="ts">
+  import type { ResourceRecordDto } from '$lib/api/resourceRecord';
+  import { t } from '$lib/translations/config';
+
+  export let resourceRecord: ResourceRecordDto;
+</script>
+
+<div
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+>
+  <a href={`/resource-records/${resourceRecord.id}`}>
+    <div class="card-body py-6 gap-0.5">
+      {#if resourceRecord.strategy === 0}
+        <div
+          class="tooltip tooltip-left tooltip-success absolute top-6 right-6"
+          data-tip={$t('resource_record.strategies.0')}
+        >
+          <button class="btn btn-xs btn-circle btn-success no-animation">
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+      {:else if resourceRecord.strategy === 4}
+        <div
+          class="tooltip tooltip-left tooltip-error absolute top-6 right-6"
+          data-tip={$t('resource_record.strategies.4')}
+        >
+          <button class="btn btn-xs btn-circle btn-error no-animation">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      {:else}
+        <div
+          class="tooltip tooltip-left tooltip-warning absolute top-6 right-6"
+          data-tip={$t(`resource_record.strategies.${resourceRecord.strategy}`)}
+        >
+          <button class="btn btn-xs btn-circle btn-warning no-animation">
+            <i class="fa-solid fa-exclamation"></i>
+          </button>
+        </div>
+      {/if}
+      <h2 class="title mb-1 whitespace-nowrap overflow-hidden text-ellipsis max-w-[220px]">
+        {resourceRecord.title}
+      </h2>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">{$t('resource_record.type')}</span>
+        {$t(`resource_record.types.${resourceRecord.type}`)}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">{$t('resource_record.edition')}</span>
+        {resourceRecord.edition ??
+          $t(`resource_record.edition_types.${resourceRecord.editionType}`)}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">{$t('resource_record.author')}</span>
+        {resourceRecord.authorName}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">{$t('resource_record.copyright_owner')}</span>
+        {resourceRecord.copyrightOwner}
+      </p>
+    </div>
+  </a>
+</div>

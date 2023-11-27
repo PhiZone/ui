@@ -43,8 +43,8 @@
                   grade == 'P'
                     ? 'top-11 text-yellow-400'
                     : record.isFullCombo
-                    ? 'top-11 text-blue-400'
-                    : 'top-11'
+                      ? 'top-11 text-blue-400'
+                      : 'top-11'
                 }`}
               >
                 {grade}
@@ -90,13 +90,15 @@
               <span class="badge mr-1">{$t('record.time')}</span>
               {parseDateTime(record.dateCreated)}
             </p>
-            <Like
-              id={record.id}
-              likes={record.likeCount}
-              type="records"
-              liked={record.dateLiked != null}
-              class="btn-md w-36 text-lg"
-            />
+            <div class="card-actions justify-end">
+              <Like
+                id={record.id}
+                likes={record.likeCount}
+                type="records"
+                liked={record.dateLiked != null}
+                class="card-action btn-md w-36 text-lg"
+              />
+            </div>
           </div>
         </div>
       </div>

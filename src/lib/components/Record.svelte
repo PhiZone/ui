@@ -34,43 +34,52 @@
   class={'card m-1 w-[288px] h-40 card-side relative overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg'}
 >
   <a class="w-full h-full glass" href={`/records/${record.id}`}>
-    {#if $songQ.isSuccess}
+    {#if ($chartQ.isSuccess && $chartQ.data.data.illustration) || $songQ.isSuccess}
       <img
         class="object-fill w-full h-full blur-lg opacity-40"
-        src={getCompressedImage($songQ.data.data.illustration, 1)}
+        src={getCompressedImage(
+          $chartQ.data?.data.illustration ?? $songQ.data?.data.illustration,
+          1,
+        )}
         alt="Illustration"
       />
+    {:else}
+      <div class="skeleton w-full h-full"></div>
     {/if}
     <div
       class={`absolute left-6 text-7xl grade ${
         grade == 'P'
           ? 'top-11 text-yellow-400'
           : record.isFullCombo
-          ? 'top-11 text-blue-400'
-          : 'top-11'
+            ? 'top-11 text-blue-400'
+            : 'top-11'
       }`}
     >
       {grade}
     </div>
     <div class="absolute right-2 top-2 form-control justify-end">
-      {#if showChart && $chartQ.isSuccess && $songQ.isSuccess}
-        {@const chart = $chartQ.data.data}
-        {@const song = $songQ.data.data}
-        <div class="join join-horizontal w-[272px] justify-end">
-          <a
-            class="btn btn-xs btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
-            href="/songs/{song.id}"
-          >
-            {song.title}
-          </a>
-          <a
-            class={`btn ${getLevelColor(chart.levelType)} btn-xs text-sm join-item no-animation`}
-            href="/charts/{chart.id}"
-          >
-            {chart.level}
-            {getLevelDisplay(chart.difficulty)}
-          </a>
-        </div>
+      {#if showChart}
+        {#if $chartQ.isSuccess && $songQ.isSuccess}
+          {@const chart = $chartQ.data.data}
+          {@const song = $songQ.data.data}
+          <div class="join join-horizontal w-[272px] justify-end">
+            <a
+              class="btn btn-xs btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
+              href="/songs/{song.id}"
+            >
+              {song.title}
+            </a>
+            <a
+              class={`btn ${getLevelColor(chart.levelType)} btn-xs text-sm join-item no-animation`}
+              href="/charts/{chart.id}"
+            >
+              {chart.level}
+              {getLevelDisplay(chart.difficulty)}
+            </a>
+          </div>
+        {:else}
+          <div class="skeleton h-6 justify-end"></div>
+        {/if}
       {:else if rank}
         <div class="join join-horizontal w-[272px] justify-start">
           <button class="btn btn-secondary btn-xs join-item text-sm no-animation">

@@ -14,16 +14,22 @@ body {
 .page {
   min-height: calc(100vh - 219px);
   max-width: 1600px;
-  @apply bg-base-200 flex flex-col pt-32 px-4 md:px-32 mx-auto justify-start;
+  @apply bg-base-300 flex flex-col pt-32 px-4 md:px-32 mx-auto justify-start;
 }
 
 .info-page {
   min-height: calc(100vh - 219px);
-  @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row;
+  @apply bg-base-300 py-24 px-12 justify-center flex flex-col lg:flex-row;
 }
 
 .studio-info-page {
-  @apply bg-base-200 py-24 px-12 justify-center flex flex-col lg:flex-row min-h-screen;
+  @apply bg-base-300 py-24 px-12 justify-center flex flex-col lg:flex-row min-h-screen;
+}
+
+.title {
+  font-size: 1.25rem /* 20px */;
+  line-height: 1.75rem /* 28px */;
+  font-weight: 600;
 }
 
 .content {

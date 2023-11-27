@@ -4,7 +4,7 @@
   "illustration": "Illustration",
   "view_illustration": "View Illustration",
   "illustrator": "Illustrator",
-  "description": "Description",
   "owner": "Owner",
-  "songs": "Songs"
+  "songs": "Songs",
+  "label": "Label"
 }

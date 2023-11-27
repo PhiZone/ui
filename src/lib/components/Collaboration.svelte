@@ -156,8 +156,8 @@
                   collaboration.status === 1
                     ? 'studio.request.accepted'
                     : !disabled
-                    ? 'studio.request.rejected'
-                    : 'common.waiting',
+                      ? 'studio.request.rejected'
+                      : 'common.waiting',
                 )}
               </button>
             {/if}
@@ -223,8 +223,8 @@
           collaboration.status === 1
             ? 'studio.request.accepted'
             : !disabled
-            ? 'studio.request.rejected'
-            : 'common.waiting',
+              ? 'studio.request.rejected'
+              : 'common.waiting',
         )}
       </button>
     {/if}

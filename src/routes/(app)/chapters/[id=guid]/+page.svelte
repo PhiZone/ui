@@ -44,7 +44,7 @@
   </div>
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
-    <div class="hero-overlay bg-base-200 bg-opacity-50" />
+    <div class="hero-overlay bg-base-300 bg-opacity-50" />
     <div class="pt-32 pb-24 w-full flex justify-center">
       <div class="w-full max-w-[1280px] mx-16">
         <h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">
@@ -98,10 +98,10 @@
                   <li class="overflow-hidden">
                     <div class="w-full h-[82px] flex px-5">
                       <div class="w-1/2">
-                        <div class="w-[300px] h-7 bg-slate-200 rounded" />
+                        <div class="w-[300px] h-7 skeleton rounded" />
                       </div>
                       <div class="w-5/12">
-                        <div class="w-[200px] h-7 bg-slate-200 rounded" />
+                        <div class="w-[200px] h-7 skeleton rounded" />
                       </div>
                       <div class="w-1/12 min-w-fit">
                         <btn class="w-16 h-12 btn btn-sm" disabled />

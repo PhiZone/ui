@@ -1,10 +1,10 @@
 <script lang="ts">
   import { locale, t } from '$lib/translations/config';
 
-  const email_address = 'contact@phizone.cn';
+  const emailAddress = 'contact@phizone.cn';
 </script>
 
-<footer class="footer pt-[24px] pb-3 px-10 bg-base-200 text-base">
+<footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">
   <div>
     <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
     <a href="https://www.phi.zone/" target="_blank" rel="noreferrer" class="link link-hover">
@@ -50,11 +50,11 @@
     <span class="footer-title text-lg">{$t('common.footer.contact')}</span>
     <div class="flex gap-2 items-center">
       <i class="fa-solid fa-envelope fa-lg"></i>
-      <a class="link link-hover" href="mailto:{email_address}">{email_address}</a>
+      <a class="link link-hover" href="mailto:{emailAddress}">{emailAddress}</a>
     </div>
   </div>
 </footer>
-<footer class="footer px-10 py-5 text-base bg-base-200">
+<footer class="footer px-10 py-5 text-base bg-base-300">
   <div class="items-center grid-flow-col">
     <p class="copyright text-base">{$t('common.footer.copyright')}</p>
   </div>

@@ -42,7 +42,7 @@
   <title>{$t('pet.title')} - {$t('pet.subjective')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="bg-base-200 page">
+<div class="page">
   <div
     class="card fixed top-20 right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >
@@ -98,8 +98,8 @@
             $message
               ? 'btn-error tooltip tooltip-open tooltip-left tooltip-error'
               : timeUp
-              ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
-              : 'btn-primary'
+                ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
+                : 'btn-primary'
           } my-5`}
           data-tip={timeUp ? $t('pet.time_up') : $message}
           disabled={$submitting}
@@ -107,8 +107,8 @@
           {$allErrors.length > 0
             ? $t('common.error')
             : $submitting
-            ? $t('common.waiting')
-            : $t('common.submit')}
+              ? $t('common.waiting')
+              : $t('common.submit')}
         </button>
       </form>
     {:else}

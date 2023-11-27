@@ -147,7 +147,7 @@
               </div>
             </div>
           </figure>
-          <div class="card-body pt-3 max-w-full">
+          <div class="card-body py-3 max-w-full">
             {#if $charts.isSuccess}
               {@const total = $charts.data.total}
               {@const charts = $charts.data.data}

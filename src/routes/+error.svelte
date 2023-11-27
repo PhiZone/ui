@@ -19,7 +19,7 @@
   </title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero min-h-screen bg-base-300">
   <div class="hero-content text-center">
     <div class="max-w-4xl form-control gap-4">
       <h1 class="text-8xl font-bold">{$page.status}</h1>

@@ -54,6 +54,94 @@
     policy shall prevail.
   </p>
   <p>The last modification date of the Copyright Policy is November 18, 2023.</p>
+  <h2 id="active-defense-against-copyright-infringements">
+    Active Defense Against Copyright Infringements
+  </h2>
+  <p>
+    PhiZone has a built-in system that actively reports potential copyright infringements on user
+    submissions. We store <a href="/resource-records">Resource Records</a>
+    in our database, which help the system identify user submissions that need restricting or rejecting.
+    A Resource Record is comprised of the following fields:
+  </p>
+  <ol>
+    <li>title;</li>
+    <li>
+      type (i.e. <code>0</code>
+      for "Music" and
+      <code>1</code>
+      for "Illustration");
+    </li>
+    <li>
+      edition type (i.e. <code>0</code>
+      for "Original Ver.",
+      <code>1</code>
+      for "Author's Edit", and
+      <code>2</code>
+      for "Second-Party Edit");
+    </li>
+    <li>
+      name/origin of edition (e.g. "Arcaea Edit"; leaving blank is suggested when the edition type
+      is <code>0</code>
+      );
+    </li>
+    <li>
+      strategy (i.e. <code>0</code>
+      for "Accept",
+      <code>1</code>
+      for "Make hidden",
+      <code>2</code>
+      for "Make locked",
+      <code>3</code>
+      for "Make hidden and locked", and
+      <code>4</code>
+      for "Reject");
+    </li>
+    <li>author's name;</li>
+    <li>copyright owner's name;</li>
+    <li>source URL;</li>
+    <li>description (optional).</li>
+  </ol>
+  <p>
+    The system searches for Resource Records that match the title, the edition (both the edition
+    type and the name/origin of edition), and the author's name of a user submission, and that has a
+    strategy other than "Accept". If any Resource Records satisfy these conditions, they will be
+    displayed on the submission page and, if the user insists, on the info page of the submission.
+    Moderators are responsible for implementing the strategy specified by the corresponding Resource
+    Records. In cases where multiple Resource Records with different strategies match, moderators
+    act upon the strictest one.
+  </p>
+  <p>
+    If you, as a copyright owner, want your content included in this system, please send an email to <a
+      href="mailto:copyright@phizone.cn"
+      target="_blank"
+      class="url"
+    >
+      copyright@phizone.cn
+    </a>
+    with a CSV file that contains information aforementioned. An example for this CSV file is as follows:
+  </p>
+  <div class="mockup-code max-w-fit mb-2">
+    <pre><code>Title,Type,Edition Type,Edition,Strategy,Author,Copyright Owner,Source,Description</code></pre>
+    <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
+    <pre><code>雪降り、メリクリ,0,0,,4,A-39,Pigeon Games,https://www.bilibili.com/video/BV1hp4y1B7a5/,Phigros original.</code></pre>
+    <pre><code>ジングルベル(Jingle bell),0,0,,4,A-39 & 沙包P,Pigeon Games,https://www.bilibili.com/video/BV1Zr4y1U71p/,</code></pre>
+  </div>
+  <p>
+    Note that the order of the fields must be as described in the example, and that the fields must
+    be separated by commas without Spaces before or after them. Upon receiving the email, we will
+    take action within 7 business days.
+  </p>
+  <p>
+    Alternatively, you may join our group chat on QQ (
+    <a
+      href="https://h5.qun.qq.com/h5/qun-share-page/?_wv=1027&k=O2GbdboCc4etoeMMkJk8dCFVO6BueaKY&authKey=%2FZ810eNpglqIj6Ft7AJtVKHrZTP1VFmWVYQlvhhjur9s1IReWUXz38IqWDPwNRwF&market_channel_source=714344319_1&noverify=0&group_code=714344319"
+      target="_blank"
+    >
+      714344319
+    </a>
+    ) to discuss related issues so as to reduce message latency.
+  </p>
+
   <h2 id="reporting-copyright-infringements">Reporting Copyright Infringements</h2>
   <p>
     If you believe that content residing on PhiZone's services infringes your copyright, please send
@@ -157,11 +245,12 @@
     (responds in 7 business days)
   </p>
   <p><strong>Postal Address:</strong></p>
-  <pre><code>PhiZone Designated Agent
-D5-f1205, Guangzhou International Campus, South China University of Technology
-Guangzhou, Guangdong, 511442
-People's Republic of China
-</code></pre>
+  <div class="mockup-code max-w-fit mb-2">
+    <pre><code>PhiZone Designated Agent</code></pre>
+    <pre><code>D5-f1205, Guangzhou International Campus, South China University of Technology</code></pre>
+    <pre><code>Guangzhou, Guangdong, 511442</code></pre>
+    <pre><code>People's Republic of China</code></pre>
+  </div>
 {:else if lang.toLowerCase() == 'zh-cn'}
   <h1 id="版权政策">版权政策</h1>
   <p>
@@ -181,6 +270,87 @@ People's Republic of China
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
   <p>版权政策的最后更改日期为 2023 年 11 月 18 日。</p>
+  <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
+  <p>
+    PhiZone
+    内置主动报告用户稿件中的涉嫌侵权行为。我们在数据库中储存用于协助识别需要限制或退回的用户稿件的
+    <a href="/resource-records">资源记录</a>
+    。一条资源记录包含以下字段：
+  </p>
+  <ol>
+    <li>标题；</li>
+    <li>
+      类型（
+      <code>0</code>
+      对应“曲目”，
+      <code>1</code>
+      对应“插画”）；
+    </li>
+    <li>
+      版本类型（
+      <code>0</code>
+      对应“原版”，
+      <code>1</code>
+      对应“作者改编版”，
+      <code>2</code>
+      对应“第二方改编版”）；
+    </li>
+    <li>
+      版本名称或出处（例如“Arcaea Edit”；当版本类型为 <code>0</code>
+      时建议留空）；
+    </li>
+    <li>
+      策略（
+      <code>0</code>
+      对应“允许”，
+      <code>1</code>
+      对应“隐藏”，
+      <code>2</code>
+      对应“锁定”，
+      <code>3</code>
+      对应“隐藏并锁定”，
+      <code>4</code>
+      对应“禁止”）；
+    </li>
+    <li>作者名义；</li>
+    <li>版权所有者名义；</li>
+    <li>发布源 URL；</li>
+    <li>简介（选填）。</li>
+  </ol>
+  <p>
+    系统搜索与用户稿件的标题、版本（包括版本类型和版本名称或出处）和作者名义匹配的、不以“接受”为策略的资源记录。满足这些条件的资源记录将显示在上传页面；如果用户坚持提交，亦将显示在稿件的详情页面。版主负责执行相应资源记录指定的策略。在多个具有不同策略的资源记录匹配的情况下，版主将根据最严格的策略执行操作。
+  </p>
+  <p>
+    如你，作为版权所有者，希望你的内容包含在本系统中，请发送电子邮件至 <a
+      href="mailto:copyright@phizone.cn"
+      target="_blank"
+      class="url"
+    >
+      copyright@phizone.cn
+    </a>
+    ，并提供包含上述信息的 CSV 文件。以下为 CSV 文件示例：
+  </p>
+  <div class="mockup-code max-w-fit mb-2">
+    <pre><code>标题,类型,版本类型,版本,策略,作者,版权所有者,来源,简介</code></pre>
+    <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
+    <pre><code>雪降り、メリクリ,0,0,,4,A-39,Pigeon Games,https://www.bilibili.com/video/BV1hp4y1B7a5/,音乐游戏《Phigros》独占曲。</code></pre>
+    <pre><code>ジングルベル(Jingle bell),0,0,,4,A-39 & 沙包P,Pigeon Games,https://www.bilibili.com/video/BV1Zr4y1U71p/,</code></pre>
+  </div>
+  <p>
+    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段。在收到邮件后，我们会在 7
+    个工作日内采取相应的措施。
+  </p>
+  <p>
+    或者，你亦可以加入 QQ 群（
+    <a
+      href="https://h5.qun.qq.com/h5/qun-share-page/?_wv=1027&k=O2GbdboCc4etoeMMkJk8dCFVO6BueaKY&authKey=%2FZ810eNpglqIj6Ft7AJtVKHrZTP1VFmWVYQlvhhjur9s1IReWUXz38IqWDPwNRwF&market_channel_source=714344319_1&noverify=0&group_code=714344319"
+      target="_blank"
+    >
+      714344319
+    </a>
+    ）进行相关事宜的讨论，以减少消息延迟。
+  </p>
+
   <h2 id="举报侵权行为">举报侵权行为</h2>
   <p>
     如你认为 PhiZone
@@ -248,11 +418,12 @@ People's Republic of China
     （7 个工作日内回复）
   </p>
   <p><strong>邮寄地址：</strong></p>
-  <pre><code>邮政编码 511442
-中华人民共和国 广东省 广州市
-华南理工大学 广州国际校区 D5f-1205
-PhiZone 指定代理人	收
-</code></pre>
+  <div class="mockup-code max-w-fit mb-2">
+    <pre><code>邮政编码 511442</code></pre>
+    <pre><code>中华人民共和国 广东省 广州市</code></pre>
+    <pre><code>华南理工大学 广州国际校区 D5f-1205</code></pre>
+    <pre><code>PhiZone 指定代理人	收</code></pre>
+  </div>
 {/if}
 
 <style>
@@ -266,6 +437,10 @@ PhiZone 指定代理人	收
 
   p {
     @apply text-lg mb-2;
+  }
+
+  code {
+    @apply text-lg mx-1;
   }
 
   a {

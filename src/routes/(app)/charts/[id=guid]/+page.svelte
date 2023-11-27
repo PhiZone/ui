@@ -44,15 +44,6 @@
     return 0;
   };
 
-  let status = Status.WAITING;
-  let arrangement = 0;
-  let feel = 0;
-  let vfx = 0;
-  let creativity = 0;
-  let concord = 0;
-  let impression = 0;
-  let open = false;
-
   $: chart = createQuery(api.chart.info({ id }));
   $: song = createQuery(
     api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
@@ -61,7 +52,28 @@
     api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
   );
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
+  $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
   $: charter = richtext($chart.data?.data.authorName ?? '');
+
+  let status = Status.WAITING;
+  let arrangement = 0;
+  let feel = 0;
+  let vfx = 0;
+  let creativity = 0;
+  let concord = 0;
+  let impression = 0;
+  let open = false;
+  let voteSync = false;
+
+  $: if (!voteSync && $myVote.isSuccess && $myVote.data.data.length > 0) {
+    arrangement = $myVote.data.data[0].arrangement;
+    feel = $myVote.data.data[0].feel;
+    vfx = $myVote.data.data[0].visualEffects;
+    creativity = $myVote.data.data[0].creativity;
+    concord = $myVote.data.data[0].concord;
+    impression = $myVote.data.data[0].impression;
+    voteSync = true;
+  }
 </script>
 
 <!-- {#if $chart.isSuccess}
@@ -97,7 +109,7 @@
         </label>
         <h2 class="font-bold text-xl mb-4">{$t('common.vote')}</h2>
         <form
-          class="form-control"
+          class="form-control gap-1"
           method="POST"
           action="?/vote"
           use:enhance={() => {
@@ -116,7 +128,7 @@
             };
           }}
         >
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.arrangement')}
             </span>
@@ -134,7 +146,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{arrangement}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.feel')}
             </span>
@@ -152,7 +164,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{feel}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.vfx')}
             </span>
@@ -170,7 +182,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{vfx}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.creativity')}
             </span>
@@ -188,7 +200,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{creativity}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.concord')}
             </span>
@@ -206,7 +218,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{concord}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.impression')}
             </span>
@@ -224,7 +236,7 @@
             </div>
             <p class="text-xl font-bold w-[5%] text-center">{impression}</p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center h-[29px]">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.multiplier')}
             </span>
@@ -232,7 +244,7 @@
               {getMultiplier(getUserLevel(user.experience)).toFixed(1)}
             </p>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 items-center h-[29px]">
             <span class="badge badge-lg badge-secondary text-lg mr-1 w-1/4 min-w-fit">
               {$t('chart.score')}
             </span>
@@ -256,15 +268,15 @@
                 class="btn {status === Status.ERROR
                   ? 'btn-error'
                   : status === Status.SENDING
-                  ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                    ? 'btn-ghost'
+                    : 'btn-secondary btn-outline'} w-full"
                 disabled={status == Status.SENDING}
               >
                 {status === Status.ERROR
                   ? $t('common.error')
                   : status === Status.SENDING
-                  ? $t('common.waiting')
-                  : $t('common.submit')}
+                    ? $t('common.waiting')
+                    : $t('common.submit')}
               </button>
             </div>
           </div>
@@ -285,11 +297,15 @@
           class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="py-3 flex-col sm:flex-row gap-4 items-center">
-              <h2 class="text-5xl font-bold content md:inline-block">
-                {$song.data?.data.title}
-              </h2>
-              <div class="join join-vertical md:join-horizontal mt-2 md:mt-0 md:ml-2 min-w-fit">
+            <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
+              {#if chart.title || $song.isSuccess}
+                <h2 class="text-5xl font-bold content md:inline-block">
+                  {chart.title ?? $song.data?.data.title}
+                </h2>
+              {:else}
+                <div class="skeleton h-11 w-1/2"></div>
+              {/if}
+              <div class="join join-vertical md:join-horizontal min-w-fit">
                 <button
                   class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                 >

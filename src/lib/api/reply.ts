@@ -40,7 +40,7 @@ export default class ReplyAPI {
   });
 
   info = createQueryCreator('reply.info', ({ id }: InfoOpts): R<ReplyDto> => {
-    return this.api.GET(`/replies/${id}/`);
+    return this.api.GET(`/replies/${id}`);
   });
 
   delete(opts: InfoOpts) {

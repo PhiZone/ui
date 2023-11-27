@@ -24,7 +24,20 @@
       <li>
         <a href="/studio/collaborations">{$t('studio.collaborations')}</a>
       </li>
-      <!-- <li><a href="/studio/admissions">{$t("studio.admissions")}</a></li> -->
+      <li>
+        <details>
+          <summary>{$t('studio.admissions')}</summary>
+          <ul>
+            <li><a href="/studio/admissions/chapters">{$t('studio.chapter_admissions')}</a></li>
+            <li><a href="/studio/admissions/songs">{$t('studio.song_admissions')}</a></li>
+            <li>
+              <a href="/studio/admissions/song-submissions">
+                {$t('studio.song_submission_admissions')}
+              </a>
+            </li>
+          </ul>
+        </details>
+      </li>
     </ul>
   </div>
 </div>

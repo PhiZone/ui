@@ -1,121 +1,169 @@
 <script lang="ts">
-  import type { ChartSubmissionDto } from '$lib/api/chart.submission';
-  import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { page } from '$app/stores';
   import { createQuery } from '@tanstack/svelte-query';
+  import { page } from '$app/stores';
+  import type { ChartSubmissionDto } from '$lib/api';
+  import { t } from '$lib/translations/config';
+  import { getCompressedImage, getLevelColor, parseDateTime } from '$lib/utils';
+  import { richtext } from '$lib/richtext';
 
-  export let submission: ChartSubmissionDto;
+  $: ({ api } = $page.data);
 
-  $: ({ user, api } = $page.data);
+  export let chart: ChartSubmissionDto;
 
-  $: song = createQuery(
-    api.song.info({ id: submission.songId ?? '' }, { enabled: !!submission.songId }),
-  );
+  $: song = createQuery(api.song.info({ id: chart.songId ?? '' }, { enabled: !!chart.songId }));
   $: songSubmission = createQuery(
     api.song.submission.info(
-      { id: submission.songSubmissionId ?? '' },
-      { enabled: !!submission.songSubmissionId },
+      { id: chart.songSubmissionId ?? '' },
+      { enabled: !!chart.songSubmissionId },
     ),
   );
-  $: uploader = createQuery(api.user.info({ id: submission.ownerId }));
+  $: charter = richtext(chart.authorName ?? '');
+  $: uploader = createQuery(api.user.info({ id: chart.ownerId }));
 </script>
 
-<a href={`/studio/chart-submissions/${submission.id}`}>
-  <div
-    class={`card card-side ${
-      submission.status === 1
-        ? 'bg-success-content'
-        : submission.status === 2
-        ? 'bg-error-content'
-        : (user && getUserPrivilege(user.role) < 3) ||
-          (submission.dateVoted && submission.dateVoted > submission.dateUpdated)
-        ? 'bg-base-100'
-        : 'bg-warning-content'
-    } overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg`}
-  >
-    <figure class="min-w-[30%] max-w-[30%]">
-      <img
-        class="object-cover w-full h-full"
-        src={getCompressedImage(
-          $song.isSuccess
-            ? $song.data.data.illustration
-            : $songSubmission.isSuccess
-            ? $songSubmission.data.data.illustration
-            : '',
-        )}
-        alt="Illustration"
-      />
-    </figure>
-    <div class="card-body w-[70%] max-h-fit">
-      <h2 class="card-title text-2xl mb-3 min-w-fit content inline-block">
-        {submission.title ??
-          ($song.isSuccess
-            ? $song.data.data.title
-            : $songSubmission.isSuccess
-            ? $songSubmission.data.data.title
-            : '')}
-        <div class="join join-vertical md:join-horizontal min-w-fit">
+<div
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+>
+  <a href={`/studio/chart-submissions/${chart.id}`}>
+    <figure class="h-[167px] relative">
+      {#if chart.illustration || $song.isSuccess || $songSubmission.isSuccess}
+        <img
+          src={getCompressedImage(
+            chart.illustration ??
+              ($song.isSuccess
+                ? $song.data.data.illustration
+                : $songSubmission.isSuccess
+                  ? $songSubmission.data.data.illustration
+                  : undefined),
+          )}
+          alt="Illustration"
+          class="object-fill"
+        />
+      {:else}
+        <div class="skeleton rounded-none w-full h-full"></div>
+      {/if}
+      <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+        <div class="join join-horizontal">
           <button
-            class={`btn ${getLevelColor(
-              submission.levelType,
-            )} btn-sm join-item text-xl no-animation min-w-fit`}
+            class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
           >
-            {submission.level}
-            {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+            {chart.level}
+            {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
           </button>
-          {#if submission.isRanked}
-            <button class="btn btn-success btn-sm join-item text-xl no-animation min-w-fit">
+          {#if chart.isRanked}
+            <button class="btn btn-success btn-sm join-item text-xl no-animation">
               {$t('chart.ranked')}
             </button>
           {/if}
         </div>
-      </h2>
-      <div class="flex flex-col md:flex-row min-w-fit">
-        <p class="md:w-1/2">
-          <span class="badge mr-1">
-            {$t('studio.submission.overall_status')}
-          </span>
-          {$t(`studio.submission.statuses.${submission.status}`)}
-        </p>
-        <p class="md:w-1/2">
-          <span class="badge mr-1">
-            {$t('studio.submission.volunteer_status')}
-          </span>
-          {$t(`studio.submission.statuses.${submission.volunteerStatus}`)}
-        </p>
       </div>
-      <div class="flex flex-col md:flex-row min-w-fit">
-        <p class="md:w-1/2">
-          <span class="badge mr-1">
-            {$t('studio.submission.adm_status')}
-          </span>
-          {$t(`studio.submission.statuses.${submission.admissionStatus}`)}
-        </p>
-        {#if $uploader.isSuccess}
-          {@const uploader = $uploader.data?.data}
-          <p class="md:w-1/2">
-            <span class="badge mr-1">
-              {$t('studio.submission.uploader')}
-            </span>
-            {uploader.userName}
-          </p>
+    </figure>
+    <div class="card-body py-6 gap-0.5">
+      <div class="flex gap-2 mb-1 items-center">
+        {#if chart.title || $song.isSuccess || $songSubmission.isSuccess}
+          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+            {chart.title ??
+              ($song.isSuccess
+                ? $song.data.data.title
+                : $songSubmission.isSuccess
+                  ? $songSubmission.data.data.title
+                  : undefined)}
+          </h2>
+        {:else}
+          <div class="skeleton h-7"></div>
+        {/if}
+        {#if chart.status === 1}
+          <div
+            class="tooltip tooltip-right tooltip-success"
+            data-tip={$t('studio.submission.statuses.1')}
+          >
+            <button class="btn btn-xs btn-circle btn-success no-animation">
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        {:else if chart.status === 2}
+          <div
+            class="tooltip tooltip-right tooltip-error"
+            data-tip={$t('studio.submission.statuses.2')}
+          >
+            <button class="btn btn-xs btn-circle btn-error no-animation">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        {:else if !chart.dateVoted}
+          <div
+            class="tooltip tooltip-right tooltip-warning"
+            data-tip={$t('studio.submission.statuses.0')}
+          >
+            <button class="btn btn-xs btn-circle btn-warning no-animation">
+              <i class="fa-solid fa-exclamation"></i>
+            </button>
+          </div>
         {/if}
       </div>
-      <div class="flex flex-col md:flex-row min-w-fit">
-        <p class="md:w-1/2">
-          <span class="badge mr-1">
-            {$t('common.created_at')}
-          </span>
-          {parseDateTime(submission.dateCreated)}
-        </p>
-        <p class="md:w-1/2">
-          <span class="badge mr-1">
-            {$t('common.updated_at')}
-          </span>
-          {parseDateTime(submission.dateUpdated)}
-        </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">{$t('chart.charter')}</span>
+        {#if chart.authorName}
+          {@html $charter}
+        {:else}
+          {$t('common.anonymous')}
+        {/if}
+      </p>
+      <div class="grow-0 flex items-center">
+        <span class="badge mr-1">{$t('chapter.owner')}</span>
+        {#if $uploader.isSuccess}
+          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+            {$uploader.data.data.userName}
+          </p>
+        {:else}
+          <div class="skeleton w-2/3 h-6"></div>
+        {/if}
       </div>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">
+          {$t('studio.submission.volunteer_status')}
+        </span>
+        {$t(`studio.submission.statuses.${chart.volunteerStatus}`)}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">
+          {$t('studio.submission.adm_status')}
+        </span>
+        {$t(`studio.submission.statuses.${chart.admissionStatus}`)}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">
+          {$t('common.created_at')}
+        </span>
+        {parseDateTime(chart.dateCreated)}
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="badge mr-1">
+          {$t('common.updated_at')}
+        </span>
+        {parseDateTime(chart.dateUpdated)}
+      </p>
     </div>
-  </div>
-</a>
+  </a>
+</div>
+
+<style>
+  .ellipsis-2-md {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media (min-width: 640px) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  .ellipsis-2-lg {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media (min-width: 1024px) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+</style>

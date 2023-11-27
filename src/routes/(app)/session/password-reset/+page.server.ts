@@ -45,14 +45,14 @@ export const actions = {
       console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
-        form.message = `error.${error.code}`;
+        form.message = t.get(`error.${error.code}`);
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
           form.errors[field as keyof Schema] = errors.map((value) => {
-            return `error.${value}`;
+            return t.get(`error.${value}`);
           });
         });
       }

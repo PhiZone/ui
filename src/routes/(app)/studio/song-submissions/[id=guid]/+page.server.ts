@@ -10,6 +10,7 @@ const reviewSchema = z.object({
   status: z.number().min(1).max(2),
   isOriginal: z.boolean(),
   isHidden: z.boolean(),
+  isLocked: z.boolean(),
   message: z.string().optional(),
 });
 

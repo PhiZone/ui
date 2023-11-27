@@ -7,12 +7,14 @@
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
   import { convertTime, parseTime } from '$lib/utils';
+  import Song from '$lib/components/Song.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
 
   export let data;
 
   $: ({ user, api } = data);
 
-  const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
+  const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
   interface TargetElement extends HTMLElement {
     noUiSlider?: API;
@@ -36,12 +38,36 @@
   let newComposerId: number | null = null;
   let newComposerDisplay = '';
   let queryComposer = false;
+  let querySongDuplications = false;
+  let queryResourceRecords = false;
 
   $: composer = createQuery(
     api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
   );
-
   $: composerPreview = richtext(authorName ?? '');
+  $: songDuplications = createQuery(
+    api.song.listAll(
+      {
+        equalsTitle: $form.Title,
+        equalsAuthorName: authorName,
+        rangeEditionType: [editionType],
+        equalsEdition: edition,
+      },
+      { enabled: querySongDuplications && !!$form.Title && !!authorName },
+    ),
+  );
+  $: resourceRecords = createQuery(
+    api.resourceRecord.listAll(
+      {
+        equalsTitle: $form.Title,
+        equalsAuthorName: authorName,
+        rangeEditionType: [editionType],
+        containsEdition: edition,
+        rangeStrategy: [1, 2, 3, 4],
+      },
+      { enabled: queryResourceRecords && !!$form.Title && !!authorName },
+    ),
+  );
 
   const handlePreview = () => {
     pausePreview();
@@ -192,7 +218,7 @@
   </div>
 </div>
 
-<div class="bg-base-200 min-h-screen">
+<div class="bg-base-300 min-h-screen">
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_song')}</h1>
@@ -200,7 +226,7 @@
         <div class="card-body">
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 place-self-center">{$t('song.original')}</span>
+              <span class="w-32">{$t('song.original')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -218,18 +244,18 @@
                   }}
                 />
               </div>
-              <span class="place-self-center w-2/3">
+              <span class="w-2/3">
                 {$t(`common.form.tips.${isOriginal ? 'original' : 'reposted'}`)}
               </span>
             </div>
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.audio')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.audio')}</span>
               <input
                 type="file"
                 id="file"
                 name="File"
                 accept=".mp3, .wav, .flac, .ogg"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   $errors.File
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -237,19 +263,19 @@
                 on:change={handleAudio}
               />
               {#if !!$errors.File}
-                <span class="place-self-center w-2/3 text-error">{$errors.File}</span>
+                <span class="w-2/3 text-error">{$errors.File}</span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.audio')}</span>
+                <span class="w-2/3">{$t('common.form.tips.audio')}</span>
               {/if}
             </div>
-            <div class="flex">
-              <span class="w-32 place-self-center">{$t('common.form.illustration')}</span>
+            <div class="flex items-center my-2">
+              <span class="w-32">{$t('common.form.illustration')}</span>
               <input
                 type="file"
                 id="illustration"
                 name="Illustration"
                 accept=".jpg, .jpeg, .png, .webp"
-                class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   $errors.Illustration
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
@@ -261,14 +287,14 @@
                 }}
               />
               {#if !!$errors.Illustration}
-                <span class="place-self-center w-2/3 text-error">{$errors.Illustration}</span>
+                <span class="w-2/3 text-error">{$errors.Illustration}</span>
               {:else}
-                <span class="place-self-center w-2/3">{$t('common.form.tips.illustration')}</span>
+                <span class="w-2/3">{$t('common.form.tips.illustration')}</span>
               {/if}
             </div>
             {#if isOriginal}
-              <div class="flex">
-                <span class="w-32 place-self-center">
+              <div class="flex items-center my-2">
+                <span class="w-32">
                   {$t('common.form.originality_proof')}
                 </span>
                 <input
@@ -276,7 +302,7 @@
                   id="originality_proof"
                   name="OriginalityProof"
                   accept=".zip"
-                  class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                     $errors.OriginalityProof
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
@@ -288,37 +314,37 @@
                   }}
                 />
                 {#if !!$errors.OriginalityProof}
-                  <span class="place-self-center w-2/3 text-error">{$errors.OriginalityProof}</span>
+                  <span class="w-2/3 text-error">{$errors.OriginalityProof}</span>
                 {:else}
-                  <span class="place-self-center w-2/3">
+                  <span class="w-2/3">
                     {$t('common.form.tips.originality_proof')}
                   </span>
                 {/if}
               </div>
             {/if}
             {#if editionType === 3}
-              <div class="flex">
-                <span class="w-32 place-self-center">{$t('common.form.license')}</span>
+              <div class="flex items-center my-2">
+                <span class="w-32">{$t('common.form.license')}</span>
                 <input
                   type="file"
                   id="license"
                   name="License"
                   accept=".jpg, .jpeg, .png, .webp"
-                  class={`mb-2 w-1/3 place-self-center file:mr-4 file:py-2 file:border-0 file:btn ${
+                  class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                     $errors.License
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
                 />
                 {#if !!$errors.License}
-                  <span class="place-self-center w-2/3 text-error">{$errors.License}</span>
+                  <span class="w-2/3 text-error">{$errors.License}</span>
                 {:else}
-                  <span class="place-self-center w-2/3">{$t('common.form.tips.license')}</span>
+                  <span class="w-2/3">{$t('common.form.tips.license')}</span>
                 {/if}
               </div>
             {/if}
             {#if showPreview}
-              <div class="flex">
+              <div class="flex my-2">
                 <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
@@ -422,8 +448,17 @@
                       e.preventDefault();
                     }
                   }}
+                  on:input={() => {
+                    querySongDuplications = false;
+                    queryResourceRecords = false;
+                  }}
+                  on:focusout={() => {
+                    querySongDuplications = true;
+                    queryResourceRecords = true;
+                  }}
                   id="title"
                   name="Title"
+                  bind:value={$form.Title}
                   placeholder={$t('common.form.song_title')}
                   class={`input input-secondary join-item w-3/4 min-w-[180px] ${
                     $errors.Title ? 'input-error' : 'input-secondary'
@@ -450,6 +485,14 @@
                     editionType === 0 ? 'w-3/4' : 'w-1/6'
                   } ${$errors.EditionType ? 'select-error' : 'select-secondary'}`}
                   bind:value={editionType}
+                  on:input={() => {
+                    querySongDuplications = false;
+                    queryResourceRecords = false;
+                  }}
+                  on:focusout={() => {
+                    querySongDuplications = true;
+                    queryResourceRecords = true;
+                  }}
                 >
                   {#each [...Array(3).keys()] as i}
                     <option value={i}>{$t(`song.edition_types.${i}`)}</option>
@@ -467,6 +510,14 @@
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
+                    }}
+                    on:input={() => {
+                      querySongDuplications = false;
+                      queryResourceRecords = false;
+                    }}
+                    on:focusout={() => {
+                      querySongDuplications = true;
+                      queryResourceRecords = true;
                     }}
                     id="edition"
                     name="Edition"
@@ -542,6 +593,14 @@
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
+                  }}
+                  on:input={() => {
+                    querySongDuplications = false;
+                    queryResourceRecords = false;
+                  }}
+                  on:focusout={() => {
+                    querySongDuplications = true;
+                    queryResourceRecords = true;
                   }}
                   id="author_name"
                   name="AuthorName"
@@ -699,6 +758,32 @@
                 />
               </label>
             </div>
+            {#if $songDuplications.isSuccess && $songDuplications.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.duplicate_song')}</h2>
+                  <p class="text-base">{$t('studio.submission.duplicate_song_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $songDuplications.data.data as song}
+                    <Song {song} />
+                  {/each}
+                </div>
+              </div>
+            {/if}
+            {#if $resourceRecords.isSuccess && $resourceRecords.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.copyright_alert')}</h2>
+                  <p class="text-base">{$t('studio.submission.copyright_alert_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $resourceRecords.data.data as resourceRecord}
+                    <ResourceRecord {resourceRecord} />
+                  {/each}
+                </div>
+              </div>
+            {/if}
             <div class="w-full flex justify-center mt-6">
               <div
                 class="tooltip tooltip-bottom tooltip-error w-full"
@@ -710,18 +795,19 @@
                   class="btn {$allErrors.length > 0
                     ? 'btn-error'
                     : $submitting
-                    ? 'btn-ghost'
-                    : 'btn-primary btn-outline'} w-full"
+                      ? 'btn-ghost'
+                      : 'btn-primary btn-outline'} w-full"
                   disabled={$submitting ||
                     !audio ||
                     !illustration ||
-                    (isOriginal && !originalityProof)}
+                    (isOriginal && !originalityProof) ||
+                    ($songDuplications.isSuccess && $songDuplications.data.data.length > 0)}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')
                     : $submitting
-                    ? $t('common.waiting')
-                    : $t('common.submit')}
+                      ? $t('common.waiting')
+                      : $t('common.submit')}
                 </button>
               </div>
             </div>
