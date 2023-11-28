@@ -6,24 +6,25 @@
   export let data;
   $: ({ questions } = data);
 
-  let min = 59,
-    sec = 59;
+  const timeLimit = 30;
+  const timeDue = new Date();
+  timeDue.setMinutes(timeDue.getMinutes() + timeLimit);
+
+  let min = timeLimit - 1;
+  let sec = 59;
 
   let timeUp = false;
 
   let timer = setInterval(() => {
-    if (sec == 0) {
-      if (min == 0) {
-        clearInterval(timer);
-        timeUp = true;
-      } else {
-        min--;
-        sec = 59;
-      }
-    } else {
-      sec--;
+    if (sec == 0 && min == 0) {
+      clearInterval(timer);
+      timeUp = true;
+      return;
     }
-  }, 1000);
+    const diff = timeDue.getTime() - new Date().getTime();
+    min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    sec = Math.floor((diff % (1000 * 60)) / 1000);
+  }, 100);
 
   let answers: number[][] = [];
 </script>
