@@ -53,7 +53,7 @@
     PhiZone reserves the right to modify the Copyright Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Copyright Policy is November 18, 2023.</p>
+  <p>The last modification date of the Copyright Policy is November 28, 2023.</p>
   <h2 id="active-defense-against-copyright-infringements">
     Active Defense Against Copyright Infringements
   </h2>
@@ -269,7 +269,7 @@
   </p>
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
-  <p>版权政策的最后更改日期为 2023 年 11 月 18 日。</p>
+  <p>版权政策的最后更改日期为 2023 年 11 月 28 日。</p>
   <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
   <p>
     PhiZone
