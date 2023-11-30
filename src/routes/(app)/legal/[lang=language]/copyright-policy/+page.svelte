@@ -53,7 +53,7 @@
     PhiZone reserves the right to modify the Copyright Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Copyright Policy is November 28, 2023.</p>
+  <p>The last modification date of the Copyright Policy is November 30, 2023.</p>
   <h2 id="active-defense-against-copyright-infringements">
     Active Defense Against Copyright Infringements
   </h2>
@@ -123,13 +123,16 @@
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>Title,Type,Edition Type,Edition,Strategy,Author,Copyright Owner,Source,Description</code></pre>
     <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
-    <pre><code>雪降り、メリクリ,0,0,,4,A-39,Pigeon Games,https://www.bilibili.com/video/BV1hp4y1B7a5/,Phigros original.</code></pre>
-    <pre><code>ジングルベル(Jingle bell),0,0,,4,A-39 & 沙包P,Pigeon Games,https://www.bilibili.com/video/BV1Zr4y1U71p/,</code></pre>
+    <pre><code>Sheriruth (Laur Remix),0,0,,4,Laur,"lowiro Ltd., Marvelous Inc. & HARDCORE TANO*C",https://www.youtube.com/watch?v=e09aoYJcNSU,</code></pre>
+    <pre><code>Einherjar Joker,0,1,Requiem EXTENDED MIX,4,DJ Genki vs Gram,lowiro Ltd. & HARDCORE TANO*C,https://www.youtube.com/watch?v=pdmtqN68vOg,</code></pre>
+    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,Winning entry in Arcaea Song Contest - 3rd Movement "Imagining After".</code></pre>
+    <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    Note that the order of the fields must be as described in the example, and that the fields must
-    be separated by commas without Spaces before or after them. Upon receiving the email, we will
-    take action within 7 business days.
+    Please adhere to the specified order of the fields as demonstrated in the example and ensure
+    that they are separated by commas without any spaces before or after them. To include a comma in
+    your data, enclose the field in quotation marks. Upon receiving the email, we will take action
+    within 7 business days.
   </p>
   <p>
     Alternatively, you may join our group chat on QQ (
@@ -269,7 +272,7 @@
   </p>
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
-  <p>版权政策的最后更改日期为 2023 年 11 月 28 日。</p>
+  <p>版权政策的最后更改日期为 2023 年 11 月 30 日。</p>
   <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
   <p>
     PhiZone
@@ -321,7 +324,7 @@
     系统搜索与用户稿件的标题、版本（包括版本类型和版本名称或出处）和作者名义匹配的、不以“接受”为策略的资源记录。满足这些条件的资源记录将显示在上传页面；如果用户坚持提交，亦将显示在稿件的详情页面。版主负责执行相应资源记录指定的策略。在多个具有不同策略的资源记录匹配的情况下，版主将根据最严格的策略执行操作。
   </p>
   <p>
-    如你，作为版权所有者，希望你的内容包含在本系统中，请发送电子邮件至 <a
+    如你作为版权所有者希望你的内容包含在本系统中，请发送电子邮件至 <a
       href="mailto:copyright@phizone.cn"
       target="_blank"
       class="url"
@@ -333,12 +336,14 @@
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>标题,类型,版本类型,版本,策略,作者,版权所有者,来源,简介</code></pre>
     <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
-    <pre><code>雪降り、メリクリ,0,0,,4,A-39,Pigeon Games,https://www.bilibili.com/video/BV1hp4y1B7a5/,音乐游戏《Phigros》独占曲。</code></pre>
-    <pre><code>ジングルベル(Jingle bell),0,0,,4,A-39 & 沙包P,Pigeon Games,https://www.bilibili.com/video/BV1Zr4y1U71p/,</code></pre>
+    <pre><code>Sheriruth (Laur Remix),0,0,,4,Laur,"lowiro Ltd., Marvelous Inc. & HARDCORE TANO*C",https://www.youtube.com/watch?v=e09aoYJcNSU,</code></pre>
+    <pre><code>Einherjar Joker,0,1,Requiem EXTENDED MIX,4,DJ Genki vs Gram,lowiro Ltd. & HARDCORE TANO*C,https://www.youtube.com/watch?v=pdmtqN68vOg,</code></pre>
+    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,Winning entry in Arcaea Song Contest - 3rd Movement "Imagining After".</code></pre>
+    <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段。在收到邮件后，我们会在 7
-    个工作日内采取相应的措施。
+    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如需在字段中加入逗号，请使用英文半角引号括起字段内容。在收到邮件后，我们会在
+    7 个工作日内采取相应的措施。
   </p>
   <p>
     或者，你亦可以加入 QQ 群（
@@ -418,7 +423,7 @@
     （7 个工作日内回复）
   </p>
   <p><strong>邮寄地址：</strong></p>
-  <div class="mockup-code max-w-fit mb-2">
+  <div class="mockup-code hover:shadow-lg max-w-fit mb-2">
     <pre><code>邮政编码 511442</code></pre>
     <pre><code>中华人民共和国 广东省 广州市</code></pre>
     <pre><code>华南理工大学 广州国际校区 D5f-1205</code></pre>
@@ -440,7 +445,8 @@
   }
 
   code {
-    @apply text-lg mx-1;
+    font-family: 'Noto Sans Mono', 'Noto Sans SC', monospace;
+    @apply text-base mx-1;
   }
 
   a {

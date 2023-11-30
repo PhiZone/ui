@@ -32,6 +32,74 @@
     return !str || str === 'null' ? undefined : str;
   };
 
+  // const convertCsvToJson = async (file: File): Promise<CreateOpts[]> => {
+  //   return new Promise<CreateOpts[]>((resolve, reject) => {
+  //     const results: CreateOpts[] = [];
+
+  //     const reader = new FileReader();
+  //     reader.onload = (event: ProgressEvent<FileReader>) => {
+  //       const csvData = event.target?.result as string;
+  //       const stream = new Readable({
+  //         read() {
+  //           this.push(csvData);
+  //           this.push(null);
+  //         },
+  //       });
+
+  //       stream
+  //         .pipe(csvParser())
+  //         .on('data', (data: { [key: string]: string }) => {
+  //           const parsedData: CreateOpts = {
+  //             title: data['0'],
+  //             type: parseInt(data['1'], 10),
+  //             editionType: parseInt(data['2'], 10),
+  //             edition: parseNullable(data['3']),
+  //             strategy: parseInt(data['4'], 10),
+  //             authorName: data['5'],
+  //             copyrightOwner: data['6'],
+  //             source: data['7'],
+  //             description: parseNullable(data['8']),
+  //           };
+  //           results.push(parsedData);
+  //         })
+  //         .on('end', () => {
+  //           resolve(results);
+  //         })
+  //         .on('error', (error: Error) => {
+  //           reject(error);
+  //         });
+  //     };
+
+  //     reader.onerror = (event: ProgressEvent<FileReader>) => {
+  //       reject(event.target?.error);
+  //     };
+
+  //     reader.readAsText(file);
+  //   });
+  // };
+
+  const parseCsvLine = (line: string): string[] => {
+    const fields = [];
+    let currentField = '';
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+
+      if (char === ',' && !insideQuotes) {
+        fields.push(currentField.trim());
+        currentField = '';
+      } else if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else {
+        currentField += char;
+      }
+    }
+
+    fields.push(currentField.trim());
+    return fields;
+  };
+
   const convertCsvToJson = async (file: File): Promise<CreateOpts[]> => {
     return new Promise<CreateOpts[]>((resolve, reject) => {
       const reader = new FileReader();
@@ -43,19 +111,19 @@
         const results: CreateOpts[] = [];
 
         for (let i = 1; i < lines.length; i++) {
-          const currentLine = lines[i].split(',');
+          const fields = parseCsvLine(lines[i]);
 
-          if (currentLine.length === lineLength) {
+          if (fields.length === lineLength) {
             const data: CreateOpts = {
-              title: currentLine[0],
-              type: parseInt(currentLine[1]),
-              editionType: parseInt(currentLine[2]),
-              edition: parseNullable(currentLine[3]),
-              strategy: parseInt(currentLine[4]),
-              authorName: currentLine[5],
-              copyrightOwner: currentLine[6],
-              source: currentLine[7],
-              description: parseNullable(currentLine[8]),
+              title: fields[0],
+              type: parseInt(fields[1]),
+              editionType: parseInt(fields[2]),
+              edition: parseNullable(fields[3]),
+              strategy: parseInt(fields[4]),
+              authorName: fields[5],
+              copyrightOwner: fields[6],
+              source: fields[7],
+              description: parseNullable(fields[8]),
             };
             results.push(data);
           }
