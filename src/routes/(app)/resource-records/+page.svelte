@@ -90,7 +90,12 @@
         fields.push(currentField.trim());
         currentField = '';
       } else if (char === '"') {
-        insideQuotes = !insideQuotes;
+        if (line[i + 1] === '"') {
+          currentField += '"';
+          i++;
+        } else {
+          insideQuotes = !insideQuotes;
+        }
       } else {
         currentField += char;
       }
