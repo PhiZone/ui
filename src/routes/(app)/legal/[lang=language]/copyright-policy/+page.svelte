@@ -53,7 +53,7 @@
     PhiZone reserves the right to modify the Copyright Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Copyright Policy is November 30, 2023.</p>
+  <p>The last modification date of the Copyright Policy is December 1, 2023.</p>
   <h2 id="active-defense-against-copyright-infringements">
     Active Defense Against Copyright Infringements
   </h2>
@@ -111,14 +111,21 @@
     act upon the strictest one.
   </p>
   <p>
-    If you, as a copyright owner, want your content included in this system, please send an email to <a
-      href="mailto:copyright@phizone.cn"
+    If you, as a copyright owner, want your content included in this system, please create a pull
+    request at our repository <a
+      href="https://github.com/PhiZone/phizone-resource-records"
       target="_blank"
-      class="url"
     >
-      copyright@phizone.cn
+      phizone-resource-records
     </a>
-    with a CSV file that contains information aforementioned. An example for this CSV file is as follows:
+    with a CSV file that contains information aforementioned. The file should be created within a directory
+    titled as the (concise) name of the copyright owner, following a naming convention in the form of
+    <code>&lt;game/work&gt;-&lt;update/operation&gt;.csv</code>
+    (e.g.
+    <code>lowiro/arcaea-imagining-after.csv</code>
+    ,
+    <code>rayark/cytusii-5.0-update.csv</code>
+    ). An example for this CSV file is as follows:
   </p>
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>Title,Type,Edition Type,Edition,Strategy,Author,Copyright Owner,Source,Description</code></pre>
@@ -133,7 +140,7 @@
     Please adhere to the specified order of the fields as illustrated in the example and ensure that
     they are separated by commas without any spaces before or after them. To include commas in your
     data, enclose the field in quotation marks. To preserve in-data quotation marks, double them in
-    a quoted field. Upon receiving the email, we will take action within 7 business days.
+    a quoted field. Upon receiving the pull request, we will take action within 7 business days.
   </p>
   <p>
     Alternatively, you may join our group chat on QQ (
@@ -143,7 +150,7 @@
     >
       714344319
     </a>
-    ) to discuss related issues so as to reduce message latency.
+    ) to discuss related issues.
   </p>
 
   <h2 id="reporting-copyright-infringements">Reporting Copyright Infringements</h2>
@@ -235,8 +242,8 @@
   <p>
     Part of this text is based on "
     <a
-      target="_blank"
       href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/en.md"
+      target="_blank"
     >
       osu! copyright policy
     </a>
@@ -273,11 +280,11 @@
   </p>
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
-  <p>版权政策的最后更改日期为 2023 年 11 月 30 日。</p>
+  <p>版权政策的最后更改日期为 2023 年 12 月 1 日。</p>
   <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
   <p>
     PhiZone
-    内置主动报告用户稿件中的涉嫌侵权行为。我们在数据库中储存用于协助识别需要限制或退回的用户稿件的
+    内置主动报告用户稿件中的涉嫌侵权行为的系统。我们在数据库中储存用于协助识别需要限制或退回的用户稿件的
     <a href="/resource-records">资源记录</a>
     。一条资源记录包含以下字段：
   </p>
@@ -325,14 +332,19 @@
     系统搜索与用户稿件的标题、版本（包括版本类型和版本名称或出处）和作者名义匹配的、不以“接受”为策略的资源记录。满足这些条件的资源记录将显示在上传页面；如果用户坚持提交，亦将显示在稿件的详情页面。版主负责执行相应资源记录指定的策略。在多个具有不同策略的资源记录匹配的情况下，版主将根据最严格的策略执行操作。
   </p>
   <p>
-    如你作为版权所有者希望你的内容包含在本系统中，请发送电子邮件至 <a
-      href="mailto:copyright@phizone.cn"
+    如你作为版权所有者希望你的内容包含在本系统中，请在我们的仓库 <a
+      href="https://github.com/PhiZone/phizone-resource-records"
       target="_blank"
-      class="url"
     >
-      copyright@phizone.cn
+      phizone-resource-records
     </a>
-    ，并提供包含上述信息的 CSV 文件。以下为 CSV 文件示例：
+    上创建拉取请求，并提供包含上述信息的 CSV 文件。文件应创建在版权所有者名义（简称）目录下，并以
+    <code>&lt;游戏或作品名&gt;-&lt;操作或更新名&gt;.csv</code>
+    的格式命名（例：
+    <code>lowiro/arcaea-imagining-after.csv</code>
+    、
+    <code>rayark/cytusii-5.0-update.csv</code>
+    ）。以下为 CSV 文件示例：
   </p>
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>标题,类型,版本类型,版本,策略,作者,版权所有者,来源,简介</code></pre>
@@ -344,7 +356,7 @@
     <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如字段存在逗号，请使用双引号（"）括起该字段；如字段存在双引号，请将其双写并用双引号括起该字段。在收到邮件后，我们会在
+    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如字段存在逗号，请使用双引号（"）括起该字段；如字段存在双引号，请将其双写并用双引号括起该字段。在收到拉取请求后，我们会在
     7 个工作日内采取相应的措施。
   </p>
   <p>
@@ -355,7 +367,7 @@
     >
       714344319
     </a>
-    ）进行相关事宜的讨论，以减少消息延迟。
+    ）进行相关事宜的讨论。
   </p>
 
   <h2 id="举报侵权行为">举报侵权行为</h2>
@@ -411,8 +423,8 @@
   <p>
     本文部分内容基于“
     <a
-      target="_blank"
       href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Copyright/zh.md"
+      target="_blank"
     >
       osu! 版权政策
     </a>
@@ -448,7 +460,7 @@
 
   code {
     font-family: 'Noto Sans Mono', 'Noto Sans SC', monospace;
-    @apply text-base mx-1;
+    @apply text-lg mx-1;
   }
 
   a {

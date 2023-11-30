@@ -257,7 +257,7 @@
   <h2 id="attribution">Attribution</h2>
   <p>
     Part of this text is based on "
-    <a target="_blank" href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Terms/en.md">
+    <a href="https://github.com/ppy/osu-wiki/tree/master/wiki/Legal/Terms/en.md" target="_blank">
       osu! terms of service
     </a>
     ", which is licensed under CC-BY-NC 4.0.
@@ -425,7 +425,7 @@
   <h2 id="归属">归属</h2>
   <p>
     本文部分内容基于“
-    <a target="_blank" href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Terms/zh.md">
+    <a href="https://github.com/ppy/osu-wiki/blob/master/wiki/Legal/Terms/zh.md" target="_blank">
       osu! 服务条款
     </a>
     ”，并已通过 CC-BY-NC 4.0 获得许可。
