@@ -123,16 +123,17 @@
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>Title,Type,Edition Type,Edition,Strategy,Author,Copyright Owner,Source,Description</code></pre>
     <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
+    <pre><code>Abstruse Dilemma,0,1,"""D"" side long ver.",4,Ashrount vs. 打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=7VOuvpq20NQ,</code></pre>
     <pre><code>Sheriruth (Laur Remix),0,0,,4,Laur,"lowiro Ltd., Marvelous Inc. & HARDCORE TANO*C",https://www.youtube.com/watch?v=e09aoYJcNSU,</code></pre>
     <pre><code>Einherjar Joker,0,1,Requiem EXTENDED MIX,4,DJ Genki vs Gram,lowiro Ltd. & HARDCORE TANO*C,https://www.youtube.com/watch?v=pdmtqN68vOg,</code></pre>
-    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,Winning entry in Arcaea Song Contest - 3rd Movement "Imagining After".</code></pre>
+    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,"Winning entry in Arcaea Song Contest - 3rd Movement ""Imagining After""".</code></pre>
     <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    Please adhere to the specified order of the fields as demonstrated in the example and ensure
-    that they are separated by commas without any spaces before or after them. To include a comma in
-    your data, enclose the field in quotation marks. Upon receiving the email, we will take action
-    within 7 business days.
+    Please adhere to the specified order of the fields as illustrated in the example and ensure that
+    they are separated by commas without any spaces before or after them. To include commas in your
+    data, enclose the field in quotation marks. To preserve in-data quotation marks, double them in
+    a quoted field. Upon receiving the email, we will take action within 7 business days.
   </p>
   <p>
     Alternatively, you may join our group chat on QQ (
@@ -336,13 +337,14 @@
   <div class="mockup-code max-w-fit mb-2">
     <pre><code>标题,类型,版本类型,版本,策略,作者,版权所有者,来源,简介</code></pre>
     <pre><code>Used to be,0,0,,4,KIVΛ,Rayark Inc.,https://www.youtube.com/watch?v=hGaJNvkRfo0,</code></pre>
+    <pre><code>Abstruse Dilemma,0,1,"""D"" side long ver.",4,Ashrount vs. 打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=7VOuvpq20NQ,</code></pre>
     <pre><code>Sheriruth (Laur Remix),0,0,,4,Laur,"lowiro Ltd., Marvelous Inc. & HARDCORE TANO*C",https://www.youtube.com/watch?v=e09aoYJcNSU,</code></pre>
     <pre><code>Einherjar Joker,0,1,Requiem EXTENDED MIX,4,DJ Genki vs Gram,lowiro Ltd. & HARDCORE TANO*C,https://www.youtube.com/watch?v=pdmtqN68vOg,</code></pre>
-    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,Winning entry in Arcaea Song Contest - 3rd Movement "Imagining After".</code></pre>
+    <pre><code>Wish Upon a Snow,0,0,,4,打打だいず,lowiro Ltd.,https://www.youtube.com/watch?v=0L0J8PhHy0E,"Winning entry in Arcaea Song Contest - 3rd Movement ""Imagining After""".</code></pre>
     <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如需在字段中加入逗号，请使用英文半角引号括起字段内容。在收到邮件后，我们会在
+    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如字段存在逗号，请使用双引号（"）括起该字段；如字段存在双引号，请将其双写并用双引号括起该字段。在收到邮件后，我们会在
     7 个工作日内采取相应的措施。
   </p>
   <p>
