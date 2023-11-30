@@ -356,8 +356,9 @@
     <pre><code>今年も「雪降り、メリクリ」目指して頑張ります！！,0,0,,4,AiSS vs. 华牧狸 w/ 夜輪 ft. 結月ゆかり,"Xiamen Pigeon Games Network Co., Ltd.",https://www.bilibili.com/video/BV1ic41157r1/,</code></pre>
   </div>
   <p>
-    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如字段存在逗号，请使用双引号（"）括起该字段；如字段存在双引号，请将其双写并用双引号括起该字段。在收到拉取请求后，我们会在
-    7 个工作日内采取相应的措施。
+    请注意，字段的顺序须为示例所述，并且须以前后无空格的逗号分隔字段；如字段存在逗号，请使用双引号（
+    <code>"</code>
+    ）括起该字段；如字段存在双引号，请将其双写并用双引号括起该字段。在收到拉取请求后，我们会在 7 个工作日内采取相应的措施。
   </p>
   <p>
     或者，你亦可以加入 QQ 群（
@@ -458,9 +459,13 @@
     @apply text-lg mb-2;
   }
 
+  li {
+    @apply inline-flex gap-1;
+  }
+
   code {
     font-family: 'Noto Sans Mono', 'Noto Sans SC', monospace;
-    @apply text-lg mx-1;
+    @apply text-lg;
   }
 
   a {
