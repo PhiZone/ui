@@ -13,7 +13,7 @@
 </svelte:head>
 
 {#if $headline.isSuccess}
-  {@const headline = $headline.data.message}
+  {@const headline = $headline.data.data.headline}
   {#if headline}
     <div class="flex justify-center">
       <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
