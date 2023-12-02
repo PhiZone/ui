@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { SongDto } from '$lib/api';
+  import type { SongAdmitteeDto, SongDto } from '$lib/api';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getCompressedImage } from '$lib/utils';
   import { readable } from 'svelte/store';
   import Like from './Like.svelte';
 
-  export let song: SongDto;
+  export let song: SongDto | SongAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';
   export let showLike = true;
 
@@ -44,13 +44,25 @@
     <a href={`/songs/${song.id}`}>
       <figure class="h-[167px] relative">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
-        {#if song.isOriginal}
-          <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
-            <button class="btn btn-secondary btn-sm text-xl no-animation">
-              {$t('song.original')}
-            </button>
+        <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+          <div class="join join-horizontal">
+            {#if song.isOriginal}
+              <button class="btn btn-secondary btn-sm text-xl no-animation join-item">
+                {$t('song.original')}
+              </button>
+            {/if}
+            {#if 'label' in song && song.label}
+              <div
+                class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
+                data-tip={song.label}
+              >
+                <button class="btn btn-sm btn-neutral btn-active no-animation join-item text-lg">
+                  {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
+                </button>
+              </div>
+            {/if}
           </div>
-        {/if}
+        </div>
       </figure>
       <div class="card-body py-6 gap-0.5">
         <h2 class="title w-full mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
@@ -102,11 +114,23 @@
     <div class="w-11/12 md:w-7/12">
       <div class="text-xl font-bold ellipsis-2">
         {song.title}
-        {#if song.isOriginal}
-          <button class="btn btn-secondary btn-sm text-lg no-animation">
-            {$t('song.original')}
-          </button>
-        {/if}
+        <div class="join join-horizontal">
+          {#if song.isOriginal}
+            <button class="btn btn-secondary btn-sm text-xl no-animation join-item">
+              {$t('song.original')}
+            </button>
+          {/if}
+          {#if 'label' in song && song.label}
+            <div
+              class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
+              data-tip={song.label}
+            >
+              <button class="btn btn-sm btn-neutral btn-active no-animation join-item text-lg">
+                {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
     <div class="w-0 md:w-1/3">

@@ -209,14 +209,7 @@
   <input type="checkbox" id="new-collaborator" class="modal-toggle" bind:checked={collabOpen} />
   <div class="modal">
     <div class="modal-box bg-base-100 form-control gap-3">
-      <div class="flex gap-3 items-center">
-        <h3 class="font-bold text-lg">{$t('studio.submission.add_collaborator')}</h3>
-        {#if user}
-          <p class="opacity-80">
-            ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
-          </p>
-        {/if}
-      </div>
+      <h3 class="font-bold text-lg">{$t('studio.submission.add_collaborator')}</h3>
       <label
         for="new-collaborator"
         class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
@@ -226,7 +219,7 @@
       <form
         id="collab"
         method="POST"
-        class="w-full form-control"
+        class="w-full form-control gap-4"
         action="?/collab"
         use:collabEnhance
         on:submit={() => {
@@ -237,8 +230,8 @@
         <input type="hidden" id="id" name="id" value={id} />
         <div
           class={$collaborator.isError
-            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
-            : 'w-full my-2 px-4'}
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full'
+            : 'w-full'}
           data-tip={$collaborator.isError ? $t(`error.${$collaborator.error.code}`) : ''}
         >
           <label class="join w-full">
@@ -280,7 +273,7 @@
             kind="mini"
             target="_blank"
           />
-          <label class="join w-full px-4">
+          <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-fit">
               {$t('common.position')}
             </span>
@@ -292,7 +285,7 @@
               class="input input-secondary join-item w-3/4"
             />
           </label>
-          <div class="modal-action mt-3 px-4">
+          <div class="modal-action mt-3">
             <button type="submit" class="btn btn-secondary btn-outline">
               {$t('common.submit')}
             </button>

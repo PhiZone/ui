@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
+  import Song from '$lib/components/Song.svelte';
   import Like from '$lib/components/Like.svelte';
   import User from '$lib/components/User.svelte';
   import Comments from '$lib/components/Comments.svelte';
-  import { richtext } from '$lib/richtext';
 
   export let data;
 
@@ -114,44 +114,7 @@
                 {#if songs.length > 0}
                   <ul class="menu bg-base-100 w-full">
                     {#each songs as song}
-                      <li class="w-full overflow-hidden">
-                        <a
-                          href={`/songs/${song.id}`}
-                          class="w-full flex flex-wrap px-5 h-16 content-center overflow-hidden"
-                        >
-                          <div class="basis-1 grow flex overflow-hidden">
-                            <div class="text-xl font-bold w-full truncate">
-                              {song.title}
-                            </div>
-                            {#if song.isOriginal}
-                              <div class="btn btn-secondary btn-sm text-lg no-animation">
-                                {$t('song.original')}
-                              </div>
-                            {/if}
-                          </div>
-                          <div class="basis-1 grow flex overflow-hidden">
-                            <div class="text-lg w-full truncate">
-                              {song.isOriginal ? richtext(song.authorName) : song.authorName}
-                            </div>
-                          </div>
-                          <!-- svelte-ignore a11y-no-static-element-interactions -->
-                          <div
-                            class="min-w-fit"
-                            on:click={(e) => {
-                              e.preventDefault();
-                            }}
-                            on:keyup
-                          >
-                            <Like
-                              id={song.id}
-                              likes={song.likeCount}
-                              type="songs"
-                              liked={song.dateLiked != null}
-                              class="btn-sm w-24"
-                            />
-                          </div>
-                        </a>
-                      </li>
+                      <li><Song {song} kind="inline" /></li>
                     {/each}
                   </ul>
                 {:else}
