@@ -24,11 +24,9 @@
 {#if $headline.isSuccess}
   {@const headline = $headline.data.data.headline}
   {#if headline}
-    <div class="flex justify-center">
-      <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
-        <i class="fa-solid fa-circle-info fa-xl"></i>
-        <span class="content">{headline}</span>
-      </div>
+    <div class="alert w-fit alert-info shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50">
+      <i class="fa-solid fa-circle-info fa-xl"></i>
+      <span class="content">{headline}</span>
     </div>
   {/if}
 {/if}
@@ -44,7 +42,7 @@
     <form class="form-control" on:submit|preventDefault={search}>
       <div class="join text-sm lg:text-md">
         <select
-          class="select select-bordered lg:select-lg join-item max-w-1/3 text-base-content bg-opacity-80"
+          class="select select-bordered border-2 transition hover:select-secondary lg:select-lg join-item max-w-1/3"
           bind:value={type}
         >
           <option value="chapters">{$t('common.chapters')}</option>
@@ -55,11 +53,14 @@
         <input
           type="text"
           placeholder={$t('common.search_placeholder')}
-          class="input input-bordered lg:input-lg join-item w-full bg-opacity-80 text-base-content"
+          class="input input-bordered border-2 transition hover:input-secondary lg:input-lg join-item w-full z-10"
           bind:value={text}
         />
-        <a class="btn lg:btn-lg btn-square btn-primary join-item bg-opacity-80" {href}>
-          <i class="fa-solid fa-magnifying-glass fa-xl"></i>
+        <a
+          class="btn lg:btn-lg btn-square input-bordered border-2 bg-base-100 hover:bg-secondary hover:btn-secondary join-item backdrop-blur-xl"
+          {href}
+        >
+          <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </a>
       </div>
     </form>

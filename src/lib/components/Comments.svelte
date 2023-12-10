@@ -8,7 +8,7 @@
 
   $: ({ user, api } = $page.data);
 
-  export let type: 'chapters' | 'songs' | 'charts' | 'records';
+  export let type: 'chapters' | 'songs' | 'charts' | 'records' | 'applications' | 'collections';
   export let id: string;
   export let showUser = true;
   export let showSource = false;
@@ -62,7 +62,7 @@
           {disabled}
         />
         <button
-          class="ml-3 btn btn-outline btn-primary w-1/12 min-w-fit"
+          class="ml-3 btn border-2 btn-outline btn-primary w-1/12 min-w-fit"
           on:click={sendComment}
           disabled={disabled || commentText.length === 0}
         >

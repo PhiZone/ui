@@ -1,0 +1,11 @@
+{
+  "collection": "Collection",
+  "id": "Collection ID",
+  "illustration": "Illustration",
+  "view_illustration": "View Illustration",
+  "illustrator": "Illustrator",
+  "owner": "Owner",
+  "charts": "Charts",
+  "label": "Label",
+  "search": "Search collections"
+}

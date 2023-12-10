@@ -290,7 +290,7 @@
                       ? !emailConfirmationAvailable
                         ? 'btn-ghost font-mono'
                         : 'btn-ghost'
-                      : 'btn-secondary btn-outline'} join-item w-full"
+                      : 'hover:btn-secondary btn-outline'} join-item w-full"
                   disabled={emailConfirmationResult.status === Status.SENDING ||
                     !emailConfirmationAvailable}
                   on:click={confirmEmail}
@@ -339,7 +339,7 @@
                 ? 'btn-error'
                 : $submitting || emailConfirmationResult.status === Status.ERROR
                   ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                  : 'btn-outline border-2 border-gray-700'} w-full"
               disabled={!legalAgreement ||
                 $submitting ||
                 emailConfirmationResult.status === Status.ERROR}

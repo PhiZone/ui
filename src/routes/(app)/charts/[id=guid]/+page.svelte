@@ -269,7 +269,7 @@
                   ? 'btn-error'
                   : status === Status.SENDING
                     ? 'btn-ghost'
-                    : 'btn-secondary btn-outline'} w-full"
+                    : 'btn-outline border-2 border-gray-700'} w-full"
                 disabled={status == Status.SENDING}
               >
                 {status === Status.ERROR
@@ -407,8 +407,8 @@
                   <label
                     for="chart-vote"
                     class="btn {user
-                      ? 'btn-primary'
-                      : 'btn-disabled'} btn-outline join-item flex gap-1"
+                      ? 'btn-ghost border-2 hover:btn-outline'
+                      : 'btn-disabled'} join-item"
                   >
                     <i class="fa-solid fa-check-to-slot fa-lg"></i>
                     {$t('common.vote')}
@@ -417,9 +417,8 @@
                     <a
                       href={chart.file}
                       target="_blank"
-                      rel="noreferrer"
                       download={chart.file.split('/').pop()}
-                      class="btn btn-primary btn-outline join-item flex gap-1"
+                      class="btn btn-ghost border-2 hover:btn-outline join-item"
                     >
                       <i class="fa-solid fa-file-arrow-down fa-lg"></i>
                       {$t('common.download')}

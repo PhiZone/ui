@@ -10,7 +10,7 @@
   <div class="pt-[60px] drawer-side z-50">
     <label for="studio-sidebar" class="drawer-overlay" />
     <ul
-      class="menu px-4 min-w-fit w-72 h-full shadow-lg bg-base-200 bg-opacity-70 backdrop-blur-lg text-base-content text-lg"
+      class="menu px-4 min-w-fit w-60 h-full shadow-lg bg-base-200 bg-opacity-70 backdrop-blur-lg text-base-content text-lg"
     >
       <li>
         <a href="/studio">{$t('studio.homepage')}</a>
@@ -29,6 +29,9 @@
           <summary>{$t('studio.admissions')}</summary>
           <ul>
             <li><a href="/studio/admissions/chapters">{$t('studio.chapter_admissions')}</a></li>
+            <li>
+              <a href="/studio/admissions/collections">{$t('studio.collection_admissions')}</a>
+            </li>
             <li><a href="/studio/admissions/songs">{$t('studio.song_admissions')}</a></li>
             <li>
               <a href="/studio/admissions/song-submissions">

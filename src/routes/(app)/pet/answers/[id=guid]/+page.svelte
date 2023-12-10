@@ -156,7 +156,7 @@
                   ? 'btn-error'
                   : $submitting
                     ? 'btn-ghost'
-                    : 'btn-secondary btn-outline'} w-full"
+                    : 'btn-outline border-2 border-gray-700'} w-full"
                 disabled={$submitting}
               >
                 {$allErrors.length > 0

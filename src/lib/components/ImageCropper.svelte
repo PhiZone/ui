@@ -38,7 +38,7 @@
 <input type="checkbox" id="imagecropper" class="modal-toggle" bind:checked={open} />
 <div class="modal">
   <div class="modal-box flex flex-col gap-2 relative">
-    <label for="imagecropper" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+    <label for="imagecropper" class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2">
       ✕
     </label>
     <h3 class="text-lg font-bold">{title}</h3>

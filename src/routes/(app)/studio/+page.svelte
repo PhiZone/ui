@@ -15,11 +15,9 @@
 {#if $headline.isSuccess}
   {@const headline = $headline.data.data.headline}
   {#if headline}
-    <div class="flex justify-center">
-      <div class="alert w-fit alert-info shadow-lg top-20 fixed mx-8">
-        <i class="fa-solid fa-circle-info fa-xl"></i>
-        <span class="content">{headline}</span>
-      </div>
+    <div class="alert w-fit alert-info shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50">
+      <i class="fa-solid fa-circle-info fa-xl"></i>
+      <span class="content">{headline}</span>
     </div>
   {/if}
 {/if}
@@ -34,19 +32,21 @@
       <!-- <a
         href="/studio_guide.html"
         target="_blank"
-        rel="noreferrer"
         class="text-lg hover:underline max-w-fit mx-auto mt-3"
       >
         {$t('studio.view_guide')}
       </a> -->
-      <div class="mt-6 flex justify-center">
+      <div class="mt-6 flex justify-center gap-6">
         <a
           href="/studio/chart-submissions/new"
-          class="btn btn-secondary lg:btn-lg btn-outline mr-3"
+          class="btn lg:btn-lg btn-outline border-2 border-gray-700"
         >
           {$t('studio.upload_chart')}
         </a>
-        <a href="/studio/song-submissions/new" class="btn btn-accent lg:btn-lg btn-outline ml-3">
+        <a
+          href="/studio/song-submissions/new"
+          class="btn lg:btn-lg btn-outline border-2 border-gray-700"
+        >
           {$t('studio.upload_song')}
         </a>
       </div>

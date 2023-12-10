@@ -3,6 +3,7 @@
   import { t } from '$lib/translations/config';
   import Collaboration from '$lib/components/Collaboration.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
   $: ({ searchParams, page, user, api } = data);
@@ -36,13 +37,13 @@
         <div class="join join-vertical md:join-horizontal min-w-fit max-w-fit">
           <a
             href="/studio/collaborations?rangeInviteeId={user?.id}"
-            class="btn btn-primary btn-outline join-item min-w-fit"
+            class="btn btn-outline border-2 border-gray-700 join-item min-w-fit"
           >
             {$t('studio.request.received')}
           </a>
           <a
             href="/studio/collaborations?rangeInviterId={user?.id}"
-            class="btn btn-primary btn-outline join-item min-w-fit"
+            class="btn btn-outline border-2 border-gray-700 join-item min-w-fit"
           >
             {$t('studio.request.sent')}
           </a>
@@ -53,7 +54,12 @@
           {@const { total, perPage, data } = $query.data}
           {#if total && perPage && data.length > 0}
             {#each data as collaboration}
-              <Collaboration {collaboration} />
+              <Collaboration
+                {collaboration}
+                editable={user &&
+                  ((collaboration.inviterId === user.id && getUserPrivilege(user.role) >= 3) ||
+                    (collaboration.inviterId !== user.id && getUserPrivilege(user.role) === 6))}
+              />
             {/each}
             <Pagination {total} {perPage} {page} {searchParams} />
           {:else}

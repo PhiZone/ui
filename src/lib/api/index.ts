@@ -17,6 +17,8 @@ import CollaborationAPI from './collaboration';
 import PetAPI from './pet';
 import AdmissionAPI from './admission';
 import ResourceRecordAPI from './resourceRecord';
+import ApplicationAPI from './application';
+import CollectionAPI from './collection';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -76,9 +78,11 @@ export default class API {
     return this.send(path, 'PATCH', body);
   }
 
+  application = new ApplicationAPI(this);
   auth = new AuthAPI(this);
   chapter = new ChapterAPI(this);
   chart = new ChartAPI(this);
+  collection = new CollectionAPI(this);
   comment = new CommentAPI(this);
   headline = new HeadlineAPI(this);
   like = new LikeAPI(this);
@@ -95,6 +99,7 @@ export default class API {
 }
 
 export type { ChapterDto } from './chapter';
+export type { CollectionDto } from './collection';
 export { ChartFormat, type ChartDto } from './chart';
 export type { ChartSubmissionDto } from './chart.submission';
 export type { CommentDto } from './comment';
@@ -105,3 +110,4 @@ export type { ChartLevelDto, SongDto, SongAdmitteeDto } from './song';
 export type { SongSubmissionDto } from './song.submission';
 export { Gender, type UserDto, type UserDetailedDto } from './user';
 export type { VoteDto } from './vote';
+export type { ApplicationDto } from './application';

@@ -7,7 +7,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { readable } from 'svelte/store';
 
-  $: ({ api } = $page.data);
+  $: ({ user, api } = $page.data);
 
   export let song: SongSubmissionDto;
 
@@ -89,13 +89,13 @@
         <span class="badge mr-1">
           {$t('common.created_at')}
         </span>
-        {parseDateTime(song.dateCreated)}
+        {parseDateTime(song.dateCreated, true, user?.language)}
       </p>
       <p class="whitespace-nowrap overflow-hidden text-ellipsis">
         <span class="badge mr-1">
           {$t('common.updated_at')}
         </span>
-        {parseDateTime(song.dateUpdated)}
+        {parseDateTime(song.dateUpdated, true, user?.language)}
       </p>
     </div>
   </a>

@@ -221,7 +221,7 @@
     </div>
     <label
       for="studio-composer"
-      class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -235,8 +235,8 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-            $composer.isError ? 'input-error' : 'input-secondary'
+          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
           on:input={() => {
@@ -244,11 +244,11 @@
           }}
         />
         <button
-          class={`btn join-item ${
+          class={`btn border-2 border-gray-700 join-item ${
             newComposerId || $composer.isLoading
               ? $composer.isError
                 ? 'btn-error'
-                : 'btn-secondary btn-outline'
+                : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
           on:click={() => {
@@ -265,7 +265,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.composer')}</span>
         <input
           placeholder={$t('common.form.composer')}
-          class="input input-secondary join-item w-3/4"
+          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
           bind:value={newComposerDisplay}
         />
       </label>
@@ -273,7 +273,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-composer"
-          class="btn btn-secondary btn-outline"
+          class="btn border-2 border-gray-700 btn-outline"
           on:click={() => {
             song.authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
@@ -291,7 +291,10 @@
     <div class="w-3/4 max-w-6xl min-w-20">
       <div class="flex justify-between">
         <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
-        <a href="/studio/song-submissions/{song.id}" class="btn btn-secondary btn-outline">
+        <a
+          href="/studio/song-submissions/{song.id}"
+          class="btn border-2 border-gray-700 btn-outline"
+        >
           {$t('common.back')}
         </a>
       </div>
@@ -303,7 +306,7 @@
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
-                  class="toggle toggle-secondary"
+                  class="toggle border-2 toggle-secondary"
                   bind:checked={isOriginal}
                   on:change={() => {
                     if (isOriginal) {
@@ -534,8 +537,8 @@
                   id="title"
                   name="Title"
                   placeholder={$t('common.form.song_title')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Title') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.title}
                   on:input={(e) => {
@@ -557,9 +560,11 @@
                 <select
                   id="edition_type"
                   name="EditionType"
-                  class={`select select-secondary join-item ${
+                  class={`select transition border-2 border-gray-700 join-item ${
                     song.editionType === 0 ? 'w-3/4' : 'w-1/6'
-                  } ${errors?.get('EditionType') ? 'select-error' : 'select-secondary'}`}
+                  } ${
+                    errors?.get('EditionType') ? 'hover:select-error' : 'hover:select-secondary'
+                  }`}
                   bind:value={song.editionType}
                   on:input={(e) => {
                     patch = applyPatch(
@@ -590,8 +595,8 @@
                     id="edition"
                     name="Edition"
                     placeholder={$t('studio.submission.edition_placeholder')}
-                    class={`input input-secondary join-item w-7/12 min-w-[180px] ${
-                      errors?.get('Edition') ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                      errors?.get('Edition') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.edition}
                     on:input={(e) => {
@@ -632,8 +637,8 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select select-secondary join-item w-3/4 ${
-                    errors?.get('Accessibility') ? 'select-error' : 'select-secondary'
+                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                    errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   value={`${song.accessibility}`}
                   on:input={(e) => {
@@ -679,9 +684,11 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.composer')}
-                  class={`input input-secondary join-item ${
+                  class={`input transition border-2 border-gray-700 join-item ${
                     isOriginal ? 'w-7/12' : 'w-9/12'
-                  } min-w-[180px] ${errors?.get('AuthorName') ? 'input-error' : 'input-secondary'}`}
+                  } min-w-[180px] ${
+                    errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
                   bind:value={song.authorName}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
@@ -691,7 +698,7 @@
                   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                   <label
                     for="studio-composer"
-                    class="btn btn-outline btn-secondary join-item w-1/6"
+                    class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
                     on:click={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
@@ -733,8 +740,8 @@
                   id="illustrator"
                   name="Illustrator"
                   placeholder={$t('common.form.illustrator')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Illustrator') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Illustrator') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.illustrator}
                   on:input={(e) => {
@@ -764,8 +771,8 @@
                     id="min_bpm"
                     name="MinBpm"
                     placeholder={$t('studio.submission.min_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      errors?.get('MinBpm') ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      errors?.get('MinBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.minBpm}
                     on:input={(e) => {
@@ -787,8 +794,8 @@
                     id="bpm"
                     name="Bpm"
                     placeholder={$t('studio.submission.main_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      errors?.get('Bpm') ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      errors?.get('Bpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.bpm}
                     on:input={(e) => {
@@ -810,8 +817,8 @@
                     id="max_bpm"
                     name="MaxBpm"
                     placeholder={$t('studio.submission.max_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      errors?.get('MaxBpm') ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      errors?.get('MaxBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.maxBpm}
                     on:input={(e) => {
@@ -846,8 +853,8 @@
                   id="offset"
                   name="Offset"
                   placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Offset') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Offset') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.offset}
                   on:input={(e) => {
@@ -874,10 +881,10 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea join-item ${
-                    errors?.get('Description') ? 'textarea-error' : 'textarea-secondary'
+                  class={`textarea transition border-2 border-gray-700 join-item ${
+                    errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
-                  placeholder={$t('studio.submission.description_placeholder')}
+                  placeholder={`${$t('common.description')}${$t('common.optional')}`}
                   bind:value={song.description}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
@@ -886,7 +893,9 @@
               </label>
               <button
                 type="button"
-                class="absolute right-2 bottom-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                class="absolute right-2 bottom-2 btn btn-sm {song.description
+                  ? 'border-2 hover:btn-outline backdrop-blur'
+                  : 'btn-disabled'}"
                 on:click={() => {
                   song.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
@@ -908,7 +917,7 @@
                     ? 'btn-error'
                     : status === Status.SENDING
                       ? 'btn-ghost'
-                      : 'btn-secondary btn-outline'} w-full"
+                      : 'btn-outline border-2 border-gray-700'} w-full"
                   disabled={status == Status.SENDING}
                   on:click={update}
                 >

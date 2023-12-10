@@ -2,10 +2,11 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Collaboration from '$lib/components/Collaboration.svelte';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 
-  $: ({ id, api } = data);
+  $: ({ user, id, api } = data);
 
   $: query = createQuery(api.collaboration.info({ id }));
 </script>
@@ -25,7 +26,12 @@
         >
           {$t('studio.collaboration')}
         </span>
-        <Collaboration {collaboration} />
+        <Collaboration
+          {collaboration}
+          editable={user &&
+            ((collaboration.inviterId === user.id && getUserPrivilege(user.role) >= 3) ||
+              (collaboration.inviterId !== user.id && getUserPrivilege(user.role) === 6))}
+        />
       </div>
     {/if}
   </div>

@@ -5,9 +5,12 @@
   import Song from './Song.svelte';
   import Chapter from './Chapter.svelte';
   import User from './User.svelte';
+  import AdmissionDelete from './AdmissionDelete.svelte';
 
   export let admission: ChapterAdmissionDto;
+  export let showSong = true;
   export let showRequestee = false;
+  export let editable = false;
 
   $: ({ user, api } = $page.data);
 
@@ -30,16 +33,22 @@
 
 <div class="card overflow-hidden bg-base-200 border-2 border-gray-700 transition hover:shadow-lg">
   <div class="card-body">
-    <div class="flex flex-col lg:flex-row gap-6 mx-auto">
+    <div class="flex flex-col {showSong ? 'lg:flex-row' : 'md:flex-row'} gap-6 mx-auto">
       <div class="flex flex-col w-full md:flex-row">
-        <Song song={admission.admittee} kind="full" showLike={false} />
-        <div class="divider md:divider-horizontal">
-          <i class="fa-solid fa-arrow-right fa-2xl hidden md:inline"></i>
-          <i class="fa-solid fa-arrow-down fa-lg md:hidden"></i>
-        </div>
+        {#if showSong}
+          <Song song={admission.admittee} kind="full" showLike={false} />
+          <div class="divider md:divider-horizontal">
+            <i class="fa-solid fa-arrow-right fa-2xl hidden md:inline"></i>
+            <i class="fa-solid fa-arrow-down fa-lg md:hidden"></i>
+          </div>
+        {/if}
         <Chapter chapter={admission.admitter} fixedHeight={false} />
       </div>
-      <div class="flex flex-col md:flex-row lg:flex-col gap-4 md:gap-[45px] lg:gap-4 w-fit">
+      <div
+        class="flex flex-col {showSong
+          ? 'md:flex-row lg:flex-col'
+          : ''} gap-4 md:gap-[45px] lg:gap-4 w-fit"
+      >
         {#if !showRequestee && user && admission.requesteeId == user.id}
           <User id={admission.requesterId} kind="full" showFollow={false} />
         {:else}
@@ -69,7 +78,7 @@
             {#if user && admission.requesteeId === user.id}
               <div class="join w-80">
                 <button
-                  class="btn btn-primary btn-outline join-item w-1/2"
+                  class="btn btn-primary border-2 btn-outline join-item w-1/2"
                   on:click={() => {
                     review(true);
                   }}
@@ -77,7 +86,7 @@
                   {$t('studio.request.accept')}
                 </button>
                 <button
-                  class="btn btn-accent btn-outline join-item w-1/2"
+                  class="btn btn-accent border-2 btn-outline join-item w-1/2"
                   on:click={() => {
                     review(false);
                   }}
@@ -89,6 +98,9 @@
               <button class="btn btn-disabled w-80">
                 {$t('common.pending')}
               </button>
+            {/if}
+            {#if editable}
+              <AdmissionDelete target={admission} type="chapter" class="" />
             {/if}
           {:else}
             <button class="btn btn-disabled w-80">

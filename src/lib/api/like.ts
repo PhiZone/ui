@@ -2,7 +2,15 @@ import type API from '.';
 import type { R } from './types';
 
 export interface LikeOpts {
-  type: 'comments' | 'replies' | 'records' | 'charts' | 'songs' | 'chapters';
+  type:
+    | 'comments'
+    | 'replies'
+    | 'records'
+    | 'charts'
+    | 'songs'
+    | 'chapters'
+    | 'applications'
+    | 'collections';
   id: string;
 }
 

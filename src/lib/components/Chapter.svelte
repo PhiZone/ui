@@ -39,7 +39,7 @@
         <span class="badge mr-1">{$t('chapter.illustrator')}</span>
         {chapter.illustrator}
       </p>
-      <div class="grow-0 flex items-center">
+      <div class="flex items-center grow-0">
         <span class="badge mr-1">{$t('chapter.owner')}</span>
         {#if $owner.isSuccess}
           <p class="whitespace-nowrap overflow-hidden text-ellipsis">

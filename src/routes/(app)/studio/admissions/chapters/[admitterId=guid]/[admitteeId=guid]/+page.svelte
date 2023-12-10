@@ -2,10 +2,11 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 
-  $: ({ admitterId, admitteeId, api } = data);
+  $: ({ user, admitterId, admitteeId, api } = data);
 
   $: query = createQuery(api.admission.infoChapter({ admitterId, admitteeId }));
 </script>
@@ -25,7 +26,12 @@
         >
           {$t('studio.chapter_admission')}
         </span>
-        <ChapterAdmission {admission} />
+        <ChapterAdmission
+          {admission}
+          editable={user &&
+            ((admission.admittee.ownerId === user.id && getUserPrivilege(user.role) >= 3) ||
+              (admission.admittee.ownerId !== user.id && getUserPrivilege(user.role) === 6))}
+        />
       </div>
     {/if}
   </div>

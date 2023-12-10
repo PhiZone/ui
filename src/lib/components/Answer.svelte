@@ -7,7 +7,7 @@
 
   export let answer: PetAnswerDto;
 
-  $: ({ api } = $page.data);
+  $: ({ user, api } = $page.data);
 
   $: owner = createQuery(api.user.info({ id: answer.ownerId }));
 </script>
@@ -54,16 +54,11 @@
       </p>
       <div class="w-full flex justify-between items-center">
         <p class="text-sm opacity-70 text-right">
-          <a
-            href={`/users/${answer.ownerId}`}
-            target="_blank"
-            rel="noreferrer"
-            class="hover:underline"
-          >
+          <a href={`/users/${answer.ownerId}`} target="_blank" class="hover:underline">
             {$owner.data?.data.userName ?? ''}
           </a>
           @
-          {parseDateTime(answer.dateCreated)}
+          {parseDateTime(answer.dateCreated, true, user?.language)}
         </p>
       </div>
     </div>

@@ -6,7 +6,7 @@
   import { getCompressedImage, getLevelColor, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
 
-  $: ({ api } = $page.data);
+  $: ({ user, api } = $page.data);
 
   export let chart: ChartSubmissionDto;
 
@@ -135,13 +135,13 @@
         <span class="badge mr-1">
           {$t('common.created_at')}
         </span>
-        {parseDateTime(chart.dateCreated)}
+        {parseDateTime(chart.dateCreated, true, user?.language)}
       </p>
       <p class="whitespace-nowrap overflow-hidden text-ellipsis">
         <span class="badge mr-1">
           {$t('common.updated_at')}
         </span>
-        {parseDateTime(chart.dateUpdated)}
+        {parseDateTime(chart.dateUpdated, true, user?.language)}
       </p>
     </div>
   </a>

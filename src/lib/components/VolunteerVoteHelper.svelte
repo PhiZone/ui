@@ -43,7 +43,10 @@
 <input type="checkbox" id="vote-helper" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
-    <label for="vote-helper" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+    <label
+      for="vote-helper"
+      class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+    >
       ✕
     </label>
     <h3 class="font-bold text-lg mb-3">谱面评分助手</h3>
@@ -60,7 +63,7 @@
         <input
           type="radio"
           name="score"
-          class="radio radio-secondary"
+          class="radio border-2 radio-secondary"
           bind:group={scores[step]}
           on:change={calculate}
           value={3}
@@ -71,7 +74,7 @@
         <input
           type="radio"
           name="score"
-          class="radio radio-secondary"
+          class="radio border-2 radio-secondary"
           bind:group={scores[step]}
           on:change={calculate}
           value={2}
@@ -82,7 +85,7 @@
         <input
           type="radio"
           name="score"
-          class="radio radio-secondary"
+          class="radio border-2 radio-secondary"
           bind:group={scores[step]}
           on:change={calculate}
           value={0}
@@ -93,7 +96,7 @@
         <input
           type="radio"
           name="score"
-          class="radio radio-secondary"
+          class="radio border-2 radio-secondary"
           bind:group={scores[step]}
           on:change={calculate}
           value={-3}
@@ -108,7 +111,7 @@
           <input
             type="radio"
             name="bonus"
-            class="radio radio-secondary"
+            class="radio border-2 radio-secondary"
             bind:group={bonuses[step]}
             on:change={calculate}
             value={true}
@@ -119,7 +122,7 @@
           <input
             type="radio"
             name="bonus"
-            class="radio radio-secondary"
+            class="radio border-2 radio-secondary"
             bind:group={bonuses[step]}
             on:change={calculate}
             value={false}

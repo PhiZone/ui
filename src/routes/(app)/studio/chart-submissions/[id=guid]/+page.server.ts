@@ -18,13 +18,21 @@ const collabSchema = z.object({
   position: z.string().optional(),
 });
 
+const collectionSchema = z.object({
+  id: z.string(),
+  admitterId: z.string(),
+  label: z.string().optional(),
+});
+
 type VoteSchema = z.infer<typeof voteSchema>;
 type CollabSchema = z.infer<typeof collabSchema>;
+type CollectionSchema = z.infer<typeof collectionSchema>;
 
 export const load = async () => {
   const voteForm = await superValidate(voteSchema);
   const collabForm = await superValidate(collabSchema);
-  return { voteForm, collabForm };
+  const collectionForm = await superValidate(collectionSchema);
+  return { voteForm, collabForm, collectionForm };
 };
 
 export const actions = {
@@ -94,6 +102,42 @@ export const actions = {
         }
 
         return fail(resp.status, { collabForm });
+      } catch (e) {
+        return fail(resp.status);
+      }
+    }
+  },
+
+  collection: async ({ request, locals, fetch }) => {
+    const api = new API(fetch, locals.accessToken, locals.user);
+    const formData = await request.formData();
+    const collectionForm = await superValidate(formData, collectionSchema);
+
+    if (!collectionForm.valid) {
+      return fail(400, { collectionForm });
+    }
+    const resp = await api.chart.createAdmission(collectionForm.data);
+    if (resp.ok) {
+      return;
+    } else {
+      try {
+        const error = await resp.json();
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        collectionForm.valid = false;
+        if (error.status === ResponseDtoStatus.ErrorBrief) {
+          collectionForm.message = t.get(`error.${error.code}`);
+        } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+          collectionForm.message = error.message;
+        } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          collectionForm.errors = {};
+          error.errors.forEach(({ field, errors }) => {
+            collectionForm.errors[field as keyof CollectionSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
+        }
+
+        return fail(resp.status, { collectionForm });
       } catch (e) {
         return fail(resp.status);
       }

@@ -24,8 +24,8 @@
     <div class="join flex justify-center">
       <a
         href="?{getSearch(page - 1)}"
-        class="btn btn-primary join-item text-4xl {page > 1
-          ? 'btn-primary btn-outline'
+        class="btn border-2 join-item text-4xl {page > 1
+          ? 'hover:btn-outline'
           : 'btn-ghost btn-disabled'}"
       >
         «
@@ -33,9 +33,9 @@
       {#if nearbyPagesStart !== 1}
         <a
           href="?{getSearch(1)}"
-          class="btn btn-primary join-item text-lg {page === 1
+          class="btn border-2 join-item text-lg {page === 1
             ? 'btn-active btn-disabled'
-            : 'btn-outline'}"
+            : 'hover:btn-outline'}"
         >
           1
         </a>
@@ -44,9 +44,9 @@
       {#each nearbyPages as p}
         <a
           href="?{getSearch(p)}"
-          class="btn btn-primary join-item text-lg {page === p
+          class="btn border-2 join-item text-lg {page === p
             ? 'btn-active btn-disabled'
-            : 'btn-outline'}"
+            : 'hover:btn-outline'}"
         >
           {p}
         </a>
@@ -55,17 +55,17 @@
         <span class="btn btn-disabled join-item text-lg pointer-events-none">...</span>
         <a
           href="?{getSearch(totalPages)}"
-          class="btn btn-primary join-item text-lg {page === totalPages
+          class="btn border-2 join-item text-lg {page === totalPages
             ? 'btn-active btn-disabled'
-            : 'btn-outline'}"
+            : 'hover:btn-outline'}"
         >
           {totalPages}
         </a>
       {/if}
       <a
         href="?{getSearch(page + 1)}"
-        class="btn btn-primary join-item text-4xl {page < totalPages
-          ? 'btn-outline'
+        class="btn border-2 join-item text-4xl {page < totalPages
+          ? 'hover:btn-outline'
           : 'btn-ghost btn-disabled'}"
       >
         »

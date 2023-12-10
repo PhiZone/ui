@@ -153,7 +153,7 @@
     </div>
     <label
       for="studio-composer"
-      class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -167,8 +167,8 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-            $composer.isError ? 'input-error' : 'input-secondary'
+          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
           on:input={() => {
@@ -176,11 +176,11 @@
           }}
         />
         <button
-          class={`btn join-item ${
+          class={`btn border-2 border-gray-700 join-item ${
             newComposerId || $composer.isLoading
               ? $composer.isError
                 ? 'btn-error'
-                : 'btn-secondary btn-outline'
+                : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
           on:click={() => {
@@ -197,7 +197,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.composer')}</span>
         <input
           placeholder={$t('common.form.composer')}
-          class="input input-secondary join-item w-3/4"
+          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
           bind:value={newComposerDisplay}
         />
       </label>
@@ -205,7 +205,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-composer"
-          class="btn btn-secondary btn-outline"
+          class="btn border-2 border-gray-700 btn-outline"
           on:click={() => {
             authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
@@ -230,7 +230,7 @@
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
-                  class="toggle toggle-secondary"
+                  class="toggle border-2 toggle-secondary"
                   bind:checked={isOriginal}
                   on:change={() => {
                     if (isOriginal) {
@@ -460,8 +460,8 @@
                   name="Title"
                   bind:value={$form.Title}
                   placeholder={$t('common.form.song_title')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    $errors.Title ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    $errors.Title ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
               </label>
@@ -481,9 +481,9 @@
                 <select
                   id="edition_type"
                   name="EditionType"
-                  class={`select select-secondary join-item ${
+                  class={`select transition border-2 border-gray-700 join-item ${
                     editionType === 0 ? 'w-3/4' : 'w-1/6'
-                  } ${$errors.EditionType ? 'select-error' : 'select-secondary'}`}
+                  } ${$errors.EditionType ? 'hover:select-error' : 'hover:select-secondary'}`}
                   bind:value={editionType}
                   on:input={() => {
                     querySongDuplications = false;
@@ -522,8 +522,8 @@
                     id="edition"
                     name="Edition"
                     placeholder={$t('studio.submission.edition_placeholder')}
-                    class={`input input-secondary join-item w-7/12 min-w-[180px] ${
-                      $errors.Edition ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                      $errors.Edition ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={edition}
                   />
@@ -561,8 +561,8 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select select-secondary join-item w-3/4 ${
-                    $errors.Accessibility ? 'select-error' : 'select-secondary'
+                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                    $errors.Accessibility ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                 >
                   <option value="0">
@@ -605,16 +605,18 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.composer')}
-                  class={`input input-secondary join-item ${
+                  class={`input transition border-2 border-gray-700 join-item ${
                     isOriginal ? 'w-7/12' : 'w-9/12'
-                  } min-w-[180px] ${$errors.AuthorName ? 'input-error' : 'input-secondary'}`}
+                  } min-w-[180px] ${
+                    $errors.AuthorName ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
                   bind:value={authorName}
                 />
                 {#if isOriginal}
                   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                   <label
                     for="studio-composer"
-                    class="btn btn-outline btn-secondary join-item w-1/6"
+                    class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
                     on:click={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
@@ -654,8 +656,8 @@
                   id="illustrator"
                   name="Illustrator"
                   placeholder={$t('common.form.illustrator')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    $errors.Illustrator ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    $errors.Illustrator ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
               </label>
@@ -681,8 +683,8 @@
                     id="min_bpm"
                     name="MinBpm"
                     placeholder={$t('studio.submission.min_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      $errors.MinBpm ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      $errors.MinBpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
                   <input
@@ -695,8 +697,8 @@
                     id="bpm"
                     name="Bpm"
                     placeholder={$t('studio.submission.main_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      $errors.Bpm ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      $errors.Bpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
                   <input
@@ -709,8 +711,8 @@
                     id="max_bpm"
                     name="MaxBpm"
                     placeholder={$t('studio.submission.max_bpm')}
-                    class={`input input-secondary join-item w-1/3 ${
-                      $errors.MaxBpm ? 'input-error' : 'input-secondary'
+                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                      $errors.MaxBpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
                 </div>
@@ -734,8 +736,8 @@
                   id="offset"
                   name="Offset"
                   placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    $errors.Offset ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    $errors.Offset ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
               </label>
@@ -751,10 +753,10 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea join-item ${
-                    $errors.Description ? 'textarea-error' : 'textarea-secondary'
+                  class={`textarea transition border-2 border-gray-700 join-item ${
+                    $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
-                  placeholder={$t('studio.submission.description_placeholder')}
+                  placeholder={`${$t('common.description')}${$t('common.optional')}`}
                 />
               </label>
             </div>
@@ -796,7 +798,7 @@
                     ? 'btn-error'
                     : $submitting
                       ? 'btn-ghost'
-                      : 'btn-primary btn-outline'} w-full"
+                      : 'btn-outline border-2 border-gray-700'} w-full"
                   disabled={$submitting ||
                     !audio ||
                     !illustration ||

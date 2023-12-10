@@ -36,13 +36,13 @@
         <div class="join join-vertical md:join-horizontal min-w-fit max-w-fit">
           <a
             href="/studio/admissions/song-submissions?rangeRequesteeId={user?.id}"
-            class="btn btn-primary btn-outline join-item min-w-fit"
+            class="btn btn-outline border-2 border-gray-700 join-item min-w-fit"
           >
             {$t('studio.request.received')}
           </a>
           <a
             href="/studio/admissions/song-submissions?rangeRequesterId={user?.id}"
-            class="btn btn-primary btn-outline join-item min-w-fit"
+            class="btn btn-outline border-2 border-gray-700 join-item min-w-fit"
           >
             {$t('studio.request.sent')}
           </a>

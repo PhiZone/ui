@@ -103,7 +103,7 @@ export interface FilterBase {
   predicate?: string;
 }
 
-export interface PublicResourceFilterBase {
+export interface PublicResourceFilterBase extends FilterBase {
   rangeId?: string[];
   containsTitle?: string;
   equalsTitle?: string;
@@ -111,7 +111,7 @@ export interface PublicResourceFilterBase {
   equalsIllustrator?: string;
   containsDescription?: string;
   equalsDescription?: string;
-  rangeAccessibility?: string[];
+  rangeAccessibility?: number[];
   isHidden?: boolean;
   isLocked?: boolean;
   minOwnerId?: number;

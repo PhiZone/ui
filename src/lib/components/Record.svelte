@@ -10,7 +10,7 @@
     parseDateTime,
   } from '$lib/utils';
 
-  $: ({ api } = $page.data);
+  $: ({ user, api } = $page.data);
 
   export let record: RecordDto;
   export let chart: ChartDto | undefined = undefined;
@@ -99,14 +99,17 @@
       </p>
     </div>
     <div class="absolute right-2 bottom-2 form-control justify-end">
-      <p class="text-right player">
+      <p class="flex justify-end items-center gap-2 player">
         {#if $player.isSuccess}
           {@const player = $player.data.data}
           <a href={`/users/${player.id}`} class="hover:underline">
             {player.userName}
           </a>
         {/if}
-        {parseDateTime(record.dateCreated)}
+        <span>·</span>
+        <span>
+          {parseDateTime(record.dateCreated, true, user?.language)}
+        </span>
       </p>
     </div>
   </a>

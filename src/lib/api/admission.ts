@@ -1,7 +1,34 @@
-import type { ChartSubmissionDto, SongSubmissionDto, SongDto, ChapterDto } from '.';
+import type {
+  ChartSubmissionDto,
+  SongSubmissionDto,
+  ChartDto,
+  SongDto,
+  CollectionDto,
+  ChapterDto,
+} from '.';
 import type API from '.';
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
+
+export interface ChapterAdmissionDto {
+  admittee: SongDto;
+  admitter: ChapterDto;
+  dateCreated: Date;
+  label: null | string;
+  requesteeId: number;
+  requesterId: number;
+  status: number;
+}
+
+export interface CollectionAdmissionDto {
+  admittee: ChartDto;
+  admitter: CollectionDto;
+  dateCreated: Date;
+  label: null | string;
+  requesteeId: number;
+  requesterId: number;
+  status: number;
+}
 
 export interface SongAdmissionDto {
   admittee: ChartSubmissionDto;
@@ -16,16 +43,6 @@ export interface SongAdmissionDto {
 export interface SongSubmissionAdmissionDto {
   admittee: ChartSubmissionDto;
   admitter: SongSubmissionDto;
-  dateCreated: Date;
-  label: null | string;
-  requesteeId: number;
-  requesterId: number;
-  status: number;
-}
-
-export interface ChapterAdmissionDto {
-  admittee: SongDto;
-  admitter: ChapterDto;
   dateCreated: Date;
   label: null | string;
   requesteeId: number;
@@ -48,6 +65,7 @@ export interface InfoOpts {
 
 // create
 export interface CreateOpts {
+  type: 'chapters' | 'collections';
   id: string;
   admitterId: string;
   label: null | string;
@@ -55,7 +73,7 @@ export interface CreateOpts {
 
 // review
 export interface ReviewOpts {
-  type: 'chapters' | 'songs' | 'songSubmissions';
+  type: 'chapters' | 'collections' | 'songs' | 'songSubmissions';
   admitterId: string;
   admitteeId: string;
   approve: boolean;
@@ -63,6 +81,7 @@ export interface ReviewOpts {
 
 // delete
 export interface DeleteOpts {
+  type: 'chapters' | 'collections';
   admitterId: string;
   admitteeId: string;
 }
@@ -74,6 +93,12 @@ export default class AdmissionAPI {
     'admission.list.chapter',
     (opts: Filter): R<ChapterAdmissionDto[]> =>
       this.api.GET('/admissions/chapters?' + stringifyFilter(opts)),
+  );
+
+  listCollection = createQueryCreator(
+    'admission.list.collection',
+    (opts: Filter): R<CollectionAdmissionDto[]> =>
+      this.api.GET('/admissions/collections?' + stringifyFilter(opts)),
   );
 
   listSong = createQueryCreator(
@@ -94,6 +119,12 @@ export default class AdmissionAPI {
       this.api.GET(`/admissions/chapters/${admitterId}/${admitteeId}`),
   );
 
+  infoCollection = createQueryCreator(
+    'admission.info.collection',
+    ({ admitterId, admitteeId }: InfoOpts): R<CollectionAdmissionDto> =>
+      this.api.GET(`/admissions/collections/${admitterId}/${admitteeId}`),
+  );
+
   infoSong = createQueryCreator(
     'admission.info.song',
     ({ admitterId, admitteeId }: InfoOpts): R<SongAdmissionDto> =>
@@ -106,15 +137,15 @@ export default class AdmissionAPI {
       this.api.GET(`/admissions/songSubmissions/${admitterId}/${admitteeId}`),
   );
 
-  createChapterAdmission({ id, ...rest }: CreateOpts): R {
-    return this.api.POST(`/songs/${id}/chapters`, rest);
+  createAdmission({ type, id, ...rest }: CreateOpts): R {
+    return this.api.POST(`/${type == 'chapters' ? 'songs' : 'charts'}/${id}/${type}`, rest);
   }
 
   review({ type, admitterId, admitteeId, ...rest }: ReviewOpts): R {
     return this.api.POST(`/admissions/${type}/${admitterId}/${admitteeId}/review`, rest);
   }
 
-  deleteChapterAdmission({ admitterId, admitteeId }: DeleteOpts): R {
-    return this.api.DELETE(`/admissions/chapters/${admitterId}/${admitteeId}`);
+  deleteAdmission({ type, admitterId, admitteeId }: DeleteOpts): R {
+    return this.api.DELETE(`/admissions/${type}/${admitterId}/${admitteeId}`);
   }
 }
