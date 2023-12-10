@@ -10,7 +10,12 @@
   <div class="navbar-start w-[160px] lg:w-1/2 z-20">
     <div class="dropdown">
       <!-- svelte-ignore a11y-label-has-associated-control -->
-      <label tabindex="-1" class="btn btn-ghost btn-circle lg:hidden">
+      <label
+        tabindex="-1"
+        class="btn btn-ghost btn-circle {$page.url.pathname.startsWith('/studio')
+          ? 'xl:hidden'
+          : 'lg:hidden'}"
+      >
         <i class="fa-solid fa-bars"></i>
       </label>
       <ul
@@ -19,6 +24,9 @@
       >
         <li>
           <a href="/chapters">{$t('common.chapters')}</a>
+        </li>
+        <li>
+          <a href="/collections">{$t('common.collections')}</a>
         </li>
         <li>
           <a href="/songs">{$t('common.songs')}</a>
@@ -30,12 +38,23 @@
           <a href="/users">{$t('common.users')}</a>
         </li>
         <li>
+          <a href="/applications">{$t('common.applications')}</a>
+        </li>
+        <li>
           <a href="/records">{$t('common.records')}</a>
         </li>
+        {#if !$page.url.pathname.startsWith('/session')}
+          {@const { user } = $page.data}
+          {#if user}
+            <li class="rounded-full">
+              <a href="/pet">{$t('common.navbar.pet')}</a>
+            </li>
+          {/if}
+        {/if}
       </ul>
     </div>
-    <a class="title flex items-center normal-case font-extrabold text-2xl lg:text-4xl" href="/">
-      <img src="/favicon.ico" alt="Logo" class="logo hidden lg:block" />
+    <a class="title flex items-center normal-case font-extrabold text-2xl sm:text-4xl" href="/">
+      <img src="/favicon.ico" alt="Logo" class="logo hidden xl:block" />
       {$t('common.title')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
@@ -44,10 +63,15 @@
       </label>
     {/if}
   </div>
-  <div class="navbar-center hidden lg:flex">
+  <div
+    class="navbar-center hidden {$page.url.pathname.startsWith('/studio') ? 'xl:flex' : 'lg:flex'}"
+  >
     <ul class="menu menu-horizontal p-0 text-lg">
       <li>
         <a href="/chapters">{$t('common.chapters')}</a>
+      </li>
+      <li>
+        <a href="/collections">{$t('common.collections')}</a>
       </li>
       <li>
         <a href="/songs">{$t('common.songs')}</a>
@@ -59,12 +83,12 @@
         <a href="/users">{$t('common.users')}</a>
       </li>
       <li>
+        <a href="/applications">{$t('common.applications')}</a>
+      </li>
+      <li>
         <a href="/records">{$t('common.records')}</a>
       </li>
       <!-- <li class="rounded-full">
-				<a href="/apps">{$t("common.navbar.apps")}</a>
-			</li>
-			<li class="rounded-full">
 				<a href="/discussions">{$t("common.discussions")}</a>
 			</li> -->
       <!-- <li>
@@ -96,7 +120,7 @@
             </div>
           </button>
         </a>
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-end relative">
           <!-- svelte-ignore a11y-label-has-associated-control -->
           <label
             tabindex="-1"
@@ -104,6 +128,14 @@
               user.role,
             )}"
           >
+            {#if user.dateOfBirth && new Date(user.dateOfBirth).getMonth() === new Date().getMonth() && new Date(user.dateOfBirth).getDate() === new Date().getDate() && !$page.url.pathname.startsWith(`/users/${user.id}`)}
+              <img
+                src="https://res.phizone.cn/cDoKFCtSeSUrQwPOCg9KPmEIihjLrQtW/party-hat.png"
+                alt="Birthday Hat"
+                class="absolute -top-3 -right-[0.5px]"
+                style="width: 32px; height: 32px;"
+              />
+            {/if}
             <div class="w-12 rounded-full">
               <img src={getAvatar(user.avatar)} alt="Avatar" class="bg-white" />
             </div>
@@ -151,7 +183,7 @@
             {$t('session.login.login')}
           </a>
           <a
-            class="btn btn-outline btn-secondary btn-md text-base"
+            class="btn btn-outline border-2 btn-secondary btn-md text-base"
             href="/session/register?redirect={$page.url.pathname}"
           >
             {$t('session.registration.register')}

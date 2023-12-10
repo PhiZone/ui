@@ -79,7 +79,7 @@
           {$t('common.unknown_error')}
         </p>
         <a href="/pet">
-          <button class="btn btn-primary btn-outline">{$t('common.back')}</button>
+          <button class="btn border-2 hover:btn-outline">{$t('common.back')}</button>
         </a>
       </div>
     {/if}

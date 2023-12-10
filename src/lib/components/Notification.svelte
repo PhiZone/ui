@@ -7,7 +7,7 @@
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
 
-  $: ({ api } = $page.data);
+  $: ({ user, api } = $page.data);
 
   export let notification: NotificationDto;
 
@@ -39,29 +39,29 @@
     </figure>
     <div class="card-body w-3/4 md:w-5/6 pt-4 pl-6 pb-4 pr-6 flex-col justify-center">
       <div class="flex justify-between items-center">
-        <div class="flex flex-col">
-          <h2 class="text-xl mb-3 min-w-fit inline">
+        <div class="flex flex-col w-full">
+          <h2 class="text-xl mb-3 inline">
             {@html $content}
           </h2>
-          <div class="flex gap-2 flex-col lg:flex-row min-w-fit">
+          <div class="flex gap-2 flex-col sm:flex-row">
             <p class="min-w-fit">
               <span class="badge mr-1">
                 {$t('notification.notified_at')}
               </span>
-              {parseDateTime(notification.dateCreated)}
+              {parseDateTime(notification.dateCreated, true, user?.language)}
             </p>
             {#if notification.dateRead}
               <p class="min-w-fit">
                 <span class="badge mr-1">
                   {$t('notification.read_at')}
                 </span>
-                {parseDateTime(notification.dateRead)}
+                {parseDateTime(notification.dateRead, true, user?.language)}
               </p>
             {/if}
           </div>
         </div>
         <button
-          class="btn btn-secondary btn-outline {notification.dateRead ? 'hidden' : ''}"
+          class="btn border-2 hover:btn-outline {notification.dateRead ? 'hidden' : ''}"
           on:click={async () => {
             notification.dateRead = new Date();
             const resp = await api.notification.read({ id: notification.id });

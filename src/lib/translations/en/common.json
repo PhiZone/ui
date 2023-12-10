@@ -2,6 +2,8 @@
   "title": "PhiZone",
   "search_placeholder": "Search chapters, songs, users...",
   "chapters": "Chapters",
+  "collections": "Collections",
+  "applications": "Applications",
   "songs": "Songs",
   "users": "Users",
   "charts": "Charts",
@@ -11,7 +13,6 @@
   "settings": "Settings",
   "resource_records": "Resource Records",
   "navbar": {
-    "apps": "Apps",
     "pet": "PET",
     "studio_inaccessible": "Please first take the Privilege Escalation Test in order to access this feature!",
     "logout": "Logout"
@@ -143,7 +144,7 @@
   "admin": "Administration",
   "delete": "Delete",
   "deleted": "Deleted",
-  "delete_confirmation": "Are you sure you want to delete {resource}? This operation is irreversible.",
+  "delete_confirmation": "Are you sure you want to delete this {{resource}}? This operation is irreversible.",
   "confirm": "Confirm",
   "yes": "Yes",
   "no": "No",
@@ -163,5 +164,6 @@
   "update_success": "Information has been successfully updated!",
   "image_cropper": "Image Cropper",
   "created_at": "Created At",
-  "updated_at": "Updated At"
+  "updated_at": "Updated At",
+  "back_to_homepage": "Back to Homepage"
 }

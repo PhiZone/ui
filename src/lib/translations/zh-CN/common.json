@@ -2,6 +2,8 @@
   "title": "PhiZone",
   "search_placeholder": "搜索章节、曲目、用户……",
   "chapters": "章节",
+  "collections": "合集",
+  "applications": "应用",
   "songs": "曲目",
   "users": "用户",
   "charts": "谱面",
@@ -11,7 +13,6 @@
   "settings": "设置",
   "resource_records": "资源记录",
   "navbar": {
-    "apps": "应用",
     "pet": "权限晋升",
     "studio_inaccessible": "请先完成 PhiZone 权限晋升测试以使用该功能！",
     "logout": "登出"
@@ -143,7 +144,7 @@
   "admin": "管理",
   "delete": "删除",
   "deleted": "已删除",
-  "delete_confirmation": "你确认要删除该{resource}？该操作不可逆。",
+  "delete_confirmation": "你确认要删除该{{resource}}？该操作不可逆。",
   "confirm": "确认",
   "yes": "是",
   "no": "否",
@@ -163,5 +164,6 @@
   "update_success": "成功更新信息！",
   "image_cropper": "图片裁剪",
   "created_at": "创建时间",
-  "updated_at": "更新时间"
+  "updated_at": "更新时间",
+  "back_to_homepage": "返回主页"
 }

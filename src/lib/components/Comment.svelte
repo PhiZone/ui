@@ -69,7 +69,7 @@
         bind:value={replyText}
       />
       <button
-        class="ml-3 btn btn-outline btn-primary w-1/12 min-w-fit"
+        class="ml-3 btn border-2 btn-outline btn-primary w-1/12 min-w-fit"
         disabled={disabled || replyText.length === 0}
         on:click={sendReply}
       >
@@ -110,7 +110,7 @@
     </p>
     <div class="card-actions mt-4 flex flex-col sm:flex-row justify-between items-center">
       <p class="text-xs lg:text-sm opacity-70">
-        {parseDateTime(comment.dateCreated)}
+        {parseDateTime(comment.dateCreated, true, user?.language)}
       </p>
       {#if user && (getUserPrivilege(user.role) >= 5 || user.id === comment.ownerId)}
         <Delete target={comment} class="btn-sm btn-square" />
@@ -125,7 +125,7 @@
         />
         <label
           for="comment-{comment.id}-replies"
-          class="btn btn-sm btn-primary btn-outline gap-2 w-full sm:w-fit join-item"
+          class="btn btn-sm btn-ghost border-2 hover:btn-outline gap-2 w-full sm:w-fit join-item"
           class:animate-pulse={!$query.isSuccess}
         >
           <i class="fa-regular fa-comment-dots fa-lg"></i>
@@ -134,7 +134,7 @@
           {/if}
         </label>
         {#if showSource && type && source}
-          <a class="btn btn-sm btn-primary btn-outline join-item" href={source}>
+          <a class="btn btn-sm btn-ghost border-2 hover:btn-outline join-item" href={source}>
             <i class="fa-solid fa-link"></i>
             {$t('common.source')}
           </a>

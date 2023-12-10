@@ -1,9 +1,10 @@
 import queryString from 'query-string';
 import { stringifyFilter, createQueryCreator } from './common';
 // import ChartSubmissionAPI from './chart.submission';
-import type { Accessibility, FilterBase, R } from './types';
+import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type API from '.';
 import ChartSubmissionAPI from './chart.submission';
+import type { CollectionAdmitterDto } from './collection';
 
 export enum ChartFormat {
   RpeJson,
@@ -56,8 +57,12 @@ export interface ChartDto {
   title: string | null;
 }
 
+export interface ChartAdmitteeDto extends ChartDto {
+  label: null | string;
+}
+
 // list
-export interface Filter extends FilterBase {
+export interface Filter extends PublicResourceFilterBase {
   rangeId?: string[];
   rangeSongId?: string[];
   rangeOwnerId?: number[];
@@ -67,6 +72,17 @@ export interface Filter extends FilterBase {
 // info
 export interface InfoOpts {
   id: string;
+}
+
+export interface AdmissionListOpts extends InfoOpts, FilterBase {
+  rangeStatus?: number[];
+  containsLabel?: string;
+  equalsLabel?: string;
+}
+
+export interface AdmissionCreateOpts extends InfoOpts {
+  admitterId: string;
+  label?: string;
 }
 
 export default class ChartAPI {
@@ -84,11 +100,21 @@ export default class ChartAPI {
     (opts: Filter): R<ChartDto[]> => this.api.GET('/charts?' + stringifyFilter(opts, true)),
   );
 
+  listAllAdmitters = createQueryCreator(
+    'chart.listAllAdmitters',
+    ({ id, ...rest }: AdmissionListOpts): R<CollectionAdmitterDto[]> =>
+      this.api.GET(`/charts/${id}/collections?` + stringifyFilter(rest, true)),
+  );
+
   info = createQueryCreator(
     'chart.info',
     ({ id, ...rest }: InfoOpts): R<ChartDto> =>
       this.api.GET(`/charts/${id}?` + queryString.stringify(rest)),
   );
+
+  createAdmission({ id, ...rest }: AdmissionCreateOpts): R {
+    return this.api.POST(`/charts/${id}/collections`, rest);
+  }
 
   submission;
 }

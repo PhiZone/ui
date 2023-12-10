@@ -29,6 +29,7 @@
       {#if $page.error?.message}
         <p class="text-lg">{$t('common.error_msg')}{$page.error?.message}</p>
       {/if}
+      <a href="/" class="btn btn-outline border-2 btn-lg m-2">{$t('common.back_to_homepage')}</a>
     </div>
   </div>
 </div>

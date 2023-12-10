@@ -57,6 +57,14 @@
                 )}"
               >
                 <img src={getAvatar(user.avatar, 60)} alt="Avatar" />
+                {#if user.dateOfBirth && new Date(user.dateOfBirth).getMonth() === new Date().getMonth() && new Date(user.dateOfBirth).getDate() === new Date().getDate()}
+                  <img
+                    src="https://res.phizone.cn/cDoKFCtSeSUrQwPOCg9KPmEIihjLrQtW/party-hat.png"
+                    alt="Birthday Hat"
+                    class="absolute -top-16 ml-8"
+                    style="width: 128px; height: 128px;"
+                  />
+                {/if}
               </div>
             </div>
             <p class="text-3xl text-center font-bold h-fit">

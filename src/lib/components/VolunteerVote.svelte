@@ -38,12 +38,7 @@
       </p>
       <div class="w-full mt-4 flex justify-between items-center">
         <p class="text-sm opacity-70 text-right">
-          <a
-            href={`/users/${vote.ownerId}`}
-            target="_blank"
-            rel="noreferrer"
-            class="hover:underline"
-          >
+          <a href={`/users/${vote.ownerId}`} target="_blank" class="hover:underline">
             {$owner.data?.data.userName ?? ''}
           </a>
           @

@@ -43,5 +43,6 @@
   "volume": "Volume",
   "charts": "Charts",
   "show_charts": "Display Charts",
-  "hide_charts": "Collapse"
+  "hide_charts": "Collapse",
+  "search": "Search songs"
 }

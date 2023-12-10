@@ -26,7 +26,7 @@
     <div class="modal-box text-left min-w-fit">
       <label
         for="license-{resourceRecord.id}"
-        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
       >
         ✕
       </label>
@@ -133,7 +133,7 @@
                   href={resourceRecord.source}
                   target="_blank"
                   rel="noreferrer"
-                  class="btn btn-primary btn-outline min-w-fit"
+                  class="btn btn-ghost border-2 hover:btn-outline min-w-fit"
                 >
                   <i class="fa-solid fa-link"></i>
                   {$t('common.source')}

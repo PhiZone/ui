@@ -33,7 +33,10 @@
   <input type="checkbox" id="license-{song.id}" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box text-left min-w-fit">
-      <label for="license-{song.id}" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+      <label
+        for="license-{song.id}"
+        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+      >
         ✕
       </label>
       <div class="text-5xl py-3 flex font-bold items-center content">
@@ -159,7 +162,7 @@
                   </div>
                 </div>
                 <div
-                  class="mb-2 flex items-end w-full justify-start {user
+                  class="mb-2 flex items-end w-full justify-center {user
                     ? 'join join-horizontal'
                     : ''}"
                 >
@@ -174,9 +177,8 @@
                     <a
                       href={song.file}
                       target="_blank"
-                      rel="noreferrer"
                       download={song.file?.split('/').pop()}
-                      class="btn btn-primary btn-outline flex gap-1 join-item"
+                      class="btn btn-ghost border-2 hover:btn-outline flex gap-1 join-item"
                     >
                       <i class="fa-solid fa-file-arrow-down fa-lg"></i>
                       {$t('common.download')}

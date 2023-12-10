@@ -1,6 +1,6 @@
 import type API from '.';
 import { stringifyFilter, createQueryCreator } from './common';
-import type { FilterBase, R } from './types';
+import type { FilterBase, PatchElement, R } from './types';
 
 export interface CollaborationDto {
   dateCreated: Date;
@@ -57,8 +57,12 @@ export default class CollaborationAPI {
     return this.api.POST(`/studio/${type}/${id}/collaborations`, rest);
   }
 
-  review({ id, approve }: ReviewOpts): R {
-    return this.api.POST(`/collaborations/${id}/review?approve=${approve}`);
+  update({ id }: InfoOpts, patch: PatchElement[]): R {
+    return this.api.PATCH(`/collaborations/${id}`, patch);
+  }
+
+  review({ id, ...rest }: ReviewOpts): R {
+    return this.api.POST(`/collaborations/${id}/review`, rest);
   }
 
   delete({ id }: InfoOpts): R {

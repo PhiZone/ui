@@ -23,7 +23,10 @@
         <h1 class="text-4xl font-bold content">
           {$t('studio.chart_submissions')}
         </h1>
-        <a href="/studio/chart-submissions/new" class="btn btn-accent text-lg btn-xl btn-outline">
+        <a
+          href="/studio/chart-submissions/new"
+          class="btn text-lg btn-xl border-2 btn-outline border-gray-700"
+        >
           {$t('studio.upload_chart')}
         </a>
       </div>

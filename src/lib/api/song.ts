@@ -75,6 +75,11 @@ export interface AdmissionListOpts extends InfoOpts, FilterBase {
   equalsLabel?: string;
 }
 
+export interface AdmissionCreateOpts extends InfoOpts {
+  admitterId: string;
+  label?: string;
+}
+
 export default class SongAPI {
   constructor(private api: API) {
     this.submission = new SongSubmissionAPI(api);
@@ -91,7 +96,7 @@ export default class SongAPI {
   );
 
   listAllAdmitters = createQueryCreator(
-    'song.listAll',
+    'song.listAllAdmitters',
     ({ id, ...rest }: AdmissionListOpts): R<ChapterAdmitterDto[]> =>
       this.api.GET(`/songs/${id}/chapters?` + stringifyFilter(rest, true)),
   );
@@ -100,6 +105,10 @@ export default class SongAPI {
     'song.info',
     ({ id }: InfoOpts): R<SongDto> => this.api.GET(`/songs/${id}`),
   );
+
+  createAdmission({ id, ...rest }: AdmissionCreateOpts): R {
+    return this.api.POST(`/songs/${id}/chapters`, rest);
+  }
 
   submission;
 }

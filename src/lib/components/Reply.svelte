@@ -41,7 +41,7 @@
         }}
         on:keyup
       >
-        {parseDateTime(reply.dateCreated)}
+        {parseDateTime(reply.dateCreated, true, user?.language)}
       </p>
       <div class="min-w-fit text-right flex items-center gap-1">
         {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
@@ -74,7 +74,7 @@
       </p>
       <div class="card-actions mt-4 flex justify-between items-center">
         <p class="text-sm opacity-70">
-          {parseDateTime(reply.dateCreated)}
+          {parseDateTime(reply.dateCreated, true, user?.language)}
         </p>
         {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
           <Delete target={reply} class="btn-sm btn-square" />

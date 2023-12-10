@@ -21,13 +21,21 @@ const collabSchema = z.object({
   position: z.string().optional(),
 });
 
+const chapterSchema = z.object({
+  id: z.string(),
+  admitterId: z.string(),
+  label: z.string().optional(),
+});
+
 type ReviewSchema = z.infer<typeof reviewSchema>;
 type CollabSchema = z.infer<typeof collabSchema>;
+type ChapterSchema = z.infer<typeof chapterSchema>;
 
 export const load = async () => {
   const reviewForm = await superValidate(reviewSchema);
   const collabForm = await superValidate(collabSchema);
-  return { reviewForm, collabForm };
+  const chapterForm = await superValidate(chapterSchema);
+  return { reviewForm, collabForm, chapterForm };
 };
 
 export const actions = {
@@ -97,6 +105,42 @@ export const actions = {
         }
 
         return fail(resp.status, { collabForm });
+      } catch (e) {
+        return fail(resp.status);
+      }
+    }
+  },
+
+  chapter: async ({ request, locals, fetch }) => {
+    const api = new API(fetch, locals.accessToken, locals.user);
+    const formData = await request.formData();
+    const chapterForm = await superValidate(formData, chapterSchema);
+
+    if (!chapterForm.valid) {
+      return fail(400, { chapterForm });
+    }
+    const resp = await api.song.createAdmission(chapterForm.data);
+    if (resp.ok) {
+      return;
+    } else {
+      try {
+        const error = await resp.json();
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        chapterForm.valid = false;
+        if (error.status === ResponseDtoStatus.ErrorBrief) {
+          chapterForm.message = t.get(`error.${error.code}`);
+        } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+          chapterForm.message = error.message;
+        } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          chapterForm.errors = {};
+          error.errors.forEach(({ field, errors }) => {
+            chapterForm.errors[field as keyof ChapterSchema] = errors.map((value) => {
+              return t.get(`error.${value}`);
+            });
+          });
+        }
+
+        return fail(resp.status, { chapterForm });
       } catch (e) {
         return fail(resp.status);
       }

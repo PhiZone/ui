@@ -182,7 +182,7 @@
                 <select
                   bind:value={user.gender}
                   name="Gender"
-                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
+                  class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/gender', e.currentTarget.value);
                   }}
@@ -207,7 +207,7 @@
                   type="text"
                   name="UserName"
                   placeholder={$t('user.username')}
-                  class="input input-secondary join-item flex-shrink w-2/3 md:w-5/6"
+                  class="input transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   value={user.userName}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
@@ -228,7 +228,7 @@
                 <select
                   bind:value={$locale}
                   name="Language"
-                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
+                  class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
                   }}
@@ -252,7 +252,7 @@
                 <select
                   bind:value={regionCode}
                   name="RegionCode"
-                  class="select input-secondary join-item flex-shrink w-2/3 md:w-5/6"
+                  class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                   }}
@@ -276,7 +276,7 @@
                 <div class="join w-2/3 md:w-5/6">
                   <select
                     name="YearOfBirth"
-                    class="select input-secondary join-item flex-shrink w-1/3"
+                    class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-1/3"
                     on:input={(e) => {
                       year = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
@@ -290,7 +290,7 @@
                   </select>
                   <select
                     name="MonthOfBirth"
-                    class="select input-secondary join-item flex-shrink w-1/3"
+                    class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-1/3"
                     on:input={(e) => {
                       month = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
@@ -304,7 +304,7 @@
                   </select>
                   <select
                     name="YearOfBirth"
-                    class="select input-secondary join-item flex-shrink w-1/3"
+                    class="select transition border-2 border-gray-700 hover:input-secondary join-item flex-shrink w-1/3"
                     on:input={(e) => {
                       day = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
@@ -333,7 +333,7 @@
                   <textarea
                     placeholder={$t('user.bio')}
                     name="Bio"
-                    class="textarea textarea-secondary join-item w-2/3 md:w-5/6 h-48"
+                    class="textarea transition border-2 border-gray-700 hover:textarea-secondary join-item w-2/3 md:w-5/6 h-48"
                     bind:value={user.biography}
                     on:input={(e) => {
                       patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);
@@ -342,7 +342,9 @@
                 </label>
                 <button
                   type="button"
-                  class="absolute right-2 bottom-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                  class="absolute right-2 bottom-2 btn btn-sm {user.biography
+                    ? 'border-2 hover:btn-outline backdrop-blur'
+                    : 'btn-disabled'}"
                   on:click={() => {
                     user.biography = '';
                     patch = applyPatch(patch, 'remove', '/biography');
@@ -373,7 +375,7 @@
                       ? 'btn-error'
                       : status === Status.SENDING
                         ? 'btn-ghost'
-                        : 'btn-primary btn-outline'} w-full"
+                        : 'btn-outline border-2 border-gray-700'} w-full"
                     disabled={status == Status.SENDING}
                     on:click={update}
                   >

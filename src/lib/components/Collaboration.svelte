@@ -5,10 +5,12 @@
   import type { CollaborationDto } from '$lib/api/collaboration';
   import { createQuery } from '@tanstack/svelte-query';
   import { getCompressedImage, getLevelColor } from '$lib/utils';
+  import Delete from './Delete.svelte';
 
   export let collaboration: CollaborationDto;
   export let kind: 'mini' | 'full' = 'full';
   export let showInvitee = false;
+  export let editable = false;
 
   $: ({ user, api } = $page.data);
 
@@ -38,6 +40,18 @@
   );
 
   let disabled = false;
+  let position = collaboration.position;
+
+  const updatePosition = async () => {
+    if (position != collaboration.position) {
+      const resp = await api.collaboration.update({ id: collaboration.id }, [
+        { op: 'add', path: '/position', value: position },
+      ]);
+      if (resp.ok) {
+        collaboration.position = position;
+      }
+    }
+  };
 
   const review = async (approve: boolean) => {
     disabled = true;
@@ -98,16 +112,36 @@
               <User id={collaboration.inviteeId} kind="mini" showFollow={false} />
             {/if}
           </div>
-          {#if collaboration.position}
+          {#if editable && collaboration.status === 0}
+            <label class="join">
+              <span class="btn no-animation join-item">
+                {$t('common.position')}
+              </span>
+              <input
+                type="text"
+                placeholder={$t('common.position')}
+                class="input transition border-2 border-gray-700 hover:input-secondary join-item"
+                bind:value={position}
+              />
+              <button
+                class="btn btn-secondary join-item"
+                class:btn-disabled={(!collaboration.position && !position) ||
+                  position == collaboration.position}
+                on:click={updatePosition}
+              >
+                {$t('common.submit')}
+              </button>
+            </label>
+          {:else if collaboration.position}
             <div
               class={collaboration.position.length > 8 ? 'tooltip tooltip-bottom' : ''}
               data-tip={collaboration.position}
             >
               <label class="join">
-                <span class="btn btn-ghost no-animation join-item">
+                <span class="btn no-animation join-item">
                   {$t('common.position')}
                 </span>
-                <button class="btn btn-ghost no-animation join-item text-xl">
+                <button class="btn btn-neutral no-animation join-item text-xl">
                   {collaboration.position.length > 8
                     ? `${collaboration.position.substring(0, 8)}...`
                     : collaboration.position}
@@ -120,7 +154,7 @@
               href="/studio/{$chartSubmission.isSuccess
                 ? 'chart'
                 : 'song'}-submissions/{collaboration.submissionId}"
-              class="btn btn-primary btn-outline min-w-fit"
+              class="btn border-2 hover:btn-outline min-w-fit"
             >
               <i class="fa-solid fa-link"></i>
               {$t('common.source')}
@@ -129,7 +163,7 @@
               {#if user && collaboration.inviteeId === user.id}
                 <div class="join">
                   <button
-                    class="btn btn-primary btn-outline join-item"
+                    class="btn btn-primary border-2 btn-outline join-item"
                     on:click={() => {
                       review(true);
                     }}
@@ -137,7 +171,7 @@
                     {$t('studio.request.accept')}
                   </button>
                   <button
-                    class="btn btn-accent btn-outline join-item"
+                    class="btn btn-accent border-2 btn-outline join-item"
                     on:click={() => {
                       review(false);
                     }}
@@ -167,66 +201,95 @@
     {/if}
   </div>
 {:else}
-  <div class="flex flex-wrap gap-3 justify-between items-center">
-    <div class="max-w-fit">
+  <div class="flex flex-col md:flex-row gap-3 items-center">
+    <div class="w-full md:w-1/3">
       {#if !showInvitee && user && collaboration.inviteeId == user.id}
         <User id={collaboration.inviterId} kind="mini" showFollow={false} />
       {:else}
         <User id={collaboration.inviteeId} kind="mini" showFollow={false} />
       {/if}
     </div>
-    {#if collaboration.position}
+    {#if editable && collaboration.status === 0}
+      <label class="join w-full md:w-1/2">
+        <span class="btn no-animation join-item w-1/4">
+          {$t('common.position')}
+        </span>
+        <input
+          type="text"
+          placeholder={$t('common.position')}
+          class="input w-1/2 transition border-2 border-gray-700 hover:input-secondary join-item"
+          bind:value={position}
+        />
+        <button
+          class="btn btn-secondary join-item w-1/4"
+          class:btn-disabled={(!collaboration.position && !position) ||
+            position == collaboration.position}
+          on:click={updatePosition}
+        >
+          {$t('common.submit')}
+        </button>
+      </label>
+    {:else if collaboration.position}
       <div
-        class={collaboration.position.length > 8 ? 'tooltip tooltip-bottom' : ''}
+        class={collaboration.position.length > 10
+          ? 'tooltip tooltip-bottom w-full md:w-1/2'
+          : 'w-full md:w-1/2'}
         data-tip={collaboration.position}
       >
-        <label class="join">
-          <span class="btn btn-ghost no-animation join-item">
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4">
             {$t('common.position')}
           </span>
-          <button class="btn btn-ghost no-animation join-item text-xl">
-            {collaboration.position.length > 8
-              ? `${collaboration.position.substring(0, 8)}...`
+          <button class="btn btn-neutral no-animation join-item text-lg w-3/4">
+            {collaboration.position.length > 10
+              ? `${collaboration.position.substring(0, 10)}...`
               : collaboration.position}
           </button>
         </label>
       </div>
     {/if}
     {#if !disabled && collaboration.status === 0}
-      {#if user && collaboration.inviteeId === user.id}
-        <div class="join">
-          <button
-            class="btn btn-primary btn-outline join-item"
-            on:click={() => {
-              review(true);
-            }}
-          >
-            {$t('studio.request.accept')}
+      <div class="flex gap-1 items-center justify-end w-full md:w-1/6 min-w-fit">
+        {#if user && collaboration.inviteeId === user.id}
+          <div class="join min-w-fit">
+            <button
+              class="btn btn-primary btn-outline border-2 join-item"
+              on:click={() => {
+                review(true);
+              }}
+            >
+              {$t('studio.request.accept')}
+            </button>
+            <button
+              class="btn btn-accent btn-outline border-2 join-item"
+              on:click={() => {
+                review(false);
+              }}
+            >
+              {$t('studio.request.reject')}
+            </button>
+          </div>
+        {:else}
+          <button class="btn btn-disabled">
+            {$t('common.pending')}
           </button>
-          <button
-            class="btn btn-accent btn-outline join-item"
-            on:click={() => {
-              review(false);
-            }}
-          >
-            {$t('studio.request.reject')}
-          </button>
-        </div>
-      {:else}
-        <button class="btn btn-disabled">
-          {$t('common.pending')}
-        </button>
-      {/if}
+        {/if}
+        {#if editable}
+          <Delete target={collaboration} class="btn-sm btn-square" />
+        {/if}
+      </div>
     {:else}
-      <button class="btn btn-disabled">
-        {$t(
-          collaboration.status === 1
-            ? 'studio.request.accepted'
-            : !disabled
-              ? 'studio.request.rejected'
-              : 'common.waiting',
-        )}
-      </button>
+      <div class="flex justify-end w-full md:w-1/6 min-w-fit">
+        <button class="btn btn-disabled">
+          {$t(
+            collaboration.status === 1
+              ? 'studio.request.accepted'
+              : !disabled
+                ? 'studio.request.rejected'
+                : 'common.waiting',
+          )}
+        </button>
+      </div>
     {/if}
   </div>
 {/if}

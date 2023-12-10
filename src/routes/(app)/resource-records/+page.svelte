@@ -181,7 +181,10 @@
 />
 <div class="modal" role="dialog">
   <div class="modal-box min-w-[48vw]">
-    <label for="resource-record-add" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+    <label
+      for="resource-record-add"
+      class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+    >
       ✕
     </label>
     <h3 class="font-bold text-lg mb-2">{$t('resource_record.add')}</h3>
@@ -204,8 +207,8 @@
             id="title"
             name="title"
             placeholder={$t('resource_record.title')}
-            class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-              $errors.title ? 'input-error' : 'input-secondary'
+            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+              $errors.title ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
         </label>
@@ -221,8 +224,8 @@
           <select
             id="type"
             name="type"
-            class={`select select-secondary join-item w-3/4 ${
-              $errors.type ? 'select-error' : 'select-secondary'
+            class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+              $errors.type ? 'hover:select-error' : 'hover:select-secondary'
             }`}
             bind:value={type}
           >
@@ -245,9 +248,9 @@
           <select
             id="edition_type"
             name="editionType"
-            class={`select select-secondary join-item ${editionType === 0 ? 'w-3/4' : 'w-1/4'} ${
-              $errors.type ? 'select-error' : 'select-secondary'
-            }`}
+            class={`select transition border-2 border-gray-700 join-item ${
+              editionType === 0 ? 'w-3/4' : 'w-1/4'
+            } ${$errors.type ? 'hover:select-error' : 'hover:select-secondary'}`}
             bind:value={editionType}
           >
             {#each [...Array(3).keys()] as i}
@@ -265,8 +268,8 @@
               id="edition"
               name="edition"
               placeholder={$t('resource_record.edition_placeholder')}
-              class={`input input-secondary join-item w-1/2 min-w-[180px] ${
-                $errors.edition ? 'input-error' : 'input-secondary'
+              class={`input transition border-2 border-gray-700 join-item w-1/2 min-w-[180px] ${
+                $errors.edition ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={edition}
             />
@@ -299,8 +302,8 @@
           <select
             id="strategy"
             name="strategy"
-            class={`select select-secondary join-item w-3/4 ${
-              $errors.strategy ? 'select-error' : 'select-secondary'
+            class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+              $errors.strategy ? 'hover:select-error' : 'hover:select-secondary'
             }`}
             bind:value={strategy}
           >
@@ -330,8 +333,8 @@
             id="author_name"
             name="authorName"
             placeholder={$t('resource_record.author')}
-            class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-              $errors.authorName ? 'input-error' : 'input-secondary'
+            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+              $errors.authorName ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
         </label>
@@ -356,8 +359,8 @@
             id="copyright_owner"
             name="copyrightOwner"
             placeholder={$t('resource_record.copyright_owner')}
-            class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-              $errors.copyrightOwner ? 'input-error' : 'input-secondary'
+            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+              $errors.copyrightOwner ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
         </label>
@@ -380,8 +383,8 @@
             id="source"
             name="source"
             placeholder={$t('common.source')}
-            class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-              $errors.source ? 'input-error' : 'input-secondary'
+            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+              $errors.source ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
         </label>
@@ -399,8 +402,8 @@
           <textarea
             id="description"
             name="description"
-            class={`textarea join-item ${
-              $errors.description ? 'textarea-error' : 'textarea-secondary'
+            class={`textarea transition border-2 border-gray-700 join-item ${
+              $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={`${$t('common.description')}${$t('common.optional')}`}
           />
@@ -418,7 +421,7 @@
               ? 'btn-error'
               : $submitting
                 ? 'btn-ghost'
-                : 'btn-secondary btn-outline'} w-full"
+                : 'btn-outline border-2 border-gray-700'} w-full"
             disabled={$submitting}
           >
             {$allErrors.length > 0
@@ -443,7 +446,7 @@
   <div class="modal-box {batch === null ? 'min-w-[40vw]' : 'min-w-[75vw]'}">
     <label
       for="resource-record-add-batch"
-      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
     >
       ✕
     </label>
@@ -475,7 +478,7 @@
         </h4>
         <button
           type="button"
-          class="btn btn-accent btn-outline btn-sm"
+          class="btn btn-sm {batch ? 'border-2 hover:btn-outline' : 'btn-disabled'}"
           on:click={() => {
             batch = null;
             batchStatus = Status.OK;
@@ -612,7 +615,7 @@
             ? 'btn-error'
             : batchStatus === Status.SENDING
               ? 'btn-ghost'
-              : 'btn-secondary btn-outline'} w-full"
+              : 'btn-outline border-2 border-gray-700'} w-full"
           disabled={batchStatus === Status.SENDING}
           on:click={uploadBatch}
         >
@@ -632,10 +635,13 @@
     <h1 class="text-4xl font-bold">{$t('common.resource_records')}</h1>
     {#if user && getUserPrivilege(user.role) > 4}
       <div class="join">
-        <label for="resource-record-add" class="btn btn-primary btn-outline join-item">
+        <label for="resource-record-add" class="btn btn-primary border-2 btn-outline join-item">
           {$t('resource_record.add')}
         </label>
-        <label for="resource-record-add-batch" class="btn btn-accent btn-outline join-item">
+        <label
+          for="resource-record-add-batch"
+          class="btn btn-accent border-2 btn-outline join-item"
+        >
           {$t('resource_record.add_in_bulk')}
         </label>
       </div>

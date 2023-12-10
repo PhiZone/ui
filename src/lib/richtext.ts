@@ -51,6 +51,12 @@ export function transform(content: string /*, ctx: RichContext*/): string {
         (_, id: string, display: string) =>
           `<a href="/chapters/${id}" class="richtext-link richtext-chapter">${display}</a>`,
       )
+      // collection
+      .replaceAll(
+        /\[PZCollection:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/collections/${id}" class="richtext-link richtext-collection">${display}</a>`,
+      )
       // song
       .replaceAll(
         /\[PZSong:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
@@ -110,6 +116,12 @@ export function transform(content: string /*, ctx: RichContext*/): string {
         /\[PZChapterAdmission:([-0-9a-fA-F]+):([-0-9a-fA-F]+):(.+?):PZCRT\]/gi,
         (_, id1: string, id2: string, display: string) =>
           `<a href="/studio/admissions/chapters/${id1}/${id2}" class="richtext-link richtext-admission">${display}</a>`,
+      )
+      // collection admission
+      .replaceAll(
+        /\[PZCollectionAdmission:([-0-9a-fA-F]+):([-0-9a-fA-F]+):(.+?):PZCRT\]/gi,
+        (_, id1: string, id2: string, display: string) =>
+          `<a href="/studio/admissions/collections/${id1}/${id2}" class="richtext-link richtext-admission">${display}</a>`,
       )
       // song admission
       .replaceAll(

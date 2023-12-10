@@ -47,13 +47,13 @@
     <div class="hero-overlay bg-base-300 bg-opacity-50" />
     <div class="pt-32 pb-24 w-full flex justify-center">
       <div class="w-full max-w-[1280px] mx-16">
-        <h1 class="text-7xl text-neutral-content font-bold drop-shadow-xl">
+        <h1 class="text-7xl font-bold drop-shadow-xl">
           {chapter.title}
         </h1>
-        <h2 class="text-4xl text-neutral-content font-bold drop-shadow-lg mt-3 mb-6">
+        <h2 class="text-4xl font-bold drop-shadow-lg mt-3 mb-6">
           {chapter.subtitle}
         </h2>
-        <p class="text-xl text-neutral-content mb-6 content">
+        <p class="text-xl mb-6 content">
           {chapter.description}
         </p>
         <div class="flex justify-between items-center flex-wrap">
@@ -63,11 +63,11 @@
               likes={chapter.likeCount}
               type="chapters"
               liked={chapter.dateLiked != null}
-              class="btn-md w-36 text-lg"
+              class="btn-md w-36 text-lg btn-outline backdrop-blur"
             />
             <label
               for="illustration"
-              class="btn btn-primary btn-outline btn-md min-w-fit w-36 text-lg"
+              class="btn border-2 btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
             >
               {$t('chapter.view_illustration')}
             </label>
@@ -91,7 +91,7 @@
           >
             {$t('chapter.songs')}
           </span>
-          <div class="card w-full bg-base-100 shadow-lg">
+          <div class="card w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg">
             <div class="card-body">
               {#if $songs.isLoading}
                 <ul class="menu bg-base-100 w-full">

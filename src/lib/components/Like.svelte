@@ -5,14 +5,30 @@
   $: ({ api } = $page.data);
 
   interface $$Props {
-    type: 'comments' | 'replies' | 'records' | 'charts' | 'songs' | 'chapters';
+    type:
+      | 'comments'
+      | 'replies'
+      | 'records'
+      | 'charts'
+      | 'songs'
+      | 'chapters'
+      | 'applications'
+      | 'collections';
     id: string;
     likes: number;
     liked: boolean;
     class: string;
   }
 
-  export let type: 'comments' | 'replies' | 'records' | 'charts' | 'songs' | 'chapters';
+  export let type:
+    | 'comments'
+    | 'replies'
+    | 'records'
+    | 'charts'
+    | 'songs'
+    | 'chapters'
+    | 'applications'
+    | 'collections';
   export let id: string;
   export let likes: number;
   export let liked: boolean;
@@ -52,15 +68,18 @@
 
 {#if !liked}
   <button
-    class="btn btn-primary btn-outline gap-2 overflow-hidden {$$restProps.class}"
+    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
     on:click={like}
   >
     <i class="fa-regular fa-heart fa-lg"></i>
-    {likes}
+    <p class="text-left max-w-fit">{likes}</p>
   </button>
 {:else}
-  <button class="btn btn-primary btn-active gap-2 {$$restProps.class}" on:click={unlike}>
+  <button
+    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
+    on:click={unlike}
+  >
     <i class="fa-solid fa-heart fa-lg"></i>
-    {likes}
+    <p class="text-left max-w-fit">{likes}</p>
   </button>
 {/if}

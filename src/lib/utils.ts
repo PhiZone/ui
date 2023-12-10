@@ -1,5 +1,5 @@
 import type { Cookies } from '@sveltejs/kit';
-import { USER_LEVELS } from './constants';
+import { USER_LEVELS, defaultLocale } from './constants';
 import { PUBLIC_AVATAR } from '$env/static/public';
 import type { PatchElement } from './api/types';
 
@@ -124,18 +124,57 @@ export const parseLyrics = (input: string) => {
   return lyrics;
 };
 
-export const parseDateTime = (input: string | Date, precise = false) => {
+export const parseRelativeTime = (date: Date, locale = defaultLocale) => {
+  const now = new Date();
+  const diffInSeconds = Math.floor((date.getTime() - now.getTime()) / 1000);
+
+  const intervals = [
+    { label: 'year', seconds: 31536000 },
+    { label: 'month', seconds: 2592000 },
+    { label: 'day', seconds: 86400 },
+    { label: 'hour', seconds: 3600 },
+    { label: 'minute', seconds: 60 },
+    { label: 'second', seconds: 1 },
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(Math.abs(diffInSeconds) / interval.seconds);
+
+    if (count > 0) {
+      return new Intl.RelativeTimeFormat(locale, {
+        localeMatcher: 'best fit',
+        numeric: 'auto',
+        style: 'long',
+      }).format(diffInSeconds > 0 ? count : -count, interval.label as Intl.RelativeTimeFormatUnit);
+    }
+  }
+
+  return new Intl.RelativeTimeFormat(locale, {
+    localeMatcher: 'best fit',
+    numeric: 'auto',
+    style: 'long',
+  }).format(0, 'second');
+};
+
+export const parseDateTime = (
+  input: string | Date,
+  relative = false,
+  locale = defaultLocale,
+  precise = false,
+) => {
   const date = new Date(input);
   if (precise) {
     return date.toLocaleString();
   }
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  });
+  return relative
+    ? parseRelativeTime(date, locale)
+    : date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      });
 };
 
 export const parseMonthAndDay = (input: string | Date) => {

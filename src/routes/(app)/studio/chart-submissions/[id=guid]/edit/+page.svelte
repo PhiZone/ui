@@ -132,7 +132,7 @@
     </div>
     <label
       for="studio-charter"
-      class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -146,8 +146,8 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-            $charter.isError ? 'input-error' : 'input-secondary'
+          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            $charter.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newCharterId}
           on:input={() => {
@@ -155,11 +155,11 @@
           }}
         />
         <button
-          class={`btn join-item ${
+          class={`btn border-2 border-gray-700 join-item ${
             newCharterId || $charter.isLoading
               ? $charter.isError
                 ? 'btn-error'
-                : 'btn-secondary btn-outline'
+                : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
           on:click={() => {
@@ -176,7 +176,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.charter')}</span>
         <input
           placeholder={$t('common.form.charter')}
-          class="input input-secondary join-item w-3/4"
+          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
           bind:value={newCharterDisplay}
         />
       </label>
@@ -184,7 +184,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-charter"
-          class="btn btn-secondary btn-outline"
+          class="btn border-2 border-gray-700 btn-outline"
           on:click={() => {
             chart.authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
@@ -202,7 +202,10 @@
     <div class="w-3/4 max-w-6xl min-w-20">
       <div class="flex justify-between">
         <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_chart')}</h1>
-        <a href="/studio/chart-submissions/{chart.id}" class="btn btn-secondary btn-outline">
+        <a
+          href="/studio/chart-submissions/{chart.id}"
+          class="btn border-2 border-gray-700 btn-outline"
+        >
           {$t('common.back')}
         </a>
       </div>
@@ -210,12 +213,7 @@
         <div class="card-body">
           <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
             {#if $song.isSuccess}
-              <a
-                class="hover:underline"
-                href={`/songs/${$song.data.data.id}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a class="hover:underline" href={`/songs/${$song.data.data.id}`} target="_blank">
                 {$song.data.data.title}
               </a>
             {:else if $songSubmission.isSuccess}
@@ -223,7 +221,6 @@
                 class="hover:underline"
                 href={`/studio/song-submissions/${$songSubmission.data.data.id}`}
                 target="_blank"
-                rel="noreferrer"
               >
                 {$songSubmission.data.data.title}
               </a>
@@ -283,7 +280,9 @@
                   type="checkbox"
                   id="is_ranked"
                   name="IsRanked"
-                  class="toggle {errors?.get('IsRanked') ? 'toggle-error' : 'toggle-secondary'}"
+                  class="toggle border-2 {errors?.get('IsRanked')
+                    ? 'toggle-error'
+                    : 'toggle-secondary'}"
                   bind:checked={chart.isRanked}
                   on:input={() => {
                     patch = applyPatch(patch, 'replace', '/isRanked', !chart.isRanked);
@@ -311,8 +310,8 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select select-secondary join-item w-3/4 ${
-                    errors?.get('Accessibility') ? 'select-error' : 'select-secondary'
+                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                    errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   on:input={(e) => {
                     patch = applyPatch(
@@ -345,8 +344,8 @@
                 <select
                   id="level_type"
                   name="LevelType"
-                  class={`select select-secondary join-item w-1/6 ${
-                    errors?.get('LevelType') ? 'select-error' : 'select-secondary'
+                  class={`select transition border-2 border-gray-700 join-item w-1/6 ${
+                    errors?.get('LevelType') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   bind:value={chart.levelType}
                   on:input={(e) => {
@@ -367,8 +366,8 @@
                   id="level"
                   name="Level"
                   placeholder={$t('common.form.tips.chart_level')}
-                  class={`input input-secondary join-item w-7/12 min-w-[180px] ${
-                    errors?.get('Level') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                    errors?.get('Level') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={chart.level}
                   on:input={(e) => {
@@ -397,8 +396,8 @@
                   id="difficulty"
                   name="Difficulty"
                   placeholder={(Math.random() * (16.9 - 11.9) + 11.9).toFixed(1)}
-                  class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Difficulty') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Difficulty') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={chart.difficulty}
                   on:input={(e) => {
@@ -432,8 +431,8 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.charter')}
-                  class={`input input-secondary join-item w-7/12 min-w-[180px] ${
-                    errors?.get('AuthorName') ? 'input-error' : 'input-secondary'
+                  class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                    errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={chart.authorName}
                   on:input={(e) => {
@@ -443,7 +442,7 @@
                 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                 <label
                   for="studio-charter"
-                  class="btn btn-outline btn-secondary join-item w-1/6"
+                  class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
                   on:click={() => {
                     newCharterId = null;
                     newCharterDisplay = '';
@@ -477,8 +476,8 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea join-item ${
-                    errors?.get('Description') ? 'textarea-error' : 'textarea-secondary'
+                  class={`textarea transition border-2 border-gray-700 join-item ${
+                    errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={$t('studio.submission.description_placeholder')}
                   bind:value={chart.description}
@@ -489,7 +488,9 @@
               </label>
               <button
                 type="button"
-                class="absolute right-2 bottom-2 btn btn-accent btn-outline btn-sm backdrop-blur"
+                class="absolute right-2 bottom-2 btn btn-sm {chart.description
+                  ? 'border-2 hover:btn-outline backdrop-blur'
+                  : 'btn-disabled'}"
                 on:click={() => {
                   chart.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
@@ -511,7 +512,7 @@
                     ? 'btn-error'
                     : status === Status.SENDING
                       ? 'btn-ghost'
-                      : 'btn-secondary btn-outline'} w-full"
+                      : 'btn-outline border-2 border-gray-700'} w-full"
                   disabled={status == Status.SENDING}
                   on:click={update}
                 >

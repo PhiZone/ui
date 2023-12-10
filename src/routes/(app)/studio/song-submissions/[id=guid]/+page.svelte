@@ -9,6 +9,7 @@
   import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
 
   export let data;
 
@@ -25,21 +26,22 @@
     id: 'song-review',
   });
 
-  const {
-    // form: collabForm,
-    enhance: collabEnhance,
-    // errors: collabErrors,
-    // message: collabMessage,
-    // submitting: collabSubmitting,
-    // allErrors: collabAllErrors,
-  } = superForm(data.collabForm, {
+  const { enhance: collabEnhance } = superForm(data.collabForm, {
     id: 'song-collab',
+  });
+
+  const { enhance: chapterEnhance } = superForm(data.chapterForm, {
+    id: 'song-chapter',
   });
 
   let queryCollaborator = false;
   let newCollaboratorId: number | null = null;
+  let queryChapter = true;
+  let newChapterSearch: string;
+  let newChapterId: string | null = null;
   let reviewOpen = false;
   let collabOpen = false;
+  let chapterOpen = false;
 
   $: submission = createQuery(api.song.submission.info({ id }));
   $: uploader = createQuery(
@@ -76,6 +78,15 @@
     ),
   );
   $: collaborations = createQuery(api.song.submission.listAllCollaborations({ id }));
+  $: chapterSearch = createQuery(
+    api.chapter.listAll({ search: newChapterSearch ?? undefined }, { enabled: queryChapter }),
+  );
+  $: chapters = createQuery(
+    api.admission.listChapter(
+      { rangeAdmitteeId: [$submission.data?.data.representationId ?? ''] },
+      { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
+    ),
+  );
 
   $: composer = $submission.data?.data.originalityProof
     ? richtext($submission.data?.data.authorName ?? '')
@@ -192,7 +203,7 @@
                 ? 'btn-error'
                 : $reviewSubmitting
                   ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                  : 'btn-outline border-2 border-gray-700'} w-full"
               disabled={$reviewSubmitting}
             >
               {$reviewAllErrors.length > 0
@@ -212,7 +223,7 @@
       <h3 class="font-bold text-lg">{$t('studio.submission.add_collaborator')}</h3>
       <label
         for="new-collaborator"
-        class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
       >
         ✕
       </label>
@@ -241,8 +252,8 @@
               id="invitee_id"
               name="inviteeId"
               placeholder={$t('studio.submission.author_placeholder')}
-              class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                $collaborator.isError ? 'input-error' : 'input-secondary'
+              class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
               on:input={() => {
@@ -251,11 +262,11 @@
             />
             <button
               type="button"
-              class={`btn join-item ${
+              class={`btn border-2 border-gray-700 join-item ${
                 newCollaboratorId || $collaborator.isLoading
                   ? $collaborator.isError
                     ? 'btn-error'
-                    : 'btn-secondary btn-outline'
+                    : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
               on:click={() => {
@@ -282,15 +293,115 @@
               id="position"
               name="position"
               placeholder={$t('common.position')}
-              class="input input-secondary join-item w-3/4"
+              class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
             />
           </label>
           <div class="modal-action mt-3">
-            <button type="submit" class="btn btn-secondary btn-outline">
+            <button type="submit" class="btn border-2 border-gray-700 btn-outline">
               {$t('common.submit')}
             </button>
           </div>
         {/if}
+      </form>
+    </div>
+  </div>
+  <input type="checkbox" id="new-chapter" class="modal-toggle" bind:checked={chapterOpen} />
+  <div class="modal">
+    <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
+      <h3 class="font-bold text-lg">{$t('studio.submission.add_chapter')}</h3>
+      <label
+        for="new-chapter"
+        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      >
+        ✕
+      </label>
+      <form
+        id="chapter"
+        method="POST"
+        class="w-full form-control gap-4"
+        action="?/chapter"
+        use:chapterEnhance
+        on:submit={() => {
+          chapterOpen = false;
+        }}
+      >
+        <input type="hidden" id="id" name="id" value={submission.representationId} />
+        <div
+          class={$chapterSearch.isError
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full'
+            : 'w-full'}
+          data-tip={$chapterSearch.isError ? $t(`error.${$chapterSearch.error.code}`) : ''}
+        >
+          <label class="join w-full">
+            <input
+              type="text"
+              placeholder={$t('chapter.search')}
+              class={`input transition border-2 border-gray-700 w-5/6 join-item min-w-[180px] ${
+                $chapterSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
+              }`}
+              bind:value={newChapterSearch}
+              on:input={() => {
+                queryChapter = false;
+              }}
+            />
+            <button
+              type="button"
+              class={`btn border-2 border-gray-700 w-1/6 join-item ${
+                $chapterSearch.isLoading
+                  ? $chapterSearch.isError
+                    ? 'btn-error'
+                    : 'hover:btn-secondary btn-outline'
+                  : 'btn-disabled'
+              }`}
+              on:click={() => {
+                queryChapter = true;
+              }}
+            >
+              <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </button>
+          </label>
+        </div>
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">
+            {$t('common.chapters')}
+          </span>
+          <select
+            id="admitter_id"
+            name="admitterId"
+            class="select transition border-2 border-gray-700 hover:select-secondary w-3/4 join-item"
+            bind:value={newChapterId}
+          >
+            {#if $chapterSearch.isSuccess}
+              {#each $chapterSearch.data.data as chapter}
+                {#if chapter.accessibility in [0, 1] || (user && chapter.ownerId === user.id)}
+                  <option value={chapter.id}>
+                    {chapter.title} - {chapter.subtitle}
+                  </option>
+                {/if}
+              {/each}
+            {/if}
+          </select>
+        </label>
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">
+            {$t('chapter.label')}
+          </span>
+          <input
+            type="text"
+            id="label"
+            name="label"
+            placeholder={$t('chapter.label')}
+            class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
+          />
+        </label>
+        <div class="modal-action mt-3">
+          <button
+            type="submit"
+            class="btn border-2 border-gray-700 hover:btn-secondary btn-outline"
+          >
+            {$t('common.submit')}
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -332,7 +443,6 @@
                   <a
                     href={submission.file}
                     target="_blank"
-                    rel="noreferrer"
                     class="hover:underline min-w-fit"
                     download={submission.file?.split('/').pop()}
                   >
@@ -346,7 +456,6 @@
                   <a
                     href={submission.illustration}
                     target="_blank"
-                    rel="noreferrer"
                     class="hover:underline min-w-fit"
                     download={submission.illustration?.split('/').pop()}
                   >
@@ -361,7 +470,6 @@
                     <a
                       href={submission.license}
                       target="_blank"
-                      rel="noreferrer"
                       class="hover:underline min-w-fit"
                       download={submission.license.split('/').pop()}
                     >
@@ -377,7 +485,6 @@
                     <a
                       href={submission.originalityProof}
                       target="_blank"
-                      rel="noreferrer"
                       class="hover:underline min-w-fit"
                       download={submission.originalityProof.split('/').pop()}
                     >
@@ -488,7 +595,7 @@
                     {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 4)}
                       <a
                         href="/studio/song-submissions/{submission?.id}/edit"
-                        class="btn btn-primary btn-outline text-lg w-32"
+                        class="btn border-2 border-gray-700 btn-outline text-lg w-32"
                       >
                         {$t('common.edit')}
                       </a>
@@ -496,7 +603,7 @@
                     {#if user && getUserPrivilege(user.role) >= 4}
                       <label
                         for="studio-song-submission"
-                        class="btn btn-primary btn-outline text-lg w-32"
+                        class="btn border-2 border-gray-700 btn-outline text-lg w-32"
                       >
                         {$t('studio.submission.reply_v')}
                       </label>
@@ -523,18 +630,29 @@
               {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
                 <label
                   for="new-collaborator"
-                  class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2 text-md"
+                  class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
                 >
-                  ＋
+                  <i class="fa-solid fa-plus fa-lg"></i>
                 </label>
               {/if}
               {#if $collaborations.isLoading}
                 <div />
               {:else if $collaborations.isSuccess}
                 {#if $collaborations.data.data.length > 0}
-                  {#each $collaborations.data.data as collaboration}
-                    <Collaboration {collaboration} kind="mini" showInvitee />
-                  {/each}
+                  <div class="flex flex-col gap-4">
+                    {#each $collaborations.data.data as collaboration}
+                      <Collaboration
+                        {collaboration}
+                        kind="mini"
+                        editable={user &&
+                          ((collaboration.inviterId === user.id &&
+                            getUserPrivilege(user.role) >= 3) ||
+                            (collaboration.inviterId !== user.id &&
+                              getUserPrivilege(user.role) === 6))}
+                        showInvitee
+                      />
+                    {/each}
+                  </div>
                 {:else}
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
@@ -558,6 +676,47 @@
               {#each $resourceRecords.data.data as resourceRecord}
                 <ResourceRecord {resourceRecord} />
               {/each}
+            </div>
+          </div>
+        </div>
+      {/if}
+      {#if (submission.originalityProof || submission.license) && !!submission.representationId}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('studio.submission.chapters')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body py-10">
+              {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
+                <label
+                  for="new-chapter"
+                  class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
+                >
+                  <i class="fa-solid fa-plus fa-lg"></i>
+                </label>
+              {/if}
+              {#if $chapters.isLoading}
+                <div />
+              {:else if $chapters.isSuccess}
+                {#if $chapters.data.data.length > 0}
+                  {#each $chapters.data.data as admission}
+                    <ChapterAdmission
+                      {admission}
+                      editable={user &&
+                        ((admission.requesterId === user.id && getUserPrivilege(user.role) >= 3) ||
+                          (admission.requesterId !== user.id && getUserPrivilege(user.role) === 6))}
+                      showSong={false}
+                    />
+                  {/each}
+                {:else}
+                  <p class="py-3 text-center">{$t('common.empty')}</p>
+                {/if}
+              {/if}
             </div>
           </div>
         </div>

@@ -69,7 +69,7 @@
             {#if user && admission.requesteeId === user.id}
               <div class="join w-80">
                 <button
-                  class="btn btn-primary btn-outline join-item w-1/2"
+                  class="btn btn-primary border-2 btn-outline join-item w-1/2"
                   on:click={() => {
                     review(true);
                   }}
@@ -77,7 +77,7 @@
                   {$t('studio.request.accept')}
                 </button>
                 <button
-                  class="btn btn-accent btn-outline join-item w-1/2"
+                  class="btn btn-accent border-2 btn-outline join-item w-1/2"
                   on:click={() => {
                     review(false);
                   }}

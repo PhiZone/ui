@@ -1,0 +1,17 @@
+{
+  "application": "Application",
+  "owner": "Owner",
+  "type": "Type",
+  "types": {
+    "0": "Web Player",
+    "1": "Web Tool",
+    "2": "Mobile Player",
+    "3": "Mobile Tool",
+    "4": "Desktop Player",
+    "5": "Desktop Tool",
+    "6": "Service"
+  },
+  "illustration": "Illustration",
+  "illustrator": "Illustrator",
+  "visit": "Visit Homepage"
+}

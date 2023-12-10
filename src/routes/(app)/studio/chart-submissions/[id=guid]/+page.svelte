@@ -12,6 +12,7 @@
   import Song from '$lib/components/Song.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import CollectionAdmission from '$lib/components/CollectionAdmission.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -30,11 +31,19 @@
     id: 'chart-collab',
   });
 
+  const { enhance: collectionEnhance } = superForm(data.collabForm, {
+    id: 'chart-collection',
+  });
+
   let score = 0;
   let queryCollaborator = false;
   let newCollaboratorId: number | null = null;
+  let queryCollection = true;
+  let newCollectionSearch: string;
+  let newCollectionId: string | null = null;
   let voteOpen = false;
   let collabOpen = false;
+  let collectionOpen = false;
 
   $: submission = createQuery(api.chart.submission.info({ id }));
   $: song = createQuery(
@@ -66,6 +75,18 @@
     ),
   );
   $: collaborations = createQuery(api.chart.submission.listAllCollaborations({ id }));
+  $: collectionSearch = createQuery(
+    api.collection.listAll(
+      { search: newCollectionSearch ?? undefined },
+      { enabled: queryCollection },
+    ),
+  );
+  $: collections = createQuery(
+    api.admission.listCollection(
+      { rangeAdmitteeId: [$submission.data?.data.representationId ?? ''] },
+      { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
+    ),
+  );
 
   $: charter = richtext($submission.data?.data.authorName ?? '');
 </script>
@@ -159,7 +180,7 @@
                 ? 'btn-error'
                 : $voteSubmitting
                   ? 'btn-ghost'
-                  : 'btn-secondary btn-outline'} w-full"
+                  : 'btn-outline border-2 border-gray-700'} w-full"
               disabled={$voteSubmitting}
             >
               {$voteAllErrors.length > 0
@@ -179,7 +200,7 @@
       <h3 class="font-bold text-lg">{$t('studio.submission.add_collaborator')}</h3>
       <label
         for="new-collaborator"
-        class="btn btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
       >
         ✕
       </label>
@@ -208,8 +229,8 @@
               id="invitee_id"
               name="inviteeId"
               placeholder={$t('studio.submission.author_placeholder')}
-              class={`input input-secondary join-item w-3/4 min-w-[180px] ${
-                $collaborator.isError ? 'input-error' : 'input-secondary'
+              class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
               on:input={() => {
@@ -218,11 +239,11 @@
             />
             <button
               type="button"
-              class={`btn join-item ${
+              class={`btn border-2 border-gray-700 join-item ${
                 newCollaboratorId || $collaborator.isLoading
                   ? $collaborator.isError
                     ? 'btn-error'
-                    : 'btn-secondary btn-outline'
+                    : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
               on:click={() => {
@@ -249,15 +270,115 @@
               id="position"
               name="position"
               placeholder={$t('common.position')}
-              class="input input-secondary join-item w-3/4"
+              class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
             />
           </label>
           <div class="modal-action mt-3">
-            <button type="submit" class="btn btn-secondary btn-outline">
+            <button type="submit" class="btn border-2 border-gray-700 btn-outline">
               {$t('common.submit')}
             </button>
           </div>
         {/if}
+      </form>
+    </div>
+  </div>
+  <input type="checkbox" id="new-collection" class="modal-toggle" bind:checked={collectionOpen} />
+  <div class="modal">
+    <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
+      <h3 class="font-bold text-lg">{$t('studio.submission.add_collection')}</h3>
+      <label
+        for="new-collection"
+        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      >
+        ✕
+      </label>
+      <form
+        id="collection"
+        method="POST"
+        class="w-full form-control gap-4"
+        action="?/collection"
+        use:collectionEnhance
+        on:submit={() => {
+          collectionOpen = false;
+        }}
+      >
+        <input type="hidden" id="id" name="id" value={submission.representationId} />
+        <div
+          class={$collectionSearch.isError
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full'
+            : 'w-full'}
+          data-tip={$collectionSearch.isError ? $t(`error.${$collectionSearch.error.code}`) : ''}
+        >
+          <label class="join w-full">
+            <input
+              type="text"
+              placeholder={$t('collection.search')}
+              class={`input transition border-2 border-gray-700 w-5/6 join-item min-w-[180px] ${
+                $collectionSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
+              }`}
+              bind:value={newCollectionSearch}
+              on:input={() => {
+                queryCollection = false;
+              }}
+            />
+            <button
+              type="button"
+              class={`btn border-2 border-gray-700 w-1/6 join-item ${
+                $collectionSearch.isLoading
+                  ? $collectionSearch.isError
+                    ? 'btn-error'
+                    : 'hover:btn-secondary btn-outline'
+                  : 'btn-disabled'
+              }`}
+              on:click={() => {
+                queryCollection = true;
+              }}
+            >
+              <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </button>
+          </label>
+        </div>
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">
+            {$t('common.collections')}
+          </span>
+          <select
+            id="admitter_id"
+            name="admitterId"
+            class="select transition border-2 border-gray-700 hover:select-secondary w-3/4 join-item"
+            bind:value={newCollectionId}
+          >
+            {#if $collectionSearch.isSuccess}
+              {#each $collectionSearch.data.data as collection}
+                {#if collection.accessibility in [0, 1] || (user && collection.ownerId === user.id)}
+                  <option value={collection.id}>
+                    {collection.title} - {collection.subtitle}
+                  </option>
+                {/if}
+              {/each}
+            {/if}
+          </select>
+        </label>
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">
+            {$t('collection.label')}
+          </span>
+          <input
+            type="text"
+            id="label"
+            name="label"
+            placeholder={$t('collection.label')}
+            class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
+          />
+        </label>
+        <div class="modal-action mt-3">
+          <button
+            type="submit"
+            class="btn border-2 border-gray-700 hover:btn-secondary btn-outline"
+          >
+            {$t('common.submit')}
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -323,7 +444,6 @@
                 <a
                   href={submission.file}
                   target="_blank"
-                  rel="noreferrer"
                   class="hover:underline min-w-fit"
                   download={submission.file?.split('/').pop()}
                 >
@@ -389,7 +509,7 @@
               {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 4)}
                 <a
                   href="/studio/chart-submissions/{submission.id}/edit"
-                  class="btn btn-primary btn-outline text-lg w-32"
+                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
                 >
                   {$t('common.edit')}
                 </a>
@@ -397,7 +517,7 @@
               {#if user && getUserPrivilege(user.role) >= 4}
                 <label
                   for="studio-chart-submission"
-                  class="btn btn-primary btn-outline text-lg w-32"
+                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
                 >
                   {$t('common.vote_v')}
                 </label>
@@ -413,7 +533,7 @@
                     song?.title}&level={submission.level}&difficulty={submission.difficulty != 0
                     ? Math.floor(submission.difficulty)
                     : '?'}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}"
-                  class="btn btn-primary btn-outline text-lg w-32"
+                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
                   target="_target"
                 >
                   {$t('common.preview')}
@@ -437,18 +557,29 @@
             {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
               <label
                 for="new-collaborator"
-                class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2 text-md"
+                class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
               >
-                ＋
+                <i class="fa-solid fa-plus fa-lg"></i>
               </label>
             {/if}
             {#if $collaborations.isLoading}
               <div />
             {:else if $collaborations.isSuccess}
               {#if $collaborations.data.data.length > 0}
-                {#each $collaborations.data.data as collaboration}
-                  <Collaboration {collaboration} kind="mini" showInvitee />
-                {/each}
+                <div class="flex flex-col gap-4">
+                  {#each $collaborations.data.data as collaboration}
+                    <Collaboration
+                      {collaboration}
+                      kind="mini"
+                      editable={user &&
+                        ((collaboration.inviterId === user.id &&
+                          getUserPrivilege(user.role) >= 3) ||
+                          (collaboration.inviterId !== user.id &&
+                            getUserPrivilege(user.role) === 6))}
+                      showInvitee
+                    />
+                  {/each}
+                </div>
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
@@ -456,6 +587,47 @@
           </div>
         </div>
       </div>
+      {#if !!submission.representationId}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('studio.submission.collections')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body py-10">
+              {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
+                <label
+                  for="new-collection"
+                  class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
+                >
+                  <i class="fa-solid fa-plus fa-lg"></i>
+                </label>
+              {/if}
+              {#if $collections.isLoading}
+                <div />
+              {:else if $collections.isSuccess}
+                {#if $collections.data.data.length > 0}
+                  {#each $collections.data.data as admission}
+                    <CollectionAdmission
+                      {admission}
+                      editable={user &&
+                        ((admission.requesterId === user.id && getUserPrivilege(user.role) >= 3) ||
+                          (admission.requesterId !== user.id && getUserPrivilege(user.role) === 6))}
+                      showChart={false}
+                    />
+                  {/each}
+                {:else}
+                  <p class="py-3 text-center">{$t('common.empty')}</p>
+                {/if}
+              {/if}
+            </div>
+          </div>
+        </div>
+      {/if}
       {#if $votes.isSuccess}
         {@const votes = $votes.data.data}
         {#each votes as vote}

@@ -6,7 +6,9 @@
   import { invalidateAll } from '$app/navigation';
 
   export let data;
-  $: ({ searchParams, page, api, queryClient } = data);
+  $: ({ searchParams, page, api } = data);
+
+  let disabled = false;
 
   $: query = createQuery(api.notification.list(searchParams));
 </script>
@@ -23,29 +25,31 @@
         {searchParams.getRead ? `- ${$t('notification.read_adj')}` : ''}
       </h1>
       {#if searchParams.getRead}
-        <a href="/me/notifications" class="btn btn-primary btn-outline">
+        <a href="/me/notifications" class="btn btn-outline border-2 border-gray-700">
           {$t('notification.view_unread')}
         </a>
       {:else}
         <div class="join">
           <button
-            class="join-item btn btn-primary btn-outline"
+            class="join-item btn border-2 border-gray-700 {disabled
+              ? 'btn-disabled'
+              : 'btn-outline'}"
             on:click={async () => {
-              if (!$query.isSuccess) return;
-              if ($query.data.status !== 0) return;
-              if ($query.data.data.length === 0) return;
+              if (!$query.isSuccess || $query.data.data.length === 0) return;
+              disabled = true;
               const resp = await api.notification.readList(searchParams);
               if (resp.ok) {
-                invalidateAll();
-                await queryClient.invalidateQueries({
-                  queryKey: ['notification.list', { searchParams }],
-                });
+                await invalidateAll();
               }
+              disabled = false;
             }}
           >
             {$t('notification.read_page')}
           </button>
-          <a href="/me/notifications?getRead=true" class="join-item btn btn-primary btn-outline">
+          <a
+            href="/me/notifications?getRead=true"
+            class="join-item btn btn-outline border-2 border-gray-700"
+          >
             {$t('notification.view_read')}
           </a>
         </div>
