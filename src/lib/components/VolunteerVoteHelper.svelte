@@ -135,7 +135,7 @@
       <p class="text-lg">当前分数：{realScore.toFixed(2)}</p>
       <div class="flex join">
         <button
-          class="btn btn-outline btn-secondary join-item"
+          class="btn btn-outline border-2 border-gray-700 join-item"
           disabled={step <= 0}
           on:click={() => {
             step--;
@@ -145,7 +145,7 @@
         </button>
         {#if step < 4}
           <button
-            class="btn btn-outline btn-secondary join-item"
+            class="btn btn-outline border-2 border-gray-700 join-item"
             on:click={() => {
               step++;
             }}
@@ -158,7 +158,7 @@
           <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
           <label
             for="vote-helper"
-            class="btn btn-outline btn-primary join-item"
+            class="btn btn-outline border-2 border-gray-700 join-item"
             on:click={() => {
               calculate();
               if (message) {

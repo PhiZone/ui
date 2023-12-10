@@ -77,6 +77,12 @@
         '[谱师自荐] 在保证手感的情况下，谱师希望通过在创新和创人之间找到一个平衡的点来增强表现力。但是，这张谱面仍然需要打磨。期待宝贵建议！',
       link: 'https://www.bilibili.com/video/BV1a44y1w7vY/',
     },
+    {
+      title: 'Latent Kingdom [IN 15] [+契合度 +特效 -手感]',
+      description:
+        '[谱师自荐] 在传统核曲写法基础上加入了一些flick的特化，手感可能略有欠缺。针对乐曲特征构思了一些特殊配置/特殊下落，在音乐契合度上下了一定的功夫。特效一般通过，水平尚可。',
+      link: 'https://www.bilibili.com/video/BV1WN411M7fr/',
+    },
   ];
 </script>
 
@@ -99,11 +105,11 @@
               <a
                 href={charts[i].link}
                 target="_blank"
-                class="btn btn-primary btn-outline join-item"
+                class="btn border-2 border-gray-700 btn-outline join-item"
               >
                 查看
               </a>
-              <a href="/crs/{i}" class="btn btn-primary btn-outline join-item">投票</a>
+              <a href="/crs/{i}" class="btn border-2 border-gray-700 btn-outline join-item">投票</a>
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@
   <div class="page md:px-24">
     <div class="flex justify-between">
       <h1 class="text-4xl font-bold mb-6">{official ? '官方谱组' : '自制谱组'}投票</h1>
-      <a href="/crs" class="btn btn-secondary btn-outline">返回</a>
+      <a href="/crs" class="btn border-2 border-gray-700 btn-outline">返回</a>
     </div>
     <div class="flex flex-col md:flex-row gap-5">
       <div class="flex md:w-1/3">
@@ -69,15 +69,17 @@
           <textarea
             id="message"
             name="message"
-            class="mr-3 textarea textarea-secondary w-full h-64"
+            class="mr-3 textarea textarea-bordered transition border-2 hover:textarea-secondary w-full h-64"
             placeholder="对谱面进行评价"
             {disabled}
             bind:value={message}
           />
           <div class="join join-vertical">
-            <label for="vote-helper" class="btn btn-outline btn-primary join-item">评分助手</label>
+            <label for="vote-helper" class="btn btn-outline border-2 border-gray-700 join-item">
+              评分助手
+            </label>
             <button
-              class="w-full btn btn-outline btn-primary join-item"
+              class="w-full btn btn-outline border-2 border-gray-700 join-item"
               disabled={disabled || message.length === 0}
             >
               提交投票
