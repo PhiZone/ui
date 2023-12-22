@@ -33,8 +33,6 @@
     "4": "Reject"
   },
   "copyright_owner": "Copyright Owner",
-  "add": "Add",
-  "add_in_bulk": "Add in bulk",
   "edition_placeholder": "Name of edition / resource's origin",
   "csv_file": "CSV File",
   "csv_complete": "Successfully resolved {{valid}} valid records ({{total}} in total)"

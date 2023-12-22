@@ -74,7 +74,7 @@ export const actions = {
     const vote: Vote = {
       id: crypto.randomUUID(),
       official: cookies.get('sec_token') == official,
-      score: parseInt(data.get('score') as string),
+      score: parseFloat(data.get('score') as string),
       message: data.get('message') as string,
       name: data.get('name') as string,
       user: data.get('user') ? parseInt(data.get('user') as string) : undefined,

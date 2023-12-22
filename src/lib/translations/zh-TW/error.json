@@ -44,5 +44,6 @@
   "ParentIsPrivate": "The parent resource is private.",
   "RemoteFailure": "Errors occurred whilst contacting remote servers.",
   "BindingOccupied": "The remote account has already been bound to another user.",
-  "ContentProhibited": "There exists prohibited content in your input text."
+  "ContentProhibited": "There exists prohibited content in your input text.",
+  "NameOccupied": "此名稱已被使用。"
 }

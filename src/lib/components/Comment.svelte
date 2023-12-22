@@ -56,14 +56,14 @@
   <div class="modal-box bg-base-100 max-h-[90vh] min-w-[70vw] w-[75vw] max-w-[1800px]">
     <label
       for="comment-{comment.id}-replies"
-      class="btn btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 normal-border btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
     <h2 class="font-bold text-xl mb-4">{$t('common.replies')}</h2>
     <div class="flex items-center mx-5 mb-3">
       <textarea
-        class="mr-3 textarea transition border-2 border-gray-700 hover:textarea-secondary w-11/12"
+        class="mr-3 textarea transition border-2 normal-border hover:textarea-secondary w-11/12"
         placeholder={$t('common.write_reply')}
         {disabled}
         bind:value={replyText}
@@ -94,11 +94,11 @@
   </div>
 </div>
 
-<div class="card card-side w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg">
+<div class="card card-side w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
   {#if showUser}
     <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center justify-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center justify-center border-r normal-border px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={comment.ownerId} kind="embedded" />
       </div>
@@ -113,7 +113,7 @@
         {parseDateTime(comment.dateCreated, true, user?.language)}
       </p>
       {#if user && (getUserPrivilege(user.role) >= 5 || user.id === comment.ownerId)}
-        <Delete target={comment} class="btn-sm btn-square" />
+        <Delete id={comment.id} path="comments" name="common.comments" class="btn-sm btn-square" />
       {/if}
       <div class="items-center join join-vertical sm:join-horizontal">
         <Like

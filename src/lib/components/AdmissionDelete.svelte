@@ -38,12 +38,12 @@
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <label
         for="delete-{target.admitter.id}-{target.admittee.id}"
-        class="btn btn-outline"
+        class="btn border-2 normal-border btn-outline"
         on:click={async () => {
           const resp = await api.DELETE(
             `/admissions/${type}s/${target.admitter.id}/${target.admittee.id}`,
           );
-          if (resp.ok || resp.status == 404) {
+          if (resp.ok || resp.status === 404) {
             deleted = true;
           } else {
             console.error(await resp.json());
@@ -58,9 +58,7 @@
 
 <label
   for="delete-{target.admitter.id}-{target.admittee.id}"
-  class="btn {deleted
-    ? 'btn-ghost btn-disabled'
-    : 'border-2 btn-ghost'} flex gap-1 items-center {$$restProps.class}"
+  class="btn {deleted ? 'btn-ghost btn-disabled' : 'border-2 btn-ghost'} {$$restProps.class}"
 >
   <i class="fa-regular fa-trash-can fa-lg"></i>
   {$t('common.delete')}

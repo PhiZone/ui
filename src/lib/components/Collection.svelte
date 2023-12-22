@@ -14,73 +14,71 @@
   $: owner = createQuery(api.user.info({ id: collection.ownerId }));
 </script>
 
-<div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+<a
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+  href="/collections/{collection.id}"
 >
-  <a href="/collections/{collection.id}">
-    <figure class="h-[167px] relative">
-      <img
-        src={getCompressedImage(collection.illustration)}
-        alt="Illustration"
-        class="object-fill"
-      />
-      {#if 'label' in collection && collection.label}
-        <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
-          <button class="btn btn-secondary btn-sm text-xl no-animation">
-            {collection.label}
-          </button>
-        </div>
-      {/if}
-    </figure>
-    <div class="card-body {fixedHeight ? 'h-[255px]' : ''} py-6 gap-0.5">
+  <figure class="h-[167px] relative">
+    <img src={getCompressedImage(collection.illustration)} alt="Illustration" class="object-fill" />
+    {#if 'label' in collection && collection.label}
+      <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+        <button class="btn btn-shallow btn-sm text-xl no-animation">
+          {collection.label}
+        </button>
+      </div>
+    {/if}
+  </figure>
+  <div class="card-body {fixedHeight ? 'h-[244px]' : ''} py-6 gap-0.5">
+    <div class="flex flex-col mb-2">
       <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
         {collection.title}
       </h2>
-      <h2 class="subtitle opacity-80 mb-2 w-full whitespace-nowrap overflow-hidden text-ellipsis">
+      <h2 class="subtitle opacity-80 w-full whitespace-nowrap overflow-hidden text-ellipsis">
         {collection.subtitle}
       </h2>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-        <span class="badge mr-1">{$t('collection.illustrator')}</span>
-        {collection.illustrator}
-      </p>
-      <div class="flex items-center grow-0">
-        <span class="badge mr-1">{$t('collection.owner')}</span>
-        {#if $owner.isSuccess}
-          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-            {$owner.data.data.userName}
-          </p>
-        {:else}
-          <div class="skeleton w-2/3 h-6"></div>
-        {/if}
-      </div>
-      {#if collection.description}
-        <p class="content description grow-0">
-          <span class="badge mr-1">{$t('common.description')}</span>
-          {collection.description}
-        </p>
-      {/if}
-      {#if fixedHeight}
-        <div class="absolute bottom-8 right-8">
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
-            <Like
-              id={collection.id}
-              likes={collection.likeCount}
-              type="collections"
-              liked={collection.dateLiked != null}
-              class="btn-sm"
-            />
-          </div>
-        </div>
-      {/if}
     </div>
-  </a>
-</div>
+    <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+      <span class="badge">{$t('collection.illustrator')}</span>
+      <span>{collection.illustrator}</span>
+    </p>
+    <p class="flex items-center gap-1">
+      <span class="badge">{$t('collection.owner')}</span>
+      {#if $owner.isSuccess}
+        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+          {$owner.data.data.userName}
+        </span>
+      {:else}
+        <span class="skeleton w-2/3 h-6"></span>
+      {/if}
+    </p>
+    {#if collection.description}
+      <p class="flex items-center">
+        <span class="content description">
+          <span class="inline-flex badge mr-1">{$t('common.description')}</span>
+          {collection.description}
+        </span>
+      </p>
+    {/if}
+    {#if fixedHeight}
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        class="card-actions justify-end"
+        on:click={(e) => {
+          e.preventDefault();
+        }}
+        on:keyup
+      >
+        <Like
+          id={collection.id}
+          likes={collection.likeCount}
+          type="collections"
+          liked={collection.dateLiked != null}
+          class="btn-sm"
+        />
+      </div>
+    {/if}
+  </div>
+</a>
 
 <style>
   .title {

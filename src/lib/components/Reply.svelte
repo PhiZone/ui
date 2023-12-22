@@ -9,7 +9,7 @@
   import User from './User.svelte';
   import { createQuery } from '@tanstack/svelte-query';
 
-  $: ({ api, user } = $page.data);
+  $: ({ user, api } = $page.data);
 
   export let kind: 'mini' | 'full' = 'mini';
   export let reply: ReplyDto;
@@ -45,7 +45,7 @@
       </p>
       <div class="min-w-fit text-right flex items-center gap-1">
         {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
-          <Delete target={reply} class="btn-sm btn-square" />
+          <Delete id={reply.id} path="replies" name="common.reply" class="btn-sm btn-square" />
         {/if}
         <Like
           id={reply.id}
@@ -58,12 +58,10 @@
     </div>
   </li>
 {:else}
-  <div
-    class="card card-side w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg"
-  >
+  <div class="card card-side w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
     <figure class="w-1/3 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center border-r normal-border px-3 py-3 mx-auto my-auto w-full"
       >
         <User id={reply.ownerId} kind="embedded" />
       </div>
@@ -77,7 +75,7 @@
           {parseDateTime(reply.dateCreated, true, user?.language)}
         </p>
         {#if user && (getUserPrivilege(user.role) >= 5 || user.id === reply.ownerId)}
-          <Delete target={reply} class="btn-sm btn-square" />
+          <Delete id={reply.id} path="replies" name="common.reply" class="btn-sm btn-square" />
         {/if}
         <div class="items-center join join-vertical sm:join-horizontal">
           <Like

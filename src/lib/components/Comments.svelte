@@ -51,12 +51,12 @@
     {$t('common.comments')}
   </span>
   <div
-    class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+    class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
   >
     <div class="card-body py-10">
       <div class="flex items-center">
         <textarea
-          class="mr-3 textarea transition border-2 border-gray-700 hover:textarea-secondary w-11/12"
+          class="mr-3 textarea transition border-2 normal-border hover:textarea-secondary w-11/12"
           placeholder={$t('common.write_comment')}
           bind:value={commentText}
           {disabled}

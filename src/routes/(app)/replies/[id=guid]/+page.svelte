@@ -2,6 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Reply from '$lib/components/Reply.svelte';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -14,10 +15,10 @@
   <title>{$t('common.reply')} | {$t('common.title')}</title>
 </svelte:head>
 
-<div class="hero min-h-screen bg-base-300">
-  <div class="w-5/6 form-control mx-auto">
-    {#if $query.isSuccess}
-      {@const reply = $query.data.data}
+{#if $query.isSuccess}
+  {@const reply = $query.data.data}
+  <div class="hero min-h-screen bg-base-300">
+    <div class="w-5/6 form-control mx-auto">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
@@ -27,6 +28,10 @@
         </span>
         <Reply kind="full" {reply} />
       </div>
-    {/if}
+    </div>
   </div>
-</div>
+{:else if $query.isError}
+  <Error error={$query.error} />
+{:else}
+  <div class="min-h-page skeleton" />
+{/if}

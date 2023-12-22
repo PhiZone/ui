@@ -44,10 +44,16 @@ export function createQueryCreator<T, O, K extends string>(
     queryKey: [key, opts],
     queryFn: async () => {
       const resp = await func(opts);
-      if (resp.status === 401) throw new Error('Unauthorized');
-      const data = await resp.json();
-      if (data.status === ResponseDtoStatus.Ok) return data;
-      else throw data;
+      try {
+        const data = await resp.json();
+        if (data.status === ResponseDtoStatus.Ok) return data;
+        else throw { ...data, httpStatus: resp.status };
+      } catch (e) {
+        throw { httpStatus: resp.status };
+      }
+    },
+    retry: (failureCount, error) => {
+      return ![401, 404, 502].includes(error.httpStatus) && failureCount < 1;
     },
     ...options,
   });

@@ -1,43 +1,15 @@
+import { browser } from '$app/environment';
 import { htmlEscape } from 'escape-goat';
-import { type Readable, readable /*, derived */ } from 'svelte/store';
-// import { createQueries } from '@tanstack/svelte-query';
-// import type API from './api';
-
-// export interface RichContext {
-//   users?: Map<number, string>;
-// }
-
-// export function preprocess(content: string): string {
-//   content = htmlEscape(content);
-//   let result = '';
-//   let level = 0;
-//   for (let i = 0; i < content.length; i++) {
-//     if (content[i] === '[') {
-//       if (level >= 1) result += '&#91;';
-//       else result += '[';
-//       level++;
-//     } else if (content[i] === ']') {
-//       level--;
-//       if (level >= 1) result += '&#93;';
-//       else result += ']';
-//     } else result += content[i];
-//   }
-//   return result.replaceAll(/\[PZ(.+?):PZRT\]/gi, '[PZ$1]');
-// }
+import dompurify from 'dompurify';
+import { type Readable, readable } from 'svelte/store';
 
 export function preprocess(content: string): string {
-  return htmlEscape(content);
+  return htmlEscape(browser ? dompurify.sanitize(content) : content);
 }
 
-export function transform(content: string /*, ctx: RichContext*/): string {
+export function transform(content: string): string {
   return (
     content
-      // user
-      // .replaceAll(
-      //   /\[PZUser(Mention)?:(\d+)\]/gi,
-      //   (_, at: string | undefined, id: string) =>
-      //     `[PZUser${at ?? ''}:${id}:${ctx.users?.get(parseInt(id)) ?? id}]`,
-      // )
       .replaceAll(
         /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
         (_, at: string | undefined, id: string, display: string) =>
@@ -138,34 +110,8 @@ export function transform(content: string /*, ctx: RichContext*/): string {
   );
 }
 
-export function richtext(content: string /*, api?: API*/): Readable<string> {
+export function richtext(content: string): Readable<string> {
+  if (!content) return readable('');
   content = preprocess(content);
-
-  // if (api) {
-  //   return derived(
-  //     [
-  //       // users
-  //       createQueries(
-  //         [
-  //           ...new Set(
-  //             [...content.matchAll(/\[PZUser(?:Mention)?:(\d+)\]/gi)].map((match) =>
-  //               parseInt(match[1]),
-  //             ),
-  //           ),
-  //         ].map((id) => api.user.info({ id })),
-  //       ),
-  //     ],
-  //     ([users]) => {
-  //       const ctx: RichContext = {
-  //         users: users.reduce((map, query) => {
-  //           if (query.isSuccess) map.set(query.data.data.id, query.data.data.userName);
-  //           return map;
-  //         }, new Map<number, string>()),
-  //       };
-  //       return transform(content, ctx);
-  //     },
-  //   );
-  // } else {
-  return readable(transform(content /*, {}*/));
-  // }
+  return readable(transform(content));
 }

@@ -22,7 +22,7 @@
 </script>
 
 <div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a href={`/studio/chart-submissions/${chart.id}`}>
     <figure class="h-[167px] relative">
@@ -51,7 +51,9 @@
             {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
           </button>
           {#if chart.isRanked}
-            <button class="btn btn-success btn-sm join-item text-xl no-animation">
+            <button
+              class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-xl no-animation"
+            >
               {$t('chart.ranked')}
             </button>
           {/if}

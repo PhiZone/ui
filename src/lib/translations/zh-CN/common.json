@@ -53,6 +53,7 @@
   "select_file": "选择文件",
   "likes": "赞",
   "colon": "：",
+  "semicolon": "；",
   "description": "简介",
   "comments": "评论",
   "comment": "评论",
@@ -79,7 +80,7 @@
     "ja": "日语"
   },
   "source": "来源",
-  "all": "查看全部 »",
+  "all": "查看全部",
   "anonymous": "[ 匿名 ]",
   "records": "游玩记录",
   "form": {
@@ -134,7 +135,8 @@
     "401": "请先注册 / 登录",
     "403": "你无权访问该功能",
     "404": "你所请求的资源不存在",
-    "500": "服务器在处理你的请求时出现问题"
+    "500": "服务器在处理你的请求时出现问题",
+    "502": "无法连接至服务器"
   },
   "list_options": "列表选项",
   "filter": "筛选",
@@ -165,5 +167,15 @@
   "image_cropper": "图片裁剪",
   "created_at": "创建时间",
   "updated_at": "更新时间",
-  "back_to_homepage": "返回主页"
+  "back_to_homepage": "返回主页",
+  "on": "开",
+  "off": "关",
+  "auto": "自动",
+  "set_as_preferred": "设为首选",
+  "unset_as_preferred": "取消首选",
+  "preferred": "首选",
+  "unnamed": "未命名",
+  "add": "添加",
+  "add_in_bulk": "批量添加",
+  "more": "更多"
 }

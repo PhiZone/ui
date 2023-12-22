@@ -10,6 +10,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -39,10 +40,10 @@
       >
         ✕
       </label>
-      <div class="text-5xl py-3 flex font-bold items-center content">
-        {song.title}
+      <div class="py-3 flex gap-4 items-center content">
+        <span class="text-5xl font-bold">{song.title}</span>
         {#if song.isOriginal}
-          <button class="ml-2 btn btn-secondary text-3xl no-animation min-w-fit">
+          <button class="btn btn-shallow text-3xl no-animation min-w-fit">
             {$t('song.original')}
           </button>
         {/if}
@@ -76,7 +77,7 @@
           {$t('song.song')}
         </span>
         <div
-          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
             <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
@@ -84,7 +85,7 @@
                 {song.title}
               </h2>
               {#if song.isOriginal}
-                <button class="btn btn-secondary text-3xl no-animation min-w-fit">
+                <button class="btn btn-accent text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
@@ -103,7 +104,7 @@
                       </span>
                       <label
                         for="license-{song.id}"
-                        class="btn btn-xs btn-neutral text-sm font-normal"
+                        class="btn btn-xs btn-shallow text-sm font-normal"
                       >
                         {$t(`song.edition_types.${song.editionType}`)}
                       </label>
@@ -178,7 +179,7 @@
                       href={song.file}
                       target="_blank"
                       download={song.file?.split('/').pop()}
-                      class="btn btn-ghost border-2 hover:btn-outline flex gap-1 join-item"
+                      class="btn btn-ghost border-2 hover:btn-outline join-item"
                     >
                       <i class="fa-solid fa-file-arrow-down fa-lg"></i>
                       {$t('common.download')}
@@ -205,7 +206,7 @@
             {/if}
             {#if $charts.isSuccess}
               <div
-                class="collapse collapse-arrow transition border-2 border-gray-700 hover:border-secondary bg-base-100 rounded-box mt-3"
+                class="collapse collapse-arrow transition border-2 normal-border hover:border-secondary bg-base-100 rounded-box mt-3"
               >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
@@ -235,7 +236,7 @@
       <Comments type="songs" {id} {searchParams} />
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
-      <div class="indicator my-4 w-full">
+      <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
@@ -246,7 +247,7 @@
       </div>
       {#if $chapters.isSuccess}
         {#each $chapters.data.data as chapter}
-          <div class="indicator my-4 w-full">
+          <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
@@ -259,6 +260,10 @@
       {/if}
     </div>
   </div>
+{:else if $song.isError}
+  <Error error={$song.error} back="/songs" />
+{:else}
+  <div class="min-h-page skeleton" />
 {/if}
 
 <style>

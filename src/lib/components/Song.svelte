@@ -39,7 +39,7 @@
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
   >
     <a href={`/songs/${song.id}`}>
       <figure class="h-[167px] relative">
@@ -47,7 +47,7 @@
         <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
           <div class="join join-horizontal">
             {#if song.isOriginal}
-              <button class="btn btn-secondary btn-sm text-xl no-animation join-item">
+              <button class="btn btn-accent btn-sm text-xl no-animation join-item">
                 {$t('song.original')}
               </button>
             {/if}
@@ -56,7 +56,7 @@
                 class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
                 data-tip={song.label}
               >
-                <button class="btn btn-sm btn-neutral btn-active no-animation join-item text-lg">
+                <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
                   {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
                 </button>
               </div>
@@ -112,20 +112,22 @@
 {:else if kind === 'inline'}
   <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
     <div class="w-11/12 md:w-7/12">
-      <div class="text-xl font-bold ellipsis-2">
-        {song.title}
+      <div class="flex gap-2 items-center">
+        <p class="text-xl font-bold ellipsis-2 max-w-fit">
+          {song.title}
+        </p>
         <div class="join join-horizontal">
           {#if song.isOriginal}
-            <button class="btn btn-secondary btn-sm text-xl no-animation join-item">
+            <button class="btn btn-accent btn-sm text-xl no-animation join-item">
               {$t('song.original')}
             </button>
           {/if}
           {#if 'label' in song && song.label}
             <div
-              class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
+              class={song.label.length > 10 ? 'tooltip tooltip-right' : ''}
               data-tip={song.label}
             >
-              <button class="btn btn-sm btn-neutral btn-active no-animation join-item text-lg">
+              <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
                 {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
               </button>
             </div>

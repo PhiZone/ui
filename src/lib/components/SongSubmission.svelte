@@ -16,14 +16,14 @@
 </script>
 
 <div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a href={`/studio/song-submissions/${song.id}`}>
     <figure class="h-[167px] relative">
       <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
       {#if song.originalityProof}
         <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
-          <button class="btn btn-secondary btn-sm text-xl no-animation">
+          <button class="btn btn-accent btn-sm text-xl no-animation">
             {$t('song.original')}
           </button>
         </div>

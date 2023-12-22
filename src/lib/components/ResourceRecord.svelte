@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a href={`/resource-records/${resourceRecord.id}`}>
     <div class="card-body py-6 gap-0.5">

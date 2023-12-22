@@ -9,7 +9,7 @@
       title: 'Lanterns [SP 2023] [+采音 +特效]',
       description:
         '[谱师自荐] 整体思路利用渐变式的流动背景线组来体现穿梭于繁华街道的感觉，屏幕上端来回摆动的黄键来象征着街道上璀璨的灯笼群，背景线做了一定取舍使其尽量不晓得多余和晃眼。缓动多用24缓振动来表现具有国风特色的琵音和拨奏。特效思路简单，实现起来也没那么难，个人觉得可以作为纯良谱面的背景线范例。采音方面核心思路使用tap，短ln和extap表现lead和鼓，flick表现快板，drag表现拨奏。出于歌曲节奏型比较单一的原因采音思路并没有很多创新，但个人认为思路足够清晰合理，可以作为一般通过的低难范例来学习。',
-      link: 'https://b23.tv/Jm0o7ef',
+      link: 'https://www.bilibili.com/video/BV1pK411q7Tt/',
     },
     {
       title: 'reboot*the Starlight [IN 14] [+契合度 -配置 -手感]',
@@ -42,7 +42,7 @@
       link: 'https://www.bilibili.com/video/BV1Zw411C76c/',
     },
     {
-      title: 'Fracture Ray [IN 16] [-采音 -配置]',
+      title: 'Fracture Ray [IN 16] [-配置 -手感]',
       description:
         '[Naptie] 背景线动效打造了曲目应有的氛围，但仍然建议继续减少特效数量，以避免单线幅度过大导致的“掉价”。选曲具有高密度鼓点，需要大量舍音以保证配置的合理性，而该谱的舍音工作并没有做到位。177combo的vfx音效选择舍掉并不是一个好的选择。此外，一些不必要的双押的加入也导致了配置的无理性。724combo的drag蛇、1182combo的hold应当提早出现以确保游玩体验。总之，该谱可作为高bpm采音与配置方面的反面示例，评分建议不超过ranked标准。',
       link: 'https://www.bilibili.com/video/BV1rM411y7QF?p=1',
@@ -83,6 +83,12 @@
         '[谱师自荐] 在传统核曲写法基础上加入了一些flick的特化，手感可能略有欠缺。针对乐曲特征构思了一些特殊配置/特殊下落，在音乐契合度上下了一定的功夫。特效一般通过，水平尚可。',
       link: 'https://www.bilibili.com/video/BV1WN411M7fr/',
     },
+    {
+      title: 'BLACK or WHITE? [IN 15] [+配置 +手感]',
+      description:
+        '[_Vexxxx_] 此谱面几乎为全谱正面下落式，牺牲了一定的玩法上限空间来获得更好的配置游玩体验。与一般谱面不同地，此谱面添加了部分空音note，并于部分段落设计了押数自由化（如2nd drop的12分音段落）。整张谱的总体设计比较偏向八股，但在尽可能保全手感的情况下增加了设计感，给出了一定的记忆点。全谱特效较偏简约，没有过多杂乱花的表演，但不失观感上的流畅、与配置的契合。综上，该谱面为一张着重在配置上进行部分设计的中难度双指谱，可作为中等质量的偏八股向谱面进行评价。',
+      link: 'https://www.bilibili.com/video/BV1iQ4y187N2/',
+    },
   ];
 </script>
 
@@ -96,7 +102,7 @@
     <div class="result">
       {#each range(0, charts.length) as i}
         <div
-          class="card lg:w-[430px] w-full bg-base-100 border-2 border-gray-700 transition hover:shadow-lg"
+          class="card lg:w-[430px] w-full bg-base-100 border-2 normal-border transition hover:shadow-lg"
         >
           <div class="card-body">
             <h2 class="card-title">{charts[i].title}</h2>
@@ -105,11 +111,11 @@
               <a
                 href={charts[i].link}
                 target="_blank"
-                class="btn border-2 border-gray-700 btn-outline join-item"
+                class="btn border-2 normal-border btn-outline join-item"
               >
                 查看
               </a>
-              <a href="/crs/{i}" class="btn border-2 border-gray-700 btn-outline join-item">投票</a>
+              <a href="/crs/{i}" class="btn border-2 normal-border btn-outline join-item">投票</a>
             </div>
           </div>
         </div>

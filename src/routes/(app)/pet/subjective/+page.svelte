@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { PetQuestionDto } from '$lib/api/pet';
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';
   import { superForm } from 'sveltekit-superforms/client';
@@ -17,7 +16,7 @@
   let timeUp = false;
 
   let timer = setInterval(() => {
-    if (sec == 0 && min == 0) {
+    if (sec === 0 && min === 0) {
       clearInterval(timer);
       timeUp = true;
       return;
@@ -28,13 +27,6 @@
   }, 100);
 
   let answers: string[] = [];
-  let chartQuestion: PetQuestionDto = {
-    position: 19,
-    type: 2,
-    content: $t('pet.chart_question'),
-    choices: null,
-    language: 'zh-CN',
-  };
 
   const { enhance, message, errors: _errors, submitting, allErrors } = superForm(data.form);
 </script>
@@ -45,16 +37,16 @@
 
 <div class="page">
   <div
-    class="card fixed top-20 right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
+    class="card fixed top-20 right-3 px-6 py-3 bg-base-100 transition border-2 normal-border hover:shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
+      <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${min};`} />
       </span>
       min
     </div>
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
+      <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${sec};`} />
       </span>
       sec
@@ -74,20 +66,6 @@
             /> -->
           </li>
         {/each}
-        <li>
-          <Question
-            id={19}
-            question={chartQuestion}
-            choices={null}
-            bind:text={answers[3]}
-            textAreaCss="text-base h-24"
-          />
-          <!-- <div
-            class="tooltip tooltip-bottom tooltip-error"
-            class:tooltip-open={$errors._errors && !!$errors._errors[3]}
-            data-tip={$errors._errors ? $errors._errors[3] : ''}
-          /> -->
-        </li>
       </ul>
       <form method="POST" class="flex justify-end" use:enhance>
         <input type="hidden" name="answer1" bind:value={answers[0]} />
@@ -95,12 +73,12 @@
         <input type="hidden" name="answer3" bind:value={answers[2]} />
         <input type="hidden" name="chart" bind:value={answers[3]} />
         <button
-          class={`btn btn-outline ${
-            $message
+          class={`btn border-2 ${
+            $allErrors.length > 0
               ? 'btn-error tooltip tooltip-open tooltip-left tooltip-error'
               : timeUp
                 ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
-                : 'btn-primary'
+                : 'normal-border hover:btn-outline'
           } my-5`}
           data-tip={timeUp ? $t('pet.time_up') : $message}
           disabled={$submitting}

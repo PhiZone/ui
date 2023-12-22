@@ -2,7 +2,6 @@
   import { t } from '$lib/translations/config';
   import User from '$lib/components/User.svelte';
   import Question from '$lib/components/Question.svelte';
-  import type { PetQuestionDto } from '$lib/api/pet';
   import { getUserPrivilege } from '$lib/utils';
   import { superForm } from 'sveltekit-superforms/client';
 
@@ -17,14 +16,6 @@
     submitting,
     allErrors,
   } = superForm(data.form);
-
-  let chartQuestion: PetQuestionDto = {
-    position: 19,
-    type: 2,
-    content: $t('pet.chart_question'),
-    choices: null,
-    language: 'zh-CN',
-  };
   let score = 0;
 </script>
 
@@ -42,7 +33,7 @@
         {$t('pet.answer.answer')}
       </span>
       <div
-        class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+        class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
       >
         <div class="card-body py-10">
           <div class="stats stats-vertical sm:stats-horizontal">
@@ -86,10 +77,16 @@
       text={null}
       answer={answer.answer3}
     />
-    <Question id={19} question={chartQuestion} choices={null} text={null} answer={answer.chart} />
+    <Question
+      id={19}
+      question={answer.question4}
+      choices={null}
+      text={null}
+      answer={answer.chart}
+    />
   </div>
   <div class="w-80 form-control mx-auto lg:mx-4">
-    <div class="indicator my-4 w-full">
+    <div class="indicator w-full my-4">
       <span
         class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
         style:--tw-translate-x="0"
@@ -99,7 +96,7 @@
       <User id={answer.ownerId} />
     </div>
     {#if answer.assessorId}
-      <div class="indicator my-4 w-full">
+      <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
@@ -108,15 +105,15 @@
         </span>
         <User id={answer.assessorId} />
       </div>
-    {:else if user && getUserPrivilege(user.role) >= 5}
-      <div class="indicator my-4 w-full">
+    {:else if getUserPrivilege(user?.role) >= 5}
+      <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('pet.answer.assess')}
         </span>
-        <div class="card bg-base-100 w-full shadow-lg">
+        <div class="card bg-base-100 w-full transition border-2 normal-border hover:shadow-lg">
           <form id="review" class="card-body" method="POST" action="?/assess" use:enhance>
             <input type="hidden" id="id" name="id" value={answer.id} />
             <h2 class="card-title">{$t('pet.answer.subjective_score')}</h2>
@@ -127,7 +124,6 @@
                   type="text"
                   id="score"
                   name="score"
-                  placeholder=""
                   bind:value={score}
                   class="input w-1/4 text-right text-xl font-bold"
                   on:input={(e) => {
@@ -156,7 +152,7 @@
                   ? 'btn-error'
                   : $submitting
                     ? 'btn-ghost'
-                    : 'btn-outline border-2 border-gray-700'} w-full"
+                    : 'btn-outline border-2 normal-border'} w-full"
                 disabled={$submitting}
               >
                 {$allErrors.length > 0

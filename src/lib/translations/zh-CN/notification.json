@@ -12,7 +12,7 @@
   "notified_at": "通知时间",
   "read_at": "阅读时间",
   "read_adj": "已读",
-  "read_v": "阅读",
+  "mark_as_read": "标为已读",
   "read_page": "阅读本页",
   "view_read": "查看已读",
   "view_unread": "查看未读"

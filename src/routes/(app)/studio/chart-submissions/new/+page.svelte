@@ -70,7 +70,7 @@
     </div>
     <label
       for="studio-charter"
-      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -84,7 +84,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+          class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
             $charter.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newCharterId}
@@ -93,7 +93,7 @@
           }}
         />
         <button
-          class={`btn border-2 border-gray-700 join-item ${
+          class={`btn border-2 normal-border join-item ${
             newCharterId || $charter.isLoading
               ? $charter.isError
                 ? 'btn-error'
@@ -114,7 +114,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.charter')}</span>
         <input
           placeholder={$t('common.form.charter')}
-          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
+          class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
           bind:value={newCharterDisplay}
         />
       </label>
@@ -122,7 +122,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-charter"
-          class="btn border-2 border-gray-700 btn-outline"
+          class="btn border-2 normal-border btn-outline"
           on:click={() => {
             authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
@@ -139,7 +139,7 @@
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
-      <div class="card w-full bg-base-100 shadow-lg">
+      <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
           <a
             href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${encodeURI(
@@ -231,7 +231,7 @@
                   <select
                     id="song"
                     name="SongId"
-                    class={`select transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    class={`select transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                       $song.isError ? 'hover:select-error' : 'hover:select-secondary'
                     }`}
                     value=""
@@ -264,7 +264,7 @@
                   <select
                     id="song_submission"
                     name="SongSubmissionId"
-                    class={`select transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                    class={`select transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                       $songSubmission.isError ? 'hover:select-error' : 'hover:select-secondary'
                     }`}
                     value=""
@@ -296,7 +296,7 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                  class={`select transition border-2 normal-border join-item w-3/4 ${
                     $errors.Accessibility ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                 >
@@ -324,7 +324,7 @@
                 <select
                   id="level_type"
                   name="LevelType"
-                  class={`select transition border-2 border-gray-700 join-item w-1/6 ${
+                  class={`select transition border-2 normal-border join-item w-1/6 ${
                     $errors.LevelType ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   bind:value={levelType}
@@ -343,7 +343,7 @@
                   id="level"
                   name="Level"
                   placeholder={$t('common.form.tips.chart_level')}
-                  class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
                     $errors.Level ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={level}
@@ -368,7 +368,7 @@
                   id="difficulty"
                   name="Difficulty"
                   placeholder={(Math.random() * (16.9 - 11.9) + 11.9).toFixed(1)}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     $errors.Difficulty ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={difficulty}
@@ -404,7 +404,7 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.charter')}
-                  class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
                     $errors.AuthorName ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={authorName}
@@ -412,7 +412,7 @@
                 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                 <label
                   for="studio-charter"
-                  class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
+                  class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
                   on:click={() => {
                     newCharterId = null;
                     newCharterDisplay = '';
@@ -444,7 +444,7 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea transition border-2 border-gray-700 join-item ${
+                  class={`textarea transition border-2 normal-border join-item ${
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={$t('studio.submission.description_placeholder')}
@@ -463,7 +463,7 @@
                     ? 'btn-error'
                     : $submitting
                       ? 'btn-ghost'
-                      : 'btn-outline border-2 border-gray-700'} w-full"
+                      : 'btn-outline border-2 normal-border'} w-full"
                   disabled={$submitting || !chart}
                 >
                   {$allErrors.length > 0

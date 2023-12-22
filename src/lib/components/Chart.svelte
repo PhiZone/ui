@@ -22,7 +22,7 @@
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
   >
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[167px] relative">
@@ -44,7 +44,9 @@
               {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
             </button>
             {#if chart.isRanked}
-              <button class="btn btn-success btn-sm join-item text-xl no-animation">
+              <button
+                class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-xl no-animation"
+              >
                 {$t('chart.ranked')}
               </button>
             {/if}
@@ -115,14 +117,16 @@
           <div class="skeleton sm:w-1/2 2xl:w-2/3 h-7 ellipsis-2-md"></div>
         {/if}
       {/if}
-      <div class="hidden sm:flex join join-horizontal items-center">
+      <div class="{showSong ? 'hidden sm:flex' : ''} join join-horizontal items-center">
         <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}
         </button>
         {#if chart.isRanked}
-          <button class="btn btn-success btn-sm join-item text-lg no-animation">
-            {showSong ? 'R' : $t('chart.ranked')}
+          <button
+            class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-lg no-animation"
+          >
+            {$t('chart.ranked')}
           </button>
         {/if}
       </div>

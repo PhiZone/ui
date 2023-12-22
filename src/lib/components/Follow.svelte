@@ -24,7 +24,7 @@
         user.followerCount--;
         user.dateFollowed = null;
       }
-      console.error(await resp.json());
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
     }
   };
 
@@ -41,7 +41,7 @@
         user.followerCount++;
         user.dateFollowed = new Date().toISOString();
       }
-      console.error(await resp.json());
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
     }
   };
 </script>

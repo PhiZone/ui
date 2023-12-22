@@ -11,7 +11,7 @@
 </svelte:head>
 
 <select
-  class="select transition border-2 border-gray-700 hover:select-secondary self-end w-full max-w-xs"
+  class="select transition border-2 normal-border hover:select-secondary self-end w-full max-w-xs"
   on:input={(e) => {
     goto(`/legal/${e.currentTarget.value}/copyright-policy`);
   }}

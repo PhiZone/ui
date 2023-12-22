@@ -20,12 +20,12 @@
     {$t('pet.answer.answer')}
   </span>
   <a
-    class="card card-side w-full bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class="card card-side w-full bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
     href={`/pet/answers/${answer.id}`}
   >
     <figure class="w-1/6 min-w-fit">
       <div
-        class="relative inline-flex items-center justify-center form-control border-r border-gray-700 px-3 py-3 mx-auto my-auto"
+        class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
       >
         <p class="opacity-80">
           {$t(answer.totalScore ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
@@ -53,12 +53,14 @@
         {answer.chart}
       </p>
       <div class="w-full flex justify-between items-center">
-        <p class="text-sm opacity-70 text-right">
+        <p class="text-sm opacity-70 flex justify-end items-center gap-2">
           <a href={`/users/${answer.ownerId}`} target="_blank" class="hover:underline">
             {$owner.data?.data.userName ?? ''}
           </a>
-          @
-          {parseDateTime(answer.dateCreated, true, user?.language)}
+          <span>·</span>
+          <span>
+            {parseDateTime(answer.dateCreated, true, user?.language)}
+          </span>
         </p>
       </div>
     </div>

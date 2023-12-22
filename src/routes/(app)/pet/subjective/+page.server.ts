@@ -8,8 +8,9 @@ import { superValidate } from 'sveltekit-superforms/server';
 import type { Plugin } from 'unified';
 import type { KatexOptions } from 'katex';
 import { fail, redirect } from '@sveltejs/kit';
-import { t } from '$lib/translations/config';
+import { locale, t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { toCamel } from '$lib/utils';
 
 const schema = z.object({
   answer1: z.string(),
@@ -37,6 +38,13 @@ export const load = async ({ url, fetch, locals }) => {
     return { status: 2, error: error.code, form };
   }
   const questions = (await resp.json()).data;
+  questions.push({
+    position: 19,
+    type: 2,
+    content: t.get('pet.chart_question'),
+    choices: null,
+    language: locale.get(),
+  });
   for (let i = 0; i < questions.length; i++) {
     questions[i].content =
       (
@@ -93,9 +101,10 @@ export const actions = {
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        form.message = t.get(`error.${error.code}`);
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
-          form.errors[field as keyof Schema] = errors.map((value) => {
+          form.errors[toCamel(field) as keyof Schema] = errors.map((value) => {
             return t.get(`error.${value}`);
           });
         });

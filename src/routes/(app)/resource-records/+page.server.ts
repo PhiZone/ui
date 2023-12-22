@@ -4,6 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { toCamel } from '$lib/utils';
 
 const schema = z.object({
   authorName: z.string(),
@@ -52,9 +53,10 @@ export const actions = {
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         form.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        form.message = t.get(`error.${error.code}`);
         form.errors = {};
         error.errors.forEach(({ field, errors }) => {
-          form.errors[field as keyof Schema] = errors.map((value) => {
+          form.errors[toCamel(field) as keyof Schema] = errors.map((value) => {
             return t.get(`error.${value}`);
           });
         });

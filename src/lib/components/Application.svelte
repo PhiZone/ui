@@ -6,7 +6,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import Like from './Like.svelte';
 
-  $: ({ api } = $page.data);
+  $: ({ api, preferredApplication } = $page.data);
 
   export let application: ApplicationDto;
   export let fixedHeight = true;
@@ -15,7 +15,7 @@
 </script>
 
 <div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a href={`/applications/${application.id}`}>
     <figure class="h-[167px] relative">
@@ -26,51 +26,61 @@
       />
       <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle"></div>
     </figure>
-    <div class="card-body {fixedHeight ? 'h-[255px]' : ''} py-6 gap-0.5">
-      <h2 class="title w-full mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
-        {application.name}
-      </h2>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-        <span class="badge mr-1">{$t('application.type')}</span>
-        {$t(`application.types.${application.type}`)}
-      </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis grow-0">
-        <span class="badge mr-1">{$t('application.illustrator')}</span>
-        {application.illustrator}
-      </p>
-      <div class="flex items-center grow-0">
-        <span class="badge mr-1">{$t('application.owner')}</span>
-        {#if $owner.isSuccess}
-          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-            {$owner.data.data.userName}
-          </p>
-        {:else}
-          <div class="skeleton w-2/3 h-6"></div>
+    <div class="card-body {fixedHeight ? 'h-[250px]' : ''} py-6 gap-0.5">
+      <div class="flex items-center gap-2 w-full mb-1">
+        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+          {application.name}
+        </h2>
+        {#if preferredApplication == application.id}
+          <div class="tooltip tooltip-right tooltip-primary" data-tip={$t('common.preferred')}>
+            <button class="btn btn-xs btn-circle btn-primary no-animation">
+              <i class="fa-solid fa-star"></i>
+            </button>
+          </div>
         {/if}
       </div>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+        <span class="badge">{$t('application.type')}</span>
+        <span>{$t(`application.types.${application.type}`)}</span>
+      </p>
+      <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+        <span class="badge">{$t('application.illustrator')}</span>
+        <span>{application.illustrator}</span>
+      </p>
+      <p class="flex items-center gap-1">
+        <span class="badge">{$t('application.owner')}</span>
+        {#if $owner.isSuccess}
+          <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+            {$owner.data.data.userName}
+          </span>
+        {:else}
+          <span class="skeleton w-2/3 h-6"></span>
+        {/if}
+      </p>
       {#if application.description}
-        <p class="content description grow-0">
-          <span class="badge mr-1">{$t('common.description')}</span>
-          {application.description}
+        <p class="flex items-center">
+          <span class="content description">
+            <span class="inline-flex badge mr-1">{$t('common.description')}</span>
+            {application.description}
+          </span>
         </p>
       {/if}
       {#if fixedHeight}
-        <div class="absolute bottom-8 right-8">
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
-            <Like
-              id={application.id}
-              likes={application.likeCount}
-              type="applications"
-              liked={application.dateLiked != null}
-              class="btn-sm"
-            />
-          </div>
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          class="card-actions justify-end"
+          on:click={(e) => {
+            e.preventDefault();
+          }}
+          on:keyup
+        >
+          <Like
+            id={application.id}
+            likes={application.likeCount}
+            type="applications"
+            liked={application.dateLiked != null}
+            class="btn-sm"
+          />
         </div>
       {/if}
     </div>

@@ -1,0 +1,26 @@
+{
+  "play_configuration": "Play Configuration",
+  "judgment_windows": "Judgment Windows",
+  "perfect": "Perfect",
+  "good": "Good",
+  "bad": "Bad",
+  "miss_or_incoming": "Miss / Incoming",
+  "rks_factor": "RKS Factor",
+  "name": "Name",
+  "chart_mirroring": "Chart Mirroring",
+  "chart_mirroring_modes": {
+    "0": "Off",
+    "1": "Horizontal",
+    "2": "Vertical",
+    "3": "Horizontal and Vertical"
+  },
+  "aspect_ratio": "Aspect Ratio",
+  "note_size": "Note Size",
+  "background_luminance": "Background Luminance",
+  "background_blur": "Background Blur",
+  "simultaneous_note_hint": "Simultaneous Note Hint",
+  "fc_ap_indicator": "FC/AP Indicator",
+  "chart_offset": "Chart Offset",
+  "hit_sound_volume": "Hit Sound Volume",
+  "music_volume": "Music Volume"
+}

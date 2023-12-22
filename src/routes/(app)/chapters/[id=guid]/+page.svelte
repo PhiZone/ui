@@ -5,6 +5,7 @@
   import Like from '$lib/components/Like.svelte';
   import User from '$lib/components/User.svelte';
   import Comments from '$lib/components/Comments.svelte';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -18,14 +19,14 @@
   <title>{$t('chapter.chapter')} - {$chapter.data?.data?.title} | {$t('common.title')}</title>
 </svelte:head>
 
-{#if $chapter.isSuccess && $chapter.data.data}
+{#if $chapter.isSuccess}
   {@const chapter = $chapter.data.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
       <label
         for="illustration"
-        class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
+        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
       >
         ✕
       </label>
@@ -44,16 +45,16 @@
   </div>
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
-    <div class="hero-overlay bg-base-300 bg-opacity-50" />
+    <div class="hero-overlay bg-opacity-40" />
     <div class="pt-32 pb-24 w-full flex justify-center">
       <div class="w-full max-w-[1280px] mx-16">
-        <h1 class="text-7xl font-bold drop-shadow-xl">
+        <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
           {chapter.title}
         </h1>
-        <h2 class="text-4xl font-bold drop-shadow-lg mt-3 mb-6">
+        <h2 class="text-4xl font-bold drop-shadow-lg mt-3 mb-6 text-neutral-content">
           {chapter.subtitle}
         </h2>
-        <p class="text-xl mb-6 content">
+        <p class="text-xl mb-6 content text-neutral-content">
           {chapter.description}
         </p>
         <div class="flex justify-between items-center flex-wrap">
@@ -63,11 +64,11 @@
               likes={chapter.likeCount}
               type="chapters"
               liked={chapter.dateLiked != null}
-              class="btn-md w-36 text-lg btn-outline backdrop-blur"
+              class="btn-md w-36 text-lg border-neutral-content text-neutral-content btn-outline backdrop-blur"
             />
             <label
               for="illustration"
-              class="btn border-2 btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
+              class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
             >
               {$t('chapter.view_illustration')}
             </label>
@@ -91,7 +92,7 @@
           >
             {$t('chapter.songs')}
           </span>
-          <div class="card w-full bg-base-100 transition border-2 border-gray-700 hover:shadow-lg">
+          <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
             <div class="card-body">
               {#if $songs.isLoading}
                 <ul class="menu bg-base-100 w-full">
@@ -128,6 +129,10 @@
       </div>
     </div>
   </div>
+{:else if $chapter.isError}
+  <Error error={$chapter.error} back="/chapters" />
+{:else}
+  <div class="min-h-page skeleton" />
 {/if}
 
 <style>

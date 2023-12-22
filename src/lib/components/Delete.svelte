@@ -1,29 +1,29 @@
 <script lang="ts">
-  import type { CommentDto, ReplyDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
-  import type { CollaborationDto } from '$lib/api/collaboration';
 
   const { api } = $page.data;
 
   interface $$Props {
-    target: CommentDto | ReplyDto | CollaborationDto;
+    id: string;
+    path: string;
+    name: string;
     class: string;
+    hasText?: boolean;
   }
 
-  export let target: CommentDto | ReplyDto | CollaborationDto;
-  let typePlural: 'comments' | 'replies' | 'collaborations' =
-    'replyCount' in target ? 'comments' : 'commentId' in target ? 'replies' : 'collaborations';
-  let type: 'comment' | 'reply' | 'collaboration' =
-    'replyCount' in target ? 'comment' : 'commentId' in target ? 'reply' : 'collaboration';
+  export let id: string;
+  export let path: string;
+  export let name: string;
+  export let hasText = false;
   let deleted = false;
 </script>
 
-<input type="checkbox" id="delete-{target.id}" class="modal-toggle" />
+<input type="checkbox" id="delete-{id}" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box text-left">
     <label
-      for="delete-{target.id}"
+      for="delete-{id}"
       class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
     >
       ✕
@@ -33,21 +33,21 @@
       {$t('common.delete_confirmation', {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        resource: $t(`${type == 'collaboration' ? 'studio' : 'common'}.${type}`),
+        resource: $t(name),
       })}
     </p>
     <div class="modal-action">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <label
-        for="delete-{target.id}"
-        class="btn btn-outline"
+        for="delete-{id}"
+        class="btn border-2 normal-border btn-outline"
         on:click={async () => {
-          const resp = await api.DELETE(`/${typePlural}/${target.id}`);
-          if (resp.ok || resp.status == 404) {
+          const resp = await api.DELETE(`/${path}/${id}`);
+          if (resp.ok || resp.status === 404) {
             deleted = true;
           } else {
-            console.error(await resp.json());
+            console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
           }
         }}
       >
@@ -58,10 +58,11 @@
 </div>
 
 <label
-  for="delete-{target.id}"
-  class="btn {deleted
-    ? 'btn-ghost btn-disabled'
-    : 'btn-ghost'} flex gap-1 items-center {$$restProps.class}"
+  for="delete-{id}"
+  class="btn {deleted ? 'btn-ghost btn-disabled' : 'border-2 btn-ghost'} {$$restProps.class}"
 >
   <i class="fa-regular fa-trash-can fa-lg"></i>
+  {#if hasText}
+    {$t('common.delete')}
+  {/if}
 </label>

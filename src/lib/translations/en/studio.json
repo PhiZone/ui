@@ -87,6 +87,7 @@
     "min_bpm": "Minimum BPM",
     "main_bpm": "Main BPM",
     "max_bpm": "Maximum BPM",
+    "song_duplications": "Song Duplications",
     "duplicate_song": "Duplicate Song",
     "duplicate_song_description": "Someone else has already submitted the same version of the song. If you think your submission is better, please contact the resource owner or the staff.",
     "copyright_alert": "Copyright Alert",

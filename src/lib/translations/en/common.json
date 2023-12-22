@@ -53,6 +53,7 @@
   "select_file": "Select a file",
   "likes": "Likes",
   "colon": ": ",
+  "semicolon": "; ",
   "description": "Description",
   "comments": "Comments",
   "comment": "Comment",
@@ -79,7 +80,7 @@
     "ja": "Japanese"
   },
   "source": "Source",
-  "all": "View all »",
+  "all": "View all",
   "anonymous": "[ ANONYMOUS ]",
   "records": "Records",
   "form": {
@@ -134,7 +135,8 @@
     "401": "Please login / register an account first",
     "403": "You're not permitted to access this feature",
     "404": "The resource you requested does not exist",
-    "500": "An error has occurred whilst handling your request"
+    "500": "An error has occurred whilst handling your request",
+    "502": "We couldn't connect to the server at the moment"
   },
   "list_options": "List Options",
   "filter": "Filter",
@@ -165,5 +167,15 @@
   "image_cropper": "Image Cropper",
   "created_at": "Created At",
   "updated_at": "Updated At",
-  "back_to_homepage": "Back to Homepage"
+  "back_to_homepage": "Back to Homepage",
+  "on": "On",
+  "off": "Off",
+  "auto": "Auto",
+  "set_as_preferred": "Set as Preferred",
+  "unset_as_preferred": "Unset as Preferred",
+  "preferred": "Preferred",
+  "unnamed": "Unnamed",
+  "add": "Add",
+  "add_in_bulk": "Add in bulk",
+  "more": "More"
 }

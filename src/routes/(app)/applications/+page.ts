@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-export const load = async ({ url, parent }) => {
+export const load = async ({ data, url, parent }) => {
   const { api, queryClient } = await parent();
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   const page = typeof searchParams.page === 'number' ? searchParams.page : 1;
@@ -9,5 +9,6 @@ export const load = async ({ url, parent }) => {
   return {
     searchParams,
     page,
+    preferredApplication: data.preferredApplication,
   };
 };

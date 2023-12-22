@@ -53,6 +53,7 @@
   "select_file": "選擇文件",
   "likes": "讚",
   "colon": "：",
+  "semicolon": "；",
   "description": "簡介",
   "comments": "留言",
   "comment": "留言",
@@ -79,7 +80,7 @@
     "ja": "日文"
   },
   "source": "来源",
-  "all": "查看全部 »",
+  "all": "查看全部",
   "anonymous": "[ 匿名 ]",
   "records": "游玩紀錄",
   "form": {
@@ -134,7 +135,8 @@
     "401": "請先註冊 / 登入",
     "403": "您無權訪問該頁面",
     "404": "您要造訪的頁面不存在",
-    "500": "伺服器在處理您的請求時發生錯誤"
+    "500": "伺服器在處理您的請求時發生錯誤",
+    "502": "無法連接至伺服器"
   },
   "list_options": "列表選項",
   "filter": "篩選",
@@ -165,5 +167,15 @@
   "image_cropper": "图片裁剪",
   "created_at": "創建於",
   "updated_at": "更新於",
-  "back_to_homepage": "返回首頁"
+  "back_to_homepage": "返回首頁",
+  "on": "開",
+  "off": "關",
+  "auto": "自動",
+  "set_as_preferred": "設為首選",
+  "unset_as_preferred": "取消首選",
+  "preferred": "首選",
+  "unnamed": "未命名",
+  "add": "添加",
+  "add_in_bulk": "批量添加",
+  "more": "更多"
 }

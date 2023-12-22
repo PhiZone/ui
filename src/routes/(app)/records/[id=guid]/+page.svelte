@@ -6,6 +6,8 @@
   import Chart from '$lib/components/Chart.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import Like from '$lib/components/Like.svelte';
+  import Application from '$lib/components/Application.svelte';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
   $: ({ searchParams, id, api } = data);
@@ -13,6 +15,12 @@
   $: record = createQuery(api.record.info({ id }));
   $: chart = createQuery(
     api.chart.info({ id: $record.data?.data.chartId ?? '' }, { enabled: $record.isSuccess }),
+  );
+  $: application = createQuery(
+    api.application.info(
+      { id: $record.data?.data.applicationId ?? '' },
+      { enabled: $record.isSuccess },
+    ),
   );
 </script>
 
@@ -33,62 +41,67 @@
           {$t('record.record')}
         </span>
         <div
-          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="text-5xl py-1 flex gap-5 items-center font-bold">
-              {record.score}
-              <div
+            <h1 class="py-1 flex gap-5 items-center">
+              <span class="text-5xl font-bold">{record.score}</span>
+              <span
                 class={`text-8xl font-normal grade ${
                   grade == 'P'
-                    ? 'top-11 text-yellow-400'
+                    ? 'top-11 text-warning'
                     : record.isFullCombo
-                      ? 'top-11 text-blue-400'
+                      ? 'top-11 text-info'
                       : 'top-11'
                 }`}
               >
                 {grade}
-              </div>
-            </div>
-            <p>
-              <span class="badge mr-1">{$t('record.acc')}</span>
-              {(record.accuracy * 100).toFixed(2)}%
+              </span>
+            </h1>
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.acc')}</span>
+              <span>{(record.accuracy * 100).toFixed(2)}%</span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.perfect')}</span>
-              {record.perfect}
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.perfect')}</span>
+              <span>{record.perfect}</span>
               <span class="opacity-70">
                 (± {record.perfectJudgment} ms)
               </span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.good')}</span>
-              {record.goodEarly + record.goodLate} [E{record.goodEarly} · L{record.goodLate}]
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.good')}</span>
+              <span>
+                {record.goodEarly + record.goodLate} [E{record.goodEarly} · L{record.goodLate}]
+              </span>
               <span class="opacity-70">
                 (± {record.goodJudgment} ms)
               </span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.bad')}</span>
-              {record.bad}
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.bad')}</span>
+              <span>{record.bad}</span>
+              <span class="opacity-70">
+                (± {record.goodJudgment * 1.125} ms)
+              </span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.miss')}</span>
-              {record.miss}
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.miss')}</span>
+              <span>{record.miss}</span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.rks')}</span>
-              {record.rks.toFixed(3)}
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.rks')}</span>
+              <span>{record.rks.toFixed(3)}</span>
             </p>
-            <p>
-              <span class="badge mr-1">
+            <p class="flex gap-1 items-center">
+              <span class="badge">
                 {$t('record.std_deviation')}
               </span>
-              {record.stdDeviation.toFixed(3)} ms
+              <span>{record.stdDeviation.toFixed(3)} ms</span>
             </p>
-            <p>
-              <span class="badge mr-1">{$t('record.time')}</span>
-              {parseDateTime(record.dateCreated)}
+            <p class="flex gap-1 items-center">
+              <span class="badge">{$t('record.time')}</span>
+              <span>{parseDateTime(record.dateCreated)}</span>
             </p>
             <div class="card-actions justify-end">
               <Like
@@ -105,7 +118,7 @@
       <Comments type="records" id={record.id} {searchParams} />
     </div>
     <div class="w-80 form-control mx-auto lg:mx-4">
-      <div class="indicator my-4 w-full">
+      <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
@@ -115,7 +128,7 @@
         <User id={record.ownerId} />
       </div>
       {#if $chart.isSuccess}
-        <div class="indicator my-4 w-full">
+        <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
@@ -125,8 +138,23 @@
           <Chart chart={$chart.data.data} />
         </div>
       {/if}
+      {#if $application.isSuccess}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('application.application')}
+          </span>
+          <Application application={$application.data.data} />
+        </div>
+      {/if}
     </div>
   </div>
+{:else if $record.isError}
+  <Error error={$record.error} back="/records" />
+{:else}
+  <div class="min-h-page skeleton" />
 {/if}
 
 <style>

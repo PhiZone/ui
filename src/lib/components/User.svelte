@@ -62,7 +62,7 @@
   <a
     href={initUser || $query.isSuccess ? `/users/${initUser?.id ?? $query.data?.data.id}` : '#'}
     {target}
-    class="card bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+    class="card bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
     class:w-80={kind === 'full'}
     class:h-60={fixedHeight}
   >

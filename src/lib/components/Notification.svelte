@@ -23,12 +23,12 @@
   </span>
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 transition hover:shadow-lg overflow-hidden border-2 ${
-      notification.dateRead ? 'border-gray-700' : 'border-secondary'
+      notification.dateRead ? 'normal-border' : 'border-secondary'
     }`}
   >
     <figure class="w-1/4 xs:w-1/6">
       <div
-        class="relative inline-flex flex-col items-center justify-center border-r border-gray-700 px-3 py-3 mx-auto my-auto w-full"
+        class="relative inline-flex flex-col items-center justify-center border-r normal-border px-3 py-3 mx-auto my-auto w-full"
       >
         <User
           id={notification.operator?.id ?? 1}
@@ -68,11 +68,11 @@
             if (resp.ok) {
               invalidateAll();
             } else {
-              console.error(await resp.json());
+              console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
             }
           }}
         >
-          {$t('notification.read_v')}
+          {$t('notification.mark_as_read')}
         </button>
       </div>
     </div>

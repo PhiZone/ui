@@ -12,10 +12,14 @@
   import Song from '$lib/components/Song.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import ChartAssetSubmission from '$lib/components/ChartAsset.svelte';
   import CollectionAdmission from '$lib/components/CollectionAdmission.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import ChartReviewWizard from '$lib/components/ChartReviewWizard.svelte';
+  import VoteScore from '$lib/components/VoteScore.svelte';
 
   export let data;
-  $: ({ id, user, api } = data);
+  $: ({ id, user, api, searchParams } = data);
 
   const {
     enhance: voteEnhance,
@@ -25,17 +29,45 @@
     allErrors: voteAllErrors,
   } = superForm(data.voteForm, {
     id: 'chart-vote',
+    onResult({ result }) {
+      if (result.type == 'success') {
+        voteOpen = false;
+      }
+    },
   });
 
-  const { enhance: collabEnhance } = superForm(data.collabForm, {
+  const {
+    enhance: collabEnhance,
+    errors: collabErrors,
+    message: collabMessage,
+    submitting: collabSubmitting,
+    allErrors: collabAllErrors,
+  } = superForm(data.collabForm, {
     id: 'chart-collab',
+    onResult({ result }) {
+      if (result.type == 'success') {
+        collabOpen = false;
+      }
+    },
   });
 
-  const { enhance: collectionEnhance } = superForm(data.collabForm, {
+  const {
+    enhance: collectionEnhance,
+    errors: collectionErrors,
+    message: collectionMessage,
+    submitting: collectionSubmitting,
+    allErrors: collectionAllErrors,
+  } = superForm(data.collectionForm, {
     id: 'chart-collection',
+    onResult({ result }) {
+      if (result.type == 'success') {
+        collectionOpen = false;
+      }
+    },
   });
 
   let score = 0;
+  let message = '';
   let queryCollaborator = false;
   let newCollaboratorId: number | null = null;
   let queryCollection = true;
@@ -87,17 +119,19 @@
       { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
     ),
   );
+  $: assets = createQuery(api.chart.submission.asset.list({ ...searchParams, chartId: id }));
 
   $: charter = richtext($submission.data?.data.authorName ?? '');
 </script>
 
 <svelte:head>
   <title>
-    {$t('studio.chart_submission')} - {$song.isSuccess
-      ? $song.data.data.title
-      : $songSubmission.isSuccess
-        ? $songSubmission.data.data.title
-        : ''}
+    {$t('studio.chart_submission')} - {$submission.data?.data.title ??
+      ($song.isSuccess
+        ? $song.data.data.title
+        : $songSubmission.isSuccess
+          ? $songSubmission.data.data.title
+          : '')}
     {$submission.isSuccess
       ? `[${$submission.data.data.level} ${
           $submission.data.data.difficulty != 0 ? Math.floor($submission.data.data.difficulty) : '?'
@@ -108,6 +142,13 @@
 
 {#if $submission.isSuccess}
   {@const submission = $submission.data.data}
+  <ChartReviewWizard
+    bind:score
+    bind:message
+    onConfirm={() => {
+      voteOpen = true;
+    }}
+  />
   <input
     type="checkbox"
     id="studio-chart-submission"
@@ -115,26 +156,17 @@
     bind:checked={voteOpen}
   />
   <div class="modal">
-    <div class="modal-box bg-base-100">
+    <div class="modal-box max-w-2xl bg-base-100">
       <label
         for="studio-chart-submission"
-        class="btn btn-sm btn-primary btn-outline btn-circle absolute right-2 top-2"
+        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
       >
         ✕
       </label>
       <h2 class="font-bold text-xl mb-4">{$t('common.vote_v')}</h2>
-      <form
-        id="vote"
-        method="POST"
-        class="form-control"
-        action="?/vote"
-        use:voteEnhance
-        on:submit={() => {
-          voteOpen = false;
-        }}
-      >
+      <form id="vote" method="POST" class="form-control" action="?/vote" use:voteEnhance>
         <input type="hidden" id="chart_id" name="chartId" value={id} />
-        <div class="flex min-w-full items-center">
+        <div class="flex items-center gap-2">
           <input
             id="score"
             name="score"
@@ -142,10 +174,10 @@
             min="-3"
             max="3"
             bind:value={score}
-            class="range min-w-auto"
-            step="1"
+            class="range"
+            step="0.05"
           />
-          <p class="w-8 text-right text-xl font-bold">{score}</p>
+          <VoteScore {score} size={16} centered={false} />
         </div>
         <div
           class="tooltip tooltip-bottom tooltip-error"
@@ -159,8 +191,9 @@
           <textarea
             id="message"
             name="message"
-            class="textarea textarea-secondary join-item w-full h-48"
+            class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-full h-48"
             placeholder={$t('studio.submission.write_message')}
+            bind:value={message}
           />
         </label>
         <div
@@ -180,7 +213,7 @@
                 ? 'btn-error'
                 : $voteSubmitting
                   ? 'btn-ghost'
-                  : 'btn-outline border-2 border-gray-700'} w-full"
+                  : 'btn-outline border-2 normal-border'} w-full"
               disabled={$voteSubmitting}
             >
               {$voteAllErrors.length > 0
@@ -200,7 +233,7 @@
       <h3 class="font-bold text-lg">{$t('studio.submission.add_collaborator')}</h3>
       <label
         for="new-collaborator"
-        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+        class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
       >
         ✕
       </label>
@@ -210,9 +243,6 @@
         class="w-full form-control gap-4"
         action="?/collab"
         use:collabEnhance
-        on:submit={() => {
-          collabOpen = false;
-        }}
       >
         <input type="hidden" id="type" name="type" value="charts" />
         <input type="hidden" id="id" name="id" value={id} />
@@ -229,7 +259,7 @@
               id="invitee_id"
               name="inviteeId"
               placeholder={$t('studio.submission.author_placeholder')}
-              class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+              class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                 $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
@@ -239,7 +269,7 @@
             />
             <button
               type="button"
-              class={`btn border-2 border-gray-700 join-item ${
+              class={`btn border-2 normal-border join-item ${
                 newCollaboratorId || $collaborator.isLoading
                   ? $collaborator.isError
                     ? 'btn-error'
@@ -261,22 +291,47 @@
             kind="mini"
             target="_blank"
           />
-          <label class="join w-full">
-            <span class="btn no-animation join-item w-1/4 min-w-fit">
-              {$t('common.position')}
-            </span>
-            <input
-              type="text"
-              id="position"
-              name="position"
-              placeholder={$t('common.position')}
-              class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
-            />
-          </label>
+          <div
+            class={$collabErrors.position
+              ? 'tooltip tooltip-open tooltip-bottom tooltip-error'
+              : ''}
+            data-tip={$collabErrors.position}
+          >
+            <label class="join w-full">
+              <span class="btn no-animation join-item w-1/4 min-w-fit">
+                {$t('common.position')}
+              </span>
+              <input
+                type="text"
+                id="position"
+                name="position"
+                placeholder={$t('common.position')}
+                class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
+              />
+            </label>
+          </div>
           <div class="modal-action mt-3">
-            <button type="submit" class="btn border-2 border-gray-700 btn-outline">
-              {$t('common.submit')}
-            </button>
+            <div
+              class="tooltip tooltip-bottom tooltip-error w-full"
+              class:tooltip-open={!!$collabMessage}
+              data-tip={$collabMessage}
+            >
+              <button
+                type="submit"
+                class="btn {$collabAllErrors.length > 0
+                  ? 'btn-error'
+                  : $collabSubmitting
+                    ? 'btn-ghost'
+                    : 'btn-outline border-2 normal-border'} w-full"
+                disabled={$collabSubmitting}
+              >
+                {$collabAllErrors.length > 0
+                  ? $t('common.error')
+                  : $collabSubmitting
+                    ? $t('common.waiting')
+                    : $t('common.submit')}
+              </button>
+            </div>
           </div>
         {/if}
       </form>
@@ -288,7 +343,7 @@
       <h3 class="font-bold text-lg">{$t('studio.submission.add_collection')}</h3>
       <label
         for="new-collection"
-        class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+        class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
       >
         ✕
       </label>
@@ -298,9 +353,6 @@
         class="w-full form-control gap-4"
         action="?/collection"
         use:collectionEnhance
-        on:submit={() => {
-          collectionOpen = false;
-        }}
       >
         <input type="hidden" id="id" name="id" value={submission.representationId} />
         <div
@@ -313,7 +365,7 @@
             <input
               type="text"
               placeholder={$t('collection.search')}
-              class={`input transition border-2 border-gray-700 w-5/6 join-item min-w-[180px] ${
+              class={`input transition border-2 normal-border w-5/6 join-item min-w-[180px] ${
                 $collectionSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollectionSearch}
@@ -323,7 +375,7 @@
             />
             <button
               type="button"
-              class={`btn border-2 border-gray-700 w-1/6 join-item ${
+              class={`btn border-2 normal-border w-1/6 join-item ${
                 $collectionSearch.isLoading
                   ? $collectionSearch.isError
                     ? 'btn-error'
@@ -345,12 +397,12 @@
           <select
             id="admitter_id"
             name="admitterId"
-            class="select transition border-2 border-gray-700 hover:select-secondary w-3/4 join-item"
+            class="select transition border-2 normal-border hover:select-secondary w-3/4 join-item"
             bind:value={newCollectionId}
           >
             {#if $collectionSearch.isSuccess}
               {#each $collectionSearch.data.data as collection}
-                {#if collection.accessibility in [0, 1] || (user && collection.ownerId === user.id)}
+                {#if [0, 1].includes(collection.accessibility) || (user && collection.ownerId === user.id)}
                   <option value={collection.id}>
                     {collection.title} - {collection.subtitle}
                   </option>
@@ -359,25 +411,45 @@
             {/if}
           </select>
         </label>
-        <label class="join w-full">
-          <span class="btn no-animation join-item w-1/4 min-w-fit">
-            {$t('collection.label')}
-          </span>
-          <input
-            type="text"
-            id="label"
-            name="label"
-            placeholder={$t('collection.label')}
-            class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
-          />
-        </label>
+        <div
+          class={$collectionErrors.label ? 'tooltip tooltip-open tooltip-bottom tooltip-error' : ''}
+          data-tip={$collectionErrors.label}
+        >
+          <label class="join w-full">
+            <span class="btn no-animation join-item w-1/4 min-w-fit">
+              {$t('collection.label')}
+            </span>
+            <input
+              type="text"
+              id="label"
+              name="label"
+              placeholder={$t('collection.label')}
+              class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
+            />
+          </label>
+        </div>
         <div class="modal-action mt-3">
-          <button
-            type="submit"
-            class="btn border-2 border-gray-700 hover:btn-secondary btn-outline"
+          <div
+            class="tooltip tooltip-bottom tooltip-error w-full"
+            class:tooltip-open={!!$collectionMessage}
+            data-tip={$collectionMessage}
           >
-            {$t('common.submit')}
-          </button>
+            <button
+              type="submit"
+              class="btn {$collectionAllErrors.length > 0
+                ? 'btn-error'
+                : $collectionSubmitting
+                  ? 'btn-ghost'
+                  : 'btn-outline border-2 normal-border'} w-full"
+              disabled={$collectionSubmitting}
+            >
+              {$collectionAllErrors.length > 0
+                ? $t('common.error')
+                : $collectionSubmitting
+                  ? $t('common.waiting')
+                  : $t('common.submit')}
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -392,7 +464,7 @@
           {$t('studio.chart_submission')}
         </span>
         <div
-          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
             <div class="text-5xl py-3 font-bold gap-4 items-center content flex">
@@ -418,7 +490,9 @@
                   {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
                 </button>
                 {#if submission.isRanked}
-                  <button class="btn btn-success join-item text-3xl no-animation">
+                  <button
+                    class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item text-3xl no-animation"
+                  >
                     {$t('chart.ranked')}
                   </button>
                 {/if}
@@ -509,15 +583,15 @@
               {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 4)}
                 <a
                   href="/studio/chart-submissions/{submission.id}/edit"
-                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
+                  class="btn border-2 normal-border btn-outline text-lg w-32"
                 >
                   {$t('common.edit')}
                 </a>
               {/if}
-              {#if user && getUserPrivilege(user.role) >= 4}
+              {#if getUserPrivilege(user?.role) >= 4}
                 <label
-                  for="studio-chart-submission"
-                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
+                  for="chart-review-wizard"
+                  class="btn border-2 normal-border btn-outline text-lg w-32"
                 >
                   {$t('common.vote_v')}
                 </label>
@@ -533,7 +607,7 @@
                     song?.title}&level={submission.level}&difficulty={submission.difficulty != 0
                     ? Math.floor(submission.difficulty)
                     : '?'}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}"
-                  class="btn border-2 border-gray-700 btn-outline text-lg w-32"
+                  class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >
                   {$t('common.preview')}
@@ -548,16 +622,50 @@
           class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
+          {$t('chart.assets')}
+        </span>
+        <div
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+        >
+          <div class="card-body pt-14 pb-10">
+            <a
+              class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+              href="/studio/chart-submissions/{id}/assets"
+            >
+              {$t('common.more')}
+              <i class="fa-solid fa-angles-right"></i>
+            </a>
+            {#if $assets.isLoading}
+              <div />
+            {:else if $assets.isSuccess}
+              {#if $assets.data.data.length > 0}
+                <div class="result">
+                  {#each $assets.data.data as chartAsset}
+                    <ChartAssetSubmission {chartAsset} />
+                  {/each}
+                </div>
+              {:else}
+                <p class="py-3 text-center">{$t('common.empty')}</p>
+              {/if}
+            {/if}
+          </div>
+        </div>
+      </div>
+      <div class="indicator w-full my-4">
+        <span
+          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          style:--tw-translate-x="0"
+        >
           {$t('common.collaborators')}
         </span>
         <div
-          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
             {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
               <label
                 for="new-collaborator"
-                class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
+                class="btn border-2 normal-border btn-outline btn-sm btn-circle absolute right-2 top-2"
               >
                 <i class="fa-solid fa-plus fa-lg"></i>
               </label>
@@ -596,13 +704,13 @@
             {$t('studio.submission.collections')}
           </span>
           <div
-            class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
           >
             <div class="card-body py-10">
               {#if user && (user.id === submission.ownerId || getUserPrivilege(user.role) === 6)}
                 <label
                   for="new-collection"
-                  class="btn border-2 btn-primary btn-outline btn-sm btn-circle absolute right-2 top-2"
+                  class="btn border-2 normal-border btn-outline btn-sm btn-circle absolute right-2 top-2"
                 >
                   <i class="fa-solid fa-plus fa-lg"></i>
                 </label>
@@ -637,9 +745,9 @@
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
       {#if $uploader.isSuccess}
-        <div class="indicator my-4 w-full">
+        <div class="indicator w-full my-4">
           <span
-            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.uploader')}
@@ -649,9 +757,9 @@
       {/if}
       {#if $song.isSuccess}
         {@const song = $song.data.data}
-        <div class="indicator my-4 w-full">
+        <div class="indicator w-full my-4">
           <span
-            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}
@@ -661,9 +769,9 @@
       {/if}
       {#if $songSubmission.isSuccess}
         {@const song = $songSubmission.data.data}
-        <div class="indicator my-4 w-full">
+        <div class="indicator w-full my-4">
           <span
-            class="indicator-item badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.song_submission')}
@@ -672,8 +780,21 @@
         </div>
       {/if}
       {#if $representation.isSuccess}
-        <Chart chart={$representation.data.data} />
+        {@const chart = $representation.data.data}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('chart.chart')}
+          </span>
+          <Chart {chart} />
+        </div>
       {/if}
     </div>
   </div>
+{:else if $submission.isError}
+  <Error error={$submission.error} back="/studio/chart-submissions" />
+{:else}
+  <div class="min-h-screen skeleton" />
 {/if}

@@ -9,7 +9,7 @@ export interface VoteDto {
   concord: number;
   creativity: number;
   dateCreated: Date;
-  feel: number;
+  gameplay: number;
   id: string;
   impression: number;
   multiplier: number;
@@ -29,7 +29,7 @@ export interface Filter extends FilterBase {
 export interface CreateOpts {
   chartId: string;
   arrangement: number;
-  feel: number;
+  gameplay: number;
   visualEffects: number;
   creativity: number;
   concord: number;
