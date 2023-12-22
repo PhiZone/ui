@@ -1,0 +1,36 @@
+{
+    "title": "Chart Review Wizard",
+    "question": "Which of the following do you think best describes {{aspect}}?",
+    "aspects": [
+        "the sound pickings in this chart",
+        "the arrangement of notes in this chart",
+        "the concord between this chart and the music",
+        "the gameplay experience of this chart",
+        "the visual effects of this chart"
+    ],
+    "aspect_names": [
+        "Sound Picking",
+        "Note Arrangement",
+        "Concord",
+        "Gameplay",
+        "Visual Effects"
+    ],
+    "answers": [
+        "Highly compliant",
+        "Up to standard",
+        "Marginally compliant",
+        "Unsatisfactory"
+    ],
+    "innovation_question": "Do you recognize the innovation in this aspect?",
+    "innovation_answers": [
+        "Yes",
+        "No / No innovation in this aspect"
+    ],
+    "structure_question": "Which of the following do you think best describes the structural design in this aspect?",
+    "structure_answers": [
+        "Clear and reasonable",
+        "Partially illogical",
+        "Almost structureless"
+    ],
+    "current_score": "Current Score"
+}

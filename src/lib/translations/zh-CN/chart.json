@@ -24,13 +24,13 @@
   "equivalent_vote_count": "等效票数",
   "real_vote_count": "实际票数",
   "arrangement": "配置",
-  "feel": "手感",
+  "gameplay": "游玩体验",
   "vfx": "视觉效果",
   "creativity": "创新度",
   "concord": "契合度",
   "impression": "印象",
   "r_arrangement": "配置评分",
-  "r_feel": "手感评分",
+  "r_gameplay": "游玩体验评分",
   "r_vfx": "视觉效果评分",
   "r_creativity": "创新度评分",
   "r_concord": "契合度评分",
@@ -48,5 +48,21 @@
   "lowest_difficulty": "最低定数",
   "highest_difficulty": "最高定数",
   "lowest_note_count": "最低物量",
-  "highest_note_count": "最高物量"
+  "highest_note_count": "最高物量",
+  "play": "游玩",
+  "assets": "外置资源",
+  "asset": {
+    "asset": "外置资源",
+    "type": "资源类型",
+    "types": {
+      "0": "图片",
+      "1": "音频",
+      "2": "视频",
+      "3": "配置",
+      "4": "着色器",
+      "5": "其他"
+    },
+    "name": "资源名称",
+    "file": "资源文件"
+  }
 }

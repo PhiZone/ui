@@ -66,8 +66,8 @@
       min = 4;
       sec = 59;
       emailConfirmationTimer = setInterval(() => {
-        if (sec == 0) {
-          if (min == 0) {
+        if (sec === 0) {
+          if (min === 0) {
             clearInterval(emailConfirmationTimer);
             emailConfirmationAvailable = true;
           } else {
@@ -93,6 +93,7 @@
       } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
         emailConfirmationResult.message = error.message;
       } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+        emailConfirmationResult.message = $t(`error.${error.code}`);
         error.errors.forEach(({ field, errors }) => {
           emailConfirmationResult.errors[field] = errors.map((value) => {
             return $t(`error.${value}`);
@@ -120,7 +121,7 @@
     <h3 class="font-bold text-lg">{$t('session.email_confirmation.email_confirmation')}</h3>
     <p class="py-4">{$t('session.email_confirmation.email_confirmation_text')}</p>
     <div class="modal-action">
-      <label for="email-confirmation" class="btn btn-success btn-outline">
+      <label for="email-confirmation" class="btn btn-success border-2 btn-outline">
         {$t('common.confirm')}
       </label>
     </div>
@@ -138,7 +139,7 @@
       </p>
     </div>
     <div
-      class="card flex-shrink-0 max-w-[80vw] w-96 border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+      class="card flex-shrink-0 max-w-[80vw] w-96 border-2 normal-border transition hover:shadow-lg bg-base-100"
     >
       <div class="card-body">
         <form method="POST" class="w-full form-control" use:enhance>
@@ -152,7 +153,7 @@
               name="UserName"
               placeholder={$t('session.username')}
               bind:value={$form.UserName}
-              class="input input-bordered w-full max-w-xs"
+              class="input transition border-2 normal-border hover:input-secondary w-full max-w-xs"
             />
             <div
               class="tooltip tooltip-right tooltip-error"
@@ -172,7 +173,7 @@
               bind:value={$form.Email}
               {...$constraints.Email}
               autocomplete="username"
-              class="input input-bordered w-full max-w-xs"
+              class="input transition border-2 normal-border hover:input-secondary w-full max-w-xs"
             />
             <div
               class="tooltip tooltip-right tooltip-error"
@@ -191,7 +192,7 @@
               placeholder={$t('session.password')}
               bind:value={$form.Password}
               autocomplete="new-password"
-              class="input input-bordered w-full max-w-xs"
+              class="input transition border-2 normal-border hover:input-secondary w-full max-w-xs"
             />
             <div
               class="tooltip tooltip-right tooltip-error"
@@ -211,7 +212,7 @@
               bind:value={$form.ConfirmPassword}
               {...$constraints.ConfirmPassword}
               autocomplete="new-password"
-              class="input input-bordered w-full max-w-xs"
+              class="input transition border-2 normal-border hover:input-secondary w-full max-w-xs"
             />
             <div
               class="tooltip tooltip-right tooltip-error"
@@ -275,7 +276,7 @@
                 name="EmailConfirmationCode"
                 placeholder={$t('session.registration.email_confirmation_code')}
                 bind:value={$form.EmailConfirmationCode}
-                class="input input-bordered join-item w-3/5"
+                class="input transition border-2 normal-border hover:input-secondary join-item w-3/5"
               />
               <div
                 class="tooltip tooltip-bottom tooltip-error w-2/5"
@@ -288,7 +289,7 @@
                     ? 'btn-error'
                     : emailConfirmationResult.status === Status.SENDING
                       ? !emailConfirmationAvailable
-                        ? 'btn-ghost font-mono'
+                        ? 'btn-ghost font-code'
                         : 'btn-ghost'
                       : 'hover:btn-secondary btn-outline'} join-item w-full"
                   disabled={emailConfirmationResult.status === Status.SENDING ||
@@ -339,7 +340,7 @@
                 ? 'btn-error'
                 : $submitting || emailConfirmationResult.status === Status.ERROR
                   ? 'btn-ghost'
-                  : 'btn-outline border-2 border-gray-700'} w-full"
+                  : 'btn-outline border-2 normal-border'} w-full"
               disabled={!legalAgreement ||
                 $submitting ||
                 emailConfirmationResult.status === Status.ERROR}

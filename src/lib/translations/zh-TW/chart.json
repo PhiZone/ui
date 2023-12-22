@@ -24,13 +24,13 @@
   "equivalent_vote_count": "等效票數",
   "real_vote_count": "實際票數",
   "arrangement": "配置",
-  "feel": "手感",
+  "gameplay": "游玩體驗",
   "vfx": "視覺效果",
   "creativity": "創新度",
   "concord": "契合度",
   "impression": "印象",
   "r_arrangement": "配置評分",
-  "r_feel": "手感評分",
+  "r_gameplay": "游玩體驗評分",
   "r_vfx": "視覺效果評分",
   "r_creativity": "創新度評分",
   "r_concord": "契合度評分",
@@ -48,5 +48,21 @@
   "lowest_difficulty": "最低定數",
   "highest_difficulty": "最高定數",
   "lowest_note_count": "最低物量",
-  "highest_note_count": "最高物量"
+  "highest_note_count": "最高物量",
+  "play": "游玩",
+  "assets": "Assets",
+  "asset": {
+    "asset": "Asset",
+    "type": "Type",
+    "types": {
+      "0": "Image",
+      "1": "Audio",
+      "2": "Video",
+      "3": "Config",
+      "4": "Shader",
+      "5": "Other"
+    },
+    "name": "Name",
+    "file": "File"
+  }
 }

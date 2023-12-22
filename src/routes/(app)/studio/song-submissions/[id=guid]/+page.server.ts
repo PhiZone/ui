@@ -1,6 +1,7 @@
 import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
+import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -60,9 +61,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           reviewForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          reviewForm.message = t.get(`error.${error.code}`);
           reviewForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            reviewForm.errors[field as keyof ReviewSchema] = errors.map((value) => {
+            reviewForm.errors[toCamel(field) as keyof ReviewSchema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });
@@ -96,9 +98,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           collabForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          collabForm.message = t.get(`error.${error.code}`);
           collabForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            collabForm.errors[field as keyof CollabSchema] = errors.map((value) => {
+            collabForm.errors[toCamel(field) as keyof CollabSchema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });
@@ -132,9 +135,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           chapterForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          chapterForm.message = t.get(`error.${error.code}`);
           chapterForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            chapterForm.errors[field as keyof ChapterSchema] = errors.map((value) => {
+            chapterForm.errors[toCamel(field) as keyof ChapterSchema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });

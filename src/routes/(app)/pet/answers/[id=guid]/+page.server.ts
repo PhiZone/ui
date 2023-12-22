@@ -1,6 +1,6 @@
 import API from '$lib/api';
 import type { PetQuestionDto } from '$lib/api/pet';
-import { t } from '$lib/translations/config';
+import { locale, t } from '$lib/translations/config';
 import { fail } from '@sveltejs/kit';
 import { compile } from 'mdsvex';
 import rehypeKatexSvelte from 'rehype-katex-svelte';
@@ -9,6 +9,7 @@ import type { Plugin } from 'unified';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { toCamel } from '$lib/utils.js';
 
 const schema = z.object({
   id: z.string(),
@@ -29,6 +30,13 @@ export const load = async ({ params, locals, fetch }) => {
   answer.question1.content = await compileQuestion(answer.question1);
   answer.question2.content = await compileQuestion(answer.question2);
   answer.question3.content = await compileQuestion(answer.question3);
+  answer.question4 = {
+    position: 19,
+    type: 2,
+    content: await compileQuestion(t.get('pet.chart_question')),
+    choices: null,
+    language: locale.get(),
+  };
   const form = await superValidate(schema);
   return {
     answer,
@@ -58,9 +66,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           form.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          form.message = t.get(`error.${error.code}`);
           form.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            form.errors[field as keyof Schema] = errors.map((value) => {
+            form.errors[toCamel(field) as keyof Schema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });
@@ -74,10 +83,10 @@ export const actions = {
   },
 };
 
-const compileQuestion = async (question: PetQuestionDto) => {
+const compileQuestion = async (question: PetQuestionDto | string) => {
   return (
     (
-      await compile(question.content ?? '', {
+      await compile(typeof question === 'object' ? question.content : question ?? '', {
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatexSvelte as Plugin],
       })

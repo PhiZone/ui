@@ -3,6 +3,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
 import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type { CollaborationDto } from './collaboration';
+import ChartAssetSubmissionAPI from './chart.submission.asset';
 
 export interface ChartSubmissionDto {
   accessibility: number;
@@ -69,7 +70,9 @@ export interface DeleteOpts {
 }
 
 export default class ChartSubmissionAPI {
-  constructor(private api: API) {}
+  constructor(private api: API) {
+    this.asset = new ChartAssetSubmissionAPI(api);
+  }
 
   list = createQueryCreator(
     'chart.submission.list',
@@ -109,4 +112,6 @@ export default class ChartSubmissionAPI {
   delete(opts: DeleteOpts): R {
     return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
+
+  asset;
 }

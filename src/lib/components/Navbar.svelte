@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] bg-base-100 bg-opacity-70 backdrop-blur-lg text-base shadow-lg"
+  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] bg-base-100 bg-opacity-70 backdrop-blur-lg text-base transition border-b-2 normal-border hover:shadow-lg"
 >
   <div class="navbar-start w-[160px] lg:w-1/2 z-20">
     <div class="dropdown">
@@ -58,7 +58,10 @@
       {$t('common.title')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
-      <label for="studio-sidebar" class="btn btn-primary btn-outline drawer-button mx-4 xl:hidden">
+      <label
+        for="studio-sidebar"
+        class="btn btn-sm border-2 btn-outline normal-border drawer-button mx-4 xl:hidden"
+      >
         {$t('studio.drawer')}
       </label>
     {/if}
@@ -91,9 +94,6 @@
       <!-- <li class="rounded-full">
 				<a href="/discussions">{$t("common.discussions")}</a>
 			</li> -->
-      <!-- <li>
-        <a href="/recorder">{$t('common.navbar.recorder')}</a>
-      </li> -->
       {#if !$page.url.pathname.startsWith('/session')}
         {@const { user } = $page.data}
         {#if user}

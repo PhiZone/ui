@@ -145,7 +145,7 @@ export const parseRelativeTime = (date: Date, locale = defaultLocale) => {
         localeMatcher: 'best fit',
         numeric: 'auto',
         style: 'long',
-      }).format(diffInSeconds > 0 ? count : -count, interval.label as Intl.RelativeTimeFormatUnit);
+      }).format(diffInSeconds > 0 ? 0 : -count, interval.label as Intl.RelativeTimeFormatUnit);
     }
   }
 
@@ -320,3 +320,6 @@ export const applyPatch = (
   }
   return patch;
 };
+
+export const toCamel = (inputString: string): string =>
+  inputString.length > 0 ? inputString[0].toLowerCase() + inputString.slice(1) : inputString;

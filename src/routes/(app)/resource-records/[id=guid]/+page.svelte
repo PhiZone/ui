@@ -2,6 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -59,7 +60,7 @@
           {$t('resource_record.resource_record')}
         </span>
         <div
-          class="card flex-shrink-0 w-full border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
             <h2 class="text-5xl py-1 flex gap-5 items-center font-bold">
@@ -82,7 +83,7 @@
                     </span>
                     <label
                       for="license-{resourceRecord.id}"
-                      class="btn btn-xs btn-neutral text-sm font-normal"
+                      class="btn btn-xs btn-shallow text-sm font-normal"
                     >
                       {$t(`resource_record.edition_types.${resourceRecord.editionType}`)}
                     </label>
@@ -153,6 +154,10 @@
       </div>
     </div>
   </div>
+{:else if $resourceRecord.isError}
+  <Error error={$resourceRecord.error} back="/resource-records" />
+{:else}
+  <div class="min-h-page skeleton" />
 {/if}
 
 <style>

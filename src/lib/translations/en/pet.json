@@ -1,11 +1,11 @@
 {
   "title": "Privilege Escalation Test",
-  "description": "In order to access all features that PhiZone provides, you must first take the Privilege Escalation Test. There are 15 objective questions and 3 subjective questions. For objective questions, there are multiple choice questions (No. 1 ~ 10, 2 pts each, 20 pts in total) and multiple response questions (No. 11 ~ 15, 4 pts each, 2 pts when partially correct, 20 pts in total). For subjective questions, No. 16 ~ 18, 10 pts each, 30 pts in total. Plus, you'll also need to provide us with a chart you've made so that we can truly assess your proficiency.",
+  "description": "In order to access all features that PhiZone provides, you must first take the Privilege Escalation Test. There are 15 objective questions and 3 subjective questions. For objective questions, there are multiple choice questions (No. 1 ~ 10, 2 pts each, 20 pts in total) and multiple response questions (No. 11 ~ 15, 4 pts each, 2 pts each when partially correct, 20 pts in total). For subjective questions, No. 16 ~ 18, 10 pts each, 30 pts in total. Plus, you'll also need to provide us with a chart you've independently made (No. 19, 30 pts) so that we can truly assess your proficiency.",
   "start": "Get Started",
   "already_passed": "You've already passed this test!",
   "objective": "Objective Questions",
   "subjective": "Subjective Questions",
-  "chart_question": "Please enter a valid link to an autoplay of your chart. You may explain in detail about some parts of the chart if necessary.",
+  "chart_question": "Please enter a valid link to an autoplay of your chart. You may explain in detail about some parts of the chart if necessary.\n\n(The chart must be of **Phigros fanmade** and made **independently by you**.)",
   "placeholder": "Answer here",
   "time_up": "Time is up! Please refresh the page to restart the test.",
   "view_history": "View History",

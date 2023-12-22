@@ -4,6 +4,7 @@
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
+  import VoteScore from './VoteScore.svelte';
 
   export let vote: VolunteerVoteDto;
 
@@ -19,17 +20,13 @@
   >
     {$t('studio.submission.volunteer_vote')}
   </span>
-  <div
-    class="card card-side w-full bg-base-100 border-2 border-gray-700 transition hover:shadow-lg"
-  >
+  <div class="card card-side w-full bg-base-100 border-2 normal-border transition hover:shadow-lg">
     <figure class="w-1/6 min-w-fit">
       <div
-        class="relative inline-flex items-center justify-center form-control border-r border-gray-700 px-3 py-3 mx-auto my-auto"
+        class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
       >
         <p class="opacity-80">{$t('studio.submission.score')}</p>
-        <p class="text-4xl font-extrabold">
-          {vote.score}
-        </p>
+        <VoteScore score={vote.score} />
       </div>
     </figure>
     <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">

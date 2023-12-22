@@ -6,6 +6,10 @@ export const load = async ({ params, url, parent, data }) => {
   const id = params.id;
   await queryClient.prefetchQuery(api.chart.submission.info({ id }));
   await queryClient.prefetchQuery(api.vote.volunteer.listAll({ chartId: id }));
+  await queryClient.prefetchQuery(api.chart.submission.listAllCollaborations({ id }));
+  await queryClient.prefetchQuery(
+    api.chart.submission.asset.list({ ...searchParams, chartId: id }),
+  );
   return {
     searchParams,
     id,

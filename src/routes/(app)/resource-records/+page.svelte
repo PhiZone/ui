@@ -7,12 +7,13 @@
   import { Status } from '$lib/constants';
   import type { CreateOpts } from '$lib/api/resourceRecord';
   import { getUserPrivilege } from '$lib/utils';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  $: ({ searchParams, page, api, user } = data);
+  $: ({ searchParams, page, user, api } = data);
 
   let type = 0;
   let editionType = 0;
@@ -31,52 +32,6 @@
   const parseNullable = (str: string): string | undefined => {
     return !str || str === 'null' ? undefined : str;
   };
-
-  // const convertCsvToJson = async (file: File): Promise<CreateOpts[]> => {
-  //   return new Promise<CreateOpts[]>((resolve, reject) => {
-  //     const results: CreateOpts[] = [];
-
-  //     const reader = new FileReader();
-  //     reader.onload = (event: ProgressEvent<FileReader>) => {
-  //       const csvData = event.target?.result as string;
-  //       const stream = new Readable({
-  //         read() {
-  //           this.push(csvData);
-  //           this.push(null);
-  //         },
-  //       });
-
-  //       stream
-  //         .pipe(csvParser())
-  //         .on('data', (data: { [key: string]: string }) => {
-  //           const parsedData: CreateOpts = {
-  //             title: data['0'],
-  //             type: parseInt(data['1'], 10),
-  //             editionType: parseInt(data['2'], 10),
-  //             edition: parseNullable(data['3']),
-  //             strategy: parseInt(data['4'], 10),
-  //             authorName: data['5'],
-  //             copyrightOwner: data['6'],
-  //             source: data['7'],
-  //             description: parseNullable(data['8']),
-  //           };
-  //           results.push(parsedData);
-  //         })
-  //         .on('end', () => {
-  //           resolve(results);
-  //         })
-  //         .on('error', (error: Error) => {
-  //           reject(error);
-  //         });
-  //     };
-
-  //     reader.onerror = (event: ProgressEvent<FileReader>) => {
-  //       reject(event.target?.error);
-  //     };
-
-  //     reader.readAsText(file);
-  //   });
-  // };
 
   const parseCsvLine = (line: string): string[] => {
     const fields = [];
@@ -187,7 +142,7 @@
     >
       ✕
     </label>
-    <h3 class="font-bold text-lg mb-2">{$t('resource_record.add')}</h3>
+    <h3 class="font-bold text-lg mb-2">{$t('common.add')}</h3>
     <form method="POST" class="w-full form-control" use:enhance>
       <div
         class={$errors.title ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2' : 'my-2'}
@@ -207,7 +162,7 @@
             id="title"
             name="title"
             placeholder={$t('resource_record.title')}
-            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
               $errors.title ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
@@ -224,7 +179,7 @@
           <select
             id="type"
             name="type"
-            class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+            class={`select transition border-2 normal-border join-item w-3/4 ${
               $errors.type ? 'hover:select-error' : 'hover:select-secondary'
             }`}
             bind:value={type}
@@ -248,7 +203,7 @@
           <select
             id="edition_type"
             name="editionType"
-            class={`select transition border-2 border-gray-700 join-item ${
+            class={`select transition border-2 normal-border join-item ${
               editionType === 0 ? 'w-3/4' : 'w-1/4'
             } ${$errors.type ? 'hover:select-error' : 'hover:select-secondary'}`}
             bind:value={editionType}
@@ -268,7 +223,7 @@
               id="edition"
               name="edition"
               placeholder={$t('resource_record.edition_placeholder')}
-              class={`input transition border-2 border-gray-700 join-item w-1/2 min-w-[180px] ${
+              class={`input transition border-2 normal-border join-item w-1/2 min-w-[180px] ${
                 $errors.edition ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={edition}
@@ -282,7 +237,7 @@
             {$t('common.form.edition_preview')}
           </span>
           <div class="w-3/4">
-            <button type="button" class="btn btn-xs btn-neutral text-sm font-normal no-animation">
+            <button type="button" class="btn btn-xs btn-shallow text-sm font-normal no-animation">
               {$t(`resource_record.edition_types.${editionType}`)}
             </button>
             {#if edition}
@@ -302,7 +257,7 @@
           <select
             id="strategy"
             name="strategy"
-            class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+            class={`select transition border-2 normal-border join-item w-3/4 ${
               $errors.strategy ? 'hover:select-error' : 'hover:select-secondary'
             }`}
             bind:value={strategy}
@@ -333,7 +288,7 @@
             id="author_name"
             name="authorName"
             placeholder={$t('resource_record.author')}
-            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
               $errors.authorName ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
@@ -359,7 +314,7 @@
             id="copyright_owner"
             name="copyrightOwner"
             placeholder={$t('resource_record.copyright_owner')}
-            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
               $errors.copyrightOwner ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
@@ -383,7 +338,7 @@
             id="source"
             name="source"
             placeholder={$t('common.source')}
-            class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+            class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
               $errors.source ? 'hover:input-error' : 'hover:input-secondary'
             }`}
           />
@@ -402,7 +357,7 @@
           <textarea
             id="description"
             name="description"
-            class={`textarea transition border-2 border-gray-700 join-item ${
+            class={`textarea transition border-2 normal-border join-item ${
               $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={`${$t('common.description')}${$t('common.optional')}`}
@@ -411,8 +366,7 @@
       </div>
       <div class="modal-action">
         <div
-          class="tooltip tooltip-bottom max-w-fit tooltip-error"
-          class:tooltip-open={!!$message}
+          class="{$message ? 'tooltip tooltip-open tooltip-left tooltip-error' : ''} max-w-fit"
           data-tip={$message}
         >
           <button
@@ -421,7 +375,7 @@
               ? 'btn-error'
               : $submitting
                 ? 'btn-ghost'
-                : 'btn-outline border-2 border-gray-700'} w-full"
+                : 'btn-outline border-2 normal-border'} w-full"
             disabled={$submitting}
           >
             {$allErrors.length > 0
@@ -450,7 +404,7 @@
     >
       ✕
     </label>
-    <h3 class="font-bold text-lg mb-2">{$t('resource_record.add_in_bulk')}</h3>
+    <h3 class="font-bold text-lg mb-2">{$t('common.add_in_bulk')}</h3>
     <div class="flex items-center">
       <span class="w-32">{$t('resource_record.csv_file')}</span>
       <input
@@ -492,7 +446,7 @@
         {#each batch as resourceRecord}
           <div class="min-w-fit">
             <div
-              class="card w-80 bg-base-100 overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg"
+              class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
             >
               <div class="card-body py-6 gap-0.5">
                 {#if resourceRecord.strategy === 0}
@@ -615,7 +569,7 @@
             ? 'btn-error'
             : batchStatus === Status.SENDING
               ? 'btn-ghost'
-              : 'btn-outline border-2 border-gray-700'} w-full"
+              : 'btn-outline border-2 normal-border'} w-full"
           disabled={batchStatus === Status.SENDING}
           on:click={uploadBatch}
         >
@@ -630,25 +584,28 @@
   </div>
 </div>
 
-<div class="page">
-  <div class="flex gap-2 justify-between items-center mb-6">
-    <h1 class="text-4xl font-bold">{$t('common.resource_records')}</h1>
-    {#if user && getUserPrivilege(user.role) > 4}
-      <div class="join">
-        <label for="resource-record-add" class="btn btn-primary border-2 btn-outline join-item">
-          {$t('resource_record.add')}
-        </label>
-        <label
-          for="resource-record-add-batch"
-          class="btn btn-accent border-2 btn-outline join-item"
-        >
-          {$t('resource_record.add_in_bulk')}
-        </label>
-      </div>
-    {/if}
-  </div>
-  {#if $query.isSuccess}
-    {@const { total, perPage, data } = $query.data}
+{#if $query.isSuccess}
+  {@const { total, perPage, data } = $query.data}
+  <div class="page">
+    <div class="flex gap-2 justify-between items-center mb-6">
+      <h1 class="text-4xl font-bold">{$t('common.resource_records')}</h1>
+      {#if getUserPrivilege(user?.role) > 4}
+        <div class="join">
+          <label
+            for="resource-record-add"
+            class="btn border-2 normal-border hover:btn-outline join-item"
+          >
+            {$t('common.add')}
+          </label>
+          <label
+            for="resource-record-add-batch"
+            class="btn border-2 normal-border hover:btn-outline join-item"
+          >
+            {$t('common.add_in_bulk')}
+          </label>
+        </div>
+      {/if}
+    </div>
     {#if total && perPage && data.length > 0}
       <div class="result">
         {#each data as resourceRecord}
@@ -661,5 +618,9 @@
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}
-  {/if}
-</div>
+  </div>
+{:else if $query.isError}
+  <Error error={$query.error} />
+{:else}
+  <div class="min-h-page skeleton" />
+{/if}

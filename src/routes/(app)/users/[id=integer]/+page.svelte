@@ -13,6 +13,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import Song from '$lib/components/Song.svelte';
   import { PAGINATION_PER_PAGE } from '$lib/constants';
+  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -45,10 +46,10 @@
           {$t('user.user')}
         </span>
         <div
-          class="card card-side flex-col md:flex-row min-w-fit w-full bg-base-100 border-2 border-gray-700 transition hover:shadow-lg"
+          class="card card-side flex-col md:flex-row min-w-fit w-full bg-base-100 border-2 normal-border transition hover:shadow-lg"
         >
           <figure
-            class="min-w-[150px] border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control border-gray-700 mx-auto overflow-visible"
+            class="min-w-[150px] border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control normal-border mx-auto overflow-visible"
           >
             <div class="avatar min-w-fit h-fit">
               <div
@@ -72,11 +73,11 @@
             </p>
             <div class="flex items-center justify-center gap-1 h-fit">
               <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-              {#if user.gender == 1}
+              {#if user.gender === 1}
                 <span class="badge badge-sm">
                   <i class="fa-solid fa-mars"></i>
                 </span>
-              {:else if user.gender == 2}
+              {:else if user.gender === 2}
                 <span class="badge badge-sm">
                   <i class="fa-solid fa-venus"></i>
                 </span>
@@ -159,16 +160,17 @@
             {#if $charts.isSuccess}
               {@const total = $charts.data.total}
               {@const charts = $charts.data.data}
-              <div class="flex items-center mt-6 mb-2">
-                <h2 class="text-3xl font-bold w-full">
+              <div class="flex items-center mt-6 mb-2 justify-between">
+                <h2 class="text-3xl font-bold">
                   {$t('user.charts')}
                 </h2>
                 {#if total && total > PAGINATION_PER_PAGE}
                   <a
-                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    class="min-w-fit btn btn-sm border-2 normal-border btn-outline"
                     href="/charts?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
+                    <i class="fa-solid fa-angles-right"></i>
                   </a>
                 {/if}
               </div>
@@ -185,16 +187,17 @@
             {#if $songs.isSuccess}
               {@const total = $songs.data.total}
               {@const songs = $songs.data.data}
-              <div class="flex items-center mt-6 mb-2">
-                <h2 class="text-3xl font-bold w-full">
+              <div class="flex items-center mt-6 mb-2 justify-between">
+                <h2 class="text-3xl font-bold">
                   {$t('user.songs')}
                 </h2>
                 {#if total && total > PAGINATION_PER_PAGE}
                   <a
-                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    class="min-w-fit btn btn-sm border-2 normal-border btn-outline"
                     href="/songs?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
+                    <i class="fa-solid fa-angles-right"></i>
                   </a>
                 {/if}
               </div>
@@ -211,16 +214,17 @@
             {#if $recentRecords.isSuccess}
               {@const total = $recentRecords.data.total}
               {@const recent_records = $recentRecords.data.data}
-              <div class="flex items-center mt-6 mb-2">
-                <h2 class="text-3xl font-bold w-full">
+              <div class="flex items-center mt-6 mb-2 justify-between">
+                <h2 class="text-3xl font-bold">
                   {$t('user.recent_records')}
                 </h2>
                 {#if total && total > PAGINATION_PER_PAGE}
                   <a
-                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    class="min-w-fit btn btn-sm border-2 normal-border btn-outline"
                     href="/records?rangeOwnerId={user.id}"
                   >
                     {$t('common.all')}
+                    <i class="fa-solid fa-angles-right"></i>
                   </a>
                 {/if}
               </div>
@@ -237,16 +241,17 @@
             {#if $bestRecords.isSuccess}
               {@const total = $bestRecords.data.total}
               {@const best_records = $bestRecords.data.data}
-              <div class="flex items-center mt-6 mb-2">
-                <h2 class="text-3xl font-bold w-full">
+              <div class="flex items-center mt-6 mb-2 justify-between">
+                <h2 class="text-3xl font-bold">
                   {$t('user.best_records')}
                 </h2>
                 {#if total && total > PAGINATION_PER_PAGE}
                   <a
-                    class="min-w-fit btn btn-sm btn-primary btn-outline"
+                    class="min-w-fit btn btn-sm border-2 normal-border btn-outline"
                     href="/records?rangeOwnerId={user.id}&order=rks&desc=true"
                   >
                     {$t('common.all')}
+                    <i class="fa-solid fa-angles-right"></i>
                   </a>
                 {/if}
               </div>
@@ -280,4 +285,8 @@
       </div>
     </div>
   </div>
+{:else if $user.isError}
+  <Error error={$user.error} back="/users" />
+{:else}
+  <div class="min-h-page skeleton" />
 {/if}

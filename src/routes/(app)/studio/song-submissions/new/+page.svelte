@@ -1,13 +1,14 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import User from '$lib/components/User.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
+  import { convertTime, parseTime } from '$lib/utils';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import { convertTime, parseTime } from '$lib/utils';
+  import User from '$lib/components/User.svelte';
   import Song from '$lib/components/Song.svelte';
+  import Cropper from '$lib/components/ImageCropper.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
 
   export let data;
@@ -22,6 +23,9 @@
 
   let audio: HTMLAudioElement | undefined;
   let illustration = false;
+  let illustrationFiles: FileList;
+  let illustrationSrc: string;
+  let illustrationCropping = false;
   let originalityProof = false;
   let slider: TargetElement;
   let isOriginal = false;
@@ -48,10 +52,7 @@
   $: songDuplications = createQuery(
     api.song.listAll(
       {
-        equalsTitle: $form.Title,
-        equalsAuthorName: authorName,
-        rangeEditionType: [editionType],
-        equalsEdition: edition,
+        search: `${$form.Title} ${edition} ${authorName}`,
       },
       { enabled: querySongDuplications && !!$form.Title && !!authorName },
     ),
@@ -59,10 +60,7 @@
   $: resourceRecords = createQuery(
     api.resourceRecord.listAll(
       {
-        equalsTitle: $form.Title,
-        equalsAuthorName: authorName,
-        rangeEditionType: [editionType],
-        containsEdition: edition,
+        search: `${$form.Title} ${edition} ${authorName}`,
         rangeStrategy: [1, 2, 3, 4],
       },
       { enabled: queryResourceRecords && !!$form.Title && !!authorName },
@@ -104,11 +102,11 @@
 
   const handlePreviewPlay = () => {
     if (!audio) return;
-    if (previewStatus == 0) {
+    if (previewStatus === 0) {
       audio.currentTime = previewStart;
       previewTime = previewStart;
     }
-    if (previewStatus == 2) {
+    if (previewStatus === 2) {
       pausePreview();
       previewStatus = 1;
     } else {
@@ -135,11 +133,39 @@
     clearTimeout(previewTimeout);
     clearInterval(previewTimer);
   };
+
+  const handleIllustration = () => {
+    if (illustrationFiles.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(illustrationFiles[0]);
+      reader.onload = () => {
+        illustrationSrc = reader.result as string;
+        illustrationCropping = true;
+      };
+    }
+  };
 </script>
 
 <svelte:head>
   <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.title')}</title>
 </svelte:head>
+
+{#if illustrationCropping}
+  <Cropper
+    bind:open={illustrationCropping}
+    title={$t('common.image_cropper')}
+    src={illustrationSrc}
+    aspectRatio={16 / 9}
+    on:submit={(e) => {
+      const transfer = new DataTransfer();
+      transfer.items.add(new File([e.detail], 'illustration', { type: e.detail.type }));
+      illustrationFiles = transfer.files;
+      illustration = true;
+      illustrationCropping = false;
+    }}
+  />
+{/if}
+
 <input type="checkbox" id="studio-composer" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box bg-base-100 form-control gap-3">
@@ -153,7 +179,7 @@
     </div>
     <label
       for="studio-composer"
-      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -167,7 +193,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+          class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
             $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
@@ -176,7 +202,7 @@
           }}
         />
         <button
-          class={`btn border-2 border-gray-700 join-item ${
+          class={`btn border-2 normal-border join-item ${
             newComposerId || $composer.isLoading
               ? $composer.isError
                 ? 'btn-error'
@@ -197,7 +223,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.composer')}</span>
         <input
           placeholder={$t('common.form.composer')}
-          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
+          class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
           bind:value={newComposerDisplay}
         />
       </label>
@@ -205,7 +231,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-composer"
-          class="btn border-2 border-gray-700 btn-outline"
+          class="btn border-2 normal-border btn-outline"
           on:click={() => {
             authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
@@ -222,7 +248,7 @@
   <div class="pt-32 pb-4 flex justify-center">
     <div class="w-3/4 max-w-6xl min-w-20">
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_song')}</h1>
-      <div class="card w-full bg-base-100 shadow-lg">
+      <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex justify-start items-center my-2 w-full">
@@ -280,11 +306,8 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:input={(e) => {
-                  if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-                    illustration = true;
-                  }
-                }}
+                bind:files={illustrationFiles}
+                on:change={handleIllustration}
               />
               {#if !!$errors.Illustration}
                 <span class="w-2/3 text-error">{$errors.Illustration}</span>
@@ -348,7 +371,7 @@
                 <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
-                    {#if previewStatus == 2}
+                    {#if previewStatus === 2}
                       <button
                         type="button"
                         class="btn btn-secondary btn-square btn-sm btn-outline"
@@ -460,7 +483,7 @@
                   name="Title"
                   bind:value={$form.Title}
                   placeholder={$t('common.form.song_title')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     $errors.Title ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
@@ -481,7 +504,7 @@
                 <select
                   id="edition_type"
                   name="EditionType"
-                  class={`select transition border-2 border-gray-700 join-item ${
+                  class={`select transition border-2 normal-border join-item ${
                     editionType === 0 ? 'w-3/4' : 'w-1/6'
                   } ${$errors.EditionType ? 'hover:select-error' : 'hover:select-secondary'}`}
                   bind:value={editionType}
@@ -522,7 +545,7 @@
                     id="edition"
                     name="Edition"
                     placeholder={$t('studio.submission.edition_placeholder')}
-                    class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                    class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
                       $errors.Edition ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={edition}
@@ -538,7 +561,7 @@
                 <div class="w-3/4">
                   <button
                     type="button"
-                    class="btn btn-xs btn-neutral text-sm font-normal no-animation"
+                    class="btn btn-xs btn-shallow text-sm font-normal no-animation"
                   >
                     {$t(`song.edition_types.${editionType}`)}
                   </button>
@@ -561,7 +584,7 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                  class={`select transition border-2 normal-border join-item w-3/4 ${
                     $errors.Accessibility ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                 >
@@ -605,7 +628,7 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.composer')}
-                  class={`input transition border-2 border-gray-700 join-item ${
+                  class={`input transition border-2 normal-border join-item ${
                     isOriginal ? 'w-7/12' : 'w-9/12'
                   } min-w-[180px] ${
                     $errors.AuthorName ? 'hover:input-error' : 'hover:input-secondary'
@@ -616,7 +639,7 @@
                   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                   <label
                     for="studio-composer"
-                    class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
+                    class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
                     on:click={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
@@ -656,7 +679,7 @@
                   id="illustrator"
                   name="Illustrator"
                   placeholder={$t('common.form.illustrator')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     $errors.Illustrator ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
@@ -683,7 +706,7 @@
                     id="min_bpm"
                     name="MinBpm"
                     placeholder={$t('studio.submission.min_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       $errors.MinBpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
@@ -697,7 +720,7 @@
                     id="bpm"
                     name="Bpm"
                     placeholder={$t('studio.submission.main_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       $errors.Bpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
@@ -711,7 +734,7 @@
                     id="max_bpm"
                     name="MaxBpm"
                     placeholder={$t('studio.submission.max_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       $errors.MaxBpm ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                   />
@@ -736,7 +759,7 @@
                   id="offset"
                   name="Offset"
                   placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     $errors.Offset ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                 />
@@ -753,14 +776,14 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea transition border-2 border-gray-700 join-item ${
+                  class={`textarea transition border-2 normal-border join-item ${
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
                 />
               </label>
             </div>
-            {#if $songDuplications.isSuccess && $songDuplications.data.data.length > 0}
+            {#if $songDuplications.isSuccess && $songDuplications.data.data}
               <div class="flex my-2">
                 <div class="w-1/4 flex flex-col gap-2">
                   <h2 class="text-lg font-bold">{$t('studio.submission.duplicate_song')}</h2>
@@ -798,12 +821,11 @@
                     ? 'btn-error'
                     : $submitting
                       ? 'btn-ghost'
-                      : 'btn-outline border-2 border-gray-700'} w-full"
+                      : 'btn-outline border-2 normal-border'} w-full"
                   disabled={$submitting ||
                     !audio ||
                     !illustration ||
-                    (isOriginal && !originalityProof) ||
-                    ($songDuplications.isSuccess && $songDuplications.data.data.length > 0)}
+                    (isOriginal && !originalityProof)}
                 >
                   {$allErrors.length > 0
                     ? $t('common.error')

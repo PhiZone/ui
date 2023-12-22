@@ -27,9 +27,9 @@
           name="Email"
           placeholder={$t('session.email')}
           value={$form.Email}
-          class="input input-bordered input-lg {$errors.Email
-            ? 'input-error'
-            : 'input-info'} w-full text-center"
+          class="input transition border-2 normal-border input-lg {$errors.Email
+            ? 'hover:input-error'
+            : 'hover:input-info'} w-full text-center"
         />
         <div
           class="tooltip tooltip-right tooltip-error"
@@ -49,7 +49,7 @@
               ? 'btn-error'
               : $submitting
                 ? 'btn-ghost'
-                : 'btn-outline border-2 border-gray-700'} w-full"
+                : 'btn-outline border-2 normal-border'} w-full"
             disabled={$submitting}
           >
             {$allErrors.length > 0

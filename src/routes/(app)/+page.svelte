@@ -24,25 +24,39 @@
 {#if $headline.isSuccess}
   {@const headline = $headline.data.data.headline}
   {#if headline}
-    <div class="alert w-fit alert-info shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50">
+    <div
+      class="alert w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
+    >
       <i class="fa-solid fa-circle-info fa-xl"></i>
       <span class="content">{headline}</span>
     </div>
   {/if}
+{:else if $headline.isError && [400, 401, 403, 404, 500, 502].includes($headline.error.httpStatus)}
+  <div
+    class="alert alert-error w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
+  >
+    <i class="fa-solid fa-circle-error fa-xl"></i>
+    <span class="content">
+      {$headline.error.httpStatus}
+      {$t(`common.errors.${$headline.error.httpStatus}`)}
+    </span>
+  </div>
 {/if}
 
 <div class="hero min-h-screen" style:background-image="url(/background.webp)">
-  <div class="hero-overlay bg-opacity-50" />
+  <div class="hero-overlay bg-opacity-30" />
   <div class="w-5/6 max-w-4xl form-control text-center">
-    <img class="logo" src="/favicon.ico" alt="Logo" />
-    <h1 class="mb-3 text-8xl font-bold">{$t('common.title')}</h1>
-    <p class="mb-5 text-lg">
-      {$t('home.description')}
-    </p>
+    <div class="text-neutral-content">
+      <img class="logo" src="/favicon.ico" alt="Logo" />
+      <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.title')}</h1>
+      <p class="mb-5 sm:text-lg">
+        {$t('home.description')}
+      </p>
+    </div>
     <form class="form-control" on:submit|preventDefault={search}>
       <div class="join text-sm lg:text-md">
         <select
-          class="select select-bordered border-2 transition hover:select-secondary lg:select-lg join-item max-w-1/3"
+          class="select border-2 normal-border transition hover:select-secondary lg:select-lg join-item max-w-1/3"
           bind:value={type}
         >
           <option value="chapters">{$t('common.chapters')}</option>
@@ -53,11 +67,11 @@
         <input
           type="text"
           placeholder={$t('common.search_placeholder')}
-          class="input input-bordered border-2 transition hover:input-secondary lg:input-lg join-item w-full z-10"
+          class="input border-2 normal-border transition hover:input-secondary lg:input-lg join-item w-full z-10"
           bind:value={text}
         />
         <a
-          class="btn lg:btn-lg btn-square input-bordered border-2 bg-base-100 hover:bg-secondary hover:btn-secondary join-item backdrop-blur-xl"
+          class="btn lg:btn-lg btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item backdrop-blur-xl"
           {href}
         >
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>

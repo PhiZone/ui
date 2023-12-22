@@ -24,6 +24,7 @@ export interface PetAnswerDto {
   question1: PetQuestionDto;
   question2: PetQuestionDto;
   question3: PetQuestionDto;
+  question4: PetQuestionDto;
   subjectiveScore?: number | null;
   totalScore?: number | null;
 }

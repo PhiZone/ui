@@ -1,21 +1,27 @@
 /* Write your global styles here, in PostCSS syntax */
-@import url('https://fonts.loli.net/css2?family=Saira:wght@400;600&display=swap');
-@import url('https://fonts.loli.net/css2?family=Black+Ops+One&display=swap');
-@import url('https://fonts.loli.net/css2?family=Noto+Sans+SC&display=swap');
-@import url('https://fonts.loli.net/css2?family=Inter&family=Noto+Sans+Mono&display=swap');
+@import url('https://fonts.loli.net/css2?family=Outfit&family=Noto+Sans+SC&family=Black+Ops+One&family=Noto+Sans+Mono&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: 'Saira', 'Noto Sans SC', sans-serif;
+  font-family: 'Outfit', 'Noto Sans SC', sans-serif;
 }
 
 .page {
   min-height: calc(100vh - 219px);
   max-width: 1600px;
-  @apply bg-base-300 flex flex-col pt-32 px-4 md:px-32 mx-auto justify-start;
+  @apply bg-base-300 pt-32 px-4 md:px-32 mx-auto;
+}
+
+.min-h-page {
+  min-height: calc(100vh - 219px);
+}
+
+.studio-page {
+  max-width: 1600px;
+  @apply bg-base-300 pt-32 px-4 md:px-32 mx-auto min-h-screen;
 }
 
 .info-page {
@@ -46,12 +52,24 @@ body {
 }
 
 .richtext-link {
-  @apply text-emerald-200 hover:underline;
+  @apply text-emerald-800 dark:text-emerald-200 hover:underline;
 }
 
-.cropper-view-box,
-.cropper-face {
+.normal-border {
+  @apply border-gray-400 dark:border-gray-700;
+}
+
+.btn-shallow {
+  @apply dark:btn-neutral;
+}
+
+.rounded-cropper .cropper-view-box,
+.rounded-cropper .cropper-face {
   border-radius: 50%;
+}
+
+.font-code {
+  font-family: 'Noto Sans Mono', 'Noto Sans SC', ui-monospace, monospace;
 }
 
 /* The css styles for `outline` do not follow `border-radius` on iOS/Safari (#979). */

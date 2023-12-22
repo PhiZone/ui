@@ -3,11 +3,11 @@
   "owner": "Owner",
   "type": "Type",
   "types": {
-    "0": "Web Player",
+    "0": "Web Chart Player",
     "1": "Web Tool",
-    "2": "Mobile Player",
+    "2": "Mobile Chart Player",
     "3": "Mobile Tool",
-    "4": "Desktop Player",
+    "4": "Desktop Chart Player",
     "5": "Desktop Tool",
     "6": "Service"
   },

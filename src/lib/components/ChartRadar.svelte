@@ -16,7 +16,7 @@
   $: data = {
     labels: [
       $t('chart.arrangement'),
-      $t('chart.feel'),
+      $t('chart.gameplay'),
       $t('chart.vfx'),
       $t('chart.creativity'),
       $t('chart.concord'),
@@ -27,14 +27,14 @@
         label: `${$t('chart.rating')}`,
         data: [
           chart.ratingOnArrangement,
-          chart.ratingOnFeel,
+          chart.ratingOnGameplay,
           chart.ratingOnVisualEffects,
           chart.ratingOnCreativity,
           chart.ratingOnConcord,
           chart.ratingOnImpression,
         ],
-        backgroundColor: ['rgba(255, 155, 132, 0.2)'],
-        borderColor: ['rgba(255, 99, 132, 1)'],
+        backgroundColor: ['rgba(238, 129, 195, 0.25)'],
+        borderColor: ['rgb(238, 129, 195)'],
         borderRadius: 4,
         borderWidth: 2,
       },
@@ -42,10 +42,10 @@
   };
 
   ChartJS.register(PointElement, LineElement, RadialLinearScale, Tooltip, Filler);
-  ChartJS.defaults.font.family = "'Saira', sans-serif";
-  ChartJS.defaults.font.size = 12;
-  ChartJS.defaults.borderColor = 'rgba(127, 99, 132, 0.5)';
-  ChartJS.defaults.color = 'rgb(127, 99, 132)';
+  ChartJS.defaults.font.family = "'Outfit', 'Noto Sans SC', sans-serif";
+  ChartJS.defaults.font.size = 14;
+  ChartJS.defaults.borderColor = 'rgba(150, 150, 150, 0.5)';
+  ChartJS.defaults.color = 'rgb(150, 150, 150)';
 </script>
 
 <Radar

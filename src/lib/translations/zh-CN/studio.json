@@ -87,6 +87,7 @@
     "min_bpm": "最小 BPM",
     "main_bpm": "主要 BPM",
     "max_bpm": "最大 BPM",
+    "song_duplications": "重复曲目",
     "duplicate_song": "重复曲目",
     "duplicate_song_description": "其他人已经提交了该曲目的相同版本。如你认为你的稿件更优质，请联系资源所有者或工作人员。",
     "copyright_alert": "版权警告",

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { Status } from '$lib/constants';
-  import User from '$lib/components/User.svelte';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import noUiSlider, { type API } from 'nouislider';
@@ -11,6 +10,9 @@
   import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
   import { onMount } from 'svelte';
+  import User from '$lib/components/User.svelte';
+  import Cropper from '$lib/components/ImageCropper.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
 
   export let data;
 
@@ -35,6 +37,9 @@
   let status = Status.WAITING;
   let errorCode = '';
   let errors: Map<string, string> | undefined = undefined;
+  let illustrationFiles: FileList;
+  let illustrationCropping = false;
+  let illustrationSrc: string;
 
   $: submission = createQuery(api.song.submission.info({ id }));
   $: composer = createQuery(
@@ -101,11 +106,11 @@
 
   const handlePreviewPlay = () => {
     if (!audio) return;
-    if (previewStatus == 0) {
+    if (previewStatus === 0) {
       audio.currentTime = parseTime(song.previewStart);
       previewTime = parseTime(song.previewStart);
     }
-    if (previewStatus == 2) {
+    if (previewStatus === 2) {
       pausePreview();
       previewStatus = 1;
     } else {
@@ -133,6 +138,10 @@
     clearInterval(previewTimer);
   };
 
+  const parsePreviewTime = (time: string) => {
+    return /^\d{1,2}:\d{1,2}.\d+$/g.test(time) ? `00:${time}` : time;
+  };
+
   const handleFile = async (
     e: Event & { currentTarget: EventTarget & HTMLInputElement },
     type = 'file',
@@ -150,16 +159,23 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(data);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
       }
     }
   };
 
-  let patch = new Array<PatchElement>();
-
-  const parsePreviewTime = (time: string) => {
-    return /^\d{1,2}:\d{1,2}.\d+$/g.test(time) ? `00:${time}` : time;
+  const handleIllustration = () => {
+    if (illustrationFiles.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(illustrationFiles[0]);
+      reader.onload = () => {
+        illustrationSrc = reader.result as string;
+        illustrationCropping = true;
+      };
+    }
   };
+
+  let patch = new Array<PatchElement>();
 
   const update = async () => {
     status = Status.SENDING;
@@ -179,7 +195,7 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(errors);
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, errors);
     }
   };
 </script>
@@ -188,25 +204,30 @@
   <title>{$t('common.studio')} - {$t('studio.edit_song')} | {$t('common.title')}</title>
 </svelte:head>
 
-<input type="checkbox" id="update-success" class="modal-toggle" checked={status === Status.OK} />
-<div class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">{$t('common.success')}</h3>
-    <p class="py-4">{$t('common.update_success')}</p>
-    <div class="modal-action">
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <btn
-        class="btn btn-success btn-outline"
-        on:click={() => {
-          status = Status.WAITING;
-        }}
-        on:keyup
-      >
-        {$t('common.confirm')}
-      </btn>
-    </div>
-  </div>
-</div>
+<UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
+
+{#if illustrationCropping}
+  <Cropper
+    bind:open={illustrationCropping}
+    title={$t('common.image_cropper')}
+    src={illustrationSrc}
+    aspectRatio={16 / 9}
+    on:submit={async (e) => {
+      const resp = await api.song.submission.updateFile('illustration', { id, File: e.detail });
+      if (resp.ok) {
+        invalidateAll();
+        await queryClient.invalidateQueries(['song.submission.info', { id }]);
+        illustrationCropping = false;
+        status = Status.OK;
+      } else {
+        status = Status.ERROR;
+        const data = await resp.json();
+        errorCode = data.code;
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+      }
+    }}
+  />
+{/if}
 
 <input type="checkbox" id="studio-composer" class="modal-toggle" />
 <div class="modal">
@@ -221,7 +242,7 @@
     </div>
     <label
       for="studio-composer"
-      class="btn border-2 border-gray-700 hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
     </label>
@@ -235,7 +256,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
         <input
           placeholder={$t('studio.submission.author_placeholder')}
-          class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+          class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
             $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
@@ -244,7 +265,7 @@
           }}
         />
         <button
-          class={`btn border-2 border-gray-700 join-item ${
+          class={`btn border-2 normal-border join-item ${
             newComposerId || $composer.isLoading
               ? $composer.isError
                 ? 'btn-error'
@@ -265,7 +286,7 @@
         <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.composer')}</span>
         <input
           placeholder={$t('common.form.composer')}
-          class="input transition border-2 border-gray-700 hover:input-secondary join-item w-3/4"
+          class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
           bind:value={newComposerDisplay}
         />
       </label>
@@ -273,7 +294,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <label
           for="studio-composer"
-          class="btn border-2 border-gray-700 btn-outline"
+          class="btn border-2 normal-border btn-outline"
           on:click={() => {
             song.authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
@@ -291,16 +312,18 @@
     <div class="w-3/4 max-w-6xl min-w-20">
       <div class="flex justify-between">
         <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
-        <a
-          href="/studio/song-submissions/{song.id}"
-          class="btn border-2 border-gray-700 btn-outline"
-        >
+        <a href="/studio/song-submissions/{song.id}" class="btn border-2 normal-border btn-outline">
           {$t('common.back')}
         </a>
       </div>
-      <div class="card w-full bg-base-100 shadow-lg">
+      <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
-          <form class="w-full form-control">
+          <form
+            class="w-full form-control"
+            on:submit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <div class="flex justify-start items-center my-2 w-full">
               <span class="w-32 place-self-center">{$t('song.original')}</span>
               <div class="flex w-1/3">
@@ -357,9 +380,8 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:input={(e) => {
-                  handleFile(e, 'illustration');
-                }}
+                bind:files={illustrationFiles}
+                on:change={handleIllustration}
               />
               {#if !!errors?.get('Illustration')}
                 <span class="w-2/3 text-error">
@@ -428,10 +450,10 @@
                 <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
                 <div class="flex w-full gap-2">
                   <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
-                    {#if previewStatus == 2}
+                    {#if previewStatus === 2}
                       <button
                         type="button"
-                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-pause fa-xl"></i>
@@ -439,7 +461,7 @@
                     {:else}
                       <button
                         type="button"
-                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-play fa-lg"></i>
@@ -537,7 +559,7 @@
                   id="title"
                   name="Title"
                   placeholder={$t('common.form.song_title')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.title}
@@ -560,7 +582,7 @@
                 <select
                   id="edition_type"
                   name="EditionType"
-                  class={`select transition border-2 border-gray-700 join-item ${
+                  class={`select transition border-2 normal-border join-item ${
                     song.editionType === 0 ? 'w-3/4' : 'w-1/6'
                   } ${
                     errors?.get('EditionType') ? 'hover:select-error' : 'hover:select-secondary'
@@ -595,7 +617,7 @@
                     id="edition"
                     name="Edition"
                     placeholder={$t('studio.submission.edition_placeholder')}
-                    class={`input transition border-2 border-gray-700 join-item w-7/12 min-w-[180px] ${
+                    class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
                       errors?.get('Edition') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.edition}
@@ -614,7 +636,7 @@
                 <div class="w-3/4">
                   <button
                     type="button"
-                    class="btn btn-xs btn-neutral text-sm font-normal no-animation"
+                    class="btn btn-xs btn-shallow text-sm font-normal no-animation"
                   >
                     {$t(`song.edition_types.${song.editionType}`)}
                   </button>
@@ -637,7 +659,7 @@
                 <select
                   id="accessibility"
                   name="Accessibility"
-                  class={`select transition border-2 border-gray-700 join-item w-3/4 ${
+                  class={`select transition border-2 normal-border join-item w-3/4 ${
                     errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   value={`${song.accessibility}`}
@@ -684,7 +706,7 @@
                   id="author_name"
                   name="AuthorName"
                   placeholder={$t('common.form.composer')}
-                  class={`input transition border-2 border-gray-700 join-item ${
+                  class={`input transition border-2 normal-border join-item ${
                     isOriginal ? 'w-7/12' : 'w-9/12'
                   } min-w-[180px] ${
                     errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
@@ -698,7 +720,7 @@
                   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                   <label
                     for="studio-composer"
-                    class="btn border-2 border-gray-700 btn-outline hover:btn-secondary join-item w-1/6"
+                    class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
                     on:click={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
@@ -740,7 +762,7 @@
                   id="illustrator"
                   name="Illustrator"
                   placeholder={$t('common.form.illustrator')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     errors?.get('Illustrator') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.illustrator}
@@ -771,7 +793,7 @@
                     id="min_bpm"
                     name="MinBpm"
                     placeholder={$t('studio.submission.min_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       errors?.get('MinBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.minBpm}
@@ -794,7 +816,7 @@
                     id="bpm"
                     name="Bpm"
                     placeholder={$t('studio.submission.main_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       errors?.get('Bpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.bpm}
@@ -817,7 +839,7 @@
                     id="max_bpm"
                     name="MaxBpm"
                     placeholder={$t('studio.submission.max_bpm')}
-                    class={`input transition border-2 border-gray-700 join-item w-1/3 ${
+                    class={`input transition border-2 normal-border join-item w-1/3 ${
                       errors?.get('MaxBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.maxBpm}
@@ -853,7 +875,7 @@
                   id="offset"
                   name="Offset"
                   placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input transition border-2 border-gray-700 join-item w-3/4 min-w-[180px] ${
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     errors?.get('Offset') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.offset}
@@ -881,7 +903,7 @@
                 <textarea
                   id="description"
                   name="Description"
-                  class={`textarea transition border-2 border-gray-700 join-item ${
+                  class={`textarea transition border-2 normal-border join-item ${
                     errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
@@ -917,7 +939,7 @@
                     ? 'btn-error'
                     : status === Status.SENDING
                       ? 'btn-ghost'
-                      : 'btn-outline border-2 border-gray-700'} w-full"
+                      : 'btn-outline border-2 normal-border'} w-full"
                   disabled={status == Status.SENDING}
                   on:click={update}
                 >

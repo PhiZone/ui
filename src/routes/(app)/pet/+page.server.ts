@@ -6,7 +6,7 @@ export const load = async ({ parent, locals, fetch }) => {
   const api = new API(fetch, locals.accessToken, locals.user);
   let status = !user ? 3 : getUserPrivilege(user.role) >= 4 ? 4 : 0;
   const resp = await api.pet.getAnswers({ order: ['subjectiveScore'], desc: [true], perPage: 1 });
-  if (status == 0 && resp.ok) {
+  if (status === 0 && resp.ok) {
     const data = (await resp.json()).data;
     if (data.length === 0) {
       status = 1;

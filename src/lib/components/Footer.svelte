@@ -71,7 +71,7 @@
         href="https://pd.qq.com/s/ebe35nz6y"
         target="_blank"
         rel="noreferrer"
-        class="w-5 h-5 pt-[1px]"
+        class="w-5 h-5 pt-[1px] hidden dark:inline"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768">
           <g>
@@ -83,6 +83,9 @@
             />
           </g>
         </svg>
+      </a>
+      <a href="https://pd.qq.com/s/ebe35nz6y" target="_blank" rel="noreferrer" class="dark:hidden">
+        <i class="fa-solid fa-hashtag fa-lg"></i>
       </a>
       <a href="https://space.bilibili.com/325599863" target="_blank" rel="noreferrer">
         <i class="fa-brands fa-bilibili fa-lg"></i>

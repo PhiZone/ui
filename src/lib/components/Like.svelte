@@ -43,11 +43,11 @@
     if (!resp.ok) {
       liked = false;
       likes--;
-      if (resp.status == 401) {
+      if (resp.status === 401) {
         goto(`/session/login?redirect=${$page.url.pathname}`);
       } else {
         const data = await resp.json();
-        console.error(data);
+        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
       }
     }
   };
@@ -61,7 +61,7 @@
       likes++;
       const data = await resp.json();
       // TODO: toast
-      console.error(data);
+      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
     }
   };
 </script>

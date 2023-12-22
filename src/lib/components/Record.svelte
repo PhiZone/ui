@@ -20,25 +20,25 @@
 
   $: grade = getGrade(record.score, record.isFullCombo);
 
-  $: chartQ = createQuery(api.chart.info({ id: record.chartId }, { enabled: !chart }));
-  $: songQ = createQuery(
+  $: chartQuery = createQuery(api.chart.info({ id: record.chartId }, { enabled: !chart }));
+  $: songQuery = createQuery(
     api.song.info(
-      { id: chart ? chart.songId : $chartQ.data?.data.songId ?? '' },
-      { enabled: $chartQ.isSuccess && !song },
+      { id: chart ? chart.songId : $chartQuery.data?.data.songId ?? '' },
+      { enabled: $chartQuery.isSuccess && !song },
     ),
   );
   $: player = createQuery(api.user.info({ id: record.ownerId }));
 </script>
 
 <div
-  class={'card m-1 w-[288px] h-40 card-side relative overflow-hidden transition border-2 border-gray-700 hover:border-primary hover:shadow-lg'}
+  class="card w-[288px] h-40 card-side relative overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a class="w-full h-full glass" href={`/records/${record.id}`}>
-    {#if ($chartQ.isSuccess && $chartQ.data.data.illustration) || $songQ.isSuccess}
+    {#if ($chartQuery.isSuccess && $chartQuery.data.data.illustration) || $songQuery.isSuccess}
       <img
         class="object-fill w-full h-full blur-lg opacity-40"
         src={getCompressedImage(
-          $chartQ.data?.data.illustration ?? $songQ.data?.data.illustration,
+          $chartQuery.data?.data.illustration ?? $songQuery.data?.data.illustration,
           1,
         )}
         alt="Illustration"
@@ -48,23 +48,19 @@
     {/if}
     <div
       class={`absolute left-6 text-7xl grade ${
-        grade == 'P'
-          ? 'top-11 text-yellow-400'
-          : record.isFullCombo
-            ? 'top-11 text-blue-400'
-            : 'top-11'
+        grade == 'P' ? 'top-11 text-warning' : record.isFullCombo ? 'top-11 text-info' : 'top-11'
       }`}
     >
       {grade}
     </div>
     <div class="absolute right-2 top-2 form-control justify-end">
       {#if showChart}
-        {#if $chartQ.isSuccess && $songQ.isSuccess}
-          {@const chart = $chartQ.data.data}
-          {@const song = $songQ.data.data}
+        {#if $chartQuery.isSuccess && $songQuery.isSuccess}
+          {@const chart = $chartQuery.data.data}
+          {@const song = $songQuery.data.data}
           <div class="join join-horizontal w-[272px] justify-end">
             <a
-              class="btn btn-xs btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
+              class="btn btn-xs border-2 btn-ghost btn-active hover:btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
               href="/songs/{song.id}"
             >
               {song.title}

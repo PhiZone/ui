@@ -31,7 +31,7 @@
   };
 </script>
 
-<div class="card overflow-hidden bg-base-200 border-2 border-gray-700 transition hover:shadow-lg">
+<div class="card overflow-hidden bg-base-200 border-2 normal-border transition hover:shadow-lg">
   <div class="card-body">
     <div class="flex flex-col {showChart ? 'lg:flex-row' : 'md:flex-row'} gap-6 mx-auto">
       <div class="flex flex-col w-full md:flex-row">
@@ -46,8 +46,8 @@
       </div>
       <div
         class="flex flex-col {showChart
-          ? 'md:flex-row lg:flex-col'
-          : ''} gap-4 md:gap-[45px] lg:gap-4 w-fit"
+          ? 'md:flex-row lg:flex-col md:gap-[45px] lg:gap-4'
+          : ''} gap-4 w-fit"
       >
         {#if !showRequestee && user && admission.requesteeId == user.id}
           <User id={admission.requesterId} kind="full" showFollow={false} />
@@ -65,7 +65,7 @@
                   {$t('collection.label')}
                 </span>
                 <button
-                  class="btn w-3/4 btn-neutral btn-active cursor-default no-animation join-item text-lg"
+                  class="btn w-3/4 btn-shallow btn-active cursor-default no-animation join-item text-lg"
                 >
                   {admission.label.length > 10
                     ? `${admission.label.substring(0, 10)}...`
@@ -78,7 +78,7 @@
             {#if user && admission.requesteeId === user.id}
               <div class="join w-80">
                 <button
-                  class="btn btn-primary border-2 btn-outline join-item w-1/2"
+                  class="btn hover:btn-primary border-2 normal-border btn-outline join-item w-1/2"
                   on:click={() => {
                     review(true);
                   }}
@@ -86,7 +86,7 @@
                   {$t('studio.request.accept')}
                 </button>
                 <button
-                  class="btn btn-accent border-2 btn-outline join-item w-1/2"
+                  class="btn hover:btn-accent border-2 normal-border btn-outline join-item w-1/2"
                   on:click={() => {
                     review(false);
                   }}

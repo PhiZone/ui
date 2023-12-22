@@ -11,7 +11,7 @@ const config = {
   plugins: [typography, daisyui],
 
   daisyui: {
-    themes: ['dracula'],
+    themes: ['garden', 'dracula'],
     darkTheme: 'dracula',
   },
 };

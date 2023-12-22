@@ -1,6 +1,7 @@
 import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
+import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -57,9 +58,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           voteForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          voteForm.message = t.get(`error.${error.code}`);
           voteForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            voteForm.errors[field as keyof VoteSchema] = errors.map((value) => {
+            voteForm.errors[toCamel(field) as keyof VoteSchema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });
@@ -93,9 +95,10 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           collabForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          collabForm.message = t.get(`error.${error.code}`);
           collabForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            collabForm.errors[field as keyof CollabSchema] = errors.map((value) => {
+            collabForm.errors[toCamel(field) as keyof CollabSchema] = errors.map((value) => {
               return t.get(`error.${value}`);
             });
           });
@@ -129,11 +132,14 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           collectionForm.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          collectionForm.message = t.get(`error.${error.code}`);
           collectionForm.errors = {};
           error.errors.forEach(({ field, errors }) => {
-            collectionForm.errors[field as keyof CollectionSchema] = errors.map((value) => {
-              return t.get(`error.${value}`);
-            });
+            collectionForm.errors[toCamel(field) as keyof CollectionSchema] = errors.map(
+              (value) => {
+                return t.get(`error.${value}`);
+              },
+            );
           });
         }
 

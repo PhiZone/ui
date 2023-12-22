@@ -26,6 +26,7 @@ export interface ResponseDtoOk<T> extends ResponseDtoBase {
 }
 
 interface ResponseDtoErrorBrief extends ResponseDtoBase {
+  httpStatus: number;
   status: ResponseDtoStatus.ErrorBrief;
   code: string;
   data: null;
@@ -40,6 +41,7 @@ export interface ModelErrorDto {
 }
 
 interface ResponseDtoErrorDetailed extends ResponseDtoBase {
+  httpStatus: number;
   status: ResponseDtoStatus.ErrorDetailed;
   code: string;
   data: null;
@@ -49,6 +51,7 @@ interface ResponseDtoErrorDetailed extends ResponseDtoBase {
 }
 
 interface ResponseDtoErrorWithMessage extends ResponseDtoBase {
+  httpStatus: number;
   status: ResponseDtoStatus.ErrorWithMessage;
   code: string;
   data: null;
@@ -58,6 +61,7 @@ interface ResponseDtoErrorWithMessage extends ResponseDtoBase {
 }
 
 interface ResponseDtoErrorTemporarilyUnavailable extends ResponseDtoBase {
+  httpStatus: number;
   status: ResponseDtoStatus.ErrorTemporarilyUnavailable;
   code: string;
   data: null;
@@ -67,6 +71,7 @@ interface ResponseDtoErrorTemporarilyUnavailable extends ResponseDtoBase {
 }
 
 interface ResponseDtoErrorWithData extends ResponseDtoBase {
+  httpStatus: number;
   status: ResponseDtoStatus.ErrorWithData;
   code: string;
   data: unknown;

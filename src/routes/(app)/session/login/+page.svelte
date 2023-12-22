@@ -38,7 +38,7 @@
       </p>
     </div>
     <div
-      class="card flex-shrink-0 w-full max-w-sm border-2 border-gray-700 transition hover:shadow-lg bg-base-100"
+      class="card flex-shrink-0 w-full max-w-sm border-2 normal-border transition hover:shadow-lg bg-base-100"
     >
       <div class="card-body">
         <form
@@ -52,7 +52,7 @@
               if (result.type === 'failure') {
                 status = Status.ERROR;
                 msg = $t(
-                  result.status == 400 || result.status == 404
+                  result.status === 400 || result.status === 404
                     ? `session.login.${result.data?.error}`
                     : 'common.unknown_error',
                 );
@@ -73,7 +73,7 @@
             placeholder={$t('session.email')}
             value={form?.email ?? ''}
             autocomplete="username"
-            class="input input-bordered"
+            class="input transition border-2 normal-border hover:input-secondary"
           />
           <label class="label" for="password">
             <span class="label-text">{$t('session.password')}</span>
@@ -85,7 +85,7 @@
             placeholder={$t('session.password')}
             value={form?.password ?? ''}
             autocomplete="current-password"
-            class="input input-bordered"
+            class="input transition border-2 normal-border hover:input-secondary"
           />
           <div class="label flex justify-between">
             <a
@@ -110,7 +110,7 @@
                   ? 'btn-error'
                   : status === Status.SENDING
                     ? 'btn-ghost'
-                    : 'btn-outline border-2 border-gray-700'} w-full"
+                    : 'btn-outline border-2 normal-border'} w-full"
                 disabled={status == Status.SENDING}
               >
                 {status === Status.ERROR

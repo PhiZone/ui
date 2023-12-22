@@ -5,6 +5,7 @@ import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './t
 import type API from '.';
 import ChartSubmissionAPI from './chart.submission';
 import type { CollectionAdmitterDto } from './collection';
+import ChartAssetAPI from './chart.asset';
 
 export enum ChartFormat {
   RpeJson,
@@ -49,7 +50,7 @@ export interface ChartDto {
   ratingOnArrangement: number;
   ratingOnConcord: number;
   ratingOnCreativity: number;
-  ratingOnFeel: number;
+  ratingOnGameplay: number;
   ratingOnImpression: number;
   ratingOnVisualEffects: number;
   score: number;
@@ -85,9 +86,21 @@ export interface AdmissionCreateOpts extends InfoOpts {
   label?: string;
 }
 
+export interface PlayDto {
+  chartId: string;
+  configurationId: string;
+  applicationId: string;
+}
+
+export interface PlayResponseDto {
+  timestamp?: number;
+  token?: string;
+}
+
 export default class ChartAPI {
   constructor(private api: API) {
     this.submission = new ChartSubmissionAPI(api);
+    this.asset = new ChartAssetAPI(api);
   }
 
   list = createQueryCreator(
@@ -116,5 +129,10 @@ export default class ChartAPI {
     return this.api.POST(`/charts/${id}/collections`, rest);
   }
 
+  play(opts: PlayDto): R<PlayResponseDto> {
+    return this.api.GET('/player/play?' + queryString.stringify(opts));
+  }
+
   submission;
+  asset;
 }

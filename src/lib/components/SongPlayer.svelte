@@ -82,7 +82,7 @@
 </script>
 
 <div
-  class="rounded-lg shadow-lg overflow-hidden bg-cover bg-center bg-no-repeat"
+  class="rounded-lg transition border-2 normal-border hover:shadow-lg overflow-hidden bg-cover bg-center bg-no-repeat"
   style:background-image="url({illustration})"
 >
   <div class="relative">
@@ -127,7 +127,7 @@
         <div class="flex justify-center">
           <div class="flex items-center space-x-3 pb-2">
             <button
-              class="btn btn-circle btn-sm btn-primary {loop
+              class="btn btn-circle btn-sm btn-primary border-2 {loop
                 ? 'btn-active'
                 : 'btn-outline'} flex items-center justify-center"
               title={$t('song.loop')}
@@ -138,7 +138,7 @@
               <i class="fa-solid fa-repeat"></i>
             </button>
             <button
-              class="btn btn-circle btn-sm btn-primary btn-outline flex items-center justify-center"
+              class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.rewind')}
               on:click={() => {
                 let time = audio.currentTime - 10;
@@ -151,7 +151,7 @@
             </button>
             {#if playing}
               <button
-                class="btn btn-circle btn-secondary btn-outline flex items-center justify-center px-0.5"
+                class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.pause')}
                 on:click={() => {
                   pauseAudio();
@@ -161,7 +161,7 @@
               </button>
             {:else}
               <button
-                class="btn btn-circle btn-secondary btn-outline flex items-center justify-center px-0.5"
+                class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.play')}
                 on:click={() => {
                   playAudio();
@@ -171,7 +171,7 @@
               </button>
             {/if}
             <button
-              class="btn btn-circle btn-sm btn-primary btn-outline flex items-center justify-center"
+              class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.fast_forward')}
               on:click={() => {
                 let time = audio.currentTime + 10;
@@ -185,7 +185,7 @@
             <div class="dropdown dropdown-hover dropdown-top float-right">
               <button
                 tabindex="0"
-                class="btn btn-circle btn-sm rounded-full btn-primary btn-outline flex items-center justify-center"
+                class="btn btn-circle btn-sm rounded-full btn-primary border-2 btn-outline"
                 title={$t('song.volume')}
               >
                 <i class="fa-solid fa-volume-high"></i>

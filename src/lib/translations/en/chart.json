@@ -24,13 +24,13 @@
   "equivalent_vote_count": "Equiv. Vote Count",
   "real_vote_count": "Real Vote Count",
   "arrangement": "Note Arrangement",
-  "feel": "Feel",
+  "gameplay": "Gameplay Experience",
   "vfx": "Visual Effects",
   "creativity": "Creativity",
   "concord": "Concord",
   "impression": "Impression",
   "r_arrangement": "Rating on Note Arrangement",
-  "r_feel": "Rating on Feel",
+  "r_gameplay": "Rating on Gameplay Experience",
   "r_vfx": "Rating on Visual Effects",
   "r_creativity": "Rating on Creativity",
   "r_concord": "Rating on Concord",
@@ -48,5 +48,21 @@
   "lowest_difficulty": "Lowest Difficulty",
   "highest_difficulty": "Highest Difficulty",
   "lowest_note_count": "Lowest Note Count",
-  "highest_note_count": "Highest Note Count"
+  "highest_note_count": "Highest Note Count",
+  "play": "Play",
+  "assets": "Assets",
+  "asset": {
+    "asset": "Asset",
+    "type": "Type",
+    "types": {
+      "0": "Image",
+      "1": "Audio",
+      "2": "Video",
+      "3": "Config",
+      "4": "Shader",
+      "5": "Other"
+    },
+    "name": "Name",
+    "file": "File"
+  }
 }

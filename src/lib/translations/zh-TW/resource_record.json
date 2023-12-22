@@ -33,8 +33,6 @@
     "4": "禁止"
   },
   "copyright_owner": "版權所有者",
-  "add": "添加",
-  "add_in_bulk": "批量添加",
   "edition_placeholder": "版本名稱 /（改編後的）資源出處",
   "csv_file": "CSV 文件",
   "csv_complete": "成功解析 {{valid}} 條有效記錄（總計 {{total}} 條）"

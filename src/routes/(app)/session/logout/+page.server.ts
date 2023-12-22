@@ -13,7 +13,5 @@ export const load = async ({ cookies, locals, fetch }) => {
   locals.user = undefined;
   clearTokens(cookies);
 
-  return {
-    // api,
-  };
+  return {};
 };

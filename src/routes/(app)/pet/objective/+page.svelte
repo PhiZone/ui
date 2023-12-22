@@ -16,7 +16,7 @@
   let timeUp = false;
 
   let timer = setInterval(() => {
-    if (sec == 0 && min == 0) {
+    if (sec === 0 && min === 0) {
       clearInterval(timer);
       timeUp = true;
       return;
@@ -35,16 +35,16 @@
 
 <div class="page">
   <div
-    class="card fixed top-20 right-3 px-6 py-3 bg-base-100 shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
+    class="card fixed top-20 right-3 px-6 py-3 bg-base-100 transition border-2 normal-border hover:shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
+      <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${min};`} />
       </span>
       min
     </div>
     <div class="flex form-control">
-      <span class={`countdown font-mono text-5xl ${min == 0 ? 'text-error' : ''}`}>
+      <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${sec};`} />
       </span>
       sec
@@ -62,8 +62,10 @@
       </ul>
       <div class="flex justify-end">
         <button
-          class={`btn btn-outline ${
-            timeUp ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error' : 'btn-primary'
+          class={`btn border-2 ${
+            timeUp
+              ? 'btn-disabled tooltip tooltip-open tooltip-left tooltip-error'
+              : 'normal-border hover:btn-outline'
           } my-5`}
           data-tip={$t('pet.time_up')}
           on:click={() => {

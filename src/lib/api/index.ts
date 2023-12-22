@@ -19,6 +19,7 @@ import AdmissionAPI from './admission';
 import ResourceRecordAPI from './resourceRecord';
 import ApplicationAPI from './application';
 import CollectionAPI from './collection';
+import PlayConfigurationAPI from './playConfiguration';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -96,6 +97,7 @@ export default class API {
   admission = new AdmissionAPI(this);
   resourceRecord = new ResourceRecordAPI(this);
   pet = new PetAPI(this);
+  playConfiguration = new PlayConfigurationAPI(this);
 }
 
 export type { ChapterDto } from './chapter';

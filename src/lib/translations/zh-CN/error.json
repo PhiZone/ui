@@ -44,5 +44,6 @@
   "ParentIsPrivate": "父级资源为私有资源。",
   "RemoteFailure": "访问远程服务器时出现错误。",
   "BindingOccupied": "远程账户已被其他用户绑定。",
-  "ContentProhibited": "输入的内容中存在违禁内容。"
+  "ContentProhibited": "输入的内容中存在违禁内容。",
+  "NameOccupied": "该名称已被占用。"
 }

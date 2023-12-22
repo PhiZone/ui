@@ -27,7 +27,7 @@ const schema = z
     PreviewStart: z.string(),
     PreviewEnd: z.string(),
   })
-  .refine(({ EditionType, Edition }) => EditionType! in [2, 5] || Edition, {
+  .refine(({ EditionType, Edition }) => EditionType === 0 || Edition, {
     message: t.get('error.FieldEmpty'),
     path: ['Edition'],
   })
@@ -118,6 +118,7 @@ export const actions = {
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           form.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          form.message = t.get(`error.${error.code}`);
           form.errors = {};
           error.errors.forEach(({ field, errors }) => {
             form.errors[field as keyof Schema] = errors.map((value) => {

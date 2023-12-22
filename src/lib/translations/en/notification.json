@@ -12,7 +12,7 @@
   "notified_at": "Notified At",
   "read_at": "Read At",
   "read_adj": "Read",
-  "read_v": "Read",
+  "mark_as_read": "Mark as Read",
   "read_page": "Read Page",
   "view_read": "View Read",
   "view_unread": "View Unread"

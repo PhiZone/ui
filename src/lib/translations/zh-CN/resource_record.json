@@ -33,8 +33,6 @@
     "4": "禁止"
   },
   "copyright_owner": "版权所有者",
-  "add": "添加",
-  "add_in_bulk": "批量添加",
   "edition_placeholder": "版本名称 /（改编后的）资源出处",
   "csv_file": "CSV 文件",
   "csv_complete": "成功解析 {{valid}} 条有效记录（总计 {{total}} 条）"
