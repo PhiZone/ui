@@ -4,9 +4,9 @@
   export let centered = true;
 </script>
 
-<div class="flex{centered ? ' justify-center' : ''}" style:min-width="{size * 3.5}px">
+<div class="flex{centered ? ' justify-center' : ''}" style:min-width="{size * 3.6}px">
   <span class="font-extrabold" style:font-size="{size * 1.8}px" style:line-height="{size * 2}px">
-    {Math.floor(score)}
+    {score < 0 ? '-' : ''}{Math.floor(Math.abs(score))}
   </span>
   <span class="font-bold" style:font-size="{size}px" style:line-height="{size * 1.6}px">.</span>
   <span class="font-bold" style:font-size="{size}px" style:line-height="{size * 1.6}px">
