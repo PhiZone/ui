@@ -39,13 +39,13 @@
   <div
     class="card fixed top-20 right-3 px-6 py-3 bg-base-100 transition border-2 normal-border hover:shadow-lg z-10 grid grid-flow-col gap-5 text-center auto-cols-max"
   >
-    <div class="flex form-control">
+    <div class="form-control">
       <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${min};`} />
       </span>
       min
     </div>
-    <div class="flex form-control">
+    <div class="form-control">
       <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
         <span style={`--value:${sec};`} />
       </span>

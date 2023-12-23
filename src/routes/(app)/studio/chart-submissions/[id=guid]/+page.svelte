@@ -458,7 +458,7 @@
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('studio.chart_submission')}
@@ -619,7 +619,7 @@
       </div>
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.assets')}
@@ -653,7 +653,7 @@
       </div>
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('common.collaborators')}
@@ -698,7 +698,7 @@
       {#if !!submission.representationId}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.collections')}
@@ -747,7 +747,7 @@
       {#if $uploader.isSuccess}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.uploader')}
@@ -759,7 +759,7 @@
         {@const song = $song.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}
@@ -771,7 +771,7 @@
         {@const song = $songSubmission.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.song_submission')}
@@ -783,7 +783,7 @@
         {@const chart = $representation.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('chart.chart')}

@@ -89,7 +89,7 @@
     <img src={illustration} class="object-fill" alt="Illustration" />
     {#if line}
       <div
-        class="absolute p-4 inset-0 flex form-control justify-end backdrop backdrop-blur-5 text-neutral-content"
+        class="absolute p-4 inset-0 form-control justify-end backdrop backdrop-blur-5 text-neutral-content"
       >
         <span class="px-2 py-0.5 w-fit bg-black bg-opacity-60 rounded-full">
           {line}

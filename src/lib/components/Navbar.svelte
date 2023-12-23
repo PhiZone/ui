@@ -113,7 +113,7 @@
             <div class="indicator">
               <i class="fa-regular fa-bell fa-lg"></i>
               {#if user.notifications && user.notifications > 0 && !$page.url.pathname.startsWith('/me/notifications')}
-                <span class="badge h-4 badge-xs badge-secondary indicator-item">
+                <span class="badge h-4 badge-xs badge-primary indicator-item">
                   {user.notifications}
                 </span>
               {/if}

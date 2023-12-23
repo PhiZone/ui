@@ -27,7 +27,7 @@
   <div class="mx-auto lg:mx-4 lg:w-[60vw]">
     <div class="indicator w-full my-4">
       <span
-        class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+        class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
         style:--tw-translate-x="0"
       >
         {$t('pet.answer.answer')}
@@ -88,7 +88,7 @@
   <div class="w-80 form-control mx-auto lg:mx-4">
     <div class="indicator w-full my-4">
       <span
-        class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+        class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
         style:--tw-translate-x="0"
       >
         {$t('pet.answer.answerer')}
@@ -98,7 +98,7 @@
     {#if answer.assessorId}
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('pet.answer.assessor')}
@@ -108,7 +108,7 @@
     {:else if getUserPrivilege(user?.role) >= 5}
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('pet.answer.assess')}

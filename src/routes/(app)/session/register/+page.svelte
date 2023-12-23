@@ -232,7 +232,7 @@
               on:input={(e) => {
                 $locale = e.currentTarget.value;
               }}
-              class="select select-bordered w-full max-w-xs"
+              class="select transition border-2 normal-border hover:select-secondary w-full max-w-xs"
             >
               {#each $locales as value}
                 <option {value}>{$t(`common.lang.${value}`)}</option>
@@ -253,7 +253,7 @@
               name="RegionCode"
               bind:value={regionCode}
               {...$constraints.RegionCode}
-              class="select select-bordered w-full max-w-xs"
+              class="select transition border-2 normal-border hover:select-secondary w-full max-w-xs"
             >
               {#each regionMap as region}
                 <option value={region[0]}>{region[1]}</option>
@@ -291,7 +291,7 @@
                       ? !emailConfirmationAvailable
                         ? 'btn-ghost font-code'
                         : 'btn-ghost'
-                      : 'hover:btn-secondary btn-outline'} join-item w-full"
+                      : 'border-2 normal-border btn-outline'} join-item w-full"
                   disabled={emailConfirmationResult.status === Status.SENDING ||
                     !emailConfirmationAvailable}
                   on:click={confirmEmail}
@@ -317,7 +317,7 @@
               <input
                 type="checkbox"
                 bind:checked={legalAgreement}
-                class="checkbox checkbox-secondary"
+                class="checkbox transition border-2 normal-border checkbox-secondary"
               />
               <span class="label-text">
                 {@html $t('session.registration.legal_agreement', {

@@ -230,7 +230,7 @@
     <div class="asset mx-auto lg:mx-4">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.asset.asset')}
@@ -330,7 +330,7 @@
     <div class="mx-auto lg:mx-4 w-80 form-control">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.owner')}
@@ -341,7 +341,7 @@
         {@const chart = $chart.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('chart.chart')}

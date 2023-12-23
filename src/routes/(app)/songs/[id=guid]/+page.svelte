@@ -71,7 +71,7 @@
     <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('song.song')}
@@ -216,7 +216,7 @@
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
-                          <li class="hover-bordered">
+                          <li>
                             <Chart {chart} kind="inline" showSong={false} />
                           </li>
                         {/each}
@@ -238,7 +238,7 @@
     <div class="mx-auto lg:mx-4 w-80 form-control">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t(song.isOriginal ? 'song.author' : 'song.uploader')}
@@ -249,7 +249,7 @@
         {#each $chapters.data.data as chapter}
           <div class="indicator w-full my-4">
             <span
-              class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+              class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
             >
               {$t('song.chapter')}
