@@ -12,57 +12,49 @@
   $: owner = createQuery(api.user.info({ id: answer.ownerId }));
 </script>
 
-<div class="indicator w-full my-4">
-  <span
-    class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
-    style:--tw-translate-x="0"
-  >
-    {$t('pet.answer.answer')}
-  </span>
-  <a
-    class="card card-side w-full bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
-    href={`/pet/answers/${answer.id}`}
-  >
-    <figure class="w-1/6 min-w-fit">
-      <div
-        class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
-      >
-        <p class="opacity-80">
-          {$t(answer.totalScore ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
-        </p>
-        <p class="text-4xl font-extrabold">
-          {answer.totalScore ?? answer.objectiveScore}
-        </p>
-      </div>
-    </figure>
-    <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
-      <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge mr-1">A 16</span>
-        {answer.answer1}
+<a
+  class="card card-side w-full bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+  href={`/pet/answers/${answer.id}`}
+>
+  <figure class="w-1/6 min-w-fit">
+    <div
+      class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
+    >
+      <p class="opacity-80">
+        {$t(answer.totalScore ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
       </p>
-      <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge mr-1">A 17</span>
-        {answer.answer2}
+      <p class="text-4xl font-extrabold">
+        {answer.totalScore ?? answer.objectiveScore}
       </p>
-      <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge mr-1">A 18</span>
-        {answer.answer3}
-      </p>
-      <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge mr-1">A 19</span>
-        {answer.chart}
-      </p>
-      <div class="w-full flex justify-between items-center">
-        <p class="text-sm opacity-70 flex justify-end items-center gap-2">
-          <a href={`/users/${answer.ownerId}`} target="_blank" class="hover:underline">
-            {$owner.data?.data.userName ?? ''}
-          </a>
-          <span>·</span>
-          <span>
-            {parseDateTime(answer.dateCreated, true, user?.language)}
-          </span>
-        </p>
-      </div>
     </div>
-  </a>
-</div>
+  </figure>
+  <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
+    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="badge mr-1">A 16</span>
+      {answer.answer1}
+    </p>
+    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="badge mr-1">A 17</span>
+      {answer.answer2}
+    </p>
+    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="badge mr-1">A 18</span>
+      {answer.answer3}
+    </p>
+    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="badge mr-1">A 19</span>
+      {answer.chart}
+    </p>
+    <div class="w-full flex justify-between items-center">
+      <p class="text-sm opacity-70 flex justify-end items-center gap-2">
+        <a href={`/users/${answer.ownerId}`} target="_blank" class="hover:underline">
+          {$owner.data?.data.userName ?? ''}
+        </a>
+        <span>·</span>
+        <span>
+          {parseDateTime(answer.dateCreated, true, user?.language)}
+        </span>
+      </p>
+    </div>
+  </div>
+</a>

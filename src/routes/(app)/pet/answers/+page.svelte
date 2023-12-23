@@ -20,7 +20,7 @@
   <div class="page">
     <h1 class="text-4xl font-bold mb-6">{$t('pet.answers')}</h1>
     {#if total && perPage && data && data.length > 0}
-      <div class="flex flex-col">
+      <div class="form-control gap-4">
         {#each data as answer}
           <Answer {answer} />
         {/each}

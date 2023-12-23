@@ -47,6 +47,12 @@ export function transform(content: string): string {
         (_, id: string, display: string) =>
           `<a href="/records/${id}" class="richtext-link richtext-chart">${display}</a>`,
       )
+      // application
+      .replaceAll(
+        /\[PZApplication:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/applications/${id}" class="richtext-link richtext-chart">${display}</a>`,
+      )
       // comment
       .replaceAll(
         /\[PZComment:([-0-9a-fA-F]+):(.+):PZRT\]/gi,

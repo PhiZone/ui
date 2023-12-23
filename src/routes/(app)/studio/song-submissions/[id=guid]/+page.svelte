@@ -490,7 +490,7 @@
     <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('studio.song_submission')}
@@ -697,7 +697,7 @@
       {#if $resourceRecords.isSuccess && $resourceRecords.data.data.length > 0}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.copyright_alert')}
@@ -720,7 +720,7 @@
         {#if songs.length > 0}
           <div class="indicator w-full my-4">
             <span
-              class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+              class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
             >
               {$t('studio.submission.song_duplications')}
@@ -740,7 +740,7 @@
       {#if submission.originalityProof}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('common.collaborators')}
@@ -786,7 +786,7 @@
       {#if (submission.originalityProof || submission.license) && !!submission.representationId}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.chapters')}
@@ -829,7 +829,7 @@
       {#if $uploader.isSuccess}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('studio.submission.uploader')}
@@ -841,7 +841,7 @@
         {@const song = $representation.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}

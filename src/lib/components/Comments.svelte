@@ -45,7 +45,7 @@
 
 <div class="indicator w-full my-4">
   <span
-    class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+    class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
     style:--tw-translate-x="0"
   >
     {$t('common.comments')}

@@ -438,7 +438,7 @@
     <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.chart')}
@@ -594,39 +594,41 @@
                       <i class="fa-solid fa-eye fa-lg"></i>
                       {$t('common.preview')}
                     </a>
-                    <button
-                      class="btn btn-ghost border-2 hover:btn-outline join-item"
-                      on:click={async () => {
-                        if (
-                          $preferredPlayConfigurationQuery.isSuccess &&
-                          $preferredPlayConfigurationQuery.data.data.length > 0 &&
-                          $preferredApplicationQuery.isSuccess &&
-                          $preferredApplicationQuery.data.data.length > 0
-                        ) {
-                          const resp = await api.chart.play({
-                            chartId: chart.id,
-                            configurationId: $preferredPlayConfigurationQuery.data.data[0].id,
-                            applicationId: $preferredApplicationQuery.data.data[0].id,
-                          });
-                          if (resp.ok) {
-                            const data = await resp.json();
-                            console.log(
-                              'Opening',
-                              `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
-                            );
-                            window.open(
-                              `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
-                              '_blank',
-                            );
+                    {#if chart.accessibility !== 2}
+                      <button
+                        class="btn btn-ghost border-2 hover:btn-outline join-item"
+                        on:click={async () => {
+                          if (
+                            $preferredPlayConfigurationQuery.isSuccess &&
+                            $preferredPlayConfigurationQuery.data.data.length > 0 &&
+                            $preferredApplicationQuery.isSuccess &&
+                            $preferredApplicationQuery.data.data.length > 0
+                          ) {
+                            const resp = await api.chart.play({
+                              chartId: chart.id,
+                              configurationId: $preferredPlayConfigurationQuery.data.data[0].id,
+                              applicationId: $preferredApplicationQuery.data.data[0].id,
+                            });
+                            if (resp.ok) {
+                              const data = await resp.json();
+                              console.log(
+                                'Opening',
+                                `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
+                              );
+                              window.open(
+                                `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
+                                '_blank',
+                              );
+                            }
+                          } else {
+                            playOpen = true;
                           }
-                        } else {
-                          playOpen = true;
-                        }
-                      }}
-                    >
-                      <i class="fa-solid fa-play fa-lg"></i>
-                      {$t('chart.play')}
-                    </button>
+                        }}
+                      >
+                        <i class="fa-solid fa-play fa-lg"></i>
+                        {$t('chart.play')}
+                      </button>
+                    {/if}
                   {/if}
                 </div>
               </div>
@@ -637,7 +639,7 @@
       {#if $assets.isSuccess && ($assets.data.data.length > 0 || getUserPrivilege(user?.role) === 6)}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('chart.assets')}
@@ -671,7 +673,7 @@
     <div class="w-80 form-control mx-auto lg:mx-4">
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
           {$t('chart.owner')}
@@ -682,7 +684,7 @@
         {@const song = $song.data.data}
         <div class="indicator w-full my-4">
           <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
             {$t('song.song')}
@@ -694,7 +696,7 @@
           {#if records.length > 0}
             <div class="indicator w-full my-4">
               <span
-                class="indicator-item indicator-start lg:indicator-end badge badge-secondary badge-lg min-w-fit text-lg"
+                class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
                 style:--tw-translate-x="0"
               >
                 {$t('common.records')}
