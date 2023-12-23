@@ -92,7 +92,7 @@
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
-        {:else if !chart.dateVoted}
+        {:else if !chart.dateVoted || new Date(chart.dateVoted) < new Date(chart.dateUpdated)}
           <div
             class="tooltip tooltip-right tooltip-warning"
             data-tip={$t('studio.submission.statuses.0')}
