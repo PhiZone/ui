@@ -223,7 +223,7 @@
             : 'my-2'}
           data-tip={$reviewErrors.message}
         >
-          <label class="join my-2">
+          <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
               {$t('studio.submission.reply')}
             </span>
