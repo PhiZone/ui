@@ -184,23 +184,25 @@
           class:tooltip-open={!!$voteErrors.score}
           data-tip={$voteErrors.score}
         />
-        <label class="join my-4">
-          <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-            {$t('studio.submission.message')}
-          </span>
-          <textarea
-            id="message"
-            name="message"
-            class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-full h-48"
-            placeholder={$t('studio.submission.write_message')}
-            bind:value={message}
-          />
-        </label>
         <div
-          class="tooltip tooltip-bottom tooltip-error"
-          class:tooltip-open={!!$voteErrors.message}
+          class={$voteErrors.message
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-4'
+            : 'my-4'}
           data-tip={$voteErrors.message}
-        />
+        >
+          <label class="join">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('studio.submission.message')}
+            </span>
+            <textarea
+              id="message"
+              name="message"
+              class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-full h-48"
+              placeholder={$t('studio.submission.write_message')}
+              bind:value={message}
+            />
+          </label>
+        </div>
         <div class="modal-action">
           <div
             class="tooltip tooltip-bottom tooltip-error w-full"

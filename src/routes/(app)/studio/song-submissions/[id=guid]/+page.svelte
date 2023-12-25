@@ -217,22 +217,24 @@
           class:tooltip-open={!!$reviewErrors.isLocked}
           data-tip={$reviewErrors.isLocked}
         />
-        <label class="join my-2">
-          <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-            {$t('studio.submission.reply')}
-          </span>
-          <textarea
-            id="message"
-            name="message"
-            class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-3/4 h-48"
-            placeholder={$t('common.write_reply')}
-          />
-        </label>
         <div
-          class="tooltip tooltip-bottom tooltip-error"
-          class:tooltip-open={!!$reviewErrors.message}
+          class={$reviewErrors.message
+            ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2'
+            : 'my-2'}
           data-tip={$reviewErrors.message}
-        />
+        >
+          <label class="join my-2">
+            <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
+              {$t('studio.submission.reply')}
+            </span>
+            <textarea
+              id="message"
+              name="message"
+              class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-3/4 h-48"
+              placeholder={$t('common.write_reply')}
+            />
+          </label>
+        </div>
         <div class="modal-action">
           <div
             class="tooltip tooltip-bottom tooltip-error w-full"
