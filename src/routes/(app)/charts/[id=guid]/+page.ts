@@ -6,6 +6,7 @@ export const load = async ({ data, params, url, parent }) => {
   const id = params.id;
   await Promise.allSettled([
     queryClient.prefetchQuery(api.chart.info({ id })),
+    queryClient.prefetchQuery(api.chart.listAllAdmitters({ id })),
     queryClient.prefetchQuery(
       api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
     ),

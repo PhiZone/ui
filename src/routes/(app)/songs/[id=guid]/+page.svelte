@@ -41,12 +41,12 @@
         ✕
       </label>
       <div class="py-3 flex gap-4 items-center content">
-        <span class="text-5xl font-bold">{song.title}</span>
         {#if song.isOriginal}
           <button class="btn btn-shallow text-3xl no-animation min-w-fit">
             {$t('song.original')}
           </button>
         {/if}
+        <span class="text-5xl font-bold">{song.title}</span>
       </div>
       <div class="flex items-center gap-2">
         <button class="btn btn-accent btn-sm text-xl no-animation">
@@ -81,14 +81,14 @@
         >
           <div class="card-body py-10">
             <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
-              <h2 class="text-5xl font-bold content md:inline-block">
-                {song.title}
-              </h2>
               {#if song.isOriginal}
                 <button class="btn btn-accent text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
+              <h2 class="text-5xl font-bold content md:inline-block">
+                {song.title}
+              </h2>
             </div>
             <div class="flex gap-2 flex-col lg:flex-row">
               <div class="lg:w-1/3">

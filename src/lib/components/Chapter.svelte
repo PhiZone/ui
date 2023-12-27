@@ -10,6 +10,7 @@
 
   export let chapter: ChapterDto | ChapterAdmitterDto;
   export let fixedHeight = true;
+  export let showLike = true;
 
   $: owner = createQuery(api.user.info({ id: chapter.ownerId }));
 </script>
@@ -21,7 +22,7 @@
   <figure class="h-[167px] relative">
     <img src={getCompressedImage(chapter.illustration)} alt="Illustration" class="object-fill" />
     {#if 'label' in chapter && chapter.label}
-      <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+      <div class="absolute bottom-2 right-2">
         <button class="btn btn-shallow btn-sm text-xl no-animation">
           {chapter.label}
         </button>
@@ -59,7 +60,7 @@
         </span>
       </p>
     {/if}
-    {#if fixedHeight}
+    {#if showLike}
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="card-actions justify-end"

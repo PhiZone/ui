@@ -146,7 +146,7 @@
           >
             {$t('application.application')}
           </span>
-          <Application application={$application.data.data} />
+          <Application application={$application.data.data} fixedHeight={false} />
         </div>
       {/if}
     </div>
