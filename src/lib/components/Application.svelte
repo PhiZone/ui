@@ -10,6 +10,7 @@
 
   export let application: ApplicationDto;
   export let fixedHeight = true;
+  export let showLike = true;
 
   $: owner = createQuery(api.user.info({ id: application.ownerId }));
 </script>
@@ -24,7 +25,6 @@
         alt="Illustration"
         class="object-fill"
       />
-      <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle"></div>
     </figure>
     <div class="card-body {fixedHeight ? 'h-[250px]' : ''} py-6 gap-0.5">
       <div class="flex items-center gap-2 w-full mb-1">
@@ -65,7 +65,7 @@
           </span>
         </p>
       {/if}
-      {#if fixedHeight}
+      {#if showLike}
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
           class="card-actions justify-end"

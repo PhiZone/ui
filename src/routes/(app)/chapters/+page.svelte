@@ -23,7 +23,7 @@
       <div class="result">
         {#each data as chapter}
           <div class="min-w-fit">
-            <Chapter {chapter} fixedHeight />
+            <Chapter {chapter} />
           </div>
         {/each}
       </div>

@@ -502,14 +502,14 @@
         >
           <div class="card-body py-10">
             <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
-              <h2 class="text-5xl font-bold content md:inline-block">
-                {submission.title}
-              </h2>
               {#if submission.originalityProof}
                 <button class="btn btn-accent text-3xl no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}
+              <h2 class="text-5xl font-bold content md:inline-block">
+                {submission.title}
+              </h2>
             </div>
             <div class="flex flex-col md:flex-row">
               <div class="md:w-1/3">

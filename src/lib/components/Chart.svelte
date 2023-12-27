@@ -7,10 +7,11 @@
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
   import Rating from './Rating.svelte';
+  import type { ChartAdmitteeDto } from '$lib/api/chart';
 
   $: ({ api } = $page.data);
 
-  export let chart: ChartDto;
+  export let chart: ChartDto | ChartAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';
   export let showSong = true;
   export let showCharter = true;
@@ -35,7 +36,7 @@
         {:else}
           <div class="skeleton rounded-none w-full h-full"></div>
         {/if}
-        <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+        <div class="absolute bottom-2 left-2">
           <div class="join join-horizontal">
             <button
               class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
@@ -52,6 +53,18 @@
             {/if}
           </div>
         </div>
+        {#if 'label' in chart && chart.label}
+          <div class="absolute bottom-2 right-2">
+            <div
+              class={chart.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
+              data-tip={chart.label}
+            >
+              <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
+                {chart.label.length > 10 ? `${chart.label.substring(0, 10)}...` : chart.label}
+              </button>
+            </div>
+          </div>
+        {/if}
       </figure>
       <div class="card-body py-6 gap-0.5">
         <div class="w-full">
@@ -106,18 +119,41 @@
     </a>
   </div>
 {:else if kind === 'inline'}
-  <a href="/charts/{chart.id}" class="w-full flex items-center gap-3 overflow-hidden px-5 h-16">
-    <div class="flex {showCharter ? 'lg:w-1/2 w-5/6' : 'w-5/6'} gap-2">
-      {#if showSong}
-        {#if chart.title || $song.isSuccess}
-          <div class="sm:w-1/2 2xl:w-2/3 text-xl font-bold ellipsis-2-md">
-            {$song.data?.data.title}
-          </div>
-        {:else}
-          <div class="skeleton sm:w-1/2 2xl:w-2/3 h-7 ellipsis-2-md"></div>
-        {/if}
+  <a
+    href="/charts/{chart.id}"
+    class="w-full flex justify-between items-center gap-3 overflow-hidden px-5 h-16"
+  >
+    <div
+      class="flex w-full {showCharter
+        ? showSong
+          ? 'lg:w-1/2 w-2/3'
+          : 'lg:w-1/2 w-2/3 min-w-fit'
+        : 'w-2/3'} gap-2"
+    >
+      {#if showSong || ('label' in chart && chart.label)}
+        <div class="{showSong ? 'w-full sm:w-1/2 2xl:w-2/3' : 'w-1/6'} flex gap-2 items-center">
+          {#if 'label' in chart && chart.label}
+            <div
+              class="{chart.label.length > 10 ? 'tooltip tooltip-right' : ''} hidden sm:inline"
+              data-tip={chart.label}
+            >
+              <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
+                {chart.label.length > 10 ? `${chart.label.substring(0, 10)}...` : chart.label}
+              </button>
+            </div>
+          {/if}
+          {#if showSong}
+            {#if chart.title || $song.isSuccess}
+              <p class="text-xl font-bold ellipsis-2-md max-w-fit">
+                {$song.data?.data.title}
+              </p>
+            {:else}
+              <div class="skeleton h-7 ellipsis-2-md"></div>
+            {/if}
+          {/if}
+        </div>
       {/if}
-      <div class="{showSong ? 'hidden sm:flex' : ''} join join-horizontal items-center">
+      <div class="{showSong ? 'hidden sm:flex' : ''} join join-horizontal items-center min-w-fit">
         <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
           {chart.level}
           {getLevelDisplay(chart.difficulty)}
@@ -132,7 +168,11 @@
       </div>
     </div>
     {#if showCharter}
-      <div class="hidden lg:inline w-1/3 max-w-1/3 lg:text-lg ellipsis-2-lg">
+      <div
+        class="hidden md:inline lg:hidden xl:inline {showSong
+          ? 'w-1/3 max-w-1/3'
+          : 'w-3/4'} text-lg ellipsis-2-smxl"
+      >
         {#if chart.authorName}
           {@html $charter}
         {:else}
@@ -141,7 +181,7 @@
       </div>
     {/if}
     <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
-      <div class="hidden sm:inline">
+      <div class="hidden md:inline">
         <Rating rating={chart.rating} direction="left" />
       </div>
       {#if showLike}
@@ -151,6 +191,7 @@
             e.preventDefault();
           }}
           on:keyup
+          class="hidden sm:inline"
         >
           <Like
             id={chart.id}
@@ -169,16 +210,16 @@
   .ellipsis-2-md {
     overflow: hidden;
     text-overflow: ellipsis;
-    @media (min-width: 640px) {
+    @media (min-width: 768px) {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
   }
-  .ellipsis-2-lg {
+  .ellipsis-2-smxl {
     overflow: hidden;
     text-overflow: ellipsis;
-    @media (min-width: 1024px) {
+    @media (min-width: 1100px) {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;

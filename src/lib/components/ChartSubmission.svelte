@@ -42,7 +42,7 @@
       {:else}
         <div class="skeleton rounded-none w-full h-full"></div>
       {/if}
-      <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
+      <div class="absolute bottom-2 left-2">
         <div class="join join-horizontal">
           <button
             class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
@@ -148,24 +148,3 @@
     </div>
   </a>
 </div>
-
-<style>
-  .ellipsis-2-md {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    @media (min-width: 640px) {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-  }
-  .ellipsis-2-lg {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    @media (min-width: 1024px) {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-  }
-</style>

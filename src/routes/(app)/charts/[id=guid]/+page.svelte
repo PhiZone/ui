@@ -14,6 +14,7 @@
   import Song from '$lib/components/Song.svelte';
   import User from '$lib/components/User.svelte';
   import Like from '$lib/components/Like.svelte';
+  import Collection from '$lib/components/Collection.svelte';
   import Record from '$lib/components/Record.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import ChartRadar from '$lib/components/ChartRadar.svelte';
@@ -65,6 +66,7 @@
   $: song = createQuery(
     api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
   );
+  $: collections = createQuery(api.chart.listAllAdmitters({ id }));
   $: records = createQuery(
     api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
   );
@@ -691,25 +693,39 @@
           </span>
           <Song {song} />
         </div>
-        {#if $records.isSuccess}
-          {@const records = $records.data.data.slice(0, 10)}
-          {#if records.length > 0}
-            <div class="indicator w-full my-4">
-              <span
-                class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
-                style:--tw-translate-x="0"
-              >
-                {$t('common.records')}
-              </span>
-              <div class="card w-80 bg-base-100 transition border-2 normal-border hover:shadow-lg">
-                <div class="card-body gap-2 items-center justify-center">
-                  {#each records as record}
-                    <Record {record} {chart} {song} rank={record.position} showChart={false} />
-                  {/each}
-                </div>
+      {/if}
+      {#if $collections.isSuccess}
+        {#each $collections.data.data as collection}
+          <div class="indicator w-full my-4">
+            <span
+              class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
+              style:--tw-translate-x="0"
+            >
+              {$t('chart.collection')}
+            </span>
+            <Collection {collection} />
+          </div>
+        {/each}
+      {/if}
+      {#if $records.isSuccess && $song.isSuccess}
+        {@const records = $records.data.data.slice(0, 10)}
+        {@const song = $song.data.data}
+        {#if records.length > 0}
+          <div class="indicator w-full my-4">
+            <span
+              class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
+              style:--tw-translate-x="0"
+            >
+              {$t('common.records')}
+            </span>
+            <div class="card w-80 bg-base-100 transition border-2 normal-border hover:shadow-lg">
+              <div class="card-body gap-2 items-center justify-center">
+                {#each records as record}
+                  <Record {record} {chart} {song} rank={record.position} showChart={false} />
+                {/each}
               </div>
             </div>
-          {/if}
+          </div>
         {/if}
       {/if}
     </div>

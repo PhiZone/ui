@@ -42,7 +42,7 @@
             <i class="fa-solid fa-arrow-down fa-lg md:hidden"></i>
           </div>
         {/if}
-        <Chapter chapter={admission.admitter} fixedHeight={false} />
+        <Chapter chapter={admission.admitter} fixedHeight={false} showLike={false} />
       </div>
       <div
         class="flex flex-col {showSong

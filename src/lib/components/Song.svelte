@@ -44,25 +44,25 @@
     <a href={`/songs/${song.id}`}>
       <figure class="h-[167px] relative">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
-        <div class="absolute bottom-2 left-2 w-full flex gap-1 align-middle">
-          <div class="join join-horizontal">
-            {#if song.isOriginal}
-              <button class="btn btn-accent btn-sm text-xl no-animation join-item">
-                {$t('song.original')}
-              </button>
-            {/if}
-            {#if 'label' in song && song.label}
-              <div
-                class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
-                data-tip={song.label}
-              >
-                <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
-                  {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
-                </button>
-              </div>
-            {/if}
-          </div>
+        <div class="absolute bottom-2 left-2">
+          {#if song.isOriginal}
+            <button class="btn btn-accent btn-sm text-xl no-animation join-item">
+              {$t('song.original')}
+            </button>
+          {/if}
         </div>
+        {#if 'label' in song && song.label}
+          <div class="absolute bottom-2 right-2">
+            <div
+              class={song.label.length > 10 ? 'tooltip tooltip-bottom' : ''}
+              data-tip={song.label}
+            >
+              <button class="btn btn-sm btn-shallow btn-active no-animation join-item text-lg">
+                {song.label.length > 10 ? `${song.label.substring(0, 10)}...` : song.label}
+              </button>
+            </div>
+          </div>
+        {/if}
       </figure>
       <div class="card-body py-6 gap-0.5">
         <h2 class="title w-full mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
@@ -113,9 +113,6 @@
   <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
     <div class="w-11/12 md:w-7/12">
       <div class="flex gap-2 items-center">
-        <p class="text-xl font-bold ellipsis-2 max-w-fit">
-          {song.title}
-        </p>
         <div class="join join-horizontal">
           {#if song.isOriginal}
             <button class="btn btn-accent btn-sm text-xl no-animation join-item">
@@ -133,6 +130,9 @@
             </div>
           {/if}
         </div>
+        <p class="text-xl font-bold ellipsis-2 max-w-fit">
+          {song.title}
+        </p>
       </div>
     </div>
     <div class="w-0 md:w-1/3">
@@ -143,7 +143,7 @@
     {#if showLike}
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="w-1/12 min-w-fit"
+        class="w-1/12 min-w-fit hidden sm:inline"
         on:click={(e) => {
           e.preventDefault();
         }}
@@ -172,7 +172,7 @@
   .ellipsis-2-md {
     overflow: hidden;
     text-overflow: ellipsis;
-    @media (min-width: 640px) {
+    @media (min-width: 768px) {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
