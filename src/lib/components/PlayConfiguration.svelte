@@ -20,14 +20,18 @@
   let status = Status.WAITING;
   let errorCode = '';
   let updateErrors: Map<string, string> | undefined = undefined;
+  const { backgroundLuminance, hitSoundVolume, musicVolume, ...rest } = playConfiguration;
+  let editable: PlayConfigurationDto = {
+    backgroundLuminance: backgroundLuminance * 100,
+    hitSoundVolume: hitSoundVolume * 100,
+    musicVolume: musicVolume * 100,
+    ...rest,
+  };
   let aspectRatio1 = playConfiguration.aspectRatio ? playConfiguration.aspectRatio[0] : 16;
   let aspectRatio2 = playConfiguration.aspectRatio ? playConfiguration.aspectRatio[1] : 9;
 
-  $: badJudgment = playConfiguration.goodJudgment * 1.125;
-  $: rksFactor = calculateRksFactor(
-    playConfiguration.perfectJudgment,
-    playConfiguration.goodJudgment,
-  );
+  $: badJudgment = editable.goodJudgment * 1.125;
+  $: rksFactor = calculateRksFactor(editable.perfectJudgment, editable.goodJudgment);
 
   const update = async () => {
     status = Status.SENDING;
@@ -94,35 +98,34 @@
     >
       <div class="flex w-full pt-6">
         <div
-          class="tooltip {playConfiguration.perfectJudgment < 45
+          class="tooltip {editable.perfectJudgment < 45
             ? 'tooltip-right'
             : ''} tooltip-warning leading-[0px] h-[7.5px]"
-          data-tip="{$t('play_configuration.perfect')} ({playConfiguration.perfectJudgment}ms)"
-          style:width="{playConfiguration.perfectJudgment / 3.5}%"
+          data-tip="{$t('play_configuration.perfect')} ({editable.perfectJudgment}ms)"
+          style:width="{editable.perfectJudgment / 3.5}%"
         >
           <progress value="1" max="1" class="progress progress-warning" />
         </div>
         <div
-          class="tooltip {playConfiguration.goodJudgment < 40
+          class="tooltip {editable.goodJudgment < 40
             ? 'tooltip-right'
             : ''} tooltip-info leading-[0px] h-[7.5px]"
-          data-tip="{$t('play_configuration.good')} ({playConfiguration.goodJudgment}ms)"
-          style:width="{(playConfiguration.goodJudgment - playConfiguration.perfectJudgment) /
-            3.5}%"
+          data-tip="{$t('play_configuration.good')} ({editable.goodJudgment}ms)"
+          style:width="{(editable.goodJudgment - editable.perfectJudgment) / 3.5}%"
         >
           <progress value="1" max="1" class="progress progress-info" />
         </div>
         <div
-          class="tooltip {playConfiguration.goodJudgment < 25
+          class="tooltip {editable.goodJudgment < 25
             ? 'tooltip-right'
             : ''} tooltip-error leading-[0px] h-[7.5px]"
           data-tip="{$t('play_configuration.bad')} ({badJudgment}ms)"
-          style:width="{(badJudgment - playConfiguration.goodJudgment) / 3.5}%"
+          style:width="{(badJudgment - editable.goodJudgment) / 3.5}%"
         >
           <progress value="1" max="1" class="progress progress-error" />
         </div>
         <div
-          class="tooltip {playConfiguration.goodJudgment > 225
+          class="tooltip {editable.goodJudgment > 225
             ? 'tooltip-left'
             : ''} leading-[0px] h-[7.5px]"
           data-tip={$t('play_configuration.miss_or_incoming')}
@@ -151,17 +154,17 @@
               name="perfectJudgment"
               min={minJudgment}
               max="150"
-              bind:value={playConfiguration.perfectJudgment}
+              bind:value={editable.perfectJudgment}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('perfectJudgment') ? 'range-error' : ''
               }`}
               on:input={(e) => {
                 const perfectJudgment = parseInt(e.currentTarget.value);
                 if (
-                  playConfiguration.goodJudgment <
+                  editable.goodJudgment <
                   Math.max(perfectJudgment + minJudgment, perfectJudgment * 1.125)
                 ) {
-                  playConfiguration.goodJudgment = Math.round(
+                  editable.goodJudgment = Math.round(
                     Math.max(perfectJudgment + minJudgment, perfectJudgment * 1.125),
                   );
                 }
@@ -175,11 +178,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.perfectJudgment}
+              value={editable.perfectJudgment}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.perfectJudgment}`;
+                  e.currentTarget.value = `${editable.perfectJudgment}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < minJudgment) {
@@ -187,27 +190,19 @@
                 } else if (parseInt(e.currentTarget.value) > 150) {
                   e.currentTarget.value = '150';
                 }
-                playConfiguration.perfectJudgment = parseInt(e.currentTarget.value);
+                editable.perfectJudgment = parseInt(e.currentTarget.value);
                 if (
-                  playConfiguration.goodJudgment <
-                  Math.max(
-                    playConfiguration.perfectJudgment + minJudgment,
-                    playConfiguration.perfectJudgment * 1.125,
-                  )
+                  editable.goodJudgment <
+                  Math.max(editable.perfectJudgment + minJudgment, editable.perfectJudgment * 1.125)
                 ) {
-                  playConfiguration.goodJudgment = Math.round(
+                  editable.goodJudgment = Math.round(
                     Math.max(
-                      playConfiguration.perfectJudgment + minJudgment,
-                      playConfiguration.perfectJudgment * 1.125,
+                      editable.perfectJudgment + minJudgment,
+                      editable.perfectJudgment * 1.125,
                     ),
                   );
                 }
-                patch = applyPatch(
-                  patch,
-                  'replace',
-                  '/perfectJudgment',
-                  playConfiguration.perfectJudgment,
-                );
+                patch = applyPatch(patch, 'replace', '/perfectJudgment', editable.perfectJudgment);
               }}
             />
           </div>
@@ -230,13 +225,10 @@
               id="good_judgment"
               name="goodJudgment"
               min={Math.round(
-                Math.max(
-                  playConfiguration.perfectJudgment + minJudgment,
-                  playConfiguration.perfectJudgment * 1.125,
-                ),
+                Math.max(editable.perfectJudgment + minJudgment, editable.perfectJudgment * 1.125),
               )}
               max="300"
-              bind:value={playConfiguration.goodJudgment}
+              bind:value={editable.goodJudgment}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('goodJudgment') ? 'range-error' : ''
               }`}
@@ -252,36 +244,28 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.goodJudgment}
+              value={editable.goodJudgment}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${Math.round(playConfiguration.goodJudgment)}`;
+                  e.currentTarget.value = `${Math.round(editable.goodJudgment)}`;
                   return;
                 }
                 if (
                   parseInt(e.currentTarget.value) <
-                  Math.max(
-                    playConfiguration.perfectJudgment + minJudgment,
-                    playConfiguration.perfectJudgment * 1.125,
-                  )
+                  Math.max(editable.perfectJudgment + minJudgment, editable.perfectJudgment * 1.125)
                 ) {
                   e.currentTarget.value = `${Math.round(
                     Math.max(
-                      playConfiguration.perfectJudgment + minJudgment,
-                      playConfiguration.perfectJudgment * 1.125,
+                      editable.perfectJudgment + minJudgment,
+                      editable.perfectJudgment * 1.125,
                     ),
                   )}`;
                 } else if (parseInt(e.currentTarget.value) > 300) {
                   e.currentTarget.value = '300';
                 }
-                playConfiguration.goodJudgment = parseInt(e.currentTarget.value);
-                patch = applyPatch(
-                  patch,
-                  'replace',
-                  '/goodJudgment',
-                  playConfiguration.goodJudgment,
-                );
+                editable.goodJudgment = parseInt(e.currentTarget.value);
+                patch = applyPatch(patch, 'replace', '/goodJudgment', editable.goodJudgment);
               }}
             />
           </div>
@@ -310,7 +294,7 @@
                 }}
                 id="simultaneous_note_hint"
                 name="simultaneousNoteHint"
-                bind:checked={playConfiguration.simultaneousNoteHint}
+                bind:checked={editable.simultaneousNoteHint}
                 class={`toggle border-2 transition ${
                   updateErrors?.get('simultaneousNoteHint') ? 'toggle-error' : ''
                 }`}
@@ -319,7 +303,7 @@
                     patch,
                     'replace',
                     '/simultaneousNoteHint',
-                    !playConfiguration.simultaneousNoteHint,
+                    !editable.simultaneousNoteHint,
                   );
                 }}
               />
@@ -342,17 +326,12 @@
                 }}
                 id="fc_ap_indicator"
                 name="fcApIndicator"
-                bind:checked={playConfiguration.fcApIndicator}
+                bind:checked={editable.fcApIndicator}
                 class={`toggle border-2 transition ${
                   updateErrors?.get('fcApIndicator') ? 'toggle-error' : ''
                 }`}
                 on:input={() => {
-                  patch = applyPatch(
-                    patch,
-                    'replace',
-                    '/fcApIndicator',
-                    !playConfiguration.fcApIndicator,
-                  );
+                  patch = applyPatch(patch, 'replace', '/fcApIndicator', !editable.fcApIndicator);
                 }}
               />
             </div>
@@ -378,7 +357,7 @@
               min="0.4"
               max="2"
               step="0.1"
-              bind:value={playConfiguration.noteSize}
+              bind:value={editable.noteSize}
               class={`range join-item w-7/12 ${updateErrors?.get('noteSize') ? 'range-error' : ''}`}
               on:input={(e) => {
                 const noteSize = parseInt(e.currentTarget.value);
@@ -392,11 +371,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.noteSize}
+              value={editable.noteSize}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.noteSize}`;
+                  e.currentTarget.value = `${editable.noteSize}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -404,8 +383,8 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.noteSize = parseFloat(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/noteSize', playConfiguration.noteSize);
+                editable.noteSize = parseFloat(e.currentTarget.value);
+                patch = applyPatch(patch, 'replace', '/noteSize', editable.noteSize);
               }}
             />
           </div>
@@ -429,13 +408,18 @@
               name="backgroundLuminance"
               min="0"
               max="100"
-              bind:value={playConfiguration.backgroundLuminance}
+              bind:value={editable.backgroundLuminance}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('backgroundLuminance') ? 'range-error' : ''
               }`}
               on:input={(e) => {
                 const backgroundLuminance = parseInt(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/backgroundLuminance', backgroundLuminance);
+                patch = applyPatch(
+                  patch,
+                  'replace',
+                  '/backgroundLuminance',
+                  backgroundLuminance / 100,
+                );
               }}
             />
             <input
@@ -445,11 +429,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.backgroundLuminance}
+              value={editable.backgroundLuminance}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.backgroundLuminance}`;
+                  e.currentTarget.value = `${editable.backgroundLuminance}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -457,12 +441,12 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.backgroundLuminance = parseInt(e.currentTarget.value);
+                editable.backgroundLuminance = parseInt(e.currentTarget.value);
                 patch = applyPatch(
                   patch,
                   'replace',
                   '/backgroundLuminance',
-                  playConfiguration.backgroundLuminance,
+                  editable.backgroundLuminance / 100,
                 );
               }}
             />
@@ -488,7 +472,7 @@
               min="0"
               max="2"
               step="0.1"
-              bind:value={playConfiguration.backgroundBlur}
+              bind:value={editable.backgroundBlur}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('backgroundBlur') ? 'range-error' : ''
               }`}
@@ -504,11 +488,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.backgroundBlur}
+              value={editable.backgroundBlur}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.backgroundBlur}`;
+                  e.currentTarget.value = `${editable.backgroundBlur}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -516,13 +500,8 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.backgroundBlur = parseFloat(e.currentTarget.value);
-                patch = applyPatch(
-                  patch,
-                  'replace',
-                  '/backgroundBlur',
-                  playConfiguration.backgroundBlur,
-                );
+                editable.backgroundBlur = parseFloat(e.currentTarget.value);
+                patch = applyPatch(patch, 'replace', '/backgroundBlur', editable.backgroundBlur);
               }}
             />
           </div>
@@ -546,7 +525,7 @@
               name="chartOffset"
               min="-600"
               max="600"
-              bind:value={playConfiguration.chartOffset}
+              bind:value={editable.chartOffset}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('chartOffset') ? 'range-error' : ''
               }`}
@@ -562,11 +541,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.chartOffset}
+              value={editable.chartOffset}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.chartOffset}`;
+                  e.currentTarget.value = `${editable.chartOffset}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -574,8 +553,8 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.chartOffset = parseInt(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/chartOffset', playConfiguration.chartOffset);
+                editable.chartOffset = parseInt(e.currentTarget.value);
+                patch = applyPatch(patch, 'replace', '/chartOffset', editable.chartOffset);
               }}
             />
           </div>
@@ -599,13 +578,13 @@
               name="hitSoundVolume"
               min="0"
               max="100"
-              bind:value={playConfiguration.hitSoundVolume}
+              bind:value={editable.hitSoundVolume}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('hitSoundVolume') ? 'range-error' : ''
               }`}
               on:input={(e) => {
                 const hitSoundVolume = parseInt(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/hitSoundVolume', hitSoundVolume);
+                patch = applyPatch(patch, 'replace', '/hitSoundVolume', hitSoundVolume / 100);
               }}
             />
             <input
@@ -615,11 +594,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.hitSoundVolume}
+              value={editable.hitSoundVolume}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.hitSoundVolume}`;
+                  e.currentTarget.value = `${editable.hitSoundVolume}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -627,12 +606,12 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.hitSoundVolume = parseInt(e.currentTarget.value);
+                editable.hitSoundVolume = parseInt(e.currentTarget.value);
                 patch = applyPatch(
                   patch,
                   'replace',
                   '/hitSoundVolume',
-                  playConfiguration.hitSoundVolume,
+                  editable.hitSoundVolume / 100,
                 );
               }}
             />
@@ -657,13 +636,13 @@
               name="musicVolume"
               min="0"
               max="100"
-              bind:value={playConfiguration.musicVolume}
+              bind:value={editable.musicVolume}
               class={`range join-item w-7/12 ${
                 updateErrors?.get('musicVolume') ? 'range-error' : ''
               }`}
               on:input={(e) => {
                 const musicVolume = parseInt(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/musicVolume', musicVolume);
+                patch = applyPatch(patch, 'replace', '/musicVolume', musicVolume / 100);
               }}
             />
             <input
@@ -673,11 +652,11 @@
                   e.preventDefault();
                 }
               }}
-              value={playConfiguration.musicVolume}
+              value={editable.musicVolume}
               class="input w-1/6 text-right text-xl font-bold"
               on:focusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
-                  e.currentTarget.value = `${playConfiguration.musicVolume}`;
+                  e.currentTarget.value = `${editable.musicVolume}`;
                   return;
                 }
                 if (parseInt(e.currentTarget.value) < 0) {
@@ -685,8 +664,8 @@
                 } else if (parseInt(e.currentTarget.value) > 100) {
                   e.currentTarget.value = '100';
                 }
-                playConfiguration.musicVolume = parseInt(e.currentTarget.value);
-                patch = applyPatch(patch, 'replace', '/musicVolume', playConfiguration.musicVolume);
+                editable.musicVolume = parseInt(e.currentTarget.value);
+                patch = applyPatch(patch, 'replace', '/musicVolume', editable.musicVolume / 100);
               }}
             />
           </div>
@@ -711,7 +690,7 @@
             }}
             id="name"
             name="name"
-            bind:value={playConfiguration.name}
+            bind:value={editable.name}
             placeholder={`${$t('play_configuration.name')}${$t('common.optional')}`}
             class={`input transition border-2 normal-border join-item w-3/4 ${
               updateErrors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
@@ -723,11 +702,11 @@
         </label>
         <button
           type="button"
-          class="absolute right-2 top-[7.5px] btn btn-sm {playConfiguration.name
+          class="absolute right-2 top-[7.5px] btn btn-sm {editable.name
             ? 'border-2 hover:btn-outline backdrop-blur'
             : 'btn-disabled'}"
           on:click={() => {
-            playConfiguration.name = null;
+            editable.name = null;
           }}
         >
           {$t('common.empty_v')}
@@ -751,7 +730,7 @@
             }}
             id="chart_mirroring"
             name="chartMirroring"
-            bind:value={playConfiguration.chartMirroring}
+            bind:value={editable.chartMirroring}
             class={`select transition border-2 normal-border join-item w-3/4 ${
               updateErrors?.get('chartMirroring') ? 'hover:select-error' : 'hover:select-secondary'
             }`}
