@@ -6,7 +6,7 @@
   import { parseDateTime } from '$lib/utils';
 
   export let data;
-  $: ({ data: votes, official, user } = data);
+  $: ({ data: votes, user } = data);
 
   let score = 0;
   let message = '';
@@ -14,14 +14,14 @@
 </script>
 
 <svelte:head>
-  <title>示例谱面评分征集 - {official ? '官方谱组' : '自制谱组'}投票 | {$t('common.title')}</title>
+  <title>示例谱面评分征集 - 群众投票 | {$t('common.title')}</title>
 </svelte:head>
 
-{#if data.data !== null}
+{#if user && data.data !== null}
   <VolunteerVoteHelper bind:score bind:message />
   <div class="page md:px-24">
     <div class="flex justify-between">
-      <h1 class="text-4xl font-bold mb-6">{official ? '官方谱组' : '自制谱组'}投票</h1>
+      <h1 class="text-4xl font-bold mb-6">群众投票</h1>
       <a href="/crs" class="btn border-2 normal-border btn-outline">返回</a>
     </div>
     <div class="flex flex-col md:flex-row gap-5">
@@ -41,8 +41,8 @@
             };
           }}
         >
-          <input id="name" name="name" type="hidden" value={user ? user.userName : '匿名用户'} />
-          <input id="user" name="user" type="hidden" value={user ? user.id : undefined} />
+          <input id="name" name="name" type="hidden" value={user.userName} />
+          <input id="user" name="user" type="hidden" value={user.id} />
           <div class="flex gap-2">
             <div class="grow">
               <input
@@ -107,13 +107,7 @@
                   {vote.message}
                 </p>
                 <div class="w-full mt-4 flex justify-between items-center">
-                  <p class="text-sm opacity-70">
-                    {vote.official === true
-                      ? '官方谱组'
-                      : vote.official === false
-                        ? '自制谱组'
-                        : '群众'}
-                  </p>
+                  <p class="text-sm opacity-70">{vote.official === undefined ? '群众' : '谱组'}</p>
                   <p class="text-sm opacity-70 text-right">
                     {vote.name}
                     @

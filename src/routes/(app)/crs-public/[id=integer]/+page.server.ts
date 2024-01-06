@@ -1,5 +1,5 @@
 import { REDIS_CONNECTION } from '$env/static/private';
-import queryString from 'query-string';
+import { error } from '@sveltejs/kit';
 import { createClient } from 'redis';
 
 interface Vote {
@@ -12,32 +12,9 @@ interface Vote {
   date: Date;
 }
 
-const official = 'b55y6u83e6bmyu9eryehie24bg4h6n2mu8s';
-const fanmade = 'rv7t590oie5yb64u3t4gh82hu1eg0dopthl';
-
-export const load = async ({ params, url, cookies }) => {
-  const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
-  if (
-    searchParams.secToken != official &&
-    searchParams.secToken != fanmade &&
-    cookies.get('sec_token') != official &&
-    cookies.get('sec_token') != fanmade
-  ) {
-    return {
-      official: null,
-      data: null,
-    };
-  }
-
-  let token = '';
-  if (searchParams.secToken) {
-    cookies.set('sec_token', searchParams.secToken as string, {
-      path: '/',
-      maxAge: 1209600,
-    });
-    token = searchParams.secToken as string;
-  } else {
-    token = cookies.get('sec_token') as string;
+export const load = async ({ params, locals }) => {
+  if (!locals.user) {
+    throw error(401, 'Unauthorized');
   }
 
   const client = createClient({
@@ -54,13 +31,12 @@ export const load = async ({ params, url, cookies }) => {
   );
   client.quit();
   return {
-    official: token == official,
     data,
   };
 };
 
 export const actions = {
-  vote: async ({ params, request, cookies }) => {
+  vote: async ({ params, request }) => {
     const client = createClient({
       url: REDIS_CONNECTION,
     });
@@ -73,11 +49,11 @@ export const actions = {
     const data = await request.formData();
     const vote: Vote = {
       id: crypto.randomUUID(),
-      official: cookies.get('sec_token') == official,
+      official: undefined,
       score: parseFloat(data.get('score') as string),
       message: data.get('message') as string,
       name: data.get('name') as string,
-      user: data.get('user') ? parseInt(data.get('user') as string) : undefined,
+      user: parseInt(data.get('user') as string),
       date: new Date(),
     };
     client.rPush(`phizone:crs:${params.id}`, JSON.stringify(vote));
