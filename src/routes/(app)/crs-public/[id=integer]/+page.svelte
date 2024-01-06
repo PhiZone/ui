@@ -107,7 +107,7 @@
                   {vote.message}
                 </p>
                 <div class="w-full mt-4 flex justify-between items-center">
-                  <p class="text-sm opacity-70">{vote.official === undefined ? '群众' : '谱组'}</p>
+                  <p class="text-sm opacity-70">{vote.official === null ? '群众' : '谱组'}</p>
                   <p class="text-sm opacity-70 text-right">
                     {vote.name}
                     @

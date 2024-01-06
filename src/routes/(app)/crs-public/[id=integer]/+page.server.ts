@@ -4,7 +4,7 @@ import { createClient } from 'redis';
 
 interface Vote {
   id: string;
-  official?: boolean;
+  official: boolean | null;
   score: number;
   message: string;
   name: string;
@@ -49,7 +49,7 @@ export const actions = {
     const data = await request.formData();
     const vote: Vote = {
       id: crypto.randomUUID(),
-      official: undefined,
+      official: null,
       score: parseFloat(data.get('score') as string),
       message: data.get('message') as string,
       name: data.get('name') as string,

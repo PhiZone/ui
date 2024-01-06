@@ -4,7 +4,7 @@ import { createClient } from 'redis';
 
 interface Vote {
   id: string;
-  official?: boolean;
+  official: boolean | null;
   score: number;
   message: string;
   name: string;
