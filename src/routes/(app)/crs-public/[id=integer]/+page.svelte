@@ -22,7 +22,7 @@
   <div class="page md:px-24">
     <div class="flex justify-between">
       <h1 class="text-4xl font-bold mb-6">群众投票</h1>
-      <a href="/crs" class="btn border-2 normal-border btn-outline">返回</a>
+      <a href="/crs-public" class="btn border-2 normal-border btn-outline">返回</a>
     </div>
     <div class="flex flex-col md:flex-row gap-5">
       <div class="flex md:w-1/3">
