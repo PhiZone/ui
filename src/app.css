@@ -26,11 +26,11 @@ body {
 
 .info-page {
   min-height: calc(100vh - 219px);
-  @apply bg-base-300 py-24 px-12 justify-center flex flex-col lg:flex-row;
+  @apply bg-base-300 py-24 px-2 md:px-12 justify-center flex flex-col lg:flex-row;
 }
 
 .studio-info-page {
-  @apply bg-base-300 py-24 px-12 justify-center flex flex-col lg:flex-row min-h-screen;
+  @apply bg-base-300 py-24 px-2 md:px-12 justify-center flex flex-col lg:flex-row min-h-screen;
 }
 
 .title {
@@ -46,7 +46,7 @@ body {
 
 .result {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1.5rem;
   justify-items: center;
 }

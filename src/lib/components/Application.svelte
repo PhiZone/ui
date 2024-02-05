@@ -39,13 +39,17 @@
           </div>
         {/if}
       </div>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+      <p class="flex items-center gap-1">
         <span class="badge">{$t('application.type')}</span>
-        <span>{$t(`application.types.${application.type}`)}</span>
+        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+          {$t(`application.types.${application.type}`)}
+        </span>
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+      <p class="flex items-center gap-1">
         <span class="badge">{$t('application.illustrator')}</span>
-        <span>{application.illustrator}</span>
+        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+          {application.illustrator}
+        </span>
       </p>
       <p class="flex items-center gap-1">
         <span class="badge">{$t('application.owner')}</span>

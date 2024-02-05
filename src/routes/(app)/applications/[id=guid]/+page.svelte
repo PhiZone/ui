@@ -54,10 +54,6 @@
             <div class="flex gap-2 flex-col lg:flex-row">
               <div class="lg:w-1/3 form-control justify-between">
                 <div class="form-control gap-1">
-                  <!-- <p>
-                      <span class="badge mr-1">{$t('application.id')}</span>
-                      {application.id}
-                    </p> -->
                   <p>
                     <span class="badge mr-1">
                       {$t('application.type')}

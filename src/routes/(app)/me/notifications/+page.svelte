@@ -58,7 +58,7 @@
           </div>
         {/if}
       </div>
-      <div class="py-4 min-w-fit">
+      <div class="py-4">
         {#if total && perPage && data && data.length > 0}
           {#each data as notification}
             <Notification {notification} />

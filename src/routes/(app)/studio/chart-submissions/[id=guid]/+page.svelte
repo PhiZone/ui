@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { richtext } from '$lib/richtext';
-  import { getLevelColor, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { getLevelColor, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import VolunteerVote from '$lib/components/VolunteerVote.svelte';
   import { LEVEL_TYPES } from '$lib/constants';
@@ -17,9 +17,11 @@
   import Error from '$lib/components/Error.svelte';
   import ChartReviewWizard from '$lib/components/ChartReviewWizard.svelte';
   import VoteScore from '$lib/components/VoteScore.svelte';
+  import DifficultySuggestion from '$lib/components/DifficultySuggestion.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
-  $: ({ id, user, api, searchParams } = data);
+  $: ({ id, user, api } = data);
 
   const {
     enhance: voteEnhance,
@@ -67,6 +69,7 @@
   });
 
   let score = 0;
+  let suggestedDifficulty = 0;
   let message = '';
   let queryCollaborator = false;
   let newCollaboratorId: number | null = null;
@@ -78,22 +81,12 @@
   let collectionOpen = false;
 
   $: submission = createQuery(api.chart.submission.info({ id }));
-  $: song = createQuery(
-    api.song.info(
-      { id: $submission.data?.data.songId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data.data.songId },
-    ),
-  );
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      { id: $submission.data?.data.songSubmissionId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data.data.songSubmissionId },
-    ),
-  );
   $: uploader = createQuery(
     api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
   );
-  $: votes = createQuery(api.vote.volunteer.listAll({ chartId: id }));
+  $: votes = createQuery(
+    api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] }),
+  );
   $: representation = createQuery(
     api.chart.info(
       { id: $submission.data?.data.representationId ?? '' },
@@ -119,24 +112,30 @@
       { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
     ),
   );
-  $: assets = createQuery(api.chart.submission.asset.list({ ...searchParams, chartId: id }));
-
+  $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
   $: charter = richtext($submission.data?.data.authorName ?? '');
+
+  $: averageSuggestedDifficulty =
+    $votes.isSuccess && $submission.isSuccess
+      ? $votes.data.data
+          .filter((vote) => vote.dateCreated > $submission.data!.data.dateUpdated)
+          .reduce((total, vote) => total + vote.suggestedDifficulty, 0) /
+        $votes.data.data.filter((vote) => vote.dateCreated > $submission.data!.data.dateUpdated)
+          .length
+      : 0;
+
+  $: difficultyDifference = $submission.isSuccess
+    ? averageSuggestedDifficulty - $submission.data.data.difficulty
+    : 0;
 </script>
 
 <svelte:head>
   <title>
     {$t('studio.chart_submission')} - {$submission.data?.data.title ??
-      ($song.isSuccess
-        ? $song.data.data.title
-        : $songSubmission.isSuccess
-          ? $songSubmission.data.data.title
-          : '')}
-    {$submission.isSuccess
-      ? `[${$submission.data.data.level} ${
-          $submission.data.data.difficulty != 0 ? Math.floor($submission.data.data.difficulty) : '?'
-        }]`
-      : ''} | {$t('common.title')}
+      $submission.data?.data.song?.title ??
+      $submission.data?.data.songSubmission?.title}
+    [{$submission.data?.data.level}
+    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.title')}
   </title>
 </svelte:head>
 
@@ -178,6 +177,30 @@
             step="0.05"
           />
           <VoteScore {score} size={16} centered={false} />
+        </div>
+        <div
+          class="tooltip tooltip-bottom tooltip-error"
+          class:tooltip-open={!!$voteErrors.score}
+          data-tip={$voteErrors.score}
+        />
+        <div class="flex items-center gap-2">
+          <input
+            id="suggested_difficulty"
+            name="suggestedDifficulty"
+            type="range"
+            min="0"
+            max="18"
+            bind:value={suggestedDifficulty}
+            class="range"
+            step="0.1"
+          />
+          <DifficultySuggestion
+            bind:suggested={suggestedDifficulty}
+            actual={submission.difficulty}
+            size={16}
+            centered={false}
+            compact
+          />
         </div>
         <div
           class="tooltip tooltip-bottom tooltip-error"
@@ -472,16 +495,16 @@
             <div class="text-5xl py-3 font-bold gap-4 items-center content flex">
               {#if submission.title}
                 {submission.title}
-              {:else if $song.isSuccess}
-                <a class="hover:underline" href={`/songs/${$song.data.data.id}`}>
-                  {$song.data.data.title}
+              {:else if submission.song}
+                <a class="hover:underline" href={`/songs/${submission.song.id}`}>
+                  {submission.song.title}
                 </a>
-              {:else if $songSubmission.isSuccess}
+              {:else if submission.songSubmission}
                 <a
                   class="hover:underline"
-                  href={`/studio/song-submissions/${$songSubmission.data.data.id}`}
+                  href={`/studio/song-submissions/${submission.songSubmission.id}`}
                 >
-                  {$songSubmission.data.data.title}
+                  {submission.songSubmission.title}
                 </a>
               {/if}
               <div class="join join-vertical lg:join-horizontal min-w-fit">
@@ -489,7 +512,7 @@
                   class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
                 >
                   {submission.level}
-                  {submission.difficulty != 0 ? Math.floor(submission.difficulty) : '?'}
+                  {getLevelDisplay(submission.difficulty)}
                 </button>
                 {#if submission.isRanked}
                   <button
@@ -513,6 +536,23 @@
                 </span>
                 {submission.difficulty.toFixed(1)}
               </p>
+              {#if !isNaN(averageSuggestedDifficulty)}
+                <p>
+                  <span class="badge mr-1">
+                    {$t('studio.submission.suggested_difficulty')}
+                  </span>
+                  {averageSuggestedDifficulty.toFixed(2)}
+                  <span
+                    class="opacity-80 self-center {Math.abs(difficultyDifference) < 0.4
+                      ? 'text-success'
+                      : 'text-error'}"
+                  >
+                    ({difficultyDifference >= 0
+                      ? `+${difficultyDifference.toFixed(2)}`
+                      : difficultyDifference.toFixed(2)})
+                  </span>
+                </p>
+              {/if}
               <p>
                 <span class="badge mr-1">
                   {$t('common.form.chart')}
@@ -562,6 +602,16 @@
                   {submission.description}
                 </p>
               {/if}
+              {#if submission.tags.length > 0}
+                <p class="inline-flex gap-1 flex-wrap">
+                  <span class="badge">
+                    {$t('common.tags')}
+                  </span>
+                  {#each submission.tags as tag}
+                    <Tag {tag} />
+                  {/each}
+                </p>
+              {/if}
               <p>
                 <span class="badge mr-1">
                   {$t('studio.submission.adm_status')}
@@ -598,21 +648,39 @@
                   {$t('common.vote_v')}
                 </label>
               {/if}
-              {#if $song.isSuccess || $songSubmission.isSuccess}
-                {@const song = $song.data?.data ?? $songSubmission.data?.data}
+              {#if submission.song || submission.songSubmission}
+                {@const song = submission.song ?? submission.songSubmission}
                 <a
                   href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
                     submission.file,
                   )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
                     song?.illustration ?? '',
                   )}&name={submission.title ??
-                    song?.title}&level={submission.level}&difficulty={submission.difficulty != 0
-                    ? Math.floor(submission.difficulty)
-                    : '?'}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}"
+                    song?.title}&level={submission.level}&difficulty={getLevelDisplay(
+                    submission.difficulty,
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assets={$assets.data?.data
+                    .map((asset) => encodeURI(asset.file))
+                    .join(',')}"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >
                   {$t('common.preview')}
+                </a>
+                <a
+                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&flag=noRequestingFullscreen&chart={encodeURI(
+                    submission.file,
+                  )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
+                    song?.illustration ?? '',
+                  )}&name={submission.title ??
+                    song?.title}&level={submission.level}&difficulty={getLevelDisplay(
+                    submission.difficulty,
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assets={$assets.data?.data
+                    .map((asset) => encodeURI(asset.file))
+                    .join(',')}"
+                  class="btn border-2 normal-border btn-outline text-lg w-32"
+                  target="_target"
+                >
+                  {$t('studio.submission.playtest')}
                 </a>
               {/if}
             </div>
@@ -642,7 +710,7 @@
             {:else if $assets.isSuccess}
               {#if $assets.data.data.length > 0}
                 <div class="result">
-                  {#each $assets.data.data as chartAsset}
+                  {#each $assets.data.data.slice(0, 12) as chartAsset}
                     <ChartAssetSubmission {chartAsset} />
                   {/each}
                 </div>
@@ -741,7 +809,7 @@
       {#if $votes.isSuccess}
         {@const votes = $votes.data.data}
         {#each votes as vote}
-          <VolunteerVote {vote} />
+          <VolunteerVote {vote} {submission} />
         {/each}
       {/if}
     </div>
@@ -757,8 +825,8 @@
           <User id={$uploader.data.data.id} initUser={$uploader.data.data} />
         </div>
       {/if}
-      {#if $song.isSuccess}
-        {@const song = $song.data.data}
+      {#if submission.song}
+        {@const song = submission.song}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
@@ -769,8 +837,8 @@
           <Song {song} />
         </div>
       {/if}
-      {#if $songSubmission.isSuccess}
-        {@const song = $songSubmission.data.data}
+      {#if submission.songSubmission}
+        {@const song = submission.songSubmission}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"

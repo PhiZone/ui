@@ -9,7 +9,7 @@ export const load = async ({ cookies }) => {
 
 export const actions = {
   vote: async ({ request, params, fetch, locals }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const data = await request.formData();
     const resp = await api.vote.create({
       chartId: params.id,

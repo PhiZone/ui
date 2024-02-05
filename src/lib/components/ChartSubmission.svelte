@@ -3,20 +3,13 @@
   import { page } from '$app/stores';
   import type { ChartSubmissionDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, parseDateTime } from '$lib/utils';
+  import { getCompressedImage, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
 
   $: ({ user, api } = $page.data);
 
   export let chart: ChartSubmissionDto;
 
-  $: song = createQuery(api.song.info({ id: chart.songId ?? '' }, { enabled: !!chart.songId }));
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      { id: chart.songSubmissionId ?? '' },
-      { enabled: !!chart.songSubmissionId },
-    ),
-  );
   $: charter = richtext(chart.authorName ?? '');
   $: uploader = createQuery(api.user.info({ id: chart.ownerId }));
 </script>
@@ -26,29 +19,20 @@
 >
   <a href={`/studio/chart-submissions/${chart.id}`}>
     <figure class="h-[167px] relative">
-      {#if chart.illustration || $song.isSuccess || $songSubmission.isSuccess}
-        <img
-          src={getCompressedImage(
-            chart.illustration ??
-              ($song.isSuccess
-                ? $song.data.data.illustration
-                : $songSubmission.isSuccess
-                  ? $songSubmission.data.data.illustration
-                  : undefined),
-          )}
-          alt="Illustration"
-          class="object-fill"
-        />
-      {:else}
-        <div class="skeleton rounded-none w-full h-full"></div>
-      {/if}
-      <div class="absolute bottom-2 left-2">
+      <img
+        src={getCompressedImage(
+          chart.illustration ?? chart.song?.illustration ?? chart.songSubmission?.illustration,
+        )}
+        alt="Illustration"
+        class="object-fill"
+      />
+      <div class="absolute bottom-2 left-2 w-fit h-fit">
         <div class="join join-horizontal">
           <button
             class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
           >
             {chart.level}
-            {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+            {getLevelDisplay(chart.difficulty)}
           </button>
           {#if chart.isRanked}
             <button
@@ -62,18 +46,9 @@
     </figure>
     <div class="card-body py-6 gap-0.5">
       <div class="flex gap-2 mb-1 items-center">
-        {#if chart.title || $song.isSuccess || $songSubmission.isSuccess}
-          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
-            {chart.title ??
-              ($song.isSuccess
-                ? $song.data.data.title
-                : $songSubmission.isSuccess
-                  ? $songSubmission.data.data.title
-                  : undefined)}
-          </h2>
-        {:else}
-          <div class="skeleton h-7"></div>
-        {/if}
+        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+          {chart.title ?? chart.song?.title ?? chart.songSubmission?.title}
+        </h2>
         {#if chart.status === 1}
           <div
             class="tooltip tooltip-right tooltip-success"

@@ -14,7 +14,7 @@ export interface UserDto {
   userName: string;
   avatar: string | null;
   gender: Gender;
-  region: string;
+  region: RegionDto;
   language: string;
   biography: string | null;
   role: string;
@@ -38,6 +38,12 @@ export interface UserDetailedDto extends UserDto {
   twoFactorEnabled: boolean;
 }
 
+export interface RegionDto {
+  code: string;
+  id: number;
+  name: string;
+}
+
 // list
 export interface Filter extends FilterBase {}
 
@@ -59,7 +65,7 @@ export interface RegisterOpts {
   Password: string;
   Language: string;
   RegionCode: string;
-  Avatar?: File;
+  Avatar?: Blob;
   Gender?: Gender;
   Biography?: string;
   DateOfBirth?: Date;

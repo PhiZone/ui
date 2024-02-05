@@ -24,7 +24,10 @@
         user.followerCount--;
         user.dateFollowed = null;
       }
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        await resp.json(),
+      );
     }
   };
 
@@ -41,7 +44,10 @@
         user.followerCount++;
         user.dateFollowed = new Date().toISOString();
       }
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        await resp.json(),
+      );
     }
   };
 </script>
@@ -50,7 +56,7 @@
   <button
     type="button"
     class="w-fit btn btn-outline btn-primary text-sm border-2"
-    disabled={!api._user}
+    disabled={!user}
     on:click={follow}
   >
     {$t('user.follow')}

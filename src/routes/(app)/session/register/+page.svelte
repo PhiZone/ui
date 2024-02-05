@@ -235,7 +235,12 @@
               class="select transition border-2 normal-border hover:select-secondary w-full max-w-xs"
             >
               {#each $locales as value}
-                <option {value}>{$t(`common.lang.${value}`)}</option>
+                <option {value}>
+                  {$t(`common.lang.${value}`)}
+                  {#if $locale !== value}
+                    - {$t(`lang.${value}`)}
+                  {/if}
+                </option>
               {/each}
             </select>
             <div

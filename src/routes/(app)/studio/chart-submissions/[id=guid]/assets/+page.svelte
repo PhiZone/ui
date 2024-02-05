@@ -4,7 +4,7 @@
   import ChartAssetSubmission from '$lib/components/ChartAsset.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-  import { getUserPrivilege } from '$lib/utils';
+  import { getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
 
   export let data;
@@ -25,19 +25,7 @@
   let file: File | null = null;
   let modalOpen = false;
 
-  $: chart = createQuery(api.chart.submission.info({ id: params.id }));
-  $: song = createQuery(
-    api.song.info(
-      { id: $chart.data?.data.songId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songId },
-    ),
-  );
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      { id: $chart.data?.data.songSubmissionId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songSubmissionId },
-    ),
-  );
+  $: submission = createQuery(api.chart.submission.info({ id: params.id }));
   $: query = createQuery(api.chart.submission.asset.list({ ...searchParams, chartId: params.id }));
 
   const getFileType = (mime: string, fileName: string) => {
@@ -72,17 +60,11 @@
 
 <svelte:head>
   <title>
-    {$t('chart.assets')} | {$t('studio.chart_submission')} - {$chart.data?.data.title ??
-      ($song.isSuccess
-        ? $song.data.data.title
-        : $songSubmission.isSuccess
-          ? $songSubmission.data.data.title
-          : '')}
-    {$chart.isSuccess
-      ? `[${$chart.data.data.level} ${
-          $chart.data.data.difficulty != 0 ? Math.floor($chart.data.data.difficulty) : '?'
-        }]`
-      : ''} | {$t('common.title')}
+    {$t('chart.assets')} | {$t('studio.chart_submission')} - {$submission.data?.data.title ??
+      $submission.data?.data.song?.title ??
+      $submission.data?.data.songSubmission?.title}
+    [{$submission.data?.data.level}
+    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.title')}
   </title>
 </svelte:head>
 
@@ -196,7 +178,7 @@
     <div class="flex gap-2 justify-between items-center mb-6">
       <h1 class="text-4xl font-bold">{$t('chart.assets')}</h1>
       <div class="join">
-        {#if user && (getUserPrivilege(user.role) >= 5 || ($chart.isSuccess && user.id === $chart.data.data.ownerId && getUserPrivilege(user.role) >= 3))}
+        {#if user && (getUserPrivilege(user.role) >= 5 || ($submission.isSuccess && user.id === $submission.data.data.ownerId && getUserPrivilege(user.role) >= 3))}
           <button
             class="btn border-2 normal-border hover:btn-outline join-item"
             on:click={() => {

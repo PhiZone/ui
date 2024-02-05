@@ -213,7 +213,7 @@ export const getUserColor = (type: string | null) => {
   }
 };
 
-export const getLevelColor = (type: number) => {
+export const getLevelColor = (type: number | undefined) => {
   switch (type) {
     case 0:
       return 'btn-info';
@@ -263,7 +263,8 @@ export const getGrade = (score: number, fullCombo: boolean) => {
   return 'F';
 };
 
-export const getLevelDisplay = (difficulty: number) => {
+export const getLevelDisplay = (difficulty: number | undefined) => {
+  if (difficulty === undefined) return undefined;
   if (difficulty === 0) return '?';
   else return Math.floor(difficulty).toString();
 };
@@ -300,6 +301,10 @@ export const parseAcceptLanguage = (acceptLanguageHeader: string | null): string
     .sort((a, b) => b.quality - a.quality)
     .map(({ tag }) => tag);
   return languageTags;
+};
+
+export const parseFile = async (url: string, fileName: string, type: string): Promise<File> => {
+  return new File([await (await fetch(url)).blob()], fileName, { type });
 };
 
 export const range = (start: number, end: number) => {

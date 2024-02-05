@@ -13,6 +13,7 @@
   import User from '$lib/components/User.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -31,6 +32,8 @@
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = 0;
+  let showTags = true;
+  let newTag = '';
   let newComposerId: number | null = null;
   let newComposerDisplay = '';
   let queryComposer = false;
@@ -159,7 +162,10 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }
   };
@@ -195,7 +201,10 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, errors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        errors,
+      );
     }
   };
 </script>
@@ -223,7 +232,10 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }}
   />
@@ -926,6 +938,69 @@
                 {$t('common.empty_v')}
               </button>
             </div>
+            <div
+              class={errors?.get('Tags') ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
+              data-tip={errors?.get('Tags') ?? ''}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.tags')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      showTags = false;
+                      song.tags.push(newTag);
+                      patch = applyPatch(patch, 'replace', '/tags', song.tags);
+                      newTag = '';
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }
+                  }}
+                  id="new_tag"
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Tags') ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
+                  bind:value={newTag}
+                />
+                <button
+                  class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  on:click={(e) => {
+                    e.preventDefault();
+                    showTags = false;
+                    song.tags.push(newTag);
+                    patch = applyPatch(patch, 'replace', '/tags', song.tags);
+                    newTag = '';
+                    setTimeout(() => {
+                      showTags = true;
+                    }, 0);
+                  }}
+                  on:keyup
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </label>
+            </div>
+            {#if showTags}
+              <div class="flex gap-1 flex-wrap">
+                {#each song.tags as tag, i}
+                  <Tag
+                    {tag}
+                    removeFunction={() => {
+                      showTags = false;
+                      song.tags.splice(i, 1);
+                      patch = applyPatch(patch, 'replace', '/tags', song.tags);
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }}
+                  />
+                {/each}
+              </div>
+            {/if}
             <div class="w-full flex justify-center mt-6">
               <div
                 class="tooltip tooltip-top tooltip-error w-full"

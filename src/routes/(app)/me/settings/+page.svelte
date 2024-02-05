@@ -41,7 +41,7 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
-  $: regionCode = user.region;
+  $: regionCode = user.region ? user.region.code : '';
   $: year = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCFullYear();
   $: month = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
   $: day = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCDate();
@@ -89,7 +89,10 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, updateErrors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        updateErrors,
+      );
     }
   };
 
@@ -132,7 +135,10 @@
       } else {
         const error = await resp.json();
         // TODO: toast
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
       }
     }}
   />
@@ -881,7 +887,12 @@
                   }}
                 >
                   {#each $locales as value}
-                    <option {value}>{$t(`common.lang.${value}`)}</option>
+                    <option {value}>
+                      {$t(`common.lang.${value}`)}
+                      {#if $locale !== value}
+                        - {$t(`lang.${value}`)}
+                      {/if}
+                    </option>
                   {/each}
                 </select>
               </label>

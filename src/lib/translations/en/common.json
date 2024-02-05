@@ -131,12 +131,12 @@
   "unavailable": "This feature is currently unavailable!",
   "error_msg": "Error Message: ",
   "errors": {
-    "400": "We couldn't handle your request",
-    "401": "Please login / register an account first",
-    "403": "You're not permitted to access this feature",
-    "404": "The resource you requested does not exist",
-    "500": "An error has occurred whilst handling your request",
-    "502": "We couldn't connect to the server at the moment"
+    "400": "We couldn't handle your request.",
+    "401": "Please login / register an account first.",
+    "403": "You're not permitted to access this feature.",
+    "404": "The resource you requested does not exist.",
+    "500": "An error has occurred whilst handling your request.",
+    "502": "We couldn't connect to the server at the moment."
   },
   "list_options": "List Options",
   "filter": "Filter",
@@ -177,5 +177,7 @@
   "unnamed": "Unnamed",
   "add": "Add",
   "add_in_bulk": "Add in bulk",
-  "more": "More"
+  "more": "More",
+  "tags": "Tags",
+  "tag": "Tag"
 }

@@ -38,9 +38,11 @@
         {collection.subtitle}
       </h2>
     </div>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+    <p class="flex items-center gap-1">
       <span class="badge">{$t('collection.illustrator')}</span>
-      <span>{collection.illustrator}</span>
+      <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        {collection.illustrator}
+      </span>
     </p>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('collection.owner')}</span>

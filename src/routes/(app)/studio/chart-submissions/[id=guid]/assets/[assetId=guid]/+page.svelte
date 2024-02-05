@@ -4,7 +4,7 @@
   import { t } from '$lib/translations/config';
   import type { PatchElement } from '$lib/api/types';
   import { Status } from '$lib/constants';
-  import { applyPatch, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
   import Delete from '$lib/components/Delete.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import User from '$lib/components/User.svelte';
@@ -22,28 +22,16 @@
 
   $: ({ id, chartId, user, api, queryClient } = data);
 
-  $: chart = createQuery(api.chart.submission.info({ id: chartId }));
-  $: song = createQuery(
-    api.song.info(
-      { id: $chart.data?.data.songId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songId },
-    ),
-  );
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      { id: $chart.data?.data.songSubmissionId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songSubmissionId },
-    ),
-  );
-  $: chartAssetQuery = createQuery(api.chart.submission.asset.info({ chartId, id }));
+  $: submission = createQuery(api.chart.submission.info({ id: chartId }));
+  $: query = createQuery(api.chart.submission.asset.info({ chartId, id }));
   $: content = createQuery({
     queryKey: ['chart-submission-asset-content'],
-    queryFn: async () => await (await fetch($chartAssetQuery.data?.data.file ?? '')).text(),
-    enabled: $chartAssetQuery.isSuccess && $chartAssetQuery.data.data.type >= 3,
+    queryFn: async () => await (await fetch($query.data?.data.file ?? '')).text(),
+    enabled: $query.isSuccess && $query.data.data.type >= 3,
   });
 
-  $: if (!chartAssetDto && $chartAssetQuery.isSuccess) {
-    chartAssetDto = $chartAssetQuery.data.data;
+  $: if (!chartAssetDto && $query.isSuccess) {
+    chartAssetDto = $query.data.data;
   }
 
   const handleFile = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
@@ -64,7 +52,10 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }
   };
@@ -85,32 +76,29 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, updateErrors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        updateErrors,
+      );
     }
   };
 </script>
 
 <svelte:head>
   <title>
-    {$t('chart.assets')} - {$chartAssetQuery.data?.data.name} | {$t('studio.chart_submission')} - {$chart
+    {$t('chart.assets')} - {$query.data?.data.name} | {$t('studio.chart_submission')} - {$submission
       .data?.data.title ??
-      ($song.isSuccess
-        ? $song.data.data.title
-        : $songSubmission.isSuccess
-          ? $songSubmission.data.data.title
-          : '')}
-    {$chart.isSuccess
-      ? `[${$chart.data.data.level} ${
-          $chart.data.data.difficulty != 0 ? Math.floor($chart.data.data.difficulty) : '?'
-        }]`
-      : ''} | {$t('common.title')}
+      $submission.data?.data.song?.title ??
+      $submission.data?.data.songSubmission?.title}
+    [{$submission.data?.data.level}
+    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.title')}
   </title>
 </svelte:head>
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $chartAssetQuery.isSuccess}
-  {@const chartAsset = $chartAssetQuery.data.data}
+{#if $query.isSuccess}
+  {@const chartAsset = $query.data.data}
 
   <input
     type="checkbox"
@@ -315,7 +303,7 @@
                     <i class="fa-solid fa-file-arrow-down fa-lg"></i>
                     {$t('common.download')}
                   </a>
-                  {#if user && (getUserPrivilege(user.role) >= 5 || ($chart.isSuccess && user.id === $chart.data.data.ownerId && getUserPrivilege(user.role) >= 3))}
+                  {#if user && (getUserPrivilege(user.role) >= 5 || ($submission.isSuccess && user.id === $submission.data.data.ownerId && getUserPrivilege(user.role) >= 3))}
                     <label
                       for="chart-asset-update-{chartAsset.id}"
                       class="btn btn-ghost border-2 hover:btn-outline w-fit join-item"
@@ -348,8 +336,8 @@
         </span>
         <User id={chartAsset.ownerId} />
       </div>
-      {#if $chart.isSuccess}
-        {@const chart = $chart.data.data}
+      {#if $submission.isSuccess}
+        {@const chart = $submission.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
@@ -362,8 +350,8 @@
       {/if}
     </div>
   </div>
-{:else if $chartAssetQuery.isError}
-  <Error error={$chartAssetQuery.error} back="/studio/chart-submissions/{chartId}/assets" />
+{:else if $query.isError}
+  <Error error={$query.error} back="/studio/chart-submissions/{chartId}/assets" />
 {:else}
   <div class="min-h-screen skeleton" />
 {/if}

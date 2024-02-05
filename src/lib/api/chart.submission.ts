@@ -4,6 +4,7 @@ import type API from '.';
 import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type { CollaborationDto } from './collaboration';
 import ChartAssetSubmissionAPI from './chart.submission.asset';
+import type { SongDto, SongSubmissionDto } from '.';
 
 export interface ChartSubmissionDto {
   accessibility: number;
@@ -25,9 +26,12 @@ export interface ChartSubmissionDto {
   noteCount: number;
   ownerId: number;
   representationId: null | string;
+  song: null | SongDto;
   songId: null | string;
+  songSubmission: null | SongSubmissionDto;
   songSubmissionId: null | string;
   status: number;
+  tags: string[];
   title: null | string;
   volunteerStatus: number;
 }
@@ -53,14 +57,15 @@ export interface CreateOpts {
   AuthorName: string;
   Description?: string | undefined;
   Difficulty: number;
-  File: File;
-  Illustration?: File | undefined;
+  File: Blob;
+  Illustration?: Blob | undefined;
   Illustrator?: string | undefined;
   IsRanked: boolean;
   Level?: string | undefined;
   LevelType: number;
   SongId?: string | undefined;
   SongSubmissionId?: string | undefined;
+  Tags: string[];
   Title?: string | undefined;
 }
 

@@ -47,7 +47,10 @@
         goto(`/session/login?redirect=${$page.url.pathname}`);
       } else {
         const data = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }
   };
@@ -61,7 +64,10 @@
       likes++;
       const data = await resp.json();
       // TODO: toast
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        data,
+      );
     }
   };
 </script>

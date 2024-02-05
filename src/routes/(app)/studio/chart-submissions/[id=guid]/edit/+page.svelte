@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { LEVEL_TYPES, Status } from '$lib/constants';
   import User from '$lib/components/User.svelte';
-  import { applyPatch, getLevelColor } from '$lib/utils';
+  import { applyPatch, getLevelColor, getLevelDisplay } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
@@ -10,12 +10,15 @@
   import type { PatchElement } from '$lib/api/types';
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
   $: ({ id, user, api } = data);
 
   let chart: ChartSubmissionDto;
+  let showTags = true;
+  let newTag = '';
   let newCharterId: number | null = null;
   let newCharterDisplay = '';
   let queryCharter = false;
@@ -24,6 +27,7 @@
   let errors: Map<string, string> | undefined = undefined;
 
   $: submission = createQuery(api.chart.submission.info({ id }));
+  $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
   );
@@ -66,7 +70,10 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }
   };
@@ -91,7 +98,10 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, errors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        errors,
+      );
     }
   };
 </script>
@@ -211,7 +221,7 @@
             <div class="join join-vertical lg:join-horizontal min-w-fit">
               <button class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation">
                 {chart.level}
-                {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+                {getLevelDisplay(chart.difficulty)}
               </button>
               {#if chart.isRanked}
                 <button
@@ -227,11 +237,11 @@
               $submission.data?.data.file ?? '',
             )}&song=${encodeURI(parent?.file ?? '')}&illustration=${encodeURI(
               parent?.illustration ?? '',
-            )}&name=${parent?.title}&level=${chart.level}&difficulty=${
-              chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'
-            }&composer=${parent?.authorName}&illustrator=${parent?.illustrator}&charter=${
+            )}&name=${parent?.title}&level=${chart.level}&difficulty=${getLevelDisplay(
+              chart.difficulty,
+            )}&composer=${parent?.authorName}&illustrator=${parent?.illustrator}&charter=${
               chart.authorName
-            }`}
+            }&assets=${$assets.data?.data.map((asset) => encodeURI(asset.file)).join(',')}`}
             target="_blank"
             class="mb-2 link link-hover"
           >
@@ -489,6 +499,69 @@
                 {$t('common.empty_v')}
               </button>
             </div>
+            <div
+              class={errors?.get('Tags') ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
+              data-tip={errors?.get('Tags') ?? ''}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.tags')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      showTags = false;
+                      chart.tags.push(newTag);
+                      patch = applyPatch(patch, 'replace', '/tags', chart.tags);
+                      newTag = '';
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }
+                  }}
+                  id="new_tag"
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                    errors?.get('Tags') ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
+                  bind:value={newTag}
+                />
+                <button
+                  class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  on:click={(e) => {
+                    e.preventDefault();
+                    showTags = false;
+                    chart.tags.push(newTag);
+                    patch = applyPatch(patch, 'replace', '/tags', chart.tags);
+                    newTag = '';
+                    setTimeout(() => {
+                      showTags = true;
+                    }, 0);
+                  }}
+                  on:keyup
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </label>
+            </div>
+            {#if showTags}
+              <div class="flex gap-1 flex-wrap">
+                {#each chart.tags as tag, i}
+                  <Tag
+                    {tag}
+                    removeFunction={() => {
+                      showTags = false;
+                      chart.tags.splice(i, 1);
+                      patch = applyPatch(patch, 'replace', '/tags', chart.tags);
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }}
+                  />
+                {/each}
+              </div>
+            {/if}
             <div class="w-full flex justify-center mt-6">
               <div
                 class="tooltip tooltip-top tooltip-error w-full"

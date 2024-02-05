@@ -69,10 +69,6 @@
             <div class="flex gap-4 flex-col">
               <div class="info">
                 <div class="form-control gap-1">
-                  <!-- <p>
-                      <span class="badge mr-1">{$t('resource_record.id')}</span>
-                      {resourceRecord.id}
-                    </p> -->
                   <p>
                     <span class="badge mr-1">{$t('resource_record.type')}</span>
                     {$t(`resource_record.types.${resourceRecord.type}`)}

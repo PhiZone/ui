@@ -1,12 +1,14 @@
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
 import type { FilterBase, R } from './types';
+import type { UserDto } from '.';
 
 export interface ReplyDto {
   id: string;
   commentId: string;
   content: string;
   language: string;
+  owner: UserDto;
   ownerId: number;
   dateCreated: Date;
   likeCount: number;

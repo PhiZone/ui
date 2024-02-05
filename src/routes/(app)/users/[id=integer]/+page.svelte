@@ -14,6 +14,7 @@
   import Song from '$lib/components/Song.svelte';
   import { PAGINATION_PER_PAGE } from '$lib/constants';
   import Error from '$lib/components/Error.svelte';
+  import Region from '$lib/components/Region.svelte';
 
   export let data;
 
@@ -37,7 +38,7 @@
 {#if $user.isSuccess}
   {@const user = $user.data.data}
   <div class="info-page">
-    <div class="mx-4 w-full max-w-[1800px]">
+    <div class="mx-4 md:w-full max-w-[1800px]">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -46,10 +47,10 @@
           {$t('user.user')}
         </span>
         <div
-          class="card card-side flex-col md:flex-row min-w-fit w-full bg-base-100 border-2 normal-border transition hover:shadow-lg"
+          class="card card-side flex-col md:flex-row w-full bg-base-100 border-2 normal-border transition hover:shadow-lg"
         >
           <figure
-            class="min-w-[150px] border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control normal-border mx-auto overflow-visible"
+            class="border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control normal-border mx-auto overflow-visible"
           >
             <div class="avatar min-w-fit h-fit">
               <div
@@ -68,25 +69,28 @@
                 {/if}
               </div>
             </div>
-            <p class="text-3xl text-center font-bold h-fit">
-              {user.userName}
-            </p>
-            <div class="flex items-center justify-center gap-1 h-fit">
-              <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
-              {#if user.gender === 1}
-                <span class="badge badge-sm">
-                  <i class="fa-solid fa-mars"></i>
-                </span>
-              {:else if user.gender === 2}
-                <span class="badge badge-sm">
-                  <i class="fa-solid fa-venus"></i>
-                </span>
-              {/if}
-              {#if user.tag}
-                <span class="badge badge-sm badge-accent">{user.tag}</span>
-              {/if}
+            <div class="flex flex-col gap-1 h-fit pb-3">
+              <p class="text-3xl text-center font-bold h-fit">
+                {user.userName}
+              </p>
+              <div class="flex items-center justify-center gap-1 h-fit">
+                <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
+                {#if user.gender === 1}
+                  <span class="badge badge-sm">
+                    <i class="fa-solid fa-mars"></i>
+                  </span>
+                {:else if user.gender === 2}
+                  <span class="badge badge-sm">
+                    <i class="fa-solid fa-venus"></i>
+                  </span>
+                {/if}
+                {#if user.tag}
+                  <span class="badge badge-sm badge-accent">{user.tag}</span>
+                {/if}
+              </div>
+              <Region region={user.region} width={21} overallCss="justify-center" />
             </div>
-            <div class="mt-4 w-full form-control gap-0.5 h-fit">
+            <div class="w-full form-control gap-0.5 h-fit">
               <p>
                 <span class="badge mr-1">{$t('user.id')}</span>
                 {user.id}
@@ -156,7 +160,7 @@
               </div>
             </div>
           </figure>
-          <div class="card-body py-3 max-w-full">
+          <div class="card-body py-3">
             {#if $charts.isSuccess}
               {@const total = $charts.data.total}
               {@const charts = $charts.data.data}
@@ -175,11 +179,16 @@
                 {/if}
               </div>
               {#if charts.length > 0}
-                <ul class="menu bg-base-100 w-full p-0">
+                <div class="result">
+                  {#each charts as chart}
+                    <Chart {chart} />
+                  {/each}
+                </div>
+                <!-- <ul class="menu bg-base-100 w-full p-0">
                   {#each charts as chart}
                     <li><Chart {chart} kind="inline" /></li>
                   {/each}
-                </ul>
+                </ul> -->
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
@@ -202,18 +211,23 @@
                 {/if}
               </div>
               {#if songs.length > 0}
-                <ul class="menu bg-base-100 w-full p-0">
+                <div class="result">
+                  {#each songs as song}
+                    <Song {song} />
+                  {/each}
+                </div>
+                <!-- <ul class="menu bg-base-100 w-full p-0">
                   {#each songs as song}
                     <li><Song {song} kind="inline" /></li>
                   {/each}
-                </ul>
+                </ul> -->
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
             {#if $recentRecords.isSuccess}
               {@const total = $recentRecords.data.total}
-              {@const recent_records = $recentRecords.data.data}
+              {@const recentRecords = $recentRecords.data.data}
               <div class="flex items-center mt-6 mb-2 justify-between">
                 <h2 class="text-3xl font-bold">
                   {$t('user.recent_records')}
@@ -228,9 +242,9 @@
                   </a>
                 {/if}
               </div>
-              {#if recent_records.length > 0}
+              {#if recentRecords.length > 0}
                 <div class="result">
-                  {#each recent_records as record}
+                  {#each recentRecords as record}
                     <Record {record} />
                   {/each}
                 </div>
@@ -265,21 +279,6 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            <!-- {#if $comments.isSuccess}
-              {@const comments = $comments.data.results}
-              <h2 class="text-3xl font-bold mt-6 mb-2">
-                {$t('user.comments')}
-              </h2>
-              {#if comments.length > 0}
-                <div class="form-control gap-1">
-                  {#each comments as comment}
-                    <Comment {searchParams} {comment} showUser={false} showSource />
-                  {/each}
-                </div>
-              {:else}
-                <p class="py-3 text-center">{$t('common.empty')}</p>
-              {/if}
-            {/if} -->
           </div>
         </div>
       </div>

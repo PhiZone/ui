@@ -49,7 +49,10 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, updateErrors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        updateErrors,
+      );
     }
   };
 
@@ -912,7 +915,7 @@
       <Delete
         id={playConfiguration.id}
         path="player/configurations"
-        name="playConfiguration.playConfiguration"
+        name="play_configuration.play_configuration"
         class="btn-sm btn-square"
       />
       <div class="join">

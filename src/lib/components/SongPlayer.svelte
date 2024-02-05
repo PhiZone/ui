@@ -88,13 +88,11 @@
   <div class="relative">
     <img src={illustration} class="object-fill" alt="Illustration" />
     {#if line}
-      <div
-        class="absolute p-4 inset-0 form-control justify-end backdrop backdrop-blur-5 text-neutral-content"
+      <span
+        class="absolute left-4 bottom-4 px-2 py-0.5 w-fit bg-black bg-opacity-60 backdrop-blur-lg rounded-full text-lg"
       >
-        <span class="px-2 py-0.5 w-fit bg-black bg-opacity-60 rounded-full">
-          {line}
-        </span>
-      </div>
+        {line}
+      </span>
     {/if}
   </div>
   {#if audio}

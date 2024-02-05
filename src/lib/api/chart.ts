@@ -1,11 +1,12 @@
 import queryString from 'query-string';
 import { stringifyFilter, createQueryCreator } from './common';
-// import ChartSubmissionAPI from './chart.submission';
 import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type API from '.';
 import ChartSubmissionAPI from './chart.submission';
 import type { CollectionAdmitterDto } from './collection';
 import ChartAssetAPI from './chart.asset';
+import type { RecordDto, SongDto } from '.';
+import type { TagDto } from './tag';
 
 export enum ChartFormat {
   RpeJson,
@@ -54,7 +55,9 @@ export interface ChartDto {
   ratingOnImpression: number;
   ratingOnVisualEffects: number;
   score: number;
+  song: SongDto;
   songId: string;
+  tags: TagDto[];
   title: string | null;
 }
 
@@ -73,6 +76,11 @@ export interface Filter extends PublicResourceFilterBase {
 // info
 export interface InfoOpts {
   id: string;
+}
+
+export interface LeaderboardOpts extends InfoOpts {
+  topRange?: number;
+  neighborhoodRange?: number;
 }
 
 export interface AdmissionListOpts extends InfoOpts, FilterBase {
@@ -119,10 +127,22 @@ export default class ChartAPI {
       this.api.GET(`/charts/${id}/collections?` + stringifyFilter(rest, true)),
   );
 
+  listTag = createQueryCreator(
+    'chart.listTag',
+    ({ id, ...rest }: InfoOpts & Filter): R<ChartDto[]> =>
+      this.api.GET(`/tags/${id}/charts?` + stringifyFilter(rest)),
+  );
+
   info = createQueryCreator(
     'chart.info',
     ({ id, ...rest }: InfoOpts): R<ChartDto> =>
       this.api.GET(`/charts/${id}?` + queryString.stringify(rest)),
+  );
+
+  leaderboard = createQueryCreator(
+    'chart.leaderboard',
+    ({ id, ...rest }: LeaderboardOpts): R<RecordDto[]> =>
+      this.api.GET(`/charts/${id}/leaderboard?` + queryString.stringify(rest)),
   );
 
   createAdmission({ id, ...rest }: AdmissionCreateOpts): R {

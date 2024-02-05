@@ -20,7 +20,7 @@ export const load = async () => {
 
 export const actions = {
   default: async ({ request, locals, fetch, params }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
@@ -36,7 +36,10 @@ export const actions = {
       return;
     } else {
       const error = await resp.json();
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        error,
+      );
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
         form.message = t.get(`error.${error.code}`);

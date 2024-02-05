@@ -27,9 +27,11 @@
   {/if}
   <div class="card-body gap-0.5 z-10">
     <h2 class="card-title mb-1">{chartAsset.name}</h2>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+    <p class="flex items-center gap-1">
       <span class="badge">{$t('chart.asset.type')}</span>
-      <span>{$t(`chart.asset.types.${chartAsset.type}`)}</span>
+      <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        {$t(`chart.asset.types.${chartAsset.type}`)}
+      </span>
     </p>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('chart.owner')}</span>

@@ -16,26 +16,11 @@ export const load = async ({ url, data, fetch }) => {
     },
   });
 
-  const api = new API(fetch, data.accessToken, data.user);
-
-  if (
-    data.accessToken &&
-    (!data.lastRetrieval ||
-      url.pathname.startsWith('/me/notifications') ||
-      Date.now() - data.lastRetrieval > 20000)
-  ) {
-    const resp = await api.user.me();
-    if (resp.ok) {
-      data.user = (await resp.json()).data;
-      data.lastRetrieval = Date.now();
-    } else if (window) {
-      window.location.reload();
-    }
-  }
+  const api = new API(fetch, data.accessToken);
 
   return {
-    user: data.user,
     api,
+    user: data.user,
     queryClient,
   };
 };

@@ -5,6 +5,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
+// import { parseFile } from '$lib/utils';
 
 const schema = z
   .object({
@@ -26,6 +27,7 @@ const schema = z
     Offset: z.number(),
     PreviewStart: z.string(),
     PreviewEnd: z.string(),
+    Tags: z.string(),
   })
   .refine(({ EditionType, Edition }) => EditionType === 0 || Edition, {
     message: t.get('error.FieldEmpty'),
@@ -57,7 +59,7 @@ const parsePreviewTime = (time: string) => {
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
 
@@ -73,14 +75,21 @@ export const actions = {
       Illustration,
       License,
       OriginalityProof,
+      Tags: tagsRaw,
       ...rest
     } = form.data;
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;
+    // const Illustration = await parseFile(
+    //   formData.get('Illustration') as string,
+    //   formData.get('IllustrationFileName') as string,
+    //   formData.get('IllustrationFileType') as string,
+    // );
     License = formData.get('License') as File;
     OriginalityProof = formData.get('OriginalityProof') as File | undefined;
     PreviewStart = parsePreviewTime(PreviewStart);
     PreviewEnd = parsePreviewTime(PreviewEnd);
+    const Tags = tagsRaw.split(',').map((tag: string) => tag.trim());
     const resp = await api.song.submission.create(
       EditionType !== 0
         ? {
@@ -92,6 +101,7 @@ export const actions = {
             Illustration,
             License,
             OriginalityProof,
+            Tags,
             ...rest,
           }
         : {
@@ -102,6 +112,7 @@ export const actions = {
             Illustration,
             License,
             OriginalityProof,
+            Tags,
             ...rest,
           },
     );
@@ -111,7 +122,10 @@ export const actions = {
       const respBackup = resp.clone();
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);
@@ -130,8 +144,11 @@ export const actions = {
         return fail(resp.status, { form });
       } catch (e) {
         const error = await respBackup.text();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
-        return fail(resp.status, { error });
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
+        return fail(resp.status, { form });
       }
     }
   },
