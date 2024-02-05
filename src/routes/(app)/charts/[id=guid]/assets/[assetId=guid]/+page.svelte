@@ -4,7 +4,7 @@
   import { t } from '$lib/translations/config';
   import type { PatchElement } from '$lib/api/types';
   import { Status } from '$lib/constants';
-  import { applyPatch, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
   import Delete from '$lib/components/Delete.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import User from '$lib/components/User.svelte';
@@ -23,12 +23,6 @@
   $: ({ id, chartId, user, api, queryClient } = data);
 
   $: chart = createQuery(api.chart.info({ id: chartId }));
-  $: song = createQuery(
-    api.song.info(
-      { id: $chart.data?.data.songId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songId },
-    ),
-  );
   $: chartAssetQuery = createQuery(api.chart.asset.info({ chartId, id }));
   $: content = createQuery({
     queryKey: ['chart-asset-content'],
@@ -58,7 +52,10 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, data);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          data,
+        );
       }
     }
   };
@@ -79,19 +76,21 @@
         map.set(error.field, $t(`error.${error.errors[0]}`));
         return map;
       }, new Map<string, string>());
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, updateErrors);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        updateErrors,
+      );
     }
   };
 </script>
 
 <svelte:head>
   <title>
-    {$t('chart.assets')} - {$chartAssetQuery.data?.data.name} | {$t('chart.chart')} - {$chart.data
-      ?.data.title ?? ($song.isSuccess ? $song.data.data.title : '')}
+    {$t('chart.assets')} - {$chartAssetQuery.data?.data.name} | {$t('chart.chart')} -
     {$chart.isSuccess
-      ? `[${$chart.data.data.level} ${
-          $chart.data.data.difficulty != 0 ? Math.floor($chart.data.data.difficulty) : '?'
-        }]`
+      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
+          $chart.data.data.level
+        } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''} | {$t('common.title')}
   </title>
 </svelte:head>

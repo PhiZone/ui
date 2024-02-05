@@ -8,7 +8,6 @@ declare namespace App {
     accessToken?: string;
     refreshToken?: string;
     user?: import('$lib/api').UserDetailedDto;
-    lastRetrieval?: number;
   }
   interface PageData {
     user?: import('$lib/api').UserDetailedDto;

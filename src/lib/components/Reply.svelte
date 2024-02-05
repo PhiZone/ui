@@ -7,27 +7,25 @@
   import Like from './Like.svelte';
   import Delete from './Delete.svelte';
   import User from './User.svelte';
-  import { createQuery } from '@tanstack/svelte-query';
 
-  $: ({ user, api } = $page.data);
+  $: ({ user } = $page.data);
 
   export let kind: 'mini' | 'full' = 'mini';
   export let reply: ReplyDto;
   export let replyTo: (reply: UserDto) => void = (_) => {};
 
   $: content = richtext(reply.content);
-  $: owner = createQuery(api.user.info({ id: reply.ownerId }));
 </script>
 
 {#if kind === 'mini'}
   <li class="max-w-full">
     <div class="flex w-full">
-      <User id={reply.ownerId} initUser={$owner.data?.data} kind="embedded-mini" />
+      <User id={reply.ownerId} initUser={reply.owner} kind="embedded-mini" />
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         class="ml-2 w-3/4 min-w-fit content"
         on:click={() => {
-          if ($owner.isSuccess && $owner.data) replyTo($owner.data.data);
+          replyTo(reply.owner);
         }}
         on:keyup
       >
@@ -37,7 +35,7 @@
       <p
         class="w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
         on:click={() => {
-          if ($owner.isSuccess && $owner.data) replyTo($owner.data.data);
+          replyTo(reply.owner);
         }}
         on:keyup
       >

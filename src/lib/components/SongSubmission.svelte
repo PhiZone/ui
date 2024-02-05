@@ -22,7 +22,7 @@
     <figure class="h-[167px] relative">
       <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
       {#if song.originalityProof}
-        <div class="absolute bottom-2 left-2">
+        <div class="absolute bottom-2 left-2 w-fit h-fit">
           <button class="btn btn-accent btn-sm text-xl no-animation">
             {$t('song.original')}
           </button>

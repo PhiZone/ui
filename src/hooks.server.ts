@@ -1,12 +1,12 @@
 import API from '$lib/api';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import { clearTokens, getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
+import { getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
 import type { Handle } from '@sveltejs/kit';
 import { locales } from '$lib/translations/config';
 
 export const handle = (async ({ event, resolve }) => {
-  let accessToken = event.cookies.get('access_token'),
-    refreshToken = event.cookies.get('refresh_token');
+  let accessToken = event.cookies.get('access_token');
+  let refreshToken = event.cookies.get('refresh_token');
 
   if (refreshToken) {
     let resp;
@@ -23,8 +23,6 @@ export const handle = (async ({ event, resolve }) => {
       if (resp.ok) {
         ({ access_token: accessToken, refresh_token: refreshToken } = await resp.json());
         setTokens(event.cookies, accessToken, refreshToken);
-      } else {
-        event.locals.user = undefined;
       }
     }
 
@@ -33,15 +31,17 @@ export const handle = (async ({ event, resolve }) => {
       resp = await api.user.me();
       if (resp.ok) {
         event.locals.user = (await resp.json()).data;
-        event.locals.lastRetrieval = Date.now();
+        event.cookies.set('last_retrieval', Date.now().toString(), { path: '/' });
       }
     }
-  } else {
-    event.locals.user = undefined;
   }
+
+  event.locals.accessToken = accessToken;
+  event.locals.refreshToken = refreshToken;
+
   const language =
-    event.locals.user?.language ??
     event.url.searchParams.get('language') ??
+    event.locals.user?.language ??
     event.cookies.get('language') ??
     parseAcceptLanguage(event.request.headers.get('Accept-Language')).find((tag) =>
       locales
@@ -53,12 +53,6 @@ export const handle = (async ({ event, resolve }) => {
     event.cookies.set('language', language, { path: '/' });
   }
 
-  if (event.locals.user) {
-    event.locals.accessToken = accessToken;
-    event.locals.refreshToken = refreshToken;
-  } else {
-    clearTokens(event.cookies);
-  }
   const userColors = [
     '\x1b[0m',
     '\x1b[100m',
@@ -70,7 +64,7 @@ export const handle = (async ({ event, resolve }) => {
   ];
   if (event.url.pathname.includes('undefined')) {
     console.warn(
-      `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`,
+      `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
       (event.locals.user
         ? userColors[getUserPrivilege(event.locals.user.role)] +
           event.locals.user.userName +
@@ -81,7 +75,7 @@ export const handle = (async ({ event, resolve }) => {
     return new Response();
   }
   console.log(
-    `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`,
+    `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
     (event.locals.user
       ? userColors[getUserPrivilege(event.locals.user.role)] +
         event.locals.user.userName +

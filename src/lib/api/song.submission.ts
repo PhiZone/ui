@@ -31,6 +31,7 @@ export interface SongSubmissionDto {
   representationId: null | string;
   reviewerId: number | null;
   status: number;
+  tags: string[];
   title: string;
 }
 
@@ -69,6 +70,7 @@ export interface CreateOpts {
   OriginalityProof?: Blob | undefined;
   PreviewEnd: string;
   PreviewStart: string;
+  Tags: string[];
   Title: string;
 }
 

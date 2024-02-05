@@ -41,7 +41,7 @@ export const load = async () => {
 
 export const actions = {
   review: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const reviewForm = await superValidate(formData, reviewSchema);
 
@@ -54,7 +54,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         reviewForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           reviewForm.message = t.get(`error.${error.code}`);
@@ -78,7 +81,7 @@ export const actions = {
   },
 
   collab: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const collabForm = await superValidate(formData, collabSchema);
 
@@ -91,7 +94,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         collabForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           collabForm.message = t.get(`error.${error.code}`);
@@ -115,7 +121,7 @@ export const actions = {
   },
 
   chapter: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const chapterForm = await superValidate(formData, chapterSchema);
 
@@ -128,7 +134,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         chapterForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           chapterForm.message = t.get(`error.${error.code}`);

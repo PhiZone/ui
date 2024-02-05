@@ -38,9 +38,11 @@
         {chapter.subtitle}
       </h2>
     </div>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1">
+    <p class="flex items-center gap-1">
       <span class="badge">{$t('chapter.illustrator')}</span>
-      <span>{chapter.illustrator}</span>
+      <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        {chapter.illustrator}
+      </span>
     </p>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('chapter.owner')}</span>

@@ -9,6 +9,7 @@ export interface VolunteerVoteDto {
   message: null | string;
   ownerId: number;
   score: number;
+  suggestedDifficulty: number;
 }
 
 // list
@@ -21,6 +22,7 @@ export interface CreateOpts {
   chartId: string;
   message: null | string;
   score: number;
+  suggestedDifficulty: number;
 }
 
 // delete

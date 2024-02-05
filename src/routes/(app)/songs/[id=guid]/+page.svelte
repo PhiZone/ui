@@ -11,6 +11,7 @@
   import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
   import Error from '$lib/components/Error.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -94,10 +95,6 @@
               <div class="lg:w-1/3">
                 <div class="info">
                   <div class="form-control gap-1">
-                    <!-- <p>
-                      <span class="badge mr-1">{$t('song.id')}</span>
-                      {song.id}
-                    </p> -->
                     <p>
                       <span class="badge mr-1">
                         {$t('song.edition')}
@@ -158,6 +155,16 @@
                           {$t('common.description')}
                         </span>
                         {song.description}
+                      </p>
+                    {/if}
+                    {#if song.tags.length > 0}
+                      <p class="inline-flex gap-1 flex-wrap">
+                        <span class="badge">
+                          {$t('common.tags')}
+                        </span>
+                        {#each song.tags as tag}
+                          <Tag {tag} />
+                        {/each}
                       </p>
                     {/if}
                   </div>

@@ -58,7 +58,6 @@
     "preview_end": "預覽結束時間",
     "start": "開始",
     "end": "結束",
-    "preview_placeholder": "用於遊玩器內預覽播放，須以 mm:ss 格式填寫（如 01:14）",
     "chapters": "收錄章節",
     "collections": "收錄合集",
     "uploader": "上傳者",
@@ -92,8 +91,10 @@
     "duplicate_song_description": "其他人已經提交了該曲目的相同版本。如你認爲你的稿件更優質，請聯係資源所有者或工作人員。",
     "copyright_alert": "版權警告",
     "copyright_alert_description": "你提交的稿件可能會因版權問題而受到限制或被退回。此處列出了你的稿件可能侵犯其版權的資源記錄。",
-    "adjust_offset": "点击此处调整譜面延迟",
-    "offset_helper": "在上传谱面文件之前，请先选择曲目并填写谱面信息，然后点击此处调整延迟，随后将校正延迟后的文件上传。"
+    "adjust_offset": "Click here to adjust the chart's offset",
+    "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file.",
+    "suggested_difficulty": "Suggested Difficulty",
+    "playtest": "Playtest"
   },
   "request": {
     "accept": "接受",

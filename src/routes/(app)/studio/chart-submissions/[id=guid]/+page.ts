@@ -5,11 +5,11 @@ export const load = async ({ params, url, parent, data }) => {
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   const id = params.id;
   await queryClient.prefetchQuery(api.chart.submission.info({ id }));
-  await queryClient.prefetchQuery(api.vote.volunteer.listAll({ chartId: id }));
-  await queryClient.prefetchQuery(api.chart.submission.listAllCollaborations({ id }));
   await queryClient.prefetchQuery(
-    api.chart.submission.asset.list({ ...searchParams, chartId: id }),
+    api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] }),
   );
+  await queryClient.prefetchQuery(api.chart.submission.listAllCollaborations({ id }));
+  await queryClient.prefetchQuery(api.chart.submission.asset.listAll({ chartId: id }));
   return {
     searchParams,
     id,

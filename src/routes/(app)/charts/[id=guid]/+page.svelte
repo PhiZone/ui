@@ -22,6 +22,8 @@
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import ChartAsset from '$lib/components/ChartAsset.svelte';
   import Error from '$lib/components/Error.svelte';
+  import InteractiveRating from '$lib/components/InteractiveRating.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data, form;
   const {
@@ -63,13 +65,8 @@
   };
 
   $: chart = createQuery(api.chart.info({ id }));
-  $: song = createQuery(
-    api.song.info({ id: $chart.data?.data.songId ?? '' }, { enabled: $chart.isSuccess }),
-  );
   $: collections = createQuery(api.chart.listAllAdmitters({ id }));
-  $: records = createQuery(
-    api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
-  );
+  $: leaderboard = createQuery(api.chart.leaderboard({ id }));
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
   $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
   $: charter = richtext($chart.data?.data.authorName ?? '');
@@ -96,7 +93,7 @@
   $: applications = createQuery(
     api.application.listAll({ rangeType: [0] }, { enabled: playOpen && !!user }),
   );
-  $: assets = createQuery(api.chart.asset.list({ ...searchParams, chartId: id }));
+  $: assets = createQuery(api.chart.asset.listAll({ chartId: id }));
 
   let status = Status.WAITING;
   let arrangement = 0;
@@ -127,7 +124,7 @@
   <title>
     {$t('chart.chart')} -
     {$chart.isSuccess
-      ? `${$chart.data.data.title ?? $song.data?.data.title} [${
+      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
@@ -237,7 +234,7 @@
                 } else {
                   playStatus = Status.ERROR;
                   console.error(
-                    `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`,
+                    `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
                     await resp.json(),
                   );
                 }
@@ -252,7 +249,7 @@
     </div>
     <input type="checkbox" id="chart-vote" class="modal-toggle" bind:checked={voteOpen} />
     <div class="modal">
-      <div class="modal-box bg-base-100 min-w-fit w-[50vw] max-w-[1200px]">
+      <div class="modal-box bg-base-100 min-w-fit max-w-fit">
         <label
           for="chart-vote"
           class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
@@ -273,6 +270,7 @@
               } else if (result.type === 'success') {
                 status = Status.OK;
                 await queryClient.invalidateQueries(['chart.info', { id }]);
+                await queryClient.invalidateQueries(['vote.listAll', { chartId: id }]);
                 // TODO: toast
                 voteOpen = false;
               }
@@ -280,132 +278,100 @@
             };
           }}
         >
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.arrangement')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="arrangement"
-                name="arrangement"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={arrangement}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{arrangement}</p>
-          </div>
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.gameplay')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="gameplay"
-                name="gameplay"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={gameplay}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{gameplay}</p>
-          </div>
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.vfx')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="visualEffects"
-                name="visualEffects"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={vfx}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{vfx}</p>
-          </div>
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.creativity')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="creativity"
-                name="creativity"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={creativity}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{creativity}</p>
-          </div>
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.concord')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="concord"
-                name="concord"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={concord}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{concord}</p>
-          </div>
-          <div class="flex gap-3 items-center">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.impression')}
-            </span>
-            <div class="w-[70%]">
-              <input
-                id="impression"
-                name="impression"
-                type="range"
-                min="0"
-                max="5"
-                bind:value={impression}
-                class="range"
-                step="1"
-              />
-            </div>
-            <p class="text-xl font-bold w-[5%] text-center">{impression}</p>
-          </div>
-          <div class="flex gap-3 items-center h-[29px]">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.multiplier')}
-            </span>
-            <p class="text-xl font-bold w-3/4">
-              {getMultiplier(getUserLevel(user.experience)).toFixed(1)}
-            </p>
-          </div>
-          <div class="flex gap-3 items-center h-[29px]">
-            <span class="badge badge-lg badge-neutral text-lg mr-1 w-1/4 min-w-fit">
-              {$t('chart.score')}
-            </span>
-            <p class="text-xl font-bold w-3/4">
-              {(
-                (arrangement + gameplay + vfx + creativity + concord + impression) *
-                getMultiplier(getUserLevel(user.experience))
-              ).toFixed(2)}
-            </p>
+          <div class="overflow-x-auto">
+            <table class="table table-xs">
+              <tbody>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.arrangement')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="arrangement" bind:rating={arrangement} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{arrangement}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.gameplay')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="gameplay" bind:rating={gameplay} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{gameplay}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.vfx')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="visualEffects" bind:rating={vfx} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{vfx}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.creativity')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="creativity" bind:rating={creativity} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{creativity}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.concord')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="concord" bind:rating={concord} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{concord}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.impression')}
+                    </div>
+                  </td>
+                  <td>
+                    <InteractiveRating aspect="impression" bind:rating={impression} />
+                  </td>
+                  <td class="text-xl font-bold text-center">{impression}</td>
+                </tr>
+                <tr style:border-bottom-width="0px">
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.multiplier')}
+                    </div>
+                  </td>
+                  <td class="text-xl font-bold h-[52px]">
+                    {getMultiplier(getUserLevel(user.experience)).toFixed(1)}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
+                      {$t('chart.score')}
+                    </div>
+                  </td>
+                  <td class="text-xl font-bold h-[52px]">
+                    {(
+                      (arrangement + gameplay + vfx + creativity + concord + impression) *
+                      getMultiplier(getUserLevel(user.experience))
+                    ).toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="modal-action">
             <div
@@ -450,19 +416,15 @@
         >
           <div class="card-body py-10">
             <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
-              {#if chart.title || $song.isSuccess}
-                <h2 class="text-5xl font-bold content md:inline-block">
-                  {chart.title ?? $song.data?.data.title}
-                </h2>
-              {:else}
-                <div class="skeleton h-11 w-1/2"></div>
-              {/if}
+              <h2 class="text-5xl font-bold content md:inline-block">
+                {chart.title ?? chart.song.title}
+              </h2>
               <div class="join join-vertical md:join-horizontal min-w-fit">
                 <button
                   class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
                 >
                   {chart.level}
-                  {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+                  {getLevelDisplay(chart.difficulty)}
                 </button>
                 {#if chart.isRanked}
                   <button
@@ -546,6 +508,16 @@
                     {chart.description}
                   </p>
                 {/if}
+                {#if chart.tags.length > 0}
+                  <p class="inline-flex gap-1 flex-wrap">
+                    <span class="badge">
+                      {$t('common.tags')}
+                    </span>
+                    {#each chart.tags as tag}
+                      <Tag {tag} />
+                    {/each}
+                  </p>
+                {/if}
               </div>
               <div class="divider lg:divider-horizontal" />
               <div class="lg:w-1/2 float-right p-4 form-control gap-3">
@@ -560,76 +532,77 @@
                     liked={chart.dateLiked != null}
                     class="btn-md join-item"
                   />
-                  <label
-                    for="chart-vote"
-                    class="btn {user
-                      ? 'btn-ghost border-2 hover:btn-outline'
-                      : 'btn-disabled'} join-item"
-                  >
-                    <i class="fa-solid fa-check-to-slot fa-lg"></i>
-                    {$t('common.vote')}
-                  </label>
-                  {#if chart.file && user}
-                    <a
-                      href={chart.file}
-                      target="_blank"
-                      download={chart.file.split('/').pop()}
+                  {#if user}
+                    <label
+                      for="chart-vote"
                       class="btn btn-ghost border-2 hover:btn-outline join-item"
                     >
-                      <i class="fa-solid fa-file-arrow-down fa-lg"></i>
-                      {$t('common.download')}
-                    </a>
-                    <a
-                      href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
-                        chart.file,
-                      )}&song={encodeURI($song.data?.data.file ?? '')}&illustration={encodeURI(
-                        $song.data?.data.illustration ?? '',
-                      )}&name={chart.title ??
-                        $song.data?.data.title}&level={chart.level}&difficulty={chart.difficulty !=
-                      0
-                        ? Math.floor(chart.difficulty)
-                        : '?'}&composer={$song.data?.data.authorName}&illustrator={$song.data?.data
-                        .illustrator}&charter={chart.authorName}"
-                      class="btn btn-ghost border-2 hover:btn-outline join-item"
-                      target="_target"
-                    >
-                      <i class="fa-solid fa-eye fa-lg"></i>
-                      {$t('common.preview')}
-                    </a>
-                    {#if chart.accessibility !== 2}
-                      <button
+                      <i class="fa-solid fa-check-to-slot fa-lg"></i>
+                      {$t('common.vote')}
+                    </label>
+                    {#if chart.file}
+                      <a
+                        href={chart.file}
+                        target="_blank"
+                        download={chart.file.split('/').pop()}
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
-                        on:click={async () => {
-                          if (
-                            $preferredPlayConfigurationQuery.isSuccess &&
-                            $preferredPlayConfigurationQuery.data.data.length > 0 &&
-                            $preferredApplicationQuery.isSuccess &&
-                            $preferredApplicationQuery.data.data.length > 0
-                          ) {
-                            const resp = await api.chart.play({
-                              chartId: chart.id,
-                              configurationId: $preferredPlayConfigurationQuery.data.data[0].id,
-                              applicationId: $preferredApplicationQuery.data.data[0].id,
-                            });
-                            if (resp.ok) {
-                              const data = await resp.json();
-                              console.log(
-                                'Opening',
-                                `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
-                              );
-                              window.open(
-                                `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
-                                '_blank',
-                              );
-                            }
-                          } else {
-                            playOpen = true;
-                          }
-                        }}
                       >
-                        <i class="fa-solid fa-play fa-lg"></i>
-                        {$t('chart.play')}
-                      </button>
+                        <i class="fa-solid fa-file-arrow-down fa-lg"></i>
+                        {$t('common.download')}
+                      </a>
+                      <a
+                        href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
+                          chart.file,
+                        )}&song={encodeURI(chart.song.file ?? '')}&illustration={encodeURI(
+                          chart.song.illustration ?? '',
+                        )}&name={chart.title ??
+                          chart.song.title}&level={chart.level}&difficulty={getLevelDisplay(
+                          chart.difficulty,
+                        )}&composer={chart.song.authorName}&illustrator={chart.song
+                          .illustrator}&charter={chart.authorName}&assets={$assets.data?.data
+                          .map((asset) => encodeURI(asset.file))
+                          .join(',')}"
+                        class="btn btn-ghost border-2 hover:btn-outline join-item"
+                        target="_target"
+                      >
+                        <i class="fa-solid fa-eye fa-lg"></i>
+                        {$t('common.preview')}
+                      </a>
+                      {#if chart.accessibility !== 2}
+                        <button
+                          class="btn btn-ghost border-2 hover:btn-outline join-item"
+                          on:click={async () => {
+                            if (
+                              $preferredPlayConfigurationQuery.isSuccess &&
+                              $preferredPlayConfigurationQuery.data.data.length > 0 &&
+                              $preferredApplicationQuery.isSuccess &&
+                              $preferredApplicationQuery.data.data.length > 0
+                            ) {
+                              const resp = await api.chart.play({
+                                chartId: chart.id,
+                                configurationId: $preferredPlayConfigurationQuery.data.data[0].id,
+                                applicationId: $preferredApplicationQuery.data.data[0].id,
+                              });
+                              if (resp.ok) {
+                                const data = await resp.json();
+                                // console.log(
+                                //   'Opening',
+                                //   `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
+                                // );
+                                window.open(
+                                  `${$preferredApplicationQuery.data.data[0].apiEndpoint}player=${user?.id}&chart=${chart.id}&configuration=${$preferredPlayConfigurationQuery.data.data[0].id}&token=${data.data.token}&timestamp=${data.data.timestamp}`,
+                                  '_blank',
+                                );
+                              }
+                            } else {
+                              playOpen = true;
+                            }
+                          }}
+                        >
+                          <i class="fa-solid fa-play fa-lg"></i>
+                          {$t('chart.play')}
+                        </button>
+                      {/if}
                     {/if}
                   {/if}
                 </div>
@@ -682,18 +655,15 @@
         </span>
         <User id={chart.ownerId} />
       </div>
-      {#if $song.isSuccess}
-        {@const song = $song.data.data}
-        <div class="indicator w-full my-4">
-          <span
-            class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
-            style:--tw-translate-x="0"
-          >
-            {$t('song.song')}
-          </span>
-          <Song {song} />
-        </div>
-      {/if}
+      <div class="indicator w-full my-4">
+        <span
+          class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
+          style:--tw-translate-x="0"
+        >
+          {$t('song.song')}
+        </span>
+        <Song song={chart.song} />
+      </div>
       {#if $collections.isSuccess}
         {#each $collections.data.data as collection}
           <div class="indicator w-full my-4">
@@ -707,22 +677,28 @@
           </div>
         {/each}
       {/if}
-      {#if $records.isSuccess && $song.isSuccess}
-        {@const records = $records.data.data.slice(0, 10)}
-        {@const song = $song.data.data}
+      {#if $leaderboard.isSuccess}
+        {@const records = $leaderboard.data.data}
         {#if records.length > 0}
           <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
             >
-              {$t('common.records')}
+              {$t('chart.leaderboard')}
             </span>
             <div class="card w-80 bg-base-100 transition border-2 normal-border hover:shadow-lg">
-              <div class="card-body gap-2 items-center justify-center">
+              <div class="card-body px-4 py-6 gap-2 items-center justify-center">
                 {#each records as record}
-                  <Record {record} {chart} {song} rank={record.position} showChart={false} />
+                  <Record {record} {chart} rank={record.position} showChart={false} />
                 {/each}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+                  href="/charts/{id}/leaderboard"
+                >
+                  {$t('common.more')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import type { Accessibility, FilterBase, R } from './types';
 import type { ChapterAdmitterDto } from './chapter';
 import type API from '.';
 import SongSubmissionAPI from './song.submission';
+import type { TagDto } from './tag';
 
 export interface ChartLevelDto {
   count: number;
@@ -38,6 +39,7 @@ export interface SongDto {
   ownerId: number;
   previewEnd: string;
   previewStart: string;
+  tags: TagDto[];
   title: string;
 }
 
@@ -99,6 +101,12 @@ export default class SongAPI {
     'song.listAllAdmitters',
     ({ id, ...rest }: AdmissionListOpts): R<ChapterAdmitterDto[]> =>
       this.api.GET(`/songs/${id}/chapters?` + stringifyFilter(rest, true)),
+  );
+
+  listTag = createQueryCreator(
+    'song.listTag',
+    ({ id, ...rest }: InfoOpts & Filter): R<SongDto[]> =>
+      this.api.GET(`/tags/${id}/songs?` + stringifyFilter(rest)),
   );
 
   info = createQueryCreator(

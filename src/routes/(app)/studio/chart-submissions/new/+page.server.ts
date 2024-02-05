@@ -20,6 +20,7 @@ const schema = z.object({
   IsRanked: z.boolean(),
   SongId: z.string(),
   SongSubmissionId: z.string(),
+  Tags: z.string(),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -31,7 +32,7 @@ export const load = async () => {
 
 export const actions = {
   default: async ({ request, url, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
 
@@ -39,16 +40,20 @@ export const actions = {
       return fail(400, { form });
     }
     // eslint-disable-next-line prefer-const
-    let { File, Illustration, ...rest } = form.data;
+    let { File, Illustration, Tags: tagsRaw, ...rest } = form.data;
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;
-    const resp = await api.chart.submission.create({ File, Illustration, ...rest });
+    const Tags = tagsRaw.split(',').map((tag: string) => tag.trim());
+    const resp = await api.chart.submission.create({ File, Illustration, Tags, ...rest });
     if (resp.ok) {
       throw redirect(303, '/studio/chart-submissions' + url.search);
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);

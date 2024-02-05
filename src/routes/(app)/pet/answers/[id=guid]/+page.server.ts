@@ -19,11 +19,14 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async ({ params, locals, fetch }) => {
-  const api = new API(fetch, locals.accessToken, locals.user);
+  const api = new API(fetch, locals.accessToken);
   const resp = await api.pet.getAnswer({ id: params.id });
   if (!resp.ok) {
     const error = await resp.json();
-    console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+    console.error(
+      `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+      error,
+    );
     throw fail(resp.status, t.get(`error.${error.code}`));
   }
   const answer = (await resp.json()).data;
@@ -46,7 +49,7 @@ export const load = async ({ params, locals, fetch }) => {
 
 export const actions = {
   assess: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
 
@@ -59,7 +62,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           form.message = t.get(`error.${error.code}`);

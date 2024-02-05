@@ -1,5 +1,4 @@
-import { ContentType, defaultLocale } from '$lib/constants';
-import { locale } from '$lib/translations/config';
+import { ContentType } from '$lib/constants';
 import { PUBLIC_API_BASE } from '$env/static/public';
 import AuthAPI from './auth';
 import ChapterAPI from './chapter';
@@ -11,7 +10,7 @@ import NotificationAPI from './notification';
 import RecordAPI from './record';
 import ReplyAPI from './reply';
 import SongAPI from './song';
-import UserAPI, { type UserDetailedDto } from './user';
+import UserAPI from './user';
 import VoteAPI from './vote';
 import CollaborationAPI from './collaboration';
 import PetAPI from './pet';
@@ -20,6 +19,7 @@ import ResourceRecordAPI from './resourceRecord';
 import ApplicationAPI from './application';
 import CollectionAPI from './collection';
 import PlayConfigurationAPI from './playConfiguration';
+import TagAPI from './tag';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -28,7 +28,7 @@ export default class API {
   constructor(
     public fetch: typeof globalThis.fetch,
     public access_token?: string,
-    public _user?: UserDetailedDto,
+    // public _user?: UserDetailedDto,
   ) {}
 
   send(path: string, method: string, body?: SendBody): Promise<Response> {
@@ -44,13 +44,13 @@ export default class API {
     }
     if (import.meta.env.DEV)
       console.log(
-        `\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[44mAPI\x1b[0m`,
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m \x1b[44mAPI\x1b[0m`,
         path + (body ? ` ${body}` : ''),
       );
 
     if (this.access_token) headers.append('Authorization', `Bearer ${this.access_token}`);
     headers.append('User-Agent', 'PhiZoneRegularAccess');
-    headers.set('Accept-Language', locale.get() ?? this._user?.language ?? defaultLocale);
+    // headers.set('Accept-Language', locale.get() ?? this._user?.language ?? defaultLocale);
 
     return this.fetch(`${PUBLIC_API_BASE}${path}`, { method, headers, body });
   }
@@ -79,25 +79,26 @@ export default class API {
     return this.send(path, 'PATCH', body);
   }
 
+  admission = new AdmissionAPI(this);
   application = new ApplicationAPI(this);
   auth = new AuthAPI(this);
   chapter = new ChapterAPI(this);
   chart = new ChartAPI(this);
+  collaboration = new CollaborationAPI(this);
   collection = new CollectionAPI(this);
   comment = new CommentAPI(this);
   headline = new HeadlineAPI(this);
   like = new LikeAPI(this);
   notification = new NotificationAPI(this);
+  playConfiguration = new PlayConfigurationAPI(this);
   record = new RecordAPI(this);
   reply = new ReplyAPI(this);
+  resourceRecord = new ResourceRecordAPI(this);
   song = new SongAPI(this);
+  tag = new TagAPI(this);
   user = new UserAPI(this);
   vote = new VoteAPI(this);
-  collaboration = new CollaborationAPI(this);
-  admission = new AdmissionAPI(this);
-  resourceRecord = new ResourceRecordAPI(this);
   pet = new PetAPI(this);
-  playConfiguration = new PlayConfigurationAPI(this);
 }
 
 export type { ChapterDto } from './chapter';

@@ -1,3 +1,4 @@
+import type { UserDto } from '.';
 import type API from '.';
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
@@ -7,6 +8,7 @@ export interface CommentDto {
   resourceId: string;
   content: string;
   language: string;
+  owner: UserDto;
   ownerId: number;
   dateCreated: Date;
   replyCount: number;

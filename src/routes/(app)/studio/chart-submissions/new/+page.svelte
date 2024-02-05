@@ -2,13 +2,14 @@
   import { t } from '$lib/translations/config';
   import { LEVEL_TYPES } from '$lib/constants';
   import User from '$lib/components/User.svelte';
-  import { getLevelColor } from '$lib/utils';
+  import { getLevelColor, getLevelDisplay } from '$lib/utils';
   import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import type { SongDto } from '$lib/api/song';
   import type { SongSubmissionDto } from '$lib/api';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -21,6 +22,10 @@
   let levelType = 0;
   let level = '';
   let difficulty = '';
+  let tagsRaw: string;
+  let tags: string[] = [];
+  let showTags = true;
+  let newTag = '';
   let newCharterId: number | null = null;
   let newCharterDisplay = '';
   let queryCharter = false;
@@ -146,11 +151,9 @@
               parent?.file ?? '',
             )}&illustration=${encodeURI(parent?.illustration ?? '')}&name=${
               parent?.title
-            }&level=${level}&difficulty=${
-              parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'
-            }&composer=${parent?.authorName}&illustrator=${
-              parent?.illustrator
-            }&charter=${authorName}`}
+            }&level=${level}&difficulty=${getLevelDisplay(parseFloat(difficulty))}&composer=${
+              parent?.authorName
+            }&illustrator=${parent?.illustrator}&charter=${authorName}`}
             target="_blank"
             class="mb-2 link link-hover"
           >
@@ -381,7 +384,7 @@
                 <div class="w-3/4">
                   <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
                     {level}
-                    {parseFloat(difficulty) != 0 ? Math.floor(parseFloat(difficulty)) : '?'}
+                    {getLevelDisplay(parseFloat(difficulty))}
                   </button>
                 </div>
               </div>
@@ -451,6 +454,70 @@
                 />
               </label>
             </div>
+            <input type="hidden" id="tags" name="Tags" bind:value={tagsRaw} />
+            <div
+              class={$errors.Tags ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
+              data-tip={$errors.Tags ? $errors.Tags : ''}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.tags')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      showTags = false;
+                      tags.push(newTag);
+                      tagsRaw = tags.join(',');
+                      newTag = '';
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }
+                  }}
+                  id="new_tag"
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                    $errors.Tags ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
+                  bind:value={newTag}
+                />
+                <button
+                  class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  on:click={(e) => {
+                    e.preventDefault();
+                    showTags = false;
+                    tags.push(newTag);
+                    tagsRaw = tags.join(',');
+                    newTag = '';
+                    setTimeout(() => {
+                      showTags = true;
+                    }, 0);
+                  }}
+                  on:keyup
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </label>
+            </div>
+            {#if showTags}
+              <div class="flex gap-1 flex-wrap">
+                {#each tags as tag, i}
+                  <Tag
+                    {tag}
+                    removeFunction={() => {
+                      showTags = false;
+                      tags.splice(i, 1);
+                      tagsRaw = tags.join(',');
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }}
+                  />
+                {/each}
+              </div>
+            {/if}
             <div class="w-full flex justify-center mt-6">
               <div
                 class="tooltip tooltip-bottom tooltip-error w-full"

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createQuery } from '@tanstack/svelte-query';
-  import { page } from '$app/stores';
   import type { ChartDto } from '$lib/api';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, getLevelColor, getLevelDisplay } from '$lib/utils';
@@ -9,15 +7,12 @@
   import Rating from './Rating.svelte';
   import type { ChartAdmitteeDto } from '$lib/api/chart';
 
-  $: ({ api } = $page.data);
-
   export let chart: ChartDto | ChartAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';
   export let showSong = true;
   export let showCharter = true;
   export let showLike = true;
 
-  $: song = createQuery(api.song.info({ id: chart.songId }));
   $: charter = richtext(chart.authorName ?? '');
 </script>
 
@@ -27,22 +22,18 @@
   >
     <a href={`/charts/${chart.id}`}>
       <figure class="h-[167px] relative">
-        {#if chart.illustration || $song.isSuccess}
-          <img
-            src={getCompressedImage(chart.illustration ?? $song.data?.data.illustration)}
-            alt="Illustration"
-            class="object-fill"
-          />
-        {:else}
-          <div class="skeleton rounded-none w-full h-full"></div>
-        {/if}
-        <div class="absolute bottom-2 left-2">
+        <img
+          src={getCompressedImage(chart.illustration ?? chart.song.illustration)}
+          alt="Illustration"
+          class="object-fill"
+        />
+        <div class="absolute bottom-2 left-2 w-fit h-fit">
           <div class="join join-horizontal">
             <button
               class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
             >
               {chart.level}
-              {chart.difficulty != 0 ? Math.floor(chart.difficulty) : '?'}
+              {getLevelDisplay(chart.difficulty)}
             </button>
             {#if chart.isRanked}
               <button
@@ -68,13 +59,9 @@
       </figure>
       <div class="card-body py-6 gap-0.5">
         <div class="w-full">
-          {#if chart.title || $song.isSuccess}
-            <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
-              {chart.title ?? $song.data?.data.title}
-            </h2>
-          {:else}
-            <div class="skeleton h-7"></div>
-          {/if}
+          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+            {chart.title ?? chart.song.title}
+          </h2>
           <Rating rating={chart.rating} />
         </div>
         <p class="whitespace-nowrap overflow-hidden text-ellipsis">
@@ -143,13 +130,9 @@
             </div>
           {/if}
           {#if showSong}
-            {#if chart.title || $song.isSuccess}
-              <p class="text-xl font-bold ellipsis-2-md max-w-fit">
-                {$song.data?.data.title}
-              </p>
-            {:else}
-              <div class="skeleton h-7 ellipsis-2-md"></div>
-            {/if}
+            <p class="text-xl font-bold ellipsis-2-md max-w-fit">
+              {chart.title ?? chart.song.title}
+            </p>
           {/if}
         </div>
       {/if}

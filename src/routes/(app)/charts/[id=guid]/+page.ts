@@ -7,9 +7,7 @@ export const load = async ({ data, params, url, parent }) => {
   await Promise.allSettled([
     queryClient.prefetchQuery(api.chart.info({ id })),
     queryClient.prefetchQuery(api.chart.listAllAdmitters({ id })),
-    queryClient.prefetchQuery(
-      api.record.listChart({ chartId: id, order: ['rks', 'dateCreated'], desc: [true, true] }),
-    ),
+    queryClient.prefetchQuery(api.chart.leaderboard({ id })),
     queryClient.prefetchQuery(
       api.comment.list({
         type: 'charts',
@@ -19,7 +17,7 @@ export const load = async ({ data, params, url, parent }) => {
         desc: [true, true],
       }),
     ),
-    queryClient.prefetchQuery(api.chart.asset.list({ ...searchParams, chartId: id })),
+    queryClient.prefetchQuery(api.chart.asset.listAll({ chartId: id })),
   ]);
   if (data.preferredPlayConfiguration && user) {
     await queryClient.prefetchQuery(

@@ -8,8 +8,9 @@
   import 'nouislider/dist/nouislider.css';
   import User from '$lib/components/User.svelte';
   import Song from '$lib/components/Song.svelte';
-  import Cropper from '$lib/components/ImageCropper.svelte';
+  // import Cropper from '$lib/components/ImageCropper.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -23,9 +24,9 @@
 
   let audio: HTMLAudioElement | undefined;
   let illustration = false;
-  let illustrationFiles: FileList;
-  let illustrationSrc: string;
-  let illustrationCropping = false;
+  // let illustrationFileSrc: string;
+  // let illustrationOriginalSrc: string;
+  // let illustrationCropping = false;
   let originalityProof = false;
   let slider: TargetElement;
   let isOriginal = false;
@@ -39,6 +40,10 @@
   let authorName = '';
   let editionType = 0;
   let edition = '';
+  let tagsRaw: string;
+  let tags: string[] = [];
+  let showTags = true;
+  let newTag = '';
   let newComposerId: number | null = null;
   let newComposerDisplay = '';
   let queryComposer = false;
@@ -134,37 +139,52 @@
     clearInterval(previewTimer);
   };
 
-  const handleIllustration = () => {
-    if (illustrationFiles.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(illustrationFiles[0]);
-      reader.onload = () => {
-        illustrationSrc = reader.result as string;
-        illustrationCropping = true;
-      };
-    }
-  };
+  // TODO The file list of an input field of type "file" in an HTML form is read-only
+  // for security reasons. This means it cannot be set or modified programmatically.
+  // Besides, data URLs don't work due to length limitations.
+
+  // const handleIllustration = (
+  //   e: Event & {
+  //     currentTarget: EventTarget & HTMLInputElement;
+  //   },
+  // ) => {
+  //   if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+  //     const illustration = e.currentTarget.files[0];
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(illustration);
+  //     reader.onload = () => {
+  //       illustrationOriginalSrc = reader.result as string;
+  //       illustrationCropping = true;
+  //     };
+  //   }
+  // };
+
+  // const handleCropperResult = (e: CustomEvent<Blob>) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(e.detail);
+  //   reader.onload = () => {
+  //     illustrationFileSrc = reader.result as string;
+  //     console.log(e.detail);
+  //     console.log(reader.result);
+  //   };
+  //   illustration = true;
+  //   illustrationCropping = false;
+  // };
 </script>
 
 <svelte:head>
   <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.title')}</title>
 </svelte:head>
 
-{#if illustrationCropping}
+<!-- {#if illustrationCropping}
   <Cropper
     bind:open={illustrationCropping}
     title={$t('common.image_cropper')}
-    src={illustrationSrc}
+    src={illustrationOriginalSrc}
     aspectRatio={16 / 9}
-    on:submit={(e) => {
-      const transfer = new DataTransfer();
-      transfer.items.add(new File([e.detail], 'illustration', { type: e.detail.type }));
-      illustrationFiles = transfer.files;
-      illustration = true;
-      illustrationCropping = false;
-    }}
+    on:submit={handleCropperResult}
   />
-{/if}
+{/if} -->
 
 <input type="checkbox" id="studio-composer" class="modal-toggle" />
 <div class="modal">
@@ -306,8 +326,9 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                bind:files={illustrationFiles}
-                on:change={handleIllustration}
+                on:input={() => {
+                  illustration = true;
+                }}
               />
               {#if !!$errors.Illustration}
                 <span class="w-2/3 text-error">{$errors.Illustration}</span>
@@ -783,7 +804,71 @@
                 />
               </label>
             </div>
-            {#if $songDuplications.isSuccess && $songDuplications.data.data}
+            <input type="hidden" id="tags" name="Tags" bind:value={tagsRaw} />
+            <div
+              class={$errors.Tags ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
+              data-tip={$errors.Tags ? $errors.Tags : ''}
+            >
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                  {$t('common.tags')}
+                </span>
+                <input
+                  type="text"
+                  on:keydown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      showTags = false;
+                      tags.push(newTag);
+                      tagsRaw = tags.join(',');
+                      newTag = '';
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }
+                  }}
+                  id="new_tag"
+                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                    $errors.Tags ? 'hover:input-error' : 'hover:input-secondary'
+                  }`}
+                  bind:value={newTag}
+                />
+                <button
+                  class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  on:click={(e) => {
+                    e.preventDefault();
+                    showTags = false;
+                    tags.push(newTag);
+                    tagsRaw = tags.join(',');
+                    newTag = '';
+                    setTimeout(() => {
+                      showTags = true;
+                    }, 0);
+                  }}
+                  on:keyup
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </label>
+            </div>
+            {#if showTags}
+              <div class="flex gap-1 flex-wrap">
+                {#each tags as tag, i}
+                  <Tag
+                    {tag}
+                    removeFunction={() => {
+                      showTags = false;
+                      tags.splice(i, 1);
+                      tagsRaw = tags.join(',');
+                      setTimeout(() => {
+                        showTags = true;
+                      }, 0);
+                    }}
+                  />
+                {/each}
+              </div>
+            {/if}
+            {#if $songDuplications.isSuccess && $songDuplications.data.data.length > 0}
               <div class="flex my-2">
                 <div class="w-1/4 flex flex-col gap-2">
                   <h2 class="text-lg font-bold">{$t('studio.submission.duplicate_song')}</h2>

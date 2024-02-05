@@ -31,7 +31,7 @@ export const load = async ({ url, fetch, locals }) => {
     return { status: 1, form };
   }
   if (!searchParams.answers || !isNumberMatrix(answers)) return { status: 1, form };
-  const api = new API(fetch, locals.accessToken, locals.user);
+  const api = new API(fetch, locals.accessToken);
   const resp = await api.pet.listSubjective(answers.map((entry) => ({ choices: entry })));
   if (!resp.ok) {
     const error = await resp.json();
@@ -80,7 +80,7 @@ export const load = async ({ url, fetch, locals }) => {
 
 export const actions = {
   default: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
@@ -94,7 +94,10 @@ export const actions = {
       throw redirect(303, '/pet/answers');
     } else {
       const error = await resp.json();
-      console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        error,
+      );
       form.valid = false;
       if (error.status === ResponseDtoStatus.ErrorBrief) {
         form.message = t.get(`error.${error.code}`);

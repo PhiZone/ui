@@ -44,7 +44,7 @@
     <a href={`/songs/${song.id}`}>
       <figure class="h-[167px] relative">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
-        <div class="absolute bottom-2 left-2">
+        <div class="absolute bottom-2 left-2 w-fit h-fit">
           {#if song.isOriginal}
             <button class="btn btn-accent btn-sm text-xl no-animation join-item">
               {$t('song.original')}

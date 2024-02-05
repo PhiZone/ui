@@ -9,6 +9,7 @@ import { z } from 'zod';
 const voteSchema = z.object({
   chartId: z.string(),
   score: z.number(),
+  suggestedDifficulty: z.number(),
   message: z.string(),
 });
 
@@ -38,7 +39,7 @@ export const load = async () => {
 
 export const actions = {
   vote: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const voteForm = await superValidate(formData, voteSchema);
 
@@ -51,7 +52,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         voteForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           voteForm.message = t.get(`error.${error.code}`);
@@ -75,7 +79,7 @@ export const actions = {
   },
 
   collab: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const collabForm = await superValidate(formData, collabSchema);
 
@@ -88,7 +92,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         collabForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           collabForm.message = t.get(`error.${error.code}`);
@@ -112,7 +119,7 @@ export const actions = {
   },
 
   collection: async ({ request, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken, locals.user);
+    const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const collectionForm = await superValidate(formData, collectionSchema);
 
@@ -125,7 +132,10 @@ export const actions = {
     } else {
       try {
         const error = await resp.json();
-        console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, error);
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
         collectionForm.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
           collectionForm.message = t.get(`error.${error.code}`);

@@ -1,3 +1,4 @@
+import type { ChartDto, UserDto } from '.';
 import type API from '.';
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
@@ -6,6 +7,7 @@ export interface RecordDto {
   accuracy: number;
   applicationId: string;
   bad: number;
+  chart?: ChartDto;
   chartId: string;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -17,6 +19,7 @@ export interface RecordDto {
   likeCount: number;
   maxCombo: number;
   miss: number;
+  owner: UserDto;
   ownerId: number;
   perfect: number;
   perfectJudgment: number;
@@ -53,12 +56,6 @@ export default class RecordAPI {
   listAll = createQueryCreator(
     'record.listAll',
     (opts: Filter): R<RecordDto[]> => this.api.GET('/records?' + stringifyFilter(opts, true)),
-  );
-
-  listChart = createQueryCreator(
-    'record.listChart',
-    ({ chartId, ...rest }: FilterChart): R<RecordDto[]> =>
-      this.api.GET(`/charts/${chartId}/records?` + stringifyFilter(rest)),
   );
 
   info = createQueryCreator(

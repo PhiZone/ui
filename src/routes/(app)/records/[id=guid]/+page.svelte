@@ -100,7 +100,7 @@
               <span>{record.stdDeviation.toFixed(3)} ms</span>
             </p>
             <p class="flex gap-1 items-center">
-              <span class="badge">{$t('record.time')}</span>
+              <span class="badge">{$t('record.played_at')}</span>
               <span>{parseDateTime(record.dateCreated)}</span>
             </p>
             <div class="card-actions justify-end">

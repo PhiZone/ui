@@ -12,7 +12,7 @@
   "miss": "Miss",
   "rks": "RKS",
   "std_deviation": "标准差",
-  "time": "游玩时间",
+  "played_at": "游玩时间",
   "player": "玩家",
   "player_id": "玩家 ID",
   "lowest_score": "最低分数",

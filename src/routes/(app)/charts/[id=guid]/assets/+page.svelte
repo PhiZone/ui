@@ -4,7 +4,7 @@
   import ChartAsset from '$lib/components/ChartAsset.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-  import { getUserPrivilege } from '$lib/utils';
+  import { getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
 
   export let data;
@@ -26,12 +26,6 @@
   let modalOpen = false;
 
   $: chart = createQuery(api.chart.info({ id: params.id }));
-  $: song = createQuery(
-    api.song.info(
-      { id: $chart.data?.data.songId ?? '' },
-      { enabled: $chart.isSuccess && !!$chart.data.data.songId },
-    ),
-  );
   $: query = createQuery(api.chart.asset.list({ ...searchParams, chartId: params.id }));
 
   const getFileType = (mime: string, fileName: string) => {
@@ -66,12 +60,11 @@
 
 <svelte:head>
   <title>
-    {$t('chart.assets')} | {$t('chart.chart')} - {$chart.data?.data.title ??
-      ($song.isSuccess ? $song.data.data.title : '')}
+    {$t('chart.assets')} | {$t('chart.chart')} -
     {$chart.isSuccess
-      ? `[${$chart.data.data.level} ${
-          $chart.data.data.difficulty != 0 ? Math.floor($chart.data.data.difficulty) : '?'
-        }]`
+      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
+          $chart.data.data.level
+        } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''} | {$t('common.title')}
   </title>
 </svelte:head>

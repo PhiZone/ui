@@ -100,7 +100,7 @@
       <div
         class="relative inline-flex flex-col items-center justify-center border-r normal-border px-3 py-3 mx-auto my-auto w-full"
       >
-        <User id={comment.ownerId} kind="embedded" />
+        <User id={comment.ownerId} initUser={comment.owner} kind="embedded" />
       </div>
     </figure>
   {/if}

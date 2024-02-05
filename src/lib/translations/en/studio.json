@@ -58,7 +58,6 @@
     "preview_end": "End Time of Preview",
     "start": "Start",
     "end": "End",
-    "preview_placeholder": "In the format of mm:ss (e.g. 01:14), used to specify the preview section in players",
     "chapters": "Associated Chapters",
     "collections": "Associated Collections",
     "uploader": "Uploader",
@@ -92,8 +91,10 @@
     "duplicate_song_description": "Someone else has already submitted the same version of the song. If you think your submission is better, please contact the resource owner or the staff.",
     "copyright_alert": "Copyright Alert",
     "copyright_alert_description": "Your submission might be restricted or rejected due to copyright issues. Listed are resource records whose copyright may have been potentially infringed by your submission.",
-    "adjust_offset": "Click here to adjust your chart's offset",
-    "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file."
+    "adjust_offset": "Click here to adjust the chart's offset",
+    "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file.",
+    "suggested_difficulty": "Suggested Difficulty",
+    "playtest": "Playtest"
   },
   "request": {
     "accept": "Accept",

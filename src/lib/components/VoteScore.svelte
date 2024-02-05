@@ -2,9 +2,14 @@
   export let score: number;
   export let size = 20;
   export let centered = true;
+  export let obsolete = false;
 </script>
 
-<div class="flex{centered ? ' justify-center' : ''}" style:min-width="{size * 3.6}px">
+<div
+  class="flex{centered ? ' justify-center' : ''}"
+  style:min-width="{size * 3.6}px"
+  class:opacity-40={obsolete}
+>
   <span class="font-extrabold" style:font-size="{size * 1.8}px" style:line-height="{size * 2}px">
     {score < 0 ? '-' : ''}{Math.floor(Math.abs(score))}
   </span>

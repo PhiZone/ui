@@ -11,6 +11,7 @@
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
   import Error from '$lib/components/Error.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -640,6 +641,16 @@
                       {$t('common.description')}
                     </span>
                     {submission.description}
+                  </p>
+                {/if}
+                {#if submission.tags.length > 0}
+                  <p class="inline-flex gap-1 flex-wrap">
+                    <span class="badge">
+                      {$t('common.tags')}
+                    </span>
+                    {#each submission.tags as tag}
+                      <Tag {tag} />
+                    {/each}
                   </p>
                 {/if}
                 <p>

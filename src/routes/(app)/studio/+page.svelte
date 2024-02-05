@@ -41,13 +41,6 @@
       <p class="sm:text-lg pt-6 whitespace-pre-wrap">
         {$t('studio.description')}
       </p>
-      <!-- <a
-        href="/studio_guide.html"
-        target="_blank"
-        class="text-lg hover:underline max-w-fit mx-auto mt-3"
-      >
-        {$t('studio.view_guide')}
-      </a> -->
       <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mx-auto">
         <a
           href="/studio/chart-submissions/new"

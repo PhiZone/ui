@@ -68,7 +68,10 @@
             if (resp.ok) {
               invalidateAll();
             } else {
-              console.error(`\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m`, await resp.json());
+              console.error(
+                `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+                await resp.json(),
+              );
             }
           }}
         >
