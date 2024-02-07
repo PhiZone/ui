@@ -41,7 +41,6 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
-  $: regionCode = user.region ? user.region.code : '';
   $: year = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCFullYear();
   $: month = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
   $: day = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCDate();
@@ -908,7 +907,7 @@
                   {$t('user.region')}
                 </span>
                 <select
-                  bind:value={regionCode}
+                  bind:value={user.region.code}
                   name="RegionCode"
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
