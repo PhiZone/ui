@@ -150,7 +150,7 @@
   checked={$submitting || $allErrors.length > 0}
 />
 <div class="modal" role="dialog">
-  <div class="modal-box min-w-[30vw] overflow-hidden">
+  <div class="modal-box min-w-[30vw] overflow-x-hidden">
     <label
       for="new-play-configuration"
       class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"

@@ -85,7 +85,7 @@
   checked={status === Status.SENDING || status === Status.ERROR}
 />
 <div class="modal" role="dialog">
-  <div class="modal-box min-w-[30vw] overflow-hidden">
+  <div class="modal-box min-w-[30vw] overflow-x-hidden">
     <label
       for="play-configuration-update-{playConfiguration.id}"
       class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
