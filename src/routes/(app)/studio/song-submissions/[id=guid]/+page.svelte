@@ -742,7 +742,7 @@
               class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
             >
               <div class="card-body py-10 result">
-                {#each $songDuplications.data.data as song}
+                {#each songs as song}
                   <Song {song} />
                 {/each}
               </div>
