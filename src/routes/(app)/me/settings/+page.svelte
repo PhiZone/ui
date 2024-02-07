@@ -41,7 +41,12 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
-  $: regionCode = user.region ? user.region.code : '';
+  $: regionCode = (function () {
+    let patchElement = patch.find((x) => x.op == 'replace' && x.path == '/regionCode');
+    if (patchElement) return patchElement.value;
+    return user.region ? user.region.code : '';
+  })();
+
   $: year = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCFullYear();
   $: month = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
   $: day = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCDate();
