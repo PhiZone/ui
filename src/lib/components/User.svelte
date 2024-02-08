@@ -35,7 +35,7 @@
         {target}
         class="avatar {kind === 'embedded'
           ? 'flex-col w-full'
-          : 'w-1/6 min-w-fit'} items-center gap-1"
+          : 'w-1/6 min-w-fit'} items-center gap-1 hover:underline"
       >
         <div
           class="{kind === 'embedded'
@@ -52,6 +52,9 @@
             <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
             {#if user.tag}
               <span class="badge badge-sm badge-accent">{user.tag}</span>
+            {/if}
+            {#if 'position' in user && user.position}
+              <span class="badge badge-sm badge-neutral">{user.position}</span>
             {/if}
           </div>
         {/if}
@@ -111,6 +114,9 @@
               </span>
               {#if user.tag}
                 <span class="hidden sm:flex badge badge-sm badge-accent">{user.tag}</span>
+              {/if}
+              {#if 'position' in user && user.position}
+                <span class="badge badge-sm badge-neutral">{user.position}</span>
               {/if}
             </p>
           </div>

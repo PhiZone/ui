@@ -20,6 +20,7 @@
   $: song = createQuery(api.song.info({ id }));
   $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
   $: chapters = createQuery(api.song.listAllAdmitters({ id }));
+  $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
   $: composer = $song.data?.data.isOriginal
     ? richtext($song.data?.data.authorName ?? '')
     : readable($song.data?.data.authorName);
@@ -240,6 +241,33 @@
           </div>
         </div>
       </div>
+      {#if $authorships.isSuccess && $authorships.data.data.length > 0 && song.isOriginal}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('song.composer')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body py-10">
+              {#if $authorships.data.data.length > 0}
+                <div
+                  class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2"
+                >
+                  {#each $authorships.data.data as author}
+                    <User id={author.id} initUser={author} kind="mini" showFollow={false} />
+                  {/each}
+                </div>
+              {:else}
+                <p class="py-3 text-center">{$t('common.empty')}</p>
+              {/if}
+            </div>
+          </div>
+        </div>
+      {/if}
       <Comments type="songs" {id} {searchParams} />
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">

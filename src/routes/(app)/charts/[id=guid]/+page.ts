@@ -18,6 +18,7 @@ export const load = async ({ data, params, url, parent }) => {
       }),
     ),
     queryClient.prefetchQuery(api.chart.asset.listAll({ chartId: id })),
+    queryClient.prefetchQuery(api.authorship.listAll({ rangeResourceId: [id] })),
   ]);
   if (data.preferredPlayConfiguration && user) {
     await queryClient.prefetchQuery(

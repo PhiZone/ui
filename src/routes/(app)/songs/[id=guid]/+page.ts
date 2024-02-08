@@ -7,6 +7,7 @@ export const load = async ({ params, url, parent }) => {
     queryClient.prefetchQuery(api.song.info({ id: params.id })),
     queryClient.prefetchQuery(api.chart.listAll({ rangeSongId: [params.id] })),
     queryClient.prefetchQuery(api.song.listAllAdmitters({ id: params.id })),
+    queryClient.prefetchQuery(api.authorship.listAll({ rangeResourceId: [params.id] })),
     queryClient.prefetchQuery(
       api.comment.list({
         type: 'songs',

@@ -20,6 +20,7 @@ import ApplicationAPI from './application';
 import CollectionAPI from './collection';
 import PlayConfigurationAPI from './playConfiguration';
 import TagAPI from './tag';
+import AuthorshipAPI from './authorship';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -82,6 +83,7 @@ export default class API {
   admission = new AdmissionAPI(this);
   application = new ApplicationAPI(this);
   auth = new AuthAPI(this);
+  authorship = new AuthorshipAPI(this);
   chapter = new ChapterAPI(this);
   chart = new ChartAPI(this);
   collaboration = new CollaborationAPI(this);
