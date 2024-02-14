@@ -1,44 +1,44 @@
 {
-  "username": "Username",
-  "email": "Email",
-  "password": "Password",
-  "confirm_password": "Confirm Password",
-  "passwords_differ": "The two passwords differ from each other!",
+  "bind_failure": "Failed to verify your account. Try again later.",
+  "bind_success": "Successfully verified your account!",
   "code": "Verification Code",
-  "enter_email": "Please enter your email address.",
-  "invalid_email": "The input value is not a valid email address.",
-  "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
-  "invalid_password": "The password should be at least 6 characters long, contain at least one non-alphanumeric character, have at least one lowercase letter, one uppercase letter, one digit, and can have a maximum length of 18 characters.",
-  "login": {
-    "login": "Log In",
-    "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
-    "forgot_password": "Forgot your password?",
-    "not_activated": "Not activated?",
-    "invalid_token": "We can't find an account associated with this email address.",
-    "invalid_grant": "The password is incorrect.",
-    "invalid_request": "The request is invalid. Check your credentials and try again.",
-    "insufficient_access": "Your account is not activated. Please first activate your account before logging in."
-  },
-  "registration": {
-    "register": "Register",
-    "registration_text": "Register an account to participate in the PhiZone community!",
-    "select_language": "Select Language",
-    "select_region": "Select Region",
-    "email_confirmation_code": "Email Confirmation Code",
-    "success": "You've successfully registered an account on PhiZone!",
-    "language_error": "Invalid language. Switch to another browser and retry.",
-    "legal_agreement": "I have read and agree to the {{terms_of_service}} and {{privacy_policy}}."
-  },
+  "confirm_password": "Confirm Password",
+  "email": "Email",
   "email_confirmation": {
     "email_confirmation": "Confirm Email Address",
     "email_confirmation_text": "We've sent an email to your mailbox, containing a six-digit code for email confirmation. Please type it in the blank."
   },
-  "password_reset": {
-    "password_reset": "Reset Password",
-    "password_reset_text": "Please enter the code we've just sent you along with your new password.",
-    "new_password": "New Password"
-  },
+  "enter_email": "Please enter your email address.",
+  "invalid_email": "The input value is not a valid email address.",
+  "invalid_password": "The password should be between 6 and 24 characters in length.",
+  "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
   "logging_out": "Logging Out",
+  "login": {
+    "forgot_password": "Forgot your password?",
+    "insufficient_access": "Your account is not activated. Please first activate your account before logging in.",
+    "invalid_grant": "The password is incorrect.",
+    "invalid_request": "The request is invalid. Check your credentials and try again.",
+    "invalid_token": "We can't find an account associated with this email address.",
+    "login": "Log In",
+    "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
+    "not_activated": "Not activated?"
+  },
+  "password": "Password",
+  "password_reset": {
+    "new_password": "New Password",
+    "password_reset": "Reset Password",
+    "password_reset_text": "Please enter the code we've just sent you along with your new password."
+  },
+  "passwords_differ": "The two passwords differ from each other!",
   "redirecting": "Redirecting",
-  "redirection_description": "Please wait while you're being redirected."
+  "redirection_description": "Please wait while you're being redirected.",
+  "registration": {
+    "email_confirmation_code": "Email Confirmation Code",
+    "legal_agreement": "I have read and agree to the {{terms_of_service}} and {{privacy_policy}}.",
+    "register": "Register",
+    "registration_text": "Register an account to participate in the PhiZone community!",
+    "select_language": "Select Language",
+    "select_region": "Select Region"
+  },
+  "username": "Username"
 }

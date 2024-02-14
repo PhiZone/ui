@@ -42,7 +42,7 @@
         {resourceRecord.title}
       </h2>
       <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-        <span class="badge mr-1">{$t('resource_record.type')}</span>
+        <span class="badge mr-1">{$t('common.type')}</span>
         {$t(`resource_record.types.${resourceRecord.type}`)}
       </p>
       <p class="whitespace-nowrap overflow-hidden text-ellipsis">

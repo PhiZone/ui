@@ -36,9 +36,11 @@ export enum ContentType {
   FORM_URLENCODED = 'application/x-www-form-urlencoded',
 }
 
-export const defaultLocale = 'en';
+export const DEFAULT_LOCALE = 'en';
 
-export const regions = [
+export const SUPPORTED_APPS = ['GitHub'];
+
+export const REGIONS = [
   'AF',
   'AX',
   'AL',

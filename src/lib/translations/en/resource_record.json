@@ -1,20 +1,10 @@
 {
-  "resource_record": "Resource Record",
-  "title": "Title",
-  "type": "Type",
-  "types": {
-    "0": "Music",
-    "1": "Illustration"
-  },
+  "author": "Author",
+  "copyright_owner": "Copyright Owner",
+  "csv_complete": "Successfully resolved {{valid}} valid records ({{total}} in total)",
+  "csv_file": "CSV File",
   "edition": "Edition",
-  "edition_types": {
-    "0": "Original Ver.",
-    "1": "Author's Edit",
-    "2": "Second-Party Edit",
-    "3": "Licensed Edit",
-    "4": "Unlicensed Edit",
-    "5": "Third-Party Edit"
-  },
+  "edition_placeholder": "Name of edition / resource's origin",
   "edition_type_tips": {
     "0": "This version is the original edition of the resource.",
     "1": "This version is an edition made by the resource's author.",
@@ -23,8 +13,15 @@
     "4": "This version is an edition made by the uploader, not licensed by the author.",
     "5": "This version is an edition made by a third party, not licensed by the author."
   },
-  "author": "Author",
-  "strategy": "Strategy",
+  "edition_types": {
+    "0": "Original Ver.",
+    "1": "Author's Edit",
+    "2": "Second-Party Edit",
+    "3": "Licensed Edit",
+    "4": "Unlicensed Edit",
+    "5": "Third-Party Edit"
+  },
+  "resource_record": "Resource Record",
   "strategies": {
     "0": "Accept",
     "1": "Make hidden",
@@ -32,8 +29,10 @@
     "3": "Make hidden and locked",
     "4": "Reject"
   },
-  "copyright_owner": "Copyright Owner",
-  "edition_placeholder": "Name of edition / resource's origin",
-  "csv_file": "CSV File",
-  "csv_complete": "Successfully resolved {{valid}} valid records ({{total}} in total)"
+  "strategy": "Strategy",
+  "title": "Title",
+  "types": {
+    "0": "Music",
+    "1": "Illustration"
+  }
 }

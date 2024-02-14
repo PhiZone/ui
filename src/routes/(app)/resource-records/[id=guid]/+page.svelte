@@ -70,7 +70,7 @@
               <div class="info">
                 <div class="form-control gap-1">
                   <p>
-                    <span class="badge mr-1">{$t('resource_record.type')}</span>
+                    <span class="badge mr-1">{$t('common.type')}</span>
                     {$t(`resource_record.types.${resourceRecord.type}`)}
                   </p>
                   <p>
@@ -129,7 +129,7 @@
                 <a
                   href={resourceRecord.source}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   class="btn btn-ghost border-2 hover:btn-outline min-w-fit"
                 >
                   <i class="fa-solid fa-link"></i>

@@ -64,7 +64,7 @@
               .replaceAll(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '')
               .replaceAll(
                 /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
-                '<a href="$1" target="_blank" rel="noreferrer" class="richtext-link">$1</a>',
+                '<a href="$1" target="_blank" rel="noopener noreferrer" class="richtext-link">$1</a>',
               )}
           </p>
         {/if}

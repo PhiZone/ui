@@ -1,18 +1,16 @@
 {
-  "song": "Song",
-  "id": "Song ID",
-  "name": "Song Title",
-  "chapter": "Chapter",
-  "composer": "Composer",
-  "edition": "Edition",
-  "edition_types": {
-    "0": "Original Ver.",
-    "1": "Author's Edit",
-    "2": "Second-Party Edit",
-    "3": "Licensed Edit",
-    "4": "Unlicensed Edit",
-    "5": "Third-Party Edit"
+  "accessibility_tips": {
+    "0": "This song accepts any chart admission",
+    "1": "This song accepts chart admissions carefully reviewed",
+    "2": "This song doesn't accept any chart admission"
   },
+  "author": "Author",
+  "bpm": "BPM",
+  "chapter": "Chapter",
+  "charts": "Charts",
+  "composer": "Composer",
+  "duration": "Duration",
+  "edition": "Edition",
   "edition_type_tips": {
     "0": "This version is the original edition of the song.",
     "1": "This version is an edition made by the song's author.",
@@ -21,28 +19,26 @@
     "4": "This version is an edition made by the uploader, not licensed by the author.",
     "5": "This version is an edition made by a third party, not licensed by the author."
   },
+  "edition_types": {
+    "0": "Original Ver.",
+    "1": "Author's Edit",
+    "2": "Second-Party Edit",
+    "3": "Licensed Edit",
+    "4": "Unlicensed Edit",
+    "5": "Third-Party Edit"
+  },
+  "fast_forward": "Fast Forward",
   "illustration": "Illustration",
   "illustrator": "Illustrator",
-  "lyrics": "Lyrics",
-  "bpm": "BPM",
-  "offset": "Offset Ref.",
-  "duration": "Duration",
-  "original": "Original",
-  "accessibility_tips": {
-    "0": "This song accepts any chart admission",
-    "1": "This song accepts chart admissions carefully reviewed",
-    "2": "This song doesn't accept any chart admission"
-  },
-  "uploader": "Uploader",
-  "author": "Author",
   "loop": "Loop",
-  "rewind": "Rewind",
-  "play": "Play",
+  "lyrics": "Lyrics",
+  "name": "Song Title",
+  "offset": "Offset Ref.",
+  "original": "Original",
   "pause": "Pause",
-  "fast_forward": "Fast Forward",
-  "volume": "Volume",
-  "charts": "Charts",
-  "show_charts": "Display Charts",
-  "hide_charts": "Collapse",
-  "search": "Search songs"
+  "play": "Play",
+  "rewind": "Rewind",
+  "song": "Song",
+  "uploader": "Uploader",
+  "volume": "Volume"
 }

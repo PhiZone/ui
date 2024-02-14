@@ -5,11 +5,16 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import { Status } from '$lib/constants';
+  import { SUPPORTED_APPS, Status } from '$lib/constants';
+  import { requestIdentity } from '$lib/utils.js';
   // import { useQueryClient } from '@tanstack/svelte-query';
+
+  export let data, form;
+  $: ({ api } = data);
 
   let status = Status.WAITING;
   let msg = '';
+  let appDisabled = '';
 
   const clear = () => {
     if (status !== Status.WAITING) {
@@ -17,8 +22,6 @@
       msg = '';
     }
   };
-
-  export let form;
 
   // const queryClient = useQueryClient();
 </script>
@@ -122,7 +125,31 @@
             </div>
           </div>
         </form>
+        <div class="divider"></div>
+        <div class="apps">
+          {#each SUPPORTED_APPS as app}
+            <button
+              class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+              disabled={appDisabled === app}
+              on:click={async () => {
+                appDisabled = app;
+                await requestIdentity(app, api);
+                appDisabled = '';
+              }}
+            >
+              <i class={`fa-brands fa-${app.toLowerCase()} fa-lg`}></i>
+              <p>{app}</p>
+            </button>
+          {/each}
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .apps {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    @apply grid justify-center gap-2;
+  }
+</style>

@@ -11,6 +11,7 @@
   // import Cropper from '$lib/components/ImageCropper.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import { onDestroy } from 'svelte';
 
   export let data;
 
@@ -21,6 +22,10 @@
   interface TargetElement extends HTMLElement {
     noUiSlider?: API;
   }
+
+  onDestroy(() => {
+    pausePreview();
+  });
 
   let audio: HTMLAudioElement | undefined;
   let illustration = false;

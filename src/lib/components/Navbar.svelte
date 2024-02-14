@@ -154,7 +154,7 @@
               <li class="disabled">
                 <div
                   class="tooltip tooltip-left tooltip-warning text-left"
-                  data-tip={$t('common.unavailable')}
+                  data-tip={$t('common.navbar.studio_inaccessible')}
                 >
                   <p>{$t('common.studio')}</p>
                 </div>

@@ -174,7 +174,7 @@
       >
         <label class="join w-full">
           <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-            {$t('resource_record.type')}
+            {$t('common.type')}
           </span>
           <select
             id="type"
@@ -489,7 +489,7 @@
                   data-tip={$t(`resource_record.types.${resourceRecord.type}`)}
                 >
                   <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-                    <span class="badge mr-1">{$t('resource_record.type')}</span>
+                    <span class="badge mr-1">{$t('common.type')}</span>
                     {$t(`resource_record.types.${resourceRecord.type}`)}
                   </p>
                 </div>
@@ -535,7 +535,7 @@
                     <a
                       href={resourceRecord.source}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       class="hover:underline"
                     >
                       {resourceRecord.source}

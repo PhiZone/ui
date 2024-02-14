@@ -1,7 +1,7 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { locales, locale, t } from '$lib/translations/config';
-  import { Status, regions } from '$lib/constants';
+  import { Status, REGIONS } from '$lib/constants';
   import { SendEmailMode } from '$lib/api/auth';
   import { ResponseDtoStatus } from '$lib/api/types';
   import { parseDateTime } from '$lib/utils';
@@ -28,12 +28,10 @@
 
   $: regionMap = new Map(
     [
-      ...regions
-        .reduce((map, region) => {
-          map.set(region, $t(`region.${region}`));
-          return map;
-        }, new Map<string, string>())
-        .entries(),
+      ...REGIONS.reduce((map, region) => {
+        map.set(region, $t(`region.${region}`));
+        return map;
+      }, new Map<string, string>()).entries(),
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 

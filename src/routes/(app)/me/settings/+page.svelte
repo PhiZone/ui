@@ -2,14 +2,15 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { invalidateAll } from '$app/navigation';
   import { locales, locale, t } from '$lib/translations/config';
-  import { Status, regions } from '$lib/constants';
+  import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import { applyPatch, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
+  import { applyPatch, requestIdentity, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
   import { superForm } from 'sveltekit-superforms/client';
   import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
 
   export let data;
 
@@ -29,15 +30,14 @@
   let errorCode = '';
   let dateAvailable: Date | undefined = undefined;
   let updateErrors: Map<string, string> | undefined = undefined;
+  let bindDisabled = '';
 
   $: regionMap = new Map(
     [
-      ...regions
-        .reduce((map, region) => {
-          map.set(region, $t(`region.${region}`));
-          return map;
-        }, new Map<string, string>())
-        .entries(),
+      ...REGIONS.reduce((map, region) => {
+        map.set(region, $t(`region.${region}`));
+        return map;
+      }, new Map<string, string>()).entries(),
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
@@ -142,6 +142,35 @@
     }}
   />
 {/if}
+
+<input type="checkbox" id="new-app-link" class="modal-toggle" />
+<div class="modal" role="dialog">
+  <div class="modal-box max-w-xs overflow-x-hidden">
+    <label
+      for="new-app-link"
+      class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <h3 class="font-bold text-lg mb-2">{$t('application.bind_account')}</h3>
+    <div class="flex flex-col gap-2">
+      {#each SUPPORTED_APPS as app}
+        <button
+          class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+          disabled={bindDisabled === app}
+          on:click={async () => {
+            bindDisabled = app;
+            await requestIdentity(app, api, true);
+            bindDisabled = '';
+          }}
+        >
+          <i class={`fa-brands fa-${app.toLowerCase()} fa-xl`}></i>
+          <p>{app}</p>
+        </button>
+      {/each}
+    </div>
+  </div>
+</div>
 
 <input
   type="checkbox"
@@ -907,15 +936,17 @@
                   {$t('user.region')}
                 </span>
                 <select
-                  bind:value={user.region.code}
                   name="RegionCode"
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   on:input={(e) => {
+                    user.region.code = e.currentTarget.value;
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                   }}
                 >
                   {#each regionMap as region}
-                    <option value={region[0]}>{region[1]}</option>
+                    <option value={region[0]} selected={region[0] == user.region.code}>
+                      {region[1]}
+                    </option>
                   {/each}
                 </select>
               </label>
@@ -1050,6 +1081,37 @@
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+      <div class="indicator w-full my-4">
+        <span
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+          style:--tw-translate-x="0"
+        >
+          {$t('user.linked_accounts')}
+        </span>
+        <div
+          class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+        >
+          <div class="card-body gap-4 py-10">
+            <label
+              for="new-app-link"
+              class="btn border-2 normal-border btn-outline btn-sm btn-circle absolute right-2 top-2"
+            >
+              <i class="fa-solid fa-plus fa-lg"></i>
+            </label>
+            {#if user.applicationLinks && user.applicationLinks.length > 0}
+              <div class="result">
+                {#each user.applicationLinks as appLink}
+                  <div class="min-w-fit">
+                    <ApplicationLink {appLink} />
+                  </div>
+                {/each}
+              </div>
+            {:else}
+              <p class="py-3 text-center">{$t('common.empty')}</p>
+            {/if}
           </div>
         </div>
       </div>

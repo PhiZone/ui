@@ -39,6 +39,6 @@
 
 <style>
   .page-height {
-    min-height: calc(100vh - 219px);
+    min-height: calc(100vh - 232px);
   }
 </style>

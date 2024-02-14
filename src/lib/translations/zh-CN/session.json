@@ -1,44 +1,44 @@
 {
-  "username": "用户名",
-  "email": "邮箱",
-  "password": "密码",
-  "confirm_password": "确认密码",
-  "passwords_differ": "两次输入的密码不相同。",
+  "bind_failure": "账号验证失败。请稍后重试。",
+  "bind_success": "账号验证成功！",
   "code": "验证码",
-  "enter_email": "请在下方输入你注册时输入的邮箱。",
-  "invalid_email": "邮箱地址不合法。",
-  "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
-  "invalid_password": "密码必须至少包含 6 个字符，其中至少包含一个非字母数字字符、一个小写字母、一个大写字母、一个数字，并且不多于 18 个字符。",
-  "login": {
-    "login": "登录",
-    "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
-    "forgot_password": "忘记密码？",
-    "not_activated": "还未激活？",
-    "invalid_token": "与该邮箱地址关联的账号不存在。",
-    "invalid_grant": "输入的密码不正确。",
-    "invalid_request": "请求无效。请检查凭据并重试。",
-    "insufficient_access": "账号未激活。请在登录之前先激活账号。"
-  },
-  "registration": {
-    "register": "注册",
-    "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
-    "select_language": "选择语言",
-    "select_region": "选择地区",
-    "email_confirmation_code": "邮箱验证码",
-    "success": "你的 PhiZone 账户注册成功！",
-    "language_error": "语言选项出现问题。请更换浏览器重试。",
-    "legal_agreement": "我已阅读并同意{{terms_of_service}}与{{privacy_policy}}。"
-  },
+  "confirm_password": "确认密码",
+  "email": "邮箱",
   "email_confirmation": {
     "email_confirmation": "确认邮箱地址",
     "email_confirmation_text": "我们向你的邮箱发送了一封邮件，内含确认邮箱地址所需的六位数代码。请将代码填入输入框中。"
   },
-  "password_reset": {
-    "password_reset": "重置密码",
-    "password_reset_text": "请在下方输入邮箱验证码以及你希望为你的账户设置的新密码。",
-    "new_password": "新密码"
-  },
+  "enter_email": "请在下方输入你注册时输入的邮箱。",
+  "invalid_email": "邮箱地址不合法。",
+  "invalid_password": "密码长度须在 6 ~ 24 个字符之间。",
+  "invalid_username": "用户名只能包含数字、下划线和英文、中文、日文、韩文字符，并且长度必须在 4 ~ 12 个字符之间。",
   "logging_out": "登出中",
+  "login": {
+    "forgot_password": "忘记密码？",
+    "insufficient_access": "账号未激活。请在登录之前先激活账号。",
+    "invalid_grant": "输入的密码不正确。",
+    "invalid_request": "请求无效。请检查凭据并重试。",
+    "invalid_token": "与该邮箱地址关联的账号不存在。",
+    "login": "登录",
+    "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
+    "not_activated": "还未激活？"
+  },
+  "password": "密码",
+  "password_reset": {
+    "new_password": "新密码",
+    "password_reset": "重置密码",
+    "password_reset_text": "请在下方输入邮箱验证码以及你希望为你的账户设置的新密码。"
+  },
+  "passwords_differ": "两次输入的密码不相同。",
   "redirecting": "重定向中",
-  "redirection_description": "请等待重定向完毕"
+  "redirection_description": "请等待重定向完毕",
+  "registration": {
+    "email_confirmation_code": "邮箱验证码",
+    "legal_agreement": "我已阅读并同意{{terms_of_service}}与{{privacy_policy}}。",
+    "register": "注册",
+    "registration_text": "注册 PhiZone 账户以游玩谱面、参与社区交流！",
+    "select_language": "选择语言",
+    "select_region": "选择地区"
+  },
+  "username": "用户名"
 }

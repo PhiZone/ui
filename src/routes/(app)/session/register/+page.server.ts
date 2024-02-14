@@ -18,7 +18,7 @@ const schema = z
     Email: z.string().email({
       message: t.get('session.invalid_email'),
     }),
-    Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/, {
+    Password: z.string().regex(/^.{6,24}$/, {
       message: t.get('session.invalid_password'),
     }),
     ConfirmPassword: z.string(),

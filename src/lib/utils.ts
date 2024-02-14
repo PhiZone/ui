@@ -1,7 +1,8 @@
 import type { Cookies } from '@sveltejs/kit';
-import { USER_LEVELS, defaultLocale } from './constants';
+import { USER_LEVELS, DEFAULT_LOCALE } from './constants';
 import { PUBLIC_AVATAR } from '$env/static/public';
 import type { PatchElement } from './api/types';
+import type API from './api';
 
 export const parseLatex = (input: string) => {
   const result = input.matchAll(/(\$[^$]+\$)/g);
@@ -124,7 +125,7 @@ export const parseLyrics = (input: string) => {
   return lyrics;
 };
 
-export const parseRelativeTime = (date: Date, locale = defaultLocale) => {
+export const parseRelativeTime = (date: Date, locale = DEFAULT_LOCALE) => {
   const now = new Date();
   const diffInSeconds = Math.floor((date.getTime() - now.getTime()) / 1000);
 
@@ -159,7 +160,7 @@ export const parseRelativeTime = (date: Date, locale = defaultLocale) => {
 export const parseDateTime = (
   input: string | Date,
   relative = false,
-  locale = defaultLocale,
+  locale = DEFAULT_LOCALE,
   precise = false,
 ) => {
   const date = new Date(input);
@@ -328,3 +329,32 @@ export const applyPatch = (
 
 export const toCamel = (inputString: string): string =>
   inputString.length > 0 ? inputString[0].toLowerCase() + inputString.slice(1) : inputString;
+
+export const getAppUserLink = (app: string, user: string) => {
+  switch (app.toLowerCase()) {
+    case 'github':
+      return `https://github.com/${user}`;
+    default:
+      return null;
+  }
+};
+
+export const requestIdentity = async (provider: string, api: API, bind = false) => {
+  const state = Math.random().toString(36).substring(2);
+  const resp = await api.auth.provider({
+    provider: provider.toLowerCase(),
+    state,
+    redirectUri: `${location.origin}/session/callback/${provider.toLowerCase()}${
+      bind ? '?bind=true' : ''
+    }`,
+  });
+  if (resp.ok) {
+    const data = (await resp.json()).data;
+    if (data.type === 2 && data.redirectUri) window.open(data.redirectUri, '_blank');
+  } else {
+    console.error(
+      `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+      await resp.json(),
+    );
+  }
+};

@@ -2,6 +2,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
+import type { ApplicationDto } from '.';
 
 export enum Gender {
   Unset,
@@ -10,6 +11,7 @@ export enum Gender {
 }
 
 export interface UserDto {
+  applicationLinks: ApplicationUserDto[] | null;
   id: number;
   userName: string;
   avatar: string | null;
@@ -42,6 +44,15 @@ export interface RegionDto {
   code: string;
   id: number;
   name: string;
+}
+
+export interface ApplicationUserDto {
+  application: ApplicationDto;
+  applicationId: string;
+  dateCreated: Date;
+  dateUpdated: Date;
+  remoteUserId: null | string;
+  userId: number;
 }
 
 // list
@@ -118,5 +129,9 @@ export default class UserAPI {
 
   updateAvatar({ id, ...rest }: FileUpdateOpts): R {
     return this.api.PATCH(`/users/${id}/avatar`, serialize(rest));
+  }
+
+  bind(provider: string, code: string, state: string) {
+    return this.api.POST(`/me/bindings/${provider}?code=${code}&state=${state}`);
   }
 }
