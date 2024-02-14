@@ -8,7 +8,7 @@ import { ResponseDtoStatus } from '$lib/api/types';
 const schema = z
   .object({
     Code: z.string(),
-    Password: z.string().regex(/^(?=.*[^a-zA-Z0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}$/, {
+    Password: z.string().regex(/^.{6,24}$/, {
       message: t.get('session.invalid_password'),
     }),
     ConfirmPassword: z.string(),

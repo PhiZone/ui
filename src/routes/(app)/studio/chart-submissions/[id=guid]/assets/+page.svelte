@@ -130,7 +130,7 @@
       >
         <label class="join w-full">
           <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-            {$t('chart.asset.type')}
+            {$t('common.type')}
           </span>
           <select
             id="type"

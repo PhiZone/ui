@@ -66,6 +66,6 @@
 >
   <i class="fa-regular fa-trash-can fa-lg"></i>
   {#if hasText}
-    {$t('common.delete')}
+    {$t(deleted ? 'common.deleted' : 'common.delete')}
   {/if}
 </label>

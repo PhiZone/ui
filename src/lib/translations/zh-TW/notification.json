@@ -1,6 +1,10 @@
 {
+  "mark_as_read": "標為已讀",
   "notifications": "通知",
-  "type": "類型",
+  "notified_at": "通知於",
+  "read_adj": "已讀",
+  "read_at": "閱讀於",
+  "read_page": "閲讀本頁",
   "types": {
     "0": "提及",
     "1": "留言與回覆",
@@ -9,11 +13,6 @@
     "4": "關注",
     "5": "系統通知"
   },
-  "notified_at": "通知於",
-  "read_at": "閱讀於",
-  "read_adj": "已讀",
-  "mark_as_read": "標為已讀",
-  "read_page": "閲讀本頁",
   "view_read": "查看已讀",
   "view_unread": "查看未讀"
 }

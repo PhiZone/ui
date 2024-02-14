@@ -33,7 +33,7 @@
       <div class="absolute left-2 bottom-2">
         <div class="join join-horizontal">
           <div class="btn btn-secondary btn-xs join-item text-base no-animation">
-            {$t('chapter.illustrator')}
+            {$t('common.illustrator')}
           </div>
           <div class="btn btn-xs join-item text-base no-animation">
             {chapter.illustrator}
@@ -77,7 +77,7 @@
             class="indicator-item badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
-            {$t('chapter.owner')}
+            {$t('common.owner')}
           </span>
           <div class="w-fit">
             <User id={chapter.ownerId} kind="mini" />

@@ -1,6 +1,10 @@
 {
+  "mark_as_read": "Mark as Read",
   "notifications": "Notifications",
-  "type": "Type",
+  "notified_at": "Notified At",
+  "read_adj": "Read",
+  "read_at": "Read At",
+  "read_page": "Read Page",
   "types": {
     "0": "Mentions",
     "1": "Comments & Replies",
@@ -9,11 +13,6 @@
     "4": "Followed Updates",
     "5": "System Notifications"
   },
-  "notified_at": "Notified At",
-  "read_at": "Read At",
-  "read_adj": "Read",
-  "mark_as_read": "Mark as Read",
-  "read_page": "Read Page",
   "view_read": "View Read",
   "view_unread": "View Unread"
 }

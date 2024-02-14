@@ -40,19 +40,19 @@
         {/if}
       </div>
       <p class="flex items-center gap-1">
-        <span class="badge">{$t('application.type')}</span>
+        <span class="badge">{$t('common.type')}</span>
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">
           {$t(`application.types.${application.type}`)}
         </span>
       </p>
       <p class="flex items-center gap-1">
-        <span class="badge">{$t('application.illustrator')}</span>
+        <span class="badge">{$t('common.illustrator')}</span>
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">
           {application.illustrator}
         </span>
       </p>
       <p class="flex items-center gap-1">
-        <span class="badge">{$t('application.owner')}</span>
+        <span class="badge">{$t('common.owner')}</span>
         {#if $owner.isSuccess}
           <span class="whitespace-nowrap overflow-hidden text-ellipsis">
             {$owner.data.data.userName}

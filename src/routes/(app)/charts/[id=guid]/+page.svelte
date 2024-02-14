@@ -679,7 +679,7 @@
           class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
-          {$t('chart.owner')}
+          {$t('common.owner')}
         </span>
         <User id={chart.ownerId} />
       </div>

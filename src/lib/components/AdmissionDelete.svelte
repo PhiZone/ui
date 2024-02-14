@@ -46,7 +46,10 @@
           if (resp.ok || resp.status === 404) {
             deleted = true;
           } else {
-            console.error(await resp.json());
+            console.error(
+              `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+              await resp.json(),
+            );
           }
         }}
       >

@@ -56,13 +56,13 @@
                 <div class="form-control gap-1">
                   <p>
                     <span class="badge mr-1">
-                      {$t('application.type')}
+                      {$t('common.type')}
                     </span>
                     {$t(`application.types.${application.type}`)}
                   </p>
                   <p>
                     <span class="badge mr-1">
-                      {$t('application.illustrator')}
+                      {$t('common.illustrator')}
                     </span>
                     {application.illustrator}
                   </p>
@@ -97,7 +97,7 @@
                     liked={application.dateLiked != null}
                     class="btn-md join-item"
                   />
-                  {#if user}
+                  {#if user && [0, 2, 4].includes(application.type)}
                     {#if preferredApplication == application.id}
                       <button
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
@@ -123,7 +123,7 @@
                   <a
                     href={application.homepage}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     class="btn btn-ghost border-2 hover:btn-outline min-w-fit join-item"
                   >
                     <i class="fa-solid fa-link"></i>
@@ -160,7 +160,7 @@
           class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
-          {$t('application.owner')}
+          {$t('common.owner')}
         </span>
         <User id={application.ownerId} />
       </div>

@@ -7,13 +7,28 @@
 <footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">
   <div>
     <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
-    <a href="https://www.phi.zone/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a
+      href="https://www.phi.zone/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
       {$t('common.footer.main')}
     </a>
-    <a href="https://insider.phizone.cn/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a
+      href="https://insider.phizone.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
       {$t('common.footer.insider')}
     </a>
-    <a href="https://status.phi.zone/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a
+      href="https://status.phi.zone/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
       {$t('common.footer.status')}
     </a>
     <!-- <a href="/about" class="link link-hover">{$t('common.footer.about')}</a>
@@ -33,13 +48,23 @@
   </div>
   <div>
     <span class="footer-title text-lg">{$t('common.footer.external_links')}</span>
-    <a href="https://www.phigrim.cn/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a
+      href="https://www.phigrim.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
       {$t('common.footer.phigrim')}
     </a>
-    <a href="https://phira.moe/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a href="https://phira.moe/" target="_blank" rel="noopener noreferrer" class="link link-hover">
       {$t('common.footer.phira')}
     </a>
-    <a href="https://phitogether.fun/" target="_blank" rel="noreferrer" class="link link-hover">
+    <a
+      href="https://phitogether.fun/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
       {$t('common.footer.phitogether')}
     </a>
     <!-- <a href="/" class="link link-hover"
@@ -63,14 +88,14 @@
       <a
         href="https://h5.qun.qq.com/h5/qun-share-page/?_wv=1027&k=HzHKfikWjKaAnnen4iMDWIEUF2knfqrh&authKey=IIY1TB7aOS%2BWS0LCr7AGTzSdOnyBs0TJ2BzRrwS1XuKNh6T0Qj2IX2Yqf%2BA19S1f&market_channel_source=587121959_1&noverify=0&group_code=587121959"
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
       >
         <i class="fa-brands fa-qq fa-lg"></i>
       </a>
       <a
         href="https://pd.qq.com/s/ebe35nz6y"
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         class="w-5 h-5 pt-[1px] hidden dark:inline"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768">
@@ -84,10 +109,18 @@
           </g>
         </svg>
       </a>
-      <a href="https://pd.qq.com/s/ebe35nz6y" target="_blank" rel="noreferrer" class="dark:hidden">
+      <a
+        href="https://pd.qq.com/s/ebe35nz6y"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="dark:hidden"
+      >
         <i class="fa-solid fa-hashtag fa-lg"></i>
       </a>
-      <a href="https://space.bilibili.com/325599863" target="_blank" rel="noreferrer">
+      <a href="https://discord.gg/q5MVeHeRhv" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-discord fa-lg"></i>
+      </a>
+      <a href="https://space.bilibili.com/325599863" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-bilibili fa-lg"></i>
       </a>
     </div>

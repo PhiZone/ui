@@ -38,11 +38,11 @@ const schema = z
     path: ['License'],
   })
   .refine(({ MinBpm, Bpm }) => MinBpm <= Bpm, {
-    message: t.get('common.form.errors.min_bpm'),
+    message: t.get('studio.submission.min_bpm_error'),
     path: ['MinBpm'],
   })
   .refine(({ MaxBpm, Bpm }) => MaxBpm >= Bpm, {
-    message: t.get('common.form.errors.max_bpm'),
+    message: t.get('studio.submission.max_bpm_error'),
     path: ['MaxBpm'],
   });
 

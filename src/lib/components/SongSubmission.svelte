@@ -76,7 +76,9 @@
         {convertTime(song.duration, true)}
       </p>
       <div class="grow-0 flex items-center">
-        <span class="badge mr-1">{$t('chapter.owner')}</span>
+        <span class="badge mr-1">
+          {$t(song.originalityProof ? 'common.owner' : 'song.uploader')}
+        </span>
         {#if $uploader.isSuccess}
           <p class="whitespace-nowrap overflow-hidden text-ellipsis">
             {$uploader.data.data.userName}

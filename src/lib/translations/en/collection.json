@@ -1,11 +1,7 @@
 {
-  "collection": "Collection",
-  "id": "Collection ID",
-  "illustration": "Illustration",
-  "view_illustration": "View Illustration",
-  "illustrator": "Illustrator",
-  "owner": "Owner",
   "charts": "Charts",
+  "collection": "Collection",
   "label": "Label",
-  "search": "Search collections"
+  "search": "Search collections",
+  "view_illustration": "View Illustration"
 }

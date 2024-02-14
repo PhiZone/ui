@@ -39,13 +39,13 @@
       </h2>
     </div>
     <p class="flex items-center gap-1">
-      <span class="badge">{$t('chapter.illustrator')}</span>
+      <span class="badge">{$t('common.illustrator')}</span>
       <span class="whitespace-nowrap overflow-hidden text-ellipsis">
         {chapter.illustrator}
       </span>
     </p>
     <p class="flex items-center gap-1">
-      <span class="badge">{$t('chapter.owner')}</span>
+      <span class="badge">{$t('common.owner')}</span>
       {#if $owner.isSuccess}
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">
           {$owner.data.data.userName}

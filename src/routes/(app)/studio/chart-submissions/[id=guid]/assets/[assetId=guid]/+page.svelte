@@ -178,7 +178,7 @@
         >
           <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-              {$t('chart.asset.type')}
+              {$t('common.type')}
             </span>
             <select
               id="type"
@@ -246,7 +246,7 @@
                 <p
                   class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 grow-0"
                 >
-                  <span class="badge">{$t('chart.asset.type')}</span>
+                  <span class="badge">{$t('common.type')}</span>
                   <span>{$t(`chart.asset.types.${chartAsset.type}`)}</span>
                 </p>
                 <p
@@ -332,7 +332,7 @@
           class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
-          {$t('chart.owner')}
+          {$t('common.owner')}
         </span>
         <User id={chartAsset.ownerId} />
       </div>

@@ -4,6 +4,7 @@ import type API from '.';
 
 export interface ApplicationDto {
   apiEndpoint: null | string;
+  avatar: string;
   commentCount: number;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -16,6 +17,12 @@ export interface ApplicationDto {
   likeCount: number;
   name: string;
   ownerId: number;
+  type: number;
+}
+
+export interface ServiceResponseDto {
+  message: null | string;
+  redirectUri: null | string;
   type: number;
 }
 

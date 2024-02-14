@@ -1,4 +1,5 @@
 import type API from '.';
+import type { ServiceResponseDto } from './application';
 import type { R, TypedResponse } from './types';
 
 // token
@@ -61,6 +62,12 @@ export interface ActivateOpts {
   code: string;
 }
 
+export interface ProviderOpts {
+  provider: string;
+  state: string;
+  redirectUri: string;
+}
+
 // taptap
 export interface TaptapOpts {
   accessToken?: string;
@@ -76,8 +83,14 @@ export interface RevokeAccountOpts {
 export default class AuthAPI {
   constructor(private api: API) {}
 
-  token(opts: TokenOpts): Promise<TypedResponse<true, TokenResult> | TypedResponse<false>> {
-    return this.api.POST('/auth/token', new URLSearchParams({ ...opts }));
+  token(
+    opts: TokenOpts,
+    provider: string | null = null,
+  ): Promise<TypedResponse<true, TokenResult> | TypedResponse<false>> {
+    return this.api.POST(
+      `/auth/token${provider ? `?provider=${provider}` : ''}`,
+      new URLSearchParams({ ...opts }),
+    );
   }
 
   revokeToken(opts: RevokeTokenOpts) {
@@ -102,5 +115,9 @@ export default class AuthAPI {
 
   revokeAccount(opts: RevokeAccountOpts): R {
     return this.api.POST('/auth/revokeAccount', opts);
+  }
+
+  provider({ provider, ...rest }: ProviderOpts): R<ServiceResponseDto> {
+    return this.api.POST(`/auth/provider/${provider}`, rest);
   }
 }

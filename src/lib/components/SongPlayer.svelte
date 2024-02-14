@@ -21,6 +21,12 @@
     audio.volume = 0.4;
   });
 
+  onDestroy(() => {
+    if (playing) {
+      pauseAudio();
+    }
+  });
+
   const syncLyrics = () => {
     if (!lyrics || time < lyrics[0].time) {
       return;
@@ -73,12 +79,6 @@
     playing = false;
     clearInterval(timer);
   };
-
-  onDestroy(() => {
-    if (playing) {
-      pauseAudio();
-    }
-  });
 </script>
 
 <div

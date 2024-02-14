@@ -1,7 +1,7 @@
 {
   "application": "Application",
-  "owner": "Owner",
-  "type": "Type",
+  "bind_account": "Bind Account",
+  "reverify": "Reverify",
   "types": {
     "0": "Web Chart Player",
     "1": "Web Tool",
@@ -9,9 +9,8 @@
     "3": "Mobile Tool",
     "4": "Desktop Chart Player",
     "5": "Desktop Tool",
-    "6": "Service"
+    "6": "Service",
+    "7": "Authentication Provider"
   },
-  "illustration": "Illustration",
-  "illustrator": "Illustrator",
   "visit": "Visit Homepage"
 }

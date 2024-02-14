@@ -143,7 +143,7 @@
       >
         ✕
       </label>
-      <h2 class="font-bold text-xl mb-4">{$t('studio.submission.reply_v')}</h2>
+      <h2 class="font-bold text-xl mb-4">{$t('common.reply_v')}</h2>
       <form
         id="review"
         class="form-control"
@@ -226,7 +226,7 @@
         >
           <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-              {$t('studio.submission.reply')}
+              {$t('common.reply')}
             </span>
             <textarea
               id="message"
@@ -698,7 +698,7 @@
                       for="studio-song-submission"
                       class="btn border-2 normal-border btn-outline text-lg w-32"
                     >
-                      {$t('studio.submission.reply_v')}
+                      {$t('common.reply_v')}
                     </label>
                   {/if}
                 </div>

@@ -9,7 +9,7 @@
   import type { SongSubmissionDto } from '$lib/api';
   import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import User from '$lib/components/User.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
@@ -59,6 +59,10 @@
     if (song) {
       createAudio(song.file);
     }
+  });
+
+  onDestroy(() => {
+    pausePreview();
   });
 
   const queryClient = useQueryClient();

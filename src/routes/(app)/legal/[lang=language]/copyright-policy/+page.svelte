@@ -452,11 +452,11 @@
   }
 
   h2 {
-    @apply text-4xl font-bold mb-4 mt-7;
+    @apply text-4xl font-bold mb-6 mt-7;
   }
 
   p {
-    @apply text-lg mb-2;
+    @apply text-lg mb-6;
   }
 
   li {
@@ -480,7 +480,7 @@
     list-style-type: none;
     padding-left: 0;
     counter-reset: item-counter;
-    @apply mb-2;
+    @apply mb-6;
   }
 
   li {

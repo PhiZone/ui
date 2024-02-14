@@ -15,6 +15,7 @@
   import { PAGINATION_PER_PAGE } from '$lib/constants';
   import Error from '$lib/components/Error.svelte';
   import Region from '$lib/components/Region.svelte';
+  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
 
   export let data;
 
@@ -154,6 +155,13 @@
                 </p>
               {/if}
             </div>
+            {#if user.applicationLinks}
+              <div class="flex flex-col gap-2 justify-center py-3 h-fit">
+                {#each user.applicationLinks as appLink}
+                  <ApplicationLink {appLink} kind="mini" />
+                {/each}
+              </div>
+            {/if}
             <div>
               <div class="flex justify-center my-3 h-fit">
                 <Follow {user} instantResp={false} />
