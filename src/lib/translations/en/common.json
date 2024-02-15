@@ -115,7 +115,7 @@
   "navbar": {
     "logout": "Logout",
     "pet": "PET",
-    "studio_inaccessible": "Please first take the Privilege Escalation Test in order to access this feature!"
+    "studio_inaccessible": "Please first take the PET in order to access this feature!"
   },
   "off": "Off",
   "on": "On",
