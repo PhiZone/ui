@@ -98,7 +98,7 @@ for (const lang in translationValues) {
 
 const args = process.argv.slice(2);
 if (args[0] === 'mc') {
-  const sourceLang = args[1] ?? 'en';
+  const sourceLang = args[1] ?? 'en-US';
   const targetLangs = args[2]
     ? [args[2]]
     : Object.keys(translations).filter((lang) => lang !== sourceLang);
