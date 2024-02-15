@@ -1,15 +1,14 @@
 import { redirect } from '@sveltejs/kit';
 import queryString from 'query-string';
+import { OFFICIAL_SECTOKEN, FANMADE_SECTOKEN } from '$env/static/private';
 
 export const load = async ({ url, cookies }) => {
-  const official = 'b55y6u83e6bmyu9eryehie24bg4h6n2mu8s';
-  const fanmade = 'rv7t590oie5yb64u3t4gh82hu1eg0dopthl';
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   if (
-    searchParams.secToken != official &&
-    searchParams.secToken != fanmade &&
-    cookies.get('sec_token') != official &&
-    cookies.get('sec_token') != fanmade
+    searchParams.secToken != OFFICIAL_SECTOKEN &&
+    searchParams.secToken != FANMADE_SECTOKEN &&
+    cookies.get('sec_token') != OFFICIAL_SECTOKEN &&
+    cookies.get('sec_token') != FANMADE_SECTOKEN
   ) {
     throw redirect(303, '/');
   }
@@ -26,6 +25,6 @@ export const load = async ({ url, cookies }) => {
   }
 
   return {
-    official: token == official,
+    official: token == OFFICIAL_SECTOKEN,
   };
 };

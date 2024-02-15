@@ -1,6 +1,7 @@
 import { REDIS_CONNECTION } from '$env/static/private';
 import queryString from 'query-string';
 import { createClient } from 'redis';
+import { OFFICIAL_SECTOKEN, FANMADE_SECTOKEN } from '$env/static/private';
 
 interface Vote {
   id: string;
@@ -12,16 +13,13 @@ interface Vote {
   date: Date;
 }
 
-const official = 'b55y6u83e6bmyu9eryehie24bg4h6n2mu8s';
-const fanmade = 'rv7t590oie5yb64u3t4gh82hu1eg0dopthl';
-
 export const load = async ({ params, url, cookies }) => {
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   if (
-    searchParams.secToken != official &&
-    searchParams.secToken != fanmade &&
-    cookies.get('sec_token') != official &&
-    cookies.get('sec_token') != fanmade
+    searchParams.secToken != OFFICIAL_SECTOKEN &&
+    searchParams.secToken != FANMADE_SECTOKEN &&
+    cookies.get('sec_token') != OFFICIAL_SECTOKEN &&
+    cookies.get('sec_token') != FANMADE_SECTOKEN
   ) {
     return {
       official: null,
@@ -54,7 +52,7 @@ export const load = async ({ params, url, cookies }) => {
   );
   client.quit();
   return {
-    official: token == official,
+    official: token == OFFICIAL_SECTOKEN,
     data,
   };
 };
@@ -73,7 +71,7 @@ export const actions = {
     const data = await request.formData();
     const vote: Vote = {
       id: crypto.randomUUID(),
-      official: cookies.get('sec_token') == official,
+      official: cookies.get('sec_token') == OFFICIAL_SECTOKEN,
       score: parseFloat(data.get('score') as string),
       message: data.get('message') as string,
       name: data.get('name') as string,
