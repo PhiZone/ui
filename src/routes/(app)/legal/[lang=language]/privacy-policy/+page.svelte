@@ -23,7 +23,7 @@
   {/each}
 </select>
 
-{#if lang.toLowerCase() == 'en'}
+{#if lang.toLowerCase() == 'en-US'}
   <h1 id="privacy-policy">Privacy Policy</h1>
   <p>
     PhiZone is a rhythm game community website centered around Phigros fanmade charts, dedicated to

@@ -21,14 +21,14 @@ export const { t, locale, locales, loading, loadTranslations } = new I18n({
   initLocale: DEFAULT_LOCALE,
   fallbackLocale: DEFAULT_LOCALE,
   translations: {
-    en: { lang },
+    'en-US': { lang },
     'zh-CN': { lang },
     'zh-TW': { lang },
   },
   loaders: [
     ...createLoaders(
-      'en',
-      import.meta.glob<Translations.Input>('./en/*.json', { import: 'default' }),
+      'en-US',
+      import.meta.glob<Translations.Input>('./en-US/*.json', { import: 'default' }),
     ),
     ...createLoaders(
       'zh-CN',
