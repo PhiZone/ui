@@ -87,9 +87,9 @@
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "illustration": "JPG / JPEG / PNG / WEBP, no larger than 10 MB, 16:9, no smaller than 960×540",
       "image": "JPG / JPEG / PNG / WEBP, no larger than 10 MB",
-      "license": "Must upload an image (no larger than 10 MB) of the license to proove that this edition is licensed by the author",
+      "license": "Must upload an image (no larger than 10 MB) of the license to prove that this edition is licensed by the author",
       "original": "This is an original track produced by you / your team",
-      "originality_proof": "ZIP file (no larger than 200 MB) (e.g. containing sub-track audio files) is required to proove the originality",
+      "originality_proof": "ZIP file (no larger than 200 MB) (e.g. containing sub-track audio files) is required to prove the originality",
       "ranked": "Scores on this chart are counted in players' RKS; the review is strict",
       "reposted": "This is a track produced by someone else",
       "unranked": "Scores on this chart are not counted in players' RKS; the review is lenient"
