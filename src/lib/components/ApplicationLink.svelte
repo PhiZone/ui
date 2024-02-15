@@ -68,7 +68,7 @@
           {disabled}
           on:click={async () => {
             disabled = true;
-            await requestIdentity(appLink.application.name, api);
+            await requestIdentity(appLink.application.name, api, true);
             disabled = false;
           }}
         >
