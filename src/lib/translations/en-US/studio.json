@@ -43,6 +43,7 @@
     "adm_status": "Admission Status",
     "approved_at": "Approved At",
     "author_placeholder": "Integers only; the specified user needs qualified",
+    "bi_statuses": {},
     "bpm_placeholder": "If BPM changes, fill in according to the format of \"min~max (main)\"",
     "chapters": "Associated Chapters",
     "collab_status": "Collab Status",
@@ -87,6 +88,7 @@
     "suggested_difficulty": "Suggested Difficulty",
     "uploader": "Uploader",
     "volunteer_status": "Volunteer Status",
+    "volunteer_statuses": {},
     "volunteer_vote": "Volunteer Vote",
     "write_message": "Comment on this chart in a few sentences",
     "your_id": "Your ID"

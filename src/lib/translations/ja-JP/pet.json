@@ -1,0 +1,24 @@
+{
+  "already_passed": "你已通过该测试！",
+  "answer": {
+    "answer": "PET 答卷",
+    "answerer": "作答人",
+    "assess": "评阅",
+    "assessor": "阅卷人",
+    "objective_score": "客观题分数",
+    "subjective_score": "主观题分数",
+    "total_score": "总分数"
+  },
+  "answers": "PET 答卷",
+  "chart_question": "请在此输入谱面预览视频的链接。如有需要，亦可在此对谱面某些部分进行详细说明\n\n（谱面须为你**独立创作**的 **Phigros 自制**谱面）",
+  "description": "为了访问 PhiZone 提供的所有功能，你须首先参加该测试。测试包含 15 道客观题和 3 道主观题。其中，客观题分为单项选择题（题号 1 ~ 10，每题 2 分， 共 20 分）与不定项选择题（题号 11 ~ 15，每题全部选对 4 分、部分选对 2 分，共 20 分）；主观题题号 16 ~ 18，每题 10 分，共 30 分。此外，你还需要向我们提供一张你个人独立制作的 Phigros 自制谱面（题号 19，30 分），以便我们能够真正评估你的能力。",
+  "manage": "管理答卷",
+  "objective": "客观题",
+  "placeholder": "输入答案",
+  "points": "分",
+  "start": "开始",
+  "subjective": "主观题",
+  "time_up": "时间到！请刷新页面以重新作答。",
+  "title": "PhiZone 权限晋升测试",
+  "view_history": "查看历史"
+}
