@@ -53,7 +53,7 @@
     PhiZone reserves the right to modify the Copyright Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Copyright Policy is December 1, 2023.</p>
+  <p>The last modification date of the Copyright Policy is February 15, 2024.</p>
   <h2 id="active-defense-against-copyright-infringements">
     Active Defense Against Copyright Infringements
   </h2>
@@ -112,11 +112,8 @@
   </p>
   <p>
     If you, as a copyright owner, want your content included in this system, please create a pull
-    request at our repository <a
-      href="https://github.com/PhiZone/phizone-resource-records"
-      target="_blank"
-    >
-      phizone-resource-records
+    request at our repository <a href="https://github.com/PhiZone/resource-records" target="_blank">
+      resource-records
     </a>
     with a CSV file that contains information aforementioned. The file should be created within a directory
     titled as the (concise) name of the copyright owner, following a naming convention in the form of
@@ -280,7 +277,7 @@
   </p>
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
-  <p>版权政策的最后更改日期为 2023 年 12 月 1 日。</p>
+  <p>版权政策的最后更改日期为 2024 年 2 月 15 日。</p>
   <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
   <p>
     PhiZone
@@ -333,10 +330,10 @@
   </p>
   <p>
     如你作为版权所有者希望你的内容包含在本系统中，请在我们的仓库 <a
-      href="https://github.com/PhiZone/phizone-resource-records"
+      href="https://github.com/PhiZone/resource-records"
       target="_blank"
     >
-      phizone-resource-records
+      resource-records
     </a>
     上创建拉取请求，并提供包含上述信息的 CSV 文件。文件应创建在版权所有者名义（简称）目录下，并以
     <code>&lt;游戏或作品名&gt;-&lt;操作或更新名&gt;.csv</code>
