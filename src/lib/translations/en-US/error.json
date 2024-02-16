@@ -1,7 +1,7 @@
 {
   "AccountLocked": "Your account has been locked.",
   "AlreadyDone": "You've already performed this operation!",
-  "ApplicationNotFound": "The specified application is not found.",
+  "ApplicationNotFound": "The specified application does not exist.",
   "BindingOccupied": "The remote account has already been bound to another user.",
   "Blacklisted": "You have been blacklisted by the target user / resource owner.",
   "ConfigurationNotFound": "The specified configuration is not found.",
@@ -12,7 +12,7 @@
   "InsufficientPermission": "You do not have enough permission to perform the action.",
   "InternalError": "An internal server error has occurred.",
   "InvalidAuthorInfo": "You are not present in the author name!",
-  "InvalidCode": "The code is invalid or has expired.",
+  "InvalidCode": "The verification code is invalid or has expired.",
   "InvalidData": "Data validation has failed.",
   "InvalidDate": "The input value is not a valid date.",
   "InvalidEmailAddress": "The input value is not a valid email address.",
