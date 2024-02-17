@@ -21,7 +21,7 @@
       class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
     >
       <p class="opacity-80">
-        {$t(answer.totalScore ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
+        {$t(answer.totalScore !== null ? 'pet.answer.total_score' : 'pet.answer.objective_score')}
       </p>
       <p class="text-4xl font-extrabold">
         {answer.totalScore ?? answer.objectiveScore}
