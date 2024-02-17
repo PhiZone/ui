@@ -10,7 +10,7 @@ export const load = async ({ parent, locals, fetch }) => {
     const data = (await resp.json()).data;
     if (data.length === 0) {
       status = 1;
-    } else if (!data[0].subjectiveScore) {
+    } else if (data[0].subjectiveScore === null) {
       status = 2;
     }
   }
