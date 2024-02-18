@@ -23,7 +23,7 @@
   {/each}
 </select>
 
-{#if lang.toLowerCase() == 'en-US'}
+{#if lang.toLowerCase() == 'en-us'}
   <h1 id="terms-of-service">Terms of Service</h1>
   <p>Before you use services we provide, you must read and agree with the following terms.</p>
   <p>

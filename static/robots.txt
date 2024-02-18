@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /crs/
-Disallow: /crs?
+Disallow: /

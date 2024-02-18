@@ -23,7 +23,7 @@
   {/each}
 </select>
 
-{#if lang.toLowerCase() == 'en-US'}
+{#if lang.toLowerCase() == 'en-us'}
   <h1 id="copyright-policy">Copyright Policy</h1>
   <p>
     PhiZone serves as a rhythm game community website. All game levels (charts) as well as songs are
