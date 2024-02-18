@@ -22,7 +22,7 @@
   let levelType = 0;
   let level = '';
   let difficulty = '';
-  let tagsRaw: string;
+  let tagsRaw = '';
   let tags: string[] = [];
   let showTags = true;
   let newTag = '';

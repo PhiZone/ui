@@ -45,7 +45,7 @@
   let authorName = '';
   let editionType = 0;
   let edition = '';
-  let tagsRaw: string;
+  let tagsRaw = '';
   let tags: string[] = [];
   let showTags = true;
   let newTag = '';
