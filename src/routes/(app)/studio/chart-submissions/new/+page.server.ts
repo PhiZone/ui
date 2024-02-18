@@ -43,7 +43,7 @@ export const actions = {
     let { File, Illustration, Tags: tagsRaw, ...rest } = form.data;
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;
-    const Tags = tagsRaw.split(',').map((tag: string) => tag.trim());
+    const Tags = tagsRaw ? tagsRaw.split(',').map((tag: string) => tag.trim()) : [];
     const resp = await api.chart.submission.create({ File, Illustration, Tags, ...rest });
     if (resp.ok) {
       throw redirect(303, '/studio/chart-submissions' + url.search);

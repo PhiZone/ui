@@ -89,7 +89,7 @@ export const actions = {
     OriginalityProof = formData.get('OriginalityProof') as File | undefined;
     PreviewStart = parsePreviewTime(PreviewStart);
     PreviewEnd = parsePreviewTime(PreviewEnd);
-    const Tags = tagsRaw.split(',').map((tag: string) => tag.trim());
+    const Tags = tagsRaw ? tagsRaw.split(',').map((tag: string) => tag.trim()) : [];
     const resp = await api.song.submission.create(
       EditionType !== 0
         ? {
