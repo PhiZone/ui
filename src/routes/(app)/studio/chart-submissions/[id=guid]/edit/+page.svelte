@@ -399,14 +399,10 @@
                   class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     errors?.get('Difficulty') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
-                  bind:value={chart.difficulty}
+                  value={chart.difficulty}
                   on:input={(e) => {
-                    patch = applyPatch(
-                      patch,
-                      'replace',
-                      '/difficulty',
-                      parseFloat(e.currentTarget.value),
-                    );
+                    chart.difficulty = parseFloat(e.currentTarget.value);
+                    patch = applyPatch(patch, 'replace', '/difficulty', chart.difficulty);
                   }}
                 />
               </label>
