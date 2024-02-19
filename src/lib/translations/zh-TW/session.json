@@ -19,6 +19,7 @@
     "invalid_grant": "輸入的密碼不正確。",
     "invalid_request": "請求無效。請檢查憑據並重試。",
     "invalid_token": "無法找到與該郵件地址關聯的賬號。",
+    "invalid_token_link": "We can't find an account associated with this {{provider}} account.",
     "login": "登入",
     "login_text": "登入以在 PhiZone 上遊玩譜面、參與社區交流！",
     "not_activated": "還未激活？"

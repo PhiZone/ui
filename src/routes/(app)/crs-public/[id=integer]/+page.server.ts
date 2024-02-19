@@ -1,5 +1,4 @@
 import { REDIS_CONNECTION } from '$env/static/private';
-import { error } from '@sveltejs/kit';
 import { createClient } from 'redis';
 
 interface Vote {
@@ -12,11 +11,7 @@ interface Vote {
   date: Date;
 }
 
-export const load = async ({ params, locals }) => {
-  if (!locals.user) {
-    throw error(401, 'Unauthorized');
-  }
-
+export const load = async ({ params }) => {
   const client = createClient({
     url: REDIS_CONNECTION,
   });

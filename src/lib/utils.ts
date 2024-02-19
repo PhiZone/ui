@@ -3,7 +3,6 @@ import { USER_LEVELS, DEFAULT_LOCALE } from './constants';
 import { PUBLIC_AVATAR } from '$env/static/public';
 import type { PatchElement } from './api/types';
 import type API from './api';
-import { t } from './translations/config';
 
 export const parseLatex = (input: string) => {
   const result = input.matchAll(/(\$[^$]+\$)/g);

@@ -5,6 +5,7 @@
   import { t } from '$lib/translations/config';
 
   $: message = $page.url.searchParams.get('message');
+  $: translate = $page.url.searchParams.get('t') === 'true';
   $: level = ['info', 'success', 'warning', 'error'].includes(
     $page.url.searchParams.get('level') as string,
   )
@@ -24,7 +25,7 @@
 {#if message && !closed}
   <div role="alert" class="fixed alert rounded-none alert-{level} top-16 z-10">
     <i class="fa-solid fa-{icon} fa-xl"></i>
-    <span>{$t(message)}</span>
+    <span>{translate ? $t(message) : message}</span>
     <button
       class="btn btn-sm btn-circle btn-{level} border-2"
       on:click={() => {

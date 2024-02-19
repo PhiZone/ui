@@ -17,7 +17,7 @@
   <title>示例谱面评分征集 - 群众投票 | {$t('common.title')}</title>
 </svelte:head>
 
-{#if user && data.data !== null}
+{#if data.data !== null}
   <VolunteerVoteHelper bind:score bind:message />
   <div class="page md:px-24">
     <div class="flex justify-between">
@@ -41,8 +41,8 @@
             };
           }}
         >
-          <input id="name" name="name" type="hidden" value={user.userName} />
-          <input id="user" name="user" type="hidden" value={user.id} />
+          <input id="name" name="name" type="hidden" value={user?.userName} />
+          <input id="user" name="user" type="hidden" value={user?.id} />
           <div class="flex gap-2">
             <div class="grow">
               <input
@@ -71,8 +71,8 @@
             id="message"
             name="message"
             class="mr-3 textarea textarea-bordered transition border-2 hover:textarea-secondary w-full h-64"
-            placeholder="对谱面进行评价"
-            {disabled}
+            placeholder={user ? '对谱面进行评价' : '请先登录'}
+            disabled={disabled || !user}
             bind:value={message}
           />
           <div class="join join-vertical">
@@ -81,9 +81,13 @@
             </label>
             <button
               class="w-full btn btn-outline border-2 normal-border join-item"
-              disabled={disabled || message.length === 0}
+              disabled={disabled || message.length === 0 || !user}
             >
-              提交投票
+              {#if user}
+                提交投票
+              {:else}
+                请先登录
+              {/if}
             </button>
           </div>
         </form>

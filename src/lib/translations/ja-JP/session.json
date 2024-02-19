@@ -19,6 +19,7 @@
     "invalid_grant": "输入的密码不正确。",
     "invalid_request": "请求无效。请检查凭据并重试。",
     "invalid_token": "与该邮箱地址关联的账号不存在。",
+    "invalid_token_link": "与该 {{provider}} 账号关联的账号不存在。",
     "login": "登录",
     "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
     "not_activated": "还未激活？"
