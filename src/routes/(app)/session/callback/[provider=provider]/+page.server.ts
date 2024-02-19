@@ -1,5 +1,7 @@
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import API from '$lib/api';
+import { SUPPORTED_APPS } from '$lib/constants.js';
+import { t } from '$lib/translations/config';
 import { setTokens } from '$lib/utils';
 import { redirect } from '@sveltejs/kit';
 import queryString from 'query-string';
@@ -20,8 +22,8 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
     throw redirect(
       303,
       resp.ok
-        ? '/me/settings?level=success&message=session.bind_success'
-        : '/me/settings?level=error&message=session.bind_failure',
+        ? '/me/settings?level=success&message=session.bind_success&t=true'
+        : '/me/settings?level=error&message=session.bind_failure&t=true',
     );
   } else {
     const resp = await api.auth.token(
@@ -35,9 +37,24 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
       params.provider,
     );
     if (!resp.ok) {
+      const error = await resp.json();
       console.error(
         `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
-        await resp.json(),
+        error,
+      );
+      throw redirect(
+        303,
+        `/session/login?level=error&message=${encodeURI(
+          error.error === 'invalid_token'
+            ? t.get('session.login.invalid_token_link', {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                provider: SUPPORTED_APPS.find(
+                  (app) => app.toLowerCase() === params.provider.toLowerCase(),
+                ),
+              })
+            : t.get(`session.login.${error.error}`),
+        )}`,
       );
     }
 

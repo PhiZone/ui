@@ -19,6 +19,7 @@
     "invalid_grant": "The password is incorrect.",
     "invalid_request": "The request is invalid. Check your credentials and try again.",
     "invalid_token": "We can't find an account associated with this email address.",
+    "invalid_token_link": "We can't find an account associated with this {{provider}} account.",
     "login": "Log In",
     "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
     "not_activated": "Not activated?"
