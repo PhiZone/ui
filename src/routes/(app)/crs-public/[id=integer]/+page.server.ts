@@ -1,5 +1,7 @@
 import { REDIS_CONNECTION } from '$env/static/private';
 import { createClient } from 'redis';
+import { redirect } from '@sveltejs/kit';
+import { OFFICIAL_SECTOKEN, FANMADE_SECTOKEN } from '$env/static/private';
 
 interface Vote {
   id: string;
@@ -11,7 +13,14 @@ interface Vote {
   date: Date;
 }
 
-export const load = async ({ params }) => {
+export const load = async ({ params, cookies }) => {
+  if (
+    cookies.get('sec_token') == OFFICIAL_SECTOKEN ||
+    cookies.get('sec_token') == FANMADE_SECTOKEN
+  ) {
+    throw redirect(302, `/crs/${params.id}`);
+  }
+
   const client = createClient({
     url: REDIS_CONNECTION,
   });
