@@ -43,7 +43,6 @@
     "adm_status": "收录状态",
     "approved_at": "通过时间",
     "author_placeholder": "仅整数；对应用户须已认证",
-    "bi_statuses": {},
     "bpm_placeholder": "若 BPM 变化，按“最低BPM~最高BPM (主要BPM)”格式填写，注意空格，所有符号须为半角",
     "chapters": "收录章节",
     "collab_status": "合作状态",
@@ -88,8 +87,15 @@
     "suggested_difficulty": "建议定数",
     "uploader": "上传者",
     "volunteer_status": "审核状态",
-    "volunteer_statuses": {},
     "volunteer_vote": "志愿者投票",
+    "vote_diagram": {
+      "actual": "实际分数",
+      "bound_approved": "通过下限分数",
+      "bound_ranked": "Ranked 下限分数",
+      "bound_rejected": "退回上限分数",
+      "n_votes": "{{count}} 票",
+      "title": "审核状态示意图"
+    },
     "write_message": "对这张谱面进行评价",
     "your_id": "你的 ID"
   },

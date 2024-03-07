@@ -404,7 +404,7 @@
     </div>
   {/if}
   <div class="info-page">
-    <div class="mx-4 min-w-[300px] max-w-7xl">
+    <div class="mx-4 max-w-7xl">
       <div class="indicator w-full my-4">
         <span
           class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"

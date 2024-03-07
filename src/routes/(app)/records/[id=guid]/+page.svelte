@@ -97,7 +97,9 @@
               <span class="badge">
                 {$t('record.std_deviation')}
               </span>
-              <span>{record.stdDeviation.toFixed(3)} ms</span>
+              <span>
+                {typeof record.stdDeviation === 'number' ? record.stdDeviation.toFixed(3) : '∞'} ms
+              </span>
             </p>
             <p class="flex gap-1 items-center">
               <span class="badge">{$t('record.played_at')}</span>
