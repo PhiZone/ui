@@ -39,7 +39,7 @@
       data: [NaN, 1.5, 0.9, 0.45, 0.15, 0],
       backgroundColor: ['rgba(60, 149, 255, 0.25)'],
       borderColor: ['rgb(60, 149, 255)'],
-      fill: ranked ? 1 : 'end',
+      fill: ranked ? 3 : 'end',
       borderRadius: 4,
       borderWidth: 2,
     },
