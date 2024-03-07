@@ -19,6 +19,7 @@
   import VoteScore from '$lib/components/VoteScore.svelte';
   import DifficultySuggestion from '$lib/components/DifficultySuggestion.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import VolunteerVoteDiagram from '$lib/components/VolunteerVoteDiagram.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -808,6 +809,24 @@
       {/if}
       {#if $votes.isSuccess}
         {@const votes = $votes.data.data}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('studio.submission.vote_diagram.title')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body py-10">
+              <VolunteerVoteDiagram
+                votes={votes.filter((vote) => vote.dateCreated >= submission.dateUpdated)}
+                ranked={submission.isRanked}
+              />
+            </div>
+          </div>
+        </div>
         {#each votes as vote}
           <VolunteerVote {vote} {submission} />
         {/each}

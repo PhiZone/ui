@@ -678,12 +678,14 @@
                 {/if}
               </div>
               <div class="md:w-2/3 flex flex-col justify-between gap-2">
-                <img
-                  src={submission.illustration}
-                  class="h-fit rounded-lg transition border-2 normal-border hover:shadow-lg"
-                  alt="Illustration"
-                />
-                <audio class="w-full" controls src={submission.file} />
+                <div class="flex flex-col gap-2">
+                  <img
+                    src={submission.illustration}
+                    class="h-fit rounded-lg transition border-2 normal-border hover:shadow-lg"
+                    alt="Illustration"
+                  />
+                  <audio class="w-full" controls src={submission.file} />
+                </div>
                 <div class="flex gap-2 items-center justify-end">
                   {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 4)}
                     <a
