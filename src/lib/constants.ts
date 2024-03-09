@@ -46,7 +46,7 @@ export const SUPPORTED_APPS = [
   },
   {
     name: 'Phira',
-    id: 'https://res.phizone.cn/rLX1fO2dLkQJKrOGPbhgYHlAaeBONVed/phira.png',
+    avatar: 'https://res.phizone.cn/rLX1fO2dLkQJKrOGPbhgYHlAaeBONVed/phira.png',
     branded: false,
   },
 ];
