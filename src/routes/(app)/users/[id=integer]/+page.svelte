@@ -156,7 +156,7 @@
               {/if}
             </div>
             {#if user.applicationLinks}
-              <div class="flex flex-col gap-2 justify-center py-3 h-fit">
+              <div class="flex flex-col gap-2 justify-start py-3 h-fit">
                 {#each user.applicationLinks as appLink}
                   <ApplicationLink {appLink} kind="mini" />
                 {/each}

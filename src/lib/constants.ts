@@ -38,7 +38,8 @@ export enum ContentType {
 
 export const DEFAULT_LOCALE = 'en-US';
 
-export const SUPPORTED_APPS = ['GitHub'];
+export const SUPPORTED_APPS = ['GitHub', 'Phira'];
+export const BRANDED_APPS = ['GitHub'];
 
 export const REGIONS = [
   'AF',
