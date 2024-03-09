@@ -38,8 +38,18 @@ export enum ContentType {
 
 export const DEFAULT_LOCALE = 'en-US';
 
-export const SUPPORTED_APPS = ['GitHub', 'Phira'];
-export const BRANDED_APPS = ['GitHub'];
+export const SUPPORTED_APPS = [
+  {
+    name: 'GitHub',
+    avatar: 'https://res.phizone.cn/W8PyKukh4Ttifcb6pskc8Ajj1PWG3oGt/github-mark.png',
+    branded: true,
+  },
+  {
+    name: 'Phira',
+    id: 'https://res.phizone.cn/rLX1fO2dLkQJKrOGPbhgYHlAaeBONVed/phira.png',
+    branded: false,
+  },
+];
 
 export const REGIONS = [
   'AF',

@@ -5,9 +5,8 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import { BRANDED_APPS, Status } from '$lib/constants';
+  import { SUPPORTED_APPS, Status } from '$lib/constants';
   import { getAvatar, requestIdentity } from '$lib/utils.js';
-  import { createQuery } from '@tanstack/svelte-query';
   // import { useQueryClient } from '@tanstack/svelte-query';
 
   export let data, form;
@@ -23,8 +22,6 @@
       msg = '';
     }
   };
-
-  $: providers = createQuery(api.application.listAll({ rangeType: [7] }));
 </script>
 
 <svelte:head>
@@ -126,33 +123,31 @@
             </div>
           </div>
         </form>
-        {#if $providers.isSuccess}
-          <div class="divider"></div>
-          <div class="apps">
-            {#each $providers.data.data as app}
-              <button
-                class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
-                disabled={appDisabled === app.name}
-                on:click={async () => {
-                  appDisabled = app.name;
-                  await requestIdentity(app.name, api);
-                  appDisabled = '';
-                }}
-              >
-                {#if BRANDED_APPS.includes(app.name)}
-                  <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
-                {:else}
-                  <div class="avatar">
-                    <div class="w-6 rounded-full">
-                      <img src={getAvatar(app.avatar)} alt="Avatar" />
-                    </div>
+        <div class="divider"></div>
+        <div class="apps">
+          {#each SUPPORTED_APPS as app}
+            <button
+              class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+              disabled={appDisabled === app.name}
+              on:click={async () => {
+                appDisabled = app.name;
+                await requestIdentity(app.name, api);
+                appDisabled = '';
+              }}
+            >
+              {#if app.branded}
+                <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
+              {:else}
+                <div class="avatar">
+                  <div class="w-6 rounded-full">
+                    <img src={getAvatar(app.avatar)} alt="Avatar" />
                   </div>
-                {/if}
-                <p>{app.name}</p>
-              </button>
-            {/each}
-          </div>
-        {/if}
+                </div>
+              {/if}
+              <p>{app.name}</p>
+            </button>
+          {/each}
+        </div>
       </div>
     </div>
   </div>

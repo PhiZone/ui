@@ -50,7 +50,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 provider: SUPPORTED_APPS.find(
-                  (app) => app.toLowerCase() === params.provider.toLowerCase(),
+                  (app) => app.name.toLowerCase() === params.provider.toLowerCase(),
                 ),
               })
             : t.get(`session.login.${error.error}`),
