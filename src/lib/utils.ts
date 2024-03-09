@@ -238,7 +238,7 @@ export const getUserLevel = (exp: number) => {
   return USER_LEVELS[USER_LEVELS.length - 1].level;
 };
 
-export const getAvatar = (avatar: string | null, quality = 15) => {
+export const getAvatar = (avatar: string | undefined | null, quality = 15) => {
   return getCompressedImage(avatar ?? PUBLIC_AVATAR, quality);
 };
 

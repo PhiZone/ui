@@ -3,7 +3,7 @@
   import { requestIdentity, getAppUserLink, getAvatar } from '$lib/utils';
   import type { ApplicationUserDto } from '$lib/api/user';
   import Delete from './Delete.svelte';
-  import { BRANDED_APPS } from '$lib/constants';
+  import { SUPPORTED_APPS } from '$lib/constants';
   import { page } from '$app/stores';
 
   export let appLink: ApplicationUserDto;
@@ -24,7 +24,7 @@
   >
     <div class="card-body py-6 gap-0.5">
       <div class="flex items-center gap-2 w-full mb-1">
-        {#if BRANDED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
+        {#if SUPPORTED_APPS.filter((a) => a.branded).find((a) => a.name.toLowerCase() === appLink.application.name.toLowerCase())}
           <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-xl"></i>
         {:else}
           <div class="avatar">
@@ -79,7 +79,7 @@
   </div>
 {:else}
   <div class="flex items-center mx-3 gap-2">
-    {#if BRANDED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
+    {#if SUPPORTED_APPS.filter((a) => a.branded).find((a) => a.name.toLowerCase() === appLink.application.name.toLowerCase())}
       <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-lg"></i>
     {:else}
       <div class="avatar">
