@@ -52,6 +52,7 @@ export interface ApplicationUserDto {
   dateCreated: Date;
   dateUpdated: Date;
   remoteUserId: null | string;
+  remoteUserName: null | string;
   userId: number;
 }
 

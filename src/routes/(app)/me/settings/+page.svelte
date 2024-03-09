@@ -2,7 +2,7 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { invalidateAll } from '$app/navigation';
   import { locales, locale, t } from '$lib/translations/config';
-  import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
+  import { Status, REGIONS, BRANDED_APPS } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import { applyPatch, requestIdentity, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
@@ -44,6 +44,8 @@
   $: year = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCFullYear();
   $: month = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
   $: day = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCDate();
+
+  $: providers = createQuery(api.application.listAll({ rangeType: [7] }));
 
   $: badJudgment = $form.goodJudgment * 1.125;
   $: rksFactor = calculateRksFactor($form.perfectJudgment, $form.goodJudgment);
@@ -153,22 +155,32 @@
       ✕
     </label>
     <h3 class="font-bold text-lg mb-2">{$t('application.bind_account')}</h3>
-    <div class="flex flex-col gap-2">
-      {#each SUPPORTED_APPS as app}
-        <button
-          class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
-          disabled={bindDisabled === app}
-          on:click={async () => {
-            bindDisabled = app;
-            await requestIdentity(app, api, true);
-            bindDisabled = '';
-          }}
-        >
-          <i class={`fa-brands fa-${app.toLowerCase()} fa-xl`}></i>
-          <p>{app}</p>
-        </button>
-      {/each}
-    </div>
+    {#if $providers.isSuccess}
+      <div class="flex flex-col gap-2">
+        {#each $providers.data.data as app}
+          <button
+            class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+            disabled={bindDisabled === app.name}
+            on:click={async () => {
+              bindDisabled = app.name;
+              await requestIdentity(app.name, api, true);
+              bindDisabled = '';
+            }}
+          >
+            {#if BRANDED_APPS.includes(app.name)}
+              <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
+            {:else}
+              <div class="avatar">
+                <div class="w-6 rounded-full">
+                  <img src={getAvatar(app.avatar)} alt="Avatar" />
+                </div>
+              </div>
+            {/if}
+            <p>{app.name}</p>
+          </button>
+        {/each}
+      </div>
+    {/if}
   </div>
 </div>
 

@@ -3,7 +3,7 @@
   import { requestIdentity, getAppUserLink, getAvatar } from '$lib/utils';
   import type { ApplicationUserDto } from '$lib/api/user';
   import Delete from './Delete.svelte';
-  import { SUPPORTED_APPS } from '$lib/constants';
+  import { BRANDED_APPS } from '$lib/constants';
   import { page } from '$app/stores';
 
   export let appLink: ApplicationUserDto;
@@ -24,7 +24,7 @@
   >
     <div class="card-body py-6 gap-0.5">
       <div class="flex items-center gap-2 w-full mb-1">
-        {#if SUPPORTED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
+        {#if BRANDED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
           <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-xl"></i>
         {:else}
           <div class="avatar">
@@ -47,11 +47,11 @@
               rel="noopener noreferrer"
               class="whitespace-nowrap overflow-hidden text-ellipsis hover:underline"
             >
-              {appLink.remoteUserId}
+              {appLink.remoteUserName ?? appLink.remoteUserId}
             </a>
           {:else}
             <span class="whitespace-nowrap overflow-hidden text-ellipsis">
-              {appLink.remoteUserId}
+              {appLink.remoteUserName ?? appLink.remoteUserId}
             </span>
           {/if}
         </p>
@@ -78,12 +78,12 @@
     </div>
   </div>
 {:else}
-  <div class="flex items-center justify-center gap-1">
-    {#if SUPPORTED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
+  <div class="flex items-center mx-3 gap-2">
+    {#if BRANDED_APPS.map( (value) => value.toLowerCase(), ).includes(appLink.application.name.toLowerCase())}
       <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-lg"></i>
     {:else}
       <div class="avatar">
-        <div class="w-6 rounded-full">
+        <div class="w-5 rounded-full">
           <img src={getAvatar(appLink.application.avatar)} alt="Avatar" />
         </div>
       </div>
@@ -96,11 +96,11 @@
           rel="noopener noreferrer"
           class="whitespace-nowrap overflow-hidden text-ellipsis hover:underline leading-tight"
         >
-          {appLink.remoteUserId}
+          {appLink.remoteUserName ?? appLink.remoteUserId}
         </a>
       {:else}
         <span class="whitespace-nowrap overflow-hidden text-ellipsis leading-tight">
-          {appLink.remoteUserId}
+          {appLink.remoteUserName ?? appLink.remoteUserId}
         </span>
       {/if}
     {/if}

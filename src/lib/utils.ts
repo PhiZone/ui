@@ -335,6 +335,8 @@ export const getAppUserLink = (app: string, user: string) => {
   switch (app.toLowerCase()) {
     case 'github':
       return `https://github.com/${user}`;
+    case 'phira':
+      return `https://phira.moe/user/${user}`;
     default:
       return null;
   }
