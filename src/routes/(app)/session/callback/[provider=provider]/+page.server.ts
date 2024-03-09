@@ -51,7 +51,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
                 // @ts-ignore
                 provider: SUPPORTED_APPS.find(
                   (app) => app.name.toLowerCase() === params.provider.toLowerCase(),
-                ),
+                ).name,
               })
             : t.get(`session.login.${error.error}`),
         )}`,
