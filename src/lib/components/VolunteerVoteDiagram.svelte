@@ -19,7 +19,6 @@
     {
       label: `${$t('studio.submission.vote_diagram.actual')}`,
       data: Array.from({ length: votes.length }, (_, index) => {
-        console.log(votes.toReversed().slice(0, index + 1));
         return (
           votes
             .toReversed()

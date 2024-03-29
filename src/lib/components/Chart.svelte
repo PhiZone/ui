@@ -1,11 +1,13 @@
 <script lang="ts">
   import type { ChartDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, getLevelDisplay } from '$lib/utils';
+  import { getCompressedImage } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import Like from './Like.svelte';
   import Rating from './Rating.svelte';
   import type { ChartAdmitteeDto } from '$lib/api/chart';
+  import ChartLabel from './ChartDifficulty.svelte';
+  import ChartDifficulty from './ChartDifficulty.svelte';
 
   export let chart: ChartDto | ChartAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';
@@ -28,21 +30,7 @@
           class="object-fill"
         />
         <div class="absolute bottom-2 left-2 w-fit h-fit">
-          <div class="join join-horizontal">
-            <button
-              class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
-            >
-              {chart.level}
-              {getLevelDisplay(chart.difficulty)}
-            </button>
-            {#if chart.isRanked}
-              <button
-                class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-xl no-animation"
-              >
-                {$t('chart.ranked')}
-              </button>
-            {/if}
-          </div>
+          <ChartLabel {chart} />
         </div>
         {#if 'label' in chart && chart.label}
           <div class="absolute bottom-2 right-2">
@@ -136,25 +124,11 @@
           {/if}
         </div>
       {/if}
-      <div class="{showSong ? 'hidden sm:flex' : ''} join join-horizontal items-center min-w-fit">
-        <button class="btn {getLevelColor(chart.levelType)} btn-sm join-item text-lg no-animation">
-          {chart.level}
-          {getLevelDisplay(chart.difficulty)}
-        </button>
-        {#if chart.isRanked}
-          <button
-            class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-lg no-animation"
-          >
-            {$t('chart.ranked')}
-          </button>
-        {/if}
-      </div>
+      <ChartDifficulty {chart} inline css={showSong ? 'hidden sm:flex' : ''} />
     </div>
     {#if showCharter}
       <div
-        class="hidden md:inline lg:hidden xl:inline {showSong
-          ? 'w-1/3 max-w-1/3'
-          : 'w-3/4'} text-lg ellipsis-2-smxl"
+        class="hidden lg:inline {showSong ? 'w-1/3 max-w-1/3' : 'w-3/4'} text-lg ellipsis-2-smxl"
       >
         {#if chart.authorName}
           {@html $charter}
@@ -164,7 +138,7 @@
       </div>
     {/if}
     <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
-      <div class="hidden md:inline">
+      <div class="hidden xl:inline">
         <Rating rating={chart.rating} direction="left" />
       </div>
       {#if showLike}

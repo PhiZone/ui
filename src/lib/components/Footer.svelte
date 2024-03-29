@@ -1,7 +1,7 @@
 <script lang="ts">
   import { locale, t } from '$lib/translations/config';
 
-  const emailAddress = 'contact@phizone.cn';
+  const emailAddress = 'contact@phi.zone';
 </script>
 
 <footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">

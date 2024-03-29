@@ -45,6 +45,11 @@ export const SUPPORTED_APPS = [
     branded: true,
   },
   {
+    name: 'Discord',
+    avatar: 'https://res.phizone.cn/PC5eY7Yna9qgqWKaQ8A1BsuPWR1BXTAL/discord-mark.png',
+    branded: true,
+  },
+  {
     name: 'Phira',
     avatar: 'https://res.phizone.cn/rLX1fO2dLkQJKrOGPbhgYHlAaeBONVed/phira.png',
     branded: false,

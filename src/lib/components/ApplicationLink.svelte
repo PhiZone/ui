@@ -25,10 +25,10 @@
     <div class="card-body py-6 gap-0.5">
       <div class="flex items-center gap-2 w-full mb-1">
         {#if SUPPORTED_APPS.filter((a) => a.branded).find((a) => a.name.toLowerCase() === appLink.application.name.toLowerCase())}
-          <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-xl"></i>
+          <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-2xl"></i>
         {:else}
           <div class="avatar">
-            <div class="w-6 rounded-full">
+            <div class="w-8 rounded-full">
               <img src={getAvatar(appLink.application.avatar)} alt="Avatar" />
             </div>
           </div>
@@ -79,15 +79,17 @@
   </div>
 {:else}
   <div class="flex items-center mx-3 gap-2">
-    {#if SUPPORTED_APPS.filter((a) => a.branded).find((a) => a.name.toLowerCase() === appLink.application.name.toLowerCase())}
-      <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-lg"></i>
-    {:else}
-      <div class="avatar">
-        <div class="w-5 rounded-full">
-          <img src={getAvatar(appLink.application.avatar)} alt="Avatar" />
+    <div class="w-5 h-5 flex items-center justify-center">
+      {#if SUPPORTED_APPS.filter((a) => a.branded).find((a) => a.name.toLowerCase() === appLink.application.name.toLowerCase())}
+        <i class="fa-brands fa-{appLink.application.name.toLowerCase()} fa-lg"></i>
+      {:else}
+        <div class="avatar">
+          <div class="rounded-full">
+            <img src={getAvatar(appLink.application.avatar)} alt="Avatar" />
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
     {#if appLink.remoteUserId}
       {#if link}
         <a

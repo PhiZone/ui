@@ -3,8 +3,9 @@
   import { page } from '$app/stores';
   import type { ChartSubmissionDto } from '$lib/api';
   import { t } from '$lib/translations/config';
-  import { getCompressedImage, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
+  import { getCompressedImage, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
+  import ChartLabel from './ChartDifficulty.svelte';
 
   $: ({ user, api } = $page.data);
 
@@ -27,21 +28,7 @@
         class="object-fill"
       />
       <div class="absolute bottom-2 left-2 w-fit h-fit">
-        <div class="join join-horizontal">
-          <button
-            class={`btn ${getLevelColor(chart.levelType)} btn-sm join-item text-xl no-animation`}
-          >
-            {chart.level}
-            {getLevelDisplay(chart.difficulty)}
-          </button>
-          {#if chart.isRanked}
-            <button
-              class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg btn-sm join-item text-xl no-animation"
-            >
-              {$t('chart.ranked')}
-            </button>
-          {/if}
-        </div>
+        <ChartLabel {chart} />
       </div>
     </figure>
     <div class="card-body py-6 gap-0.5">

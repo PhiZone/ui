@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { LEVEL_TYPES, Status } from '$lib/constants';
   import User from '$lib/components/User.svelte';
-  import { applyPatch, getLevelColor, getLevelDisplay } from '$lib/utils';
+  import { applyPatch, getLevelDisplay } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
@@ -11,6 +11,7 @@
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
 
   export let data;
 
@@ -218,19 +219,7 @@
                 {$songSubmission.data.data.title}
               </a>
             {/if}
-            <div class="join join-vertical lg:join-horizontal min-w-fit">
-              <button class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation">
-                {chart.level}
-                {getLevelDisplay(chart.difficulty)}
-              </button>
-              {#if chart.isRanked}
-                <button
-                  class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item text-3xl no-animation"
-                >
-                  {$t('chart.ranked')}
-                </button>
-              {/if}
-            </div>
+            <ChartLabel {chart} large />
           </div>
           <a
             href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset,noRequestingFullscreen&chart=${encodeURI(
@@ -558,7 +547,7 @@
                 {/each}
               </div>
             {/if}
-            <div class="w-full flex justify-center mt-6">
+            <div class="w-full flex flex-col justify-center mt-6">
               <div
                 class="tooltip tooltip-top tooltip-error w-full"
                 class:tooltip-open={status === Status.ERROR}

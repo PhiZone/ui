@@ -342,13 +342,21 @@ export const getAppUserLink = (app: string, user: string) => {
   }
 };
 
-export const requestIdentity = async (provider: string, api: API, bind = false) => {
+export const requestIdentity = async (
+  provider: string,
+  api: API,
+  bind = false,
+  register = false,
+) => {
   const state = Math.random().toString(36).substring(2);
+  const params = new URLSearchParams();
+  if (bind) params.append('bind', 'true');
+  if (register) params.append('register', 'true');
   const resp = await api.auth.provider({
     provider: provider.toLowerCase(),
     state,
     redirectUri: `${location.origin}/session/callback/${provider.toLowerCase()}${
-      bind ? '?bind=true' : ''
+      params.size > 0 ? `?${params.toString()}` : ''
     }`,
   });
   if (resp.ok) {

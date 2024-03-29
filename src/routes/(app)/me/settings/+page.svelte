@@ -164,9 +164,7 @@
             bindDisabled = '';
           }}
         >
-          {#if SUPPORTED_APPS.filter((a) => a.branded)
-            .map((a) => a.name)
-            .includes(app.name)}
+          {#if app.branded}
             <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
           {:else}
             <div class="avatar">

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { richtext } from '$lib/richtext';
-  import { getLevelColor, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import VolunteerVote from '$lib/components/VolunteerVote.svelte';
   import { LEVEL_TYPES } from '$lib/constants';
@@ -20,6 +20,7 @@
   import DifficultySuggestion from '$lib/components/DifficultySuggestion.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import VolunteerVoteDiagram from '$lib/components/VolunteerVoteDiagram.svelte';
+  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -508,21 +509,7 @@
                   {submission.songSubmission.title}
                 </a>
               {/if}
-              <div class="join join-vertical lg:join-horizontal min-w-fit">
-                <button
-                  class="btn {getLevelColor(submission.levelType)} join-item text-3xl no-animation"
-                >
-                  {submission.level}
-                  {getLevelDisplay(submission.difficulty)}
-                </button>
-                {#if submission.isRanked}
-                  <button
-                    class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item text-3xl no-animation"
-                  >
-                    {$t('chart.ranked')}
-                  </button>
-                {/if}
-              </div>
+              <ChartLabel chart={submission} large />
             </div>
             <div>
               <p>

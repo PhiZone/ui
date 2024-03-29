@@ -43,7 +43,7 @@
     PhiZone reserves the right to modify the Privacy Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Privacy Policy is November 18, 2023.</p>
+  <p>The last modification date of the Privacy Policy is March 21, 2024.</p>
   <h2 id="information-we-collect-and-store">Information We Collect and Store</h2>
   <p>
     Unless you register an account with PhiZone, we will not collect or store any personal
@@ -141,8 +141,8 @@
   <p>
     You have the option of deleting your account from our services. Please note that this is
     currently a manual process and may take several days to complete. If you have a need for this,
-    please send an email to <a href="mailto:contact@phizone.cn" target="_blank" class="url">
-      contact@phizone.cn
+    please send an email to <a href="mailto:contact@phi.zone" target="_blank" class="url">
+      contact@phi.zone
     </a>
     from the email address associated with the target account, stating the specific reasons. Upon receiving
     the email, we will take action within 7 business days. In the case of account deletion, public resources
@@ -152,11 +152,11 @@
     You cannot request the deletion of ranked charts or non-original songs at your own discretion.
     If you indeed have a legitimate need to delete the aforementioned resources, or if you have the
     intention or need to delete other types of resources, please send an email to <a
-      href="mailto:contact@phizone.cn"
+      href="mailto:contact@phi.zone"
       target="_blank"
       class="url"
     >
-      contact@phizone.cn
+      contact@phi.zone
     </a>
     from the email address associated with the account of the resource owner, stating the specific reasons.
     Upon receiving the email, we will take action within 7 business days.
@@ -184,8 +184,8 @@
   <p>
     Unfortunately, we're unable to determine the occurrence of such situations based on the
     information we collect and store. If you, as a legal guardian, discover such a situation and
-    wish for us to take action, please send an email to <a href="mailto:contact@phizone.cn">
-      contact@phizone.cn
+    wish for us to take action, please send an email to <a href="mailto:contact@phi.zone">
+      contact@phi.zone
     </a>
     from the email address associated with the target account, indicating the specific situation and
     the measures you would like us to take. Upon receiving the email, if the situation is determined
@@ -212,7 +212,7 @@
   </p>
   <h2 id="隐私政策的更改">隐私政策的更改</h2>
   <p>PhiZone 保留自由更改隐私政策的权利。该政策以最新版为准。</p>
-  <p>隐私政策的最后更改日期为 2023 年 11 月 18 日。</p>
+  <p>隐私政策的最后更改日期为 2024 年 3 月 21 日。</p>
   <h2 id="我们收集并储存的信息">我们收集并储存的信息</h2>
   <p>除非你在 PhiZone 注册账户，否则我们不会收集或储存任何关于你的个人信息。</p>
   <h3 id="注册账户时">注册账户时</h3>
@@ -274,13 +274,13 @@
   </p>
   <p>
     你也可以申请删除你的账户。请注意，目前此过程需要人工处理并可能需要几天来完成。如确实有此类需求，请使用目标账户的邮箱地址向
-    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
+    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
     发送邮件，并注明具体原因。在收到邮件后，我们会在 7 个工作日内采取相应的措施。在账户删除的情况下，你之前已上传的各类公开资源将仍对所有人可见。
   </p>
   <p>
     你无法因个人意愿申请删除你上传的 Ranked
     谱面或非原创曲目。如确实对于上述资源有删除的正当需求，或对于其他类型的资源有删除的意愿或需求，请使用目标资源所有者账户的邮箱地址向
-    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
+    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
     发送邮件，并注明具体原因。在收到邮件后，我们会在 7 个工作日内采取相应的措施。
   </p>
   <h2 id="cookies">Cookies</h2>
@@ -300,7 +300,7 @@
   </p>
   <p>
     然而，我们无法根据我们收集并储存的信息确定上述情况的发生。如你作为法定监护人发现存在相关情况，并希望我们采取措施，请使用目标账户的邮箱地址向
-    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
+    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
     发送邮件，并注明具体情况以及希望我们采取的措施。在收到邮件后，如认为情况属实，我们会在 7 个工作日内采取相应的措施。
   </p>
   <h2 id="归属">归属</h2>

@@ -2,6 +2,8 @@
   "AccountLocked": "Your account has been locked.",
   "AlreadyDone": "You've already performed this operation!",
   "ApplicationNotFound": "The specified application does not exist.",
+  "AuthFailure": "身份验证失败。",
+  "AuthProviderNotFound": "指定的身份验证提供商不存在。",
   "BindingOccupied": "The remote account has already been bound to another user.",
   "Blacklisted": "You have been blacklisted by the target user / resource owner.",
   "ConfigurationNotFound": "The specified configuration is not found.",

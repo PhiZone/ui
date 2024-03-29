@@ -899,7 +899,7 @@
                 </div>
               </div>
             {/if}
-            <div class="w-full flex justify-center mt-6">
+            <div class="w-full flex flex-col justify-center mt-6">
               <div
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}

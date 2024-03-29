@@ -83,6 +83,18 @@ export interface RegisterOpts {
   DateOfBirth?: Date;
 }
 
+export interface RegisterWithProviderOpts {
+  Language: string;
+  RegionCode: string;
+  Gender?: Gender;
+  Biography?: string;
+  DateOfBirth?: Date;
+}
+
+export interface RegisterResult {
+  token: string;
+}
+
 export default class UserAPI {
   constructor(private api: API) {}
 
@@ -120,8 +132,21 @@ export default class UserAPI {
     return this.api.POST(`/users/${id}/unfollow`);
   }
 
-  register(opts: RegisterOpts): R {
+  register(opts: RegisterOpts): R<RegisterResult> {
     return this.api.POST('/users', serialize(opts));
+  }
+
+  registerWithProvider(
+    opts: RegisterWithProviderOpts,
+    provider: string,
+    code: string,
+    state: string,
+    redirectUri: string,
+  ): R<RegisterResult> {
+    return this.api.POST(
+      `/users/provider/${provider}?code=${code}&state=${state}&redirectUri=${redirectUri}`,
+      opts,
+    );
   }
 
   update({ id }: InfoOpts, patch: PatchElement[]): R {
@@ -132,7 +157,9 @@ export default class UserAPI {
     return this.api.PATCH(`/users/${id}/avatar`, serialize(rest));
   }
 
-  bind(provider: string, code: string, state: string) {
-    return this.api.POST(`/me/bindings/${provider}?code=${code}&state=${state}`);
+  bind(provider: string, code: string, state: string, redirectUri: string) {
+    return this.api.POST(
+      `/me/bindings/${provider}?code=${code}&state=${state}&redirectUri=${redirectUri}`,
+    );
   }
 }
