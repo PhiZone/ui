@@ -53,7 +53,7 @@
     PhiZone reserves the right to modify the Copyright Policy at any time. The latest version of the
     policy shall prevail.
   </p>
-  <p>The last modification date of the Copyright Policy is February 15, 2024.</p>
+  <p>The last modification date of the Copyright Policy is March 21, 2024.</p>
   <h2 id="active-defense-against-copyright-infringements">
     Active Defense Against Copyright Infringements
   </h2>
@@ -249,7 +249,7 @@
   <h2 id="designated-agent-contact-details">Designated Agent Contact Details</h2>
   <p>
     <strong>Email:</strong>
-    <a href="mailto:copyright@phizone.cn">copyright@phizone.cn</a>
+    <a href="mailto:copyright@phi.zone">copyright@phi.zone</a>
     (responds in 7 business days)
   </p>
   <p><strong>Postal Address:</strong></p>
@@ -277,7 +277,7 @@
   </p>
   <h2 id="版权政策的更改">版权政策的更改</h2>
   <p>PhiZone 保留自由更改版权政策的权利。该政策以最新版为准。</p>
-  <p>版权政策的最后更改日期为 2024 年 2 月 15 日。</p>
+  <p>版权政策的最后更改日期为 2024 年 3 月 21 日。</p>
   <h2 id="针对侵权行为的主动防御">针对侵权行为的主动防御</h2>
   <p>
     PhiZone
@@ -431,7 +431,7 @@
   <h2 id="指定代理人联系方式">指定代理人联系方式</h2>
   <p>
     <strong>电子邮件地址：</strong>
-    <a href="mailto:copyright@phizone.cn">copyright@phizone.cn</a>
+    <a href="mailto:copyright@phi.zone">copyright@phi.zone</a>
     （7 个工作日内回复）
   </p>
   <p><strong>邮寄地址：</strong></p>

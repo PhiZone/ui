@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] bg-base-100 bg-opacity-70 backdrop-blur-lg text-base transition border-b-2 normal-border hover:shadow-lg"
+  class="navbar fixed top-0 w-full h-16 m-auto px-[3%] z-[900] bg-base-100 bg-opacity-70 backdrop-blur-xl text-base transition border-b-2 normal-border hover:shadow-lg"
 >
   <div class="navbar-start w-[160px] lg:w-1/2 z-20">
     <div class="dropdown">
@@ -198,6 +198,6 @@
   .logo {
     max-height: 60px;
     margin-right: 10px;
-    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   }
 </style>

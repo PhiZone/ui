@@ -1,8 +1,9 @@
 <script lang="ts">
   import { goto, preloadData } from '$app/navigation';
+  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
   import Region from '$lib/components/Region.svelte';
   import { t } from '$lib/translations/config';
-  import { getAvatar, getLevelColor, getLevelDisplay, parseDateTime } from '$lib/utils';
+  import { getAvatar, getLevelDisplay, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
@@ -42,19 +43,7 @@
           <h2 class="text-5xl font-bold content md:inline-block">
             {chart.title ?? chart.song.title}
           </h2>
-          <div class="join join-vertical md:join-horizontal min-w-fit">
-            <button class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation">
-              {chart.level}
-              {getLevelDisplay(chart.difficulty)}
-            </button>
-            {#if chart.isRanked}
-              <button
-                class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item text-3xl no-animation"
-              >
-                {$t('chart.ranked')}
-              </button>
-            {/if}
-          </div>
+          <ChartLabel {chart} large />
         </div>
         <a
           href="/charts/{id}"

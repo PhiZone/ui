@@ -135,15 +135,17 @@
                 appDisabled = '';
               }}
             >
-              {#if app.branded}
-                <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
-              {:else}
-                <div class="avatar">
-                  <div class="w-6 rounded-full">
-                    <img src={getAvatar(app.avatar)} alt="Avatar" />
+              <div class="w-5 h-5 flex items-center justify-center">
+                {#if app.branded}
+                  <i class="fa-brands fa-{app.name.toLowerCase()} fa-xl"></i>
+                {:else}
+                  <div class="avatar">
+                    <div class="w-6 rounded-full">
+                      <img src={getAvatar(app.avatar)} alt="Avatar" />
+                    </div>
                   </div>
-                </div>
-              {/if}
+                {/if}
+              </div>
               <p>{app.name}</p>
             </button>
           {/each}
@@ -155,7 +157,7 @@
 
 <style>
   .apps {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     @apply grid justify-center gap-2;
   }
 </style>

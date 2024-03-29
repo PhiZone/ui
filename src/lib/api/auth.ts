@@ -85,10 +85,16 @@ export default class AuthAPI {
 
   token(
     opts: TokenOpts,
-    provider: string | null = null,
+    provider?: string | undefined,
+    redirectUri?: string | undefined,
+    token?: string | undefined,
   ): Promise<TypedResponse<true, TokenResult> | TypedResponse<false>> {
     return this.api.POST(
-      `/auth/token${provider ? `?provider=${provider}` : ''}`,
+      token
+        ? `/auth/token?token=${token}`
+        : provider && redirectUri
+          ? `/auth/token?provider=${provider}&redirectUri=${redirectUri}`
+          : '/auth/token',
       new URLSearchParams({ ...opts }),
     );
   }

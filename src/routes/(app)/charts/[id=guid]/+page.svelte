@@ -2,13 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { enhance } from '$app/forms';
   import { t } from '$lib/translations/config';
-  import {
-    getLevelColor,
-    getLevelDisplay,
-    getUserLevel,
-    getUserPrivilege,
-    parseDateTime,
-  } from '$lib/utils';
+  import { getLevelDisplay, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { richtext } from '$lib/richtext';
   import { Status } from '$lib/constants';
   import Song from '$lib/components/Song.svelte';
@@ -24,6 +18,7 @@
   import Error from '$lib/components/Error.svelte';
   import InteractiveRating from '$lib/components/InteractiveRating.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
 
   export let data, form;
   const {
@@ -420,21 +415,7 @@
               <h2 class="text-5xl font-bold content md:inline-block">
                 {chart.title ?? chart.song.title}
               </h2>
-              <div class="join join-vertical md:join-horizontal min-w-fit">
-                <button
-                  class="btn {getLevelColor(chart.levelType)} join-item text-3xl no-animation"
-                >
-                  {chart.level}
-                  {getLevelDisplay(chart.difficulty)}
-                </button>
-                {#if chart.isRanked}
-                  <button
-                    class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item text-3xl no-animation"
-                  >
-                    {$t('chart.ranked')}
-                  </button>
-                {/if}
-              </div>
+              <ChartLabel {chart} large />
             </div>
             <div class="flex flex-col lg:flex-row">
               <div class="lg:w-1/2">
@@ -739,9 +720,3 @@
 {:else}
   <div class="min-h-page skeleton" />
 {/if}
-
-<style>
-  .main-width {
-    width: calc(100% - 80px);
-  }
-</style>

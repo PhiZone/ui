@@ -1,5 +1,5 @@
 /* Write your global styles here, in PostCSS syntax */
-@import url('https://fonts.loli.net/css2?family=Outfit&family=Noto+Sans+SC&family=Black+Ops+One&family=Noto+Sans+Mono&display=swap');
+@import url('https://font.alnk.cn/css2?family=Outfit&family=Noto+Sans+SC&family=Black+Ops+One&family=Noto+Sans+Mono&display=swap');
 
 @tailwind base;
 @tailwind components;

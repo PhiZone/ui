@@ -2,6 +2,8 @@
   "AccountLocked": "你的账户已被锁定。",
   "AlreadyDone": "你已执行过该操作！",
   "ApplicationNotFound": "指定的应用不存在。",
+  "AuthFailure": "身份验证失败。",
+  "AuthProviderNotFound": "指定的身份验证提供商不存在。",
   "BindingOccupied": "远程账户已被其他用户绑定。",
   "Blacklisted": "你已被目标用户 / 目标资源所有者列入黑名单。",
   "ConfigurationNotFound": "指定的配置不存在。",

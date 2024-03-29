@@ -24,5 +24,5 @@ FANMADE_SECTOKEN = 'token'
 - `deploy.sh` - Builds and serves production build.
 - `deploy-dev.sh` - Builds and previews production build.
 - `translation-helper.cjs` - Tool for organizing translations. Prints unused translations, differences between languages, and duplicate translations (used more than twice)
-  - `mc [source] [target]` - Makes translation keys of the target language (or all but the source language, if unspecified) consistent with that of the source language (default `en-US`)
+  - `mc [source] [target]` - Makes translation keys of the target language (or all but the source language, if unspecified) consistent with that of the source language (default `zh-CN`)
   - `s` - Sorts all translation files alphabetically

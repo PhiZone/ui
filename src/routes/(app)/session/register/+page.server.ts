@@ -4,6 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API, { Gender } from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
+import { login } from '$lib/utils.server';
 
 const schema = z
   .object({
@@ -42,7 +43,7 @@ export const load = async () => {
 };
 
 export const actions = {
-  default: async ({ request, url, locals, fetch }) => {
+  default: async ({ request, url, cookies, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
@@ -55,7 +56,20 @@ export const actions = {
 
     const resp = await api.user.register(opts);
     if (resp.ok) {
-      throw redirect(303, '/session/login' + url.search);
+      const data = await resp.json();
+      const redirectUri = url.searchParams.get('redirect');
+      const external = redirectUri != null && redirectUri.startsWith('http');
+      const result = await login(api, data.data.token, cookies);
+      throw redirect(
+        303,
+        `${redirectUri ?? '/'}${
+          external
+            ? ''
+            : result
+              ? `?level=error&message=session.login.${result}&t=true`
+              : '?level=success&message=session.registration.success&t=true'
+        }`,
+      );
     } else {
       const error = await resp.json();
       console.error(
