@@ -186,11 +186,6 @@ export const parseMonthAndDay = (input: string | Date) => {
   });
 };
 
-export const getPath = (input: string) => {
-  const url = new URL(input);
-  return url.pathname + url.search;
-};
-
 export const getCompressedImage = (input: string | undefined, quality = 20) => {
   return input ? `${input}?imageslim&imageMogr2/quality/${quality}` : undefined;
 };

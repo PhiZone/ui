@@ -30,7 +30,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
       params.provider,
       code,
       state,
-      url.origin + url.pathname + url.search,
+      url.origin + url.pathname + '?bind=true',
     );
     if (!resp.ok) {
       console.error(
@@ -54,7 +54,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
         password: state,
       },
       params.provider,
-      url.origin + url.pathname + url.search,
+      url.origin + url.pathname,
     );
     if (!resp.ok) {
       const error = await resp.json();
@@ -89,8 +89,8 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
 };
 
 export const actions = {
-  default: async ({ request, url, cookies, params, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken);
+  default: async ({ request, url, cookies, params, fetch }) => {
+    const api = new API(fetch);
 
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
@@ -105,7 +105,7 @@ export const actions = {
       params.provider,
       url.searchParams.get('code')!,
       url.searchParams.get('state')!,
-      url.origin + url.pathname + url.search,
+      url.origin + url.pathname + '?register=true',
     );
     if (resp.ok) {
       const data = await resp.json();

@@ -43,8 +43,8 @@ export const load = async () => {
 };
 
 export const actions = {
-  default: async ({ request, url, cookies, locals, fetch }) => {
-    const api = new API(fetch, locals.accessToken);
+  default: async ({ request, url, cookies, fetch }) => {
+    const api = new API(fetch);
 
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
