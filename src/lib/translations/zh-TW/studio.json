@@ -31,7 +31,7 @@
   "submission": {
     "accessibilities": {
       "0": "公開",
-      "1": "需審核",
+      "1": "需審查",
       "2": "私人"
     },
     "add_chapter": "關聯章節",
@@ -51,7 +51,7 @@
     "copyright_alert_description": "你提交的稿件可能會因版權問題而受到限制或被退回。此處列出了你的稿件可能侵犯其版權的資源記錄。",
     "description_placeholder": "簡介（選填，建議在此標註影音平台上譜面預覽影片的連結）",
     "duplicate_song": "重複曲目",
-    "duplicate_song_description": "其他人已經提交了該曲目的相同版本。如你認爲你的稿件更優質，請聯係資源所有者或工作人員。",
+    "duplicate_song_description": "其他人已經提交了本曲目的相同版本。如你認爲你的稿件更優質，請聯係資源所有者或工作人員。",
     "edition_placeholder": "特指（剪輯後的）音訊出處（如 Arcaea Ver. / MD Edit ...）",
     "end": "結束",
     "is_hidden": "是否隱藏",
@@ -59,10 +59,10 @@
     "is_original": "是否為原創",
     "main_bpm": "主要 BPM",
     "max_bpm": "最大 BPM",
-    "max_bpm_error": "最大 BPM 小于主要 BPM！",
+    "max_bpm_error": "最大 BPM 小於主要 BPM！",
     "message": "留言",
     "min_bpm": "最小 BPM",
-    "min_bpm_error": "最小 BPM 大于主要 BPM！",
+    "min_bpm_error": "最小 BPM 大於主要 BPM！",
     "offset_helper": "Before uploading the chart file, please first choose a song and fill in chart info. After that, click here to adjust the chart offset and upload the adjusted version of your chart file.",
     "offset_placeholder": "以毫秒為單位，取值範圍應在 ±30000/BPM 內（暫時以 RPE 播放窗口為準）",
     "original_audio": "原音源",
@@ -89,12 +89,12 @@
     "volunteer_status": "審核狀態",
     "volunteer_vote": "志工投票",
     "vote_diagram": {
-      "actual": "实际分数",
-      "bound_approved": "通过下限分数",
+      "actual": "實際分數",
+      "bound_approved": "通過下限分數",
       "bound_ranked": "Ranked 下限分数",
       "bound_rejected": "退回上限分数",
       "n_votes": "{{count}} 票",
-      "title": "审核状态示意图"
+      "title": "審查狀態示意圖"
     },
     "write_message": "對這張譜面進行評價",
     "your_id": "您的 ID"
