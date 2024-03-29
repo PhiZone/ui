@@ -1,13 +1,13 @@
 {
   "accessibilities": {
-    "0": "公开",
-    "1": "需审核",
-    "2": "私有"
+    "0": "公開",
+    "1": "需審查",
+    "2": "私人"
   },
-  "accessibility": "开放度",
-  "add": "添加",
-  "add_in_bulk": "批量添加",
-  "all": "查看全部",
+  "accessibility": "開放狀態",
+  "add": "新增",
+  "add_in_bulk": "批量新增",
+  "all": "檢視所有",
   "anonymous": "[ 匿名 ]",
   "applications": "應用",
   "auto": "自動",
@@ -15,7 +15,7 @@
   "back_to_homepage": "返回首頁",
   "chapters": "章節",
   "charts": "譜面",
-  "collaborators": "合作成员",
+  "collaborators": "合作夥伴",
   "collections": "合集",
   "colon": "：",
   "comment": "留言",
@@ -38,7 +38,7 @@
   "errors": {
     "400": "您的請求有誤。",
     "401": "請先註冊 / 登入。",
-    "403": "您無權訪問該頁面。",
+    "403": "您無權訪問此頁面。",
     "404": "您要造訪的頁面不存在。",
     "500": "伺服器在處理您的請求時發生錯誤。",
     "502": "無法連接至伺服器。"
@@ -87,12 +87,12 @@
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "illustration": "10 MB 或更小的 JPG / JPEG / PNG / WEBP，長寬比必須為 16:9，解析度不得低於 960×540",
       "image": "10 MB 或更小的 JPG / JPEG / PNG / WEBP",
-      "license": "须上传图片文件（不大于 10 MB）以证明该改编版本已经作者授权",
-      "original": "该曲目为你 / 你的团队所创作的原创曲目",
-      "originality_proof": "须上传 ZIP 压缩文件（不大于 200 MB）（例：内含分轨音频文件）以证明曲目的原创性质",
-      "ranked": "游玩该谱后，结算时数据计入玩家 RKS；谱面审核较为严格",
-      "reposted": "该曲目为他人所创作的曲目",
-      "unranked": "游玩该谱后，结算时数据不计入玩家 RKS；谱面审核较为宽松"
+      "license": "須上傳圖片檔案（不大於 10 MB）以證明此改編版本已作者授權",
+      "original": "此曲目為你 / 你的團隊所創作的原創曲目",
+      "originality_proof": "須上傳 ZIP 壓縮檔案（不大於 200 MB）（例如：內含分軌音訊檔案）以證明曲目的原創性質",
+      "ranked": "遊玩本譜面後，結算時資料計入玩家 RKS；譜面審查較為嚴格",
+      "reposted": "此曲目為他人所創作的曲目",
+      "unranked": "遊玩本譜面後，結算時資料不計入玩家 RKS；譜面審查較為寬鬆"
     }
   },
   "illustration": "Illustration",
@@ -115,14 +115,14 @@
   "navbar": {
     "logout": "登出",
     "pet": "權限晉升",
-    "studio_inaccessible": "請先完成 PhiZone 權限晉升測驗以使用該功能！"
+    "studio_inaccessible": "請先完成 PhiZone 權限晉升測驗以使用此功能！"
   },
   "off": "關",
   "on": "開",
   "optional": "（選填）",
   "owner": "Owner",
   "pending": "等待處理",
-  "position": "职能",
+  "position": "職位",
   "preferred": "首選",
   "preview": "預覽",
   "profile": "使用者資料",

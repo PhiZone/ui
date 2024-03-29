@@ -1,23 +1,23 @@
 {
   "accessibility_tips": {
-    "0": "該譜面接受任何遊玩記錄上傳",
-    "2": "該譜面不接受任何遊玩記錄上傳"
+    "0": "此譜面接受任何遊玩記錄上傳",
+    "2": "此譜面不接受任何遊玩記錄上傳"
   },
   "arrangement": "配置",
   "asset": {
-    "asset": "Asset",
-    "file": "File",
-    "name": "Name",
+    "asset": "外部資源",
+    "file": "資產檔案",
+    "name": "資源名稱",
     "types": {
-      "0": "Image",
-      "1": "Audio",
-      "2": "Video",
-      "3": "Config",
-      "4": "Shader",
-      "5": "Other"
+      "0": "圖片",
+      "1": "音訊",
+      "2": "影片",
+      "3": "配置",
+      "4": "著色器",
+      "5": "其他"
     }
   },
-  "assets": "Assets",
+  "assets": "外部資源",
   "chart": "譜面",
   "charter": "譜師",
   "collection": "相關合集",
@@ -34,15 +34,15 @@
     "3": "Phigrim 譜面",
     "4": "不支援"
   },
-  "gameplay": "游玩體驗",
+  "gameplay": "遊玩體驗",
   "highest_difficulty": "最高定數",
   "highest_note_count": "最高物量",
   "highest_rating": "最高評分",
   "highest_score": "最高總分",
-  "illustration": "Illustration",
-  "illustrator": "Illustrator",
+  "illustration": "譜繪",
+  "illustrator": "畫師",
   "impression": "印象",
-  "leaderboard": "Leaderboard",
+  "leaderboard": "排行榜",
   "level": "等級",
   "level_type": "等級類型",
   "lowest_difficulty": "最低定數",
@@ -51,7 +51,7 @@
   "lowest_score": "最低總分",
   "multiplier": "評分倍率",
   "notes": "物量",
-  "play": "游玩",
+  "play": "遊玩",
   "r_arrangement": "配置評分",
   "r_concord": "契合度評分",
   "r_creativity": "創新度評分",
