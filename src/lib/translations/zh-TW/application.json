@@ -1,16 +1,16 @@
 {
-  "application": "Application",
-  "bind_account": "Bind Account",
-  "reverify": "Reverify",
+  "application": "應用",
+  "bind_account": "綁定帳號",
+  "reverify": "重新驗證",
   "types": {
-    "0": "Web Chart Player",
-    "1": "Web Tool",
-    "2": "Mobile Chart Player",
-    "3": "Mobile Tool",
-    "4": "Desktop Chart Player",
-    "5": "Desktop Tool",
-    "6": "Service",
-    "7": "Authentication Provider"
+    "0": "網頁譜面播放器",
+    "1": "網頁工具",
+    "2": "行動裝置端台譜面播放器",
+    "3": "行動裝置端工具",
+    "4": "PC端譜面播放器",
+    "5": "PC端工具",
+    "6": "服務",
+    "7": "身份驗證供應商"
   },
-  "visit": "Visit Homepage"
+  "visit": "造訪首頁"
 }

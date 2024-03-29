@@ -89,12 +89,12 @@
     "volunteer_status": "Volunteer Status",
     "volunteer_vote": "Volunteer Vote",
     "vote_diagram": {
-      "actual": "实际分数",
-      "bound_approved": "通过下限分数",
-      "bound_ranked": "Ranked 下限分数",
-      "bound_rejected": "退回上限分数",
-      "n_votes": "{{count}} 票",
-      "title": "审核状态示意图"
+      "actual": "Actual Score",
+      "bound_approved": "Minimum Approved Score",
+      "bound_ranked": "Minimum Ranked Score",
+      "bound_rejected": "Maximum Rejected Score",
+      "n_votes": "{{count}} Votes",
+      "title": "Reviewing Status Diagram"
     },
     "write_message": "Comment on this chart in a few sentences",
     "your_id": "Your ID"
