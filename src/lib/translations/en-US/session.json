@@ -37,11 +37,11 @@
     "email_confirmation_code": "Email Confirmation Code",
     "legal_agreement": "I have read and agree to the {{terms_of_service}} and {{privacy_policy}}.",
     "register": "Register",
-    "register_with_provider": "使用 {{provider}} 注册",
+    "register_with_provider": "Register with {{provider}}",
     "registration_text": "Register an account to participate in the PhiZone community!",
     "select_language": "Select Language",
     "select_region": "Select Region",
-    "success": "账户注册成功！"
+    "success": "Registered successfully!"
   },
   "username": "Username"
 }

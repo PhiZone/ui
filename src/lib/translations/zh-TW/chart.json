@@ -6,7 +6,7 @@
   "arrangement": "配置",
   "asset": {
     "asset": "外部資源",
-    "file": "資產檔案",
+    "file": "資源檔案",
     "name": "資源名稱",
     "types": {
       "0": "圖片",
