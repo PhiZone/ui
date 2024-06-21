@@ -31,23 +31,23 @@
   </figure>
   <div class="card-body {fixedHeight ? 'h-[244px]' : ''} py-6 gap-0.5">
     <div class="flex flex-col mb-2">
-      <h2 class="title w-full whitespace-nowrap overflow-hidden text-ellipsis">
+      <h2 class="title w-full truncate">
         {collection.title}
       </h2>
-      <h2 class="subtitle opacity-80 w-full whitespace-nowrap overflow-hidden text-ellipsis">
+      <h2 class="subtitle opacity-80 w-full truncate">
         {collection.subtitle}
       </h2>
     </div>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('common.illustrator')}</span>
-      <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="truncate">
         {collection.illustrator}
       </span>
     </p>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('common.owner')}</span>
       {#if $owner.isSuccess}
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="truncate">
           {$owner.data.data.userName}
         </span>
       {:else}

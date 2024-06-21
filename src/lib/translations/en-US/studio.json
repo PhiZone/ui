@@ -78,7 +78,6 @@
     "song_duplications": "Song Duplications",
     "song_type": "Type of Song",
     "start": "Start",
-    "status": "Status",
     "statuses": {
       "0": "Waiting",
       "1": "Approved",

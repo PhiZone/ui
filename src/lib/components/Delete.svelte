@@ -1,6 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
+  import { Status } from '$lib/constants';
 
   const { api } = $page.data;
 
@@ -10,13 +11,15 @@
     name: string;
     class: string;
     hasText?: boolean;
+    onDelete?: () => void;
   }
 
   export let id: string;
   export let path: string;
   export let name: string;
   export let hasText = false;
-  let deleted = false;
+  export let onDelete: () => void = () => {};
+  let status = Status.WAITING;
 </script>
 
 <input type="checkbox" id="delete-{id}" class="modal-toggle" />
@@ -43,9 +46,11 @@
         for="delete-{id}"
         class="btn border-2 normal-border btn-outline"
         on:click={async () => {
+          status = Status.SENDING;
           const resp = await api.DELETE(`/${path}/${id}`);
           if (resp.ok || resp.status === 404) {
-            deleted = true;
+            status = Status.OK;
+            onDelete();
           } else {
             console.error(
               `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
@@ -62,10 +67,16 @@
 
 <label
   for="delete-{id}"
-  class="btn {deleted ? 'btn-ghost btn-disabled' : 'border-2 btn-ghost'} {$$restProps.class}"
+  class="btn {status != Status.WAITING
+    ? 'btn-ghost btn-disabled'
+    : 'border-2 btn-ghost'} {$$restProps.class}"
 >
-  <i class="fa-regular fa-trash-can fa-lg"></i>
+  {#if status != Status.SENDING}
+    <span><i class="fa-regular fa-trash-can fa-lg"></i></span>
+  {:else}
+    <span class="loading loading-dots loading-xs"></span>
+  {/if}
   {#if hasText}
-    {$t(deleted ? 'common.deleted' : 'common.delete')}
+    <span>{$t(status == Status.OK ? 'common.deleted' : 'common.delete')}</span>
   {/if}
 </label>

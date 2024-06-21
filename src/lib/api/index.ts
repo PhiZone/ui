@@ -21,6 +21,7 @@ import CollectionAPI from './collection';
 import PlayConfigurationAPI from './playConfiguration';
 import TagAPI from './tag';
 import AuthorshipAPI from './authorship';
+import EventAPI from './event';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -89,9 +90,11 @@ export default class API {
   collaboration = new CollaborationAPI(this);
   collection = new CollectionAPI(this);
   comment = new CommentAPI(this);
+  event = new EventAPI(this);
   headline = new HeadlineAPI(this);
   like = new LikeAPI(this);
   notification = new NotificationAPI(this);
+  pet = new PetAPI(this);
   playConfiguration = new PlayConfigurationAPI(this);
   record = new RecordAPI(this);
   reply = new ReplyAPI(this);
@@ -100,7 +103,6 @@ export default class API {
   tag = new TagAPI(this);
   user = new UserAPI(this);
   vote = new VoteAPI(this);
-  pet = new PetAPI(this);
 }
 
 export type { ChapterDto } from './chapter';

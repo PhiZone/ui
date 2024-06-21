@@ -41,7 +41,7 @@
       {#if showChart}
         <div class="join join-horizontal w-[272px] justify-end">
           <a
-            class="btn btn-xs border-2 btn-ghost btn-active hover:btn-outline join-item song flex-shrink justify-start text-sm no-animation whitespace-nowrap overflow-hidden text-ellipsis"
+            class="btn btn-xs border-2 btn-ghost btn-active hover:btn-outline join-item song flex-shrink justify-start text-sm no-animation truncate"
             href="/charts/{c?.id}"
           >
             {c?.title ?? c?.song.title}
@@ -74,10 +74,12 @@
     </div>
     <div class="absolute right-2 bottom-2 form-control justify-end">
       <p class="flex justify-end items-center gap-2 player">
-        <a href={`/users/${record.ownerId}`} class="hover:underline">
-          {record.owner.userName}
-        </a>
-        <span>·</span>
+        {#if record.owner}
+          <a href={`/users/${record.ownerId}`} class="hover:underline">
+            {record.owner.userName}
+          </a>
+          <span>·</span>
+        {/if}
         <span>
           {parseDateTime(record.dateCreated, true, user?.language)}
         </span>

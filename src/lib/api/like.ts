@@ -10,7 +10,9 @@ export interface LikeOpts {
     | 'songs'
     | 'chapters'
     | 'applications'
-    | 'collections';
+    | 'collections'
+    | 'events'
+    | 'events/divisions';
   id: string;
 }
 

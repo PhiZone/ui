@@ -23,6 +23,9 @@
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-xl w-52"
       >
         <li>
+          <a href="/events">{$t('common.events')}</a>
+        </li>
+        <li>
           <a href="/chapters">{$t('common.chapters')}</a>
         </li>
         <li>
@@ -71,6 +74,9 @@
   >
     <ul class="menu menu-horizontal p-0 text-lg">
       <li>
+        <a href="/events">{$t('common.events')}</a>
+      </li>
+      <li>
         <a href="/chapters">{$t('common.chapters')}</a>
       </li>
       <li>
@@ -91,9 +97,6 @@
       <li>
         <a href="/records">{$t('common.records')}</a>
       </li>
-      <!-- <li class="rounded-full">
-				<a href="/discussions">{$t("common.discussions")}</a>
-			</li> -->
       {#if !$page.url.pathname.startsWith('/session')}
         {@const { user } = $page.data}
         {#if user}

@@ -51,6 +51,17 @@ body {
   justify-items: center;
 }
 
+.background {
+  background-attachment: fixed;
+  display: grid;
+  background-size: cover;
+  background-position: center;
+}
+.background > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
 .richtext-link {
   @apply text-emerald-800 dark:text-emerald-200 hover:underline;
 }

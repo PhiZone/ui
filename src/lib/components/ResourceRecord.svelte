@@ -38,23 +38,23 @@
           </button>
         </div>
       {/if}
-      <h2 class="title mb-1 whitespace-nowrap overflow-hidden text-ellipsis max-w-[220px]">
+      <h2 class="title mb-1 truncate max-w-[220px]">
         {resourceRecord.title}
       </h2>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('common.type')}</span>
         {$t(`resource_record.types.${resourceRecord.type}`)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('resource_record.edition')}</span>
         {resourceRecord.edition ??
           $t(`resource_record.edition_types.${resourceRecord.editionType}`)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('resource_record.author')}</span>
         {resourceRecord.authorName}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('resource_record.copyright_owner')}</span>
         {resourceRecord.copyrightOwner}
       </p>

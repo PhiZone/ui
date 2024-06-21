@@ -13,7 +13,9 @@
       | 'songs'
       | 'chapters'
       | 'applications'
-      | 'collections';
+      | 'collections'
+      | 'events'
+      | 'events/divisions';
     id: string;
     likes: number;
     liked: boolean;
@@ -28,7 +30,9 @@
     | 'songs'
     | 'chapters'
     | 'applications'
-    | 'collections';
+    | 'collections'
+    | 'events'
+    | 'events/divisions';
   export let id: string;
   export let likes: number;
   export let liked: boolean;

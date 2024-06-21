@@ -51,16 +51,12 @@
           <div class="flex flex-wrap gap-1 !aspect-auto">
             <span class="badge badge-sm font-bold">LV{getUserLevel(user.experience)}</span>
             {#if user.tag}
-              <span
-                class="badge badge-sm badge-accent whitespace-nowrap overflow-hidden text-ellipsis"
-              >
+              <span class="badge badge-sm badge-accent truncate">
                 {user.tag}
               </span>
             {/if}
             {#if 'position' in user && user.position}
-              <span
-                class="badge badge-sm badge-neutral whitespace-nowrap overflow-hidden text-ellipsis"
-              >
+              <span class="badge badge-sm badge-neutral truncate">
                 {user.position}
               </span>
             {/if}
@@ -71,7 +67,7 @@
   {/if}
 {:else}
   <a
-    href={initUser || $query.isSuccess ? `/users/${initUser?.id ?? $query.data?.data.id}` : '#'}
+    href={initUser || $query.isSuccess ? `/users/${initUser?.id ?? $query.data?.data.id}` : ''}
     {target}
     class="card bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
     class:w-80={kind === 'full'}
@@ -113,22 +109,20 @@
             >
               <img src={getAvatar(user.avatar)} alt="Avatar" />
             </div>
-            <p class="text-lg ml-2 text-{getUserColor(user.role)} flex gap-1 items-center">
+            <p
+              class="text-lg ml-2 text-{getUserColor(user.role)} flex flex-wrap gap-1 items-center"
+            >
               {user.userName}
               <span class="badge badge-sm font-bold">
                 LV{getUserLevel(user.experience)}
               </span>
               {#if user.tag}
-                <span
-                  class="badge badge-sm badge-accent whitespace-nowrap overflow-hidden text-ellipsis"
-                >
+                <span class="badge badge-sm badge-accent truncate">
                   {user.tag}
                 </span>
               {/if}
               {#if 'position' in user && user.position}
-                <span
-                  class="badge badge-sm badge-neutral whitespace-nowrap overflow-hidden text-ellipsis"
-                >
+                <span class="badge badge-sm badge-neutral truncate">
                   {user.position}
                 </span>
               {/if}

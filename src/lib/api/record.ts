@@ -19,8 +19,8 @@ export interface RecordDto {
   likeCount: number;
   maxCombo: number;
   miss: number;
-  owner: UserDto;
-  ownerId: number;
+  owner: UserDto | null;
+  ownerId: number | null;
   perfect: number;
   perfectJudgment: number;
   position: number;

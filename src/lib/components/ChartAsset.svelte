@@ -29,14 +29,14 @@
     <h2 class="card-title mb-1">{chartAsset.name}</h2>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('common.type')}</span>
-      <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <span class="truncate">
         {$t(`chart.asset.types.${chartAsset.type}`)}
       </span>
     </p>
     <p class="flex items-center gap-1">
       <span class="badge">{$t('common.owner')}</span>
       {#if $owner.isSuccess}
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="truncate">
           {$owner.data.data.userName}
         </span>
       {:else}

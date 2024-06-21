@@ -6,7 +6,7 @@
   "arrangement": "配置",
   "asset": {
     "asset": "外部資源",
-    "file": "資產檔案",
+    "file": "資源檔案",
     "name": "資源名稱",
     "types": {
       "0": "圖片",
@@ -42,7 +42,6 @@
   "illustration": "譜繪",
   "illustrator": "畫師",
   "impression": "印象",
-  "leaderboard": "排行榜",
   "level": "等級",
   "level_type": "等級類型",
   "lowest_difficulty": "最低定數",

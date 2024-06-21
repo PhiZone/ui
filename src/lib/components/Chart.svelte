@@ -15,7 +15,7 @@
   export let showCharter = true;
   export let showLike = true;
 
-  $: charter = richtext(chart.authorName ?? '');
+  $: charter = richtext(chart.authorName ?? $t('common.anonymous'));
 </script>
 
 {#if kind === 'full'}
@@ -47,12 +47,12 @@
       </figure>
       <div class="card-body py-6 gap-0.5">
         <div class="w-full">
-          <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+          <h2 class="title truncate">
             {chart.title ?? chart.song.title}
           </h2>
           <Rating rating={chart.rating} />
         </div>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('chart.charter')}</span>
           {#if chart.authorName}
             {@html $charter}
@@ -60,15 +60,15 @@
             {$t('common.anonymous')}
           {/if}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('chart.notes')}</span>
           {chart.noteCount}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('chart.score')}</span>
           {chart.score.toFixed(2)}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('chart.rating')}</span>
           {chart.rating.toFixed(2)}
         </p>
@@ -96,7 +96,11 @@
 {:else if kind === 'inline'}
   <a
     href="/charts/{chart.id}"
-    class="w-full flex justify-between items-center gap-3 overflow-hidden px-5 h-16"
+    class="w-full flex justify-between items-center gap-3 overflow-hidden px-5 h-16 {'eventDescription' in
+      chart && chart.eventDescription
+      ? 'tooltip tooltip-bottom'
+      : ''}"
+    data-tip={'eventDescription' in chart ? chart.eventDescription : ''}
   >
     <div
       class="flex w-full {showCharter

@@ -243,23 +243,17 @@
             </h2>
             <div class="flex gap-4 flex-col md:flex-row">
               <div class="md:w-1/3 form-control gap-1">
-                <p
-                  class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 grow-0"
-                >
+                <p class="truncate flex items-center gap-1 grow-0">
                   <span class="badge">{$t('common.type')}</span>
                   <span>{$t(`chart.asset.types.${chartAsset.type}`)}</span>
                 </p>
-                <p
-                  class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 grow-0"
-                >
+                <p class="truncate flex items-center gap-1 grow-0">
                   <span class="badge">
                     {$t('common.created_at')}
                   </span>
                   <span>{parseDateTime(chartAsset.dateCreated)}</span>
                 </p>
-                <p
-                  class="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 grow-0"
-                >
+                <p class="truncate flex items-center gap-1 grow-0">
                   <span class="badge">
                     {$t('common.updated_at')}
                   </span>

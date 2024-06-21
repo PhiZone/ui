@@ -158,7 +158,7 @@
         <label class="flex flex-col my-2">
           <div class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-[64px] max-w-[180px]">
-              {$t('studio.submission.status')}
+              {$t('common.status')}
             </span>
             <select
               id="status"
@@ -655,7 +655,7 @@
                 {/if}
                 <p>
                   <span class="badge mr-1">
-                    {$t('studio.submission.status')}
+                    {$t('common.status')}
                   </span>
                   {$t(`studio.submission.statuses.${submission.status}`)}
                 </p>

@@ -12,7 +12,7 @@ export interface ChartLevelDto {
 
 export interface SongDto {
   accessibility: Accessibility;
-  authorName: string;
+  authorName: string | null;
   bpm: number;
   chartLevels: ChartLevelDto[];
   commentCount: number;
@@ -36,7 +36,7 @@ export interface SongDto {
   maxBpm: number;
   minBpm: number;
   offset: number;
-  ownerId: number;
+  ownerId: number | null;
   previewEnd: string;
   previewStart: string;
   tags: TagDto[];

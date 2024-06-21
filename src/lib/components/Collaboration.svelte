@@ -36,7 +36,7 @@
   const updatePosition = async () => {
     if (position != collaboration.position) {
       const resp = await api.collaboration.update({ id: collaboration.id }, [
-        { op: 'add', path: '/position', value: position },
+        { op: 'replace', path: '/position', value: position },
       ]);
       if (resp.ok) {
         collaboration.position = position;
@@ -213,7 +213,7 @@
           <Delete
             id={collaboration.id}
             path="collaborations"
-            name="studio.collaborations"
+            name="studio.collaboration"
             class="btn-sm btn-square"
           />
         {/if}

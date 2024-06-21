@@ -12,6 +12,7 @@
   import { readable } from 'svelte/store';
   import Error from '$lib/components/Error.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
 
   export let data;
 
@@ -21,9 +22,10 @@
   $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
   $: chapters = createQuery(api.song.listAllAdmitters({ id }));
   $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
-  $: composer = $song.data?.data.isOriginal
-    ? richtext($song.data?.data.authorName ?? '')
-    : readable($song.data?.data.authorName);
+  $: composer =
+    $song.data?.data.isOriginal && $song.data?.data.authorName
+      ? richtext($song.data?.data.authorName)
+      : readable($song.data?.data.authorName ?? $t('common.anonymous'));
 </script>
 
 <svelte:head>
@@ -278,7 +280,11 @@
         >
           {$t(song.isOriginal ? 'song.author' : 'song.uploader')}
         </span>
-        <User id={song.ownerId} />
+        {#if song.ownerId}
+          <User id={song.ownerId} />
+        {:else}
+          <AnonymizationNotice />
+        {/if}
       </div>
       {#if $chapters.isSuccess}
         {#each $chapters.data.data as chapter}

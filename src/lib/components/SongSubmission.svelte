@@ -31,7 +31,7 @@
     </figure>
     <div class="card-body py-6 gap-0.5">
       <div class="flex gap-2 mb-1 items-center">
-        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title truncate">
           {song.title}
         </h2>
         {#if song.status === 1}
@@ -63,15 +63,15 @@
           </div>
         {/if}
       </div>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('song.edition')}</span>
         {song.edition ?? $t(`song.edition_types.${song.editionType}`)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('song.composer')}</span>
         {@html $composer}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('song.duration')}</span>
         {convertTime(song.duration, true)}
       </p>
@@ -80,20 +80,20 @@
           {$t(song.originalityProof ? 'common.owner' : 'song.uploader')}
         </span>
         {#if $uploader.isSuccess}
-          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+          <p class="truncate">
             {$uploader.data.data.userName}
           </p>
         {:else}
           <div class="skeleton w-2/3 h-6"></div>
         {/if}
       </div>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('common.created_at')}
         </span>
         {parseDateTime(song.dateCreated, true, user?.language)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('common.updated_at')}
         </span>

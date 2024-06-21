@@ -19,6 +19,7 @@
   import InteractiveRating from '$lib/components/InteractiveRating.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
 
   export let data, form;
   const {
@@ -64,7 +65,7 @@
   $: leaderboard = createQuery(api.chart.leaderboard({ id }));
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
   $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
-  $: charter = richtext($chart.data?.data.authorName ?? '');
+  $: charter = richtext($chart.data?.data.authorName ?? $t('common.anonymous'));
 
   $: preferredPlayConfigurationQuery = createQuery(
     api.playConfiguration.list(
@@ -662,7 +663,11 @@
         >
           {$t('common.owner')}
         </span>
-        <User id={chart.ownerId} />
+        {#if chart.ownerId}
+          <User id={chart.ownerId} />
+        {:else}
+          <AnonymizationNotice />
+        {/if}
       </div>
       <div class="indicator w-full my-4">
         <span
@@ -694,7 +699,7 @@
               class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
             >
-              {$t('chart.leaderboard')}
+              {$t('common.leaderboard')}
             </span>
             <div class="card w-80 bg-base-100 transition border-2 normal-border hover:shadow-lg">
               <div class="card-body px-4 py-6 gap-2 items-center justify-center">

@@ -28,7 +28,7 @@
     </figure>
     <div class="card-body {fixedHeight ? 'h-[250px]' : ''} py-6 gap-0.5">
       <div class="flex items-center gap-2 w-full mb-1">
-        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title truncate">
           {application.name}
         </h2>
         {#if preferredApplication == application.id}
@@ -41,20 +41,20 @@
       </div>
       <p class="flex items-center gap-1">
         <span class="badge">{$t('common.type')}</span>
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="truncate">
           {$t(`application.types.${application.type}`)}
         </span>
       </p>
       <p class="flex items-center gap-1">
         <span class="badge">{$t('common.illustrator')}</span>
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <span class="truncate">
           {application.illustrator}
         </span>
       </p>
       <p class="flex items-center gap-1">
         <span class="badge">{$t('common.owner')}</span>
         {#if $owner.isSuccess}
-          <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+          <span class="truncate">
             {$owner.data.data.userName}
           </span>
         {:else}

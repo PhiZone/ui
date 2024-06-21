@@ -835,15 +835,11 @@
               </span>
               <div class="avatar w-5/6 flex flex-col sm:flex-row items-center">
                 <div
-                  class="mx-auto w-1/2 sm:w-1/6 rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
+                  class="mx-auto rounded-full m-2 overflow-hidden border-[4px] border-{getUserColor(
                     user.role ?? '',
-                  )}"
+                  )} w-[70px] h-[70px] md:w-[140px] md:h-[140px]"
                 >
-                  <img
-                    class="object-fill w-[140px] h-[140px]"
-                    src={getAvatar(user.avatar ?? '', 100)}
-                    alt="Avatar"
-                  />
+                  <img class="object-fill" src={getAvatar(user.avatar, 100)} alt="Avatar" />
                 </div>
                 <input
                   type="file"

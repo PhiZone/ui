@@ -113,7 +113,7 @@
         {parseDateTime(comment.dateCreated, true, user?.language)}
       </p>
       {#if user && (getUserPrivilege(user.role) >= 5 || user.id === comment.ownerId)}
-        <Delete id={comment.id} path="comments" name="common.comments" class="btn-sm btn-square" />
+        <Delete id={comment.id} path="comments" name="common.comment" class="btn-sm btn-square" />
       {/if}
       <div class="items-center join join-vertical sm:join-horizontal">
         <Like

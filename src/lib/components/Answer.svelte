@@ -29,19 +29,19 @@
     </div>
   </figure>
   <div class="card-body w-5/6 pt-6 pl-6 pb-4 pr-4">
-    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="w-full text-lg truncate">
       <span class="badge mr-1">A 16</span>
       {answer.answer1}
     </p>
-    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="w-full text-lg truncate">
       <span class="badge mr-1">A 17</span>
       {answer.answer2}
     </p>
-    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="w-full text-lg truncate">
       <span class="badge mr-1">A 18</span>
       {answer.answer3}
     </p>
-    <p class="w-full text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="w-full text-lg truncate">
       <span class="badge mr-1">A 19</span>
       {answer.chart}
     </p>
