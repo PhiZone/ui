@@ -419,7 +419,7 @@
                   </figure>
                   <div class="card-body py-6 gap-0.5">
                     <div class="flex flex-col mb-2">
-                      <h2 class="title w-full truncate">
+                      <h2 class="title-strong w-full truncate">
                         {$event.data?.data.title} / {division.title}
                       </h2>
                       {#if division.subtitle}

@@ -2,6 +2,7 @@
   import type { TagDto } from '$lib/api/tag';
 
   export let tag: TagDto | string;
+  export let full = false;
   export let removeFunction: (() => void) | undefined = undefined;
   export let removeHover = false;
 </script>
@@ -30,6 +31,29 @@
       </span>
     {/if}
   </span>
+{:else if full}
+  <a
+    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+    href="/tags/{tag.id}"
+  >
+    <div class="card-body py-6 gap-0.5">
+      <div class="flex flex-col mb-2">
+        <h2 class="subtitle opacity-80 w-full truncate">
+          #{tag.normalizedName}
+        </h2>
+        <h2 class="title-strong w-full truncate">
+          {tag.name}
+        </h2>
+      </div>
+      {#if tag.description}
+        <p class="flex items-center">
+          <span class="content description">
+            {tag.description}
+          </span>
+        </p>
+      {/if}
+    </div>
+  </a>
 {:else}
   <a
     href="/tags/{tag.id}"

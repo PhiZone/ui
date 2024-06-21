@@ -23,19 +23,28 @@
   }, 100);
 </script>
 
-<div class="flex flex-col items-center gap-1">
-  <span class="countdown font-mono text-4xl tracking-wide">
-    <span style="--value:{hour};"></span>
-    :
-    <span style="--value:{min};"></span>
-    :
-    <span style="--value:{sec};"></span>
-  </span>
-  <p class="text-sm opacity-70">
+{#if hour < 100}
+  <div class="flex flex-col items-center gap-1">
+    <span class="countdown font-mono text-4xl tracking-wide">
+      <span style="--value:{hour};"></span>
+      :
+      <span style="--value:{min};"></span>
+      :
+      <span style="--value:{sec};"></span>
+    </span>
+    <p class="text-sm opacity-70">
+      {$t(text, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        date: parseDateTime(timeDue),
+      })}
+    </p>
+  </div>
+{:else}
+  <p class="text-lg">
     {$t(text, {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       date: parseDateTime(timeDue),
     })}
-  </p>
-</div>
+  </p>{/if}

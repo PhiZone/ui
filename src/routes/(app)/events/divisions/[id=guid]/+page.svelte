@@ -9,6 +9,7 @@
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Timer from '$lib/components/Timer.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -26,6 +27,10 @@
       order: ['dateExecuted', 'dateCreated'],
     }),
   );
+  $: divisionTag = createQuery(
+    api.tag.info({ id: $division.data?.data.tagId ?? '' }, { enabled: $division.isSuccess }),
+  );
+  $: tags = createQuery(api.event.division.listTags({ id }, { enabled: $division.isSuccess }));
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
@@ -220,27 +225,42 @@
             {$t('common.view_illustration')}
           </label>
         </div>
-        {#if division.status < 3}
-          <Timer
-            timeDue={new Date(division.status < 2 ? division.dateStarted : division.dateEnded)}
-            text={division.status < 2 ? 'common.starts_at' : 'common.ends_at'}
-          />
-        {/if}
-        {#if division.team}
-          <a
-            href="/events/teams/{division.team.id}"
-            class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
-          >
-            {$t('event.division.my_team')}
-          </a>
-        {:else if user && division.status < 3}
-          <label
-            for="participate"
-            class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 backdrop-blur gradient btn-outline"
-          >
-            {$t('event.division.participate')}
-          </label>
-        {/if}
+        <div class="flex items-center gap-8">
+          {#if division.status < 3}
+            <Timer
+              timeDue={new Date(division.status < 2 ? division.dateStarted : division.dateEnded)}
+              text={division.status < 2 ? 'common.starts_at' : 'common.ends_at'}
+            />
+          {:else}
+            <div class="flex flex-col gap-2">
+              <p class="truncate">
+                <span class="badge badge-outline backdrop-blur mr-1">
+                  {$t('common.started_at')}
+                </span>
+                {parseDateTime(division.dateStarted)}
+              </p>
+              <p class="truncate">
+                <span class="badge badge-outline backdrop-blur mr-1">{$t('common.ended_at')}</span>
+                {parseDateTime(division.dateEnded)}
+              </p>
+            </div>
+          {/if}
+          {#if division.team}
+            <a
+              href="/events/teams/{division.team.id}"
+              class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
+            >
+              {$t('event.division.my_team')}
+            </a>
+          {:else if user && division.status < 3}
+            <label
+              for="participate"
+              class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 backdrop-blur gradient btn-outline"
+            >
+              {$t('event.division.participate')}
+            </label>
+          {/if}
+        </div>
       </div>
       <div class="flex flex-col lg:flex-row gap-3">
         <div class="lg:w-full">
@@ -643,6 +663,32 @@
             {/if} -->
             </div>
           </div>
+          {#if $divisionTag.isSuccess && $tags.isSuccess}
+            {@const tags = [$divisionTag.data.data, ...$tags.data.data]}
+            <div class="indicator w-full my-4">
+              <span
+                class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+                style:--tw-translate-x="0"
+              >
+                {$t('common.tags')}
+              </span>
+              <div
+                class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+              >
+                <div class="card-body py-10">
+                  {#if tags.length > 0}
+                    <div class="result">
+                      {#each tags as tag}
+                        <Tag {tag} full />
+                      {/each}
+                    </div>
+                  {:else}
+                    <p class="py-3 text-center">{$t('common.empty')}</p>
+                  {/if}
+                </div>
+              </div>
+            </div>
+          {/if}
         </div>
         <div
           class="card my-4 bg-base-100 transition border-2 normal-border hover:shadow-lg lg:hover:w-3/4 lg:w-1/4"

@@ -41,7 +41,7 @@
   </figure>
   <div class="card-body {fixedHeight ? 'h-[244px]' : ''} py-6 gap-0.5">
     <div class="flex flex-col mb-2">
-      <h2 class="title w-full truncate">
+      <h2 class="title-strong w-full truncate">
         {event.title}
       </h2>
       {#if event.subtitle}
@@ -94,23 +94,3 @@
     {/if}
   </div>
 </a>
-
-<style>
-  .title {
-    font-size: 1.25rem;
-    line-height: 1.4rem;
-    font-weight: 800;
-  }
-  .subtitle {
-    font-size: 1rem;
-    line-height: 1.2rem;
-    font-weight: 600;
-  }
-  .description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-</style>

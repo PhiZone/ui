@@ -39,6 +39,26 @@ body {
   font-weight: 600;
 }
 
+.title-strong {
+  font-size: 1.25rem;
+  line-height: 1.4rem;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.2rem;
+  font-weight: 600;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 .content {
   white-space: pre-line;
   word-break: break-word;
