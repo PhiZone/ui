@@ -1,6 +1,6 @@
 {
-  "bind_failure": "Failed to verify your account. Try again later.",
-  "bind_success": "Successfully verified your account!",
+  "bind_failure": "帳號驗證失敗。請稍後重試。",
+  "bind_success": "帳號驗証成功！",
   "code": "驗證碼",
   "confirm_password": "確認密碼",
   "email": "電子郵件",
@@ -10,19 +10,19 @@
   },
   "enter_email": "請在下方輸入你註冊時輸入的電子郵件。",
   "invalid_email": "電子郵件地址不合法。",
-  "invalid_password": "The password should be between 6 and 24 characters in length.",
-  "invalid_username": "The username can only contain numbers, underscores and English / Chinese / Japanese / Korean characters, and must be between 4 and 12 characters in length.",
+  "invalid_password": "密碼長度必須在 6 ~ 24 個字符之間",
+  "invalid_username": "使用者名稱只能包含數字、底線和英文、中文、日文、韓文字符，並且長度必須在 4 ~ 12 個字符之間。",
   "logging_out": "登出中",
   "login": {
     "forgot_password": "忘記密碼？",
-    "insufficient_access": "賬號未激活。請在登入之前先激活賬號。",
+    "insufficient_access": "帳號未啟用。請在登入之前先啟用帳號。",
     "invalid_grant": "輸入的密碼不正確。",
     "invalid_request": "請求無效。請檢查憑據並重試。",
     "invalid_token": "無法找到與此郵件地址關聯的帳號。",
-    "invalid_token_link": "We can't find an account associated with this {{provider}} account.",
+    "invalid_token_link": "與此 {{provider}} 帳號關連的帳號不存在。",
     "login": "登入",
     "login_text": "登入以在 PhiZone 上遊玩譜面、參與社區交流！",
-    "not_activated": "還未激活？"
+    "not_activated": "還未啟用？"
   },
   "password": "密碼",
   "password_reset": {
@@ -37,11 +37,11 @@
     "email_confirmation_code": "郵件驗證碼",
     "legal_agreement": "我已閲讀並同意{{terms_of_service}}與{{privacy_policy}}。",
     "register": "註冊",
-    "register_with_provider": "使用 {{provider}} 注册",
+    "register_with_provider": "使用 {{provider}} 註冊",
     "registration_text": "註冊 PhiZone 帳戶以遊玩譜面、參與社區交流！",
     "select_language": "選擇語言",
     "select_region": "選擇地區",
-    "success": "账户注册成功！"
+    "success": "帳號註冊成功"
   },
   "username": "使用者名稱"
 }
