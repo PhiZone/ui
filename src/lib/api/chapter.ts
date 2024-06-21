@@ -23,7 +23,6 @@ export interface ChapterDto {
 }
 
 export interface Filter extends PublicResourceFilterBase {
-  order?: string[];
   containsSubtitle?: string;
   equalsSubtitle?: string;
 }

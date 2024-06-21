@@ -8,6 +8,7 @@
   import Like from '$lib/components/Like.svelte';
   import Application from '$lib/components/Application.svelte';
   import Error from '$lib/components/Error.svelte';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
 
   export let data;
   $: ({ searchParams, id, api } = data);
@@ -127,7 +128,11 @@
         >
           {$t('record.player')}
         </span>
-        <User id={record.ownerId} />
+        {#if record.ownerId}
+          <User id={record.ownerId} />
+        {:else}
+          <AnonymizationNotice />
+        {/if}
       </div>
       {#if $chart.isSuccess}
         <div class="indicator w-full my-4">

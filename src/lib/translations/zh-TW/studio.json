@@ -78,7 +78,6 @@
     "song_duplications": "重複曲目",
     "song_type": "曲目類型",
     "start": "開始",
-    "status": "狀態",
     "statuses": {
       "0": "待處理",
       "1": "已通過",

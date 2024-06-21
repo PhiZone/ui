@@ -478,9 +478,7 @@
                   </div>
                 {/if}
                 <div class="tooltip tooltip-bottom max-w-fit" data-tip={resourceRecord.title}>
-                  <h2
-                    class="title mb-1 whitespace-nowrap overflow-hidden text-ellipsis w-fit max-w-[220px]"
-                  >
+                  <h2 class="title mb-1 truncate w-fit max-w-[220px]">
                     {resourceRecord.title}
                   </h2>
                 </div>
@@ -488,7 +486,7 @@
                   class="tooltip tooltip-bottom max-w-fit"
                   data-tip={$t(`resource_record.types.${resourceRecord.type}`)}
                 >
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('common.type')}</span>
                     {$t(`resource_record.types.${resourceRecord.type}`)}
                   </p>
@@ -499,7 +497,7 @@
                     resourceRecord.edition ? `${$t('common.colon')}${resourceRecord.edition}` : ''
                   }`}
                 >
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('resource_record.edition')}</span>
                     {resourceRecord.edition ??
                       $t(`resource_record.edition_types.${resourceRecord.editionType}`)}
@@ -509,13 +507,13 @@
                   class="tooltip tooltip-bottom max-w-fit"
                   data-tip={$t(`resource_record.strategies.${resourceRecord.strategy}`)}
                 >
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('resource_record.strategy')}</span>
                     {$t(`resource_record.strategies.${resourceRecord.strategy}`)}
                   </p>
                 </div>
                 <div class="tooltip tooltip-bottom max-w-fit" data-tip={resourceRecord.authorName}>
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('resource_record.author')}</span>
                     {resourceRecord.authorName}
                   </p>
@@ -524,13 +522,13 @@
                   class="tooltip tooltip-bottom max-w-fit"
                   data-tip={resourceRecord.copyrightOwner}
                 >
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('resource_record.copyright_owner')}</span>
                     {resourceRecord.copyrightOwner}
                   </p>
                 </div>
                 <div class="tooltip tooltip-bottom max-w-fit" data-tip={resourceRecord.source}>
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('common.source')}</span>
                     <a
                       href={resourceRecord.source}
@@ -546,7 +544,7 @@
                   class="tooltip tooltip-top max-w-fit"
                   data-tip={resourceRecord.description ?? $t('common.empty_adj')}
                 >
-                  <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p class="truncate">
                     <span class="badge mr-1">{$t('common.description')}</span>
                     {resourceRecord.description ?? $t('common.empty_adj')}
                   </p>

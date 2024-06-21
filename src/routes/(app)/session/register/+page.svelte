@@ -332,7 +332,6 @@
                   data-tip={emailConfirmationResult.message}
                 >
                   <button
-                    type="submit"
                     class="btn {emailConfirmationResult.status === Status.ERROR
                       ? 'btn-error'
                       : emailConfirmationResult.status === Status.SENDING

@@ -8,7 +8,15 @@
 
   $: ({ user, api } = $page.data);
 
-  export let type: 'chapters' | 'songs' | 'charts' | 'records' | 'applications' | 'collections';
+  export let type:
+    | 'chapters'
+    | 'songs'
+    | 'charts'
+    | 'records'
+    | 'applications'
+    | 'collections'
+    | 'events'
+    | 'events/divisions';
   export let id: string;
   export let showUser = true;
   export let showSource = false;

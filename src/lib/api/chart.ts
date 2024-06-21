@@ -26,7 +26,7 @@ export enum ChartLevel {
 
 export interface ChartDto {
   accessibility: Accessibility;
-  authorName: string;
+  authorName: string | null;
   commentCount: number;
   dateCreated: Date;
   dateLiked: Date | null;
@@ -45,7 +45,7 @@ export interface ChartDto {
   levelType: number;
   likeCount: number;
   noteCount: number;
-  ownerId: number;
+  ownerId: number | null;
   playCount: number;
   rating: number;
   ratingOnArrangement: number;

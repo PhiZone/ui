@@ -33,7 +33,7 @@
             </div>
           </div>
         {/if}
-        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title truncate">
           {appLink.application.name}
         </h2>
       </div>
@@ -45,12 +45,12 @@
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              class="whitespace-nowrap overflow-hidden text-ellipsis hover:underline"
+              class="truncate hover:underline"
             >
               {appLink.remoteUserName ?? appLink.remoteUserId}
             </a>
           {:else}
-            <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+            <span class="truncate">
               {appLink.remoteUserName ?? appLink.remoteUserId}
             </span>
           {/if}
@@ -96,12 +96,12 @@
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          class="whitespace-nowrap overflow-hidden text-ellipsis hover:underline leading-tight"
+          class="truncate hover:underline leading-tight"
         >
           {appLink.remoteUserName ?? appLink.remoteUserId}
         </a>
       {:else}
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis leading-tight">
+        <span class="truncate leading-tight">
           {appLink.remoteUserName ?? appLink.remoteUserId}
         </span>
       {/if}

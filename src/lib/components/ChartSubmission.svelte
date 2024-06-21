@@ -33,7 +33,7 @@
     </figure>
     <div class="card-body py-6 gap-0.5">
       <div class="flex gap-2 mb-1 items-center">
-        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title truncate">
           {chart.title ?? chart.song?.title ?? chart.songSubmission?.title}
         </h2>
         {#if chart.status === 1}
@@ -65,7 +65,7 @@
           </div>
         {/if}
       </div>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('chart.charter')}</span>
         {#if chart.authorName}
           {@html $charter}
@@ -76,32 +76,32 @@
       <div class="grow-0 flex items-center">
         <span class="badge mr-1">{$t('common.owner')}</span>
         {#if $uploader.isSuccess}
-          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+          <p class="truncate">
             {$uploader.data.data.userName}
           </p>
         {:else}
           <div class="skeleton w-2/3 h-6"></div>
         {/if}
       </div>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('studio.submission.volunteer_status')}
         </span>
         {$t(`studio.submission.statuses.${chart.volunteerStatus}`)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('studio.submission.adm_status')}
         </span>
         {$t(`studio.submission.statuses.${chart.admissionStatus}`)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('common.created_at')}
         </span>
         {parseDateTime(chart.dateCreated, true, user?.language)}
       </p>
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">
           {$t('common.updated_at')}
         </span>

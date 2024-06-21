@@ -815,7 +815,6 @@
           data-tip={errorCode ? $t(`error.${errorCode}`) : $t('common.unknown_error')}
         >
           <button
-            type="submit"
             class="btn {status === Status.ERROR
               ? 'btn-error'
               : status === Status.SENDING
@@ -860,54 +859,54 @@
         </div>
       {/if}
       {#if playConfiguration.name}
-        <h2 class="title whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title truncate">
           {playConfiguration.name}
         </h2>
       {/if}
     </div>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.chart_mirroring')}</span>
       {$t(`play_configuration.chart_mirroring_modes.${playConfiguration.chartMirroring}`)}
     </p>
     {#if playConfiguration.aspectRatio && playConfiguration.aspectRatio.length === 2}
-      <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+      <p class="truncate">
         <span class="badge mr-1">{$t('play_configuration.aspect_ratio')}</span>
         {playConfiguration.aspectRatio[0]} : {playConfiguration.aspectRatio[1]}
       </p>
     {/if}
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.note_size')}</span>
       {playConfiguration.noteSize} ×
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.background_luminance')}</span>
       {playConfiguration.backgroundLuminance * 100}%
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.background_blur')}</span>
       {playConfiguration.backgroundBlur} ×
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.simultaneous_note_hint')}</span>
       {playConfiguration.simultaneousNoteHint ? $t('common.on') : $t('common.off')}
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.fc_ap_indicator')}</span>
       {playConfiguration.fcApIndicator ? $t('common.on') : $t('common.off')}
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.chart_offset')}</span>
       {playConfiguration.chartOffset} ms
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.hit_sound_volume')}</span>
       {playConfiguration.hitSoundVolume * 100}%
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('play_configuration.music_volume')}</span>
       {playConfiguration.musicVolume * 100}%
     </p>
-    <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+    <p class="truncate">
       <span class="badge mr-1">{$t('common.created_at')}</span>
       {parseDateTime(playConfiguration.dateCreated, true, user?.language)}
     </p>

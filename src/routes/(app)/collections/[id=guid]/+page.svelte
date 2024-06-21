@@ -47,15 +47,15 @@
   </div>
 
   <div class="background min-h-screen" style:background-image="url({collection.illustration})">
-    <div class="hero-overlay bg-opacity-40" />
+    <div class="hero-overlay bg-opacity-60" />
     <div class="pt-32 pb-24 w-full flex flex-col max-w-[1600px] px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         {collection.title}
       </h1>
-      <h2 class="text-4xl font-bold drop-shadow-lg mt-3 mb-6 text-neutral-content">
+      <h2 class="text-4xl font-bold drop-shadow-lg my-3 text-neutral-content">
         {collection.subtitle}
       </h2>
-      <p class="text-xl mb-6 content text-neutral-content">
+      <p class="text-xl mt-3 mb-6 content text-neutral-content">
         {collection.description}
       </p>
       <div class="flex justify-between items-center flex-wrap">
@@ -71,7 +71,7 @@
             for="illustration"
             class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
           >
-            {$t('collection.view_illustration')}
+            {$t('common.view_illustration')}
           </label>
         </div>
         <div class="indicator my-4">
@@ -134,16 +134,3 @@
 {:else}
   <div class="min-h-page skeleton" />
 {/if}
-
-<style>
-  .background {
-    background-attachment: fixed;
-    display: grid;
-    background-size: cover;
-    background-position: center;
-  }
-  .background > * {
-    grid-column-start: 1;
-    grid-row-start: 1;
-  }
-</style>

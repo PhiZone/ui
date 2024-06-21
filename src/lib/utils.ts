@@ -3,6 +3,9 @@ import { USER_LEVELS, DEFAULT_LOCALE } from './constants';
 import { PUBLIC_AVATAR } from '$env/static/public';
 import type { PatchElement } from './api/types';
 import type API from './api';
+import type { UserDetailedDto } from './api';
+import type { EventDto } from './api/event';
+import { gen, hasPermission } from './hostshipPermissions';
 
 export const parseLatex = (input: string) => {
   const result = input.matchAll(/(\$[^$]+\$)/g);
@@ -51,8 +54,8 @@ export const parseLatex = (input: string) => {
   return array;
 };
 
-export const getUserPrivilege = (type: string | null | undefined) => {
-  switch (type) {
+export const getUserPrivilege = (role: string | null | undefined) => {
+  switch (role) {
     case 'Member':
       return 1;
     case 'Sponsor':
@@ -68,6 +71,22 @@ export const getUserPrivilege = (type: string | null | undefined) => {
     default:
       return 0;
   }
+};
+
+export const hasEventPermission = (
+  user: UserDetailedDto | undefined,
+  event: EventDto | undefined,
+  operation: number,
+  scope: number,
+) => {
+  return (
+    user &&
+    event &&
+    (getUserPrivilege(user.role) === 6 ||
+      user.hostships.some(
+        (e) => e.eventId === event.id && (e.isAdmin || hasPermission(e, gen(operation, scope))),
+      ))
+  );
 };
 
 export const convertTime = <T>(input: T, round = false) => {

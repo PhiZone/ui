@@ -15,7 +15,7 @@
 
 <svelte:head>
   <title>
-    {$t('chart.leaderboard')} | {$t('chart.chart')} -
+    {$t('common.leaderboard')} | {$t('chart.chart')} -
     {$chart.isSuccess
       ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
           $chart.data.data.level
@@ -58,7 +58,7 @@
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
-            {$t('chart.leaderboard')}
+            {$t('common.leaderboard')}
           </span>
           <div
             class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100 bg-opacity-40 backdrop-blur-lg"
@@ -174,16 +174,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-  .background {
-    background-attachment: fixed;
-    display: grid;
-    background-size: cover;
-    background-position: center;
-  }
-  .background > * {
-    grid-column-start: 1;
-    grid-row-start: 1;
-  }
-</style>

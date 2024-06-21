@@ -10,31 +10,10 @@
   export let kind: 'full' | 'inline' = 'full';
   export let showLike = true;
 
-  // let easyCount = song.levels.find((e) => {
-  //     return e.level === 'EZ';
-  //   })?.count,
-  //   hardCount = song.levels.find((e) => {
-  //     return e.level === 'HD';
-  //   })?.count,
-  //   insaneCount = song.levels.find((e) => {
-  //     return e.level === 'IN';
-  //   })?.count,
-  //   anotherCount = song.levels.find((e) => {
-  //     return e.level === 'AT';
-  //   })?.count,
-  //   specialCount = song.levels.find((e) => {
-  //     return e.level === 'SP';
-  //   })?.count,
-  //   otherCount = song.levels.length
-  //     ? (typeof song.charts == 'object' ? song.charts.length : song.charts) -
-  //       (easyCount ? easyCount : 0) -
-  //       (hardCount ? hardCount : 0) -
-  //       (insaneCount ? insaneCount : 0) -
-  //       (anotherCount ? anotherCount : 0) -
-  //       (specialCount ? specialCount : 0)
-  //     : 0;
-
-  $: composer = song.isOriginal ? richtext(song.authorName ?? '') : readable(song.authorName);
+  $: composer =
+    song.isOriginal && song.authorName
+      ? richtext(song.authorName)
+      : readable(song.authorName ?? $t('common.anonymous'));
 </script>
 
 {#if kind === 'full'}
@@ -65,26 +44,26 @@
         {/if}
       </figure>
       <div class="card-body py-6 gap-0.5">
-        <h2 class="title w-full mb-1 whitespace-nowrap overflow-hidden text-ellipsis">
+        <h2 class="title w-full mb-1 truncate">
           {song.title}
         </h2>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('song.edition')}</span>
           {song.edition ?? $t(`song.edition_types.${song.editionType}`)}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('song.composer')}</span>
           {@html $composer}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('song.illustrator')}</span>
           {song.illustrator}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('song.bpm')}</span>
           {song.bpm}
         </p>
-        <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+        <p class="truncate">
           <span class="badge mr-1">{$t('song.duration')}</span>
           {convertTime(song.duration, true)}
         </p>
@@ -110,7 +89,13 @@
     </a>
   </div>
 {:else if kind === 'inline'}
-  <a href="/songs/{song.id}" class="w-full overflow-hidden flex px-5 h-16">
+  <a
+    href="/songs/{song.id}"
+    class="w-full flex px-5 h-16 {'eventDescription' in song && song.eventDescription
+      ? 'tooltip tooltip-bottom'
+      : ''}"
+    data-tip={'eventDescription' in song ? song.eventDescription : ''}
+  >
     <div class="w-11/12 md:w-7/12">
       <div class="flex gap-2 items-center">
         <div class="join join-horizontal">

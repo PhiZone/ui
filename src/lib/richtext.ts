@@ -71,6 +71,24 @@ export function transform(content: string): string {
             200,
           )}${display.length > 200 ? '...' : ''}</a>`,
       )
+      // event
+      .replaceAll(
+        /\[PZEvent:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/events/${id}" class="richtext-link richtext-event">${display}</a>`,
+      )
+      // event division
+      .replaceAll(
+        /\[PZEventDivision:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/events/divisions/${id}" class="richtext-link richtext-event-division">${display}</a>`,
+      )
+      // event team
+      .replaceAll(
+        /\[PZEventTeam:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
+        (_, id: string, display: string) =>
+          `<a href="/events/teams/${id}" class="richtext-link richtext-event-team">${display}</a>`,
+      )
       // song submission
       .replaceAll(
         /\[PZSongSubmission:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,

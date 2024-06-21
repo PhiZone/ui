@@ -34,10 +34,20 @@ export interface UserDto {
 export interface UserDetailedDto extends UserDto {
   email: string;
   emailConfirmed: boolean;
+  hostships: HostshipDetailedDto[];
   notifications: number;
   phoneNumber: string | null;
   phoneNumberConfirmed: boolean;
   twoFactorEnabled: boolean;
+}
+
+export interface HostshipDetailedDto {
+  eventId: string;
+  isAdmin: boolean;
+  isUnveiled: boolean;
+  permissions: number[] | null;
+  position: null | string;
+  userId: number;
 }
 
 export interface RegionDto {

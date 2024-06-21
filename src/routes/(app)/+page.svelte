@@ -43,9 +43,12 @@
   </div>
 {/if}
 
-<div class="hero min-h-screen" style:background-image="url(/background.webp)">
-  <div class="hero-overlay bg-opacity-30" />
-  <div class="w-5/6 max-w-4xl form-control text-center">
+<video autoplay muted loop class="bg-video">
+  <source src="/background.webm" type="video/webm" />
+</video>
+<div class="hero min-h-screen">
+  <div class="hero-overlay bg-opacity-30 z-10" />
+  <div class="w-5/6 max-w-4xl form-control text-center z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />
       <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.title')}</h1>
@@ -59,15 +62,17 @@
           class="select border-2 normal-border transition hover:select-secondary lg:select-lg join-item max-w-1/3"
           bind:value={type}
         >
+          <option value="events">{$t('common.events')}</option>
           <option value="chapters">{$t('common.chapters')}</option>
+          <option value="collections">{$t('common.collections')}</option>
           <option selected value="songs">{$t('common.songs')}</option>
+          <option selected value="charts">{$t('common.charts')}</option>
           <option value="users">{$t('common.users')}</option>
-          <!-- <option value="discussions">{$t("common.discussions")}</option> -->
         </select>
         <input
           type="text"
           placeholder={$t('common.search_placeholder')}
-          class="input border-2 normal-border transition hover:input-secondary lg:input-lg join-item w-full z-10"
+          class="input border-2 normal-border transition hover:input-secondary lg:input-lg join-item w-full"
           bind:value={text}
         />
         <a
@@ -85,5 +90,13 @@
   .logo {
     margin: 10px auto 20px;
     display: block;
+  }
+  .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>
