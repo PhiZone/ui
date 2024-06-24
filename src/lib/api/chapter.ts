@@ -15,11 +15,11 @@ export interface ChapterDto {
   isHidden: boolean;
   isLocked: boolean;
   ownerId: number;
-  dateCreated: Date;
-  dateUpdated: Date;
+  dateCreated: string;
+  dateUpdated: string;
   commentCount: number;
   likeCount: number;
-  dateLiked: Date | null;
+  dateLiked: string | null;
 }
 
 export interface Filter extends PublicResourceFilterBase {
@@ -32,7 +32,7 @@ export interface SongListFilter extends FilterBase {
 }
 
 export interface ChapterAdmitterDto extends ChapterDto {
-  label: null | string;
+  label: string | null;
 }
 
 export interface InfoOpts {

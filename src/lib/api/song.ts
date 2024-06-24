@@ -16,12 +16,12 @@ export interface SongDto {
   bpm: number;
   chartLevels: ChartLevelDto[];
   commentCount: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  dateUpdated: Date;
-  description: null | string;
+  dateCreated: string;
+  dateLiked: string | null;
+  dateUpdated: string;
+  description: string | null;
   duration: string;
-  edition: null | string;
+  edition: string | null;
   editionType: number;
   file: string;
   id: string;
@@ -30,9 +30,9 @@ export interface SongDto {
   isHidden: boolean;
   isLocked: boolean;
   isOriginal: boolean;
-  license: null | string;
+  license: string | null;
   likeCount: number;
-  lyrics: null | string;
+  lyrics: string | null;
   maxBpm: number;
   minBpm: number;
   offset: number;
@@ -44,7 +44,7 @@ export interface SongDto {
 }
 
 export interface SongAdmitteeDto extends SongDto {
-  label: null | string;
+  label: string | null;
 }
 
 // list

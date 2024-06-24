@@ -3,8 +3,8 @@ import type { FilterBase, R } from './types';
 import type API from '.';
 
 export interface TagDto {
-  dateCreated: Date;
-  description: null | string;
+  dateCreated: string;
+  description: string | null;
   id: string;
   name: string;
   normalizedName: string;

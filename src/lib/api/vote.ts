@@ -8,7 +8,7 @@ export interface VoteDto {
   chartId: string;
   concord: number;
   creativity: number;
-  dateCreated: Date;
+  dateCreated: string;
   gameplay: number;
   id: string;
   impression: number;

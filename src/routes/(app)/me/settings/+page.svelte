@@ -995,7 +995,7 @@
                     {/each}
                   </select>
                   <select
-                    name="YearOfBirth"
+                    name="DayOfBirth"
                     class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/3"
                     on:input={(e) => {
                       day = parseInt(e.currentTarget.value);

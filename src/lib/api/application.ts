@@ -3,13 +3,13 @@ import type { FilterBase, R } from './types';
 import type API from '.';
 
 export interface ApplicationDto {
-  apiEndpoint: null | string;
+  apiEndpoint: string | null;
   avatar: string;
   commentCount: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  dateUpdated: Date;
-  description: null | string;
+  dateCreated: string;
+  dateLiked: string | null;
+  dateUpdated: string;
+  description: string | null;
   homepage: string;
   id: string;
   illustration: string;
@@ -21,8 +21,8 @@ export interface ApplicationDto {
 }
 
 export interface ServiceResponseDto {
-  message: null | string;
-  redirectUri: null | string;
+  message: string | null;
+  redirectUri: string | null;
   type: number;
 }
 

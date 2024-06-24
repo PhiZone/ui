@@ -102,13 +102,15 @@
                           >
                             <div class="avatar">
                               <div class="mask mask-circle w-12 h-12">
-                                <img src={getAvatar(record.owner.avatar)} alt="Avatar" />
+                                <img src={getAvatar(record.owner?.avatar)} alt="Avatar" />
                               </div>
                             </div>
                             <div>
-                              <div class="font-bold">{record.owner.userName}</div>
+                              <div class="font-bold">
+                                {record.owner?.userName ?? $t('common.anonymous')}
+                              </div>
                               <Region
-                                region={record.owner.region}
+                                region={record.owner?.region}
                                 width={21}
                                 textCss="opacity-50"
                               />

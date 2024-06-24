@@ -13,11 +13,11 @@ import type { UserDto } from '.';
 export interface EventTeamDto {
   claimedParticipantCount: number;
   claimedSubmissionCount: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  description: null | string;
+  dateCreated: string;
+  dateLiked: string | null;
+  description: string | null;
   divisionId: string;
-  icon: null | string;
+  icon: string | null;
   id: string;
   likeCount: number;
   name: string;
@@ -29,7 +29,7 @@ export interface EventTeamDto {
 }
 
 export interface ParticipantDto extends UserDto {
-  position: null | string;
+  position: string | null;
 }
 
 export interface EventTeamInviteDto {

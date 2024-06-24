@@ -5,6 +5,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import API from '$lib/api';
 import { t } from '$lib/translations/config';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
+import { TAG_JOINER } from '$lib/constants';
 // import { parseFile } from '$lib/utils';
 
 const schema = z
@@ -89,7 +90,7 @@ export const actions = {
     OriginalityProof = formData.get('OriginalityProof') as File | undefined;
     PreviewStart = parsePreviewTime(PreviewStart);
     PreviewEnd = parsePreviewTime(PreviewEnd);
-    const Tags = tagsRaw ? tagsRaw.split(',').map((tag: string) => tag.trim()) : [];
+    const Tags = tagsRaw ? tagsRaw.split(TAG_JOINER).map((tag: string) => tag.trim()) : [];
     const resp = await api.song.submission.create(
       EditionType !== 0
         ? {

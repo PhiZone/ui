@@ -6,8 +6,8 @@ import type API from '.';
 
 export interface NotificationDto {
   content: string;
-  dateCreated: Date;
-  dateRead: Date | null;
+  dateCreated: string;
+  dateRead: string | null;
   id: string;
   operator: UserDto | null;
   ownerId: number;

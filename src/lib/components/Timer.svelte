@@ -11,12 +11,15 @@
   let sec: number;
 
   let timer = setInterval(() => {
-    if (hour === 0 && min === 0 && sec === 0) {
+    const diff = timeDue.getTime() - new Date().getTime();
+    if ((hour === 0 && min === 0 && sec === 0) || diff < 0) {
+      hour = 0;
+      min = 0;
+      sec = 0;
       clearInterval(timer);
       timeUp = true;
       return;
     }
-    const diff = timeDue.getTime() - new Date().getTime();
     hour = Math.floor(diff / (1000 * 60 * 60));
     min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     sec = Math.floor((diff % (1000 * 60)) / 1000);

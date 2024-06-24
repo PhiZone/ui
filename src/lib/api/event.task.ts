@@ -1,14 +1,13 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
+import type { FilterBase, PatchElement, R } from './types';
 import type API from '.';
-import { serialize } from 'object-to-formdata';
 
 export interface EventTaskDto {
-  code: null | string;
-  dateCreated: Date;
-  dateExecuted: Date | null;
-  dateUpdated: Date;
-  description: null | string;
+  code: string | null;
+  dateCreated: string;
+  dateExecuted: string | null;
+  dateUpdated: string;
+  description: string;
   divisionId: string;
   id: string;
   isHidden: boolean;
@@ -16,9 +15,9 @@ export interface EventTaskDto {
   type: number;
 }
 
-export interface Filter extends PublicResourceFilterBase {
-  containsSubtitle?: string;
-  equalsSubtitle?: string;
+export interface Filter extends FilterBase {
+  containsName?: string;
+  equalsName?: string;
   rangeDivisionId?: string[];
   rangeType?: number[];
 }
@@ -32,14 +31,13 @@ export interface InfoOpts {
 }
 
 export interface CreateOpts {
-  Title: string;
-  Subtitle?: string;
-  Illustration: string;
-  Illustrator: string;
-  Description?: string;
-  Accessibility: Accessibility;
-  IsHidden: boolean;
-  IsLocked: boolean;
+  divisionId: string;
+  isHidden: boolean;
+  name: string;
+  type: number;
+  description: string;
+  dateExecuted?: Date;
+  code?: string;
 }
 
 export default class EventTaskAPI {
@@ -62,6 +60,10 @@ export default class EventTaskAPI {
   );
 
   create(opts: CreateOpts): R {
-    return this.api.POST('/events/tasks', serialize(opts));
+    return this.api.POST('/events/tasks', opts);
+  }
+
+  update({ id }: InfoOpts, patch: PatchElement[]): R {
+    return this.api.PATCH(`/events/tasks/${id}`, patch);
   }
 }

@@ -33,10 +33,10 @@
   </span>
 {:else if full}
   <a
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+    class="card w-56 h-[127.38px] bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
     href="/tags/{tag.id}"
   >
-    <div class="card-body py-6 gap-0.5">
+    <div class="card-body p-4 gap-0.5">
       <div class="flex flex-col mb-2">
         <h2 class="subtitle opacity-80 w-full truncate">
           #{tag.normalizedName}
@@ -47,7 +47,7 @@
       </div>
       {#if tag.description}
         <p class="flex items-center">
-          <span class="content description">
+          <span class="content ellipsis-2">
             {tag.description}
           </span>
         </p>
@@ -82,3 +82,13 @@
     {/if}
   </a>
 {/if}
+
+<style>
+  .ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+</style>

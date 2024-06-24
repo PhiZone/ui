@@ -8,9 +8,7 @@
   export let data;
   $: ({ searchParams, page, api } = data);
 
-  $: query = createQuery(
-    api.application.list({ rangeType: [0, 1, 2, 3, 4, 5, 6], ...searchParams }),
-  );
+  $: query = createQuery(api.application.list(searchParams));
 </script>
 
 <svelte:head>

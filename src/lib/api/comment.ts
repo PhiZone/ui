@@ -10,10 +10,10 @@ export interface CommentDto {
   language: string;
   owner: UserDto;
   ownerId: number;
-  dateCreated: Date;
+  dateCreated: string;
   replyCount: number;
   likeCount: number;
-  dateLiked: Date | null;
+  dateLiked: string | null;
 }
 
 export interface Filter extends FilterBase {

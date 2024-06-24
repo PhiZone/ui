@@ -10,11 +10,11 @@ import EventTaskAPI from './event.task';
 
 export interface EventDto {
   accessibility: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  dateUnveiled: Date;
-  dateUpdated: Date;
-  description: null | string;
+  dateCreated: string;
+  dateLiked: string | null;
+  dateUnveiled: string;
+  dateUpdated: string;
+  description: string | null;
   divisions: DivisionDto[];
   hosts: HostDto[];
   id: string;
@@ -29,25 +29,25 @@ export interface EventDto {
 }
 
 export interface EventResourceDto {
-  dateCreated: Date;
-  description: null | string;
+  dateCreated: string;
+  description: string | null;
   divisionId: string;
   isAnonymous: boolean | null;
-  label: null | string;
+  label: string | null;
   resourceId: string;
-  teamId: null | string;
+  teamId: string | null;
   type: number;
 }
 
 export interface DivisionDto {
   status: number;
-  subtitle: null | string;
+  subtitle: string | null;
   title: string;
   type: number;
 }
 
 export interface HostDto extends UserDto {
-  position: null | string;
+  position: string | null;
 }
 
 export interface Filter extends PublicResourceFilterBase {

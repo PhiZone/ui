@@ -12,6 +12,7 @@
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import { onDestroy } from 'svelte';
+  import { TAG_JOINER } from '$lib/constants.js';
 
   export let data;
 
@@ -825,7 +826,7 @@
                       e.preventDefault();
                       showTags = false;
                       tags.push(newTag);
-                      tagsRaw = tags.join(',');
+                      tagsRaw = tags.join(TAG_JOINER);
                       newTag = '';
                       setTimeout(() => {
                         showTags = true;
@@ -844,7 +845,7 @@
                     e.preventDefault();
                     showTags = false;
                     tags.push(newTag);
-                    tagsRaw = tags.join(',');
+                    tagsRaw = tags.join(TAG_JOINER);
                     newTag = '';
                     setTimeout(() => {
                       showTags = true;
@@ -864,7 +865,7 @@
                     removeFunction={() => {
                       showTags = false;
                       tags.splice(i, 1);
-                      tagsRaw = tags.join(',');
+                      tagsRaw = tags.join(TAG_JOINER);
                       setTimeout(() => {
                         showTags = true;
                       }, 0);

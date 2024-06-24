@@ -8,6 +8,7 @@
   import { getAvatar, parseDateTime } from '$lib/utils';
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import Record from '$lib/components/Record.svelte';
   import Timer from '$lib/components/Timer.svelte';
   import Tag from '$lib/components/Tag.svelte';
 
@@ -70,8 +71,9 @@
 
 <svelte:head>
   <title>
-    {$t('event.division.division')} - {$division.data?.data.title} | {$t('event.event')} - {$event
-      .data?.data.title} | {$t('common.title')}
+    {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
+      'common.title',
+    )}
   </title>
 </svelte:head>
 
@@ -194,7 +196,7 @@
     style:background-image="url({division.illustration ?? event.illustration})"
   >
     <div class="hero-overlay bg-opacity-60" />
-    <div class="pt-32 pb-24 w-full flex flex-col max-w-[2000px] px-4 md:px-32 mx-auto">
+    <div class="pt-32 pb-24 w-full flex flex-col max-w-[1600px] px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
         / {division.title}
@@ -432,37 +434,37 @@
                             <div
                               class="xl:avatar-group -space-x-3 rtl:space-x-reverse hidden 2xl:hidden"
                             >
-                              {#each team.participants.slice(0, maxMemberDisplay * 7) as participant}
+                              {#each team.participants.slice(0, maxMemberDisplay * 4) as participant}
                                 <div class="avatar">
                                   <div class="mask mask-circle w-8 h-8">
                                     <img src={getAvatar(participant.avatar)} alt="Avatar" />
                                   </div>
                                 </div>
                               {/each}
-                              {#if team.participants.length > maxMemberDisplay * 7}
+                              {#if team.participants.length > maxMemberDisplay * 4}
                                 <div class="avatar placeholder">
                                   <div
                                     class="mask mask-circle w-8 h-8 bg-neutral text-neutral-content"
                                   >
-                                    <span>+{team.participants.length - maxMemberDisplay * 7}</span>
+                                    <span>+{team.participants.length - maxMemberDisplay * 4}</span>
                                   </div>
                                 </div>
                               {/if}
                             </div>
                             <div class="2xl:avatar-group -space-x-3 rtl:space-x-reverse hidden">
-                              {#each team.participants.slice(0, maxMemberDisplay * 9) as participant}
+                              {#each team.participants.slice(0, maxMemberDisplay * 8) as participant}
                                 <div class="avatar">
                                   <div class="mask mask-circle w-8 h-8">
                                     <img src={getAvatar(participant.avatar)} alt="Avatar" />
                                   </div>
                                 </div>
                               {/each}
-                              {#if team.participants.length > maxMemberDisplay * 9}
+                              {#if team.participants.length > maxMemberDisplay * 8}
                                 <div class="avatar placeholder">
                                   <div
                                     class="mask mask-circle w-8 h-8 bg-neutral text-neutral-content"
                                   >
-                                    <span>+{team.participants.length - maxMemberDisplay * 9}</span>
+                                    <span>+{team.participants.length - maxMemberDisplay * 8}</span>
                                   </div>
                                 </div>
                               {/if}
@@ -503,11 +505,11 @@
                 {#if division.type == 0 && $songEntries.isSuccess}
                   {@const entries = $songEntries.data.data}
                   {#if entries.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each entries as song}
-                        <li><Song {song} kind="inline" /></li>
+                        <Song {song} kind="inline" />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
@@ -515,18 +517,23 @@
                 {#if division.type == 1 && $chartEntries.isSuccess}
                   {@const entries = $chartEntries.data.data}
                   {#if entries.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each entries as chart}
-                        <li><Chart {chart} kind="inline" /></li>
+                        <Chart {chart} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {:else if division.type == 2 && $recordEntries.isSuccess}
                   {@const entries = $recordEntries.data.data}
                   {#if entries.length > 0}
-                    <div class="overflow-x-auto">
+                    <div class="result">
+                      {#each entries as record}
+                        <Record {record} />
+                      {/each}
+                    </div>
+                    <!-- <div class="overflow-x-auto">
                       <table class="table">
                         <thead>
                           <tr>
@@ -627,7 +634,7 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>
+                    </div> -->
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
@@ -691,7 +698,7 @@
           {/if}
         </div>
         <div
-          class="card my-4 bg-base-100 transition border-2 normal-border hover:shadow-lg lg:hover:w-3/4 lg:w-1/4"
+          class="card my-4 h-fit bg-base-100 transition border-2 normal-border hover:shadow-lg lg:hover:w-3/4 lg:w-1/3"
           style:transition="width 400ms cubic-bezier(0.4, 0, 0.2, 1)"
         >
           <div class="card-body">
@@ -723,18 +730,26 @@
                       ? 'step-secondary'
                       : ''}"
                   >
-                    <div
+                    <a
+                      href="/events/divisions/{id}/tasks/{task.id}"
                       class="rounded-2xl transition-all hover:bg-base-200 cursor-pointer w-full overflow-hidden py-2"
                     >
-                      {#if task.dateExecuted}
+                      {#if task.type === 0 && task.dateExecuted}
                         <p class="opacity-70">{parseDateTime(task.dateExecuted)}</p>
                       {/if}
                       <p class="font-bold">{task.name}</p>
-                    </div>
+                    </a>
                   </li>
                 {/each}
               </ul>
             {/if}
+            <a
+              class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+              href="/events/divisions/{id}/tasks"
+            >
+              {$t('common.more')}
+              <i class="fa-solid fa-angles-right"></i>
+            </a>
           </div>
         </div>
       </div>

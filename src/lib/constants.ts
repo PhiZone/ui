@@ -17,6 +17,8 @@ export const USER_LEVELS = [
 
 export const LEVEL_TYPES = ['EZ', 'HD', 'IN', 'AT', 'SP'];
 
+export const TAG_JOINER = ':::';
+
 export enum Status {
   OK,
   RETRIEVING, // Retrieving data from API

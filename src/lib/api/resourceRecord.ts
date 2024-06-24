@@ -5,10 +5,10 @@ import type API from '.';
 export interface ResourceRecordDto {
   authorName: string;
   copyrightOwner: string;
-  dateCreated: Date;
-  dateUpdated: Date;
-  description: null | string;
-  edition: null | string;
+  dateCreated: string;
+  dateUpdated: string;
+  description: string | null;
+  edition: string | null;
   editionType: number;
   id: string;
   source: string;

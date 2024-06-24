@@ -16,8 +16,8 @@ export interface PetAnswerDto {
   answer3: string;
   assessorId?: number | null;
   chart: string;
-  dateCreated: Date;
-  dateUpdated: Date;
+  dateCreated: string;
+  dateUpdated: string;
   id: string;
   objectiveScore: number;
   ownerId: number;

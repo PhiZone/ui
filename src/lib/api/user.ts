@@ -46,7 +46,7 @@ export interface HostshipDetailedDto {
   isAdmin: boolean;
   isUnveiled: boolean;
   permissions: number[] | null;
-  position: null | string;
+  position: string | null;
   userId: number;
 }
 
@@ -59,10 +59,10 @@ export interface RegionDto {
 export interface ApplicationUserDto {
   application: ApplicationDto;
   applicationId: string;
-  dateCreated: Date;
-  dateUpdated: Date;
-  remoteUserId: null | string;
-  remoteUserName: null | string;
+  dateCreated: string;
+  dateUpdated: string;
+  remoteUserId: string | null;
+  remoteUserName: string | null;
   userId: number;
 }
 

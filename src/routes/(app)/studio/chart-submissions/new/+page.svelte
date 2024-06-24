@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { LEVEL_TYPES } from '$lib/constants';
+  import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
   import User from '$lib/components/User.svelte';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
   import { superForm } from 'sveltekit-superforms/client';
@@ -470,7 +470,7 @@
                       e.preventDefault();
                       showTags = false;
                       tags.push(newTag);
-                      tagsRaw = tags.join(',');
+                      tagsRaw = tags.join(TAG_JOINER);
                       newTag = '';
                       setTimeout(() => {
                         showTags = true;
@@ -489,7 +489,7 @@
                     e.preventDefault();
                     showTags = false;
                     tags.push(newTag);
-                    tagsRaw = tags.join(',');
+                    tagsRaw = tags.join(TAG_JOINER);
                     newTag = '';
                     setTimeout(() => {
                       showTags = true;
@@ -509,7 +509,7 @@
                     removeFunction={() => {
                       showTags = false;
                       tags.splice(i, 1);
-                      tagsRaw = tags.join(',');
+                      tagsRaw = tags.join(TAG_JOINER);
                       setTimeout(() => {
                         showTags = true;
                       }, 0);

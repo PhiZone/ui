@@ -76,15 +76,20 @@ export const getUserPrivilege = (role: string | null | undefined) => {
 export const hasEventPermission = (
   user: UserDetailedDto | undefined,
   event: EventDto | undefined,
-  operation: number,
-  scope: number,
+  operation?: number | undefined,
+  scope?: number | undefined,
 ) => {
   return (
     user &&
     event &&
     (getUserPrivilege(user.role) === 6 ||
       user.hostships.some(
-        (e) => e.eventId === event.id && (e.isAdmin || hasPermission(e, gen(operation, scope))),
+        (e) =>
+          e.eventId === event.id &&
+          (e.isAdmin ||
+            (operation !== undefined &&
+              scope !== undefined &&
+              hasPermission(e, gen(operation, scope)))),
       ))
   );
 };
@@ -165,7 +170,7 @@ export const parseRelativeTime = (date: Date, locale = DEFAULT_LOCALE) => {
         localeMatcher: 'best fit',
         numeric: 'auto',
         style: 'long',
-      }).format(diffInSeconds > 0 ? 0 : -count, interval.label as Intl.RelativeTimeFormatUnit);
+      }).format(diffInSeconds > 0 ? count : -count, interval.label as Intl.RelativeTimeFormatUnit);
     }
   }
 

@@ -22,6 +22,7 @@ import PlayConfigurationAPI from './playConfiguration';
 import TagAPI from './tag';
 import AuthorshipAPI from './authorship';
 import EventAPI from './event';
+import ServiceScriptAPI from './service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendBody = FormData | URLSearchParams | Record<string, any> | string;
@@ -100,6 +101,7 @@ export default class API {
   reply = new ReplyAPI(this);
   resourceRecord = new ResourceRecordAPI(this);
   song = new SongAPI(this);
+  service = new ServiceScriptAPI(this);
   tag = new TagAPI(this);
   user = new UserAPI(this);
   vote = new VoteAPI(this);
