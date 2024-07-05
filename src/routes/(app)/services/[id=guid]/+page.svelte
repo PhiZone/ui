@@ -10,15 +10,16 @@
   import csharp from 'svelte-highlight/languages/csharp';
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { Status } from '$lib/constants.js';
-  import type { PatchElement } from '$lib/api/types.js';
+  import { Status } from '$lib/constants';
+  import type { PatchElement } from '$lib/api/types';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import type { ServiceScriptDto } from '$lib/api/service.js';
+  import type { ServiceScriptDto } from '$lib/api/service';
   import Tag from '$lib/components/Tag.svelte';
+  import ServiceRequest from '$lib/components/ServiceRequest.svelte';
 
   export let data;
 
-  $: ({ user, id, api } = data);
+  $: ({ searchParams, user, id, api } = data);
 
   $: query = createQuery(api.service.info({ id }));
 
@@ -66,6 +67,9 @@
   $: if (!service && $query.isSuccess) {
     service = $query.data.data;
   }
+
+  $: resourcePath = searchParams?.resourcePath as string | undefined;
+  $: resourceId = searchParams?.resourceId as string | undefined;
 </script>
 
 <svelte:head>
@@ -398,8 +402,9 @@
                   {/if}
                 </div>
               </div>
-              {#if user && getUserPrivilege(user.role) === 6}
-                <div class="card-actions justify-end">
+              <div class="card-actions justify-end">
+                <ServiceRequest {service} {resourcePath} {resourceId} class="text-lg w-32" />
+                {#if user && getUserPrivilege(user.role) === 6}
                   <label
                     for="service-update-{service.id}"
                     class="btn border-2 normal-border btn-outline text-lg w-32"
@@ -415,8 +420,8 @@
                       goto('/services');
                     }}
                   />
-                </div>
-              {/if}
+                {/if}
+              </div>
             </div>
             {#if service.description && service.description.length >= 172}
               <p class="mt-2 content">

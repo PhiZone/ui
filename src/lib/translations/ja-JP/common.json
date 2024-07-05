@@ -105,6 +105,7 @@
   "illustrator": "画师",
   "image_cropper": "图片裁剪",
   "jump_to": "跳转至",
+  "label": "タグ",
   "lang": {
     "en-US": "英語",
     "ja": "日本語",
@@ -118,6 +119,7 @@
     "terms_of_service": "服务条款"
   },
   "loading": "ロード中...",
+  "manage": "管理",
   "more": "さらに表示",
   "name": "名称",
   "navbar": {
@@ -142,6 +144,7 @@
   "reply_to": "返信 ",
   "reply_v": "返信",
   "resource_records": "资源记录",
+  "score": "分数",
   "search_options": "搜索选项",
   "search_placeholder": "搜索章节、曲目、用户……",
   "select_file": "选择文件",

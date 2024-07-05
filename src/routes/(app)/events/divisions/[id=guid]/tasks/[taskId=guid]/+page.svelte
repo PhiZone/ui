@@ -10,10 +10,10 @@
   import csharp from 'svelte-highlight/languages/csharp';
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { Status } from '$lib/constants.js';
-  import type { PatchElement } from '$lib/api/types.js';
+  import { Status } from '$lib/constants';
+  import type { PatchElement } from '$lib/api/types';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import type { EventTaskDto } from '$lib/api/event.task.js';
+  import type { EventTaskDto } from '$lib/api/event.task';
 
   export let data;
 
@@ -129,7 +129,7 @@
         >
           <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-              {$t('event.task.name')}
+              {$t('common.name')}
             </span>
             <input
               type="text"
@@ -140,7 +140,7 @@
               }}
               id="name"
               name="name"
-              placeholder={$t('event.task.name')}
+              placeholder={$t('common.name')}
               class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                 errors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
               }`}

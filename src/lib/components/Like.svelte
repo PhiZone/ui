@@ -79,7 +79,7 @@
 {#if !liked}
   <button
     class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
-    on:click={like}
+    on:click|preventDefault={like}
   >
     <i class="fa-regular fa-heart fa-lg"></i>
     <p class="text-left max-w-fit">{likes}</p>
@@ -87,7 +87,7 @@
 {:else}
   <button
     class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
-    on:click={unlike}
+    on:click|preventDefault={unlike}
   >
     <i class="fa-solid fa-heart fa-lg"></i>
     <p class="text-left max-w-fit">{likes}</p>

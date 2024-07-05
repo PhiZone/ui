@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import ChartAssetSubmission from '$lib/components/ChartAsset.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
@@ -204,7 +204,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

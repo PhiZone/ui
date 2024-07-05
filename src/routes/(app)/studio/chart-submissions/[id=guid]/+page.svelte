@@ -21,6 +21,8 @@
   import Tag from '$lib/components/Tag.svelte';
   import VolunteerVoteDiagram from '$lib/components/VolunteerVoteDiagram.svelte';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
+  import Service from '$lib/components/Service.svelte';
+  import Download from '$lib/components/Download.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -114,6 +116,7 @@
       { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
     ),
   );
+  $: services = createQuery(api.service.list({ rangeTargetType: [1] }));
   $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
   $: charter = richtext($submission.data?.data.authorName ?? '');
 
@@ -391,7 +394,11 @@
           <label class="join w-full">
             <input
               type="text"
-              placeholder={$t('collection.search')}
+              placeholder={$t('common.search_placeholder', {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                resource: $t('common.collections'),
+              })}
               class={`input transition border-2 normal-border w-5/6 join-item min-w-[180px] ${
                 $collectionSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
@@ -444,13 +451,13 @@
         >
           <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-fit">
-              {$t('collection.label')}
+              {$t('common.label')}
             </span>
             <input
               type="text"
               id="label"
               name="label"
-              placeholder={$t('collection.label')}
+              placeholder={$t('common.label')}
               class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
             />
           </label>
@@ -541,18 +548,24 @@
                   </span>
                 </p>
               {/if}
-              <p>
-                <span class="badge mr-1">
+              <p class="flex gap-1 items-center">
+                <span class="badge">
                   {$t('common.form.chart')}
                 </span>
-                <a
-                  href={submission.file}
-                  target="_blank"
-                  class="hover:underline min-w-fit"
-                  download={submission.file?.split('/').pop()}
-                >
-                  {$t('common.download')}
-                </a>
+                <Download
+                  file={submission.file}
+                  name={`${
+                    submission.title ?? submission.song?.title ?? submission.songSubmission?.title
+                  }${
+                    submission.song && submission.song.edition
+                      ? ` (${submission.song.edition})`
+                      : submission.songSubmission && submission.songSubmission.edition
+                        ? ` (${submission.songSubmission.edition})`
+                        : ''
+                  } [${submission.level} ${getLevelDisplay(submission.difficulty)}]`}
+                  class=""
+                  inline
+                />
               </p>
               <p>
                 <span class="badge mr-1">{$t('chart.charter')}</span>
@@ -790,6 +803,35 @@
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
               {/if}
+            </div>
+          </div>
+        </div>
+      {/if}
+      {#if $services.isSuccess && $services.data.data.length > 0}
+        {@const services = $services.data.data}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('common.services')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body pt-14 pb-10">
+              <a
+                class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+                href="/services?rangeTargetType=1&resourcePath=studio/charts&resourceId={id}"
+              >
+                {$t('common.more')}
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
+              <div class="result">
+                {#each services as service}
+                  <Service {service} resourcePath="studio/charts" resourceId={id} />
+                {/each}
+              </div>
             </div>
           </div>
         </div>

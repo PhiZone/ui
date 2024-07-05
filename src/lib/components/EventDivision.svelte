@@ -58,14 +58,7 @@
       {$t(`event.division.statuses.${division.status}`)}
     </div>
     {#if showLike}
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        class="hidden lg:inline"
-        on:click={(e) => {
-          e.preventDefault();
-        }}
-        on:keyup
-      >
+      <div class="hidden lg:inline">
         <Like
           id={division.id}
           likes={division.likeCount}

@@ -15,7 +15,10 @@ export const HOSTSHIP = 0b0011;
 export const PRESERVED_FIELD = 0b0100;
 
 export const hasPermission = (hostship: HostshipDetailedDto, permission: number) => {
-  return hostship.permissions?.includes(permission);
+  return (
+    hostship.permissions?.includes(permission) ||
+    hostship.permissions?.some((p) => p === (permission >> OPERATION) << OPERATION)
+  );
 };
 
 export const gen = (operation: number, scope: number, index: number | null = null) => {

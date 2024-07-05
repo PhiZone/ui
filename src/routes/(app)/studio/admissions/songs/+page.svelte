@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Admission from '$lib/components/SongAdmission.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import Error from '$lib/components/Error.svelte';
 
   export let data;
@@ -56,7 +56,7 @@
             {#each data as admission}
               <Admission {admission} />
             {/each}
-            <Pagination {total} {perPage} {page} {searchParams} />
+            <Paginator {total} {perPage} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}

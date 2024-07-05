@@ -13,6 +13,7 @@
   import Error from '$lib/components/Error.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Download from '$lib/components/Download.svelte';
 
   export let data;
 
@@ -26,6 +27,13 @@
     $song.data?.data.isOriginal && $song.data?.data.authorName
       ? richtext($song.data?.data.authorName)
       : readable($song.data?.data.authorName ?? $t('common.anonymous'));
+  $: composerText =
+    $song.data?.data.isOriginal && $song.data?.data.authorName
+      ? $song.data?.data.authorName.replaceAll(
+          /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
+          (_, __, ___, display: string) => display,
+        )
+      : $song.data?.data.authorName;
 </script>
 
 <svelte:head>
@@ -185,15 +193,13 @@
                     class="btn-md {user ? 'join-item' : ''}"
                   />
                   {#if user}
-                    <a
-                      href={song.file}
-                      target="_blank"
-                      download={song.file?.split('/').pop()}
-                      class="btn btn-ghost border-2 hover:btn-outline join-item"
-                    >
-                      <i class="fa-solid fa-file-arrow-down fa-lg"></i>
-                      {$t('common.download')}
-                    </a>
+                    <Download
+                      file={song.file}
+                      name={`${composerText} - ${song.title}${
+                        song.edition ? ` (${song.edition})` : ''
+                      }`}
+                      class="btn-md join-item"
+                    />
                   {/if}
                 </div>
               </div>

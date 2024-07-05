@@ -105,6 +105,7 @@
   "illustrator": "画师",
   "image_cropper": "图片裁剪",
   "jump_to": "跳转至",
+  "label": "标签",
   "lang": {
     "en-US": "英语",
     "ja": "日语",
@@ -118,6 +119,7 @@
     "terms_of_service": "服务条款"
   },
   "loading": "加载中……",
+  "manage": "管理",
   "more": "更多",
   "name": "名称",
   "navbar": {
@@ -142,8 +144,9 @@
   "reply_to": "回复 ",
   "reply_v": "回复",
   "resource_records": "资源记录",
+  "score": "分数",
   "search_options": "搜索选项",
-  "search_placeholder": "搜索资源与用户……",
+  "search_placeholder": "搜索{{resource}}……",
   "select_file": "选择文件",
   "semicolon": "；",
   "send": "发送",

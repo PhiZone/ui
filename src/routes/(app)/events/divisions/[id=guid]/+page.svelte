@@ -5,7 +5,7 @@
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
   import { goto, preloadData } from '$app/navigation';
-  import { getAvatar, parseDateTime } from '$lib/utils';
+  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Record from '$lib/components/Record.svelte';
@@ -196,7 +196,7 @@
     style:background-image="url({division.illustration ?? event.illustration})"
   >
     <div class="hero-overlay bg-opacity-60" />
-    <div class="pt-32 pb-24 w-full flex flex-col max-w-[1600px] px-4 md:px-32 mx-auto">
+    <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
         / {division.title}
@@ -247,7 +247,14 @@
               </p>
             </div>
           {/if}
-          {#if division.team}
+          {#if isEventHost(user, event)}
+            <a
+              href="/events/divisions/{division.id}/manage"
+              class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
+            >
+              {$t('common.manage')}
+            </a>
+          {:else if division.team}
             <a
               href="/events/teams/{division.team.id}"
               class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
@@ -257,7 +264,7 @@
           {:else if user && division.status < 3}
             <label
               for="participate"
-              class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 backdrop-blur gradient btn-outline"
+              class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 gradient btn-outline"
             >
               {$t('event.division.participate')}
             </label>
@@ -266,18 +273,20 @@
       </div>
       <div class="flex flex-col lg:flex-row gap-3">
         <div class="lg:w-full">
-          <div role="tablist" class="tabs tabs-lifted backdrop-blur-lg rounded-t-2xl mt-4">
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 0 ? 'tab-active' : ''}"
-              on:click={() => {
-                index = 0;
-              }}
-              on:keyup
-            >
-              {$t('event.division.prompts')}
-            </div>
+          <div role="tablist" class="tabs tabs-lifted backdrop-blur-xl rounded-t-2xl mt-4">
+            {#if division.type !== 0}
+              <div
+                role="tab"
+                tabindex="0"
+                class="tab {index == 0 ? 'tab-active' : ''}"
+                on:click={() => {
+                  index = 0;
+                }}
+                on:keyup
+              >
+                {$t(division.type === 1 ? 'event.division.song_pool' : 'event.division.chart_pool')}
+              </div>
+            {/if}
             <div
               role="tab"
               tabindex="0"
@@ -309,26 +318,33 @@
                 {#if division.type == 1 && $songPrompts.isSuccess}
                   {@const prompts = $songPrompts.data.data}
                   {#if prompts.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each prompts as song}
-                        <li><Song {song} kind="inline" /></li>
+                        <Song {song} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {:else if division.type == 2 && $chartPrompts.isSuccess}
                   {@const prompts = $chartPrompts.data.data}
                   {#if prompts.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each prompts as chart}
-                        <li><Chart {chart} kind="inline" /></li>
+                        <Chart {chart} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {/if}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+                  href="/events/divisions/{id}/prompts"
+                >
+                  {$t('common.more')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
               {:else if index == 1 && $leaderboard.isSuccess}
                 {@const leaderboard = $leaderboard.data.data}
                 <div class="overflow-x-auto">
@@ -339,7 +355,7 @@
                         <th>{$t('event.team.team')}</th>
                         <th>{$t('event.team.members')}</th>
                         <th>{$t('event.team.status')}</th>
-                        <th>{$t('event.team.score')}</th>
+                        <th>{$t('common.score')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -348,7 +364,7 @@
                           class="transition {team.participants
                             .map((e) => e.id)
                             .includes(user?.id ?? 0)
-                            ? 'bg-info-content bg-opacity-25'
+                            ? 'bg-info-content bg-opacity-20'
                             : 'bg-base-100 bg-opacity-0 hover:bg-base-300'} hover:bg-opacity-75 hover:cursor-pointer"
                           on:click={() => {
                             goto(`/events/teams/${team.id}`);
@@ -496,7 +512,7 @@
                         <th>{$t('event.team.team')}</th>
                         <th>{$t('event.team.members')}</th>
                         <th>{$t('event.team.status')}</th>
-                        <th>{$t('event.team.score')}</th>
+                        <th>{$t('common.score')}</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -507,7 +523,7 @@
                   {#if entries.length > 0}
                     <div class="result">
                       {#each entries as song}
-                        <Song {song} kind="inline" />
+                        <Song {song} />
                       {/each}
                     </div>
                   {:else}
@@ -539,7 +555,7 @@
                           <tr>
                             <th>#</th>
                             <th>{$t('record.player')}</th>
-                            <th>{$t('record.score')}</th>
+                            <th>{$t('common.score')}</th>
                             <th>{$t('record.acc')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
@@ -622,7 +638,7 @@
                           <tr>
                             <th>#</th>
                             <th>{$t('record.player')}</th>
-                            <th>{$t('record.score')}</th>
+                            <th>{$t('common.score')}</th>
                             <th>{$t('record.acc')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
@@ -639,6 +655,13 @@
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {/if}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+                  href="/events/divisions/{id}/entries"
+                >
+                  {$t('common.more')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
               {/if}
               <!-- {#if $divisions.isLoading}
               <ul class="menu bg-base-100 w-full">
@@ -775,5 +798,8 @@
       --tw-border-opacity: 1;
       --tab-border-color: rgb(55 65 81 / var(--tw-border-opacity));
     }
+  }
+  .max-w {
+    max-width: min(calc(100vw - 16px), 1600px);
   }
 </style>

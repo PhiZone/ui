@@ -19,11 +19,11 @@
 
 {#if kind === 'mini'}
   <li class="max-w-full">
-    <div class="flex w-full">
+    <div class="flex flex-col sm:flex-row w-full">
       <User id={reply.ownerId} initUser={reply.owner} kind="embedded-mini" />
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
-        class="ml-2 w-3/4 min-w-fit content"
+        class="ml-2 sm:w-3/4 content"
         on:click={() => {
           replyTo(reply.owner);
         }}
@@ -33,7 +33,7 @@
       </div>
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <p
-        class="w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
+        class="hidden md:inline sm:w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
         on:click={() => {
           replyTo(reply.owner);
         }}

@@ -8,8 +8,8 @@
   import Record from '$lib/components/Record.svelte';
   import Error from '$lib/components/Error.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import { UPDATE, TEAM, REMOVE } from '$lib/hostshipPermissions.js';
-  import { Status } from '$lib/constants.js';
+  import { UPDATE, TEAM, REMOVE } from '$lib/hostshipPermissions';
+  import { Status } from '$lib/constants';
   import { goto } from '$app/navigation';
 
   export let data;
@@ -120,6 +120,7 @@
           <span class="loading loading-dots loading-lg"></span>
         {/if}
       </div>
+      <p class="opacity-70 pb-7">{$t('event.team.invitation.invite_description')}</p>
       <div class="flex flex-col md:flex-row gap-6 justify-center md:w-5/6 mx-auto">
         <button
           class="btn btn-outline border-2 {copied
@@ -306,7 +307,7 @@
                     <div class="stat-value text-4xl">#{team.position ?? '-'}</div>
                   </div>
                   <div class="stat place-items-center">
-                    <div class="stat-title">{$t('event.team.score')}</div>
+                    <div class="stat-title">{$t('common.score')}</div>
                     <div class="stat-value text-4xl">{team.score ?? '-'}</div>
                   </div>
                   <div class="stat place-items-center">
@@ -442,14 +443,7 @@
                         </span>
                       </p>
                     {/if}
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <div
-                      class="card-actions justify-end"
-                      on:click={(e) => {
-                        e.preventDefault();
-                      }}
-                      on:keyup
-                    >
+                    <div class="card-actions justify-end">
                       <Like
                         id={division.id}
                         likes={division.likeCount}

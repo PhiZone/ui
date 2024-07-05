@@ -142,7 +142,14 @@
           <div
             class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
           >
-            <div class="card-body py-10">
+            <div class="card-body pt-14 pb-10">
+              <a
+                class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+                href="/services?rangeResourceId={id}"
+              >
+                {$t('common.more')}
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
               <div class="result">
                 {#each services as service}
                   <Service {service} />

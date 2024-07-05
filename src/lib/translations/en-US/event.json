@@ -1,5 +1,6 @@
 {
   "division": {
+    "chart_pool": "谱池",
     "create_team": "Create Team",
     "division": "Division",
     "entries": "Entries",
@@ -7,7 +8,7 @@
     "join_team": "Join Team",
     "my_team": "My Team",
     "participate": "Participate",
-    "prompts": "Guidelines",
+    "song_pool": "曲池",
     "statuses": {
       "0": "Unpublished",
       "1": "Upcoming",
@@ -24,8 +25,6 @@
   "divisions": "Divisions",
   "event": "Event",
   "hosts": "Hosts",
-  "label": "Label",
-  "search": "Search events",
   "task": {
     "date_executed": "执行日期",
     "task": "自动化任务",
@@ -58,8 +57,8 @@
     "claimed_participant_count": "Claimed Number of Participants",
     "claimed_submission_count": "Claimed Number of Submissions",
     "created": "You created the team {{team}}!",
-    "disband": "Disband Team",
-    "disband_confirmation": "Are you sure you want to disband this team ? This operation is irreversible.",
+    "disband": "Disband",
+    "disband_confirmation": "Are you sure you want to disband this team? This operation is irreversible.",
     "disbanded": "The team {{team}} has been disbanded.",
     "icon": "Team Logo",
     "invitation": {
@@ -84,7 +83,6 @@
     "members": "Members",
     "name": "Team Name",
     "participant_count": "Number of Participants",
-    "score": "Score",
     "status": "Status",
     "statuses": {
       "0": "Unprepared",
@@ -96,5 +94,6 @@
     "submission_count": "Number of Submissions",
     "submissions": "Submissions",
     "team": "Team"
-  }
+  },
+  "teams": "队伍"
 }

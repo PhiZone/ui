@@ -51,7 +51,7 @@
           class="card card-side flex-col md:flex-row w-full bg-base-100 border-2 normal-border transition hover:shadow-lg"
         >
           <figure
-            class="border-r-0 md:border-r md:max-w-[28%] px-6 py-6 form-control normal-border mx-auto overflow-visible"
+            class="border-r-0 md:border-r md:max-w-[28%] px-6 py-6 flex flex-col normal-border mx-auto overflow-visible"
           >
             <div class="avatar min-w-fit h-fit">
               <div

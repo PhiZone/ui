@@ -39,6 +39,16 @@ export interface CreateOpts {
   parameters: string[];
 }
 
+export interface UseOpts extends InfoOpts {
+  parameters: { [key: string]: string };
+}
+
+export interface ServiceResponseDto {
+  message: null | string;
+  redirectUri: null | string;
+  type: number;
+}
+
 export default class ServiceScriptAPI {
   constructor(private api: API) {}
 
@@ -64,5 +74,17 @@ export default class ServiceScriptAPI {
 
   update({ id }: InfoOpts, patch: PatchElement[]): R {
     return this.api.PATCH(`/services/${id}`, patch);
+  }
+
+  use({ id, ...rest }: UseOpts): R<ServiceResponseDto> {
+    return this.api.POST(`/services/${id}/use`, rest);
+  }
+
+  useOnResource(
+    resourcePath: string,
+    resourceId: string,
+    { id, ...rest }: UseOpts,
+  ): R<ServiceResponseDto> {
+    return this.api.POST(`/${resourcePath}/${resourceId}/useService/${id}`, rest);
   }
 }

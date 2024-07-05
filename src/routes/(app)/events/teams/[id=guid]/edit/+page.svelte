@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getAvatar, range } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import type { EventTeamDto } from '$lib/api/event.team.js';
+  import type { EventTeamDto } from '$lib/api/event.team';
   import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
   import { Status } from '$lib/constants';

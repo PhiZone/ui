@@ -7,7 +7,7 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import type { ParsedQuery } from 'query-string';
   import Like from './Like.svelte';
-  import Pagination from './Pagination.svelte';
+  import Paginator from './Paginatior.svelte';
   import Delete from './Delete.svelte';
   import User from './User.svelte';
   import ReplyComponent from './Reply.svelte';
@@ -69,7 +69,9 @@
         bind:value={replyText}
       />
       <button
-        class="ml-3 btn border-2 btn-outline btn-primary w-1/12 min-w-fit"
+        class="ml-3 btn {disabled || replyText.length === 0
+          ? 'btn-disabled'
+          : 'border-2 btn-outline'} btn-primary w-1/12 min-w-fit"
         disabled={disabled || replyText.length === 0}
         on:click={sendReply}
       >
@@ -85,7 +87,7 @@
           {#each data as reply}
             <ReplyComponent {reply} {replyTo} />
           {/each}
-          <Pagination {total} {perPage} page={replyPage} pageName="reply_page" {searchParams} />
+          <Paginator {total} {perPage} page={replyPage} pageName="reply_page" {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}

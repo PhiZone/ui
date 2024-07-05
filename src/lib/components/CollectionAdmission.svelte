@@ -62,7 +62,7 @@
             >
               <label class="join w-full">
                 <span class="btn w-1/4 btn-active cursor-default no-animation join-item">
-                  {$t('collection.label')}
+                  {$t('common.label')}
                 </span>
                 <button
                   class="btn w-3/4 btn-shallow btn-active cursor-default no-animation join-item text-lg"

@@ -1,5 +1,6 @@
 {
   "division": {
+    "chart_pool": "谱池",
     "create_team": "创建队伍",
     "division": "赛道",
     "entries": "参赛作品",
@@ -7,7 +8,7 @@
     "join_team": "加入队伍",
     "my_team": "我的队伍",
     "participate": "参加",
-    "prompts": "参赛指引",
+    "song_pool": "曲池",
     "statuses": {
       "0": "未公布",
       "1": "未开始",
@@ -24,8 +25,6 @@
   "divisions": "赛道",
   "event": "活动",
   "hosts": "主办方",
-  "label": "标签",
-  "search": "搜索活动",
   "task": {
     "date_executed": "执行日期",
     "task": "自动化任务",
@@ -84,7 +83,6 @@
     "members": "成员",
     "name": "队名",
     "participant_count": "成员数",
-    "score": "分数",
     "status": "参赛状态",
     "statuses": {
       "0": "未准备",
@@ -96,5 +94,6 @@
     "submission_count": "稿件数",
     "submissions": "稿件",
     "team": "队伍"
-  }
+  },
+  "teams": "队伍"
 }

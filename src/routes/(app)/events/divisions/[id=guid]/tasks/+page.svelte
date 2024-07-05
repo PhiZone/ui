@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import EventTask from '$lib/components/EventTask.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { hasEventPermission } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
@@ -65,7 +65,7 @@
       >
         <label class="join w-full">
           <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-            {$t('event.task.name')}
+            {$t('common.name')}
           </span>
           <input
             type="text"
@@ -76,7 +76,7 @@
             }}
             id="name"
             name="name"
-            placeholder={$t('event.task.name')}
+            placeholder={$t('common.name')}
             class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
               $errors.name ? 'hover:input-error' : 'hover:input-secondary'
             }`}
@@ -291,7 +291,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

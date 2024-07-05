@@ -12,7 +12,7 @@
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import { onDestroy } from 'svelte';
-  import { TAG_JOINER } from '$lib/constants.js';
+  import { TAG_JOINER } from '$lib/constants';
 
   export let data;
 

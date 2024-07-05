@@ -1,14 +1,9 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type {
-  FileUpdateOpts,
-  FilterBase,
-  PatchElement,
-  PublicResourceFilterBase,
-  R,
-} from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 import type { UserDto } from '.';
+import type { PreservedFieldDto } from './event';
 
 export interface EventTeamDto {
   claimedParticipantCount: number;
@@ -26,6 +21,7 @@ export interface EventTeamDto {
   position: number | null;
   score: number | null;
   status: number;
+  preservedFields?: (PreservedFieldDto | null)[];
 }
 
 export interface ParticipantDto extends UserDto {
@@ -38,9 +34,8 @@ export interface EventTeamInviteDto {
   team: EventTeamDto;
 }
 
-export interface Filter extends PublicResourceFilterBase {
-  containsSubtitle?: string;
-  equalsSubtitle?: string;
+export interface Filter extends FilterBase {
+  rangeDivisionId?: string[];
 }
 
 export interface TeamListFilter extends FilterBase {
@@ -90,6 +85,12 @@ export default class EventTeamAPI {
   info = createQueryCreator(
     'event.team.info',
     ({ id }: InfoOpts): R<EventTeamDto> => this.api.GET(`/events/teams/${id}`),
+  );
+
+  listPreservedFields = createQueryCreator(
+    'event.team.preservedFields',
+    (opts: Filter): R<(PreservedFieldDto | null)[][]> =>
+      this.api.GET('/events/teams/preservedFields?' + stringifyFilter(opts)),
   );
 
   create(opts: CreateOpts): R {

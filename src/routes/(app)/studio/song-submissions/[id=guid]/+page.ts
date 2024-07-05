@@ -5,6 +5,7 @@ export const load = async ({ params, url, parent, data }) => {
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   await Promise.allSettled([
     queryClient.prefetchQuery(api.song.submission.info({ id: params.id })),
+    api.service.list({ rangeTargetType: [0] }),
   ]);
 
   return {

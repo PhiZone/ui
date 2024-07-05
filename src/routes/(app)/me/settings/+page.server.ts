@@ -4,7 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils.js';
+import { toCamel } from '$lib/utils';
 
 const schema = z.object({
   aspectRatio1: z.number().optional().default(16),

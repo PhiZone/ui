@@ -32,7 +32,7 @@
   "description": "Description",
   "download": "Download",
   "edit": "Edit",
-  "edit_info": "Edit Information",
+  "edit_info": "Edit Info",
   "empty": "It's empty here...",
   "empty_adj": "Empty",
   "empty_v": "Empty",
@@ -105,6 +105,7 @@
   "illustrator": "Illustrator",
   "image_cropper": "Image Cropper",
   "jump_to": "Jump to",
+  "label": "Label",
   "lang": {
     "en-US": "English",
     "ja": "Japanese",
@@ -118,6 +119,7 @@
     "terms_of_service": "Terms of Service"
   },
   "loading": "Loading...",
+  "manage": "管理",
   "more": "More",
   "name": "Name",
   "navbar": {
@@ -142,6 +144,7 @@
   "reply_to": "Replying to ",
   "reply_v": "Reply",
   "resource_records": "Resource Records",
+  "score": "Score",
   "search_options": "Search Options",
   "search_placeholder": "Search chapters, songs, users...",
   "select_file": "Select a file",

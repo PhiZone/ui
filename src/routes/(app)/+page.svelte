@@ -1,18 +1,16 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { goto } from '$app/navigation';
   import { t } from '$lib/translations/config';
+  import { goto } from '$app/navigation';
 
   export let data;
 
   $: ({ api } = data);
 
-  let type: 'chapters' | 'songs' | 'users' = 'songs';
+  let type: string = 'charts';
   let text = '';
 
   $: href = `/${type}?${text ? `search=${text}` : ''}`;
-
-  const search = () => goto(href);
 
   $: headline = createQuery(api.headline.get());
 </script>
@@ -56,7 +54,7 @@
         {$t('home.description')}
       </p>
     </div>
-    <form class="form-control" on:submit|preventDefault={search}>
+    <form class="form-control" on:submit|preventDefault={() => goto(href)}>
       <div class="join text-sm lg:text-md">
         <select
           class="select border-2 normal-border transition hover:select-secondary lg:select-lg join-item max-w-1/3"
@@ -65,22 +63,23 @@
           <option value="events">{$t('common.events')}</option>
           <option value="chapters">{$t('common.chapters')}</option>
           <option value="collections">{$t('common.collections')}</option>
-          <option selected value="songs">{$t('common.songs')}</option>
+          <option value="songs">{$t('common.songs')}</option>
           <option selected value="charts">{$t('common.charts')}</option>
           <option value="users">{$t('common.users')}</option>
         </select>
         <input
           type="text"
-          placeholder={$t('common.search_placeholder')}
+          placeholder={$t('common.search_placeholder', {
+            resource: $t(`common.${type}`),
+          })}
           class="input border-2 normal-border transition hover:input-secondary lg:input-lg join-item w-full"
           bind:value={text}
         />
-        <a
-          class="btn lg:btn-lg btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item backdrop-blur-xl"
-          {href}
+        <button
+          class="btn lg:btn-lg btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
         >
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-        </a>
+        </button>
       </div>
     </form>
   </div>

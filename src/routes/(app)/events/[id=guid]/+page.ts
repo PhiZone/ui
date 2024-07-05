@@ -7,6 +7,7 @@ export const load = async ({ params, url, parent }) => {
   await Promise.allSettled([
     queryClient.prefetchQuery(api.event.info({ id: params.id })),
     queryClient.prefetchQuery(api.event.listDivisions({ id: params.id })),
+    queryClient.prefetchQuery(api.service.list({ rangeResourceId: [params.id] })),
     queryClient.prefetchQuery(
       api.comment.list({
         type: 'events',

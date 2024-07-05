@@ -11,6 +11,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import type { ChartAssetDto } from '$lib/api/chart.asset';
   import Error from '$lib/components/Error.svelte';
+  import Download from '$lib/components/Download.svelte';
 
   export let data;
 
@@ -288,15 +289,11 @@
                   />
                 {/if}
                 <div class="flex justify-end join">
-                  <a
-                    href={chartAsset.file}
-                    target="_blank"
-                    download={chartAsset.file?.split('/').pop()}
-                    class="btn btn-ghost border-2 hover:btn-outline w-fit join-item"
-                  >
-                    <i class="fa-solid fa-file-arrow-down fa-lg"></i>
-                    {$t('common.download')}
-                  </a>
+                  <Download
+                    file={chartAsset.file}
+                    name={chartAsset.name.split('.').slice(0, -1).join('.')}
+                    class="btn-md join-item"
+                  />
                   {#if getUserPrivilege(user?.role) >= 6}
                     <label
                       for="chart-asset-update-{chartAsset.id}"

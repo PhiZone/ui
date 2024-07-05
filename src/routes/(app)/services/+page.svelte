@@ -2,12 +2,13 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Service from '$lib/components/Service.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import { TAG_JOINER } from '$lib/constants.js';
+  import { TAG_JOINER } from '$lib/constants';
+  import SearchBar from '$lib/components/SearchBar.svelte';
 
   export let data;
 
@@ -22,6 +23,9 @@
   let newTag = '';
 
   $: query = createQuery(api.service.list(searchParams));
+
+  $: resourcePath = searchParams?.resourcePath as string | undefined;
+  $: resourceId = searchParams?.resourceId as string | undefined;
 </script>
 
 <svelte:head>
@@ -251,8 +255,9 @@
 {#if $query.isSuccess}
   {@const { total, perPage, data } = $query.data}
   <div class="page">
-    <div class="flex gap-2 justify-between items-center mb-6">
+    <div class="flex gap-2 flex-wrap justify-between items-center mb-6">
       <h1 class="text-4xl font-bold">{$t('common.services')}</h1>
+      <SearchBar name="common.services" {searchParams} />
       {#if user && getUserPrivilege(user.role) === 6}
         <label for="service-add" class="btn border-2 normal-border hover:btn-outline join-item">
           {$t('common.add')}
@@ -263,11 +268,11 @@
       <div class="result">
         {#each data as service}
           <div class="min-w-fit">
-            <Service {service} />
+            <Service {service} {resourcePath} {resourceId} />
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

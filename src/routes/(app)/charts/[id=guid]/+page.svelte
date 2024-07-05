@@ -20,6 +20,7 @@
   import Tag from '$lib/components/Tag.svelte';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
   import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Download from '$lib/components/Download.svelte';
 
   export let data, form;
   const {
@@ -524,15 +525,13 @@
                       {$t('common.vote')}
                     </label>
                     {#if chart.file}
-                      <a
-                        href={chart.file}
-                        target="_blank"
-                        download={chart.file.split('/').pop()}
-                        class="btn btn-ghost border-2 hover:btn-outline join-item"
-                      >
-                        <i class="fa-solid fa-file-arrow-down fa-lg"></i>
-                        {$t('common.download')}
-                      </a>
+                      <Download
+                        file={chart.file}
+                        name={`${chart.title ?? chart.song.title}${
+                          chart.song.edition ? ` (${chart.song.edition})` : ''
+                        } [${chart.level} ${getLevelDisplay(chart.difficulty)}]`}
+                        class="btn-md join-item"
+                      />
                       <a
                         href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
                           chart.file,

@@ -70,14 +70,7 @@
         </p>
       {/if}
       {#if showLike}
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="card-actions justify-end"
-          on:click={(e) => {
-            e.preventDefault();
-          }}
-          on:keyup
-        >
+        <div class="card-actions justify-end">
           <Like
             id={application.id}
             likes={application.likeCount}

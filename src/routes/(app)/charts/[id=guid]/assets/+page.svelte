@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import ChartAsset from '$lib/components/ChartAsset.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
@@ -188,13 +188,13 @@
           >
             {$t('common.add')}
           </button>
-          <a
-            href="/charts/{params.id}"
-            class="btn border-2 normal-border hover:btn-outline join-item"
-          >
-            {$t('common.back')}
-          </a>
         {/if}
+        <a
+          href="/charts/{params.id}"
+          class="btn border-2 normal-border hover:btn-outline join-item"
+        >
+          {$t('common.back')}
+        </a>
       </div>
     </div>
     {#if total && perPage && data.length > 0}
@@ -205,7 +205,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

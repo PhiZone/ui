@@ -73,15 +73,24 @@ export const getUserPrivilege = (role: string | null | undefined) => {
   }
 };
 
+export const isEventHost = (user: UserDetailedDto | undefined, event: EventDto | undefined) => {
+  return (
+    user &&
+    event &&
+    (getUserPrivilege(user.role) === 6 || user.hostships.some((e) => e.eventId === event.id))
+  );
+};
+
 export const hasEventPermission = (
   user: UserDetailedDto | undefined,
   event: EventDto | undefined,
   operation?: number | undefined,
   scope?: number | undefined,
+  index?: number | undefined,
 ) => {
   return (
-    user &&
-    event &&
+    !!user &&
+    !!event &&
     (getUserPrivilege(user.role) === 6 ||
       user.hostships.some(
         (e) =>
@@ -89,7 +98,7 @@ export const hasEventPermission = (
           (e.isAdmin ||
             (operation !== undefined &&
               scope !== undefined &&
-              hasPermission(e, gen(operation, scope)))),
+              hasPermission(e, gen(operation, scope, index)))),
       ))
   );
 };

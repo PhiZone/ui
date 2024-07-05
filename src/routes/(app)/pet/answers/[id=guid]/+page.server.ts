@@ -9,7 +9,7 @@ import type { Plugin } from 'unified';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils.js';
+import { toCamel } from '$lib/utils';
 
 const schema = z.object({
   id: z.string(),

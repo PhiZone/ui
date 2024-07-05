@@ -8,7 +8,7 @@
   import type { PatchElement } from '$lib/api/types';
   import { superForm } from 'sveltekit-superforms/client';
   import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import ApplicationLink from '$lib/components/ApplicationLink.svelte';
 
@@ -678,7 +678,7 @@
       >
         <label class="join w-full">
           <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-            {$t('play_configuration.name')}
+            {$t('common.name')}
           </span>
           <input
             type="text"
@@ -690,7 +690,7 @@
             id="name"
             name="name"
             bind:value={$form.name}
-            placeholder={`${$t('play_configuration.name')}${$t('common.optional')}`}
+            placeholder={`${$t('common.name')}${$t('common.optional')}`}
             class={`input transition border-2 normal-border join-item w-3/4 ${
               $errors.name ? 'hover:input-error' : 'hover:input-secondary'
             }`}
@@ -1146,7 +1146,7 @@
                     </div>
                   {/each}
                 </div>
-                <Pagination {total} {perPage} page={playConfigurationPage} {searchParams} />
+                <Paginator {total} {perPage} page={playConfigurationPage} {searchParams} />
               {:else}
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}

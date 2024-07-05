@@ -64,10 +64,10 @@
       <h2 class="mt-1 font-bold text-3xl h-8 text-right">
         {record.score}
       </h2>
-      <p class="text-xl h-[26px] text-right">
+      <p class="text-xl h-[26px] opacity-90 text-right">
         {(record.accuracy * 100).toFixed(2)}%
       </p>
-      <p class="text-right h-5">
+      <p class="h-5 opacity-60 text-right">
         P{record.perfect} · G{record.goodEarly + record.goodLate} · B{record.bad}
         · M{record.miss}
       </p>
@@ -78,7 +78,7 @@
           <a href={`/users/${record.ownerId}`} class="hover:underline">
             {record.owner.userName}
           </a>
-          <span>·</span>
+          <span class="opacity-60">·</span>
         {/if}
         <span>
           {parseDateTime(record.dateCreated, true, user?.language)}

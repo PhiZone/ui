@@ -11,6 +11,7 @@
   import ChartSubmission from '$lib/components/ChartSubmission.svelte';
   import type { ChartAssetSubmissionDto } from '$lib/api/chart.submission.asset';
   import Error from '$lib/components/Error.svelte';
+  import Download from '$lib/components/Download.svelte';
 
   export let data;
 
@@ -288,15 +289,11 @@
                   />
                 {/if}
                 <div class="flex justify-end join">
-                  <a
-                    href={chartAsset.file}
-                    target="_blank"
-                    download={chartAsset.file?.split('/').pop()}
-                    class="btn btn-ghost border-2 hover:btn-outline w-fit join-item"
-                  >
-                    <i class="fa-solid fa-file-arrow-down fa-lg"></i>
-                    {$t('common.download')}
-                  </a>
+                  <Download
+                    file={chartAsset.file}
+                    name={chartAsset.name.split('.').slice(0, -1).join('.')}
+                    class="btn-md join-item"
+                  />
                   {#if user && (getUserPrivilege(user.role) >= 5 || ($submission.isSuccess && user.id === $submission.data.data.ownerId && getUserPrivilege(user.role) >= 3))}
                     <label
                       for="chart-asset-update-{chartAsset.id}"

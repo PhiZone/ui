@@ -20,12 +20,6 @@ export interface ApplicationDto {
   type: number;
 }
 
-export interface ServiceResponseDto {
-  message: string | null;
-  redirectUri: string | null;
-  type: number;
-}
-
 // list
 export interface Filter extends FilterBase {
   rangeId?: string[];

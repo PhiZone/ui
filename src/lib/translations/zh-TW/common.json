@@ -105,6 +105,7 @@
   "illustrator": "畫師",
   "image_cropper": "圖片裁切",
   "jump_to": "重新導向至",
+  "label": "標簽",
   "lang": {
     "en-US": "英文",
     "ja": "日文",
@@ -118,6 +119,7 @@
     "terms_of_service": "服務條款"
   },
   "loading": "載入中……",
+  "manage": "管理",
   "more": "更多",
   "name": "名稱",
   "navbar": {
@@ -142,6 +144,7 @@
   "reply_to": "回覆給 ",
   "reply_v": "回覆",
   "resource_records": "資源記錄",
+  "score": "分數",
   "search_options": "搜索選項",
   "search_placeholder": "搜尋章節、曲目、使用者……",
   "select_file": "選取檔案",

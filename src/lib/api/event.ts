@@ -7,6 +7,7 @@ import type { UserDto } from '.';
 import EventDivisionAPI from './event.division';
 import EventTeamAPI from './event.team';
 import EventTaskAPI from './event.task';
+import EventResourceAPI from './event.resource';
 
 export interface EventDto {
   accessibility: number;
@@ -44,6 +45,11 @@ export interface DivisionDto {
   subtitle: string | null;
   title: string;
   type: number;
+}
+
+export interface PreservedFieldDto {
+  index: number;
+  content: string | null;
 }
 
 export interface HostDto extends UserDto {
@@ -85,6 +91,7 @@ export default class EventAPI {
     this.division = new EventDivisionAPI(api);
     this.team = new EventTeamAPI(api);
     this.task = new EventTaskAPI(api);
+    this.resource = new EventResourceAPI(api);
   }
 
   list = createQueryCreator(
@@ -127,4 +134,5 @@ export default class EventAPI {
   division;
   team;
   task;
+  resource;
 }

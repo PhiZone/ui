@@ -6,6 +6,7 @@ import type { EventTeamDto } from './event.team';
 import queryString from 'query-string';
 import type { ChartDto, RecordDto, SongDto } from '.';
 import type { TagDto } from './tag';
+import type { PreservedFieldDto } from './event';
 
 export interface EventDivisionDto {
   accessibility: number;
@@ -79,6 +80,13 @@ export interface CreateOpts {
   IsLocked: boolean;
 }
 
+export interface PreservedFieldOpts {
+  type: 'resources' | 'teams';
+  id: string;
+  index: number;
+  content: string | null;
+}
+
 export default class EventDivisionAPI {
   constructor(private api: API) {}
 
@@ -97,6 +105,12 @@ export default class EventDivisionAPI {
   info = createQueryCreator(
     'event.division.info',
     ({ id }: InfoOpts): R<EventDivisionDto> => this.api.GET(`/events/divisions/${id}`),
+  );
+
+  listPreservedFields = createQueryCreator(
+    'event.division.preservedFields',
+    ({ id }: InfoOpts): R<(PreservedFieldDto | null)[]> =>
+      this.api.GET(`/events/divisions/${id}/preservedFields`),
   );
 
   leaderboard = createQueryCreator(
@@ -143,5 +157,9 @@ export default class EventDivisionAPI {
 
   create(opts: CreateOpts): R {
     return this.api.POST('/events/divisions', serialize(opts));
+  }
+
+  updatePreservedField({ type, id, index, ...rest }: PreservedFieldOpts): R {
+    return this.api.POST(`/events/${type}/${id}/preservedFields/${index}`, rest);
   }
 }

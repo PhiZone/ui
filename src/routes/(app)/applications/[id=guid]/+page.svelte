@@ -7,12 +7,14 @@
   import Like from '$lib/components/Like.svelte';
   import { goto } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
+  import Service from '$lib/components/Service.svelte';
 
   export let data;
 
   $: ({ searchParams, id, user, api, preferredApplication } = data);
 
   $: application = createQuery(api.application.info({ id }));
+  $: services = createQuery(api.service.list({ rangeResourceId: [id] }));
 </script>
 
 <svelte:head>
@@ -152,6 +154,35 @@
           </div>
         </div>
       </div>
+      {#if $services.isSuccess && $services.data.data.length > 0}
+        {@const services = $services.data.data}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('common.services')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body pt-14 pb-10">
+              <a
+                class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+                href="/services?rangeResourceId={id}"
+              >
+                {$t('common.more')}
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
+              <div class="result">
+                {#each services as service}
+                  <Service {service} />
+                {/each}
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
       <Comments type="applications" {id} {searchParams} />
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
