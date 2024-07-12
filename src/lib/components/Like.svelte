@@ -48,7 +48,7 @@
       liked = false;
       likes--;
       if (resp.status === 401) {
-        goto(`/session/login?redirect=${$page.url.pathname}`);
+        goto(`/session/login?redirect=${$page.url.pathname + $page.url.search}`);
       } else {
         const data = await resp.json();
         console.error(
