@@ -682,7 +682,7 @@
       >
         <label class="join w-full">
           <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-            {$t('play_configuration.name')}
+            {$t('common.name')}
           </span>
           <input
             type="text"
@@ -694,7 +694,7 @@
             id="name"
             name="name"
             bind:value={editable.name}
-            placeholder={`${$t('play_configuration.name')}${$t('common.optional')}`}
+            placeholder={`${$t('common.name')}${$t('common.optional')}`}
             class={`input transition border-2 normal-border join-item w-3/4 ${
               updateErrors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
             }`}

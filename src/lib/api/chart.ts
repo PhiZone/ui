@@ -28,9 +28,9 @@ export interface ChartDto {
   accessibility: Accessibility;
   authorName: string | null;
   commentCount: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  dateUpdated: Date;
+  dateCreated: string;
+  dateLiked: string | null;
+  dateUpdated: string;
   description: string | null;
   difficulty: number;
   file: string | null;
@@ -62,7 +62,7 @@ export interface ChartDto {
 }
 
 export interface ChartAdmitteeDto extends ChartDto {
-  label: null | string;
+  label: string | null;
 }
 
 // list

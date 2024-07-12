@@ -50,6 +50,15 @@
     : $songSubmission.isSuccess
       ? $songSubmission.data.data
       : undefined;
+  $: existingTags = createQuery(
+    api.tag.listAll(
+      {
+        rangeNormalizedName:
+          chart.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+      },
+      { enabled: !showTags || $submission.isSuccess },
+    ),
+  );
 
   $: if (!chart && $submission.isSuccess) {
     chart = $submission.data.data;
@@ -263,7 +272,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32">{$t('chart.ranked')}</span>
+              <span class="w-32">{$t('studio.submission.is_ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -458,13 +467,25 @@
                 <span class="btn no-animation join-item w-1/4 min-w-[64px]">
                   {$t('common.description')}{$t('common.optional')}
                 </span>
-                <textarea
+                <!-- <textarea
                   id="description"
                   name="Description"
                   class={`textarea transition border-2 normal-border join-item ${
                     errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={$t('studio.submission.description_placeholder')}
+                  bind:value={chart.description}
+                  on:input={(e) => {
+                    patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
+                  }}
+                /> -->
+                <textarea
+                  id="description"
+                  name="Description"
+                  class={`textarea transition border-2 normal-border join-item ${
+                    errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
+                  } w-3/4 h-28`}
+                  placeholder={`${$t('common.description')}${$t('common.optional')}`}
                   bind:value={chart.description}
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
@@ -545,6 +566,19 @@
                     }}
                   />
                 {/each}
+              </div>
+            {/if}
+            {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
+                  <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $existingTags.data.data as tag}
+                    <Tag {tag} full />
+                  {/each}
+                </div>
               </div>
             {/if}
             <div class="w-full flex flex-col justify-center mt-6">

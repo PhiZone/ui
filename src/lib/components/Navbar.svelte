@@ -181,13 +181,13 @@
         <div class="flex">
           <a
             class="btn btn-ghost btn-md text-base"
-            href="/session/login?redirect={$page.url.pathname}"
+            href="/session/login?redirect={$page.url.pathname + $page.url.search}"
           >
             {$t('session.login.login')}
           </a>
           <a
             class="btn btn-outline border-2 btn-secondary btn-md text-base"
-            href="/session/register?redirect={$page.url.pathname}"
+            href="/session/register?redirect={$page.url.pathname + $page.url.search}"
           >
             {$t('session.registration.register')}
           </a>

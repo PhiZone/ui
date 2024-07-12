@@ -8,7 +8,7 @@
   interface $$Props {
     id: string;
     path: string;
-    name: string;
+    name?: string;
     class: string;
     hasText?: boolean;
     onDelete?: () => void;
@@ -16,10 +16,25 @@
 
   export let id: string;
   export let path: string;
-  export let name: string;
+  export let name: string | undefined = undefined;
   export let hasText = false;
   export let onDelete: () => void = () => {};
   let status = Status.WAITING;
+  let confirm = 0;
+
+  const doDelete = async () => {
+    status = Status.SENDING;
+    const resp = await api.DELETE(`/${path}/${id}`);
+    if (resp.ok || resp.status === 404) {
+      status = Status.OK;
+      onDelete();
+    } else {
+      console.error(
+        `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+        await resp.json(),
+      );
+    }
+  };
 </script>
 
 <input type="checkbox" id="delete-{id}" class="modal-toggle" />
@@ -42,41 +57,61 @@
     <div class="modal-action">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <label
-        for="delete-{id}"
-        class="btn border-2 normal-border btn-outline"
-        on:click={async () => {
-          status = Status.SENDING;
-          const resp = await api.DELETE(`/${path}/${id}`);
-          if (resp.ok || resp.status === 404) {
-            status = Status.OK;
-            onDelete();
-          } else {
-            console.error(
-              `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
-              await resp.json(),
-            );
-          }
-        }}
-      >
+      <label for="delete-{id}" class="btn border-2 normal-border btn-outline" on:click={doDelete}>
         {$t('common.confirm')}
       </label>
     </div>
   </div>
 </div>
 
-<label
-  for="delete-{id}"
-  class="btn {status != Status.WAITING
-    ? 'btn-ghost btn-disabled'
-    : 'border-2 btn-ghost'} {$$restProps.class}"
->
-  {#if status != Status.SENDING}
-    <span><i class="fa-regular fa-trash-can fa-lg"></i></span>
-  {:else}
-    <span class="loading loading-dots loading-xs"></span>
-  {/if}
-  {#if hasText}
-    <span>{$t(status == Status.OK ? 'common.deleted' : 'common.delete')}</span>
-  {/if}
-</label>
+{#if name}
+  <label
+    for="delete-{id}"
+    class="btn btn-ghost {status != Status.WAITING
+      ? 'btn-disabled'
+      : 'border-2'} {$$restProps.class}"
+  >
+    {#if status != Status.SENDING}
+      <span><i class="fa-regular fa-trash-can fa-lg"></i></span>
+    {:else}
+      <span class="loading loading-dots loading-xs"></span>
+    {/if}
+    {#if hasText}
+      <span>{$t(status == Status.OK ? 'common.deleted' : 'common.delete')}</span>
+    {/if}
+  </label>
+{:else}
+  <button
+    class="btn btn-ghost {status != Status.WAITING
+      ? 'btn-disabled'
+      : 'border-2'} {$$restProps.class}"
+    on:click={async () => {
+      confirm += 1;
+      setTimeout(() => {
+        if (confirm === 1) confirm = 0;
+      }, 3000);
+      if (confirm === 2) {
+        await doDelete();
+      }
+    }}
+  >
+    {#if confirm === 1}
+      <span><i class="fa-solid fa-check fa-lg"></i></span>
+    {:else if status != Status.SENDING}
+      <span><i class="fa-regular fa-trash-can fa-lg"></i></span>
+    {:else}
+      <span class="loading loading-dots loading-xs"></span>
+    {/if}
+    {#if hasText}
+      <span>
+        {$t(
+          status == Status.OK
+            ? 'common.deleted'
+            : confirm === 1
+              ? 'common.confirm'
+              : 'common.delete',
+        )}
+      </span>
+    {/if}
+  </button>
+{/if}

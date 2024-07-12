@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Collaboration from '$lib/components/Collaboration.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
 
@@ -62,7 +62,7 @@
                     (collaboration.inviterId !== user.id && getUserPrivilege(user.role) === 6))}
               />
             {/each}
-            <Pagination {total} {perPage} {page} {searchParams} />
+            <Paginator {total} {perPage} {page} {searchParams} />
           {:else}
             <p class="py-3 text-center">{$t('common.empty')}</p>
           {/if}

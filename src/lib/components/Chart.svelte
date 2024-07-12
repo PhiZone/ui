@@ -20,10 +20,14 @@
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+    class={'eventDescription' in chart && chart.eventDescription ? 'tooltip tooltip-bottom' : ''}
+    data-tip={'eventDescription' in chart ? chart.eventDescription : ''}
   >
-    <a href={`/charts/${chart.id}`}>
-      <figure class="h-[167px] relative">
+    <a
+      class="card text-left w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+      href={`/charts/${chart.id}`}
+    >
+      <figure class="h-[167px] relative rounded-none">
         <img
           src={getCompressedImage(chart.illustration ?? chart.song.illustration)}
           alt="Illustration"
@@ -73,14 +77,7 @@
           {chart.rating.toFixed(2)}
         </p>
         {#if showLike}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class="absolute bottom-8 right-8"
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
+          <div class="absolute bottom-8 right-8">
             <Like
               id={chart.id}
               likes={chart.likeCount}
@@ -110,7 +107,13 @@
         : 'w-2/3'} gap-2"
     >
       {#if showSong || ('label' in chart && chart.label)}
-        <div class="{showSong ? 'w-full sm:w-1/2 2xl:w-2/3' : 'w-1/6'} flex gap-2 items-center">
+        <div
+          class="{showSong
+            ? 'sm:w-1/2 2xl:w-2/3'
+            : showLike
+              ? 'sm:w-5/12'
+              : 'lg:w-1/2'} w-full flex gap-2 items-center"
+        >
           {#if 'label' in chart && chart.label}
             <div
               class="{chart.label.length > 10 ? 'tooltip tooltip-right' : ''} hidden sm:inline"
@@ -132,7 +135,11 @@
     </div>
     {#if showCharter}
       <div
-        class="hidden lg:inline {showSong ? 'w-1/3 max-w-1/3' : 'w-3/4'} text-lg ellipsis-2-smxl"
+        class="hidden lg:inline {showSong
+          ? 'w-1/3 max-w-1/3'
+          : showLike
+            ? 'w-5/12'
+            : 'w-1/2'} text-lg ellipsis-2-smxl"
       >
         {#if chart.authorName}
           {@html $charter}
@@ -141,19 +148,12 @@
         {/if}
       </div>
     {/if}
-    <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
-      <div class="hidden xl:inline">
-        <Rating rating={chart.rating} direction="left" />
-      </div>
-      {#if showLike}
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          on:click={(e) => {
-            e.preventDefault();
-          }}
-          on:keyup
-          class="hidden sm:inline"
-        >
+    {#if showLike}
+      <div class="w-1/6 flex gap-3 items-center justify-between min-w-fit">
+        <div class="hidden xl:inline">
+          <Rating rating={chart.rating} direction="left" />
+        </div>
+        <div class="hidden sm:inline">
           <Like
             id={chart.id}
             likes={chart.likeCount}
@@ -162,8 +162,8 @@
             class="btn-sm w-24"
           />
         </div>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </a>
 {/if}
 

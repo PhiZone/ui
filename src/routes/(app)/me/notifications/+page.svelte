@@ -2,7 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Notification from '$lib/components/Notification.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { invalidateAll } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
 
@@ -63,7 +63,7 @@
           {#each data as notification}
             <Notification {notification} />
           {/each}
-          <Pagination {total} {perPage} {page} {searchParams} />
+          <Paginator {total} {perPage} {page} {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}

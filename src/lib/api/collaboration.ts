@@ -3,11 +3,11 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, PatchElement, R } from './types';
 
 export interface CollaborationDto {
-  dateCreated: Date;
+  dateCreated: string;
   id: string;
   inviteeId: number;
   inviterId: number;
-  position: null | string;
+  position: string | null;
   status: number;
   submissionId: string;
 }
@@ -30,7 +30,7 @@ export interface CreateOpts {
   type: 'songs' | 'charts';
   id: string;
   inviteeId: number;
-  position?: null | string;
+  position?: string | null;
 }
 
 // review

@@ -5,8 +5,8 @@ import { serialize } from 'object-to-formdata';
 
 export interface ChartAssetDto {
   chartId: string;
-  dateCreated: Date;
-  dateUpdated: Date;
+  dateCreated: string;
+  dateUpdated: string;
   file: string;
   id: string;
   name: string;

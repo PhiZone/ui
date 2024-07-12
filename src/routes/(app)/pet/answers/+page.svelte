@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import Answer from '$lib/components/Answer.svelte';
   import Error from '$lib/components/Error.svelte';
 
@@ -25,7 +25,7 @@
           <Answer {answer} />
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

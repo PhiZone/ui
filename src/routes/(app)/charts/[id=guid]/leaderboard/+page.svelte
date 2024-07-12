@@ -34,10 +34,7 @@
     <div
       class="hero-overlay bg-fixed bg-opacity-40 bg-gradient-to-t from-base-300 to-transparent"
     />
-    <div
-      class="pt-32 pb-24 w-full flex flex-col px-4 md:px-16 2xl:px-32 mx-auto"
-      style:max-width="min(100vw, 1600px)"
-    >
+    <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-16 2xl:px-32 mx-auto">
       <div class="flex justify-between">
         <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center">
           <h2 class="text-5xl font-bold content md:inline-block">
@@ -70,7 +67,7 @@
                     <tr>
                       <th>#</th>
                       <th>{$t('record.player')}</th>
-                      <th>{$t('record.score')}</th>
+                      <th>{$t('common.score')}</th>
                       <th>{$t('record.acc')}</th>
                       <th>{$t('record.perfect')}</th>
                       <th>{$t('record.good')}</th>
@@ -102,13 +99,15 @@
                           >
                             <div class="avatar">
                               <div class="mask mask-circle w-12 h-12">
-                                <img src={getAvatar(record.owner.avatar)} alt="Avatar" />
+                                <img src={getAvatar(record.owner?.avatar)} alt="Avatar" />
                               </div>
                             </div>
                             <div>
-                              <div class="font-bold">{record.owner.userName}</div>
+                              <div class="font-bold">
+                                {record.owner?.userName ?? $t('common.anonymous')}
+                              </div>
                               <Region
-                                region={record.owner.region}
+                                region={record.owner?.region}
                                 width={21}
                                 textCss="opacity-50"
                               />
@@ -154,7 +153,7 @@
                     <tr>
                       <th>#</th>
                       <th>{$t('record.player')}</th>
-                      <th>{$t('record.score')}</th>
+                      <th>{$t('common.score')}</th>
                       <th>{$t('record.acc')}</th>
                       <th>{$t('record.perfect')}</th>
                       <th>{$t('record.good')}</th>
@@ -174,3 +173,9 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .max-w {
+    max-width: min(calc(100vw - 16px), 1600px);
+  }
+</style>

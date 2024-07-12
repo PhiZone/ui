@@ -9,8 +9,8 @@ export interface RecordDto {
   bad: number;
   chart?: ChartDto;
   chartId: string;
-  dateCreated: Date;
-  dateLiked: Date | null;
+  dateCreated: string;
+  dateLiked: string | null;
   goodEarly: number;
   goodJudgment: number;
   goodLate: number;

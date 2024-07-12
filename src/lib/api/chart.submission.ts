@@ -1,39 +1,45 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
 import type { CollaborationDto } from './collaboration';
 import ChartAssetSubmissionAPI from './chart.submission.asset';
 import type { SongDto, SongSubmissionDto } from '.';
+import type { EventTeamDto, EventDivisionDto } from './event';
 
 export interface ChartSubmissionDto {
   accessibility: number;
   admissionStatus: number;
   authorName: string;
-  dateCreated: Date;
-  dateUpdated: Date;
-  dateVoted: Date | null;
-  description: null | string;
+  dateCreated: string;
+  dateUpdated: string;
+  dateVoted: string | null;
+  description: string | null;
   difficulty: number;
   file: string;
   format: number;
   id: string;
-  illustration: null | string;
-  illustrator: null | string;
+  illustration: string | null;
+  illustrator: string | null;
   isRanked: boolean;
-  level: null | string;
+  level: string | null;
   levelType: number;
   noteCount: number;
   ownerId: number;
-  representationId: null | string;
-  song: null | SongDto;
-  songId: null | string;
-  songSubmission: null | SongSubmissionDto;
-  songSubmissionId: null | string;
+  representationId: string | null;
+  song: SongDto | null;
+  songId: string | null;
+  songSubmission: SongSubmissionDto | null;
+  songSubmissionId: string | null;
   status: number;
   tags: string[];
-  title: null | string;
+  title: string | null;
   volunteerStatus: number;
+}
+
+export interface EventParticipationInfoDto {
+  division?: EventDivisionDto;
+  team?: EventTeamDto;
 }
 
 // list
@@ -117,6 +123,12 @@ export default class ChartSubmissionAPI {
   delete(opts: DeleteOpts): R {
     return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
+
+  checkEvent = createQueryCreator(
+    'chart.submission.checkEvent',
+    (opts: StringArrayOpt): R<EventParticipationInfoDto> =>
+      this.api.POST('/studio/charts/checkEvent', opts),
+  );
 
   asset;
 }

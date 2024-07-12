@@ -12,6 +12,9 @@
   import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
   import Error from '$lib/components/Error.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import Service from '$lib/components/Service.svelte';
+  import Download from '$lib/components/Download.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
 
   export let data;
 
@@ -115,10 +118,30 @@
       { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
     ),
   );
+  $: services = createQuery(api.service.list({ rangeTargetType: [0] }));
 
   $: composer = $submission.data?.data.originalityProof
     ? richtext($submission.data?.data.authorName ?? '')
     : readable($submission.data?.data.authorName);
+  $: composerText =
+    $submission.data?.data.originalityProof && $submission.data?.data.authorName
+      ? $submission.data?.data.authorName.replaceAll(
+          /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
+          (_, __, ___, display: string) => display,
+        )
+      : $submission.data?.data.authorName;
+  $: eventParticipation = createQuery(
+    api.chart.submission.checkEvent(
+      { strings: $submission.data?.data.tags ?? [] },
+      { enabled: $submission.isSuccess },
+    ),
+  );
+  $: event = createQuery(
+    api.event.info(
+      { id: $eventParticipation.data?.data.division?.eventId ?? '' },
+      { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+    ),
+  );
 </script>
 
 <svelte:head>
@@ -452,13 +475,13 @@
         >
           <label class="join w-full">
             <span class="btn no-animation join-item w-1/4 min-w-fit">
-              {$t('chapter.label')}
+              {$t('common.label')}
             </span>
             <input
               type="text"
               id="label"
               name="label"
-              placeholder={$t('chapter.label')}
+              placeholder={$t('common.label')}
               class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
             />
           </label>
@@ -520,60 +543,60 @@
                   </span>
                   {submission.title}
                 </p>
-                <p>
-                  <span class="badge mr-1">
+                <p class="flex gap-1 items-center">
+                  <span class="badge">
                     {$t('common.form.audio')}
                   </span>
-                  <a
-                    href={submission.file}
-                    target="_blank"
-                    class="hover:underline min-w-fit"
-                    download={submission.file?.split('/').pop()}
-                  >
-                    {$t('common.download')}
-                  </a>
+                  <Download
+                    file={submission.file}
+                    name={`${composerText} - ${submission.title}${
+                      submission.edition ? ` (${submission.edition})` : ''
+                    }`}
+                    class=""
+                    inline
+                  />
                 </p>
-                <p>
-                  <span class="badge mr-1">
+                <p class="flex gap-1 items-center">
+                  <span class="badge">
                     {$t('common.form.illustration')}
                   </span>
-                  <a
-                    href={submission.illustration}
-                    target="_blank"
-                    class="hover:underline min-w-fit"
-                    download={submission.illustration?.split('/').pop()}
-                  >
-                    {$t('common.download')}
-                  </a>
+                  <Download
+                    file={submission.illustration}
+                    name={`${composerText} - ${submission.title}${
+                      submission.edition ? ` (${submission.edition})` : ''
+                    }`}
+                    class=""
+                    inline
+                  />
                 </p>
                 {#if submission.license}
-                  <p>
-                    <span class="badge mr-1">
+                  <p class="flex gap-1 items-center">
+                    <span class="badge">
                       {$t('common.form.license')}
                     </span>
-                    <a
-                      href={submission.license}
-                      target="_blank"
-                      class="hover:underline min-w-fit"
-                      download={submission.license.split('/').pop()}
-                    >
-                      {$t('common.download')}
-                    </a>
+                    <Download
+                      file={submission.license}
+                      name={`${composerText} - ${submission.title}${
+                        submission.edition ? ` (${submission.edition})` : ''
+                      } - ${$t('common.form.license')}`}
+                      class=""
+                      inline
+                    />
                   </p>
                 {/if}
                 {#if submission.originalityProof}
-                  <p>
-                    <span class="badge mr-1">
+                  <p class="flex gap-1 items-center">
+                    <span class="badge">
                       {$t('common.form.originality_proof')}
                     </span>
-                    <a
-                      href={submission.originalityProof}
-                      target="_blank"
-                      class="hover:underline min-w-fit"
-                      download={submission.originalityProof.split('/').pop()}
-                    >
-                      {$t('common.download')}
-                    </a>
+                    <Download
+                      file={submission.originalityProof}
+                      name={`${composerText} - ${submission.title}${
+                        submission.edition ? ` (${submission.edition})` : ''
+                      } - ${$t('common.form.originality_proof')}`}
+                      class=""
+                      inline
+                    />
                   </p>
                 {/if}
                 <p>
@@ -839,6 +862,35 @@
           </div>
         </div>
       {/if}
+      {#if $services.isSuccess && $services.data.data.length > 0}
+        {@const services = $services.data.data}
+        <div class="indicator w-full my-4">
+          <span
+            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+            style:--tw-translate-x="0"
+          >
+            {$t('common.services')}
+          </span>
+          <div
+            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+          >
+            <div class="card-body pt-14 pb-10">
+              <a
+                class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+                href="/services?rangeTargetType=0&resourcePath=studio/songs&resourceId={id}"
+              >
+                {$t('common.more')}
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
+              <div class="result">
+                {#each services as service}
+                  <Service {service} resourcePath="studio/songs" resourceId={id} />
+                {/each}
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
     </div>
     <div class="mx-auto lg:mx-4 w-80 form-control">
       {#if $uploader.isSuccess}
@@ -863,6 +915,22 @@
           </span>
           <Song {song} />
         </div>
+      {/if}
+      {#if $eventParticipation.isSuccess}
+        {@const participation = $eventParticipation.data.data}
+        {#if participation.division && $event.isSuccess}
+          {@const division = participation.division}
+          {@const event = $event.data.data}
+          <div class="indicator w-full my-4">
+            <span
+              class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
+              style:--tw-translate-x="0"
+            >
+              {$t('event.event')}
+            </span>
+            <EventDivision {division} {event} kind="full" />
+          </div>
+        {/if}
       {/if}
     </div>
   </div>

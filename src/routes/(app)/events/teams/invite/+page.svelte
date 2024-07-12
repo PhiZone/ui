@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import Timer from '$lib/components/Timer.svelte';
   import { Status } from '$lib/constants';
@@ -7,7 +8,7 @@
   import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
-  $: ({ user, api, code } = data);
+  $: ({ user, api, code, url } = data);
 
   $: query = createQuery(api.event.team.infoInvite({ code }));
 
@@ -18,6 +19,10 @@
   let errorCode = '';
 
   let timeUp = false;
+
+  $: if (!user && browser) {
+    goto(`/session/login?redirect=${url.pathname + url.search}`);
+  }
 </script>
 
 <svelte:head>

@@ -8,13 +8,13 @@ export interface PlayConfigurationDto {
   backgroundLuminance: number;
   chartMirroring: number;
   chartOffset: number;
-  dateCreated: Date;
+  dateCreated: string;
   fcApIndicator: boolean;
   goodJudgment: number;
   hitSoundVolume: number;
   id: string;
   musicVolume: number;
-  name: null | string;
+  name: string | null;
   noteSize: number;
   ownerId: number;
   perfectJudgment: number;

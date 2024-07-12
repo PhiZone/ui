@@ -7,5 +7,6 @@ export const load = async ({ url, parent }) => {
   await queryClient.prefetchQuery(api.event.team.infoInvite({ code }));
   return {
     code,
+    url,
   };
 };

@@ -1,5 +1,6 @@
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { HostshipDto } from './event';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 import type { ApplicationDto } from '.';
@@ -34,20 +35,11 @@ export interface UserDto {
 export interface UserDetailedDto extends UserDto {
   email: string;
   emailConfirmed: boolean;
-  hostships: HostshipDetailedDto[];
+  hostships: HostshipDto[];
   notifications: number;
   phoneNumber: string | null;
   phoneNumberConfirmed: boolean;
   twoFactorEnabled: boolean;
-}
-
-export interface HostshipDetailedDto {
-  eventId: string;
-  isAdmin: boolean;
-  isUnveiled: boolean;
-  permissions: number[] | null;
-  position: null | string;
-  userId: number;
 }
 
 export interface RegionDto {
@@ -59,10 +51,10 @@ export interface RegionDto {
 export interface ApplicationUserDto {
   application: ApplicationDto;
   applicationId: string;
-  dateCreated: Date;
-  dateUpdated: Date;
-  remoteUserId: null | string;
-  remoteUserName: null | string;
+  dateCreated: string;
+  dateUpdated: string;
+  remoteUserId: string | null;
+  remoteUserName: string | null;
   userId: number;
 }
 

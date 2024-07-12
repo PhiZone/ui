@@ -1,5 +1,6 @@
 {
   "division": {
+    "chart_pool": "谱池",
     "create_team": "创建队伍",
     "division": "赛道",
     "entries": "参赛作品",
@@ -7,7 +8,7 @@
     "join_team": "加入队伍",
     "my_team": "我的队伍",
     "participate": "参加",
-    "prompts": "参赛指引",
+    "song_pool": "曲池",
     "statuses": {
       "0": "未公布",
       "1": "未开始",
@@ -15,7 +16,6 @@
       "3": "已结束"
     },
     "team_count": "队伍数",
-    "type": "类型",
     "types": {
       "0": "作曲",
       "1": "制谱",
@@ -24,9 +24,64 @@
   },
   "divisions": "赛道",
   "event": "活动",
-  "hosts": "主办方",
-  "label": "标签",
-  "search": "搜索活动",
+  "host_team": "主办团队",
+  "hostship": {
+    "already_joined": "你已经加入了该活动的主办团队。",
+    "index": "序号",
+    "invite_description": "使用邀请码将其他人邀请至主办团队。邀请码会在 6 小时后过期。请确保仅将其分享给你信任的人。",
+    "invite_msg": "{{user}} 邀请你加入活动 {{event}} 的主办团队！打开链接 {{link}} 了解详情。",
+    "invite_msg_brief": "{{user}} 邀请你加入活动 {{event}} 的主办团队",
+    "is_admin": "是否为管理员",
+    "join": "接受邀请并加入团队",
+    "joined": "你加入了活动 {{event}} 的主办团队！",
+    "operation": "操作",
+    "operations": {
+      "0": "查看",
+      "1": "创建",
+      "2": "编辑",
+      "3": "移除"
+    },
+    "permission_text": "{{operation}}{{scope}}",
+    "permissions": "权限",
+    "scope": "范围",
+    "scopes": {
+      "0": "赛道",
+      "1": "队伍",
+      "2": "资源",
+      "3": "主办身份",
+      "4": "保留字段"
+    }
+  },
+  "member": "成员",
+  "members": "成员",
+  "task": {
+    "date_executed": "执行日期",
+    "task": "自动化任务",
+    "types": {
+      "0": "定时",
+      "1": "创建队伍前",
+      "2": "接受邀请前",
+      "3": "加入队伍前",
+      "4": "提交作品前",
+      "5": "更新队伍前",
+      "6": "更新成员前",
+      "7": "更新作品前",
+      "8": "创建队伍后",
+      "9": "接受邀请后",
+      "10": "加入队伍后",
+      "11": "提交作品后",
+      "12": "更新队伍后",
+      "13": "更新成员后",
+      "14": "更新作品后",
+      "15": "稿件通过时",
+      "16": "稿件删除时",
+      "17": "队伍解散时",
+      "18": "成员退出时",
+      "19": "作品评价时",
+      "20": "队伍评价时"
+    }
+  },
+  "tasks": "自动化任务",
   "team": {
     "claimed_participant_count": "声称成员数",
     "claimed_submission_count": "声称稿件数",
@@ -53,11 +108,8 @@
     "leave": "退出队伍",
     "leave_confirmation": "你确认要退出该队伍？",
     "left": "你退出了队伍 {{team}}！",
-    "member": "成员",
-    "members": "成员",
     "name": "队名",
     "participant_count": "成员数",
-    "score": "分数",
     "status": "参赛状态",
     "statuses": {
       "0": "未准备",
@@ -69,5 +121,6 @@
     "submission_count": "稿件数",
     "submissions": "稿件",
     "team": "队伍"
-  }
+  },
+  "teams": "队伍"
 }

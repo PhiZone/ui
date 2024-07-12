@@ -1,16 +1,16 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
-  import { getAvatar, getCompressedImage, hasEventPermission } from '$lib/utils';
+  import { getAvatar, hasEventPermission } from '$lib/utils';
   import Song from '$lib/components/Song.svelte';
   import User from '$lib/components/User.svelte';
-  import Like from '$lib/components/Like.svelte';
   import Record from '$lib/components/Record.svelte';
   import Error from '$lib/components/Error.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import { UPDATE, TEAM, REMOVE } from '$lib/hostshipPermissions.js';
-  import { Status } from '$lib/constants.js';
+  import { UPDATE, TEAM, REMOVE } from '$lib/hostshipPermissions';
+  import { Status } from '$lib/constants';
   import { goto } from '$app/navigation';
+  import EventDivision from '$lib/components/EventDivision.svelte';
 
   export let data;
   const { user, id, api, url } = data;
@@ -120,11 +120,12 @@
           <span class="loading loading-dots loading-lg"></span>
         {/if}
       </div>
-      <div class="flex flex-col md:flex-row gap-6 justify-center md:w-5/6 mx-auto">
+      <p class="opacity-70 pb-7">{$t('event.team.invitation.invite_description')}</p>
+      <div class="flex flex-col md:flex-row gap-6 justify-center mx-auto">
         <button
           class="btn btn-outline border-2 {copied
             ? 'btn-success btn-active'
-            : 'normal-border'} md:w-1/2 w-full"
+            : 'normal-border'} md:w-2/5 w-full"
           on:click={() => {
             navigator.clipboard.writeText(
               $t('event.team.invitation.invite_msg', {
@@ -155,7 +156,7 @@
           {/if}
         </button>
         <div
-          class="md:w-1/2 w-full {status === Status.ERROR && errorCode
+          class="md:w-2/5 w-full {status === Status.ERROR && errorCode
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error'
             : ''}"
           data-tip={errorCode ? $t(`error.${errorCode}`) : ''}
@@ -306,7 +307,7 @@
                     <div class="stat-value text-4xl">#{team.position ?? '-'}</div>
                   </div>
                   <div class="stat place-items-center">
-                    <div class="stat-title">{$t('event.team.score')}</div>
+                    <div class="stat-title">{$t('common.score')}</div>
                     <div class="stat-value text-4xl">{team.score ?? '-'}</div>
                   </div>
                   <div class="stat place-items-center">
@@ -380,8 +381,9 @@
               </span>
               <User id={team.ownerId} />
             </div>
-            {#if $division.isSuccess}
+            {#if $division.isSuccess && $event.isSuccess}
               {@const division = $division.data.data}
+              {@const event = $event.data.data}
               <div class="indicator w-full my-4">
                 <span
                   class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -389,77 +391,7 @@
                 >
                   {$t('event.division.division')}
                 </span>
-                <a
-                  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
-                  href="/events/divisions/{division.id}"
-                >
-                  <figure class="h-[167px] relative">
-                    <img
-                      src={getCompressedImage(
-                        division.illustration ?? $event.data?.data.illustration,
-                      )}
-                      alt="Illustration"
-                      class="object-fill"
-                    />
-                    <div class="absolute bottom-2 left-2">
-                      <button class="btn btn-shallow btn-sm text-xl no-animation">
-                        {$t(`event.division.types.${division.type}`)}
-                      </button>
-                    </div>
-                    <div
-                      class="absolute bottom-2 right-2 badge badge-lg badge-outline {division.status ==
-                      2
-                        ? 'badge-success'
-                        : division.status == 3
-                          ? 'badge-error'
-                          : ''}"
-                    >
-                      {$t(`event.division.statuses.${division.status}`)}
-                    </div>
-                  </figure>
-                  <div class="card-body py-6 gap-0.5">
-                    <div class="flex flex-col mb-2">
-                      <h2 class="title w-full truncate">
-                        {$event.data?.data.title} / {division.title}
-                      </h2>
-                      {#if division.subtitle}
-                        <h2 class="subtitle opacity-80 w-full truncate">
-                          {division.subtitle}
-                        </h2>
-                      {/if}
-                    </div>
-                    <p class="flex items-center gap-1">
-                      <span class="badge">{$t('common.illustrator')}</span>
-                      <span class="truncate">
-                        {division.illustrator}
-                      </span>
-                    </p>
-                    {#if division.description}
-                      <p class="flex items-center">
-                        <span class="content description">
-                          <span class="inline-flex badge mr-1">{$t('common.description')}</span>
-                          {division.description}
-                        </span>
-                      </p>
-                    {/if}
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <div
-                      class="card-actions justify-end"
-                      on:click={(e) => {
-                        e.preventDefault();
-                      }}
-                      on:keyup
-                    >
-                      <Like
-                        id={division.id}
-                        likes={division.likeCount}
-                        type="events/divisions"
-                        liked={division.dateLiked != null}
-                        class="btn-sm"
-                      />
-                    </div>
-                  </div>
-                </a>
+                <EventDivision {division} {event} kind="full" />
               </div>
             {/if}
           </div>
@@ -469,7 +401,7 @@
                 class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
                 style:--tw-translate-x="0"
               >
-                {$t('event.team.members')}
+                {$t('event.members')}
               </span>
               <div
                 class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"

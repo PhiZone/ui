@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-300">
-  <div class="hero-content flex-col text-center w-[50vw] max-w-lg">
+  <div class="hero-content flex-col text-center sm:w-[50vw] max-w-lg">
     <h1 class="text-5xl font-bold">
       {$t('session.password_reset.password_reset')}
     </h1>

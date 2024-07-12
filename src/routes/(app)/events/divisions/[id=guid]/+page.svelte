@@ -5,10 +5,12 @@
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
   import { goto, preloadData } from '$app/navigation';
-  import { getAvatar, parseDateTime } from '$lib/utils';
+  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import Record from '$lib/components/Record.svelte';
   import Timer from '$lib/components/Timer.svelte';
+  import Tag from '$lib/components/Tag.svelte';
 
   export let data;
 
@@ -26,6 +28,10 @@
       order: ['dateExecuted', 'dateCreated'],
     }),
   );
+  $: divisionTag = createQuery(
+    api.tag.info({ id: $division.data?.data.tagId ?? '' }, { enabled: $division.isSuccess }),
+  );
+  $: tags = createQuery(api.event.division.listTags({ id }, { enabled: $division.isSuccess }));
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
@@ -65,8 +71,9 @@
 
 <svelte:head>
   <title>
-    {$t('event.division.division')} - {$division.data?.data.title} | {$t('event.event')} - {$event
-      .data?.data.title} | {$t('common.title')}
+    {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
+      'common.title',
+    )}
   </title>
 </svelte:head>
 
@@ -189,7 +196,7 @@
     style:background-image="url({division.illustration ?? event.illustration})"
   >
     <div class="hero-overlay bg-opacity-60" />
-    <div class="pt-32 pb-24 w-full flex flex-col max-w-[2000px] px-4 md:px-32 mx-auto">
+    <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
         / {division.title}
@@ -220,42 +227,66 @@
             {$t('common.view_illustration')}
           </label>
         </div>
-        {#if division.status < 3}
-          <Timer
-            timeDue={new Date(division.status < 2 ? division.dateStarted : division.dateEnded)}
-            text={division.status < 2 ? 'common.starts_at' : 'common.ends_at'}
-          />
-        {/if}
-        {#if division.team}
-          <a
-            href="/events/teams/{division.team.id}"
-            class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
-          >
-            {$t('event.division.my_team')}
-          </a>
-        {:else if user && division.status < 3}
-          <label
-            for="participate"
-            class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 backdrop-blur gradient btn-outline"
-          >
-            {$t('event.division.participate')}
-          </label>
-        {/if}
+        <div class="flex items-center gap-8">
+          {#if division.status < 3}
+            <Timer
+              timeDue={new Date(division.status < 2 ? division.dateStarted : division.dateEnded)}
+              text={division.status < 2 ? 'common.starts_at' : 'common.ends_at'}
+            />
+          {:else}
+            <div class="flex flex-col gap-2">
+              <p class="truncate">
+                <span class="badge badge-outline backdrop-blur mr-1">
+                  {$t('common.started_at')}
+                </span>
+                {parseDateTime(division.dateStarted)}
+              </p>
+              <p class="truncate">
+                <span class="badge badge-outline backdrop-blur mr-1">{$t('common.ended_at')}</span>
+                {parseDateTime(division.dateEnded)}
+              </p>
+            </div>
+          {/if}
+          {#if isEventHost(user, event)}
+            <a
+              href="/events/divisions/{division.id}/manage"
+              class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
+            >
+              {$t('common.manage')}
+            </a>
+          {:else if division.team}
+            <a
+              href="/events/teams/{division.team.id}"
+              class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
+            >
+              {$t('event.division.my_team')}
+            </a>
+          {:else if user && division.status < 3}
+            <label
+              for="participate"
+              class="btn border-0 text-neutral-content btn-md min-w-fit w-36 text-lg bg-opacity-0 gradient btn-outline"
+            >
+              {$t('event.division.participate')}
+            </label>
+          {/if}
+        </div>
       </div>
       <div class="flex flex-col lg:flex-row gap-3">
         <div class="lg:w-full">
-          <div role="tablist" class="tabs tabs-lifted backdrop-blur-lg rounded-t-2xl mt-4">
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 0 ? 'tab-active' : ''}"
-              on:click={() => {
-                index = 0;
-              }}
-              on:keyup
-            >
-              {$t('event.division.prompts')}
-            </div>
+          <div role="tablist" class="tabs tabs-lifted backdrop-blur-xl rounded-t-2xl mt-4">
+            {#if division.type !== 0}
+              <div
+                role="tab"
+                tabindex="0"
+                class="tab {index == 0 ? 'tab-active' : ''}"
+                on:click={() => {
+                  index = 0;
+                }}
+                on:keyup
+              >
+                {$t(division.type === 1 ? 'event.division.song_pool' : 'event.division.chart_pool')}
+              </div>
+            {/if}
             <div
               role="tab"
               tabindex="0"
@@ -287,26 +318,33 @@
                 {#if division.type == 1 && $songPrompts.isSuccess}
                   {@const prompts = $songPrompts.data.data}
                   {#if prompts.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each prompts as song}
-                        <li><Song {song} kind="inline" /></li>
+                        <Song {song} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {:else if division.type == 2 && $chartPrompts.isSuccess}
                   {@const prompts = $chartPrompts.data.data}
                   {#if prompts.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each prompts as chart}
-                        <li><Chart {chart} kind="inline" /></li>
+                        <Chart {chart} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {/if}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+                  href="/events/divisions/{id}/prompts"
+                >
+                  {$t('common.more')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
               {:else if index == 1 && $leaderboard.isSuccess}
                 {@const leaderboard = $leaderboard.data.data}
                 <div class="overflow-x-auto">
@@ -315,9 +353,9 @@
                       <tr>
                         <th>#</th>
                         <th>{$t('event.team.team')}</th>
-                        <th>{$t('event.team.members')}</th>
+                        <th>{$t('event.members')}</th>
                         <th>{$t('event.team.status')}</th>
-                        <th>{$t('event.team.score')}</th>
+                        <th>{$t('common.score')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -326,7 +364,7 @@
                           class="transition {team.participants
                             .map((e) => e.id)
                             .includes(user?.id ?? 0)
-                            ? 'bg-info-content bg-opacity-25'
+                            ? 'bg-info-content bg-opacity-20'
                             : 'bg-base-100 bg-opacity-0 hover:bg-base-300'} hover:bg-opacity-75 hover:cursor-pointer"
                           on:click={() => {
                             goto(`/events/teams/${team.id}`);
@@ -412,37 +450,37 @@
                             <div
                               class="xl:avatar-group -space-x-3 rtl:space-x-reverse hidden 2xl:hidden"
                             >
-                              {#each team.participants.slice(0, maxMemberDisplay * 7) as participant}
+                              {#each team.participants.slice(0, maxMemberDisplay * 4) as participant}
                                 <div class="avatar">
                                   <div class="mask mask-circle w-8 h-8">
                                     <img src={getAvatar(participant.avatar)} alt="Avatar" />
                                   </div>
                                 </div>
                               {/each}
-                              {#if team.participants.length > maxMemberDisplay * 7}
+                              {#if team.participants.length > maxMemberDisplay * 4}
                                 <div class="avatar placeholder">
                                   <div
                                     class="mask mask-circle w-8 h-8 bg-neutral text-neutral-content"
                                   >
-                                    <span>+{team.participants.length - maxMemberDisplay * 7}</span>
+                                    <span>+{team.participants.length - maxMemberDisplay * 4}</span>
                                   </div>
                                 </div>
                               {/if}
                             </div>
                             <div class="2xl:avatar-group -space-x-3 rtl:space-x-reverse hidden">
-                              {#each team.participants.slice(0, maxMemberDisplay * 9) as participant}
+                              {#each team.participants.slice(0, maxMemberDisplay * 8) as participant}
                                 <div class="avatar">
                                   <div class="mask mask-circle w-8 h-8">
                                     <img src={getAvatar(participant.avatar)} alt="Avatar" />
                                   </div>
                                 </div>
                               {/each}
-                              {#if team.participants.length > maxMemberDisplay * 9}
+                              {#if team.participants.length > maxMemberDisplay * 8}
                                 <div class="avatar placeholder">
                                   <div
                                     class="mask mask-circle w-8 h-8 bg-neutral text-neutral-content"
                                   >
-                                    <span>+{team.participants.length - maxMemberDisplay * 9}</span>
+                                    <span>+{team.participants.length - maxMemberDisplay * 8}</span>
                                   </div>
                                 </div>
                               {/if}
@@ -472,9 +510,9 @@
                       <tr>
                         <th>#</th>
                         <th>{$t('event.team.team')}</th>
-                        <th>{$t('event.team.members')}</th>
+                        <th>{$t('event.members')}</th>
                         <th>{$t('event.team.status')}</th>
-                        <th>{$t('event.team.score')}</th>
+                        <th>{$t('common.score')}</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -483,11 +521,11 @@
                 {#if division.type == 0 && $songEntries.isSuccess}
                   {@const entries = $songEntries.data.data}
                   {#if entries.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each entries as song}
-                        <li><Song {song} kind="inline" /></li>
+                        <Song {song} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
@@ -495,24 +533,29 @@
                 {#if division.type == 1 && $chartEntries.isSuccess}
                   {@const entries = $chartEntries.data.data}
                   {#if entries.length > 0}
-                    <ul class="menu bg-base-100 w-full">
+                    <div class="result">
                       {#each entries as chart}
-                        <li><Chart {chart} kind="inline" /></li>
+                        <Chart {chart} />
                       {/each}
-                    </ul>
+                    </div>
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {:else if division.type == 2 && $recordEntries.isSuccess}
                   {@const entries = $recordEntries.data.data}
                   {#if entries.length > 0}
-                    <div class="overflow-x-auto">
+                    <div class="result">
+                      {#each entries as record}
+                        <Record {record} />
+                      {/each}
+                    </div>
+                    <!-- <div class="overflow-x-auto">
                       <table class="table">
                         <thead>
                           <tr>
                             <th>#</th>
                             <th>{$t('record.player')}</th>
-                            <th>{$t('record.score')}</th>
+                            <th>{$t('common.score')}</th>
                             <th>{$t('record.acc')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
@@ -595,7 +638,7 @@
                           <tr>
                             <th>#</th>
                             <th>{$t('record.player')}</th>
-                            <th>{$t('record.score')}</th>
+                            <th>{$t('common.score')}</th>
                             <th>{$t('record.acc')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
@@ -607,11 +650,18 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>
+                    </div> -->
                   {:else}
                     <p class="py-3 text-center">{$t('common.empty')}</p>
                   {/if}
                 {/if}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+                  href="/events/divisions/{id}/entries"
+                >
+                  {$t('common.more')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
               {/if}
               <!-- {#if $divisions.isLoading}
               <ul class="menu bg-base-100 w-full">
@@ -643,9 +693,35 @@
             {/if} -->
             </div>
           </div>
+          {#if $divisionTag.isSuccess && $tags.isSuccess}
+            {@const tags = [$divisionTag.data.data, ...$tags.data.data]}
+            <div class="indicator w-full my-4">
+              <span
+                class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+                style:--tw-translate-x="0"
+              >
+                {$t('common.tags')}
+              </span>
+              <div
+                class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+              >
+                <div class="card-body py-10">
+                  {#if tags.length > 0}
+                    <div class="result">
+                      {#each tags as tag}
+                        <Tag {tag} full />
+                      {/each}
+                    </div>
+                  {:else}
+                    <p class="py-3 text-center">{$t('common.empty')}</p>
+                  {/if}
+                </div>
+              </div>
+            </div>
+          {/if}
         </div>
         <div
-          class="card my-4 bg-base-100 transition border-2 normal-border hover:shadow-lg lg:hover:w-3/4 lg:w-1/4"
+          class="card my-4 h-fit bg-base-100 transition border-2 normal-border hover:shadow-lg lg:hover:w-3/4 lg:w-1/3"
           style:transition="width 400ms cubic-bezier(0.4, 0, 0.2, 1)"
         >
           <div class="card-body">
@@ -677,18 +753,26 @@
                       ? 'step-secondary'
                       : ''}"
                   >
-                    <div
+                    <a
+                      href="/events/divisions/{id}/tasks/{task.id}"
                       class="rounded-2xl transition-all hover:bg-base-200 cursor-pointer w-full overflow-hidden py-2"
                     >
-                      {#if task.dateExecuted}
+                      {#if task.type === 0 && task.dateExecuted}
                         <p class="opacity-70">{parseDateTime(task.dateExecuted)}</p>
                       {/if}
                       <p class="font-bold">{task.name}</p>
-                    </div>
+                    </a>
                   </li>
                 {/each}
               </ul>
             {/if}
+            <a
+              class="min-w-fit btn btn-sm border-2 normal-border btn-outline self-end"
+              href="/events/divisions/{id}/tasks"
+            >
+              {$t('common.more')}
+              <i class="fa-solid fa-angles-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -714,5 +798,8 @@
       --tw-border-opacity: 1;
       --tab-border-color: rgb(55 65 81 / var(--tw-border-opacity));
     }
+  }
+  .max-w {
+    max-width: min(calc(100vw - 16px), 1600px);
   }
 </style>

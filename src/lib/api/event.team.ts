@@ -1,23 +1,18 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type {
-  FileUpdateOpts,
-  FilterBase,
-  PatchElement,
-  PublicResourceFilterBase,
-  R,
-} from './types';
+import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 import type { UserDto } from '.';
+import type { PreservedFieldDto } from './event';
 
 export interface EventTeamDto {
   claimedParticipantCount: number;
   claimedSubmissionCount: number;
-  dateCreated: Date;
-  dateLiked: Date | null;
-  description: null | string;
+  dateCreated: string;
+  dateLiked: string | null;
+  description: string | null;
   divisionId: string;
-  icon: null | string;
+  icon: string | null;
   id: string;
   likeCount: number;
   name: string;
@@ -26,10 +21,11 @@ export interface EventTeamDto {
   position: number | null;
   score: number | null;
   status: number;
+  preservedFields?: (PreservedFieldDto | null)[];
 }
 
 export interface ParticipantDto extends UserDto {
-  position: null | string;
+  position: string | null;
 }
 
 export interface EventTeamInviteDto {
@@ -38,9 +34,8 @@ export interface EventTeamInviteDto {
   team: EventTeamDto;
 }
 
-export interface Filter extends PublicResourceFilterBase {
-  containsSubtitle?: string;
-  equalsSubtitle?: string;
+export interface Filter extends FilterBase {
+  rangeDivisionId?: string[];
 }
 
 export interface TeamListFilter extends FilterBase {
@@ -53,10 +48,6 @@ export interface InfoOpts {
 
 export interface ParticipantInfoOpts extends InfoOpts {
   participantId: number;
-}
-
-export interface CodeDto {
-  code: string;
 }
 
 export interface InviteAcceptOpts {
@@ -90,6 +81,12 @@ export default class EventTeamAPI {
   info = createQueryCreator(
     'event.team.info',
     ({ id }: InfoOpts): R<EventTeamDto> => this.api.GET(`/events/teams/${id}`),
+  );
+
+  listPreservedFields = createQueryCreator(
+    'event.team.preservedFields',
+    (opts: Filter): R<(PreservedFieldDto | null)[][]> =>
+      this.api.GET('/events/teams/preservedFields?' + stringifyFilter(opts)),
   );
 
   create(opts: CreateOpts): R {

@@ -4,7 +4,7 @@
   import Song from '$lib/components/Song.svelte';
   import Error from '$lib/components/Error.svelte';
   import Chart from '$lib/components/Chart.svelte';
-  import { PAGINATION_PER_PAGE } from '$lib/constants.js';
+  import { PAGINATION_PER_PAGE } from '$lib/constants';
 
   export let data;
   $: ({ id, api } = data);

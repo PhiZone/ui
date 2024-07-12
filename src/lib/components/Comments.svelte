@@ -3,7 +3,7 @@
   import { locale, t } from '$lib/translations/config';
   import type { ParsedQuery } from 'query-string';
   import CommentComponent from './Comment.svelte';
-  import Pagination from './Pagination.svelte';
+  import Paginator from './Paginatior.svelte';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   $: ({ user, api } = $page.data);
@@ -70,7 +70,9 @@
           {disabled}
         />
         <button
-          class="ml-3 btn border-2 btn-outline btn-primary w-1/12 min-w-fit"
+          class="ml-3 btn {disabled || commentText.length === 0
+            ? 'btn-disabled'
+            : 'border-2 btn-outline'} btn-primary w-1/12 min-w-fit"
           on:click={sendComment}
           disabled={disabled || commentText.length === 0}
         >
@@ -85,7 +87,7 @@
           {#each data as comment}
             <CommentComponent {type} {comment} {showUser} {showSource} {searchParams} />
           {/each}
-          <Pagination {total} {perPage} page={commentPage} pageName="comment_page" {searchParams} />
+          <Paginator {total} {perPage} page={commentPage} pageName="comment_page" {searchParams} />
         {:else}
           <p class="py-3 text-center">{$t('common.empty')}</p>
         {/if}

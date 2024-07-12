@@ -4,9 +4,9 @@ import type API from '.';
 
 export interface VolunteerVoteDto {
   chartId: string;
-  dateCreated: Date;
+  dateCreated: string;
   id: string;
-  message: null | string;
+  message: string | null;
   ownerId: number;
   score: number;
   suggestedDifficulty: number;
@@ -20,7 +20,7 @@ export interface Filter extends FilterBase {
 // create
 export interface CreateOpts {
   chartId: string;
-  message: null | string;
+  message: string | null;
   score: number;
   suggestedDifficulty: number;
 }

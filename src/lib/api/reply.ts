@@ -10,9 +10,9 @@ export interface ReplyDto {
   language: string;
   owner: UserDto;
   ownerId: number;
-  dateCreated: Date;
+  dateCreated: string;
   likeCount: number;
-  dateLiked: Date | null;
+  dateLiked: string | null;
 }
 
 export interface Filter extends FilterBase {

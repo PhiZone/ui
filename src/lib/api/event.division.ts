@@ -2,7 +2,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
-import type { EventTeamDto } from './event.team';
+import type { EventTeamDto, PreservedFieldDto } from './event';
 import queryString from 'query-string';
 import type { ChartDto, RecordDto, SongDto } from '.';
 import type { TagDto } from './tag';
@@ -10,17 +10,17 @@ import type { TagDto } from './tag';
 export interface EventDivisionDto {
   accessibility: number;
   anonymization: boolean;
-  dateCreated: Date;
-  dateEnded: Date;
-  dateLiked: Date | null;
-  dateStarted: Date;
-  dateUnveiled: Date;
-  description: null | string;
+  dateCreated: string;
+  dateEnded: string;
+  dateLiked: string | null;
+  dateStarted: string;
+  dateUnveiled: string;
+  description: string | null;
   entryCount: number;
   eventId: string;
   id: string;
-  illustration: null | string;
-  illustrator: null | string;
+  illustration: string | null;
+  illustrator: string | null;
   isHidden: boolean;
   isLocked: boolean;
   likeCount: number;
@@ -32,22 +32,22 @@ export interface EventDivisionDto {
   minTeamCount: number | null;
   ownerId: number;
   status: number;
-  subtitle: null | string;
-  tagId: null | string;
-  team: null | EventTeamDto;
+  subtitle: string | null;
+  tagId: string | null;
+  team: EventTeamDto | null;
   teamCount: number;
   title: string;
   type: number;
 }
 
 export interface SongPromptDto extends SongDto {
-  eventDescription: null | string;
-  label: null | string;
+  eventDescription: string | null;
+  label: string | null;
 }
 
 export interface ChartPromptDto extends ChartDto {
-  eventDescription: null | string;
-  label: null | string;
+  eventDescription: string | null;
+  label: string | null;
 }
 
 export interface Filter extends PublicResourceFilterBase {
@@ -79,6 +79,13 @@ export interface CreateOpts {
   IsLocked: boolean;
 }
 
+export interface PreservedFieldOpts {
+  type: 'resources' | 'teams';
+  id: string;
+  index: number;
+  content: string | null;
+}
+
 export default class EventDivisionAPI {
   constructor(private api: API) {}
 
@@ -97,6 +104,12 @@ export default class EventDivisionAPI {
   info = createQueryCreator(
     'event.division.info',
     ({ id }: InfoOpts): R<EventDivisionDto> => this.api.GET(`/events/divisions/${id}`),
+  );
+
+  listPreservedFields = createQueryCreator(
+    'event.division.preservedFields',
+    ({ id }: InfoOpts): R<(PreservedFieldDto | null)[]> =>
+      this.api.GET(`/events/divisions/${id}/preservedFields`),
   );
 
   leaderboard = createQueryCreator(
@@ -143,5 +156,9 @@ export default class EventDivisionAPI {
 
   create(opts: CreateOpts): R {
     return this.api.POST('/events/divisions', serialize(opts));
+  }
+
+  updatePreservedField({ type, id, index, ...rest }: PreservedFieldOpts): R {
+    return this.api.POST(`/events/${type}/${id}/preservedFields/${index}`, rest);
   }
 }

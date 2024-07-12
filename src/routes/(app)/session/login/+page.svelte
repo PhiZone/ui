@@ -6,7 +6,7 @@
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { SUPPORTED_APPS, Status } from '$lib/constants';
-  import { getAvatar, requestIdentity } from '$lib/utils.js';
+  import { getAvatar, requestIdentity } from '$lib/utils';
   // import { useQueryClient } from '@tanstack/svelte-query';
 
   export let data, form;

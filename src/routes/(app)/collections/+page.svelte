@@ -2,8 +2,9 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import Collection from '$lib/components/Collection.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import Error from '$lib/components/Error.svelte';
+  import SearchBar from '$lib/components/SearchBar.svelte';
 
   export let data;
   $: ({ searchParams, page, api } = data);
@@ -18,7 +19,10 @@
 {#if $query.isSuccess}
   {@const { total, perPage, data } = $query.data}
   <div class="page">
-    <h1 class="text-4xl font-bold mb-6">{$t('common.collections')}</h1>
+    <div class="flex items-center flex-wrap justify-between gap-2 mb-6">
+      <h1 class="text-4xl font-bold">{$t('common.collections')}</h1>
+      <SearchBar name="common.collections" {searchParams} />
+    </div>
     {#if total && perPage && data && data.length > 0}
       <div class="result">
         {#each data as collection}
@@ -27,7 +31,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

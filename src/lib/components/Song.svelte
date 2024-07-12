@@ -18,10 +18,14 @@
 
 {#if kind === 'full'}
   <div
-    class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+    class={'eventDescription' in song && song.eventDescription ? 'tooltip tooltip-bottom' : ''}
+    data-tip={'eventDescription' in song ? song.eventDescription : ''}
   >
-    <a href={`/songs/${song.id}`}>
-      <figure class="h-[167px] relative">
+    <a
+      class="card text-left w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+      href={`/songs/${song.id}`}
+    >
+      <figure class="h-[167px] relative rounded-none">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
         <div class="absolute bottom-2 left-2 w-fit h-fit">
           {#if song.isOriginal}
@@ -56,7 +60,7 @@
           {@html $composer}
         </p>
         <p class="truncate">
-          <span class="badge mr-1">{$t('song.illustrator')}</span>
+          <span class="badge mr-1">{$t('common.illustrator')}</span>
           {song.illustrator}
         </p>
         <p class="truncate">
@@ -68,14 +72,7 @@
           {convertTime(song.duration, true)}
         </p>
         {#if showLike}
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div
-            class="absolute bottom-8 right-8"
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            on:keyup
-          >
+          <div class="absolute bottom-8 right-8">
             <Like
               id={song.id}
               likes={song.likeCount}
@@ -91,7 +88,7 @@
 {:else if kind === 'inline'}
   <a
     href="/songs/{song.id}"
-    class="w-full flex px-5 h-16 {'eventDescription' in song && song.eventDescription
+    class="w-full flex items-center px-5 h-16 {'eventDescription' in song && song.eventDescription
       ? 'tooltip tooltip-bottom'
       : ''}"
     data-tip={'eventDescription' in song ? song.eventDescription : ''}
@@ -126,14 +123,7 @@
       </div>
     </div>
     {#if showLike}
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        class="w-1/12 min-w-fit hidden sm:inline"
-        on:click={(e) => {
-          e.preventDefault();
-        }}
-        on:keyup
-      >
+      <div class="w-1/12 min-w-fit hidden sm:inline">
         <Like
           id={song.id}
           likes={song.likeCount}

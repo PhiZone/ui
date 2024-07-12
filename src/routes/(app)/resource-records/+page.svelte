@@ -2,12 +2,13 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import { Status } from '$lib/constants';
   import type { CreateOpts } from '$lib/api/resourceRecord';
   import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
+  import SearchBar from '$lib/components/SearchBar.svelte';
 
   export let data;
 
@@ -585,8 +586,9 @@
 {#if $query.isSuccess}
   {@const { total, perPage, data } = $query.data}
   <div class="page">
-    <div class="flex gap-2 justify-between items-center mb-6">
+    <div class="flex gap-2 flex-wrap justify-between items-center mb-6">
       <h1 class="text-4xl font-bold">{$t('common.resource_records')}</h1>
+      <SearchBar name="common.resource_records" {searchParams} />
       {#if getUserPrivilege(user?.role) > 4}
         <div class="join">
           <label
@@ -612,7 +614,7 @@
           </div>
         {/each}
       </div>
-      <Pagination {total} {perPage} {page} {searchParams} />
+      <Paginator {total} {perPage} {page} {searchParams} />
     {:else}
       <p class="py-3 text-center">{$t('common.empty')}</p>
     {/if}

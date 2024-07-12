@@ -1,5 +1,5 @@
 import type API from '.';
-import type { ServiceResponseDto } from './application';
+import type { ServiceResponseDto } from './service';
 import type { R, TypedResponse } from './types';
 
 // token

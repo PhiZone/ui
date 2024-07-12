@@ -13,8 +13,8 @@ import type { FilterBase, R } from './types';
 export interface ChapterAdmissionDto {
   admittee: SongDto;
   admitter: ChapterDto;
-  dateCreated: Date;
-  label: null | string;
+  dateCreated: string;
+  label: string | null;
   requesteeId: number;
   requesterId: number;
   status: number;
@@ -23,8 +23,8 @@ export interface ChapterAdmissionDto {
 export interface CollectionAdmissionDto {
   admittee: ChartDto;
   admitter: CollectionDto;
-  dateCreated: Date;
-  label: null | string;
+  dateCreated: string;
+  label: string | null;
   requesteeId: number;
   requesterId: number;
   status: number;
@@ -33,8 +33,8 @@ export interface CollectionAdmissionDto {
 export interface SongAdmissionDto {
   admittee: ChartSubmissionDto;
   admitter: SongDto;
-  dateCreated: Date;
-  label: null | string;
+  dateCreated: string;
+  label: string | null;
   requesteeId: number;
   requesterId: number;
   status: number;
@@ -43,8 +43,8 @@ export interface SongAdmissionDto {
 export interface SongSubmissionAdmissionDto {
   admittee: ChartSubmissionDto;
   admitter: SongSubmissionDto;
-  dateCreated: Date;
-  label: null | string;
+  dateCreated: string;
+  label: string | null;
   requesteeId: number;
   requesterId: number;
   status: number;
@@ -68,7 +68,7 @@ export interface CreateOpts {
   type: 'chapters' | 'collections';
   id: string;
   admitterId: string;
-  label: null | string;
+  label: string | null;
 }
 
 // review
