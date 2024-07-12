@@ -60,7 +60,7 @@
           {@html $composer}
         </p>
         <p class="truncate">
-          <span class="badge mr-1">{$t('song.illustrator')}</span>
+          <span class="badge mr-1">{$t('common.illustrator')}</span>
           {song.illustrator}
         </p>
         <p class="truncate">

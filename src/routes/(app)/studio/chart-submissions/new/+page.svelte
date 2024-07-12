@@ -196,7 +196,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 place-self-center">{$t('chart.ranked')}</span>
+              <span class="w-32 place-self-center">{$t('studio.submission.is_ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"

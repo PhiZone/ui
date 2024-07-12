@@ -128,7 +128,7 @@
                     </p>
                     <p>
                       <span class="badge mr-1">
-                        {$t('song.illustrator')}
+                        {$t('common.illustrator')}
                       </span>
                       {song.illustrator}
                     </p>

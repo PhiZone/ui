@@ -27,23 +27,23 @@
   "host_team": "主办团队",
   "hostship": {
     "already_joined": "你已经加入了该活动的主办团队。",
+    "index": "序号",
     "invite_description": "使用邀请码将其他人邀请至主办团队。邀请码会在 6 小时后过期。请确保仅将其分享给你信任的人。",
     "invite_msg": "{{user}} 邀请你加入活动 {{event}} 的主办团队！打开链接 {{link}} 了解详情。",
     "invite_msg_brief": "{{user}} 邀请你加入活动 {{event}} 的主办团队",
+    "is_admin": "是否为管理员",
     "join": "接受邀请并加入团队",
     "joined": "你加入了活动 {{event}} 的主办团队！",
-    "is_admin": "管理员",
-    "permissions": "权限",
-    "permission_text": "{{operation}}{{scope}}",
     "operation": "操作",
-    "scope": "范围",
-    "index": "序号",
     "operations": {
       "0": "查看",
       "1": "创建",
       "2": "编辑",
       "3": "移除"
     },
+    "permission_text": "{{operation}}{{scope}}",
+    "permissions": "权限",
+    "scope": "范围",
     "scopes": {
       "0": "赛道",
       "1": "队伍",

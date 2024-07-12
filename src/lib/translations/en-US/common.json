@@ -104,6 +104,7 @@
   "illustration": "Illustration",
   "illustrator": "Illustrator",
   "image_cropper": "Image Cropper",
+  "is_unveiled": "是否公开可见",
   "jump_to": "Jump to",
   "label": "Label",
   "lang": {
@@ -119,7 +120,7 @@
     "terms_of_service": "Terms of Service"
   },
   "loading": "Loading...",
-  "manage": "管理",
+  "manage": "Manage",
   "more": "More",
   "name": "Name",
   "navbar": {

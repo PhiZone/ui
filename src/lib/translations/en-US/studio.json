@@ -59,6 +59,7 @@
     "is_hidden": "Is hidden",
     "is_locked": "Is locked",
     "is_original": "Is original",
+    "is_ranked": "是否为 ranked",
     "main_bpm": "Main BPM",
     "max_bpm": "Maximum BPM",
     "max_bpm_error": "The maximum BPM is smaller than the main BPM!",

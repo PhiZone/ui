@@ -104,6 +104,7 @@
   "illustration": "插画",
   "illustrator": "画师",
   "image_cropper": "图片裁剪",
+  "is_unveiled": "是否公开可见",
   "jump_to": "跳转至",
   "label": "标签",
   "lang": {
@@ -162,7 +163,6 @@
   "submit": "提交",
   "success": "成功",
   "tag": "标签",
-  "is_unveiled": "公开可见",
   "tags": "标签",
   "title": "PhiZone",
   "type": "类型",
