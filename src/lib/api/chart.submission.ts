@@ -1,10 +1,11 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
 import type { CollaborationDto } from './collaboration';
 import ChartAssetSubmissionAPI from './chart.submission.asset';
 import type { SongDto, SongSubmissionDto } from '.';
+import type { EventTeamDto, EventDivisionDto } from './event';
 
 export interface ChartSubmissionDto {
   accessibility: number;
@@ -34,6 +35,11 @@ export interface ChartSubmissionDto {
   tags: string[];
   title: string | null;
   volunteerStatus: number;
+}
+
+export interface EventParticipationInfoDto {
+  division?: EventDivisionDto;
+  team?: EventTeamDto;
 }
 
 // list
@@ -117,6 +123,12 @@ export default class ChartSubmissionAPI {
   delete(opts: DeleteOpts): R {
     return this.api.DELETE(`/studio/charts/${opts.id}`);
   }
+
+  checkEvent = createQueryCreator(
+    'chart.submission.checkEvent',
+    (opts: StringArrayOpt): R<EventParticipationInfoDto> =>
+      this.api.POST('/studio/charts/checkEvent', opts),
+  );
 
   asset;
 }

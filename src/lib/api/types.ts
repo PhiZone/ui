@@ -142,6 +142,14 @@ export interface FileUpdateOpts {
   File: Blob;
 }
 
+export interface StringArrayOpt {
+  strings: string[];
+}
+
+export interface CodeDto {
+  code: string;
+}
+
 export enum Accessibility {
   Public,
   ReviewRequired,

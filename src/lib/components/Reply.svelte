@@ -85,7 +85,7 @@
           />
           {#if reply.commentId}
             <a
-              class="btn btn-sm btn-primary btn-outline join-item"
+              class="btn btn-sm btn-ghost border-2 hover:btn-outline join-item"
               href="/comments/{reply.commentId}"
             >
               <i class="fa-solid fa-link"></i>

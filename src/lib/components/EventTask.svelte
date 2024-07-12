@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { EventTaskDto } from '$lib/api/event.task';
+  import type { EventTaskDto } from '$lib/api/event';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 

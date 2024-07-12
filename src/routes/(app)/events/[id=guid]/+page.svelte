@@ -7,10 +7,12 @@
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
   import Service from '$lib/components/Service.svelte';
+  import { hasEventPermission } from '$lib/utils';
+  import { CREATE, HOSTSHIP, REMOVE, UPDATE } from '$lib/hostshipPermissions';
 
   export let data;
 
-  $: ({ searchParams, id, api } = data);
+  $: ({ searchParams, id, user, api } = data);
 
   $: event = createQuery(api.event.info({ id }));
   $: divisions = createQuery(api.event.listDivisions({ id }));
@@ -23,6 +25,10 @@
 
 {#if $event.isSuccess}
   {@const event = $event.data.data}
+  {@const hasHostshipPerm =
+    hasEventPermission(user, event, CREATE, HOSTSHIP) ||
+    hasEventPermission(user, event, UPDATE, HOSTSHIP) ||
+    hasEventPermission(user, event, REMOVE, HOSTSHIP)}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
@@ -159,18 +165,27 @@
           </div>
         </div>
       {/if}
-      {#if event.hosts.length > 0}
+      {#if event.hosts.length > 0 || hasHostshipPerm}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
             style:--tw-translate-x="0"
           >
-            {$t('event.hosts')}
+            {$t('event.host_team')}
           </span>
           <div
             class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
           >
-            <div class="card-body py-10">
+            <div class="card-body {hasHostshipPerm ? 'pt-14 pb-10' : 'py-10'}">
+              {#if hasHostshipPerm}
+                <a
+                  class="min-w-fit btn btn-sm border-2 normal-border btn-outline absolute right-2 top-2"
+                  href="/events/{id}/host-team"
+                >
+                  {$t('common.manage')}
+                  <i class="fa-solid fa-angles-right"></i>
+                </a>
+              {/if}
               <div class="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
                 {#each event.hosts as host}
                   <User id={host.id} initUser={host} kind="mini" showFollow={false} />

@@ -17,6 +17,7 @@ export interface Filter extends FilterBase {
   equalsName?: string;
   containsNormalizedName?: string;
   equalsNormalizedName?: string;
+  rangeNormalizedName?: string[];
   containsDescription?: string;
   equalsDescription?: string;
   earliestDateCreated?: Date;

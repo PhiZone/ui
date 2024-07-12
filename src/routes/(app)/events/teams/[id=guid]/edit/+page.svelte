@@ -2,7 +2,7 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getAvatar, range } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import type { EventTeamDto } from '$lib/api/event.team';
+  import type { EventTeamDto } from '$lib/api/event';
   import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
   import { Status } from '$lib/constants';
@@ -404,7 +404,7 @@
           class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
           style:--tw-translate-x="0"
         >
-          {$t('event.team.members')}
+          {$t('event.members')}
         </span>
         <div
           class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
@@ -451,7 +451,7 @@
                       <Delete
                         id={participant.id.toString()}
                         path="events/teams/{team.id}/participants"
-                        name="event.team.member"
+                        name="event.member"
                         class="btn-sm btn-square"
                         onDelete={() => {
                           deleted[index] = true;

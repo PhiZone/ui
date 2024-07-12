@@ -328,7 +328,7 @@
                 <Song {song} />
                 <div
                   tabindex="-1"
-                  class="dropdown-content menu p-2 shadow bg-base-100 bg-opacity-50 rounded-box"
+                  class="dropdown-content menu p-2 shadow bg-base-100 bg-opacity-50 backdrop-blur rounded-box z-10"
                 >
                   <Delete
                     id="{division.id}/{song.id}"
@@ -358,7 +358,10 @@
             {#each data as chart}
               <div class="dropdown dropdown-hover dropdown-right float-right">
                 <Chart {chart} />
-                <div tabindex="-1" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box">
+                <div
+                  tabindex="-1"
+                  class="dropdown-content menu p-2 shadow bg-base-200 rounded-box z-10"
+                >
                   <Delete
                     id="{division.id}/{chart.id}"
                     path="events/resources"

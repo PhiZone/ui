@@ -33,14 +33,29 @@
   let songSwitch = false;
   let parent: SongDto | SongSubmissionDto | undefined;
 
+  let querySong = true;
+  let newSongSearch: string;
+  let newSongId: string | null = null;
+
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
   );
-  $: song = createQuery(api.song.listAll({ order: ['title'] }, { enabled: songSwitch }));
+  $: songSearch = createQuery(
+    api.song.listAll({ search: newSongSearch ?? undefined }, { enabled: querySong }),
+  );
   $: songSubmission = createQuery(
     api.song.submission.listAll({ order: ['dateCreated'], desc: [true] }, { enabled: !songSwitch }),
   );
   $: charterPreview = richtext(authorName ?? '');
+  $: existingTags = createQuery(
+    api.tag.listAll(
+      {
+        rangeNormalizedName:
+          tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+      },
+      { enabled: !showTags },
+    ),
+  );
 
   const loadChart = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
@@ -51,8 +66,8 @@
 
   const resolveSong = (e: Event & { currentTarget: EventTarget & HTMLSelectElement }) => {
     parent =
-      songSwitch && $song.isSuccess
-        ? $song.data.data.find((value) => value.id === e.currentTarget.value)
+      songSwitch && $songSearch.isSuccess
+        ? $songSearch.data.data.find((value) => value.id === e.currentTarget.value)
         : $songSubmission.isSuccess
           ? $songSubmission.data.data.find((value) => value.id === e.currentTarget.value)
           : undefined;
@@ -224,6 +239,84 @@
             </div>
             {#if songSwitch}
               <div
+                class={$songSearch.isError
+                  ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2'
+                  : 'w-full my-2'}
+                data-tip={$songSearch.isError ? $t(`error.${$songSearch.error.code}`) : ''}
+              >
+                <label class="join w-full">
+                  <input
+                    type="text"
+                    placeholder={$t('common.search_placeholder', {
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      resource: $t('common.songs'),
+                    })}
+                    class={`input transition border-2 normal-border w-5/6 join-item min-w-[180px] ${
+                      $songSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={newSongSearch}
+                    on:input={() => {
+                      querySong = false;
+                    }}
+                    on:keydown={(e) => {
+                      if (e.key === 'Enter' && newSongSearch) {
+                        e.preventDefault();
+                        querySong = true;
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    class={`btn border-2 normal-border w-1/6 join-item ${
+                      $songSearch.isLoading
+                        ? $songSearch.isError
+                          ? 'btn-error'
+                          : 'hover:btn-secondary btn-outline'
+                        : 'btn-disabled'
+                    }`}
+                    on:click={() => {
+                      querySong = true;
+                    }}
+                  >
+                    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                  </button>
+                </label>
+              </div>
+              <label class="join my-2 w-full">
+                <span class="btn no-animation join-item w-1/4 min-w-fit">
+                  {$t('song.song')}
+                </span>
+                <select
+                  id="song"
+                  name="SongId"
+                  class="select transition border-2 normal-border hover:select-secondary w-3/4 join-item"
+                  bind:value={newSongId}
+                  on:input={resolveSong}
+                >
+                  {#if $songSearch.isSuccess}
+                    {#each $songSearch.data.data as song}
+                      {@const composerText =
+                        song.isOriginal && song.authorName
+                          ? song.authorName.replaceAll(
+                              /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
+                              (_, __, ___, display) => display,
+                            )
+                          : song.authorName}
+                      {#if [0, 1].includes(song.accessibility) || (user && song.ownerId === user.id)}
+                        <option value={song.id}>
+                          {`[${$t(
+                            `studio.submission.accessibilities.${song.accessibility}`,
+                          )}] ${composerText} - ${song.title} [${$t(
+                            `song.edition_types.${song.editionType}`,
+                          )}${song.edition ? ` (${song.edition})` : ''}]`}
+                        </option>
+                      {/if}
+                    {/each}
+                  {/if}
+                </select>
+              </label>
+              <!-- <div
                 class={$song.isError ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
                 data-tip={$song.isError ? $t(`error.${$song.error.code}`) : ''}
               >
@@ -252,7 +345,7 @@
                     {/if}
                   </select>
                 </label>
-              </div>
+              </div> -->
             {:else}
               <div
                 class={$songSubmission.isError
@@ -276,9 +369,9 @@
                     {#if $songSubmission.isSuccess}
                       {#each $songSubmission.data.data as song}
                         <option value={song.id}>
-                          {song.title} [{$t(`song.edition_types.${song.editionType}`)}{song.edition
-                            ? ` (${song.edition})`
-                            : ''}] - {song.authorName}
+                          {song.authorName} - {song.title} [{$t(
+                            `song.edition_types.${song.editionType}`,
+                          )}{song.edition ? ` (${song.edition})` : ''}]
                         </option>
                       {/each}
                     {/if}
@@ -444,13 +537,21 @@
                 <span class="btn no-animation join-item w-1/4 min-w-[64px]">
                   {$t('common.description')}{$t('common.optional')}
                 </span>
-                <textarea
+                <!-- <textarea
                   id="description"
                   name="Description"
                   class={`textarea transition border-2 normal-border join-item ${
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={$t('studio.submission.description_placeholder')}
+                /> -->
+                <textarea
+                  id="description"
+                  name="Description"
+                  class={`textarea transition border-2 normal-border join-item ${
+                    $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
+                  } w-3/4 h-28`}
+                  placeholder={`${$t('common.description')}${$t('common.optional')}`}
                 />
               </label>
             </div>
@@ -468,6 +569,7 @@
                   on:keydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
+                      if (!newTag || tags.includes(newTag)) return;
                       showTags = false;
                       tags.push(newTag);
                       tagsRaw = tags.join(TAG_JOINER);
@@ -487,6 +589,7 @@
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
                   on:click={(e) => {
                     e.preventDefault();
+                    if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
                     tags.push(newTag);
                     tagsRaw = tags.join(TAG_JOINER);
@@ -495,7 +598,6 @@
                       showTags = true;
                     }, 0);
                   }}
-                  on:keyup
                 >
                   <i class="fa-solid fa-plus"></i>
                 </button>
@@ -516,6 +618,19 @@
                     }}
                   />
                 {/each}
+              </div>
+            {/if}
+            {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
+                  <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $existingTags.data.data as tag}
+                    <Tag {tag} full />
+                  {/each}
+                </div>
               </div>
             {/if}
             <div class="w-full flex flex-col justify-center mt-6">

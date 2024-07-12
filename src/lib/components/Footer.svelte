@@ -85,38 +85,6 @@
   </div>
   <div class="md:place-self-center md:justify-self-end">
     <div class="grid grid-flow-col gap-4">
-      <a
-        href="https://h5.qun.qq.com/h5/qun-share-page/?_wv=1027&k=HzHKfikWjKaAnnen4iMDWIEUF2knfqrh&authKey=IIY1TB7aOS%2BWS0LCr7AGTzSdOnyBs0TJ2BzRrwS1XuKNh6T0Qj2IX2Yqf%2BA19S1f&market_channel_source=587121959_1&noverify=0&group_code=587121959"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fa-brands fa-qq fa-lg"></i>
-      </a>
-      <a
-        href="https://pd.qq.com/s/ebe35nz6y"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="w-5 h-5 pt-[1px] hidden dark:inline"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768">
-          <g>
-            <circle fill="currentColor" cx="384.37" cy="383.63" r="384.37" />
-          </g>
-          <g>
-            <path
-              d="M577,319.29l5.7-36H507.33L518.47,213h-36l-11.14,70.29H328L339.12,213h-36L292,283.29H216.72l-5.7,36h75.26L267,441.19H191.72l-5.71,36h75.27L249,555h36l12.33-77.81H369L432.42,529l31.88,26,12.32-77.81H552l5.71-36H482.33l19.3-121.9ZM446.33,441.19l-5.71,36L438.12,493l-63.47-51.79H303l19.3-121.9H465.63Z"
-            />
-          </g>
-        </svg>
-      </a>
-      <a
-        href="https://pd.qq.com/s/ebe35nz6y"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="dark:hidden"
-      >
-        <i class="fa-solid fa-hashtag fa-lg"></i>
-      </a>
       <a href="https://discord.gg/q5MVeHeRhv" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-discord fa-lg"></i>
       </a>

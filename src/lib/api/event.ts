@@ -1,5 +1,12 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
+import type {
+  Accessibility,
+  CodeDto,
+  FilterBase,
+  PatchElement,
+  PublicResourceFilterBase,
+  R,
+} from './types';
 import type { EventDivisionDto } from './event.division';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
@@ -56,6 +63,26 @@ export interface HostDto extends UserDto {
   position: string | null;
 }
 
+export interface HostshipDto {
+  eventId: string;
+  isAdmin: boolean;
+  isUnveiled: boolean;
+  permissions: number[] | null;
+  position: string | null;
+  userId: number;
+}
+
+export interface EventHostInviteDto {
+  code: string | null;
+  dateExpired: string;
+  event: EventDto;
+  inviter: UserDto;
+  isAdmin: boolean;
+  isUnveiled: boolean;
+  permissions: number[] | null;
+  position: string | null;
+}
+
 export interface Filter extends PublicResourceFilterBase {
   containsSubtitle?: string;
   equalsSubtitle?: string;
@@ -67,12 +94,25 @@ export interface ResourceFilter extends FilterBase {
   rangeTeamId?: string[];
 }
 
+export interface HostshipFilter extends FilterBase {
+  rangeEventId?: string[];
+  rangeUserId?: number[];
+  isAdmin?: boolean;
+  isUnveiled?: boolean;
+  containsPosition?: string;
+  equalsPosition?: string;
+}
+
 export interface DivisionListFilter extends FilterBase {
   id: string;
 }
 
 export interface InfoOpts {
   id: string;
+}
+
+export interface HostshipInfoOpts extends InfoOpts {
+  userId: number;
 }
 
 export interface CreateOpts {
@@ -84,6 +124,22 @@ export interface CreateOpts {
   Accessibility: Accessibility;
   IsHidden: boolean;
   IsLocked: boolean;
+}
+
+export interface HostshipCreateOpts {
+  eventId: string;
+  isAdmin: boolean;
+  isUnveiled: boolean;
+  permissions: number[] | null;
+  position: string | null;
+  userId: number;
+}
+
+export interface EventHostInviteOpts extends InfoOpts {
+  isAdmin: boolean;
+  isUnveiled: boolean;
+  permissions?: number[] | null;
+  position?: string | null;
 }
 
 export default class EventAPI {
@@ -131,8 +187,45 @@ export default class EventAPI {
     return this.api.POST('/events', serialize(opts));
   }
 
+  listHostships = createQueryCreator(
+    'event.hostship.list',
+    (opts: HostshipFilter): R<HostshipDto[]> =>
+      this.api.GET('/events/hostships?' + stringifyFilter(opts)),
+  );
+
+  listAllHostships = createQueryCreator(
+    'event.hostship.listAll',
+    (opts: HostshipFilter): R<HostshipDto[]> =>
+      this.api.GET('/events/hostships?' + stringifyFilter(opts, true)),
+  );
+
+  createHostship(opts: HostshipCreateOpts): R {
+    return this.api.POST('/events/hostships', opts);
+  }
+
+  updateHostship({ id, userId }: HostshipInfoOpts, patch: PatchElement[]): R {
+    return this.api.PATCH(`/events/hostships/${id}/${userId}`, patch);
+  }
+
+  infoInvite = createQueryCreator(
+    'event.team.invite.info',
+    ({ code }: CodeDto): R<EventHostInviteDto> => this.api.GET(`/events/hostships/invites/${code}`),
+  );
+
+  acceptInvite({ code }: CodeDto): R {
+    return this.api.POST(`/events/hostships/invites/${code}/accept`);
+  }
+
+  createInvite({ id, ...rest }: EventHostInviteOpts): R<CodeDto> {
+    return this.api.POST(`/events/${id}/invite`, rest);
+  }
+
   division;
   team;
   task;
   resource;
 }
+
+export type { EventDivisionDto } from './event.division';
+export type { EventTeamDto } from './event.team';
+export type { EventTaskDto } from './event.task';

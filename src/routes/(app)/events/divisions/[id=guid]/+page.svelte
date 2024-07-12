@@ -353,7 +353,7 @@
                       <tr>
                         <th>#</th>
                         <th>{$t('event.team.team')}</th>
-                        <th>{$t('event.team.members')}</th>
+                        <th>{$t('event.members')}</th>
                         <th>{$t('event.team.status')}</th>
                         <th>{$t('common.score')}</th>
                       </tr>
@@ -510,7 +510,7 @@
                       <tr>
                         <th>#</th>
                         <th>{$t('event.team.team')}</th>
-                        <th>{$t('event.team.members')}</th>
+                        <th>{$t('event.members')}</th>
                         <th>{$t('event.team.status')}</th>
                         <th>{$t('common.score')}</th>
                       </tr>

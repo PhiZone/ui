@@ -25,6 +25,8 @@
   "divisions": "赛道",
   "event": "活动",
   "hosts": "主办方",
+  "member": "成员",
+  "members": "成员",
   "task": {
     "date_executed": "执行日期",
     "task": "自动化任务",
@@ -79,8 +81,6 @@
     "leave": "退出队伍",
     "leave_confirmation": "你确认要退出该队伍？",
     "left": "你退出了队伍 {{team}}！",
-    "member": "成员",
-    "members": "成员",
     "name": "队名",
     "participant_count": "成员数",
     "status": "参赛状态",

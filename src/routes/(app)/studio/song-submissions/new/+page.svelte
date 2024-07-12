@@ -77,6 +77,15 @@
       { enabled: queryResourceRecords && !!$form.Title && !!authorName },
     ),
   );
+  $: existingTags = createQuery(
+    api.tag.listAll(
+      {
+        rangeNormalizedName:
+          tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+      },
+      { enabled: !showTags },
+    ),
+  );
 
   const handlePreview = () => {
     pausePreview();
@@ -872,6 +881,19 @@
                     }}
                   />
                 {/each}
+              </div>
+            {/if}
+            {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
+                  <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $existingTags.data.data as tag}
+                    <Tag {tag} full />
+                  {/each}
+                </div>
               </div>
             {/if}
             {#if $songDuplications.isSuccess && $songDuplications.data.data.length > 0}

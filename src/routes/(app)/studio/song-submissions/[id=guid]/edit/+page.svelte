@@ -49,6 +49,15 @@
     api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
   );
   $: composerPreview = richtext(song.authorName ?? '');
+  $: existingTags = createQuery(
+    api.tag.listAll(
+      {
+        rangeNormalizedName:
+          song.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+      },
+      { enabled: !showTags || $submission.isSuccess },
+    ),
+  );
 
   $: if (!song && $submission.isSuccess) {
     song = $submission.data.data;
@@ -1003,6 +1012,19 @@
                     }}
                   />
                 {/each}
+              </div>
+            {/if}
+            {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
+              <div class="flex my-2">
+                <div class="w-1/4 flex flex-col gap-2">
+                  <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
+                  <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
+                </div>
+                <div class="w-3/4 result">
+                  {#each $existingTags.data.data as tag}
+                    <Tag {tag} full />
+                  {/each}
+                </div>
               </div>
             {/if}
             <div class="w-full flex flex-col justify-center mt-6">

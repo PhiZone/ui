@@ -2,11 +2,10 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
-import type { EventTeamDto } from './event.team';
+import type { EventTeamDto, PreservedFieldDto } from './event';
 import queryString from 'query-string';
 import type { ChartDto, RecordDto, SongDto } from '.';
 import type { TagDto } from './tag';
-import type { PreservedFieldDto } from './event';
 
 export interface EventDivisionDto {
   accessibility: number;

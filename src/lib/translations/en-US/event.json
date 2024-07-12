@@ -25,6 +25,8 @@
   "divisions": "Divisions",
   "event": "Event",
   "hosts": "Hosts",
+  "member": "Member",
+  "members": "Members",
   "task": {
     "date_executed": "执行日期",
     "task": "自动化任务",
@@ -79,8 +81,6 @@
     "leave": "Leave",
     "leave_confirmation": "Are you sure you want to leave this team?",
     "left": "You left the team {{team}}!",
-    "member": "Member",
-    "members": "Members",
     "name": "Team Name",
     "participant_count": "Number of Participants",
     "status": "Status",

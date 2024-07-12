@@ -13,7 +13,7 @@
   import { Status } from '$lib/constants';
   import type { PatchElement } from '$lib/api/types';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import type { EventTaskDto } from '$lib/api/event.task';
+  import type { EventTaskDto } from '$lib/api/event';
 
   export let data;
 

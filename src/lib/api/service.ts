@@ -6,7 +6,7 @@ export interface ServiceScriptDto {
   code: string;
   dateCreated: Date;
   dateUpdated: Date;
-  description: null | string;
+  description: string | null;
   id: string;
   name: string;
   parameters: string[];
@@ -44,8 +44,8 @@ export interface UseOpts extends InfoOpts {
 }
 
 export interface ServiceResponseDto {
-  message: null | string;
-  redirectUri: null | string;
+  message: string | null;
+  redirectUri: string | null;
   type: number;
 }
 

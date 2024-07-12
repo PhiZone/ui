@@ -23,6 +23,7 @@
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
   import Service from '$lib/components/Service.svelte';
   import Download from '$lib/components/Download.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -132,6 +133,18 @@
   $: difficultyDifference = $submission.isSuccess
     ? averageSuggestedDifficulty - $submission.data.data.difficulty
     : 0;
+  $: eventParticipation = createQuery(
+    api.chart.submission.checkEvent(
+      { strings: $submission.data?.data.tags ?? [] },
+      { enabled: $submission.isSuccess },
+    ),
+  );
+  $: event = createQuery(
+    api.event.info(
+      { id: $eventParticipation.data?.data.division?.eventId ?? '' },
+      { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+    ),
+  );
 </script>
 
 <svelte:head>
@@ -908,6 +921,22 @@
           </span>
           <Chart {chart} />
         </div>
+      {/if}
+      {#if $eventParticipation.isSuccess}
+        {@const participation = $eventParticipation.data.data}
+        {#if participation.division && $event.isSuccess}
+          {@const division = participation.division}
+          {@const event = $event.data.data}
+          <div class="indicator w-full my-4">
+            <span
+              class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
+              style:--tw-translate-x="0"
+            >
+              {$t('event.event')}
+            </span>
+            <EventDivision {division} {event} kind="full" />
+          </div>
+        {/if}
       {/if}
     </div>
   </div>

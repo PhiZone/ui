@@ -1,5 +1,5 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 import type { UserDto } from '.';
@@ -48,10 +48,6 @@ export interface InfoOpts {
 
 export interface ParticipantInfoOpts extends InfoOpts {
   participantId: number;
-}
-
-export interface CodeDto {
-  code: string;
 }
 
 export interface InviteAcceptOpts {

@@ -191,7 +191,7 @@
                         <tr>
                           <th>No.</th>
                           <th>{$t('event.team.team')}</th>
-                          <th>{$t('event.team.members')}</th>
+                          <th>{$t('event.members')}</th>
                           <th>{$t('event.team.status')}</th>
                           <th>{$t('common.score')}</th>
                           {#if $preservedFieldsHeader.isSuccess}
@@ -383,7 +383,7 @@
                         <tr>
                           <th>No.</th>
                           <th>{$t('event.team.team')}</th>
-                          <th>{$t('event.team.members')}</th>
+                          <th>{$t('event.members')}</th>
                           <th>{$t('event.team.status')}</th>
                           <th>{$t('common.score')}</th>
                           {#if $preservedFieldsHeader.isSuccess}

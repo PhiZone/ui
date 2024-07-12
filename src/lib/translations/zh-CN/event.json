@@ -24,7 +24,36 @@
   },
   "divisions": "赛道",
   "event": "活动",
-  "hosts": "主办方",
+  "host_team": "主办团队",
+  "hostship": {
+    "already_joined": "你已经加入了该活动的主办团队。",
+    "invite_description": "使用邀请码将其他人邀请至主办团队。邀请码会在 6 小时后过期。请确保仅将其分享给你信任的人。",
+    "invite_msg": "{{user}} 邀请你加入活动 {{event}} 的主办团队！打开链接 {{link}} 了解详情。",
+    "invite_msg_brief": "{{user}} 邀请你加入活动 {{event}} 的主办团队",
+    "join": "接受邀请并加入团队",
+    "joined": "你加入了活动 {{event}} 的主办团队！",
+    "is_admin": "管理员",
+    "permissions": "权限",
+    "permission_text": "{{operation}}{{scope}}",
+    "operation": "操作",
+    "scope": "范围",
+    "index": "序号",
+    "operations": {
+      "0": "查看",
+      "1": "创建",
+      "2": "编辑",
+      "3": "移除"
+    },
+    "scopes": {
+      "0": "赛道",
+      "1": "队伍",
+      "2": "资源",
+      "3": "主办身份",
+      "4": "保留字段"
+    }
+  },
+  "member": "成员",
+  "members": "成员",
   "task": {
     "date_executed": "执行日期",
     "task": "自动化任务",
@@ -79,8 +108,6 @@
     "leave": "退出队伍",
     "leave_confirmation": "你确认要退出该队伍？",
     "left": "你退出了队伍 {{team}}！",
-    "member": "成员",
-    "members": "成员",
     "name": "队名",
     "participant_count": "成员数",
     "status": "参赛状态",

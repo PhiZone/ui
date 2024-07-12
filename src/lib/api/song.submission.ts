@@ -1,8 +1,9 @@
 import { serialize } from 'object-to-formdata';
 import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
 import type { CollaborationDto } from './collaboration';
+import type { EventTeamDto, EventDivisionDto } from './event';
 
 export interface SongSubmissionDto {
   accessibility: number;
@@ -33,6 +34,11 @@ export interface SongSubmissionDto {
   status: number;
   tags: string[];
   title: string;
+}
+
+export interface EventParticipationInfoDto {
+  division?: EventDivisionDto;
+  team?: EventTeamDto;
 }
 
 // list
@@ -134,4 +140,10 @@ export default class SongSubmissionAPI {
   review({ id, ...rest }: ReviewOpts): R {
     return this.api.POST(`/studio/songs/${id}/review`, rest);
   }
+
+  checkEvent = createQueryCreator(
+    'song.submission.checkEvent',
+    (opts: StringArrayOpt): R<EventParticipationInfoDto> =>
+      this.api.POST('/studio/songs/checkEvent', opts),
+  );
 }
