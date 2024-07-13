@@ -1,40 +1,11 @@
 <script lang="ts">
-    import { ICP_LICENSE } from '$env/static/private';
+  import { PUBLIC_ICP_LICENSE } from '$env/static/public';
   import { locale, t } from '$lib/translations/config';
 
   const emailAddress = 'contact@phizone.cn';
 </script>
 
 <footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">
-  <div>
-    <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
-    <a
-      href="https://www.phi.zone/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      {$t('common.footer.main')}
-    </a>
-    <a
-      href="https://insider.phizone.cn/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      {$t('common.footer.insider')}
-    </a>
-    <a
-      href="https://status.phi.zone/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      {$t('common.footer.status')}
-    </a>
-    <!-- <a href="/about" class="link link-hover">{$t('common.footer.about')}</a>
-    <a href="/feedback" class="link link-hover">{$t('common.footer.feedback')}</a> -->
-  </div>
   <div>
     <span class="footer-title text-lg">{$t('common.footer.legal')}</span>
     <a href="/legal/{$locale}/terms-of-service" class="link link-hover">
@@ -85,7 +56,13 @@
     <p class="copyright text-base">{$t('common.footer.copyright')}</p>
   </div>
   <div class="items-center grid-flow-col">
-    <a href="https://beian.miit.gov.cn/" class="text-base">{ICP_LICENSE}</a>
+    <a
+      href="https://beian.miit.gov.cn/"
+      target="_blank"
+      class="text-base opacity-80 transition hover:opacity-100 hover:text-accent"
+    >
+      {PUBLIC_ICP_LICENSE}
+    </a>
   </div>
   <div class="md:place-self-center md:justify-self-end">
     <div class="grid grid-flow-col gap-4">

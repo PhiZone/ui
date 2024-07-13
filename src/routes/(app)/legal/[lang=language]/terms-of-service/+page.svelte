@@ -28,12 +28,8 @@
   <p>Before you use services we provide, you must read and agree with the following terms.</p>
   <p>
     By visiting and using the services offered by the websites (
-    <a href="https://www.phi.zone/">www.phi.zone</a>
-    ,
-    <a href="https://insider.phizone.cn/">insider.phizone.cn</a>
-    ) or the APIs (
-    <a href="https://api.phi.zone/">api.phi.zone</a>
-    ,
+    <a href="https://www.phizone.cn/">www.phizone.cn</a>
+    ) or the API (
     <a href="https://api.phizone.cn/">api.phizone.cn</a>
     ) (henceforth referenced as "PhiZone"), you are acknowledging your full compliance to the terms and
     conditions listed here, and guaranteeing that you will not use PhiZone and any of its content for
@@ -267,12 +263,8 @@
   <p>在使用我们提供的服务之前，你必须阅读并同意以下内容。</p>
   <p>
     访问与使用网站（
-    <a href="https://www.phi.zone/">www.phi.zone</a>
-    、
-    <a href="https://insider.phizone.cn/">insider.phizone.cn</a>
+    <a href="https://www.phizone.cn/">www.phizone.cn</a>
     ）与 API（
-    <a href="https://api.phi.zone/">api.phi.zone</a>
-    、
     <a href="https://api.phizone.cn/">api.phizone.cn</a>
     ）（以下统称“PhiZone”）即代表你完全理解并遵守此处列出的条款，且保证你不会将 PhiZone 及其提供的任何内容用于任何被条款禁止或违反中华人民共和国法律的目的。
   </p>
