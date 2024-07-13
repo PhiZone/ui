@@ -1,15 +1,15 @@
 {
-  "finished": "你的请求已处理完毕。",
-  "parameters": "参数",
-  "resource_id": "资源 ID",
-  "result": "结果",
-  "service": "服务",
-  "target_type": "目标类型",
+  "finished": "Your request has been processed.",
+  "parameters": "Parameters",
+  "resource_id": "Resource ID",
+  "result": "Result",
+  "service": "Service",
+  "target_type": "Target Type",
   "target_types": {
-    "0": "曲目稿件",
-    "1": "谱面稿件",
-    "2": "自由目标"
+    "0": "Song Submission",
+    "1": "Chart Submission",
+    "2": "Liberal Target"
   },
-  "use": "使用",
-  "waiting": "你的请求正在受理，请稍候。"
+  "use": "use",
+  "waiting": "Your request is being processed, please wait."
 }
