@@ -141,8 +141,8 @@
   <p>
     You have the option of deleting your account from our services. Please note that this is
     currently a manual process and may take several days to complete. If you have a need for this,
-    please send an email to <a href="mailto:contact@phi.zone" target="_blank" class="url">
-      contact@phi.zone
+    please send an email to <a href="mailto:contact@phizone.cn" target="_blank" class="url">
+      contact@phizone.cn
     </a>
     from the email address associated with the target account, stating the specific reasons. Upon receiving
     the email, we will take action within 7 business days. In the case of account deletion, public resources
@@ -152,11 +152,11 @@
     You cannot request the deletion of ranked charts or non-original songs at your own discretion.
     If you indeed have a legitimate need to delete the aforementioned resources, or if you have the
     intention or need to delete other types of resources, please send an email to <a
-      href="mailto:contact@phi.zone"
+      href="mailto:contact@phizone.cn"
       target="_blank"
       class="url"
     >
-      contact@phi.zone
+      contact@phizone.cn
     </a>
     from the email address associated with the account of the resource owner, stating the specific reasons.
     Upon receiving the email, we will take action within 7 business days.
@@ -184,8 +184,8 @@
   <p>
     Unfortunately, we're unable to determine the occurrence of such situations based on the
     information we collect and store. If you, as a legal guardian, discover such a situation and
-    wish for us to take action, please send an email to <a href="mailto:contact@phi.zone">
-      contact@phi.zone
+    wish for us to take action, please send an email to <a href="mailto:contact@phizone.cn">
+      contact@phizone.cn
     </a>
     from the email address associated with the target account, indicating the specific situation and
     the measures you would like us to take. Upon receiving the email, if the situation is determined
@@ -274,13 +274,13 @@
   </p>
   <p>
     你也可以申请删除你的账户。请注意，目前此过程需要人工处理并可能需要几天来完成。如确实有此类需求，请使用目标账户的邮箱地址向
-    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
+    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
     发送邮件，并注明具体原因。在收到邮件后，我们会在 7 个工作日内采取相应的措施。在账户删除的情况下，你之前已上传的各类公开资源将仍对所有人可见。
   </p>
   <p>
     你无法因个人意愿申请删除你上传的 Ranked
     谱面或非原创曲目。如确实对于上述资源有删除的正当需求，或对于其他类型的资源有删除的意愿或需求，请使用目标资源所有者账户的邮箱地址向
-    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
+    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
     发送邮件，并注明具体原因。在收到邮件后，我们会在 7 个工作日内采取相应的措施。
   </p>
   <h2 id="cookies">Cookies</h2>
@@ -300,7 +300,7 @@
   </p>
   <p>
     然而，我们无法根据我们收集并储存的信息确定上述情况的发生。如你作为法定监护人发现存在相关情况，并希望我们采取措施，请使用目标账户的邮箱地址向
-    <a href="mailto:contact@phi.zone" target="_blank" class="url">contact@phi.zone</a>
+    <a href="mailto:contact@phizone.cn" target="_blank" class="url">contact@phizone.cn</a>
     发送邮件，并注明具体情况以及希望我们采取的措施。在收到邮件后，如认为情况属实，我们会在 7 个工作日内采取相应的措施。
   </p>
   <h2 id="归属">归属</h2>

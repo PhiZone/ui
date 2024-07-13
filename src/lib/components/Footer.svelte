@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { ICP_LICENSE } from '$env/static/private';
   import { locale, t } from '$lib/translations/config';
 
-  const emailAddress = 'contact@phi.zone';
+  const emailAddress = 'contact@phizone.cn';
 </script>
 
 <footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">
@@ -83,11 +84,11 @@
   <div class="items-center grid-flow-col">
     <p class="copyright text-base">{$t('common.footer.copyright')}</p>
   </div>
+  <div class="items-center grid-flow-col">
+    <a href="https://beian.miit.gov.cn/" class="text-base">{ICP_LICENSE}</a>
+  </div>
   <div class="md:place-self-center md:justify-self-end">
     <div class="grid grid-flow-col gap-4">
-      <a href="https://discord.gg/q5MVeHeRhv" target="_blank" rel="noopener noreferrer">
-        <i class="fa-brands fa-discord fa-lg"></i>
-      </a>
       <a href="https://space.bilibili.com/325599863" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-bilibili fa-lg"></i>
       </a>

@@ -249,7 +249,7 @@
   <h2 id="designated-agent-contact-details">Designated Agent Contact Details</h2>
   <p>
     <strong>Email:</strong>
-    <a href="mailto:copyright@phi.zone">copyright@phi.zone</a>
+    <a href="mailto:copyright@phizone.cn">copyright@phizone.cn</a>
     (responds in 7 business days)
   </p>
   <p><strong>Postal Address:</strong></p>
@@ -431,7 +431,7 @@
   <h2 id="指定代理人联系方式">指定代理人联系方式</h2>
   <p>
     <strong>电子邮件地址：</strong>
-    <a href="mailto:copyright@phi.zone">copyright@phi.zone</a>
+    <a href="mailto:copyright@phizone.cn">copyright@phizone.cn</a>
     （7 个工作日内回复）
   </p>
   <p><strong>邮寄地址：</strong></p>

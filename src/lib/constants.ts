@@ -41,16 +41,16 @@ export enum ContentType {
 export const DEFAULT_LOCALE = 'en-US';
 
 export const SUPPORTED_APPS = [
-  {
-    name: 'GitHub',
-    avatar: 'https://res.phizone.cn/W8PyKukh4Ttifcb6pskc8Ajj1PWG3oGt/github-mark.png',
-    branded: true,
-  },
-  {
-    name: 'Discord',
-    avatar: 'https://res.phizone.cn/PC5eY7Yna9qgqWKaQ8A1BsuPWR1BXTAL/discord-mark.png',
-    branded: true,
-  },
+  // {
+  //   name: 'GitHub',
+  //   avatar: 'https://res.phizone.cn/W8PyKukh4Ttifcb6pskc8Ajj1PWG3oGt/github-mark.png',
+  //   branded: true,
+  // },
+  // {
+  //   name: 'Discord',
+  //   avatar: 'https://res.phizone.cn/PC5eY7Yna9qgqWKaQ8A1BsuPWR1BXTAL/discord-mark.png',
+  //   branded: true,
+  // },
   {
     name: 'Phira',
     avatar: 'https://res.phizone.cn/rLX1fO2dLkQJKrOGPbhgYHlAaeBONVed/phira.png',
