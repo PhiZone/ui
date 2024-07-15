@@ -2,7 +2,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { Accessibility, FilterBase, PublicResourceFilterBase, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
-import type { EventTeamDto, PreservedFieldDto } from './event';
+import type { EventTeamDto, ReservedFieldDto } from './event';
 import queryString from 'query-string';
 import type { ChartDto, RecordDto, SongDto } from '.';
 import type { TagDto } from './tag';
@@ -32,6 +32,7 @@ export interface EventDivisionDto {
   minTeamCount: number | null;
   ownerId: number;
   status: number;
+  suggestedEntrySearch: string | null;
   subtitle: string | null;
   tagId: string | null;
   team: EventTeamDto | null;
@@ -63,6 +64,10 @@ export interface InfoOpts {
   id: string;
 }
 
+export interface EntryOpts extends InfoOpts {
+  search?: string | null;
+}
+
 export interface LeaderboardOpts extends InfoOpts {
   topRange?: number;
   neighborhoodRange?: number;
@@ -79,7 +84,7 @@ export interface CreateOpts {
   IsLocked: boolean;
 }
 
-export interface PreservedFieldOpts {
+export interface ReservedFieldOpts {
   type: 'resources' | 'teams';
   id: string;
   index: number;
@@ -106,10 +111,10 @@ export default class EventDivisionAPI {
     ({ id }: InfoOpts): R<EventDivisionDto> => this.api.GET(`/events/divisions/${id}`),
   );
 
-  listPreservedFields = createQueryCreator(
-    'event.division.preservedFields',
-    ({ id }: InfoOpts): R<(PreservedFieldDto | null)[]> =>
-      this.api.GET(`/events/divisions/${id}/preservedFields`),
+  listReservedFields = createQueryCreator(
+    'event.division.reservedFields',
+    ({ id }: InfoOpts): R<(ReservedFieldDto | null)[]> =>
+      this.api.GET(`/events/divisions/${id}/reservedFields`),
   );
 
   leaderboard = createQueryCreator(
@@ -138,27 +143,48 @@ export default class EventDivisionAPI {
 
   listSongEntries = createQueryCreator(
     'event.division.entries.songs',
-    ({ id, ...rest }: InfoOpts): R<SongDto[]> =>
-      this.api.GET(`/events/divisions/${id}/entries/songs?` + queryString.stringify(rest)),
+    ({ id, search, ...rest }: EntryOpts): R<SongDto[]> =>
+      this.api.GET(
+        `/events/divisions/${id}/entries/songs?` +
+          (search
+            ? search.startsWith('?')
+              ? search.substring(1)
+              : search
+            : queryString.stringify(rest)),
+      ),
   );
 
   listChartEntries = createQueryCreator(
     'event.division.entries.charts',
-    ({ id, ...rest }: InfoOpts): R<ChartDto[]> =>
-      this.api.GET(`/events/divisions/${id}/entries/charts?` + queryString.stringify(rest)),
+    ({ id, search, ...rest }: EntryOpts): R<ChartDto[]> =>
+      this.api.GET(
+        `/events/divisions/${id}/entries/charts?` +
+          (search
+            ? search.startsWith('?')
+              ? search.substring(1)
+              : search
+            : queryString.stringify(rest)),
+      ),
   );
 
   listRecordEntries = createQueryCreator(
     'event.division.entries.records',
-    ({ id, ...rest }: InfoOpts): R<RecordDto[]> =>
-      this.api.GET(`/events/divisions/${id}/entries/records?` + queryString.stringify(rest)),
+    ({ id, search, ...rest }: EntryOpts): R<RecordDto[]> =>
+      this.api.GET(
+        `/events/divisions/${id}/entries/records?` +
+          (search
+            ? search.startsWith('?')
+              ? search.substring(1)
+              : search
+            : queryString.stringify(rest)),
+      ),
   );
 
   create(opts: CreateOpts): R {
     return this.api.POST('/events/divisions', serialize(opts));
   }
 
-  updatePreservedField({ type, id, index, ...rest }: PreservedFieldOpts): R {
-    return this.api.POST(`/events/${type}/${id}/preservedFields/${index}`, rest);
+  updateReservedField({ type, id, index, ...rest }: ReservedFieldOpts): R {
+    return this.api.POST(`/events/${type}/${id}/reservedFields/${index}`, rest);
   }
 }

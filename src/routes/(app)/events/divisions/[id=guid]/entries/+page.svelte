@@ -28,19 +28,19 @@
   // );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id },
+      { id, search: $division.data?.data.suggestedEntrySearch },
       { enabled: $division.isSuccess && $division.data.data.type == 0 },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id },
+      { id, search: $division.data?.data.suggestedEntrySearch },
       { enabled: $division.isSuccess && $division.data.data.type == 1 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id },
+      { id, search: $division.data?.data.suggestedEntrySearch },
       { enabled: $division.isSuccess && $division.data.data.type == 2 },
     ),
   );

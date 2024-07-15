@@ -10,9 +10,9 @@ export const load = async ({ params, url, parent }) => {
     queryClient.prefetchQuery(
       api.event.team.list({ rangeDivisionId: [params.id], ...searchParams }),
     ),
-    queryClient.prefetchQuery(api.event.division.listPreservedFields({ id: params.id })),
+    queryClient.prefetchQuery(api.event.division.listReservedFields({ id: params.id })),
     queryClient.prefetchQuery(
-      api.event.team.listPreservedFields(
+      api.event.team.listReservedFields(
         { rangeDivisionId: [params.id], ...searchParams },
         { enabled: index == 1 },
       ),
