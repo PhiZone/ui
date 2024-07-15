@@ -5,6 +5,7 @@
   export let timeDue: Date = new Date();
   export let timeUp = false;
   export let text: string;
+  export let onTimeUp: () => void = () => {};
 
   let hour: number;
   let min: number;
@@ -18,6 +19,7 @@
       sec = 0;
       clearInterval(timer);
       timeUp = true;
+      onTimeUp();
       return;
     }
     hour = Math.floor(diff / (1000 * 60 * 60));

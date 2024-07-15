@@ -4,7 +4,7 @@
   import Like from '$lib/components/Like.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
-  import { goto, preloadData } from '$app/navigation';
+  import { goto, invalidateAll, preloadData } from '$app/navigation';
   import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
@@ -46,19 +46,21 @@
   );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2 },
+      { id, search: $division.data?.data.suggestedEntrySearch },
+      {
+        enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2,
+      },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id },
+      { id, search: $division.data?.data.suggestedEntrySearch },
       { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id },
+      { id, search: $division.data?.data.suggestedEntrySearch },
       { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
     ),
   );
@@ -232,6 +234,9 @@
             <Timer
               timeDue={new Date(division.status < 2 ? division.dateStarted : division.dateEnded)}
               text={division.status < 2 ? 'common.starts_at' : 'common.ends_at'}
+              onTimeUp={async () => {
+                await invalidateAll();
+              }}
             />
           {:else}
             <div class="flex flex-col gap-2">
@@ -729,8 +734,8 @@
               <div class="stat place-items-center">
                 <div class="stat-title">{$t('event.division.team_count')}</div>
                 <div class="stat-value text-3xl">{division.teamCount}</div>
-                {#if division.maxParticipantPerTeamCount}
-                  <div class="stat-desc">/ {division.maxParticipantPerTeamCount}</div>
+                {#if division.maxTeamCount}
+                  <div class="stat-desc">/ {division.maxTeamCount}</div>
                 {/if}
               </div>
               <div class="stat place-items-center">

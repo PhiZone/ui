@@ -47,7 +47,7 @@
       </div>
       {#if tag.description}
         <p class="flex items-center">
-          <span class="content leading-5 ellipsis-2">
+          <span class="description ellipsis-2">
             {tag.description}
           </span>
         </p>

@@ -59,7 +59,7 @@
     "is_hidden": "是否隐藏",
     "is_locked": "是否锁定",
     "is_original": "是否为原创",
-    "is_ranked": "是否为 ranked",
+    "is_ranked": "是否为 Ranked",
     "main_bpm": "主要 BPM",
     "max_bpm": "最大 BPM",
     "max_bpm_error": "最大 BPM 小于主要 BPM！",

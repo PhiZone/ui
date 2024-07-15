@@ -30,7 +30,7 @@
     </div>
     {#if service.description}
       <p class="flex items-center">
-        <span class="content description">
+        <span class="description">
           <span class="inline-flex badge mr-1">{$t('common.description')}</span>
           {service.description}
         </span>

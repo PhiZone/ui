@@ -54,7 +54,7 @@ export interface DivisionDto {
   type: number;
 }
 
-export interface PreservedFieldDto {
+export interface ReservedFieldDto {
   index: number;
   content: string | null;
 }

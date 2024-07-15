@@ -7,7 +7,7 @@
   import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import PreservedField from '$lib/components/PreservedField.svelte';
+  import ReservedField from '$lib/components/ReservedField.svelte';
   import { PRESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
   import Region from '$lib/components/Region.svelte';
 
@@ -20,9 +20,9 @@
     api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
   );
   $: teams = createQuery(api.event.team.list({ rangeDivisionId: [id], ...searchParams }));
-  $: preservedFieldsHeader = createQuery(api.event.division.listPreservedFields({ id }));
-  $: preservedFieldsTeam = createQuery(
-    api.event.team.listPreservedFields(
+  $: reservedFieldsHeader = createQuery(api.event.division.listReservedFields({ id }));
+  $: reservedFieldsTeam = createQuery(
+    api.event.team.listReservedFields(
       { rangeDivisionId: [id], ...searchParams },
       { enabled: index == 1 },
     ),
@@ -45,8 +45,8 @@
       { enabled: index == 2 },
     ),
   );
-  $: preservedFieldsResource = createQuery(
-    api.event.resource.listPreservedFields(
+  $: reservedFieldsResource = createQuery(
+    api.event.resource.listReservedFields(
       { rangeDivisionId: [id], rangeType: [1], ...searchParams },
       { enabled: index == 2 },
     ),
@@ -175,13 +175,13 @@
                   {$t('common.more')}
                   <i class="fa-solid fa-angles-right"></i>
                 </a>
-              {:else if index == 1 && $teams.isSuccess && $preservedFieldsTeam.isSuccess && $preservedFieldsHeader.isSuccess}
+              {:else if index == 1 && $teams.isSuccess && $reservedFieldsTeam.isSuccess && $reservedFieldsHeader.isSuccess}
                 {@const { total, perPage, data } = $teams.data}
                 {#if total && perPage && data && data.length > 0}
                   {@const teams = data.map((e, i) => {
-                    e.preservedFields = $preservedFieldsTeam.data.data[i];
-                    while (e.preservedFields.length < $preservedFieldsHeader.data.data.length) {
-                      e.preservedFields.push(null);
+                    e.reservedFields = $reservedFieldsTeam.data.data[i];
+                    while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
+                      e.reservedFields.push(null);
                     }
                     return e;
                   })}
@@ -194,9 +194,9 @@
                           <th>{$t('event.members')}</th>
                           <th>{$t('event.team.status')}</th>
                           <th>{$t('common.score')}</th>
-                          {#if $preservedFieldsHeader.isSuccess}
-                            {@const preservedFields = $preservedFieldsHeader.data.data}
-                            {#each preservedFields as field}
+                          {#if $reservedFieldsHeader.isSuccess}
+                            {@const reservedFields = $reservedFieldsHeader.data.data}
+                            {#each reservedFields as field}
                               {#if field}
                                 <th>{field.content}</th>
                               {/if}
@@ -358,20 +358,20 @@
                             <th class="text-lg">
                               {team.score ?? '-'}
                             </th>
-                            {#each team.preservedFields ?? [] as field, i}
+                            {#each team.reservedFields ?? [] as field, i}
                               <td>
-                                <PreservedField
+                                <ReservedField
                                   {field}
                                   type="teams"
                                   id={team.id}
-                                  headerIndex={$preservedFieldsHeader.data?.data[i]?.index}
+                                  headerIndex={$reservedFieldsHeader.data?.data[i]?.index}
                                   editable={hasEventPermission(user, event, UPDATE, TEAM) &&
                                     hasEventPermission(
                                       user,
                                       event,
                                       UPDATE,
                                       PRESERVED_FIELD,
-                                      $preservedFieldsHeader.data?.data[i]?.index,
+                                      $reservedFieldsHeader.data?.data[i]?.index,
                                     )}
                                 />
                               </td>
@@ -386,9 +386,9 @@
                           <th>{$t('event.members')}</th>
                           <th>{$t('event.team.status')}</th>
                           <th>{$t('common.score')}</th>
-                          {#if $preservedFieldsHeader.isSuccess}
-                            {@const preservedFields = $preservedFieldsHeader.data.data}
-                            {#each preservedFields as field}
+                          {#if $reservedFieldsHeader.isSuccess}
+                            {@const reservedFields = $reservedFieldsHeader.data.data}
+                            {#each reservedFields as field}
                               {#if field}
                                 <th>{field.content}</th>
                               {/if}
@@ -402,12 +402,12 @@
                 {:else}
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
-              {:else if index == 2 && $resources.isSuccess && $preservedFieldsResource.isSuccess && $preservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
+              {:else if index == 2 && $resources.isSuccess && $reservedFieldsResource.isSuccess && $reservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
                 {@const { total, perPage, data } = $resources.data}
                 {@const resources = data.map((e, i) => {
-                  e.preservedFields = $preservedFieldsResource.data.data[i];
-                  while (e.preservedFields.length < $preservedFieldsHeader.data.data.length) {
-                    e.preservedFields.push(null);
+                  e.reservedFields = $reservedFieldsResource.data.data[i];
+                  while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
+                    e.reservedFields.push(null);
                   }
                   return e;
                 })}
@@ -425,9 +425,9 @@
                             <th>No.</th>
                             <th>{$t('song.song')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
@@ -448,20 +448,20 @@
                               <td class="text-lg">
                                 {resource.score ?? '-'}
                               </td>
-                              {#each resource.preservedFields ?? [] as field, i}
+                              {#each resource.reservedFields ?? [] as field, i}
                                 <td>
-                                  <PreservedField
+                                  <ReservedField
                                     {field}
                                     type="resources"
                                     id={`${resource.divisionId}/${resource.resourceId}`}
-                                    headerIndex={$preservedFieldsHeader.data?.data[i]?.index}
+                                    headerIndex={$reservedFieldsHeader.data?.data[i]?.index}
                                     editable={hasEventPermission(user, event, UPDATE, RESOURCE) &&
                                       hasEventPermission(
                                         user,
                                         event,
                                         UPDATE,
                                         PRESERVED_FIELD,
-                                        $preservedFieldsHeader.data?.data[i]?.index,
+                                        $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
                                 </td>
@@ -474,9 +474,9 @@
                             <th>No.</th>
                             <th>{$t('song.song')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
@@ -502,9 +502,9 @@
                             <th>No.</th>
                             <th>{$t('chart.chart')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
@@ -525,20 +525,20 @@
                               <td class="text-lg">
                                 {resource.score ?? '-'}
                               </td>
-                              {#each resource.preservedFields ?? [] as field, i}
+                              {#each resource.reservedFields ?? [] as field, i}
                                 <td>
-                                  <PreservedField
+                                  <ReservedField
                                     {field}
                                     type="resources"
                                     id={`${resource.divisionId}/${resource.resourceId}`}
-                                    headerIndex={$preservedFieldsHeader.data?.data[i]?.index}
+                                    headerIndex={$reservedFieldsHeader.data?.data[i]?.index}
                                     editable={hasEventPermission(user, event, UPDATE, RESOURCE) &&
                                       hasEventPermission(
                                         user,
                                         event,
                                         UPDATE,
                                         PRESERVED_FIELD,
-                                        $preservedFieldsHeader.data?.data[i]?.index,
+                                        $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
                                 </td>
@@ -551,9 +551,9 @@
                             <th>No.</th>
                             <th>{$t('chart.chart')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
@@ -584,9 +584,9 @@
                             <th>{$t('record.std_deviation')}</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
@@ -646,20 +646,20 @@
                               <td class="text-lg">
                                 {resource.score ?? '-'}
                               </td>
-                              {#each resource.preservedFields ?? [] as field, i}
+                              {#each resource.reservedFields ?? [] as field, i}
                                 <td>
-                                  <PreservedField
+                                  <ReservedField
                                     {field}
                                     type="resources"
                                     id={`${resource.divisionId}/${resource.resourceId}`}
-                                    headerIndex={$preservedFieldsHeader.data?.data[i]?.index}
+                                    headerIndex={$reservedFieldsHeader.data?.data[i]?.index}
                                     editable={hasEventPermission(user, event, UPDATE, RESOURCE) &&
                                       hasEventPermission(
                                         user,
                                         event,
                                         UPDATE,
                                         PRESERVED_FIELD,
-                                        $preservedFieldsHeader.data?.data[i]?.index,
+                                        $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
                                 </td>
@@ -677,9 +677,9 @@
                             <th>{$t('record.std_deviation')}</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            {#if $preservedFieldsHeader.isSuccess}
-                              {@const preservedFields = $preservedFieldsHeader.data.data}
-                              {#each preservedFields as field}
+                            {#if $reservedFieldsHeader.isSuccess}
+                              {@const reservedFields = $reservedFieldsHeader.data.data}
+                              {#each reservedFields as field}
                                 {#if field}
                                   <th>{field.content}</th>
                                 {/if}
