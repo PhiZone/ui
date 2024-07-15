@@ -57,11 +57,18 @@ body {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  @apply content-dense;
 }
 
 .content {
   white-space: pre-line;
   word-break: break-word;
+}
+
+.content-dense {
+  white-space: pre-line;
+  word-break: break-word;
+  @apply leading-5;
 }
 
 .result {

@@ -3,7 +3,7 @@ import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './typ
 import type API from '.';
 import { serialize } from 'object-to-formdata';
 import type { UserDto } from '.';
-import type { PreservedFieldDto } from './event';
+import type { ReservedFieldDto } from './event';
 
 export interface EventTeamDto {
   claimedParticipantCount: number;
@@ -21,7 +21,7 @@ export interface EventTeamDto {
   position: number | null;
   score: number | null;
   status: number;
-  preservedFields?: (PreservedFieldDto | null)[];
+  reservedFields?: (ReservedFieldDto | null)[];
 }
 
 export interface ParticipantDto extends UserDto {
@@ -83,10 +83,10 @@ export default class EventTeamAPI {
     ({ id }: InfoOpts): R<EventTeamDto> => this.api.GET(`/events/teams/${id}`),
   );
 
-  listPreservedFields = createQueryCreator(
-    'event.team.preservedFields',
-    (opts: Filter): R<(PreservedFieldDto | null)[][]> =>
-      this.api.GET('/events/teams/preservedFields?' + stringifyFilter(opts)),
+  listReservedFields = createQueryCreator(
+    'event.team.reservedFields',
+    (opts: Filter): R<(ReservedFieldDto | null)[][]> =>
+      this.api.GET('/events/teams/reservedFields?' + stringifyFilter(opts)),
   );
 
   create(opts: CreateOpts): R {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
-  import type { PreservedFieldDto } from '$lib/api/event';
+  import type { ReservedFieldDto } from '$lib/api/event';
   import { Status } from '$lib/constants';
   import { invalidateAll } from '$app/navigation';
 
@@ -9,7 +9,7 @@
 
   export let type: 'teams' | 'resources';
   export let id: string;
-  export let field: PreservedFieldDto | null;
+  export let field: ReservedFieldDto | null;
   export let headerIndex: number | undefined;
   export let editable: boolean;
 
@@ -22,7 +22,7 @@
     const index = field?.index ?? headerIndex;
     if (!index) return;
     status = Status.SENDING;
-    const resp = await api.event.division.updatePreservedField({
+    const resp = await api.event.division.updateReservedField({
       type,
       id,
       index,

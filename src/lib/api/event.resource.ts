@@ -2,7 +2,7 @@ import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
-import type { PreservedFieldDto } from './event';
+import type { ReservedFieldDto } from './event';
 
 export interface EventResourceDto {
   dateCreated: string;
@@ -14,7 +14,7 @@ export interface EventResourceDto {
   score: number | null;
   teamId: string | null;
   type: number;
-  preservedFields?: (PreservedFieldDto | null)[];
+  reservedFields?: (ReservedFieldDto | null)[];
 }
 export interface Filter extends FilterBase {
   rangeDivisionId?: string[];
@@ -63,10 +63,10 @@ export default class EventResourceAPI {
       this.api.GET(`/events/resources/${divisionId}/${resourceId}`),
   );
 
-  listPreservedFields = createQueryCreator(
-    'event.resource.preservedFields',
-    (opts: Filter): R<(PreservedFieldDto | null)[][]> =>
-      this.api.GET('/events/resources/preservedFields?' + stringifyFilter(opts)),
+  listReservedFields = createQueryCreator(
+    'event.resource.reservedFields',
+    (opts: Filter): R<(ReservedFieldDto | null)[][]> =>
+      this.api.GET('/events/resources/reservedFields?' + stringifyFilter(opts)),
   );
 
   create({ resourceType, id, ...opts }: CreateOpts): R {
