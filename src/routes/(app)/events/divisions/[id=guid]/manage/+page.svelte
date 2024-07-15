@@ -180,6 +180,13 @@
                 {#if total && perPage && data && data.length > 0}
                   {@const teams = data.map((e, i) => {
                     e.reservedFields = $reservedFieldsTeam.data.data[i];
+                    if (
+                      !Array.isArray(e.reservedFields) ||
+                      !Array.isArray($reservedFieldsHeader.data.data)
+                    ) {
+                      e.reservedFields = [];
+                      return e;
+                    }
                     while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
                       e.reservedFields.push(null);
                     }
@@ -405,6 +412,13 @@
                 {@const { total, perPage, data } = $resources.data}
                 {@const resources = data.map((e, i) => {
                   e.reservedFields = $reservedFieldsResource.data.data[i];
+                  if (
+                    !Array.isArray(e.reservedFields) ||
+                    !Array.isArray($reservedFieldsHeader.data.data)
+                  ) {
+                    e.reservedFields = [];
+                    return e;
+                  }
                   while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
                     e.reservedFields.push(null);
                   }
