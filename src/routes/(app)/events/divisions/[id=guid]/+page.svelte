@@ -153,7 +153,7 @@
             {$t('common.continue')}
           </button>
         </div>
-        {#if division.maxParticipantPerTeamCount && division.maxParticipantPerTeamCount > 1}
+        {#if !division.maxParticipantPerTeamCount || division.maxParticipantPerTeamCount > 1}
           <div class="divider lg:divider-horizontal">{$t('common.or')}</div>
           <div
             class="form-control flex-grow"
