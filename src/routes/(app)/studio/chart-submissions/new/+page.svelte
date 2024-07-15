@@ -53,7 +53,7 @@
         rangeNormalizedName:
           tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
       },
-      { enabled: !showTags },
+      { enabled: !showTags && tags.length > 0 },
     ),
   );
 
