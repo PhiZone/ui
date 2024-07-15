@@ -57,9 +57,9 @@ export const parseLatex = (input: string) => {
 export const getUserPrivilege = (role: string | null | undefined) => {
   switch (role) {
     case 'Member':
-      return 1;
+      return 3;
     case 'Sponsor':
-      return 2;
+      return 3;
     case 'Qualified':
       return 3;
     case 'Volunteer':
