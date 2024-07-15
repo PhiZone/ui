@@ -376,7 +376,6 @@
                           }}
                           on:mouseenter={() => {
                             preloadData(`/events/teams/${team.id}`);
-                            console.log(team);
                           }}
                         >
                           <td>{team.position}</td>

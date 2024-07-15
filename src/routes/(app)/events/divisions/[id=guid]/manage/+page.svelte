@@ -8,7 +8,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import ReservedField from '$lib/components/ReservedField.svelte';
-  import { PRESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
+  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
   import Region from '$lib/components/Region.svelte';
 
   export let data;
@@ -221,7 +221,6 @@
                               }}
                               on:mouseenter={() => {
                                 preloadData(`/events/teams/${team.id}`);
-                                console.log(team);
                               }}
                             >
                               <div class="flex items-center gap-3">
@@ -370,7 +369,7 @@
                                       user,
                                       event,
                                       UPDATE,
-                                      PRESERVED_FIELD,
+                                      RESERVED_FIELD,
                                       $reservedFieldsHeader.data?.data[i]?.index,
                                     )}
                                 />
@@ -460,7 +459,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
@@ -537,7 +536,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
@@ -658,7 +657,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />

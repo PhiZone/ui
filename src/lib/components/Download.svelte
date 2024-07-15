@@ -29,7 +29,7 @@
       receivedLength += value.length;
       contentLength = Math.max(contentLength, receivedLength);
       progress = receivedLength / contentLength;
-      console.log(`Received ${receivedLength} of ${contentLength}`);
+      // console.log(`Received ${receivedLength} of ${contentLength}`);
     }
     let chunksAll = new Uint8Array(receivedLength);
     let position = 0;

@@ -51,7 +51,6 @@
     } else {
       status = Status.ERROR;
       const data = await resp.json();
-      console.log(data);
       errorCode = data.code;
     }
   };

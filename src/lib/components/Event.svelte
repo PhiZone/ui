@@ -21,13 +21,7 @@
 >
   <figure class="h-[167px] relative">
     <img src={getCompressedImage(event.illustration)} alt="Illustration" class="object-fill" />
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      class="absolute bottom-2 right-2 flex gap-1"
-      on:mouseenter={() => {
-        console.log(event);
-      }}
-    >
+    <div class="absolute bottom-2 right-2 flex gap-1">
       {#each event.divisions as division}
         <button
           class="btn btn-circle btn-xs w-[10px] btn-active no-animation {division.status == 2
