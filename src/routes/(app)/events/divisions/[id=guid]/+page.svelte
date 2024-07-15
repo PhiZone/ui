@@ -97,7 +97,7 @@
             {$t('common.illustrator')}
           </div>
           <div class="btn btn-xs join-item text-base no-animation">
-            {division.illustrator}
+            {division.illustrator ?? event.illustrator}
           </div>
         </div>
       </div>
