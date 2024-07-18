@@ -53,7 +53,7 @@
         rangeNormalizedName:
           tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
       },
-      { enabled: !showTags },
+      { enabled: !showTags && tags.length > 0 },
     ),
   );
 
@@ -368,8 +368,15 @@
                   >
                     {#if $songSubmission.isSuccess}
                       {#each $songSubmission.data.data as song}
+                        {@const composerText =
+                          song.originalityProof && song.authorName
+                            ? song.authorName.replaceAll(
+                                /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
+                                (_, __, ___, display) => display,
+                              )
+                            : song.authorName}
                         <option value={song.id}>
-                          {song.authorName} - {song.title} [{$t(
+                          {composerText} - {song.title} [{$t(
                             `song.edition_types.${song.editionType}`,
                           )}{song.edition ? ` (${song.edition})` : ''}]
                         </option>

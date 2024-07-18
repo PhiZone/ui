@@ -12,7 +12,7 @@ export const DIVISION = 0b0000;
 export const TEAM = 0b0001;
 export const RESOURCE = 0b0010;
 export const HOSTSHIP = 0b0011;
-export const PRESERVED_FIELD = 0b0100;
+export const RESERVED_FIELD = 0b0100;
 
 export const hasPermission = (hostship: HostshipDto, permission: number) => {
   return (

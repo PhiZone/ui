@@ -31,7 +31,7 @@
   $: divisionTag = createQuery(
     api.tag.info({ id: $division.data?.data.tagId ?? '' }, { enabled: $division.isSuccess }),
   );
-  $: tags = createQuery(api.event.division.listTags({ id }, { enabled: $division.isSuccess }));
+  $: tags = createQuery(api.event.division.listAllTags({ id }, { enabled: $division.isSuccess }));
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
@@ -97,7 +97,7 @@
             {$t('common.illustrator')}
           </div>
           <div class="btn btn-xs join-item text-base no-animation">
-            {division.illustrator}
+            {division.illustrator ?? event.illustrator}
           </div>
         </div>
       </div>
@@ -153,7 +153,7 @@
             {$t('common.continue')}
           </button>
         </div>
-        {#if division.maxParticipantPerTeamCount && division.maxParticipantPerTeamCount > 1}
+        {#if !division.maxParticipantPerTeamCount || division.maxParticipantPerTeamCount > 1}
           <div class="divider lg:divider-horizontal">{$t('common.or')}</div>
           <div
             class="form-control flex-grow"
@@ -376,7 +376,6 @@
                           }}
                           on:mouseenter={() => {
                             preloadData(`/events/teams/${team.id}`);
-                            console.log(team);
                           }}
                         >
                           <td>{team.position}</td>
@@ -712,7 +711,7 @@
               >
                 <div class="card-body py-10">
                   {#if tags.length > 0}
-                    <div class="result">
+                    <div class="result-tight">
                       {#each tags as tag}
                         <Tag {tag} full />
                       {/each}

@@ -133,7 +133,7 @@
   $: eventParticipation = createQuery(
     api.chart.submission.checkEvent(
       { strings: $submission.data?.data.tags ?? [] },
-      { enabled: $submission.isSuccess },
+      { enabled: $submission.isSuccess, retry: 0 },
     ),
   );
   $: event = createQuery(
@@ -422,7 +422,11 @@
           <label class="join w-full">
             <input
               type="text"
-              placeholder={$t('chapter.search')}
+              placeholder={$t('common.search_placeholder', {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                resource: $t('common.chapters'),
+              })}
               class={`input transition border-2 normal-border w-5/6 join-item min-w-[180px] ${
                 $chapterSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}

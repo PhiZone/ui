@@ -136,7 +136,7 @@
   $: eventParticipation = createQuery(
     api.chart.submission.checkEvent(
       { strings: $submission.data?.data.tags ?? [] },
-      { enabled: $submission.isSuccess },
+      { enabled: $submission.isSuccess, retry: 0 },
     ),
   );
   $: event = createQuery(

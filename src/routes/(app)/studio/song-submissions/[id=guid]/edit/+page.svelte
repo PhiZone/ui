@@ -55,7 +55,7 @@
         rangeNormalizedName:
           song.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
       },
-      { enabled: !showTags || $submission.isSuccess },
+      { enabled: (!showTags || $submission.isSuccess) && song.tags.length > 0 },
     ),
   );
 

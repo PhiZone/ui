@@ -83,7 +83,7 @@
         rangeNormalizedName:
           tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
       },
-      { enabled: !showTags },
+      { enabled: !showTags && tags.length > 0 },
     ),
   );
 
@@ -410,7 +410,7 @@
                     {#if previewStatus === 2}
                       <button
                         type="button"
-                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-pause fa-xl"></i>
@@ -418,7 +418,7 @@
                     {:else}
                       <button
                         type="button"
-                        class="btn btn-secondary btn-square btn-sm btn-outline"
+                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-play fa-lg"></i>
