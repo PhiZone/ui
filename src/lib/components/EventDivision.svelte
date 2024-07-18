@@ -112,7 +112,7 @@
       <p class="flex items-center gap-1">
         <span class="badge">{$t('common.illustrator')}</span>
         <span class="truncate">
-          {division.illustrator}
+          {division.illustrator ?? event.illustrator}
         </span>
       </p>
       {#if division.description}

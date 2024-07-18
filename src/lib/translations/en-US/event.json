@@ -58,7 +58,7 @@
     "date_executed": "Date Executed",
     "task": "Automated Task",
     "types": {
-      "0": "Schedule",
+      "0": "Scheduled",
       "1": "Before creating team",
       "2": "Before accepting invitation",
       "3": "Before joining team",
@@ -76,7 +76,7 @@
       "15": "When entry is approved",
       "16": "When entry is deleted",
       "17": "When team disbands",
-      "18": "When members quit",
+      "18": "When member leaves",
       "19": "When entry is reviewed",
       "20": "When team is reviewed"
     }

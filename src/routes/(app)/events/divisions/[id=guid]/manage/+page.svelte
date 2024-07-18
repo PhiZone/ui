@@ -8,7 +8,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import ReservedField from '$lib/components/ReservedField.svelte';
-  import { PRESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
+  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
   import Region from '$lib/components/Region.svelte';
 
   export let data;
@@ -180,6 +180,13 @@
                 {#if total && perPage && data && data.length > 0}
                   {@const teams = data.map((e, i) => {
                     e.reservedFields = $reservedFieldsTeam.data.data[i];
+                    if (
+                      !Array.isArray(e.reservedFields) ||
+                      !Array.isArray($reservedFieldsHeader.data.data)
+                    ) {
+                      e.reservedFields = [];
+                      return e;
+                    }
                     while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
                       e.reservedFields.push(null);
                     }
@@ -221,7 +228,6 @@
                               }}
                               on:mouseenter={() => {
                                 preloadData(`/events/teams/${team.id}`);
-                                console.log(team);
                               }}
                             >
                               <div class="flex items-center gap-3">
@@ -370,7 +376,7 @@
                                       user,
                                       event,
                                       UPDATE,
-                                      PRESERVED_FIELD,
+                                      RESERVED_FIELD,
                                       $reservedFieldsHeader.data?.data[i]?.index,
                                     )}
                                 />
@@ -406,6 +412,13 @@
                 {@const { total, perPage, data } = $resources.data}
                 {@const resources = data.map((e, i) => {
                   e.reservedFields = $reservedFieldsResource.data.data[i];
+                  if (
+                    !Array.isArray(e.reservedFields) ||
+                    !Array.isArray($reservedFieldsHeader.data.data)
+                  ) {
+                    e.reservedFields = [];
+                    return e;
+                  }
                   while (e.reservedFields.length < $reservedFieldsHeader.data.data.length) {
                     e.reservedFields.push(null);
                   }
@@ -460,7 +473,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
@@ -537,7 +550,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
@@ -658,7 +671,7 @@
                                         user,
                                         event,
                                         UPDATE,
-                                        PRESERVED_FIELD,
+                                        RESERVED_FIELD,
                                         $reservedFieldsHeader.data?.data[i]?.index,
                                       )}
                                   />
