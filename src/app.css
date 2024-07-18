@@ -78,6 +78,13 @@ body {
   justify-items: center;
 }
 
+.result-tight {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(201px, 1fr));
+  grid-gap: 1.5rem;
+  justify-items: center;
+}
+
 .background {
   background-attachment: fixed;
   display: grid;

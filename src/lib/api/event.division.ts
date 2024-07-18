@@ -126,19 +126,25 @@ export default class EventDivisionAPI {
   listSongPrompts = createQueryCreator(
     'event.division.prompts.songs',
     ({ id, ...rest }: InfoOpts): R<SongDto[]> =>
-      this.api.GET(`/events/divisions/${id}/prompts/songs?` + queryString.stringify(rest)),
+      this.api.GET(`/events/divisions/${id}/prompts/songs?` + stringifyFilter(rest)),
   );
 
   listChartPrompts = createQueryCreator(
     'event.division.prompts.charts',
     ({ id, ...rest }: InfoOpts): R<ChartDto[]> =>
-      this.api.GET(`/events/divisions/${id}/prompts/charts?` + queryString.stringify(rest)),
+      this.api.GET(`/events/divisions/${id}/prompts/charts?` + stringifyFilter(rest)),
   );
 
   listTags = createQueryCreator(
     'event.division.tags',
     ({ id, ...rest }: InfoOpts): R<TagDto[]> =>
-      this.api.GET(`/events/divisions/${id}/tags?` + queryString.stringify(rest)),
+      this.api.GET(`/events/divisions/${id}/tags?` + stringifyFilter(rest)),
+  );
+
+  listAllTags = createQueryCreator(
+    'event.division.tagsAll',
+    ({ id, ...rest }: InfoOpts): R<TagDto[]> =>
+      this.api.GET(`/events/divisions/${id}/tags?` + stringifyFilter(rest, true)),
   );
 
   listSongEntries = createQueryCreator(
@@ -150,7 +156,7 @@ export default class EventDivisionAPI {
             ? search.startsWith('?')
               ? search.substring(1)
               : search
-            : queryString.stringify(rest)),
+            : stringifyFilter(rest)),
       ),
   );
 
@@ -163,7 +169,7 @@ export default class EventDivisionAPI {
             ? search.startsWith('?')
               ? search.substring(1)
               : search
-            : queryString.stringify(rest)),
+            : stringifyFilter(rest)),
       ),
   );
 
@@ -176,7 +182,7 @@ export default class EventDivisionAPI {
             ? search.startsWith('?')
               ? search.substring(1)
               : search
-            : queryString.stringify(rest)),
+            : stringifyFilter(rest)),
       ),
   );
 

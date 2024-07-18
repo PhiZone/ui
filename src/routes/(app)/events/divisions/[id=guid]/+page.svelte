@@ -31,7 +31,7 @@
   $: divisionTag = createQuery(
     api.tag.info({ id: $division.data?.data.tagId ?? '' }, { enabled: $division.isSuccess }),
   );
-  $: tags = createQuery(api.event.division.listTags({ id }, { enabled: $division.isSuccess }));
+  $: tags = createQuery(api.event.division.listAllTags({ id }, { enabled: $division.isSuccess }));
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
@@ -711,7 +711,7 @@
               >
                 <div class="card-body py-10">
                   {#if tags.length > 0}
-                    <div class="result">
+                    <div class="result-tight">
                       {#each tags as tag}
                         <Tag {tag} full />
                       {/each}
