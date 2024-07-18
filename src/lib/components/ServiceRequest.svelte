@@ -71,7 +71,7 @@
   class="modal-toggle"
   checked={[Status.SENDING, Status.OK, Status.ERROR].includes(status)}
 />
-<div class="modal">
+<div class="modal cursor-auto">
   <div class="modal-box min-w-fit m-4">
     <div class="flex gap-2 items-center">
       <h3 class="font-bold text-lg">
@@ -140,7 +140,7 @@
 </div>
 
 <input type="checkbox" id="service-{service.id}" class="modal-toggle" bind:checked={paramsOpen} />
-<div class="modal">
+<div class="modal cursor-auto">
   <div class="modal-box text-left">
     <button
       class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"

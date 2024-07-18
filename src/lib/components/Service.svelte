@@ -19,7 +19,7 @@
   }`}
   class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
-  <div class="card-body h-[185.25px] py-6 gap-0.5 justify-between">
+  <div class="card-body h-[200px] py-6 gap-0.5 justify-between">
     <div class="flex flex-col mb-2">
       <h2 class="title-strong w-full truncate">
         {service.name}
@@ -30,14 +30,25 @@
     </div>
     {#if service.description}
       <p class="flex items-center">
-        <span class="description">
+        <span class="description ellipsis-2">
           <span class="inline-flex badge mr-1">{$t('common.description')}</span>
           {service.description}
         </span>
       </p>
     {/if}
-    <div class="card-actions justify-end">
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="card-actions justify-end" on:click|preventDefault on:keyup>
       <ServiceRequest {service} {resourcePath} {resourceId} />
     </div>
   </div>
 </a>
+
+<style>
+  .ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+</style>

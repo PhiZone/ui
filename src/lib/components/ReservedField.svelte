@@ -42,7 +42,7 @@
   };
 </script>
 
-<div class="relative min-w-[80px]">
+<div class="relative min-w-[135px]">
   <textarea
     class="w-full h-full textarea textarea-sm leading-5 textarea-ghost border-2 transition hover:border-secondary"
     class:textarea-disabled={!editable}
