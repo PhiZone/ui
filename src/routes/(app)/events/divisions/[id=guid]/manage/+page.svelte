@@ -222,7 +222,7 @@
                           >
                             <td>{i + (page - 1) * perPage + 1}</td>
                             <td
-                              class="hover:underline hover:cursor-pointer"
+                              class="hover:underline hover:cursor-pointer min-w-[180px]"
                               on:click={() => {
                                 goto(`/events/teams/${team.id}`);
                               }}
