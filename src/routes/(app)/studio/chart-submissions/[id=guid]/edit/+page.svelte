@@ -518,6 +518,7 @@
                   on:keydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
+                      if (!newTag || chart.tags.includes(newTag)) return;
                       showTags = false;
                       chart.tags.push(newTag);
                       patch = applyPatch(patch, 'replace', '/tags', chart.tags);
@@ -537,6 +538,7 @@
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
                   on:click={(e) => {
                     e.preventDefault();
+                    if (!newTag || chart.tags.includes(newTag)) return;
                     showTags = false;
                     chart.tags.push(newTag);
                     patch = applyPatch(patch, 'replace', '/tags', chart.tags);

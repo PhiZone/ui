@@ -176,6 +176,7 @@
             on:keydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
+                if (!newTag || tags.includes(newTag)) return;
                 showTags = false;
                 tags.push(newTag);
                 tagsRaw = tags.join(TAG_JOINER);
@@ -195,6 +196,7 @@
             class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
             on:click={(e) => {
               e.preventDefault();
+              if (!newTag || tags.includes(newTag)) return;
               showTags = false;
               tags.push(newTag);
               tagsRaw = tags.join(TAG_JOINER);
