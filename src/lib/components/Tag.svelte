@@ -7,7 +7,7 @@
   export let removeHover = false;
 </script>
 
-{#if typeof tag === 'string'}
+{#if !tag || typeof tag === 'string'}
   <span
     class="badge badge-neutral {removeHover
       ? 'hover:badge-outline'
@@ -63,7 +63,7 @@
       ? 'hover:badge-outline'
       : ''} border-2 inline-flex gap-1"
   >
-    <p>{tag.name ?? ''}</p>
+    <p>{tag.name}</p>
     {#if removeFunction}
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
