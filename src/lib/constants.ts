@@ -42,6 +42,11 @@ export const DEFAULT_LOCALE = 'en-US';
 
 export const SUPPORTED_APPS = [
   {
+    name: 'QQ',
+    avatar: 'https://res.phizone.cn/W8PyKukh4Ttifcb6pskc8Ajj1PWG3oGt/github-mark.png',
+    branded: true,
+  },
+  {
     name: 'GitHub',
     avatar: 'https://res.phizone.cn/W8PyKukh4Ttifcb6pskc8Ajj1PWG3oGt/github-mark.png',
     branded: true,
