@@ -147,7 +147,7 @@
   "resource_records": "Resource Records",
   "score": "Score",
   "search_options": "Search Options",
-  "search_placeholder": "Search chapters, songs, users...",
+  "search_placeholder": "Search {{resource}}...",
   "select_file": "Select a file",
   "semicolon": "; ",
   "send": "Send",

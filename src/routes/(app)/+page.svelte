@@ -70,7 +70,9 @@
         <input
           type="text"
           placeholder={$t('common.search_placeholder', {
-            resource: $t(`common.${type}`),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            resource: $t(`common.${type}`).toLowerCase(),
           })}
           class="input border-2 normal-border transition hover:input-secondary lg:input-lg join-item w-full"
           bind:value={text}
