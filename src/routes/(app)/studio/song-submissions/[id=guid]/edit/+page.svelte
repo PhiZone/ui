@@ -8,12 +8,13 @@
   import { applyPatch, convertTime, parseTime } from '$lib/utils';
   import type { SongSubmissionDto } from '$lib/api';
   import { invalidateAll } from '$app/navigation';
-  import type { PatchElement } from '$lib/api/types';
+  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
   import { onDestroy, onMount } from 'svelte';
   import User from '$lib/components/User.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import UpdateError from '$lib/components/UpdateError.svelte';
 
   export let data;
 
@@ -39,6 +40,7 @@
   let queryComposer = false;
   let status = Status.WAITING;
   let errorCode = '';
+  let error: ResponseDtoError | undefined = undefined;
   let errors: Map<string, string> | undefined = undefined;
   let illustrationFiles: FileList;
   let illustrationCropping = false;
@@ -175,6 +177,7 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
+        error = data;
         console.error(
           `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
           data,
@@ -227,6 +230,11 @@
 </svelte:head>
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
+<UpdateError
+  {error}
+  checked={status === Status.ERROR && !!error && !errors}
+  onClick={() => (status = Status.WAITING)}
+/>
 
 {#if illustrationCropping}
   <Cropper
