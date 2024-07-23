@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PUBLIC_ICP_LICENSE } from '$env/static/public';
+  import { PUBLIC_ICP_LICENSE, PUBLIC_SECURITY_LICENSE } from '$env/static/public';
   import { locale, t } from '$lib/translations/config';
 
   const emailAddress = 'contact@phizone.cn';
@@ -55,13 +55,25 @@
   <div class="items-center grid-flow-col">
     <p class="copyright text-base">{$t('common.footer.copyright')}</p>
   </div>
-  <div class="items-center grid-flow-col">
+  <div class="items-center grid-flow-col opacity-80">
     <a
       href="https://beian.miit.gov.cn/"
+      rel="noreferrer"
       target="_blank"
-      class="text-base opacity-80 transition hover:opacity-100 hover:text-accent"
+      class="text-base transition hover:opacity-100 hover:text-accent"
     >
       {PUBLIC_ICP_LICENSE}
+    </a>
+  </div>
+  <div class="items-center grid-flow-col opacity-80">
+    <img src="/license_icon.png" class="w-5 h-5" alt="Public Security Bureau" />
+    <a
+      href="https://beian.mps.gov.cn/#/query/webSearch?code=37018102000886"
+      rel="noreferrer"
+      target="_blank"
+      class="text-base transition hover:opacity-100 hover:text-accent"
+    >
+      {PUBLIC_SECURITY_LICENSE}
     </a>
   </div>
   <div class="md:place-self-center md:justify-self-end">
