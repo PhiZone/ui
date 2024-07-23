@@ -425,7 +425,7 @@
               placeholder={$t('common.search_placeholder', {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                resource: $t('common.chapters'),
+                resource: $t('common.chapters').toLowerCase(),
               })}
               class={`input transition border-2 normal-border w-5/6 join-item min-w-[180px] ${
                 $chapterSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
