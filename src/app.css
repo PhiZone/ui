@@ -10,13 +10,13 @@ body {
 }
 
 .page {
-  min-height: calc(100vh - 219px);
+  min-height: calc(100vh - 232px);
   max-width: 1600px;
   @apply bg-base-300 pt-32 px-4 md:px-32 mx-auto;
 }
 
 .min-h-page {
-  min-height: calc(100vh - 219px);
+  min-height: calc(100vh - 232px);
 }
 
 .studio-page {
@@ -25,7 +25,7 @@ body {
 }
 
 .info-page {
-  min-height: calc(100vh - 219px);
+  min-height: calc(100vh - 232px);
   @apply bg-base-300 py-24 px-2 md:px-12 justify-center flex flex-col lg:flex-row;
 }
 
