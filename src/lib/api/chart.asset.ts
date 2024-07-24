@@ -10,7 +10,7 @@ export interface ChartAssetDto {
   file: string;
   id: string;
   name: string;
-  ownerId: number;
+  ownerId: number | null;
   type: number;
 }
 
