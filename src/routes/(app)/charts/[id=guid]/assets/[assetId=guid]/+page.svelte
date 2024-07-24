@@ -12,6 +12,7 @@
   import type { ChartAssetDto } from '$lib/api/chart.asset';
   import Error from '$lib/components/Error.svelte';
   import Download from '$lib/components/Download.svelte';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
 
   export let data;
 
@@ -325,7 +326,11 @@
         >
           {$t('common.owner')}
         </span>
-        <User id={chartAsset.ownerId} />
+        {#if chartAsset.ownerId}
+          <User id={chartAsset.ownerId} />
+        {:else}
+          <AnonymizationNotice />
+        {/if}
       </div>
       {#if $chart.isSuccess}
         {@const chart = $chart.data.data}

@@ -9,7 +9,9 @@
 
   export let chartAsset: ChartAssetDto | ChartAssetSubmissionDto;
 
-  $: owner = createQuery(api.user.info({ id: chartAsset.ownerId }));
+  $: owner = createQuery(
+    api.user.info({ id: chartAsset.ownerId ?? 0 }, { enabled: chartAsset.ownerId !== null }),
+  );
 </script>
 
 <a
@@ -33,15 +35,17 @@
         {$t(`chart.asset.types.${chartAsset.type}`)}
       </span>
     </p>
-    <p class="flex items-center gap-1">
-      <span class="badge">{$t('common.owner')}</span>
-      {#if $owner.isSuccess}
-        <span class="truncate">
-          {$owner.data.data.userName}
-        </span>
-      {:else}
-        <span class="skeleton w-2/3 h-6"></span>
-      {/if}
-    </p>
+    {#if chartAsset.ownerId}
+      <p class="flex items-center gap-1">
+        <span class="badge">{$t('common.owner')}</span>
+        {#if $owner.isSuccess}
+          <span class="truncate">
+            {$owner.data.data.userName}
+          </span>
+        {:else}
+          <span class="skeleton w-2/3 h-6"></span>
+        {/if}
+      </p>
+    {/if}
   </div>
 </a>
