@@ -19,58 +19,59 @@
   $: event = createQuery(
     api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
   );
-  $: teams = createQuery(api.event.team.list({ rangeDivisionId: [id], ...searchParams }));
+  $: teams = createQuery(api.event.team.list({ rangeDivisionId: [id], perPage, ...searchParams }));
   $: reservedFieldsHeader = createQuery(api.event.division.listReservedFields({ id }));
   $: reservedFieldsTeam = createQuery(
     api.event.team.listReservedFields(
-      { rangeDivisionId: [id], ...searchParams },
+      { rangeDivisionId: [id], perPage, ...searchParams },
       { enabled: index == 1 },
     ),
   );
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
-      { id },
+      { id, perPage, ...searchParams },
       { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 0 },
     ),
   );
   $: chartPrompts = createQuery(
     api.event.division.listChartPrompts(
-      { id },
+      { id, perPage, ...searchParams },
       { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 0 },
     ),
   );
   $: resources = createQuery(
     api.event.resource.list(
-      { rangeDivisionId: [id], rangeType: [1], ...searchParams },
+      { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
       { enabled: index == 2 },
     ),
   );
   $: reservedFieldsResource = createQuery(
     api.event.resource.listReservedFields(
-      { rangeDivisionId: [id], rangeType: [1], ...searchParams },
+      { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
       { enabled: index == 2 },
     ),
   );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id },
+      { id, perPage, ...searchParams },
       { enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2 },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id },
+      { id, perPage, ...searchParams },
       { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id },
+      { id, perPage, ...searchParams },
       { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
     ),
   );
 
   const maxMemberDisplay = 2;
+  const perPage = 12;
 </script>
 
 <svelte:head>
