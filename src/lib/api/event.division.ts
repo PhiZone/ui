@@ -64,9 +64,7 @@ export interface InfoOpts {
   id: string;
 }
 
-export interface EntryOpts extends InfoOpts {
-  search?: string | null;
-}
+export interface EntryFilter extends InfoOpts, FilterBase {}
 
 export interface LeaderboardOpts extends InfoOpts {
   topRange?: number;
@@ -149,41 +147,20 @@ export default class EventDivisionAPI {
 
   listSongEntries = createQueryCreator(
     'event.division.entries.songs',
-    ({ id, search, ...rest }: EntryOpts): R<SongDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/songs?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: EntryFilter): R<SongDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/songs?` + stringifyFilter(rest)),
   );
 
   listChartEntries = createQueryCreator(
     'event.division.entries.charts',
-    ({ id, search, ...rest }: EntryOpts): R<ChartDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/charts?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: EntryFilter): R<ChartDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/charts?` + stringifyFilter(rest)),
   );
 
   listRecordEntries = createQueryCreator(
     'event.division.entries.records',
-    ({ id, search, ...rest }: EntryOpts): R<RecordDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/records?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: EntryFilter): R<RecordDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/records?` + stringifyFilter(rest)),
   );
 
   create(opts: CreateOpts): R {

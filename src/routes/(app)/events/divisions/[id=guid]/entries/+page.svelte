@@ -6,6 +6,7 @@
   import Record from '$lib/components/Record.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import Error from '$lib/components/Error.svelte';
+  import queryString from 'query-string';
 
   export let data;
   $: ({ id, searchParams, page, api } = data);
@@ -28,19 +29,31 @@
   // );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      {
+        id,
+        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...searchParams,
+      },
       { enabled: $division.isSuccess && $division.data.data.type == 0 },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      {
+        id,
+        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...searchParams,
+      },
       { enabled: $division.isSuccess && $division.data.data.type == 1 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      {
+        id,
+        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...searchParams,
+      },
       { enabled: $division.isSuccess && $division.data.data.type == 2 },
     ),
   );
