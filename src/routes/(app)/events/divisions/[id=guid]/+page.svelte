@@ -11,6 +11,7 @@
   import Record from '$lib/components/Record.svelte';
   import Timer from '$lib/components/Timer.svelte';
   import Tag from '$lib/components/Tag.svelte';
+  import queryString from 'query-string';
 
   export let data;
 
@@ -46,7 +47,7 @@
   );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
       {
         enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2,
       },
@@ -54,13 +55,13 @@
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
       { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id, search: $division.data?.data.suggestedEntrySearch },
+      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
       { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
     ),
   );
