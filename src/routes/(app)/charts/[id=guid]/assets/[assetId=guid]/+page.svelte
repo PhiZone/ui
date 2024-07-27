@@ -188,8 +188,10 @@
               class={`select transition border-2 normal-border join-item w-3/4 ${
                 updateErrors?.get('Type') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
-              bind:value={chartAssetDto.type}
-              on:input={() => {
+              value={chartAssetDto.type}
+              on:input={(e) => {
+                const type = parseInt(e.currentTarget.value);
+                chartAssetDto.type = type;
                 patch = applyPatch(patch, 'replace', '/type', chartAssetDto.type);
               }}
             >
