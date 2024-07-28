@@ -1,5 +1,5 @@
 import { stringifyFilter, createQueryCreator } from './common';
-import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 import type { HostshipDto } from './event';
 import type API from '.';
 import { serialize } from 'object-to-formdata';
@@ -159,9 +159,13 @@ export default class UserAPI {
     return this.api.PATCH(`/users/${id}/avatar`, serialize(rest));
   }
 
-  bind(provider: string, code: string, state: string, redirectUri: string) {
+  bind(provider: string, code: string, state: string, redirectUri: string): R {
     return this.api.POST(
       `/me/bindings/${provider}?code=${code}&state=${state}&redirectUri=${redirectUri}`,
     );
+  }
+
+  inheritTapTap(opts: CodeDto): R {
+    return this.api.POST('/me/bindings/tapTap/inherit', opts);
   }
 }

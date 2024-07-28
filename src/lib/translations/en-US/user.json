@@ -17,6 +17,11 @@
     "2": "Female"
   },
   "id": "User ID",
+  "inheritance": {
+    "account_inheritance": "账号引继",
+    "code": "引继码",
+    "success": "账号引继成功！"
+  },
   "language": "Language",
   "last_login": "Last Login",
   "linked_accounts": "Linked Accounts",
