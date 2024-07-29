@@ -275,7 +275,7 @@
                           : 'hover:btn-secondary btn-outline'
                         : 'btn-disabled'
                     }`}
-                    on:click={() => {
+                    on:click|preventDefault={() => {
                       querySong = true;
                     }}
                   >
@@ -482,7 +482,12 @@
               <div class="flex my-2">
                 <span class="w-1/4 place-self-center">{$t('common.form.level_preview')}</span>
                 <div class="w-3/4">
-                  <button class={`btn ${getLevelColor(levelType)} btn-sm text-xl no-animation`}>
+                  <button
+                    class={`btn ${getLevelColor(
+                      levelType,
+                    )} btn-sm text-xl cursor-default no-animation`}
+                    on:click|preventDefault
+                  >
                     {level}
                     {getLevelDisplay(parseFloat(difficulty))}
                   </button>
@@ -594,8 +599,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click={(e) => {
-                    e.preventDefault();
+                  on:click|preventDefault={() => {
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
                     tags.push(newTag);

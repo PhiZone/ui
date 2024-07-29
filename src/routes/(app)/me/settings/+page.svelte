@@ -851,12 +851,7 @@
                 <span class="hidden sm:inline sm:w-1/3">{$t('common.form.tips.image')}</span>
               </div>
             </div>
-            <form
-              class="form-control"
-              on:submit={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <form class="form-control" on:submit|preventDefault>
               <input type="number" name="id" value={user.id} hidden />
               <label class="join w-full mt-2">
                 <span

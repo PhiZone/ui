@@ -253,12 +253,7 @@
           >
             {$t('studio.submission.adjust_offset')}
           </a>
-          <form
-            class="w-full form-control"
-            on:submit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form class="w-full form-control" on:submit|preventDefault>
             <div class="flex items-center my-2">
               <span class="w-32">{$t('common.form.chart')}</span>
               <input
@@ -544,8 +539,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click={(e) => {
-                    e.preventDefault();
+                  on:click|preventDefault={() => {
                     if (!newTag || chart.tags.includes(newTag)) return;
                     showTags = false;
                     chart.tags.push(newTag);

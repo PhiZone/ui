@@ -16,7 +16,7 @@
 >
   <button
     class={`btn ${getLevelColor(chart.levelType)} join-item ${
-      large ? 'text-3xl' : !inline ? 'btn-sm text-xl' : 'btn-sm text-lg'
+      large ? 'text-3xl cursor-default' : !inline ? 'btn-sm text-xl' : 'btn-sm text-lg'
     } no-animation`}
   >
     {chart.level}
@@ -25,7 +25,7 @@
   {#if chart.isRanked}
     <button
       class="btn btn-success dark:btn-outline dark:border-2 dark:bg-base-300 dark:bg-opacity-40 dark:backdrop-blur-lg join-item {large
-        ? 'text-3xl'
+        ? 'text-3xl cursor-default'
         : !inline
           ? 'btn-sm text-xl'
           : 'btn-sm text-lg'} no-animation"
