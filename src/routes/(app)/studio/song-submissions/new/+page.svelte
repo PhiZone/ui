@@ -411,7 +411,7 @@
                       <button
                         type="button"
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click={handlePreviewPlay}
+                        on:click|preventDefault={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-pause fa-xl"></i>
                       </button>
@@ -419,7 +419,7 @@
                       <button
                         type="button"
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click={handlePreviewPlay}
+                        on:click|preventDefault={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-play fa-lg"></i>
                       </button>
@@ -597,7 +597,8 @@
                 <div class="w-3/4">
                   <button
                     type="button"
-                    class="btn btn-xs btn-shallow text-sm font-normal no-animation"
+                    class="btn btn-xs btn-shallow text-sm font-normal cursor-default no-animation"
+                    on:click|preventDefault
                   >
                     {$t(`song.edition_types.${editionType}`)}
                   </button>
@@ -851,8 +852,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click={(e) => {
-                    e.preventDefault();
+                  on:click|preventDefault={() => {
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
                     tags.push(newTag);

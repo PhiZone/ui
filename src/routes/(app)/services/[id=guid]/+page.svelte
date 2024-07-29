@@ -296,8 +296,7 @@
             />
             <button
               class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-              on:click={(e) => {
-                e.preventDefault();
+              on:click|preventDefault={() => {
                 if (!newTag || service.parameters.includes(newTag)) return;
                 showTags = false;
                 service.parameters.push(newTag);

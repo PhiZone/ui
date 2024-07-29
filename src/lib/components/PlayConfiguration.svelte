@@ -93,12 +93,7 @@
       ✕
     </label>
     <h3 class="font-bold text-lg mb-2">{$t('play_configuration.play_configuration')}</h3>
-    <form
-      class="w-full form-control gap-4"
-      on:submit={(e) => {
-        e.preventDefault();
-      }}
-    >
+    <form class="w-full form-control gap-4" on:submit|preventDefault>
       <div class="flex w-full pt-6">
         <div
           class="tooltip {editable.perfectJudgment < 45

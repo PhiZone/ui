@@ -351,12 +351,7 @@
       </div>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
-          <form
-            class="w-full form-control"
-            on:submit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form class="w-full form-control" on:submit|preventDefault>
             <div class="flex justify-start items-center my-2 w-full">
               <span class="w-32 place-self-center">{$t('song.original')}</span>
               <div class="flex w-1/3">
@@ -990,8 +985,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click={(e) => {
-                    e.preventDefault();
+                  on:click|preventDefault={() => {
                     if (!newTag || song.tags.includes(newTag)) return;
                     showTags = false;
                     song.tags.push(newTag);
