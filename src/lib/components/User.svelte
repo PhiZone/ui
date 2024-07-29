@@ -148,12 +148,7 @@
           {/if}
           {#if showFollow}
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div
-              on:click={(e) => {
-                e.preventDefault();
-              }}
-              on:keyup
-            >
+            <div on:click|preventDefault on:keyup>
               <Follow {user} />
             </div>
           {/if}

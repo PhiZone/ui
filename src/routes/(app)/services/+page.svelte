@@ -194,8 +194,7 @@
           />
           <button
             class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-            on:click={(e) => {
-              e.preventDefault();
+            on:click|preventDefault={() => {
               if (!newTag || tags.includes(newTag)) return;
               showTags = false;
               tags.push(newTag);

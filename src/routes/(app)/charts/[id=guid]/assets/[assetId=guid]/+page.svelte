@@ -117,12 +117,7 @@
         ✕
       </label>
       <h3 class="font-bold text-lg mb-2">{$t('chart.asset.asset')}</h3>
-      <form
-        class="w-full form-control"
-        on:submit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form class="w-full form-control" on:submit|preventDefault>
         <div
           class={updateErrors?.get('File')
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2 flex items-center'

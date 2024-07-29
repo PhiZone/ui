@@ -146,12 +146,7 @@
       </div>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg my-4">
         <div class="card-body">
-          <form
-            class="w-full form-control"
-            on:submit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form class="w-full form-control" on:submit|preventDefault>
             <!-- <div class="flex items-center my-2">
               <span class="w-32">{$t('event.team.icon')}</span>
               <input
