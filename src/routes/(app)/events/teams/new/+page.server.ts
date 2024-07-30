@@ -70,6 +70,10 @@ export const actions = {
 
         return fail(resp.status, { form });
       } catch (e) {
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          e,
+        );
         return fail(resp.status);
       }
     }
