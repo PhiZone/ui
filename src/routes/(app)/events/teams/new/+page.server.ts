@@ -32,7 +32,7 @@ export const actions = {
     }
     // eslint-disable-next-line prefer-const
     let { Icon, ...rest } = form.data;
-    Icon = formData.get('Icon') as File;
+    Icon = (formData.get('Icon') as File | null) ?? undefined;
     const resp = await api.event.team.create({ Icon, ...rest });
     if (resp.ok) {
       throw redirect(
