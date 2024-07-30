@@ -57,8 +57,8 @@ export interface InviteAcceptOpts {
 
 export interface CreateOpts {
   Name: string;
-  Icon?: Blob;
-  Description?: string;
+  Icon: Blob | null;
+  Description: string | null;
   ClaimedParticipantCount: number;
   ClaimedSubmissionCount: number;
   DivisionId: string;
