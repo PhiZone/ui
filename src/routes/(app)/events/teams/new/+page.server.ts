@@ -32,10 +32,8 @@ export const actions = {
     }
     // eslint-disable-next-line prefer-const
     let { Icon, ...rest } = form.data;
-    Icon = formData.get('Icon') as File | null;
-    console.log(Icon);
-    const resp = await api.event.team.create({ Icon: Icon ?? null, ...rest });
-    console.log({ Icon: Icon ?? null, ...rest });
+    Icon = formData.get('Icon') ? (formData.get('Icon') as File) : null;
+    const resp = await api.event.team.create({ Icon, ...rest });
     if (resp.ok) {
       throw redirect(
         303,
@@ -72,10 +70,6 @@ export const actions = {
 
         return fail(resp.status, { form });
       } catch (e) {
-        console.error(
-          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
-          e,
-        );
         return fail(resp.status);
       }
     }
