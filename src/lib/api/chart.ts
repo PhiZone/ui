@@ -5,6 +5,7 @@ import type API from '.';
 import ChartSubmissionAPI from './chart.submission';
 import type { CollectionAdmitterDto } from './collection';
 import ChartAssetAPI from './chart.asset';
+import type { ChartAssetDto } from './chart.asset';
 import type { RecordDto, SongDto } from '.';
 import type { TagDto } from './tag';
 
@@ -27,6 +28,7 @@ export enum ChartLevel {
 export interface ChartDto {
   accessibility: Accessibility;
   authorName: string | null;
+  assets: ChartAssetDto[];
   commentCount: number;
   dateCreated: string;
   dateLiked: string | null;
@@ -76,6 +78,10 @@ export interface Filter extends PublicResourceFilterBase {
 // info
 export interface InfoOpts {
   id: string;
+}
+
+export interface ExtendedInfoOpts extends InfoOpts {
+  includeAssets?: boolean;
 }
 
 export interface LeaderboardOpts extends InfoOpts {
@@ -135,7 +141,7 @@ export default class ChartAPI {
 
   info = createQueryCreator(
     'chart.info',
-    ({ id, ...rest }: InfoOpts): R<ChartDto> =>
+    ({ id, ...rest }: ExtendedInfoOpts): R<ChartDto> =>
       this.api.GET(`/charts/${id}?` + queryString.stringify(rest)),
   );
 
