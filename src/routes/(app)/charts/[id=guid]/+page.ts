@@ -5,7 +5,7 @@ export const load = async ({ data, params, url, parent }) => {
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   const id = params.id;
   await Promise.allSettled([
-    queryClient.prefetchQuery(api.chart.info({ id })),
+    queryClient.prefetchQuery(api.chart.info({ id, includeAssets: true })),
     queryClient.prefetchQuery(api.chart.listAllAdmitters({ id })),
     queryClient.prefetchQuery(api.chart.leaderboard({ id })),
     queryClient.prefetchQuery(
@@ -17,7 +17,6 @@ export const load = async ({ data, params, url, parent }) => {
         desc: [true, true],
       }),
     ),
-    queryClient.prefetchQuery(api.chart.asset.listAll({ chartId: id })),
     queryClient.prefetchQuery(api.authorship.listAll({ rangeResourceId: [id] })),
   ]);
   if (data.preferredPlayConfiguration && user) {
