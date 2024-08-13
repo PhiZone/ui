@@ -30,7 +30,7 @@ export const actions = {
 
     const resp = await api.user.inheritTapTap(form.data);
     if (resp.ok) {
-      throw redirect(303, '/me?level=success&message=user.inheritance.success&t=true');
+      throw redirect(303, '/me?level=success&message=user.account_inheritance.success&t=true');
     } else {
       const error = await resp.json();
       console.error(
