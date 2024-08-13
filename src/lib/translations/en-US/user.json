@@ -1,5 +1,10 @@
 {
   "account": "Account",
+  "account_inheritance": {
+    "code": "引继码",
+    "success": "账号引继成功！",
+    "title": "引继 Phigrim 账号"
+  },
   "avatar": "Avatar",
   "best_records": "Best Records",
   "bio": "Bio",
@@ -17,11 +22,7 @@
     "2": "Female"
   },
   "id": "User ID",
-  "inheritance": {
-    "account_inheritance": "账号引继",
-    "code": "引继码",
-    "success": "账号引继成功！"
-  },
+  "inheritance": {},
   "language": "Language",
   "last_login": "Last Login",
   "linked_accounts": "Linked Accounts",

@@ -8,13 +8,13 @@
 </script>
 
 <svelte:head>
-  <title>{$t('user.inheritance.account_inheritance')} | {$t('common.title')}</title>
+  <title>{$t('user.account_inheritance.title')} | {$t('common.title')}</title>
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-300">
   <div class="hero-content flex-col text-center sm:w-[50vw] max-w-lg">
     <h1 class="text-5xl font-bold pb-6">
-      {$t('user.inheritance.account_inheritance')}
+      {$t('user.account_inheritance.title')}
     </h1>
     <form method="POST" class="w-full form-control" use:enhance>
       <div
@@ -26,7 +26,7 @@
           name="code"
           autocomplete="off"
           class="input transition border-2 normal-border hover:input-secondary input-lg w-full text-center"
-          placeholder={$t('user.inheritance.code')}
+          placeholder={$t('user.account_inheritance.code')}
         />
       </div>
       <div
