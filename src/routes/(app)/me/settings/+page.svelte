@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { invalidateAll } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { locales, locale, t } from '$lib/translations/config';
   import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
@@ -109,6 +109,12 @@
   };
 
   const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+
+  const phigrim = {
+    name: 'Phigrim',
+    avatar: 'https://res.phizone.cn/Ak0lsqsViHdnJ80o2PVYEv0pmbhQTk4z/phigrim.png',
+    branded: false,
+  };
 </script>
 
 <svelte:head>
@@ -176,6 +182,17 @@
           <p>{app.name}</p>
         </button>
       {/each}
+      <button
+        class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+        on:click={() => goto('/me/inherit')}
+      >
+        <div class="avatar">
+          <div class="w-6 rounded-full">
+            <img src={getAvatar(phigrim.avatar)} alt="Avatar" />
+          </div>
+        </div>
+        <p>{phigrim.name}</p>
+      </button>
     </div>
   </div>
 </div>
