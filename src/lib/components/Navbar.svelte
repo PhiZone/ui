@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
-  import { getAvatar, getUserColor, getUserPrivilege } from '$lib/utils';
+  import { getAvatar, getUserColor, getUserPrivilege, toLocalTime } from '$lib/utils';
 </script>
 
 <div
@@ -131,7 +131,7 @@
               user.role,
             )}"
           >
-            {#if user.dateOfBirth && new Date(user.dateOfBirth).getMonth() === new Date().getMonth() && new Date(user.dateOfBirth).getDate() === new Date().getDate() && !$page.url.pathname.startsWith(`/users/${user.id}`)}
+            {#if user.dateOfBirth && toLocalTime(user.dateOfBirth).getMonth() === new Date().getMonth() && toLocalTime(user.dateOfBirth).getDate() === new Date().getDate() && !$page.url.pathname.startsWith(`/users/${user.id}`)}
               <img
                 src="https://res.phizone.cn/cDoKFCtSeSUrQwPOCg9KPmEIihjLrQtW/party-hat.png"
                 alt="Birthday Hat"

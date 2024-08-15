@@ -6,6 +6,7 @@
     getUserLevel,
     parseDateTime,
     parseMonthAndDay,
+    toLocalTime,
   } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
   import Record from '$lib/components/Record.svelte';
@@ -60,7 +61,7 @@
                 )}"
               >
                 <img src={getAvatar(user.avatar, 60)} alt="Avatar" />
-                {#if user.dateOfBirth && new Date(user.dateOfBirth).getMonth() === new Date().getMonth() && new Date(user.dateOfBirth).getDate() === new Date().getDate()}
+                {#if user.dateOfBirth && toLocalTime(user.dateOfBirth).getMonth() === new Date().getMonth() && toLocalTime(user.dateOfBirth).getDate() === new Date().getDate()}
                   <img
                     src="https://res.phizone.cn/cDoKFCtSeSUrQwPOCg9KPmEIihjLrQtW/party-hat.png"
                     alt="Birthday Hat"
