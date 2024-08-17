@@ -4,7 +4,14 @@
   import { locales, locale, t } from '$lib/translations/config';
   import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import { applyPatch, requestIdentity, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
+  import {
+    applyPatch,
+    requestIdentity,
+    getAvatar,
+    getUserColor,
+    parseDateTime,
+    toLocalTime,
+  } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
   import { superForm } from 'sveltekit-superforms/client';
   import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
