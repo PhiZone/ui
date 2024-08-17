@@ -61,7 +61,7 @@
     return 0;
   };
 
-  $: chart = createQuery(api.chart.info({ id }));
+  $: chart = createQuery(api.chart.info({ id, includeAssets: true }));
   $: collections = createQuery(api.chart.listAllAdmitters({ id }));
   $: leaderboard = createQuery(api.chart.leaderboard({ id }));
   $: votes = createQuery(api.vote.listAll({ chartId: id }));
@@ -90,7 +90,6 @@
   $: applications = createQuery(
     api.application.listAll({ rangeType: [0] }, { enabled: playOpen && !!user }),
   );
-  $: assets = createQuery(api.chart.asset.listAll({ chartId: id }));
   $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
 
   let status = Status.WAITING;
@@ -267,7 +266,7 @@
                 status = Status.ERROR;
               } else if (result.type === 'success') {
                 status = Status.OK;
-                await queryClient.invalidateQueries(['chart.info', { id }]);
+                await queryClient.invalidateQueries(['chart.info', { id, includeAssets: true }]);
                 await queryClient.invalidateQueries(['vote.listAll', { chartId: id }]);
                 // TODO: toast
                 voteOpen = false;
@@ -541,7 +540,7 @@
                           chart.song.title}&level={chart.level}&difficulty={getLevelDisplay(
                           chart.difficulty,
                         )}&composer={chart.song.authorName}&illustrator={chart.song
-                          .illustrator}&charter={chart.authorName}&assets={$assets.data?.data
+                          .illustrator}&charter={chart.authorName}&assets={chart.assets
                           .map((asset) => encodeURI(asset.file))
                           .join(',')}"
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
@@ -620,7 +619,7 @@
           </div>
         </div>
       {/if}
-      {#if $assets.isSuccess && ($assets.data.data.length > 0 || getUserPrivilege(user?.role) === 6)}
+      {#if chart.assets.length > 0 || getUserPrivilege(user?.role) === 6}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -639,9 +638,9 @@
                 {$t('common.more')}
                 <i class="fa-solid fa-angles-right"></i>
               </a>
-              {#if $assets.data.data.length > 0}
+              {#if chart.assets.length > 0}
                 <div class="result">
-                  {#each $assets.data.data.slice(0, 6) as chartAsset}
+                  {#each chart.assets.slice(0, 6) as chartAsset}
                     <ChartAsset {chartAsset} />
                   {/each}
                 </div>

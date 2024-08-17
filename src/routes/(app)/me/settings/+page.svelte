@@ -1,10 +1,17 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { invalidateAll } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { locales, locale, t } from '$lib/translations/config';
   import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import { applyPatch, requestIdentity, getAvatar, getUserColor, parseDateTime } from '$lib/utils';
+  import {
+    applyPatch,
+    requestIdentity,
+    getAvatar,
+    getUserColor,
+    parseDateTime,
+    toLocalTime,
+  } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
   import { superForm } from 'sveltekit-superforms/client';
   import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
@@ -41,9 +48,9 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
-  $: year = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCFullYear();
-  $: month = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
-  $: day = (user.dateOfBirth ? new Date(user.dateOfBirth) : new Date()).getUTCDate();
+  $: year = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCFullYear();
+  $: month = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
+  $: day = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCDate();
 
   $: badJudgment = $form.goodJudgment * 1.125;
   $: rksFactor = calculateRksFactor($form.perfectJudgment, $form.goodJudgment);
@@ -109,6 +116,12 @@
   };
 
   const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+
+  const phigrim = {
+    name: 'Phigrim',
+    avatar: 'https://res.phizone.cn/Ak0lsqsViHdnJ80o2PVYEv0pmbhQTk4z/phigrim.png',
+    branded: false,
+  };
 </script>
 
 <svelte:head>
@@ -176,6 +189,17 @@
           <p>{app.name}</p>
         </button>
       {/each}
+      <button
+        class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
+        on:click={() => goto('/me/inherit')}
+      >
+        <div class="avatar">
+          <div class="w-6 rounded-full">
+            <img src={getAvatar(phigrim.avatar)} alt="Avatar" />
+          </div>
+        </div>
+        <p>{phigrim.name}</p>
+      </button>
     </div>
   </div>
 </div>
@@ -851,12 +875,7 @@
                 <span class="hidden sm:inline sm:w-1/3">{$t('common.form.tips.image')}</span>
               </div>
             </div>
-            <form
-              class="form-control"
-              on:submit={(e) => {
-                e.preventDefault();
-              }}
-            >
+            <form class="form-control" on:submit|preventDefault>
               <input type="number" name="id" value={user.id} hidden />
               <label class="join w-full mt-2">
                 <span

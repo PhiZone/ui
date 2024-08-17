@@ -1,5 +1,10 @@
 {
   "account": "账号",
+  "account_inheritance": {
+    "code": "引继码",
+    "success": "账号引继成功！",
+    "title": "引继 Phigrim 账号"
+  },
   "avatar": "头像",
   "best_records": "最佳游玩记录",
   "bio": "简介",
@@ -17,6 +22,7 @@
     "2": "女"
   },
   "id": "用户 ID",
+  "inheritance": {},
   "language": "语言",
   "last_login": "上次登录",
   "linked_accounts": "关联账号",

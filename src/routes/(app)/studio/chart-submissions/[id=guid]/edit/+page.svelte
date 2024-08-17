@@ -7,11 +7,12 @@
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import { invalidateAll } from '$app/navigation';
-  import type { PatchElement } from '$lib/api/types';
+  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
+  import UpdateError from '$lib/components/UpdateError.svelte';
 
   export let data;
 
@@ -25,6 +26,7 @@
   let queryCharter = false;
   let status = Status.WAITING;
   let errorCode = '';
+  let error: ResponseDtoError | undefined = undefined;
   let errors: Map<string, string> | undefined = undefined;
 
   $: submission = createQuery(api.chart.submission.info({ id }));
@@ -80,6 +82,7 @@
         status = Status.ERROR;
         const data = await resp.json();
         errorCode = data.code;
+        error = data;
         console.error(
           `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
           data,
@@ -121,6 +124,11 @@
 </svelte:head>
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
+<UpdateError
+  {error}
+  checked={status === Status.ERROR && !!error && !errors}
+  onClick={() => (status = Status.WAITING)}
+/>
 
 <input type="checkbox" id="studio-charter" class="modal-toggle" />
 <div class="modal">
@@ -245,12 +253,7 @@
           >
             {$t('studio.submission.adjust_offset')}
           </a>
-          <form
-            class="w-full form-control"
-            on:submit={(e) => {
-              e.preventDefault();
-            }}
-          >
+          <form class="w-full form-control" on:submit|preventDefault>
             <div class="flex items-center my-2">
               <span class="w-32">{$t('common.form.chart')}</span>
               <input
@@ -536,8 +539,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click={(e) => {
-                    e.preventDefault();
+                  on:click|preventDefault={() => {
                     if (!newTag || chart.tags.includes(newTag)) return;
                     showTags = false;
                     chart.tags.push(newTag);

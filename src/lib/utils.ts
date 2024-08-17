@@ -57,9 +57,9 @@ export const parseLatex = (input: string) => {
 export const getUserPrivilege = (role: string | null | undefined) => {
   switch (role) {
     case 'Member':
-      return 3;
+      return 1;
     case 'Sponsor':
-      return 3;
+      return 2;
     case 'Qualified':
       return 3;
     case 'Volunteer':
@@ -211,12 +211,15 @@ export const parseDateTime = (
       });
 };
 
-export const parseMonthAndDay = (input: string | Date) => {
-  const date = new Date(input);
-  return date.toLocaleDateString(undefined, {
+export const parseMonthAndDay = (input: string) => {
+  return toLocalTime(input).toLocaleDateString(undefined, {
     month: 'long',
     day: 'numeric',
   });
+};
+
+export const toLocalTime = (input: string) => {
+  return new Date(input.split('T')[0] + 'T' + new Date().toISOString().split('T')[1]);
 };
 
 export const getCompressedImage = (input: string | undefined, quality = 20) => {

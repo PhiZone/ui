@@ -7,8 +7,8 @@ import { ResponseDtoStatus } from '$lib/api/types';
 
 const schema = z.object({
   Name: z.string(),
-  Icon: z.custom<File>().optional(),
-  Description: z.string().optional(),
+  Icon: z.custom<File>().nullable(),
+  Description: z.string().nullable(),
   ClaimedParticipantCount: z.number(),
   ClaimedSubmissionCount: z.number(),
   DivisionId: z.string(),
@@ -33,6 +33,7 @@ export const actions = {
     // eslint-disable-next-line prefer-const
     let { Icon, ...rest } = form.data;
     Icon = formData.get('Icon') as File;
+    if (Icon.size == 0) Icon = null;
     const resp = await api.event.team.create({ Icon, ...rest });
     if (resp.ok) {
       throw redirect(

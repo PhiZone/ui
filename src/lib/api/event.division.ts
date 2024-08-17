@@ -64,9 +64,7 @@ export interface InfoOpts {
   id: string;
 }
 
-export interface EntryOpts extends InfoOpts {
-  search?: string | null;
-}
+export interface ResourceFilter extends InfoOpts, FilterBase {}
 
 export interface LeaderboardOpts extends InfoOpts {
   topRange?: number;
@@ -125,65 +123,44 @@ export default class EventDivisionAPI {
 
   listSongPrompts = createQueryCreator(
     'event.division.prompts.songs',
-    ({ id, ...rest }: InfoOpts): R<SongDto[]> =>
+    ({ id, ...rest }: ResourceFilter): R<SongDto[]> =>
       this.api.GET(`/events/divisions/${id}/prompts/songs?` + stringifyFilter(rest)),
   );
 
   listChartPrompts = createQueryCreator(
     'event.division.prompts.charts',
-    ({ id, ...rest }: InfoOpts): R<ChartDto[]> =>
+    ({ id, ...rest }: ResourceFilter): R<ChartDto[]> =>
       this.api.GET(`/events/divisions/${id}/prompts/charts?` + stringifyFilter(rest)),
   );
 
   listTags = createQueryCreator(
     'event.division.tags',
-    ({ id, ...rest }: InfoOpts): R<TagDto[]> =>
+    ({ id, ...rest }: ResourceFilter): R<TagDto[]> =>
       this.api.GET(`/events/divisions/${id}/tags?` + stringifyFilter(rest)),
   );
 
   listAllTags = createQueryCreator(
     'event.division.tagsAll',
-    ({ id, ...rest }: InfoOpts): R<TagDto[]> =>
+    ({ id, ...rest }: ResourceFilter): R<TagDto[]> =>
       this.api.GET(`/events/divisions/${id}/tags?` + stringifyFilter(rest, true)),
   );
 
   listSongEntries = createQueryCreator(
     'event.division.entries.songs',
-    ({ id, search, ...rest }: EntryOpts): R<SongDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/songs?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: ResourceFilter): R<SongDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/songs?` + stringifyFilter(rest)),
   );
 
   listChartEntries = createQueryCreator(
     'event.division.entries.charts',
-    ({ id, search, ...rest }: EntryOpts): R<ChartDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/charts?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: ResourceFilter): R<ChartDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/charts?` + stringifyFilter(rest)),
   );
 
   listRecordEntries = createQueryCreator(
     'event.division.entries.records',
-    ({ id, search, ...rest }: EntryOpts): R<RecordDto[]> =>
-      this.api.GET(
-        `/events/divisions/${id}/entries/records?` +
-          (search
-            ? search.startsWith('?')
-              ? search.substring(1)
-              : search
-            : stringifyFilter(rest)),
-      ),
+    ({ id, ...rest }: ResourceFilter): R<RecordDto[]> =>
+      this.api.GET(`/events/divisions/${id}/entries/records?` + stringifyFilter(rest)),
   );
 
   create(opts: CreateOpts): R {

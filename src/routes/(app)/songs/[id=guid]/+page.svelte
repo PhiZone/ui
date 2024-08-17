@@ -54,14 +54,14 @@
       </label>
       <div class="py-3 flex gap-4 items-center content">
         {#if song.isOriginal}
-          <button class="btn btn-shallow text-3xl no-animation min-w-fit">
+          <button class="btn btn-shallow text-3xl cursor-default no-animation min-w-fit">
             {$t('song.original')}
           </button>
         {/if}
         <span class="text-5xl font-bold">{song.title}</span>
       </div>
       <div class="flex items-center gap-2">
-        <button class="btn btn-accent btn-sm text-xl no-animation">
+        <button class="btn btn-accent btn-sm text-xl cursor-default no-animation">
           {$t(`song.edition_types.${song.editionType}`)}
         </button>
         {#if song.edition}
@@ -94,7 +94,7 @@
           <div class="card-body py-10">
             <div class="py-3 flex flex-col sm:flex-row gap-4 items-center">
               {#if song.isOriginal}
-                <button class="btn btn-accent text-3xl no-animation min-w-fit">
+                <button class="btn btn-accent text-3xl cursor-default no-animation min-w-fit">
                   {$t('song.original')}
                 </button>
               {/if}

@@ -330,7 +330,7 @@
                   {#if hasEventPermission(user, $event.data?.data, UPDATE, TEAM) || user?.id === team.ownerId}
                     <a
                       href="/events/teams/{team.id}/edit"
-                      class="btn border-2 normal-border btn-outline text-lg w-32"
+                      class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
                     >
                       {$t('common.edit_info')}
                     </a>
@@ -338,7 +338,7 @@
                       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                       <label
                         for="invite"
-                        class="btn border-2 normal-border btn-outline text-lg w-32"
+                        class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
                         on:click={() => {
                           if (!inviteCode) createInvitation();
                         }}
@@ -351,7 +351,7 @@
                   {#if user && team.participants.some((e) => e.id == user.id) && user.id != team.ownerId}
                     <label
                       for="leave"
-                      class="btn border-2 normal-border btn-outline hover:btn-warning text-lg w-32"
+                      class="btn border-2 normal-border btn-outline hover:btn-warning text-lg w-32 min-w-fit"
                     >
                       {$t('event.team.leave')}
                     </label>
@@ -359,7 +359,7 @@
                   {#if hasEventPermission(user, $event.data?.data, REMOVE, TEAM) || user?.id == team.ownerId}
                     <label
                       for="disband"
-                      class="btn border-2 normal-border btn-outline hover:btn-error text-lg w-32"
+                      class="btn border-2 normal-border btn-outline hover:btn-error text-lg w-32 min-w-fit"
                     >
                       {$t('event.team.disband')}
                     </label>

@@ -116,12 +116,7 @@
         ✕
       </label>
       <h3 class="font-bold text-lg mb-2">{$t('chart.asset.asset')}</h3>
-      <form
-        class="w-full form-control"
-        on:submit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form class="w-full form-control" on:submit|preventDefault>
         <div
           class={updateErrors?.get('File')
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2 flex items-center'
@@ -187,8 +182,10 @@
               class={`select transition border-2 normal-border join-item w-3/4 ${
                 updateErrors?.get('Type') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
-              bind:value={chartAssetDto.type}
-              on:input={() => {
+              value={chartAssetDto.type}
+              on:input={(e) => {
+                const type = parseInt(e.currentTarget.value);
+                chartAssetDto.type = type;
                 patch = applyPatch(patch, 'replace', '/type', chartAssetDto.type);
               }}
             >

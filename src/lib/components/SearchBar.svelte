@@ -26,7 +26,7 @@
       placeholder={$t('common.search_placeholder', {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        resource: $t(name),
+        resource: $t(name).toLowerCase(),
       })}
       class="input border-2 normal-border transition hover:input-secondary join-item w-full"
       bind:value={text}

@@ -73,7 +73,7 @@
                   class={`input transition border-2 normal-border join-item ${
                     $errors.Name ? 'hover:input-error' : 'hover:input-secondary'
                   } w-3/4`}
-                  bind:value={name}
+                  value={name}
                 />
               </label>
             </div>

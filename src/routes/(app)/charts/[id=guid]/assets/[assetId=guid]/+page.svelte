@@ -12,6 +12,7 @@
   import type { ChartAssetDto } from '$lib/api/chart.asset';
   import Error from '$lib/components/Error.svelte';
   import Download from '$lib/components/Download.svelte';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
 
   export let data;
 
@@ -116,12 +117,7 @@
         ✕
       </label>
       <h3 class="font-bold text-lg mb-2">{$t('chart.asset.asset')}</h3>
-      <form
-        class="w-full form-control"
-        on:submit={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <form class="w-full form-control" on:submit|preventDefault>
         <div
           class={updateErrors?.get('File')
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2 flex items-center'
@@ -187,8 +183,10 @@
               class={`select transition border-2 normal-border join-item w-3/4 ${
                 updateErrors?.get('Type') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
-              bind:value={chartAssetDto.type}
-              on:input={() => {
+              value={chartAssetDto.type}
+              on:input={(e) => {
+                const type = parseInt(e.currentTarget.value);
+                chartAssetDto.type = type;
                 patch = applyPatch(patch, 'replace', '/type', chartAssetDto.type);
               }}
             >
@@ -325,7 +323,11 @@
         >
           {$t('common.owner')}
         </span>
-        <User id={chartAsset.ownerId} />
+        {#if chartAsset.ownerId}
+          <User id={chartAsset.ownerId} />
+        {:else}
+          <AnonymizationNotice />
+        {/if}
       </div>
       {#if $chart.isSuccess}
         {@const chart = $chart.data.data}

@@ -7,7 +7,6 @@
   import Rating from './Rating.svelte';
   import type { ChartAdmitteeDto } from '$lib/api/chart';
   import ChartLabel from './ChartDifficulty.svelte';
-  import ChartDifficulty from './ChartDifficulty.svelte';
 
   export let chart: ChartDto | ChartAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';
@@ -131,7 +130,7 @@
           {/if}
         </div>
       {/if}
-      <ChartDifficulty {chart} inline css={showSong ? 'hidden sm:flex' : ''} />
+      <ChartLabel {chart} inline css={showSong ? 'hidden sm:flex' : ''} />
     </div>
     {#if showCharter}
       <div
