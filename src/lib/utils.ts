@@ -219,7 +219,7 @@ export const parseMonthAndDay = (input: string) => {
 };
 
 export const toLocalTime = (input: string) => {
-  return new Date(input.split('T')[0] + 'T' + new Date().toISOString().split('T')[1]);
+  return new Date(input.split('+')[0]);
 };
 
 export const getCompressedImage = (input: string | undefined, quality = 20) => {
