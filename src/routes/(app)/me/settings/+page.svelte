@@ -48,9 +48,9 @@
     ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
   );
 
-  $: year = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCFullYear();
-  $: month = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCMonth() + 1;
-  $: day = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getUTCDate();
+  $: year = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getFullYear();
+  $: month = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getMonth() + 1;
+  $: day = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getDate();
 
   $: badJudgment = $form.goodJudgment * 1.125;
   $: rksFactor = calculateRksFactor($form.perfectJudgment, $form.goodJudgment);
