@@ -15,6 +15,7 @@
   import Service from '$lib/components/Service.svelte';
   import Download from '$lib/components/Download.svelte';
   import EventDivision from '$lib/components/EventDivision.svelte';
+  import Delete from '$lib/components/Delete.svelte';
 
   export let data;
 
@@ -715,6 +716,12 @@
                 </div>
                 <div class="flex gap-2 items-center justify-end">
                   {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 4)}
+                    <Delete
+                      id={submission.id}
+                      path="studio/songs"
+                      name="studio.song_submission"
+                      class="normal-border btn-outline text-lg btn-square"
+                    />
                     <a
                       href="/studio/song-submissions/{submission?.id}/edit"
                       class="btn border-2 normal-border btn-outline text-lg w-32"
