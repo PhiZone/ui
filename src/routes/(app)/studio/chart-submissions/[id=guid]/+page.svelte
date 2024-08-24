@@ -24,6 +24,7 @@
   import Service from '$lib/components/Service.svelte';
   import Download from '$lib/components/Download.svelte';
   import EventDivision from '$lib/components/EventDivision.svelte';
+  import Delete from '$lib/components/Delete.svelte';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -647,6 +648,12 @@
             </div>
             <div class="card-actions flex items-center justify-end gap-2">
               {#if user && (($uploader.isSuccess && submission.ownerId === user.id) || getUserPrivilege(user.role) >= 4)}
+                <Delete
+                  id={submission.id}
+                  path="studio/charts"
+                  name="studio.chart_submission"
+                  class="normal-border btn-outline text-lg btn-square"
+                />
                 <a
                   href="/studio/chart-submissions/{submission.id}/edit"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
