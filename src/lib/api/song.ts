@@ -17,6 +17,7 @@ export interface SongDto {
   chartLevels: ChartLevelDto[];
   commentCount: number;
   dateCreated: string;
+  dateFileUpdated: string;
   dateLiked: string | null;
   dateUpdated: string;
   description: string | null;

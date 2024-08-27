@@ -31,6 +31,7 @@ export interface ChartDto {
   assets: ChartAssetDto[];
   commentCount: number;
   dateCreated: string;
+  dateFileUpdated: string;
   dateLiked: string | null;
   dateUpdated: string;
   description: string | null;

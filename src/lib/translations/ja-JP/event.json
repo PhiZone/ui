@@ -55,7 +55,7 @@
   "member": "成员",
   "members": "成员",
   "task": {
-    "date_executed": "执行日期",
+    "date_executed": "执行时间",
     "task": "自动化任务",
     "types": {
       "0": "定时",

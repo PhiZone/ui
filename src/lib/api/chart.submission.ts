@@ -12,6 +12,7 @@ export interface ChartSubmissionDto {
   admissionStatus: number;
   authorName: string;
   dateCreated: string;
+  dateFileUpdated: string;
   dateUpdated: string;
   dateVoted: string | null;
   description: string | null;

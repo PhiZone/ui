@@ -89,13 +89,13 @@
       </div>
       <p class="truncate">
         <span class="badge mr-1">
-          {$t('common.created_at')}
+          {$t('common.date_created')}
         </span>
         {parseDateTime(song.dateCreated, true, user?.language)}
       </p>
       <p class="truncate">
         <span class="badge mr-1">
-          {$t('common.updated_at')}
+          {$t('common.date_updated')}
         </span>
         {parseDateTime(song.dateUpdated, true, user?.language)}
       </p>

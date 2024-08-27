@@ -243,12 +243,12 @@
             <div class="flex flex-col gap-2">
               <p class="truncate">
                 <span class="badge badge-outline backdrop-blur mr-1">
-                  {$t('common.started_at')}
+                  {$t('common.date_started')}
                 </span>
                 {parseDateTime(division.dateStarted)}
               </p>
               <p class="truncate">
-                <span class="badge badge-outline backdrop-blur mr-1">{$t('common.ended_at')}</span>
+                <span class="badge badge-outline backdrop-blur mr-1">{$t('common.date_ended')}</span>
                 {parseDateTime(division.dateEnded)}
               </p>
             </div>
@@ -568,7 +568,7 @@
                             <th>{$t('record.miss')}</th>
                             <th>{$t('record.rks')}</th>
                             <th>{$t('record.std_deviation')}</th>
-                            <th>{$t('record.played_at')}</th>
+                            <th>{$t('record.date_played')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -651,7 +651,7 @@
                             <th>{$t('record.miss')}</th>
                             <th>{$t('record.rks')}</th>
                             <th>{$t('record.std_deviation')}</th>
-                            <th>{$t('record.played_at')}</th>
+                            <th>{$t('record.date_played')}</th>
                           </tr>
                         </tfoot>
                       </table>

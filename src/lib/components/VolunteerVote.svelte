@@ -29,7 +29,7 @@
         class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
       >
         <p class="opacity-80">{$t('studio.submission.score')}</p>
-        <VoteScore score={vote.score} obsolete={vote.dateCreated < submission.dateUpdated} />
+        <VoteScore score={vote.score} obsolete={vote.dateCreated < submission.dateFileUpdated} />
       </div>
     </figure>
     <figure class="w-1/6 min-w-fit">
@@ -40,7 +40,7 @@
         <DifficultySuggestion
           suggested={vote.suggestedDifficulty}
           actual={submission.difficulty}
-          obsolete={vote.dateCreated < submission.dateUpdated}
+          obsolete={vote.dateCreated < submission.dateFileUpdated}
         />
       </div>
     </figure>

@@ -46,14 +46,14 @@
           <div class="flex gap-2 flex-col sm:flex-row">
             <p class="min-w-fit">
               <span class="badge mr-1">
-                {$t('notification.notified_at')}
+                {$t('notification.date_notified')}
               </span>
               {parseDateTime(notification.dateCreated, true, user?.language)}
             </p>
             {#if notification.dateRead}
               <p class="min-w-fit">
                 <span class="badge mr-1">
-                  {$t('notification.read_at')}
+                  {$t('notification.date_read')}
                 </span>
                 {parseDateTime(notification.dateRead, true, user?.language)}
               </p>

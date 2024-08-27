@@ -653,13 +653,19 @@
                 </p>
                 <p>
                   <span class="badge mr-1">
-                    {$t('common.created_at')}
+                    {$t('common.date_created')}
                   </span>
                   {parseDateTime(submission.dateCreated)}
                 </p>
                 <p>
                   <span class="badge mr-1">
-                    {$t('common.updated_at')}
+                    {$t('common.date_file_updated')}
+                  </span>
+                  {parseDateTime(submission.dateFileUpdated)}
+                </p>
+                <p>
+                  <span class="badge mr-1">
+                    {$t('common.date_updated')}
                   </span>
                   {parseDateTime(submission.dateUpdated)}
                 </p>

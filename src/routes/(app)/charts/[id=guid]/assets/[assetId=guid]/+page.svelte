@@ -248,13 +248,13 @@
                 </p>
                 <p class="truncate flex items-center gap-1 grow-0">
                   <span class="badge">
-                    {$t('common.created_at')}
+                    {$t('common.date_created')}
                   </span>
                   <span>{parseDateTime(chartAsset.dateCreated)}</span>
                 </p>
                 <p class="truncate flex items-center gap-1 grow-0">
                   <span class="badge">
-                    {$t('common.updated_at')}
+                    {$t('common.date_updated')}
                   </span>
                   <span>{parseDateTime(chartAsset.dateUpdated)}</span>
                 </p>

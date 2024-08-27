@@ -1,6 +1,7 @@
 {
   "acc": "準度",
   "bad": "Bad",
+  "date_played": "遊玩於",
   "full_combo": "全連",
   "good": "Good",
   "good_early": "Good (Early)",
@@ -13,7 +14,6 @@
   "lowest_score": "最低分數",
   "miss": "Miss",
   "perfect": "Perfect",
-  "played_at": "遊玩於",
   "player": "玩家",
   "record": "遊玩紀錄",
   "rks": "RKS",
