@@ -75,7 +75,7 @@
                       <th>{$t('record.miss')}</th>
                       <th>{$t('record.rks')}</th>
                       <th>{$t('record.std_deviation')}</th>
-                      <th>{$t('record.played_at')}</th>
+                      <th>{$t('record.date_played')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -161,7 +161,7 @@
                       <th>{$t('record.miss')}</th>
                       <th>{$t('record.rks')}</th>
                       <th>{$t('record.std_deviation')}</th>
-                      <th>{$t('record.played_at')}</th>
+                      <th>{$t('record.date_played')}</th>
                     </tr>
                   </tfoot>
                 </table>

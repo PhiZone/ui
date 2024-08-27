@@ -70,13 +70,13 @@
                   </p>
                   <p>
                     <span class="badge mr-1">
-                      {$t('common.created_at')}
+                      {$t('common.date_created')}
                     </span>
                     {parseDateTime(application.dateCreated)}
                   </p>
                   <p>
                     <span class="badge mr-1">
-                      {$t('common.updated_at')}
+                      {$t('common.date_updated')}
                     </span>
                     {parseDateTime(application.dateUpdated)}
                   </p>

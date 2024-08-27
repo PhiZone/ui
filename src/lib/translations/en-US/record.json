@@ -1,6 +1,7 @@
 {
   "acc": "Accuracy",
   "bad": "Bad",
+  "date_played": "Played",
   "full_combo": "Full Combo",
   "good": "Good",
   "good_early": "Good (Early)",
@@ -13,7 +14,6 @@
   "lowest_score": "Lowest Score",
   "miss": "Miss",
   "perfect": "Perfect",
-  "played_at": "Played At",
   "player": "Player",
   "record": "Record",
   "rks": "RKS",

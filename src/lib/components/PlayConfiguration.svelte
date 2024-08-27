@@ -902,7 +902,7 @@
       {playConfiguration.musicVolume * 100}%
     </p>
     <p class="truncate">
-      <span class="badge mr-1">{$t('common.created_at')}</span>
+      <span class="badge mr-1">{$t('common.date_created')}</span>
       {parseDateTime(playConfiguration.dateCreated, true, user?.language)}
     </p>
     <div class="card-actions mt-4 justify-end">

@@ -54,7 +54,7 @@
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
-        {:else if !chart.dateVoted || new Date(chart.dateVoted) < new Date(chart.dateUpdated)}
+        {:else if !chart.dateVoted || new Date(chart.dateVoted) < new Date(chart.dateFileUpdated)}
           <div
             class="tooltip tooltip-right tooltip-warning"
             data-tip={$t('studio.submission.statuses.0')}
@@ -97,13 +97,13 @@
       </p>
       <p class="truncate">
         <span class="badge mr-1">
-          {$t('common.created_at')}
+          {$t('common.date_created')}
         </span>
         {parseDateTime(chart.dateCreated, true, user?.language)}
       </p>
       <p class="truncate">
         <span class="badge mr-1">
-          {$t('common.updated_at')}
+          {$t('common.date_updated')}
         </span>
         {parseDateTime(chart.dateUpdated, true, user?.language)}
       </p>

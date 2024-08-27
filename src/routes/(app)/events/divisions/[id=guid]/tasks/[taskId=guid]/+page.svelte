@@ -395,13 +395,13 @@
                   {/if}
                   <p>
                     <span class="badge mr-1">
-                      {$t('common.created_at')}
+                      {$t('common.date_created')}
                     </span>
                     {parseDateTime(task.dateCreated, false, user?.language, true)}
                   </p>
                   <p>
                     <span class="badge mr-1">
-                      {$t('common.updated_at')}
+                      {$t('common.date_updated')}
                     </span>
                     {parseDateTime(task.dateUpdated, false, user?.language, true)}
                   </p>

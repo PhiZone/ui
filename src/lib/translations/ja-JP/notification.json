@@ -1,9 +1,9 @@
 {
+  "date_notified": "通知时间",
+  "date_read": "阅读时间",
   "mark_as_read": "标为已读",
   "notifications": "通知",
-  "notified_at": "通知日期",
   "read_adj": "已读",
-  "read_at": "阅读日期",
   "read_page": "阅读本页",
   "types": {
     "0": "提及",
