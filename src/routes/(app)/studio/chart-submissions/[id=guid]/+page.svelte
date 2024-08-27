@@ -125,10 +125,11 @@
   $: averageSuggestedDifficulty =
     $votes.isSuccess && $submission.isSuccess
       ? $votes.data.data
-          .filter((vote) => vote.dateCreated > $submission.data!.data.dateUpdated)
+          .filter((vote) => vote.dateCreated >= $submission.data!.data.dateFileUpdated)
           .reduce((total, vote) => total + vote.suggestedDifficulty, 0) /
-        $votes.data.data.filter((vote) => vote.dateCreated > $submission.data!.data.dateUpdated)
-          .length
+        $votes.data.data.filter(
+          (vote) => vote.dateCreated >= $submission.data!.data.dateFileUpdated,
+        ).length
       : 0;
 
   $: difficultyDifference = $submission.isSuccess
@@ -599,13 +600,19 @@
               </p>
               <p>
                 <span class="badge mr-1">
-                  {$t('common.created_at')}
+                  {$t('common.date_created')}
                 </span>
                 {parseDateTime(submission.dateCreated)}
               </p>
               <p>
                 <span class="badge mr-1">
-                  {$t('common.updated_at')}
+                  {$t('common.date_file_updated')}
+                </span>
+                {parseDateTime(submission.dateFileUpdated)}
+              </p>
+              <p>
+                <span class="badge mr-1">
+                  {$t('common.date_updated')}
                 </span>
                 {parseDateTime(submission.dateUpdated)}
               </p>
@@ -870,7 +877,7 @@
           >
             <div class="card-body py-10">
               <VolunteerVoteDiagram
-                votes={votes.filter((vote) => vote.dateCreated >= submission.dateUpdated)}
+                votes={votes.filter((vote) => vote.dateCreated >= submission.dateFileUpdated)}
                 ranked={submission.isRanked}
               />
             </div>

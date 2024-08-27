@@ -1,9 +1,9 @@
 {
+  "date_notified": "Notified",
+  "date_read": "Read",
   "mark_as_read": "Mark as Read",
   "notifications": "Notifications",
-  "notified_at": "Notified At",
   "read_adj": "Read",
-  "read_at": "Read At",
   "read_page": "Read Page",
   "types": {
     "0": "Mentions",

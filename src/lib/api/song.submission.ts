@@ -10,6 +10,7 @@ export interface SongSubmissionDto {
   authorName: string;
   bpm: number;
   dateCreated: string;
+  dateFileUpdated: string;
   dateUpdated: string;
   description: string | null;
   duration: string;

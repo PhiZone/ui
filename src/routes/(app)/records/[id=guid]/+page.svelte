@@ -103,7 +103,7 @@
               </span>
             </p>
             <p class="flex gap-1 items-center">
-              <span class="badge">{$t('record.played_at')}</span>
+              <span class="badge">{$t('record.date_played')}</span>
               <span>{parseDateTime(record.dateCreated)}</span>
             </p>
             <div class="card-actions justify-end">
