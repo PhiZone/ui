@@ -21,7 +21,15 @@
   $: event = createQuery(
     api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
   );
-  $: leaderboard = createQuery(api.event.division.leaderboard({ id }, { enabled: index == 1 }));
+  $: leaderboard = createQuery(
+    api.event.division.leaderboard(
+      {
+        id,
+        ...searchParams,
+      },
+      { enabled: index == 1 },
+    ),
+  );
   $: tasks = createQuery(
     api.event.task.listAll({
       rangeDivisionId: [id],
@@ -248,7 +256,9 @@
                 {parseDateTime(division.dateStarted)}
               </p>
               <p class="truncate">
-                <span class="badge badge-outline backdrop-blur mr-1">{$t('common.date_ended')}</span>
+                <span class="badge badge-outline backdrop-blur mr-1">
+                  {$t('common.date_ended')}
+                </span>
                 {parseDateTime(division.dateEnded)}
               </p>
             </div>

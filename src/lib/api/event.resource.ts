@@ -1,7 +1,6 @@
 import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, PatchElement, R } from './types';
 import type API from '.';
-import { serialize } from 'object-to-formdata';
 import type { ReservedFieldDto } from './event';
 
 export interface EventResourceDto {
