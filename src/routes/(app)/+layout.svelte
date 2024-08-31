@@ -23,7 +23,7 @@
 <Navbar />
 
 {#if message && !closed}
-  <div role="alert" class="fixed alert rounded-none alert-{level} top-16 z-10">
+  <div role="alert" class="fixed alert rounded-none alert-{level} top-16 z-[60]">
     <i class="fa-solid fa-{icon} fa-xl"></i>
     <span>{translate ? $t(message) : message}</span>
     <button
