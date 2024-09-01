@@ -26,7 +26,7 @@
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
       <label
         for="illustration"
-        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2 text-white mix-blend-difference hover:text-inherit hover:mix-blend-normal"
       >
         ✕
       </label>
