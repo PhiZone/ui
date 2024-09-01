@@ -20,6 +20,9 @@
 
   export let data;
 
+  let userNameEl: HTMLParagraphElement;
+  let userNameOffsetWidth = 0;
+
   $: ({ id, api } = data);
 
   $: user = createQuery(api.user.info({ id }));
@@ -31,6 +34,8 @@
   $: bestRecords = createQuery(
     api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }),
   );
+
+  $: isUserNameEllipsis = userNameEl && userNameOffsetWidth != userNameEl.scrollWidth;
 </script>
 
 <svelte:head>
@@ -72,7 +77,14 @@
               </div>
             </div>
             <div class="flex flex-col gap-1 h-fit pb-3">
-              <p class="text-3xl text-center font-bold h-fit">
+              <p
+                bind:this={userNameEl}
+                bind:offsetWidth={userNameOffsetWidth}
+                class={'text-3xl text-center font-bold h-fit text-ellipsis' +
+                  (isUserNameEllipsis ? ' tooltip' : '')}
+                style="overflow-inline: clip;"
+                data-tip={user.userName}
+              >
                 {user.userName}
               </p>
               <div class="flex items-center justify-center gap-1 h-fit">
