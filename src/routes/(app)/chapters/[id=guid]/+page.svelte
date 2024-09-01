@@ -9,6 +9,8 @@
 
   export let data;
 
+  let illustrationModalEl: HTMLDialogElement;
+
   $: ({ searchParams, id, api } = data);
 
   $: chapter = createQuery(api.chapter.info({ id }));
@@ -21,15 +23,20 @@
 
 {#if $chapter.isSuccess}
   {@const chapter = $chapter.data.data}
-  <input type="checkbox" id="illustration" class="modal-toggle" />
-  <div class="modal">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <dialog
+    bind:this={illustrationModalEl}
+    id="illustration_modal"
+    class="modal"
+    on:click|self={illustrationModalEl.close}
+  >
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
-      <label
-        for="illustration"
+      <button
+        on:click|self={() => illustrationModalEl.close()}
         class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2 text-white mix-blend-difference hover:text-inherit hover:mix-blend-normal"
       >
         ✕
-      </label>
+      </button>
       <div class="absolute left-2 bottom-2">
         <div class="join join-horizontal">
           <div class="btn btn-secondary btn-xs join-item text-base no-animation">
@@ -42,7 +49,7 @@
       </div>
       <img src={chapter.illustration} alt="Illustration" class="object-cover" />
     </div>
-  </div>
+  </dialog>
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
     <div class="hero-overlay bg-opacity-60" />
@@ -65,12 +72,12 @@
             liked={chapter.dateLiked != null}
             class="btn-md w-36 text-lg border-neutral-content text-neutral-content btn-outline backdrop-blur"
           />
-          <label
-            for="illustration"
+          <button
+            on:click={() => illustrationModalEl.showModal()}
             class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
           >
             {$t('common.view_illustration')}
-          </label>
+          </button>
         </div>
         <div class="indicator my-4">
           <span
