@@ -80,8 +80,8 @@
               <p
                 bind:this={userNameEl}
                 bind:offsetWidth={userNameOffsetWidth}
-                class={'text-3xl text-center font-bold h-fit text-ellipsis' +
-                  (isUserNameEllipsis ? ' tooltip' : '')}
+                class={'text-3xl text-center font-bold h-fit text-ellipsis'}
+                class:tooltip={isUserNameEllipsis}
                 style="overflow-inline: clip;"
                 data-tip={user.userName}
               >
