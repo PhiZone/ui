@@ -2,6 +2,8 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
+  import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
+  import queryString from 'query-string';
 
   export let data;
 
@@ -9,6 +11,10 @@
 
   let type: string = 'charts';
   let text = '';
+
+  let searchParams = {
+    difficulty: [0, 16],
+  };
 
   $: href = `/${type}?${text ? `search=${text}` : ''}`;
 
@@ -54,6 +60,7 @@
         {$t('home.description')}
       </p>
     </div>
+    <SearchOptions />
     <form class="form-control" on:submit|preventDefault={() => goto(href)}>
       <div class="join text-sm lg:text-md">
         <select
