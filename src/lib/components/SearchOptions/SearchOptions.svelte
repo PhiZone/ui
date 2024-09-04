@@ -5,123 +5,46 @@
   import { range } from '$lib/utils';
   import Item from './Item.svelte';
 
-  import type { IFilters } from './types';
+  import type { IFilter,IFilters,IFilterInputGroup } from './types';
 
-  export const filters: IFilters = [
-    {
-      type: 'input',
-      label: 'text',
-      value: 1,
-      param: 'text',
-      options: {
-        inputType: 'text',
-        range: [0, 4],
-      },
-    },
-    {
-      type: 'input',
-      label: 'number',
-      value: 1,
-      param: 'number',
-      options: {
-        inputType: 'number',
-        range: [0, 4],
-      },
-    },
-    {
-      type: 'toggle',
-      label: 'chek',
-      value: false,
-      param: 'chek',
-    },
-    [
-      {
-        type: 'toggle',
-        label: 'toggle 1',
-        value: false,
-        param: 'toggle1',
-      },
-      {
-        type: 'toggle',
-        label: 'toggle 2',
-        value: true,
-        param: 'toggle2',
-      },
-    ],
+  export let filters: IFilters;
 
-    {
-      type: 'select',
-      label: 'select',
-      value: 'sel0',
-      param: 'select',
-      items: {
-        sel0: 'select 0',
-        sel1: 'select 1',
-      },
-    },
-
-    {
-      type: 'slider',
-      label: 'difficulty',
-      value: [0, 1],
-      param: ['MinDifficulty', 'MaxDifficulty'],
-      options: {
-        step: 0.1,
-        isRange: true,
-        range: [0, 17],
-        pipstep: 10,
-      },
-    },
-    {
-      type: 'slider',
-      label: 'slid',
-      value: [1],
-      param: ['slid'],
-      options: {
-        range: [0, 10],
-      },
-    },
-    {
-      type: 'slider',
-      label: 'slid2',
-      value: [1, 5],
-      param: ['slid2-1', 'slid2-2'],
-      options: {
-        range: [0, 10],
-      },
-    },
-    {
-      type: 'radio',
-      label: 'radi',
-      value: 'ra0',
-      param: 'ra',
-      items: {
-        ra0: 'radio 0',
-        ra1: 'radio 1',
-      },
-    },
-  ];
-
-  let params: URLSearchParams = new URLSearchParams();
+  export let params: URLSearchParams = new URLSearchParams();
 
   $: {
     filters.flat().forEach((filter) => {
-      const { type, value, param } = filter;
-      if (value instanceof Array) value.forEach((v, i) => params.set(param[i], v.toString()));
-      else if (!(param instanceof Array)) params.set(param, value.toString());
-    }); //todo
-    params = params;
+		if(filter.type == 'input_group') filter.items.forEach(({param,value})=>{
+		  if (!value || value == '__unset') params.delete(param);
+		  else params.set(param,value.toString());
+		});
+		
+		else{
+
+		  const { value, param } = filter;
+		  if (value ==''||value == '__unset') params.delete(param);
+		  else if (value instanceof Array) value.forEach((v, i) => {
+			  params.set(param[i], v.toString())
+		  });
+		  else if (!(param instanceof Array)) params.set(param, value.toString());
+		}
+	});
+	params = params;
   }
   $: console.log(filters);
   $: console.log(params);
 
   let open = true;
+
+  function generateParam(filter:IFilter,params:URLSearchParams){
+
+	  return params;
+  }
 </script>
 
-<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center">
+<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-y-auto">
   <input type="checkbox" bind:checked={open} />
   <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
-  <div class="collapse-content">
+  <div class="collapse-content md:px-2">
     <div class="form-control items-stretch w-full">
       {#each filters as filter}
         {#if filter instanceof Array}

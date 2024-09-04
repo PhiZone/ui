@@ -3,20 +3,19 @@
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
-  import queryString from 'query-string';
+  import {testFilters, searchFilters} from '$lib/SearchFilters'
 
   export let data;
 
   $: ({ api } = data);
 
-  let type: string = 'charts';
+  let type: 'charts' | 'songs' | 'users' | 'events' | 'collections' | 'chapters' = 'charts';
   let text = '';
 
-  let searchParams = {
-    difficulty: [0, 16],
-  };
+  let searchParams = new  URLSearchParams();
+  $: filters = searchFilters[type];
 
-  $: href = `/${type}?${text ? `search=${text}` : ''}`;
+  $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 
   $: headline = createQuery(api.headline.get());
 </script>
@@ -50,7 +49,7 @@
 <video autoplay muted loop class="bg-video">
   <source src="/background.webm" type="video/webm" />
 </video>
-<div class="hero min-h-screen">
+<div class="hero min-h-screen overflow-y-auto">
   <div class="hero-overlay bg-opacity-30 z-10" />
   <div class="w-5/6 max-w-4xl form-control text-center z-10">
     <div class="text-neutral-content">
@@ -60,7 +59,6 @@
         {$t('home.description')}
       </p>
     </div>
-    <SearchOptions />
     <form class="form-control" on:submit|preventDefault={() => goto(href)}>
       <div class="join text-sm lg:text-md">
         <select
@@ -90,6 +88,9 @@
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>
       </div>
+	{#key filters}
+		<SearchOptions filters={filters} bind:params={searchParams}/>
+	{/key}
     </form>
   </div>
 </div>

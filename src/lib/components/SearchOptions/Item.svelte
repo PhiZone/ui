@@ -1,51 +1,39 @@
 <script lang="ts">
   import RangeSlider from 'svelte-range-slider-pips';
   import type { IFilter } from './types';
+    import Input from './Input.svelte';
 
   export let filter: IFilter;
 
-  const joinTypes: IFilter['type'][] = ['input', 'select'];
+  const joinTypes: IFilter['type'][] = ['input', 'input_group','select'];
 </script>
 
 {#if filter}
   {@const { type, label } = filter}
 
+  <!-- svelte-ignore a11y-label-has-associated-control -->
   <label
-    class="label text-sm md:text-md cursor-pointer w-full"
+    class="label text-sm md:text-md cursor-pointer w-full md:join-horizontal md:flex-nowrap"
     class:join={joinTypes.includes(type)}
+	class:join-vertical={type=='input_group'}
+	class:flex-wrap={['slider','radio'].includes(type)}
   >
     <span
-      class="label-text no-animation join-item whitespace-nowrap w-1/4 min-w-[64px] text-left"
-      class:btn={joinTypes.includes(filter.type)}
-      class:px-5={!joinTypes.includes(filter.type)}
+		class={"label-text no-animation join-item whitespace-nowrap md:w-1/4 text-left"}
+      class:btn={joinTypes.includes(type)}
+	  class:w-16={type!=='input_group'}
     >
       {label}
     </span>
     {#if filter.type === 'input'}
-      {@const { range, inputType } = filter.options}
-      {#if inputType == 'number'}
-        <input
-          type="number"
-          placeholder={label}
-          bind:value={filter.value}
-          min={range?.[0]}
-          max={range?.[1]}
-          class="input input-ghost input-bordered join-item flex-grow w-0"
-        />
-      {:else}
-        <input
-          type="text"
-          placeholder={label}
-          bind:value={filter.value}
-          minlength={range?.[0]}
-          maxlength={range?.[1]}
-          class="input input-ghost input-bordered join-item flex-grow w-0"
-        />
-      {/if}
+		<Input bind:filter={filter}/>
+   	{:else if filter.type === 'input_group'}
+        {#each filter.items as item}
+			<Input bind:filter={item}/>
+      {/each}
     {:else if filter.type === 'select'}
-      <select bind:value={filter.value} class="select select-bordered join-item flex-grow w-0">
-        {#each Object.keys(filter.items) as selectValue, i}
-          {@const selectLabel = filter.items[selectValue]}
+      <select bind:value={filter.value} class="select select-bordered join-item flex-grow">
+        {#each Object.entries(filter.items) as [selectValue,selectLabel], i}
           <option value={selectValue}>{selectLabel}</option>
         {/each}
       </select>
@@ -56,7 +44,7 @@
         pipstep = 1,
         isRange = false,
       } = filter.options}
-      <div class="daisy-ui flex-grow w-0">
+      <div class="daisy-ui text-sm md:text-base w-full">
         <RangeSlider
           bind:values={filter.value}
           {step}
@@ -73,21 +61,14 @@
       </div>
     {:else if filter.type === 'toggle'}
       <input type="checkbox" bind:checked={filter.value} class="toggle togggle-bordered" />
-      <!--<select-->
-      <!--class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"-->
-      <!--name={filter.value}-->
-      <!--value={params?.[filter.value] ?? ''}-->
-      <!-->-->
-      <!--<option />-->
-      <!--{#each filter.options as option}-->
-      <!--<option value={option.value}>{option.name}</option>-->
-      <!--{/each}-->
-      <!--</select>-->
-    {:else if filter.type === 'radio'}
+        {:else if filter.type === 'radio'}
+			<div class="flex flex-grow flex-wrap">
       {#each Object.keys(filter.items) as radioValue, i}
         {@const radioLabel = filter.items[radioValue]}
-        <label>
+        <label class="label flex-grow cursor-pointer">
+			<span class="label-text mx-2">
           {radioLabel}
+			</span>
           <input
             type="radio"
             name={label}
@@ -97,6 +78,7 @@
           />
         </label>
       {/each}
+			</div>
     {/if}
   </label>
 {/if}

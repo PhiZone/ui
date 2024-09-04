@@ -1,4 +1,5 @@
 type Items = Record<string, string>; // value: label
+type Range = [min: number, max: number];
 
 interface IFilterBase {
   label: string;
@@ -6,6 +7,7 @@ interface IFilterBase {
   param: string[] | string; // converting the value to the corresponding param
   type:
     | 'input'
+    | 'input_group'
     | 'number'
     | 'range'
     | 'slider'
@@ -20,11 +22,19 @@ interface IFilterBase {
 interface IFilterInput extends IFilterBase {
   type: 'input';
   value: string | number;
+  param: string;
   options: {
     inputType: 'number' | 'text';
+    placeholder?: string;
     isInt?: boolean;
-    range?: [min: number, max: number];
+    range?: Range;
   };
+}
+
+interface IFilterInputGroup {
+  type: 'input_group';
+  label: string;
+  items: Omit<Omit<IFilterInput, 'label'>, 'type'>[];
 }
 
 interface IFilterSelect extends IFilterBase {
@@ -69,10 +79,17 @@ interface IFilterRadio extends IFilterBase {
 export type {
   IFilterBase,
   IFilterInput,
+  IFilterInputGroup,
   IFilterSelect,
   IFilterSlider,
   IFilterToggle,
   IFilterRadio,
 };
-export type IFilter = IFilterInput | IFilterSelect | IFilterSlider | IFilterToggle | IFilterRadio;
+export type IFilter =
+  | IFilterInput
+  | IFilterInputGroup
+  | IFilterSelect
+  | IFilterSlider
+  | IFilterToggle
+  | IFilterRadio;
 export type IFilters = (IFilter | IFilter[])[];
