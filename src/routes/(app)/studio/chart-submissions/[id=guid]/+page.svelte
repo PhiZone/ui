@@ -591,7 +591,7 @@
                 {/if}
               </p>
               <p>
-                <span class="badge mr-1">{$t('chart.notes')}</span>
+                <span class="badge mr-1">{$t('chart.note_count')}</span>
                 {submission.noteCount}
               </p>
               <p>

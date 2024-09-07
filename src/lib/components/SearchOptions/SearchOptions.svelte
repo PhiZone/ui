@@ -5,7 +5,7 @@
   import { range } from '$lib/utils';
   import Item from './Item.svelte';
 
-  import type { IFilter,IFilters,IFilterInputGroup } from './types';
+  import type { IFilter, IFilters, IFilterInputGroup } from './types';
 
   export let filters: IFilters;
 
@@ -13,35 +13,36 @@
 
   $: {
     filters.flat().forEach((filter) => {
-		if(filter.type == 'input_group') filter.items.forEach(({param,value})=>{
-		  if (!value || value == '__unset') params.delete(param);
-		  else params.set(param,value.toString());
-		});
-		
-		else{
-
-		  const { value, param } = filter;
-		  if (value ==''||value == '__unset') params.delete(param);
-		  else if (value instanceof Array) value.forEach((v, i) => {
-			  params.set(param[i], v.toString())
-		  });
-		  else if (!(param instanceof Array)) params.set(param, value.toString());
-		}
-	});
-	params = params;
+      if (filter.type == 'input_group')
+        filter.items.forEach(({ param, value }) => {
+          if (!value || value == '__unset') params.delete(param);
+          else params.set(param, value.toString());
+        });
+      else {
+        const { value, param } = filter;
+        if (value == '' || value == '__unset') params.delete(param);
+        else if (value instanceof Array)
+          value.forEach((v, i) => {
+            params.set(param[i], v.toString());
+          });
+        else if (!(param instanceof Array)) params.set(param, value.toString());
+      }
+    });
+    params = params;
   }
   $: console.log(filters);
   $: console.log(params);
 
   let open = true;
 
-  function generateParam(filter:IFilter,params:URLSearchParams){
-
-	  return params;
+  function generateParam(filter: IFilter, params: URLSearchParams) {
+    return params;
   }
 </script>
 
-<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-y-auto">
+<div
+  class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-y-auto"
+>
   <input type="checkbox" bind:checked={open} />
   <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
   <div class="collapse-content md:px-2">
@@ -77,8 +78,12 @@
       <!--<option value="desc">{$t('common.descending')}</option>-->
       <!--</select>-->
       <!--</label>-->
-      <button type="submit" class="btn btn-secondary" on:click={() => (open = false)}>
-        search
+      <button
+        type="submit"
+        class="btn border-2 normal-border bg-base-100 hover:btn-outline my-2"
+        on:click={() => (open = false)}
+      >
+        {$t('common.search')}
       </button>
     </div>
   </div>

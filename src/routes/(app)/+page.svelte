@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
-  import {testFilters, searchFilters} from '$lib/SearchFilters'
+  import { testFilters, searchFilters } from '$lib/SearchFilters';
 
   export let data;
 
@@ -12,8 +12,9 @@
   let type: 'charts' | 'songs' | 'users' | 'events' | 'collections' | 'chapters' = 'charts';
   let text = '';
 
-  let searchParams = new  URLSearchParams();
+  let searchParams = new URLSearchParams();
   $: filters = searchFilters[type];
+  // $: filters = testFilters;
 
   $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 
@@ -88,9 +89,9 @@
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>
       </div>
-	{#key filters}
-		<SearchOptions filters={filters} bind:params={searchParams}/>
-	{/key}
+      {#key filters}
+        <SearchOptions {filters} bind:params={searchParams} />
+      {/key}
     </form>
   </div>
 </div>

@@ -575,7 +575,7 @@
             >
               <label class="join my-2 w-full">
                 <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.song_title')}
+                  {$t('song.title')}
                 </span>
                 <input
                   type="text"
@@ -586,7 +586,7 @@
                   }}
                   id="title"
                   name="Title"
-                  placeholder={$t('common.form.song_title')}
+                  placeholder={$t('song.title')}
                   class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
