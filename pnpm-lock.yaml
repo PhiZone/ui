@@ -144,6 +144,9 @@ importers:
       svelte-range-slider-pips:
         specifier: ^3.1.1
         version: 3.1.1(svelte@4.2.7)
+      svelte-select:
+        specifier: ^5.8.3
+        version: 5.8.3
       sveltekit-i18n:
         specifier: ^2.4.2
         version: 2.4.2(svelte@4.2.7)
@@ -377,6 +380,15 @@ packages:
   '@fastify/busboy@2.1.0':
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
+
+  '@floating-ui/core@1.6.7':
+    resolution: {integrity: sha512-yDzVT/Lm101nQ5TCVeK65LtdN7Tj4Qpr9RTXJ2vPFLqtLxwOrpoxAHAJI8J3yYWUc40J0BDBheaitK5SJmno2g==}
+
+  '@floating-ui/dom@1.6.10':
+    resolution: {integrity: sha512-fskgCFv8J8OamCmyun8MfjB1Olfn+uZKjOKZ0vhYF3gRmEUXcGOjxWL8bBr7i4kIuPZ2KD2S3EUIOxnjC8kl2A==}
+
+  '@floating-ui/utils@0.2.7':
+    resolution: {integrity: sha512-X8R8Oj771YRl/w+c1HqAC1szL8zWQRwFvgDwT129k9ACdBoud/+/rX9V0qiMl6LWUdP9voC2nDVZYPMQQsb6eA==}
 
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
@@ -2234,6 +2246,9 @@ packages:
       svelte:
         optional: true
 
+  svelte-floating-ui@1.5.8:
+    resolution: {integrity: sha512-dVvJhZ2bT+kQDHlE4Lep8t+sgEc0XD96fXLzAi2DDI2bsaegBbClxXVNMma0C2WsG+n9GJSYx292dTvA8CYRtw==}
+
   svelte-highlight@7.6.1:
     resolution: {integrity: sha512-YIpA6LBVpghQndBsbZQLl3ufEje179vQTtC7FH/utbEmUwYecIXsBq4mcwNkCeUuCrpcaF0DkrppWmMp/ZoPfA==}
 
@@ -2284,6 +2299,9 @@ packages:
     resolution: {integrity: sha512-CaBczr0/egEr3ShYyFo3gDObZiYDEc7YBC35rQr8D2kWvisxCftE/+Znryk8YXva86Fq77tzQ4JeOfB+iUMjrg==}
     peerDependencies:
       svelte: ^4.0.0
+
+  svelte-select@5.8.3:
+    resolution: {integrity: sha512-nQsvflWmTCOZjssdrNptzfD1Ok45hHVMTL5IHay5DINk7dfu5Er+8KsVJnZMJdSircqtR0YlT4YkCFlxOUhVPA==}
 
   svelte@4.2.7:
     resolution: {integrity: sha512-UExR1KS7raTdycsUrKLtStayu4hpdV3VZQgM0akX8XbXgLBlosdE/Sf3crOgyh9xIjqSYB3UEBuUlIQKRQX2hg==}
@@ -2715,6 +2733,17 @@ snapshots:
   '@eslint/js@8.54.0': {}
 
   '@fastify/busboy@2.1.0': {}
+
+  '@floating-ui/core@1.6.7':
+    dependencies:
+      '@floating-ui/utils': 0.2.7
+
+  '@floating-ui/dom@1.6.10':
+    dependencies:
+      '@floating-ui/core': 1.6.7
+      '@floating-ui/utils': 0.2.7
+
+  '@floating-ui/utils@0.2.7': {}
 
   '@humanwhocodes/config-array@0.11.13':
     dependencies:
@@ -4635,6 +4664,11 @@ snapshots:
     optionalDependencies:
       svelte: 4.2.7
 
+  svelte-floating-ui@1.5.8:
+    dependencies:
+      '@floating-ui/core': 1.6.7
+      '@floating-ui/dom': 1.6.10
+
   svelte-highlight@7.6.1:
     dependencies:
       highlight.js: 11.9.0
@@ -4659,6 +4693,10 @@ snapshots:
   svelte-range-slider-pips@3.1.1(svelte@4.2.7):
     dependencies:
       svelte: 4.2.7
+
+  svelte-select@5.8.3:
+    dependencies:
+      svelte-floating-ui: 1.5.8
 
   svelte@4.2.7:
     dependencies:

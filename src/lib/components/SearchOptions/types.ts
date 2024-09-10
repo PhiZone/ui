@@ -1,4 +1,7 @@
-type Items = Record<string, string>; // value: label
+type Item = {
+  label: string;
+  value: unknown;
+}; // value: label
 type Range = [min: number, max: number];
 
 interface IFilterBase {
@@ -41,7 +44,10 @@ interface IFilterSelect extends IFilterBase {
   type: 'select';
   value: string;
   param: string;
-  items: Items;
+  items: Item[];
+  options?: {
+    isMultiple?: boolean;
+  };
 }
 
 interface IFilterToggle extends IFilterBase {
@@ -53,6 +59,7 @@ interface IFilterToggle extends IFilterBase {
 interface IFilterSlider extends IFilterBase {
   type: 'slider';
   value: [low: number, high: number] | number[];
+  param: string;
   options: {
     step?: number;
     isRange?: boolean;
@@ -60,20 +67,19 @@ interface IFilterSlider extends IFilterBase {
     pipstep?: number;
   };
 }
-/** TODO unknown relationship between param and value
- interface IFilterCheckbox extends IFilterBase {
-      type: 'checkbox';
-      value: (keyof this['items'])[]; // selected ones
-      param: string[];
-      items: Record<string, string>; // value: label
-  }
-   */
+
+interface IFilterCheckbox extends IFilterBase {
+  type: 'checkbox';
+  value: Item['value']; // selected one
+  param: string;
+  items: Item[];
+}
 
 interface IFilterRadio extends IFilterBase {
   type: 'radio';
-  value: keyof this['items']; // selected one
+  value: Item['value']; // selected one
   param: string;
-  items: Record<string, string>; // value: label
+  items: Item[];
 }
 
 export type {
@@ -91,5 +97,7 @@ export type IFilter =
   | IFilterSelect
   | IFilterSlider
   | IFilterToggle
-  | IFilterRadio;
+  | IFilterRadio
+  | IFilterCheckbox;
+
 export type IFilters = (IFilter | IFilter[])[];

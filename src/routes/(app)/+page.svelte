@@ -13,8 +13,8 @@
   let text = '';
 
   let searchParams = new URLSearchParams();
-  $: filters = searchFilters[type];
-  // $: filters = testFilters;
+  // $: filters = searchFilters[type];
+  $: filters = testFilters;
 
   $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 

@@ -67,12 +67,44 @@ export const testFilters: IFilters = [
   {
     type: 'select',
     label: 'select',
-    value: 'sel0',
+    value: {
+        label: 'Select One',
+        value: 'select1',
+    },
     param: 'select',
-    items: {
-      sel0: 'select 0',
-      sel1: 'select 1',
-      __unset: 'unset the param',
+    items: [
+      {
+        label: 'Select One',
+        value: 'select1',
+      },
+      {
+        label: 'Select Two',
+        value: 'select2',
+      },
+    ],
+  },
+  {
+    type: 'select',
+    label: 'Multiple Select',
+    value: [
+      {
+        label: 'Multi Select One',
+        value: 'multiSelect1',
+      },
+    ],
+    param: 'multiSelect',
+    items: [
+      {
+        label: 'Multi Select One',
+        value: 'multiSelect1',
+      },
+      {
+        label: 'Multi Select Two',
+        value: 'multiSelect2',
+      },
+    ],
+    options: {
+      isMultiple: true,
     },
   },
   {
@@ -107,13 +139,35 @@ export const testFilters: IFilters = [
   },
   {
     type: 'radio',
-    label: 'radi',
-    value: 'ra0',
-    param: 'ra',
-    items: {
-      ra0: 'radio 0',
-      ra1: 'radio 1',
-    },
+    label: 'Radio',
+    value: 'radio',
+    param: 'radio',
+    items: [
+      {
+        label: 'Radio One',
+        value: 'radio1',
+      },
+      {
+        label: 'Radio Two',
+        value: 'radio2',
+      },
+    ],
+  },
+  {
+    type: 'checkbox',
+    label: 'CheckBox',
+    value: 'radio',
+    param: 'checkbox',
+    items: [
+      {
+        label: 'CheckBox One',
+        value: 'checkbox1',
+      },
+      {
+        label: 'CheckBox Two',
+        value: 'checkbox2',
+      },
+    ],
   },
 ];
 
@@ -123,7 +177,7 @@ const basicFilters: IFilters = [
     type: 'slider',
     label: 'common.entries_per_page',
     value: [36],
-    param: 'PerPage',
+    param: ['PerPage'],
     options: {
       isRange: false,
       range: [0, 100],

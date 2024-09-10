@@ -12,6 +12,7 @@
   export let params: URLSearchParams = new URLSearchParams();
 
   $: {
+    params = new URLSearchParams()
     filters.flat().forEach((filter) => {
       if (filter.type == 'input_group')
         filter.items.forEach(({ param, value }) => {
@@ -20,24 +21,26 @@
         });
       else {
         const { value, param } = filter;
-        if (value == '' || value == '__unset') params.delete(param);
-        else if (value instanceof Array)
-          value.forEach((v, i) => {
-            params.set(param[i], v.toString());
-          });
-        else if (!(param instanceof Array)) params.set(param, value.toString());
+        if (value instanceof Array){
+          if (param instanceof Array){
+            value.forEach((v, i) => {
+              params.set(param[i], v.value??v.toString());
+            });
+          } else {
+              value.forEach((v, i) => {
+                params.append(param, v.value??v.toString());
+              });
+            }
+        }
+        else if (value == '' || value == '__unset') params.delete(param);
+        else params.set(param, (value as any).toString());
       }
     });
-    params = params;
   }
   $: console.log(filters);
-  $: console.log(params);
+  $: console.log(params.toString());
 
   let open = true;
-
-  function generateParam(filter: IFilter, params: URLSearchParams) {
-    return params;
-  }
 </script>
 
 <div
@@ -58,27 +61,7 @@
           <Item bind:filter />
         {/if}
       {/each}
-      <!--<label class="label join text-sm md:text-md cursor-pointer">-->
-      <!--<span class="label-text btn no-animation join-item whitespace-nowrap">order</span>-->
-      <!--<select-->
-      <!--class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"-->
-      <!--name="order_by"-->
-      <!--value={params?.order_by || orders[0].value}-->
-      <!-->-->
-      <!--{#each orders as order}-->
-      <!--<option value={order.value}>{order.name}</option>-->
-      <!--{/each}-->
-      <!--</select>-->
-      <!--<select-->
-      <!--class="select select-ghost select-bordered select-sm md:select-md join-item flex-grow w-0"-->
-      <!--name="order"-->
-      <!--value={params?.order || 'asc'}-->
-      <!-->-->
-      <!--<option value="asc">{$t('common.ascending')}</option>-->
-      <!--<option value="desc">{$t('common.descending')}</option>-->
-      <!--</select>-->
-      <!--</label>-->
-      <button
+	   <button
         type="submit"
         class="btn border-2 normal-border bg-base-100 hover:btn-outline my-2"
         on:click={() => (open = false)}
