@@ -12,7 +12,7 @@
   export let params: URLSearchParams = new URLSearchParams();
 
   $: {
-    params = new URLSearchParams()
+    params = new URLSearchParams();
     filters.flat().forEach((filter) => {
       if (filter.type == 'input_group')
         filter.items.forEach(({ param, value }) => {
@@ -21,38 +21,35 @@
         });
       else {
         const { value, param } = filter;
-        if (value instanceof Array){
-          if (param instanceof Array){
+        if (value instanceof Array) {
+          if (param instanceof Array) {
             value.forEach((v, i) => {
-              params.set(param[i], v.value??v.toString());
+              params.set(param[i], v.value ?? v.toString());
             });
           } else {
-              value.forEach((v, i) => {
-                params.append(param, v.value??v.toString());
-              });
-            }
-        }
-        else if (value == '' || value == '__unset') params.delete(param);
+            value.forEach((v, i) => {
+              params.append(param, v.value ?? v.toString());
+            });
+          }
+        } else if (value == '' || value == '__unset') params.delete(param);
         else params.set(param, (value as any).toString());
       }
     });
   }
-  $: console.log(filters);
-  $: console.log(params.toString());
+  //$: console.log(filters);
+  //$: console.log(params.toString());
 
   let open = true;
 </script>
 
-<div
-  class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-y-auto"
->
+<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-auto">
   <input type="checkbox" bind:checked={open} />
   <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
   <div class="collapse-content md:px-2">
     <div class="form-control items-stretch w-full">
       {#each filters as filter}
         {#if filter instanceof Array}
-          <div class="flex items-center gap-x-5">
+          <div class="flex flex-wrap items-center gap-x-0 md:gap-x-5">
             {#each filter as filter}
               <Item bind:filter />
             {/each}
@@ -61,7 +58,7 @@
           <Item bind:filter />
         {/if}
       {/each}
-	   <button
+      <button
         type="submit"
         class="btn border-2 normal-border bg-base-100 hover:btn-outline my-2"
         on:click={() => (open = false)}

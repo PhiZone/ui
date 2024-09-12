@@ -68,8 +68,8 @@ export const testFilters: IFilters = [
     type: 'select',
     label: 'select',
     value: {
-        label: 'Select One',
-        value: 'select1',
+      label: 'Select One',
+      value: 'select1',
     },
     param: 'select',
     items: [

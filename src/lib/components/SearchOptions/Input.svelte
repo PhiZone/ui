@@ -8,6 +8,7 @@
 {#if filter?.options?.inputType == 'number'}
   <input
     type="number"
+    name={filter.param}
     placeholder={filter.options.placeholder ? $t(filter.options.placeholder) : ''}
     bind:value={filter.value}
     min={filter.options.range?.[0]}
@@ -17,6 +18,7 @@
 {:else}
   <input
     type="text"
+    name={filter.param}
     placeholder={filter.options.placeholder ? $t(filter.options.placeholder) : ''}
     bind:value={filter.value}
     minlength={filter.options.range?.[0]}

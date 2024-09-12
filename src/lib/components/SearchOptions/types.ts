@@ -8,6 +8,7 @@ interface IFilterBase {
   label: string;
   value: unknown;
   param: string[] | string; // converting the value to the corresponding param
+  isEnable?: boolean;
   type:
     | 'input'
     | 'input_group'
@@ -37,6 +38,7 @@ interface IFilterInput extends IFilterBase {
 interface IFilterInputGroup {
   type: 'input_group';
   label: string;
+  isEnable?: boolean;
   items: Omit<Omit<IFilterInput, 'label'>, 'type'>[];
 }
 

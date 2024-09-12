@@ -1,38 +1,65 @@
 <script lang="ts">
-  import Select from 'svelte-select'
+  import Select from 'svelte-select';
   import RangeSlider from 'svelte-range-slider-pips';
   import type { IFilter } from './types';
   import Input from './Input.svelte';
   import { t } from '$lib/translations/config';
+  import { tick } from 'svelte';
 
   export let filter: IFilter;
 
   const joinTypes: IFilter['type'][] = ['input', 'input_group', 'select'];
-    
-  $: console.log(filter.value)
 
+  let switchOffEl;
+
+  //$: console.log(filter.value)
+
+  /*
+   *<input type="checkbox" class="checkbox"
+   *    class:relative={isJoinType}
+   *    bind:checked={filter.isEnable} />
+   */
+  function enable() {
+    if (!filter.isEnable)
+      setTimeout(() => {
+        filter.isEnable = true;
+      }, 100);
+  }
+  //<label class="join-item label-text swap tooltip" data-tip={isEnable?$t('common.disable_option'):$t('common.enable_option')} class:mx-2={!isJoinType} class:btn={isJoinType} >
+  //</label>
+  //class:w-32={!(type == 'input_group' || (type=='select'&&options?.isMultiple))}
 </script>
 
 {#if filter}
-  {@const { type, label, options } = filter}
+  {@const { type, label, isEnable, options } = filter}
+  {@const isJoinType = joinTypes.includes(type)}
 
   <!-- svelte-ignore a11y-label-has-associated-control -->
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
-    class="label text-sm md:text-md w-full md:join-horizontal md:flex-nowrap rounded-xl transition"
-    class:join={joinTypes.includes(type)}
-    class:join-vertical={type == 'input_group' || (type=='select'&&options?.isMultiple)}
-    class:flex-wrap={['slider', 'radio'].includes(type)}
+    class="label text-sm md:text-md w-full md:join-horizontal flex-wrap md:flex-nowrap rounded-xl transition"
+    class:opacity-50={!isEnable}
+    class:join={isJoinType}
+    class:flex-wrap={!isJoinType}
     class:hover:bg-base-300={['toggle'].includes(type)}
     class:cursor-pointer={['toggle'].includes(type)}
     class:my-1={['toggle'].includes(type)}
-    class:px-3={['toggle', 'radio', 'slider'].includes(type)}
+    class:px-5={!isJoinType}
+    class:gap-2={!isJoinType}
+    class:join-vertical={type == 'input_group' || (type == 'select' && options?.isMultiple)}
+    for={filter.param ?? filter.label}
+    on:mousedown={enable}
+    on:click={enable}
   >
     <span
-      class={'label-text no-animation join-item whitespace-nowrap md:w-1/4 text-left'}
-      class:btn={joinTypes.includes(type)}
-      class:w-16={!(type == 'input_group' || (type=='select'&&options?.isMultiple))}
+      class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap md:w-1/4 text-left align-middle'}
+      class:btn={isJoinType}
     >
-      {$t(label)}
+      <input type="checkbox" class="checkbox" bind:checked={filter.isEnable} />
+      <span class="flex-1" class:ml-3={!isJoinType} class:text-center={isJoinType}>
+        {$t(label)}
+      </span>
     </span>
     {#if filter.type === 'input'}
       <Input bind:filter />
@@ -41,9 +68,15 @@
         <Input bind:filter={item} />
       {/each}
     {:else if filter.type === 'select'}
-        <!--TODO: bind:value causing infinite loop-->
-        <!--<Select class='select select-bordered join-item' on:clear={({detail})=>fitter.value = filter.value.filter((v)=>!(detail instanceof Array && detail.includes(v) || detail == v))} on:change={({detail})=>filter.value = detail} items={filter.items} multiple={options?.isMultiple} --list-z-index='5'/> -->
-        <Select class=' join-item' value={filter.value} items={filter.items} multiple={options?.isMultiple} --list-z-index='5'/>
+      <!--TODO: bind:value causing infinite loop-->
+      <!--<Select class='select select-bordered join-item' on:clear={({detail})=>fitter.value = filter.value.filter((v)=>!(detail instanceof Array && detail.includes(v) || detail == v))} on:change={({detail})=>filter.value = detail} items={filter.items} multiple={options?.isMultiple} --list-z-index='5'/> -->
+      <Select
+        class="join-item"
+        value={filter.value}
+        items={filter.items}
+        multiple={options?.isMultiple}
+        --list-z-index="5"
+      />
     {:else if filter.type === 'slider'}
       {@const {
         range: [min, max],
@@ -67,9 +100,14 @@
         />
       </div>
     {:else if filter.type === 'toggle'}
-      <input type="checkbox" bind:checked={filter.value} class="toggle border-2" />
+      <input
+        type="checkbox"
+        bind:checked={filter.value}
+        class="toggle border-2"
+        name={filter.param}
+      />
     {:else if filter.type === 'radio' || filter.type === 'checkbox'}
-      <div class="flex flex-grow flex-wrap">
+      <div class="flex flex-grow flex-wrap flex-col md:flex-row">
         {#each filter.items as item, i}
           <label
             class="label flex-grow cursor-pointer rounded-xl transition hover:bg-base-300 px-3 mx-1"
@@ -77,20 +115,22 @@
             <span class="label-text">
               {$t(item.label)}
             </span>
-            {#if filter.type=== 'radio'}
-                <input type="radio"
-                  name={label}
-                  class="radio border-2"
-                  bind:group={filter.value}
-                  value={item.value}
-                />
+            {#if filter.type === 'radio'}
+              <input
+                type="radio"
+                name={label}
+                class="radio border-2"
+                bind:group={filter.value}
+                value={item.value}
+              />
             {:else}
-                <input type="checkbox"
-                  name={label}
-                  class="checkbox border-2"
-                  bind:group={filter.value}
-                  value={item.value}
-                />
+              <input
+                type="checkbox"
+                name={label}
+                class="checkbox border-2"
+                bind:group={filter.value}
+                value={item.value}
+              />
             {/if}
           </label>
         {/each}
@@ -105,25 +145,25 @@
     width: unset;
   }
 
-    :global(:root) {
-        --range-slider:            oklch(var(--b2));
-        --range-handle-inactive:   oklch(var(--bc));
-        --range-handle:            oklch(var(--s));
-        --range-handle-focus:      oklch(var(--s));
-        --range-handle-border:     oklch(var(--s));
-        --range-range-inactive:    oklch(var(--bc)/0.5);
-        --range-range:             oklch(var(--s)/0.5);
-        --range-float-inactive:    oklch(var(--s));
-        --range-float:             oklch(var(--s));
-        --range-float-text:        oklch(var(--sc));
+  :global(:root) {
+    --range-slider: oklch(var(--b2));
+    --range-handle-inactive: oklch(var(--bc));
+    --range-handle: oklch(var(--s));
+    --range-handle-focus: oklch(var(--s));
+    --range-handle-border: oklch(var(--s));
+    --range-range-inactive: oklch(var(--bc) / 0.5);
+    --range-range: oklch(var(--s) / 0.5);
+    --range-float-inactive: oklch(var(--s));
+    --range-float: oklch(var(--s));
+    --range-float-text: oklch(var(--sc));
 
-        --range-pip:               oklch(var(--bc)/0.7);
-        --range-pip-text:          oklch(var(--bc)/0.7);
-        --range-pip-active:        oklch(var(--bc)/0.8);
-        --range-pip-active-text:   oklch(var(--bc)/0.8);
-        --range-pip-hover:         oklch(var(--bc)/0.9);
-        --range-pip-hover-text:    oklch(var(--bc)/0.9);
-        --range-pip-in-range:      oklch(var(--bc));
-        --range-pip-in-range-text: oklch(var(--bc));
-      }
+    --range-pip: oklch(var(--bc) / 0.7);
+    --range-pip-text: oklch(var(--bc) / 0.7);
+    --range-pip-active: oklch(var(--bc) / 0.8);
+    --range-pip-active-text: oklch(var(--bc) / 0.8);
+    --range-pip-hover: oklch(var(--bc) / 0.9);
+    --range-pip-hover-text: oklch(var(--bc) / 0.9);
+    --range-pip-in-range: oklch(var(--bc));
+    --range-pip-in-range-text: oklch(var(--bc));
+  }
 </style>
