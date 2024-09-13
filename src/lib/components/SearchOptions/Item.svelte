@@ -41,7 +41,7 @@
     on:click={enable}
   >
     <span
-        class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap min-w-[40%] md:w-1/4 h-[unset] text-left align-middle'}
+      class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap min-w-[40%] md:w-1/4 h-[unset] text-left align-middle'}
       class:btn={withJoin}
     >
       <input
@@ -50,10 +50,12 @@
         data-tip={isEnable ? $t('common.disable_option') : $t('common.enable_option')}
         bind:checked={filter.isEnable}
       />
-      <span class="flex-1"
-          class:ml-3={!withJoin}
-          class:mr-6={withVertical && withJoin}
-          class:text-center={withJoin}>
+      <span
+        class="flex-1 md:mr-0"
+        class:ml-3={!withJoin}
+        class:mr-6={withVertical && withJoin}
+        class:text-center={withJoin}
+      >
         {$t(label)}
       </span>
     </span>
@@ -64,7 +66,7 @@
         <Input bind:filter={item} />
       {/each}
     {:else if filter.type === 'select'}
-        <Select bind:filter/>
+      <Select bind:filter />
     {:else if filter.type === 'slider'}
       {@const {
         range: [min, max],
@@ -138,12 +140,25 @@
   }
   :global(.svelecte .sv-item--wrap:hover) {
     background-color: var(--sv-dropdown-selected-bg) !important;
-    color: oklch(var(--sc))
+    color: oklch(var(--sc));
+  }
+  :global(.svelecte .sv-buttons) {
+    margin: auto 0;
   }
   :global(.svelecte .sv-control, .sv-buttons) {
     background-color: transparent !important;
     border: 0 !important;
     height: 100%;
+  }
+  :global(.svelecte .sv-item--content) {
+    display: flex;
+    width: 100%;
+  }
+  :global(.svelecte .sv-item--wrap:nth-child(2n)) {
+    background-color: oklch(var(--b3));
+  }
+  :global(.svelecte .sv-item--wrap:nth-child(2n-1)) {
+    background-color: oklch(var(--b2));
   }
 
   :root {
@@ -167,7 +182,7 @@
     --range-pip-in-range: oklch(var(--bc));
     --range-pip-in-range-text: oklch(var(--bc));
 
-    --sv-min-height: 40px;
+    --sv-min-height: 3rem;
     --sv-bg: oklch(var(--b2));
     --sv-color: oklch(var(--bc));
     --sv-disabled-bg: #eee;

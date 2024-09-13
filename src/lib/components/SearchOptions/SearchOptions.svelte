@@ -2,26 +2,25 @@
   import { t } from '$lib/translations/config';
   import Item from './Item.svelte';
 
-  import type { IFilter, IFilters, IFilterInputGroup } from '$lib/filters/types';
+  import type { IFilters } from '$lib/filters/types';
 
   export let filters: IFilters;
   export let params: URLSearchParams = new URLSearchParams();
 
-  $:filters, params = generateParams()
+  $: filters, (params = generateParams());
 
   function generateParams() {
     params = new URLSearchParams();
     filters.flat().forEach((filter) => {
-        if(filter.param == 'Order'){
-            filter.value.forEach(([field,desc])=>{
-                params.append('Order',field)
-                params.append('Desc',desc)
-            })
-            return;
-        }
+      if (filter.param == 'Order') {
+        filter.value.forEach(({ field, desc }) => {
+          params.append('Order', field);
+          params.append('Desc', desc);
+        });
+        return;
+      }
 
-
-      if(!filter.isEnable) return;
+      if (!filter.isEnable) return;
       if (filter.type == 'input_group')
         filter.items.forEach(({ param, value }) => {
           if (!value || value == '__unset') params.delete(param);
@@ -43,10 +42,7 @@
         else params.set(param, (value as any).toString());
       }
     });
-    console.log(params)
-    console.log(params.toString())
-    return params
-    //console.info(filters)
+    return params;
   }
 
   let open = true;
@@ -61,11 +57,11 @@
         {#if filter instanceof Array}
           <div class="flex flex-wrap md:flex-nowrap items-center gap-x-0 md:gap-x-5">
             {#each filter as filter}
-                <Item bind:filter/>
+              <Item bind:filter />
             {/each}
           </div>
         {:else}
-            <Item bind:filter/>
+          <Item bind:filter />
         {/if}
       {/each}
       <button
