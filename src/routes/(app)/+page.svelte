@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
-  import { searchFilters } from '$lib/filters';
+  import { getFullFilters } from '$lib/filters';
 
   export let data;
 
@@ -13,8 +13,7 @@
   let text = '';
 
   let searchParams = new URLSearchParams();
-  $: filters = searchFilters[type];
-  //$: filters = searchFilters.charts;
+  $: filters = getFullFilters(type);
 
   $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 

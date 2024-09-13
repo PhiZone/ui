@@ -51,7 +51,7 @@ interface IFilterSelect extends IFilterBase {
   // basically it's { label:string, value:string }
   items: Svelecte['options'];
   // props of svelecte. see https://svelecte.vercel.app/options for more information
-  options: object & {
+  options?: object & {
     multiple: boolean;
     placeholder: string;
   };
@@ -110,5 +110,5 @@ export type IFilter =
 export type IFilters = (IFilter | IFilter[])[];
 export type OrderItem = {
   label: string;
-  value: string;
+  field: string;
 };

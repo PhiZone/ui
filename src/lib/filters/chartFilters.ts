@@ -2,17 +2,16 @@ import { orderFilter } from './orderFilter';
 import type { IFilters, OrderItem } from './types';
 
 export const chartOrderItems: OrderItem[] = [
-  { label: 'chart.score', value: 'score' },
-  { label: 'chart.rating', value: 'rating' },
-  { label: 'chart.difficulty', value: 'difficulty' },
-  { label: 'common.like_count', value: 'likeCount' },
-  { label: 'common.play_count', value: 'playCount' },
-  { label: 'common.date_created', value: 'dateCreated' },
-  { label: 'common.date_updated', value: 'dateUpdated' },
+  { label: 'chart.score', field: 'score' },
+  { label: 'chart.rating', field: 'rating' },
+  { label: 'chart.difficulty', field: 'difficulty' },
+  { label: 'common.like_count', field: 'likeCount' },
+  { label: 'common.play_count', field: 'playCount' },
+  { label: 'common.date_created', field: 'dateCreated' },
+  { label: 'common.date_updated', field: 'dateUpdated' },
 ];
 
 export const chartFilters: IFilters = [
-  orderFilter(chartOrderItems),
   {
     type: 'toggle',
     label: 'chart.is_ranked',

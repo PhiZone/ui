@@ -12,12 +12,12 @@ type Item = object & {
 export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelect => {
   const items: Item[] = [];
 
-  orderItems.forEach(({ label, value, ...o }) => {
+  orderItems.forEach(({ label, field, ...o }) => {
     items.push({
       ...o,
       label,
       value: {
-        field: value,
+        field,
         desc: false,
       },
     });
@@ -25,7 +25,7 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
       ...o,
       label,
       value: {
-        field: value,
+        field,
         desc: true,
       },
     });
@@ -37,7 +37,7 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
     value: [],
     options: {
       placeholder: t.get('common.order'),
-      renderer: ({ label, value: { field, desc } }: Item, _isSelection: boolean, _inputValue) => {
+      renderer: ({ label, value: { desc } }: Item, _isSelection: boolean, _inputValue) => {
         const text = t.get(label),
           arrow = desc ? '↓' : '↑';
 
@@ -45,7 +45,6 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
         return `<span style="flex-grow:1;text-align:left">${text}</span>${arrow}`;
       },
       optionResolver: (opt: Item[], selection: Set<Item['value']>) => {
-        console.log(opt, selection);
         return opt.filter(
           ({ value: { field } }) => ![...selection].some(({ field: f }) => f == field),
         ); // exclude the other order of selected one.

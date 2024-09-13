@@ -42,6 +42,7 @@
         else params.set(param, (value as any).toString());
       }
     });
+    console.log(params)
     return params;
   }
 

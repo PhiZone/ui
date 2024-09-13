@@ -18,6 +18,6 @@
     opt.forEach((o) => newOpt.push({ ...o, label: $t(o.label), rawLabel: o.label })); // translate label
     return newOpt;
   }}
-  {dndzone}
+  dndzone={filter?.options?.multiple?dndzone:undefined}
   {...filter.options}
 />

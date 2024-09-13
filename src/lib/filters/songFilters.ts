@@ -1,8 +1,9 @@
 import { orderFilter } from './orderFilter';
 import type { IFilters, OrderItem } from './types';
 
+export const songOrderItems: OrderItem[] = [
+];
 export const songFilters: IFilters = [
-  orderFilter([]),
   {
     type: 'toggle',
     label: 'common.is_hidden',

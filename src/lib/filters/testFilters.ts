@@ -1,19 +1,16 @@
-import { orderFilter } from './orderFilter';
-import type { IFilters } from './types';
+import type { IFilters, OrderItem } from './types';
 
-const testOrderItems = [
-  //{ label: 'common.default', value: null },
-  { label: 'chart.score', value: 'score' },
-  { label: 'chart.rating', value: 'rating' },
-  { label: 'chart.difficulty', value: 'difficulty' },
-  { label: 'filter.likeCount', value: 'likeCount' },
-  { label: 'filter.playCount', value: 'playCount' },
-  { label: 'common.date_created', value: 'dateCreated' },
-  { label: 'common.date_updated', value: 'dateUpdated' },
+export const testOrderItems:OrderItem[] = [
+  { label: 'chart.score', field: 'score' },
+  { label: 'chart.rating', field: 'rating' },
+  { label: 'chart.difficulty', field: 'difficulty' },
+  { label: 'filter.likeCount', field: 'likeCount' },
+  { label: 'filter.playCount', field: 'playCount' },
+  { label: 'common.date_created', field: 'dateCreated' },
+  { label: 'common.date_updated', field: 'dateUpdated' },
 ];
 
 export const testFilters: IFilters = [
-  orderFilter(testOrderItems),
   {
     type: 'input',
     label: 'text',

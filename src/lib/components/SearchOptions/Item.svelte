@@ -154,12 +154,14 @@
     display: flex;
     width: 100%;
   }
-  :global(.svelecte .sv-item--wrap:nth-child(2n)) {
-    background-color: oklch(var(--b3));
-  }
-  :global(.svelecte .sv-item--wrap:nth-child(2n-1)) {
-    background-color: oklch(var(--b2));
-  }
+  /* TODO
+   *:global(.sv-item--wrap:not(:has(.is-single)):nth-child(2n)) {
+   *  background-color: oklch(var(--b3));
+   *}
+   *:global(.sv-item--wrap:not(:has(.is-single)):nth-child(2n-1)) {
+   *  background-color: oklch(var(--b2));
+   *}
+   */
 
   :root {
     --range-slider: oklch(var(--b2));
