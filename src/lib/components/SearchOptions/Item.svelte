@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Svelecte from 'svelecte';
   import RangeSlider from 'svelte-range-slider-pips';
-  import type { IFilter } from './types';
+  import type { IFilter } from '$lib/filters/types';
   import Input from './Input.svelte';
+  import Select from './Select.svelte';
   import { t } from '$lib/translations/config';
 
   export let filter: IFilter;
@@ -64,17 +64,7 @@
         <Input bind:filter={item} />
       {/each}
     {:else if filter.type === 'select'}
-      <Svelecte
-        class="join-item flex-1 w-full h-fit input input-bordered transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
-        bind:value={filter.value}
-        options={filter.items}
-        optionResolver={(opt)=>{
-            let newOpt = [];
-            opt.forEach((o)=>(newOpt.push({...o,label:$t(o.label)}))) // translate label
-            return newOpt;
-        }}
-        multiple={options?.isMultiple}
-      />
+        <Select bind:filter/>
     {:else if filter.type === 'slider'}
       {@const {
         range: [min, max],
@@ -146,6 +136,10 @@
   :global(.svelecte .is-open) {
     z-index: 5 !important;
   }
+  :global(.svelecte .sv-item--wrap:hover) {
+    background-color: var(--sv-dropdown-selected-bg) !important;
+    color: oklch(var(--sc))
+  }
   :global(.svelecte .sv-control, .sv-buttons) {
     background-color: transparent !important;
     border: 0 !important;
@@ -201,7 +195,7 @@
     --sv-dropdown-shadow: 0 6px 12px #0000002d;
     --sv-dropdown-height: 320px;
     --sv-dropdown-active-bg: oklch(var(--b1));
-    --sv-dropdown-selected-bg: oklch(var(--b1));
+    --sv-dropdown-selected-bg: oklch(var(--s));
     /*--sv-create-kbd-border: 1px solid #efefef;*/
     /*--sv-create-kbd-bg: #fff;*/
     /*--sv-create-disabled-bg: #fcbaba;*/

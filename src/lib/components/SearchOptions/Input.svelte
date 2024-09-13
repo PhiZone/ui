@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import type { IFilterInput } from './types';
+  import type { IFilterInput } from '$lib/filters/types';
 
   export let filter: Omit<Omit<IFilterInput, 'label'>, 'type'>;
 </script>
