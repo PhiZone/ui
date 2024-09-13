@@ -8,9 +8,12 @@
 
   export let params: URLSearchParams = new URLSearchParams();
 
-  $: {
+  $:filters, params = generateParams()
+
+  function generateParams() {
     params = new URLSearchParams();
     filters.flat().forEach((filter) => {
+      if(!filter.isEnable) return;
       if (filter.type == 'input_group')
         filter.items.forEach(({ param, value }) => {
           if (!value || value == '__unset') params.delete(param);
@@ -28,13 +31,14 @@
               params.append(param, v.value ?? v.toString());
             });
           }
-        } else if (value == null || value == '' || value == '__unset') params.delete(param);
+        } else if (value === null || value === '' || value === '__unset') params.delete(param);
         else params.set(param, (value as any).toString());
       }
     });
+    console.info(params)
+    return params
+    //console.info(filters)
   }
-  //$: console.log(filters);
-  //$: console.log(params.toString());
 
   let open = true;
 </script>
@@ -46,7 +50,7 @@
     <div class="form-control items-stretch w-full">
       {#each filters as filter}
         {#if filter instanceof Array}
-          <div class="flex flex-wrap items-center gap-x-0 md:gap-x-5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-x-0 md:gap-x-5">
             {#each filter as filter}
               <Item bind:filter />
             {/each}

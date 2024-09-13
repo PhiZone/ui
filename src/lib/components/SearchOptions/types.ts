@@ -1,3 +1,5 @@
+import type { SvelecteProps } from 'svelecte';
+
 type Item = {
   label: string;
   value: unknown;
@@ -46,7 +48,9 @@ interface IFilterSelect extends IFilterBase {
   type: 'select';
   value: string;
   param: string;
-  items: Item[];
+  // see https://svelecte.vercel.app/options for more information
+  // basically it's { text:string, value:string }
+  items: SvelecteProps['options'][];
   options?: {
     isMultiple?: boolean;
   };
@@ -61,7 +65,7 @@ interface IFilterToggle extends IFilterBase {
 interface IFilterSlider extends IFilterBase {
   type: 'slider';
   value: [low: number, high: number] | number[];
-  param: string;
+  param: string|string[];
   options: {
     step?: number;
     isRange?: boolean;

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Select from 'svelte-select';
   import Svelecte from 'svelecte';
   import RangeSlider from 'svelte-range-slider-pips';
   import type { IFilter } from './types';
@@ -20,29 +19,30 @@
 
 {#if filter}
   {@const { type, label, isEnable, options } = filter}
-  {@const isJoinType = joinTypes.includes(type)}
+  {@const withJoin = joinTypes.includes(type)}
+  {@const withVertical = type == 'input_group' || (type == 'select' && options?.isMultiple)}
 
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
-    class="label text-sm md:text-md w-full md:join-horizontal flex-wrap md:flex-nowrap rounded-xl transition"
+    class="label text-sm md:text-md w-full md:join-horizontal rounded-xl transition"
     class:opacity-50={!isEnable}
-    class:join={isJoinType}
-    class:flex-wrap={!isJoinType}
+    class:join={withJoin}
+    class:flex-wrap={!withJoin}
     class:hover:bg-base-300={['toggle'].includes(type)}
     class:cursor-pointer={['toggle'].includes(type)}
     class:my-1={['toggle'].includes(type)}
-    class:px-5={!isJoinType}
-    class:gap-2={!isJoinType}
-    class:join-vertical={type == 'input_group' || (type == 'select' && options?.isMultiple)}
+    class:px-5={!withJoin}
+    class:gap-2={!withJoin}
+    class:join-vertical={withVertical}
     for={filter.param ?? filter.label}
     on:mousedown={enable}
     on:click={enable}
   >
     <span
-      class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap md:w-1/4 text-left align-middle'}
-      class:btn={isJoinType}
+        class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap min-w-[40%] md:w-1/4 h-[unset] text-left align-middle'}
+      class:btn={withJoin}
     >
       <input
         type="checkbox"
@@ -50,7 +50,10 @@
         data-tip={isEnable ? $t('common.disable_option') : $t('common.enable_option')}
         bind:checked={filter.isEnable}
       />
-      <span class="flex-1" class:ml-3={!isJoinType} class:text-center={isJoinType}>
+      <span class="flex-1"
+          class:ml-3={!withJoin}
+          class:mr-6={withVertical && withJoin}
+          class:text-center={withJoin}>
         {$t(label)}
       </span>
     </span>
@@ -62,9 +65,14 @@
       {/each}
     {:else if filter.type === 'select'}
       <Svelecte
-        class="join-item flex-1 w-full input input-bordered transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
+        class="join-item flex-1 w-full h-fit input input-bordered transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
         bind:value={filter.value}
         options={filter.items}
+        optionResolver={(opt)=>{
+            let newOpt = [];
+            opt.forEach((o)=>(newOpt.push({...o,label:$t(o.label)}))) // translate label
+            return newOpt;
+        }}
         multiple={options?.isMultiple}
       />
     {:else if filter.type === 'slider'}
