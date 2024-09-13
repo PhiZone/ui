@@ -1,8 +1,5 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import type { ParsedQuery } from 'query-string';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { range } from '$lib/utils';
   import Item from './Item.svelte';
 
   import type { IFilter, IFilters, IFilterInputGroup } from './types';
@@ -31,7 +28,7 @@
               params.append(param, v.value ?? v.toString());
             });
           }
-        } else if (value == '' || value == '__unset') params.delete(param);
+        } else if (value == null || value == '' || value == '__unset') params.delete(param);
         else params.set(param, (value as any).toString());
       }
     });
@@ -42,10 +39,10 @@
   let open = true;
 </script>
 
-<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center overflow-auto">
+<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center">
   <input type="checkbox" bind:checked={open} />
-  <div class="collapse-title texl-xl">{$t('common.search_options')}</div>
-  <div class="collapse-content md:px-2">
+  <div class="collapse-title texl-xl bg-base-200">{$t('common.search_options')}</div>
+  <div class="collapse-content px-0 md:px-4 max-h-[50vh] overflow-y-auto">
     <div class="form-control items-stretch w-full">
       {#each filters as filter}
         {#if filter instanceof Array}

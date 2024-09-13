@@ -67,10 +67,7 @@ export const testFilters: IFilters = [
   {
     type: 'select',
     label: 'select',
-    value: {
-      label: 'Select One',
-      value: 'select1',
-    },
+    value: 'select1',
     param: 'select',
     items: [
       {
@@ -86,20 +83,15 @@ export const testFilters: IFilters = [
   {
     type: 'select',
     label: 'Multiple Select',
-    value: [
-      {
-        label: 'Multi Select One',
-        value: 'multiSelect1',
-      },
-    ],
+    value: 'multiSelect1',
     param: 'multiSelect',
     items: [
       {
-        label: 'Multi Select One',
+        text: 'Multi Select One',
         value: 'multiSelect1',
       },
       {
-        label: 'Multi Select Two',
+        text: 'Multi Select Two',
         value: 'multiSelect2',
       },
     ],

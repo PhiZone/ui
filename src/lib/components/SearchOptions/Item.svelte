@@ -1,33 +1,21 @@
 <script lang="ts">
   import Select from 'svelte-select';
+  import Svelecte from 'svelecte';
   import RangeSlider from 'svelte-range-slider-pips';
   import type { IFilter } from './types';
   import Input from './Input.svelte';
   import { t } from '$lib/translations/config';
-  import { tick } from 'svelte';
 
   export let filter: IFilter;
 
   const joinTypes: IFilter['type'][] = ['input', 'input_group', 'select'];
 
-  let switchOffEl;
-
-  //$: console.log(filter.value)
-
-  /*
-   *<input type="checkbox" class="checkbox"
-   *    class:relative={isJoinType}
-   *    bind:checked={filter.isEnable} />
-   */
   function enable() {
     if (!filter.isEnable)
       setTimeout(() => {
         filter.isEnable = true;
       }, 100);
   }
-  //<label class="join-item label-text swap tooltip" data-tip={isEnable?$t('common.disable_option'):$t('common.enable_option')} class:mx-2={!isJoinType} class:btn={isJoinType} >
-  //</label>
-  //class:w-32={!(type == 'input_group' || (type=='select'&&options?.isMultiple))}
 </script>
 
 {#if filter}
@@ -56,7 +44,12 @@
       class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap md:w-1/4 text-left align-middle'}
       class:btn={isJoinType}
     >
-      <input type="checkbox" class="checkbox" bind:checked={filter.isEnable} />
+      <input
+        type="checkbox"
+        class="checkbox tooltip before:z-10"
+        data-tip={isEnable ? $t('common.disable_option') : $t('common.enable_option')}
+        bind:checked={filter.isEnable}
+      />
       <span class="flex-1" class:ml-3={!isJoinType} class:text-center={isJoinType}>
         {$t(label)}
       </span>
@@ -68,14 +61,11 @@
         <Input bind:filter={item} />
       {/each}
     {:else if filter.type === 'select'}
-      <!--TODO: bind:value causing infinite loop-->
-      <!--<Select class='select select-bordered join-item' on:clear={({detail})=>fitter.value = filter.value.filter((v)=>!(detail instanceof Array && detail.includes(v) || detail == v))} on:change={({detail})=>filter.value = detail} items={filter.items} multiple={options?.isMultiple} --list-z-index='5'/> -->
-      <Select
-        class="join-item"
-        value={filter.value}
-        items={filter.items}
+      <Svelecte
+        class="join-item flex-1 w-full input input-bordered transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
+        bind:value={filter.value}
+        options={filter.items}
         multiple={options?.isMultiple}
-        --list-z-index="5"
       />
     {:else if filter.type === 'slider'}
       {@const {
@@ -145,7 +135,16 @@
     width: unset;
   }
 
-  :global(:root) {
+  :global(.svelecte .is-open) {
+    z-index: 5 !important;
+  }
+  :global(.svelecte .sv-control, .sv-buttons) {
+    background-color: transparent !important;
+    border: 0 !important;
+    height: 100%;
+  }
+
+  :root {
     --range-slider: oklch(var(--b2));
     --range-handle-inactive: oklch(var(--bc));
     --range-handle: oklch(var(--s));
@@ -165,5 +164,39 @@
     --range-pip-hover-text: oklch(var(--bc) / 0.9);
     --range-pip-in-range: oklch(var(--bc));
     --range-pip-in-range-text: oklch(var(--bc));
+
+    --sv-min-height: 40px;
+    --sv-bg: oklch(var(--b2));
+    --sv-color: oklch(var(--bc));
+    --sv-disabled-bg: #eee;
+    --sv-border: 1px solid #ccc;
+    --sv-border-radius: 4px;
+    --sv-general-padding: 4px;
+    --sv-control-bg: var(--sv-bg);
+    --sv-item-wrap-padding: 3px 3px 3px 6px;
+    --sv-item-selected-bg: oklch(var(--b2));
+    --sv-item-btn-color: oklch(var(--bc));
+    --sv-item-btn-color-hover: oklch(var(--sc)); /* same as icon-color-hover in default theme */
+    --sv-item-btn-bg: oklch(var(--b2));
+    --sv-item-btn-bg-hover: oklch(var(--s));
+    --sv-icon-color: oklch(var(--bc));
+    --sv-icon-color-hover: oklch(var(--s));
+    --sv-icon-bg: transparent;
+    --sv-icon-size: 20px;
+    --sv-separator-bg: #ccc;
+    --sv-btn-border: 0;
+    --sv-placeholder-color: oklch(var(--bc) / 0.5);
+    --sv-dropdown-bg: var(--sv-bg);
+    --sv-dropdown-offset: 1px;
+    --sv-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
+    --sv-dropdown-width: auto;
+    --sv-dropdown-shadow: 0 6px 12px #0000002d;
+    --sv-dropdown-height: 320px;
+    --sv-dropdown-active-bg: oklch(var(--b1));
+    --sv-dropdown-selected-bg: oklch(var(--b1));
+    /*--sv-create-kbd-border: 1px solid #efefef;*/
+    /*--sv-create-kbd-bg: #fff;*/
+    /*--sv-create-disabled-bg: #fcbaba;*/
+    /*--sv-loader-border: 2px solid #ccc;*/
   }
 </style>
