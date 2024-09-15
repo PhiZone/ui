@@ -7,6 +7,7 @@
   export let filter: IFilterSelect;
 
   overrideItemIdKeyNameBeforeInitialisingDndZones('value');
+
 </script>
 
 <Svelecte
@@ -19,5 +20,10 @@
     return newOpt;
   }}
   dndzone={filter?.options?.multiple ? dndzone : undefined}
+  highlightFirstItem={false}
   {...filter.options}
+  on:mousedown={(e)=>{
+    //console.log(filter.value,(e.target as HTMLDivElement).textContent)
+
+  }}
 />

@@ -154,7 +154,31 @@
     display: flex;
     width: 100%;
   }
-  /* TODO
+
+  :global(.svelecte .sv-control .sv-item--content .desc::before) {
+    content: '↓ ' ;
+  }
+  
+  :global(.svelecte  .sv-control .sv-item--content .asc::before) {
+    content: '↑ ';
+  }
+   :global(.svelecte .sv_dropdown .sv-item--content .desc,.asc) {
+    width: 100%;
+    text-align: left;
+  }
+   :global(.svelecte .sv_dropdown .sv-item--content .asc::after) {
+    content: '↑';
+    float: right;
+  }
+   :global(.svelecte .sv_dropdown .sv-item--content .desc::after) {
+    content: '↓';
+    float: right;
+  }
+   :global(.svelecte .sv_dropdown .sv-item--content .asc::after) {
+    content: '↑';
+    float: right;
+  }
+    /* TODO
    *:global(.sv-item--wrap:not(:has(.is-single)):nth-child(2n)) {
    *  background-color: oklch(var(--b3));
    *}

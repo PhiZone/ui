@@ -39,10 +39,10 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
       placeholder: t.get('common.order'),
       renderer: ({ label, value: { desc } }: Item, _isSelection: boolean, _inputValue) => {
         const text = t.get(label),
-          arrow = desc ? '↓' : '↑';
+          type = desc ? 'desc' : 'asc';
 
-        if (_isSelection) return `${arrow} ${text}`;
-        return `<span style="flex-grow:1;text-align:left">${text}</span>${arrow}`;
+        if (_isSelection) return `<span class='${type}'>${text}</span>`;
+        return `<span class='${type}'>${text}</span>`;
       },
       optionResolver: (opt: Item[], selection: Set<Item['value']>) => {
         return opt.filter(
