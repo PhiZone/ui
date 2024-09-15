@@ -42,7 +42,7 @@
         else params.set(param, (value as any).toString());
       }
     });
-    console.log(params)
+    console.log(params);
     return params;
   }
 

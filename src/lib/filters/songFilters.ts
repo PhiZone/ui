@@ -1,8 +1,7 @@
 import { orderFilter } from './orderFilter';
 import type { IFilters, OrderItem } from './types';
 
-export const songOrderItems: OrderItem[] = [
-];
+export const songOrderItems: OrderItem[] = [];
 export const songFilters: IFilters = [
   {
     type: 'toggle',
@@ -60,7 +59,7 @@ export const songFilters: IFilters = [
         value: '',
         param: 'EarliestDateCreated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.earliest_date_created',
         },
       },
@@ -68,7 +67,7 @@ export const songFilters: IFilters = [
         value: '',
         param: 'LatestDateCreated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.latest_date_created',
         },
       },
@@ -82,7 +81,7 @@ export const songFilters: IFilters = [
         value: '',
         param: 'EarliestDateUpdated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.earliest_date_updated',
         },
       },
@@ -90,7 +89,7 @@ export const songFilters: IFilters = [
         value: '',
         param: 'LatestDateUpdated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.latest_date_updated',
         },
       },

@@ -284,7 +284,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'EarliestDateCreated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.earliest_date_created',
         },
       },
@@ -292,7 +292,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'LatestDateCreated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.latest_date_created',
         },
       },
@@ -306,7 +306,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'EarliestDateUpdated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.earliest_date_updated',
         },
       },
@@ -314,7 +314,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'LatestDateUpdated',
         options: {
-          inputType: 'text',
+          inputType: 'date',
           placeholder: 'common.latest_date_updated',
         },
       },

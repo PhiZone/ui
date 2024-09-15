@@ -25,16 +25,18 @@ interface IFilterBase {
   options?: object;
 }
 
+interface IFilterInputOptions {
+  inputType: HTMLInputElement['type'];
+  placeholder?: string;
+  isInt?: this['inputType'] extends 'number' ? boolean : never;
+  range?: Range;
+}
+
 interface IFilterInput extends IFilterBase {
   type: 'input';
   value: string | number;
   param: string;
-  options: {
-    inputType: 'number' | 'text';
-    placeholder?: string;
-    isInt?: boolean;
-    range?: Range;
-  };
+  options: IFilterInputOptions;
 }
 
 interface IFilterInputGroup {

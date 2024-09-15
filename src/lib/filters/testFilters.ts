@@ -1,6 +1,6 @@
 import type { IFilters, OrderItem } from './types';
 
-export const testOrderItems:OrderItem[] = [
+export const testOrderItems: OrderItem[] = [
   { label: 'chart.score', field: 'score' },
   { label: 'chart.rating', field: 'rating' },
   { label: 'chart.difficulty', field: 'difficulty' },
@@ -49,6 +49,28 @@ export const testFilters: IFilters = [
         options: {
           inputType: 'number',
           placeholder: 'number',
+        },
+      },
+    ],
+  },
+  {
+    type: 'input_group',
+    label: 'input group 2',
+    items: [
+      {
+        value: '',
+        param: 'input_group_2',
+        options: {
+          inputType: 'date',
+          placeholder: 'date1',
+        },
+      },
+      {
+        value: '',
+        param: 'input_group_3',
+        options: {
+          inputType: 'date',
+          placeholder: 'date2',
         },
       },
     ],
