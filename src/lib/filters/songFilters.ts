@@ -194,30 +194,36 @@ export const songFilters: IFilters = [
   {
     type: 'select',
     label: 'song.edition_type',
-    value: '',
+    value: {},
     param: 'RangeEditionType',
     items: [
       {
+        id: 0,
         label: 'song.edition_types.0',
         value: 0,
       },
       {
+        id: 1,
         label: 'song.edition_types.1',
         value: 1,
       },
       {
+        id: 2,
         label: 'song.edition_types.2',
         value: 2,
       },
       {
+        id: 3,
         label: 'song.edition_types.3',
         value: 3,
       },
       {
+        id: 4,
         label: 'song.edition_types.4',
         value: 4,
       },
       {
+        id: 5,
         label: 'song.edition_types.5',
         value: 5,
       },

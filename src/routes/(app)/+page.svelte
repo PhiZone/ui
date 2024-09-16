@@ -4,16 +4,17 @@
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
   import { getFullFilters } from '$lib/filters';
+  import type { SearchFilterType } from '$lib/filters';
 
   export let data;
 
   $: ({ api } = data);
 
-  let type: 'charts' | 'songs' | 'users' | 'events' | 'collections' | 'chapters' = 'charts';
+  let type: SearchFilterType = 'charts';
   let text = '';
 
   let searchParams = new URLSearchParams();
-  $: filters = getFullFilters(type);
+  $: filters = getFullFilters(type, true);
 
   $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 
@@ -89,7 +90,7 @@
         </button>
       </div>
       {#key filters}
-        <SearchOptions {filters} bind:params={searchParams} />
+        <SearchOptions {type} {filters} bind:params={searchParams} />
       {/key}
     </form>
   </div>

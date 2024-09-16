@@ -39,18 +39,20 @@ interface IFilterInput extends IFilterBase {
   options: IFilterInputOptions;
 }
 
+interface IFilterInputItem extends Omit<Omit<IFilterInput, 'label'>, 'type'> {}
+
 interface IFilterInputGroup {
   type: 'input_group';
   label: string;
   isEnable?: boolean;
-  items: Omit<Omit<IFilterInput, 'label'>, 'type'>[];
+  items: IFilterInputItem[];
 }
 
 interface IFilterSelect extends IFilterBase {
   type: 'select';
-  value: string;
+  value: Record<string, never> | { id: string | number } | { id: string | number }[];
   param: string;
-  // basically it's { label:string, value:string }
+  // basically it's {id:string, label:string, value:string }
   items: Svelecte['options'];
   // props of svelecte. see https://svelecte.vercel.app/options for more information
   options?: object & {
@@ -94,6 +96,7 @@ interface IFilterRadio extends IFilterBase {
 export type {
   IFilterBase,
   IFilterInput,
+  IFilterInputItem,
   IFilterInputGroup,
   IFilterSelect,
   IFilterSlider,

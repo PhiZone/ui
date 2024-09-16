@@ -3,47 +3,37 @@
   import Item from './Item.svelte';
 
   import type { IFilters } from '$lib/filters/types';
+  import { getFilterValue, storeFilterValue } from '$lib/filters';
+  import type { SearchFilterType } from '$lib/filters';
 
+  export let type: SearchFilterType;
   export let filters: IFilters;
   export let params: URLSearchParams = new URLSearchParams();
 
-  $: filters, (params = generateParams());
+  $: filters;
+  $: data = getFilterValue(filters);
 
-  function generateParams() {
+  $: {
     params = new URLSearchParams();
-    filters.flat().forEach((filter) => {
-      if (filter.param == 'Order') {
-        filter.value.forEach(({ field, desc }) => {
-          params.append('Order', field);
-          params.append('Desc', desc);
-        });
-        return;
-      }
 
-      if (!filter.isEnable) return;
-      if (filter.type == 'input_group')
-        filter.items.forEach(({ param, value }) => {
-          if (!value || value == '__unset') params.delete(param);
-          else params.set(param, value.toString());
+    Object.entries(data).forEach(([param, value]) => {
+      if (param === 'Order') {
+        value.forEach(({ value: { field, desc } }) => {
+          params.append('Order', field);
+          params.append('Desc', desc.toString());
         });
-      else {
-        const { value, param } = filter;
-        if (value instanceof Array) {
-          if (param instanceof Array) {
-            value.forEach((v, i) => {
-              params.set(param[i], v.value ?? v.toString());
-            });
-          } else {
-            value.forEach((v, i) => {
-              params.append(param, v.value ?? v.toString());
-            });
-          }
-        } else if (value === null || value === '' || value === '__unset') params.delete(param);
-        else params.set(param, (value as any).toString());
+      } else if (value instanceof Array) {
+        value.forEach((v) => {
+          if (v.value) params.append(param, v.value);
+          else params.append(param, v);
+        });
+      } else {
+        params.append(param, value.toString());
       }
     });
+
     console.log(params);
-    return params;
+    storeFilterValue(type, data);
   }
 
   let open = true;

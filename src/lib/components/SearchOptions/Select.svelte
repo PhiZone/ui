@@ -6,24 +6,24 @@
 
   export let filter: IFilterSelect;
 
-  overrideItemIdKeyNameBeforeInitialisingDndZones('value');
-
+  overrideItemIdKeyNameBeforeInitialisingDndZones('id');
 </script>
 
 <Svelecte
   class="join-item flex-1 w-full input input-bordered min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
-  bind:value={filter.value}
-  options={filter.items}
   optionResolver={(opt) => {
     let newOpt = [];
-    opt.forEach((o) => newOpt.push({ ...o, label: $t(o.label), rawLabel: o.label })); // translate label
+    opt.forEach((o) => newOpt.push({ id: o.label, ...o, label: $t(o.label), rawLabel: o.label })); // translate label
     return newOpt;
   }}
+  name={filter.param}
   dndzone={filter?.options?.multiple ? dndzone : undefined}
   highlightFirstItem={false}
+  valueAsObject
   {...filter.options}
-  on:mousedown={(e)=>{
+  bind:value={filter.value}
+  options={filter.items}
+  on:mousedown={(e) => {
     //console.log(filter.value,(e.target as HTMLDivElement).textContent)
-
   }}
 />

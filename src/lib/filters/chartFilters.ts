@@ -149,26 +149,31 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.format',
-    value: '',
+    value: {},
     param: 'RangeFormat',
     items: [
       {
+        id: 0,
         label: 'chart.formats.0',
         value: 0,
       },
       {
+        id: 1,
         label: 'chart.formats.1',
         value: 1,
       },
       {
+        id: 2,
         label: 'chart.formats.2',
         value: 2,
       },
       {
+        id: 3,
         label: 'chart.formats.3',
         value: 3,
       },
       {
+        id: 4,
         label: 'chart.formats.4',
         value: 4,
       },
@@ -187,26 +192,31 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.level_type',
-    value: '',
+    value: {},
     param: 'RangeLevelType',
     items: [
       {
+        id: 0,
         label: 'chart.level_types.0',
         value: 0,
       },
       {
+        id: 1,
         label: 'chart.level_types.1',
         value: 1,
       },
       {
+        id: 2,
         label: 'chart.level_types.2',
         value: 2,
       },
       {
+        id: 3,
         label: 'chart.level_types.3',
         value: 3,
       },
       {
+        id: 4,
         label: 'chart.level_types.4',
         value: 4,
       },

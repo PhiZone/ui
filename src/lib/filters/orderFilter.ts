@@ -1,7 +1,8 @@
 import type { IFilterSelect, OrderItem } from './types';
 import { t } from '$lib/translations/config';
 
-type Item = object & {
+type Item = {
+  id: string | number;
   label: string;
   value: {
     field: string;
@@ -9,21 +10,17 @@ type Item = object & {
   };
 };
 
+export const getOrderFieldId = (field: string, desc: boolean) =>
+  `${field}_${desc ? 'desc' : 'asc'}`;
+
 export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelect => {
   const items: Item[] = [];
 
-  orderItems.forEach(({ label, field, ...o }) => {
+  orderItems.forEach(({ label, field, ...o }, i) => {
     items.push({
       ...o,
       label,
-      value: {
-        field,
-        desc: false,
-      },
-    });
-    items.push({
-      ...o,
-      label,
+      id: field,
       value: {
         field,
         desc: true,
@@ -44,10 +41,16 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
         if (_isSelection) return `<span class='${type}'>${text}</span>`;
         return `<span class='${type}'>${text}</span>`;
       },
-      optionResolver: (opt: Item[], selection: Set<Item['value']>) => {
-        return opt.filter(
-          ({ value: { field } }) => ![...selection].some(({ field: f }) => f == field),
-        ); // exclude the other order of selected one.
+      // selection: set of id
+      optionResolver: (opt: Item[], selection: Set<string>) => {
+        return opt.flatMap(({ value: { field }, label, ...o }) =>
+          [...selection].some((id) => id.match(field))
+            ? []
+            : [
+                { ...o, id: getOrderFieldId(field, false), label, value: { field, desc: false } },
+                { ...o, id: getOrderFieldId(field, true), label, value: { field, desc: true } },
+              ],
+        );
       },
       multiple: true,
       max: 3,

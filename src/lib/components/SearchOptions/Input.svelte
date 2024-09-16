@@ -5,7 +5,7 @@
   export let filter: Omit<Omit<IFilterInput, 'label'>, 'type'>;
 
   let type = 'input';
-  let placeholder = filter.options.placeholder ? $t(filter.options.placeholder) : ''
+  let placeholder = filter.options.placeholder ? $t(filter.options.placeholder) : '';
 </script>
 
 {#if filter?.options?.inputType == 'number'}
@@ -20,14 +20,14 @@
   />
 {:else}
   <input
-    {...{type}}
+    {...{ type }}
     name={filter.param}
     {placeholder}
     bind:value={filter.value}
     minlength={filter.options.range?.[0]}
     maxlength={filter.options.range?.[1]}
     class="input input-bordered min-w-0 transition hover:input-secondary join-item flex-1"
-    on:focus={()=>type=filter.options.inputType}
-    on:focusout={()=> type = filter.value? type: 'input'}
+    on:focus={() => (type = filter.options.inputType)}
+    on:focusout={() => (type = filter.value ? type : 'input')}
   />
 {/if}
