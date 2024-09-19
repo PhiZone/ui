@@ -1,4 +1,4 @@
-import type { IFilterSelect, OrderItem } from './types';
+import type { IFilterOrder, OrderItem } from './types';
 import { t } from '$lib/translations/config';
 
 type Item = {
@@ -13,10 +13,10 @@ type Item = {
 export const getOrderFieldId = (field: string, desc: boolean) =>
   `${field}_${desc ? 'desc' : 'asc'}`;
 
-export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelect => {
+export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterOrder => {
   const items: Item[] = [];
 
-  orderItems.forEach(({ label, field, ...o }, i) => {
+  orderItems.forEach(({ label, field, ...o }) => {
     items.push({
       ...o,
       label,
@@ -27,14 +27,18 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterSelec
       },
     });
   });
-  const filter = {
+  const filter: IFilterOrder = {
     type: 'select',
     param: 'Order',
     label: 'common.order',
     value: [],
     options: {
       placeholder: t.get('common.order'),
-      renderer: ({ label, value: { desc } }: Item, _isSelection: boolean, _inputValue) => {
+      renderer: (value, _isSelection?: boolean) => {
+        const {
+          label,
+          value: { desc },
+        } = value as Item;
         const text = t.get(label),
           type = desc ? 'desc' : 'asc';
 

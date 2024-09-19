@@ -1,4 +1,3 @@
-import { orderFilter } from './orderFilter';
 import type { IFilters, OrderItem } from './types';
 
 export const chartOrderItems: OrderItem[] = [

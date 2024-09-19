@@ -4,8 +4,6 @@
   import Input from './Input.svelte';
   import Select from './Select.svelte';
   import { t } from '$lib/translations/config';
-  import { isOrderFilter } from '$lib/filters';
-  import Order from './Order.svelte';
 
   export let filter: IFilter;
 
@@ -61,80 +59,12 @@
         {$t(label)}
       </span>
     </span>
-    {#if filter.type === 'input'}
-      <Input bind:filter />
-    {:else if filter.type === 'input_group'}
-      {#each filter.items as item}
-        <Input bind:filter={item} />
-      {/each}
-    {:else if isOrderFilter(filter)}
-      <Order bind:filter />
-    {:else if filter.type === 'select'}
-      <Select bind:filter />
-    {:else if filter.type === 'slider'}
-      {@const {
-        range: [min, max],
-        step = 1,
-        pipstep = 1,
-        isRange = false,
-      } = filter.options}
-      <div class="daisy-ui text-sm md:text-base w-full cursor-pointer">
-        <RangeSlider
-          bind:values={filter.value}
-          {step}
-          {min}
-          {max}
-          {pipstep}
-          pips
-          all="label"
-          range={isRange}
-          pushy
-          float
-          springValues={{ stiffness: 0.15, damping: 0.9 }}
-        />
-      </div>
-    {:else if filter.type === 'toggle'}
-      <input
-        type="checkbox"
-        bind:checked={filter.value}
-        class="toggle border-2"
-        name={filter.param}
-      />
-    {:else if filter.type === 'radio' || filter.type === 'checkbox'}
-      <div class="flex flex-grow flex-wrap flex-col md:flex-row">
-        {#each filter.items as item}
-          <label
-            class="label flex-grow cursor-pointer rounded-xl transition hover:bg-base-300 px-3 mx-1"
-          >
-            <span class="label-text">
-              {$t(item.label)}
-            </span>
-            {#if filter.type === 'radio'}
-              <input
-                type="radio"
-                name={label}
-                class="radio border-2"
-                bind:group={filter.value}
-                value={item.value}
-              />
-            {:else}
-              <input
-                type="checkbox"
-                name={label}
-                class="checkbox border-2"
-                bind:group={filter.value}
-                value={item.value}
-              />
-            {/if}
-          </label>
-        {/each}
-      </div>
-    {/if}
+    <slot />
   </label>
 {/if}
 
 <style>
-  .daisy-ui :global(.rangeSlider) {
+  :global(.daisy-ui .rangeSlider) {
     overflow: visible;
     width: unset;
   }

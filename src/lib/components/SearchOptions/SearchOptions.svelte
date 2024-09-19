@@ -3,7 +3,7 @@
   import Item from './Item.svelte';
 
   import type { IFilters } from '$lib/filters/types';
-  import { getFilterValue, storeFilterValue } from '$lib/filters';
+  import { generateParams, getFilterValue, storeFilterValue } from '$lib/filters';
   import type { SearchFilterType } from '$lib/filters';
 
   export let type: SearchFilterType;
@@ -14,24 +14,7 @@
   $: data = getFilterValue(filters);
 
   $: {
-    params = new URLSearchParams();
-
-    Object.entries(data).forEach(([param, value]) => {
-      if (param === 'Order') {
-        value.forEach(({ value: { field, desc } }) => {
-          params.append('Order', field);
-          params.append('Desc', desc.toString());
-        });
-      } else if (value instanceof Array) {
-        value.forEach((v) => {
-          if (v.value) params.append(param, v.value);
-          else params.append(param, v);
-        });
-      } else {
-        params.append(param, value.toString());
-      }
-    });
-
+    params = generateParams(data);
     console.log(params);
     storeFilterValue(type, data);
   }

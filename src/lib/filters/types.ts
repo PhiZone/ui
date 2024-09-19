@@ -2,14 +2,13 @@ import type Svelecte from 'svelecte';
 
 type Item = {
   label: string;
-  value: unknown;
+  value: string | number;
 };
 type Range = [min: number, max: number];
 
 interface IFilterBase {
   label: string;
-  value: unknown;
-  param: string[] | string; // converting the value to the corresponding param
+  param?: string[] | string; // converting the value to the corresponding param
   isEnable?: boolean;
   type:
     | 'input'
@@ -41,24 +40,47 @@ interface IFilterInput extends IFilterBase {
 
 interface IFilterInputItem extends Omit<Omit<IFilterInput, 'label'>, 'type'> {}
 
-interface IFilterInputGroup {
+interface IFilterInputGroup extends IFilterBase {
   type: 'input_group';
   label: string;
-  isEnable?: boolean;
   items: IFilterInputItem[];
 }
 
+export type IFilterSelectItem = {
+  id: string | number;
+  label: string;
+  value: string | number;
+};
+
 interface IFilterSelect extends IFilterBase {
   type: 'select';
-  value: Record<string, never> | { id: string | number } | { id: string | number }[];
+  value:
+    | Record<string, never>
+    | { id: string | number }
+    | { id: string | number }[]
+    | IFilterSelectItem
+    | IFilterSelectItem[];
   param: string;
-  // basically it's {id:string, label:string, value:string }
-  items: Svelecte['options'];
-  // props of svelecte. see https://svelecte.vercel.app/options for more information
-  options?: object & {
-    multiple: boolean;
-    placeholder: string;
-  };
+  // items: Svelecte['$$prop_def']['options']
+  items: IFilterSelectItem[];
+  // see https://svelecte.vercel.app/options for more information
+  options?: Svelecte['$$prop_def'];
+}
+
+export type IFilterOrderItem = {
+  id: string | number;
+  label: string;
+  value: { field: string; desc: boolean };
+};
+
+interface IFilterOrder extends IFilterBase {
+  type: 'select';
+  value: Record<string, never> | { id: string | number }[] | IFilterOrderItem[];
+  param: 'Order';
+  // items: Svelecte['$$prop_def']['options']
+  items: IFilterOrderItem[];
+  // see https://svelecte.vercel.app/options for more information
+  options?: Svelecte['$$prop_def'];
 }
 
 interface IFilterToggle extends IFilterBase {
@@ -99,6 +121,7 @@ export type {
   IFilterInputItem,
   IFilterInputGroup,
   IFilterSelect,
+  IFilterOrder,
   IFilterSlider,
   IFilterToggle,
   IFilterRadio,
@@ -107,6 +130,7 @@ export type IFilter =
   | IFilterInput
   | IFilterInputGroup
   | IFilterSelect
+  | IFilterOrder
   | IFilterSlider
   | IFilterToggle
   | IFilterRadio
