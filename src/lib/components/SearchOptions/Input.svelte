@@ -16,7 +16,7 @@
     bind:value={filter.value}
     min={filter.options.range?.[0]}
     max={filter.options.range?.[1]}
-    class="input input-bordered min-w-0 transition hover:input-secondary join-item flex-1"
+    class="input border-2 normal-border min-w-0 transition hover:input-secondary join-item flex-1"
   />
 {:else}
   <input
@@ -26,7 +26,7 @@
     bind:value={filter.value}
     minlength={filter.options.range?.[0]}
     maxlength={filter.options.range?.[1]}
-    class="input input-bordered min-w-0 transition hover:input-secondary join-item flex-1"
+    class="input border-2 normal-border min-w-0 transition hover:input-secondary join-item flex-1"
     on:focus={() => (type = filter.options.inputType)}
     on:focusout={() => (type = filter.value ? type : 'input')}
   />

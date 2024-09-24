@@ -24,7 +24,6 @@
   {@const withJoin = joinTypes.includes(type)}
   {@const withVertical = type == 'input_group' || (type == 'select' && options?.multiple)}
 
-  <!-- svelte-ignore a11y-label-has-associated-control -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label

@@ -22,9 +22,14 @@
   let open = true;
 </script>
 
-<div class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center">
+<div
+  class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center border-2 normal-border transition"
+  class:hover:border-secondary={!open}
+>
   <input type="checkbox" bind:checked={open} />
-  <div class="collapse-title texl-xl bg-base-200">{$t('common.search_options')}</div>
+  <div class="collapse-title texl-xl bg-base-100">
+    {$t('common.search_options')}
+  </div>
   <div class="collapse-content px-0 md:px-4 max-h-[50vh] overflow-y-auto">
     <div class="form-control items-stretch w-full">
       {#each filters as filter}

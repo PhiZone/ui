@@ -52,7 +52,7 @@
 </video>
 <div class="hero min-h-screen overflow-y-auto">
   <div class="hero-overlay bg-opacity-30 z-10" />
-  <div class="w-5/6 max-w-4xl form-control text-center z-10">
+  <div class="w-5/6 max-w-4xl form-control text-center py-32 z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />
       <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.title')}</h1>
@@ -102,7 +102,7 @@
     display: block;
   }
   .bg-video {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

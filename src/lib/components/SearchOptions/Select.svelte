@@ -7,13 +7,22 @@
   export let filter: IFilterSelect;
 
   overrideItemIdKeyNameBeforeInitialisingDndZones('id');
+
+  const optionResolver = (opt: { label: string }[]) => {
+    if (opt)
+      return opt.map((o: { label: string }) => ({
+        id: o.label,
+        ...o,
+        label: $t(o.label),
+        rawLabel: o.label,
+      })); // translate label
+    return [];
+  };
 </script>
 
 <Svelecte
-  class="join-item flex-1 w-full input input-bordered min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
-  optionResolver={(opt) => {
-    if (opt) return opt.map((o) => ({ id: o.label, ...o, label: $t(o.label), rawLabel: o.label })); // translate label
-  }}
+  class="join-item flex-1 w-full input border-2 normal-border min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
+  {optionResolver}
   name={filter.param}
   dndzone={filter?.options?.multiple ? dndzone : undefined}
   highlightFirstItem={false}

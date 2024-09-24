@@ -1,7 +1,7 @@
 <script lang="ts">
   import Svelecte from 'svelecte';
   import { dndzone, overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
-  import type { IFilterOrder, IFilterOrderItem, IFilterSelect } from '$lib/filters/types';
+  import type { IFilterOrder, IFilterOrderItem } from '$lib/filters/types';
   import { t } from '$lib/translations/config';
   import type { RenderFunction } from 'svelecte/dist/Svelecte.svelte';
 
@@ -43,11 +43,11 @@
     const {
       id,
       label,
-      value: { field, desc },
+      value: { desc },
     } = item as IFilterOrderItem;
     const text: string = t.get(label);
     const type = desc ? 'desc' : 'asc';
-    if (_isSelection) return `<span class='${type}'  data-item-id='${id}'>${text}</span>`;
+    if (_isSelection) return `<span class='${type}' data-item-id='${id}'>${text}</span>`;
     return text;
   };
 </script>
@@ -55,7 +55,7 @@
 <div use:clickBind class="join-item contents">
   {#key count}
     <Svelecte
-      class="join-item flex-1 w-full input input-bordered min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
+      class="join-item flex-1 w-full input border-2 normal-border min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
       name={filter.param}
       dndzone={filter?.options?.multiple ? dndzone : undefined}
       highlightFirstItem={false}
