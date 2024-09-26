@@ -132,63 +132,34 @@
   </label>
 {/if}
 
-<style>
-  .daisy-ui :global(.rangeSlider) {
+<style global>
+  .daisy-ui .rangeSlider {
     overflow: visible;
     width: unset;
   }
 
-  :global(.svelecte .is-open) {
-    z-index: 5 !important;
+  .svelecte {
+      .is-open {
+        z-index: 5 !important;
+      }
+    
+      .sv-item--wrap:hover {
+        background-color: var(--sv-dropdown-selected-bg) !important;
+        color: oklch(var(--sc));
+      }
+      .sv-buttons {
+        margin: auto 0;
+      }
+      .sv-control, .sv-buttons {
+        background-color: transparent !important;
+        border: 0 !important;
+        height: 100%;
+      }
+      .sv-item--content {
+        display: flex;
+        width: 100%;
+      }
   }
-  :global(.svelecte .sv-item--wrap:hover) {
-    background-color: var(--sv-dropdown-selected-bg) !important;
-    color: oklch(var(--sc));
-  }
-  :global(.svelecte .sv-buttons) {
-    margin: auto 0;
-  }
-  :global(.svelecte .sv-control, .sv-buttons) {
-    background-color: transparent !important;
-    border: 0 !important;
-    height: 100%;
-  }
-  :global(.svelecte .sv-item--content) {
-    display: flex;
-    width: 100%;
-  }
-
-  :global(.svelecte .sv-control .sv-item--content .desc::before) {
-    content: '↓ ';
-  }
-
-  :global(.svelecte .sv-control .sv-item--content .asc::before) {
-    content: '↑ ';
-  }
-  :global(.svelecte .sv_dropdown .sv-item--content .desc, .asc) {
-    width: 100%;
-    text-align: left;
-  }
-  :global(.svelecte .sv_dropdown .sv-item--content .asc::after) {
-    content: '↑';
-    float: right;
-  }
-  :global(.svelecte .sv_dropdown .sv-item--content .desc::after) {
-    content: '↓';
-    float: right;
-  }
-  :global(.svelecte .sv_dropdown .sv-item--content .asc::after) {
-    content: '↑';
-    float: right;
-  }
-  /* TODO
-   *:global(.sv-item--wrap:not(:has(.is-single)):nth-child(2n)) {
-   *  background-color: oklch(var(--b3));
-   *}
-   *:global(.sv-item--wrap:not(:has(.is-single)):nth-child(2n-1)) {
-   *  background-color: oklch(var(--b2));
-   *}
-   */
 
   :root {
     --range-slider: oklch(var(--b2));

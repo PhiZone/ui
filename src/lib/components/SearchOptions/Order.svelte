@@ -47,7 +47,8 @@
     } = item as IFilterOrderItem;
     const text: string = t.get(label);
     const type = desc ? 'desc' : 'asc';
-    if (_isSelection) return `<span class='${type}' data-item-id='${id}'>${text}</span>`;
+    const arrow = desc?  '↓' : '↑'
+    if (_isSelection) return `<span class='${type}' data-item-id='${id}'>${arrow} ${text}</span>`;
     return text;
   };
 </script>
