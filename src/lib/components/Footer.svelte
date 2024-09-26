@@ -4,7 +4,7 @@
   const emailAddress = 'contact@phi.zone';
 </script>
 
-<footer class="footer pt-[24px] pb-3 px-10 bg-base-300 text-base">
+<footer class="footer relative pt-[24px] pb-3 px-10 bg-base-300 text-base z-1">
   <div>
     <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
     <a
@@ -79,7 +79,7 @@
     </div>
   </div>
 </footer>
-<footer class="footer px-10 py-5 text-base bg-base-300">
+<footer class="footer relative px-10 py-5 text-base bg-base-300 z-1">
   <div class="items-center grid-flow-col">
     <p class="copyright text-base">{$t('common.footer.copyright')}</p>
   </div>

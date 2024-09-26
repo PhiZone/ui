@@ -27,7 +27,7 @@
   class:hover:border-secondary={!open}
 >
   <input type="checkbox" bind:checked={open} />
-  <div class="collapse-title texl-xl bg-base-100">
+  <div class="collapse-title texl-xl bg-base-200">
     {$t('common.search_options')}
   </div>
   <div class="collapse-content px-0 md:px-4 max-h-[50vh] overflow-y-auto">
@@ -45,7 +45,7 @@
       {/each}
       <button
         type="submit"
-        class="btn border-2 normal-border bg-base-100 hover:btn-outline my-2"
+        class="btn mx-1 border-2 normal-border bg-base-100 hover:btn-outline my-2"
         on:click={() => (open = false)}
       >
         {$t('common.search')}

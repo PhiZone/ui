@@ -55,7 +55,7 @@
 <div use:clickBind class="join-item contents">
   {#key count}
     <Svelecte
-      class="join-item flex-1 w-full input border-2 normal-border min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 leading-5 md:leading-7 md:text-md"
+      class="flex-1 w-full input border-2 normal-border min-h-[3rem] h-fit transition hover:input-secondary m-0 p-0 rounded-[inherit] leading-5 md:leading-7 md:text-md"
       name={filter.param}
       dndzone={filter?.options?.multiple ? dndzone : undefined}
       highlightFirstItem={false}
