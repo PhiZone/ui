@@ -139,26 +139,27 @@
   }
 
   .svelecte {
-      .is-open {
-        z-index: 5 !important;
-      }
-    
-      .sv-item--wrap:hover {
-        background-color: var(--sv-dropdown-selected-bg) !important;
-        color: oklch(var(--sc));
-      }
-      .sv-buttons {
-        margin: auto 0;
-      }
-      .sv-control, .sv-buttons {
-        background-color: transparent !important;
-        border: 0 !important;
-        height: 100%;
-      }
-      .sv-item--content {
-        display: flex;
-        width: 100%;
-      }
+    .is-open {
+      z-index: 5 !important;
+    }
+
+    .sv-item--wrap:hover {
+      background-color: var(--sv-dropdown-selected-bg) !important;
+      color: oklch(var(--sc));
+    }
+    .sv-buttons {
+      margin: auto 0;
+    }
+    .sv-control,
+    .sv-buttons {
+      background-color: transparent !important;
+      border: 0 !important;
+      height: 100%;
+    }
+    .sv-item--content {
+      display: flex;
+      width: 100%;
+    }
   }
 
   :root {

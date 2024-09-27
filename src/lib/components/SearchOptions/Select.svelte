@@ -27,6 +27,13 @@
   dndzone={filter?.options?.multiple ? dndzone : undefined}
   highlightFirstItem={false}
   valueAsObject
+  placeholder={filter.options?.placeholder ??
+    $t('common.select.placeholder', { item: $t(filter.label) })}
+  i18n={{
+    max: (max) => $t('common.select.most', { max }),
+    empty: $t('common.select.empty'),
+    nomatch: $t('common.select.nomatch'),
+  }}
   {...filter.options}
   bind:value={filter.value}
   options={filter.items}

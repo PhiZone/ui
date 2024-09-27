@@ -47,7 +47,7 @@
     } = item as IFilterOrderItem;
     const text: string = t.get(label);
     const type = desc ? 'desc' : 'asc';
-    const arrow = desc?  '↓' : '↑'
+    const arrow = desc ? '↓' : '↑';
     if (_isSelection) return `<span class='${type}' data-item-id='${id}'>${arrow} ${text}</span>`;
     return text;
   };
@@ -60,11 +60,19 @@
       name={filter.param}
       dndzone={filter?.options?.multiple ? dndzone : undefined}
       highlightFirstItem={false}
+      {...filter.options}
       valueAsObject
       bind:value={filter.value}
       options={filter.items}
       {renderer}
       optionResolver={(opt) => opt}
+      placeholder={filter.options?.placeholder ??
+        $t('common.select.placeholder', { item: $t(filter.label) })}
+      i18n={{
+        max: (max) => $t('common.select.max', { max }),
+        empty: $t('common.select.empty'),
+        nomatch: $t('common.select.nomatch'),
+      }}
       max={3}
       multiple
     />

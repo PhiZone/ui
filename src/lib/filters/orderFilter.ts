@@ -33,7 +33,6 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterOrder
     label: 'common.order',
     value: [],
     options: {
-      placeholder: t.get('common.order'),
       renderer: (value, _isSelection?: boolean) => {
         const {
           label,
