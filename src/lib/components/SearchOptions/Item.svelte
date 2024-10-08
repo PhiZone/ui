@@ -47,7 +47,7 @@
     >
       <input
         type="checkbox"
-        class="checkbox tooltip before:z-10"
+        class="checkbox border-2 tooltip before:z-10"
         data-tip={isEnable ? $t('common.disable_option') : $t('common.enable_option')}
         bind:checked={filter.isEnable}
       />
