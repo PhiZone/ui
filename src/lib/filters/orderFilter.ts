@@ -56,7 +56,7 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterOrder
         );
       },
       multiple: true,
-      max: 3,
+      max: 5,
       ...options,
     },
     items,

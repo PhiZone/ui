@@ -28,8 +28,12 @@
   highlightFirstItem={false}
   valueAsObject
   placeholder={filter.options?.placeholder ??
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     $t('common.select.placeholder', { item: $t(filter.label) })}
   i18n={{
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     max: (max) => $t('common.select.most', { max }),
     empty: $t('common.select.empty'),
     nomatch: $t('common.select.nomatch'),

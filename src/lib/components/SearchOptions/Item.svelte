@@ -11,12 +11,17 @@
 
   const joinTypes: IFilter['type'][] = ['input', 'input_group', 'select'];
 
-  function enable() {
-    if (!filter.isEnable)
+  const enable = (event: Event) => {
+    const target = event.target as HTMLElement;
+    if (target && target.closest('.no-enable')) {
+      return;
+    }
+    if (!filter.isEnable) {
       setTimeout(() => {
         filter.isEnable = true;
       }, 100);
-  }
+    }
+  };
 </script>
 
 {#if filter}
@@ -47,7 +52,7 @@
     >
       <input
         type="checkbox"
-        class="checkbox border-2 tooltip before:z-10"
+        class="checkbox border-2 tooltip before:z-10 no-enable"
         data-tip={isEnable ? $t('common.disable_option') : $t('common.enable_option')}
         bind:checked={filter.isEnable}
       />

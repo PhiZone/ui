@@ -148,7 +148,11 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.format',
-    value: {},
+    value: {
+      id: 2,
+      label: 'chart.formats.2',
+      value: 2,
+    },
     param: 'RangeFormat',
     items: [
       {
@@ -191,7 +195,11 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.level_type',
-    value: {},
+    value: {
+      id: 0,
+      label: 'chart.level_types.0',
+      value: 0,
+    },
     param: 'RangeLevelType',
     items: [
       {
