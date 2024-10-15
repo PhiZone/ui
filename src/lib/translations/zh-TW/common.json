@@ -37,6 +37,7 @@
   "deleted": "已刪除",
   "descending": "降序",
   "description": "簡介",
+  "disable_option": "禁用选项",
   "download": "下載",
   "earliest_date_created": "最早创建时间",
   "earliest_date_ended": "最早结束时间",
@@ -48,6 +49,7 @@
   "empty": "空空如也……",
   "empty_adj": "空",
   "empty_v": "清空",
+  "enable_option": "启用选项",
   "ends_at": "结束于 {{date}}",
   "entries_per_page": "每页条目数量",
   "error": "錯誤",
@@ -174,6 +176,12 @@
   "search": "搜尋",
   "search_options": "搜尋選項",
   "search_placeholder": "搜尋{{resource}}……",
+  "select": {
+    "empty": "无更多选项",
+    "max": "最多选择 {{max}} 项",
+    "nomatch": "无匹配的选项",
+    "placeholder": "请选择{{item}}"
+  },
   "select_file": "選取檔案",
   "semicolon": "；",
   "send": "傳送",

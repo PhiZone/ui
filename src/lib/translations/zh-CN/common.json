@@ -178,7 +178,7 @@
   "search_placeholder": "搜索{{resource}}……",
   "select": {
     "empty": "无更多选项",
-    "max": "最多选择{{max}}项",
+    "max": "最多选择 {{max}} 项",
     "nomatch": "无匹配的选项",
     "placeholder": "请选择{{item}}"
   },
