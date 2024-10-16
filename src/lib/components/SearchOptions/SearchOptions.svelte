@@ -19,7 +19,7 @@
     storeFilterValue(type, data);
   }
 
-  let open = true;
+  let open = false;
 </script>
 
 <div

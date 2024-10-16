@@ -1,13 +1,158 @@
 import type { IFilters, OrderItem } from './types';
 
 export const chartOrderItems: OrderItem[] = [
-  { label: 'chart.score', field: 'score' },
-  { label: 'chart.rating', field: 'rating' },
-  { label: 'chart.difficulty', field: 'difficulty' },
-  { label: 'common.like_count', field: 'likeCount' },
-  { label: 'common.play_count', field: 'playCount' },
-  { label: 'common.date_created', field: 'dateCreated' },
-  { label: 'common.date_updated', field: 'dateUpdated' },
+  {
+    label: 'chart.title',
+    field: 'Title',
+  },
+  {
+    label: 'chart.level_type',
+    field: 'LevelType',
+  },
+  {
+    label: 'chart.level',
+    field: 'Level',
+  },
+  {
+    label: 'chart.difficulty',
+    field: 'Difficulty',
+  },
+  {
+    label: 'chart.format',
+    field: 'Format',
+  },
+  {
+    label: 'chart.file',
+    field: 'File',
+  },
+  {
+    label: 'chart.file_checksum',
+    field: 'FileChecksum',
+  },
+  {
+    label: 'common.author_name',
+    field: 'AuthorName',
+  },
+  {
+    label: 'chart.illustration',
+    field: 'Illustration',
+  },
+  {
+    label: 'common.illustrator',
+    field: 'Illustrator',
+  },
+  {
+    label: 'chart.is_ranked',
+    field: 'IsRanked',
+  },
+  {
+    label: 'chart.note_count',
+    field: 'NoteCount',
+  },
+  {
+    label: 'chart.score',
+    field: 'Score',
+  },
+  {
+    label: 'chart.rating',
+    field: 'Rating',
+  },
+  {
+    label: 'chart.r_arrangement',
+    field: 'RatingOnArrangement',
+  },
+  {
+    label: 'chart.r_gameplay',
+    field: 'RatingOnGameplay',
+  },
+  {
+    label: 'chart.r_visual_effects',
+    field: 'RatingOnVisualEffects',
+  },
+  {
+    label: 'chart.r_creativity',
+    field: 'RatingOnCreativity',
+  },
+  {
+    label: 'chart.r_concord',
+    field: 'RatingOnConcord',
+  },
+  {
+    label: 'chart.r_impression',
+    field: 'RatingOnImpression',
+  },
+  {
+    label: 'chart.song_id',
+    field: 'SongId',
+  },
+  {
+    label: 'chart.song',
+    field: 'Song',
+  },
+  {
+    label: 'common.play_count',
+    field: 'PlayCount',
+  },
+  {
+    label: 'chart.tags',
+    field: 'Tags',
+  },
+  {
+    label: 'chart.assets',
+    field: 'Assets',
+  },
+  {
+    label: 'chart.date_file_updated',
+    field: 'DateFileUpdated',
+  },
+  {
+    label: 'chart.event_presences',
+    field: 'EventPresences',
+  },
+  {
+    label: 'common.description',
+    field: 'Description',
+  },
+  {
+    label: 'common.accessibility',
+    field: 'Accessibility',
+  },
+  {
+    label: 'common.is_hidden',
+    field: 'IsHidden',
+  },
+  {
+    label: 'common.is_locked',
+    field: 'IsLocked',
+  },
+  {
+    label: 'common.date_updated',
+    field: 'DateUpdated',
+  },
+  {
+    label: 'common.like_count',
+    field: 'LikeCount',
+  },
+  {
+    label: 'chart.likes',
+    field: 'Likes',
+  },
+  {
+    label: 'common.owner_id',
+    field: 'OwnerId',
+  },
+  {
+    label: 'chart.owner',
+    field: 'Owner',
+  },
+  {
+    label: 'chart.id',
+    field: 'Id',
+  },
+  {
+    label: 'common.date_created',
+    field: 'DateCreated',
+  },
 ];
 
 export const chartFilters: IFilters = [
@@ -38,10 +183,6 @@ export const chartFilters: IFilters = [
       {
         label: 'common.accessibilities.0',
         value: 0,
-      },
-      {
-        label: 'common.accessibilities.1',
-        value: 1,
       },
       {
         label: 'common.accessibilities.2',
@@ -148,12 +289,11 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.format',
-    value: {
-      id: 2,
-      label: 'chart.formats.2',
-      value: 2,
-    },
+    value: [],
     param: 'RangeFormat',
+    options: {
+      multiple: true,
+    },
     items: [
       {
         id: 0,
@@ -195,12 +335,11 @@ export const chartFilters: IFilters = [
   {
     type: 'select',
     label: 'chart.level_type',
-    value: {
-      id: 0,
-      label: 'chart.level_types.0',
-      value: 0,
-    },
+    value: [],
     param: 'RangeLevelType',
+    options: {
+      multiple: true,
+    },
     items: [
       {
         id: 0,
@@ -301,7 +440,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'EarliestDateCreated',
         options: {
-          inputType: 'date',
+          inputType: 'text',
           placeholder: 'common.earliest_date_created',
         },
       },
@@ -309,7 +448,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'LatestDateCreated',
         options: {
-          inputType: 'date',
+          inputType: 'text',
           placeholder: 'common.latest_date_created',
         },
       },
@@ -323,7 +462,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'EarliestDateUpdated',
         options: {
-          inputType: 'date',
+          inputType: 'text',
           placeholder: 'common.earliest_date_updated',
         },
       },
@@ -331,7 +470,7 @@ export const chartFilters: IFilters = [
         value: '',
         param: 'LatestDateUpdated',
         options: {
-          inputType: 'date',
+          inputType: 'text',
           placeholder: 'common.latest_date_updated',
         },
       },

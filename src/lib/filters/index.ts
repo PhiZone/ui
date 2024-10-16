@@ -170,7 +170,7 @@ export const generateParams = (data: Data) => {
       });
     } else if (value instanceof Array) {
       value.forEach((v) => {
-        if (typeof v === 'object' && v.value) params.append(param, v.value.toString());
+        if (typeof v === 'object' && 'value' in v) params.append(param, v.value.toString());
         else if (v) params.append(param, v.toString());
       });
     } else {
