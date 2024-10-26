@@ -1,9 +1,9 @@
 {
   "account": "Account",
   "account_inheritance": {
-    "code": "引继码",
-    "success": "账号引继成功！",
-    "title": "引继 Phigrim 账号"
+    "code": "Hand-over Code",
+    "success": "Successful account hand-over!",
+    "title": "Hand-over from Phigrim Account"
   },
   "avatar": "Avatar",
   "best_records": "Best Records",
@@ -22,7 +22,6 @@
     "2": "Female"
   },
   "id": "User ID",
-  "inheritance": {},
   "language": "Language",
   "last_login": "Last Login",
   "linked_accounts": "Linked Accounts",
