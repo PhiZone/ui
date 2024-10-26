@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.title')}</title>
+  <title>{$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $headline.isSuccess}
@@ -55,7 +55,7 @@
   <div class="w-5/6 max-w-4xl form-control text-center py-32 z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />
-      <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.title')}</h1>
+      <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.site_name')}</h1>
       <p class="mb-5 sm:text-lg">
         {$t('home.description')}
       </p>

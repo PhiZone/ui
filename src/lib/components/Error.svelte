@@ -10,7 +10,7 @@
 
 <svelte:head>
   <title>
-    {error.httpStatus} | {$t('common.title')}
+    {error.httpStatus} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

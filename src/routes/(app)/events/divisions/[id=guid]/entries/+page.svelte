@@ -62,7 +62,7 @@
 <svelte:head>
   <title>
     {$t('event.division.entries')} | {$t('event.event')} - {$event.data?.data.title} ({$division
-      .data?.data.title}) | {$t('common.title')}
+      .data?.data.title}) | {$t('common.site_name')}
   </title>
 </svelte:head>
 

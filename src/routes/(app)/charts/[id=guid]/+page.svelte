@@ -125,7 +125,7 @@
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
-    | {$t('common.title')}
+    | {$t('common.site_name')}
   </title>
 </svelte:head>
 

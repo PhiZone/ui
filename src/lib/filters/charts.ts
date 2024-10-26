@@ -22,20 +22,8 @@ export const chartOrderItems: OrderItem[] = [
     field: 'Format',
   },
   {
-    label: 'chart.file',
-    field: 'File',
-  },
-  {
-    label: 'chart.file_checksum',
-    field: 'FileChecksum',
-  },
-  {
     label: 'common.author_name',
     field: 'AuthorName',
-  },
-  {
-    label: 'chart.illustration',
-    field: 'Illustration',
   },
   {
     label: 'common.illustrator',
@@ -82,32 +70,12 @@ export const chartOrderItems: OrderItem[] = [
     field: 'RatingOnImpression',
   },
   {
-    label: 'chart.song_id',
-    field: 'SongId',
-  },
-  {
-    label: 'chart.song',
-    field: 'Song',
-  },
-  {
     label: 'common.play_count',
     field: 'PlayCount',
   },
   {
-    label: 'chart.tags',
-    field: 'Tags',
-  },
-  {
-    label: 'chart.assets',
-    field: 'Assets',
-  },
-  {
-    label: 'chart.date_file_updated',
+    label: 'common.date_file_updated',
     field: 'DateFileUpdated',
-  },
-  {
-    label: 'chart.event_presences',
-    field: 'EventPresences',
   },
   {
     label: 'common.description',
@@ -132,22 +100,6 @@ export const chartOrderItems: OrderItem[] = [
   {
     label: 'common.like_count',
     field: 'LikeCount',
-  },
-  {
-    label: 'chart.likes',
-    field: 'Likes',
-  },
-  {
-    label: 'common.owner_id',
-    field: 'OwnerId',
-  },
-  {
-    label: 'chart.owner',
-    field: 'Owner',
-  },
-  {
-    label: 'chart.id',
-    field: 'Id',
   },
   {
     label: 'common.date_created',

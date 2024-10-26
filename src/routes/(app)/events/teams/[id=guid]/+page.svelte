@@ -96,7 +96,7 @@
   <title>
     {$t('event.team.team')} -
     {$team.isSuccess ? $team.data.data.name : ''}
-    | {$t('event.event')} | {$t('common.title')}
+    | {$t('event.event')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

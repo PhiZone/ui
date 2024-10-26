@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.title')}</title>
+  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $song.isSuccess}

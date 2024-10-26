@@ -226,7 +226,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.studio')} - {$t('studio.edit_song')} | {$t('common.title')}</title>
+  <title>{$t('common.studio')} - {$t('studio.edit_song')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />

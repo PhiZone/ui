@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('user.user')} - {$user.data?.data.userName ?? ''} | {$t('common.title')}</title>
+  <title>{$t('user.user')} - {$user.data?.data.userName ?? ''} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $user.isSuccess}

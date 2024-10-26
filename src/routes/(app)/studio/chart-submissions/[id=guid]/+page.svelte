@@ -155,7 +155,7 @@
       $submission.data?.data.song?.title ??
       $submission.data?.data.songSubmission?.title}
     [{$submission.data?.data.level}
-    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.title')}
+    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.site_name')}
   </title>
 </svelte:head>
 

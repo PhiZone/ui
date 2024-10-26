@@ -1,34 +1,57 @@
-import { chartFilters, chartOrderItems } from './chartFilters';
-import { orderFilter } from './orderFilter';
-import { songFilters, songOrderItems } from './songFilters';
-import { testFilters, testOrderItems } from './testFilters';
 import type { IFilterSelectItem, IFilter, IFilterOrder, IFilterOrderItem, IFilters } from './types';
+import { orderFilter } from './order';
+import { applicationFilters, applicationOrderItems } from './applications';
+import { chapterFilters, chapterOrderItems } from './chapters';
+import { chartFilters, chartOrderItems } from './charts';
+import { chartSubmissionFilters, chartSubmissionOrderItems } from './chartSubmissions';
+import { collectionFilters, collectionOrderItems } from './collections';
+import { eventFilters, eventOrderItems } from './events';
+import { recordFilters, recordOrderItems } from './records';
+import { resourceRecordFilters, resourceRecordOrderItems } from './resourceRecords';
+import { serviceScriptFilters, serviceScriptOrderItems } from './serviceScripts';
+import { songFilters, songOrderItems } from './songs';
+import { songSubmissionFilters, songSubmissionOrderItems } from './songSubmissions';
+import { userFilters, userOrderItems } from './users';
+import { testFilters, testOrderItems } from './testFilters';
+import { PAGINATION_PER_PAGE } from '$lib/constants';
 export const searchFilters = {
+  applications: applicationFilters,
+  chapters: chapterFilters,
   charts: chartFilters,
+  chartSubmissions: chartSubmissionFilters,
+  collections: collectionFilters,
+  events: eventFilters,
+  records: recordFilters,
+  resourceRecords: resourceRecordFilters,
+  serviceScripts: serviceScriptFilters,
   songs: songFilters,
-  users: [],
-  events: [],
-  chapters: [],
-  collections: [],
+  songSubmissions: songSubmissionFilters,
+  users: userFilters,
   test: testFilters,
 };
 
 export type SearchFilterType = keyof typeof searchFilters;
 
 export const orders = {
+  applications: applicationOrderItems,
+  chapters: chapterOrderItems,
   charts: chartOrderItems,
+  chartSubmissions: chartSubmissionOrderItems,
+  collections: collectionOrderItems,
+  events: eventOrderItems,
+  records: recordOrderItems,
+  resourceRecords: resourceRecordOrderItems,
+  serviceScripts: serviceScriptOrderItems,
   songs: songOrderItems,
-  users: [],
-  events: [],
-  chapters: [],
-  collections: [],
+  songSubmissions: songSubmissionOrderItems,
+  users: userOrderItems,
   test: testOrderItems,
 };
 
 const perPageFilter: IFilter = {
   type: 'input',
   label: 'common.entries_per_page',
-  value: 30,
+  value: PAGINATION_PER_PAGE,
   param: 'PerPage',
   options: {
     inputType: 'number',
@@ -86,7 +109,7 @@ export const setFilterValue = (filters: IFilters, data: Data) => {
 };
 
 export const getFullFilters = (type: keyof typeof searchFilters, fromLocalStorage = true) => {
-  const filters = [orderFilter(chartOrderItems), perPageFilter, ...searchFilters[type]];
+  const filters = [orderFilter(orders[type]), perPageFilter, ...searchFilters[type]];
 
   if (fromLocalStorage && typeof localStorage !== 'undefined') {
     const storage = JSON.parse(localStorage.getItem('searchFilters') ?? '{}')[type];

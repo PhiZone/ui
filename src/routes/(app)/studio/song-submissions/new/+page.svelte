@@ -188,7 +188,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.title')}</title>
+  <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <!-- {#if illustrationCropping}

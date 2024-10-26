@@ -98,7 +98,7 @@
   <title>
     {$t('common.edit_info')} | {$t('event.team.team')} -
     {team.name}
-    | {$t('event.event')} | {$t('common.title')}
+    | {$t('event.event')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />

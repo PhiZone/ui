@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.tag')} - #{$tag.data?.data.normalizedName} | {$t('common.title')}</title>
+  <title>{$t('common.tag')} - #{$tag.data?.data.normalizedName} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $tag.isSuccess}

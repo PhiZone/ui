@@ -93,7 +93,7 @@
 </script>
 
 <svelte:head>
-  <title>示例谱面评分征集 | {$t('common.title')}</title>
+  <title>示例谱面评分征集 | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if data.official !== null}

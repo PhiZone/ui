@@ -23,7 +23,7 @@ export const orderFilter = (orderItems: OrderItem[], options = {}): IFilterOrder
       id: field,
       value: {
         field,
-        desc: true,
+        desc: false,
       },
     });
   });
