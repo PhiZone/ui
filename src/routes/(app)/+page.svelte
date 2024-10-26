@@ -2,8 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
-  import SearchOptions from '$lib/components/SearchOptions/SearchOptions.svelte';
-  import { getFullFilters } from '$lib/filters';
+  import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
   import type { SearchFilterType } from '$lib/filters';
 
   export let data;
@@ -14,7 +13,6 @@
   let text = '';
 
   let searchParams = new URLSearchParams();
-  $: filters = getFullFilters(type, true);
 
   $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 
@@ -89,8 +87,8 @@
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>
       </div>
-      {#key filters}
-        <SearchOptions {type} {filters} bind:params={searchParams} />
+      {#key type}
+        <SearchOptions {type} bind:params={searchParams} />
       {/key}
     </form>
   </div>

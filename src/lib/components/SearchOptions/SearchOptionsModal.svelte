@@ -2,15 +2,13 @@
   import { t } from '$lib/translations/config';
   import Item from './Item.svelte';
 
-  import type { IFilters } from '$lib/filters/types';
-  import { generateParams, getFilterValue, storeFilterValue } from '$lib/filters';
+  import { generateParams, getFilterValue, getFullFilters, storeFilterValue } from '$lib/filters';
   import type { SearchFilterType } from '$lib/filters';
 
   export let type: SearchFilterType;
-  export let filters: IFilters;
   export let params: URLSearchParams = new URLSearchParams();
 
-  $: filters;
+  $: filters = getFullFilters(type, true);
   $: data = getFilterValue(filters);
 
   $: {
@@ -22,16 +20,19 @@
   let open = false;
 </script>
 
-<div
-  class="collapse collapse-arrow bg-base-100 my-4 rounded-box w-full self-center border-2 normal-border transition"
-  class:hover:border-secondary={!open}
->
-  <input type="checkbox" bind:checked={open} />
-  <div class="collapse-title texl-xl bg-base-200">
-    {$t('common.search_options')}
-  </div>
-  <div class="collapse-content px-0 md:px-4 max-h-[50vh] overflow-y-auto">
-    <div class="form-control items-stretch w-full">
+<input type="checkbox" id="search-options-{type}" class="modal-toggle" bind:checked={open} />
+<div class="modal">
+  <div class="modal-box text-left">
+    <label
+      for="search-options-{type}"
+      class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
+    >
+      ✕
+    </label>
+    <div class="font-bold text-lg">
+      {$t('common.search_options')}
+    </div>
+    <div class="form-control items-stretch w-full py-4 px-0 md:px-4 max-h-[50vh] overflow-y-auto">
       {#each filters as filter}
         {#if filter instanceof Array}
           <div class="flex flex-wrap md:flex-nowrap items-center gap-x-0 md:gap-x-5">
