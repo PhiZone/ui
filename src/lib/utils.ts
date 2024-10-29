@@ -423,3 +423,16 @@ export const convertToParsedQuery = (
 
   return parsed as ParsedQuery<string | number | boolean>;
 };
+
+export const snakeToCamel = (input: string) => {
+  const arr = input.split('_');
+
+  return arr
+    .map((word, index) => {
+      if (index !== 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      return word;
+    })
+    .join('');
+};

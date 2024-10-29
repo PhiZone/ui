@@ -97,6 +97,12 @@ body {
   grid-row-start: 1;
 }
 
+.collapse-transition {
+  transition-property: grid-template-rows, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms, 150ms;
+}
+
 .richtext-link {
   @apply text-emerald-800 dark:text-emerald-200 hover:underline;
 }

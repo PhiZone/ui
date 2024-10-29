@@ -4,37 +4,16 @@
   import { goto } from '$app/navigation';
   import SearchOptions from './SearchOptions/SearchOptionsModal.svelte';
   import type { SearchFilterType } from '$lib/filters';
-  import { convertToParsedQuery } from '$lib/utils';
+  import { convertToParsedQuery, snakeToCamel } from '$lib/utils';
 
   export let name: string;
   export let pageName = 'page';
   export let searchParams: ParsedQuery<string | number | boolean>;
 
   let text = '';
-  let filterType: SearchFilterType = 'charts';
   let params = new URLSearchParams();
 
-  const isAllowedType = (value: string): value is SearchFilterType => {
-    console.log(value);
-    return [
-      'applications',
-      'chapters',
-      'charts',
-      'chartSubmissions',
-      'collections',
-      'events',
-      'records',
-      'resourceRecords',
-      'serviceScripts',
-      'songs',
-      'songSubmissions',
-      'users',
-    ].includes(value);
-  };
-
-  if (isAllowedType(name)) {
-    filterType = name;
-  }
+  $: filterType = snakeToCamel(name.split('.').pop() ?? '') as SearchFilterType;
 
   const getSearch = (text: string) => {
     if (params.size > 0) searchParams = convertToParsedQuery(params);
@@ -42,16 +21,16 @@
   };
 </script>
 
-<SearchOptions type={filterType} bind:params />
 <form
   class="form-control"
   on:submit|preventDefault={() => {
     goto(`?${getSearch(text)}`);
   }}
 >
+  <SearchOptions type={filterType} bind:params />
   <div class="join text-sm lg:text-md">
     <label
-      for="search-options-{name}"
+      for="search-options-{filterType}"
       class="btn btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
     >
       <i class="fa-solid fa-filter fa-lg"></i>

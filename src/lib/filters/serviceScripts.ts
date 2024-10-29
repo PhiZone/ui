@@ -6,7 +6,7 @@ export const serviceScriptOrderItems: OrderItem[] = [
     field: 'Name',
   },
   {
-    label: 'service_script.target_type',
+    label: 'service.target_type',
     field: 'TargetType',
   },
   {
@@ -14,7 +14,7 @@ export const serviceScriptOrderItems: OrderItem[] = [
     field: 'Description',
   },
   {
-    label: 'service_script.code',
+    label: 'service.code',
     field: 'Code',
   },
   {
@@ -29,20 +29,20 @@ export const serviceScriptOrderItems: OrderItem[] = [
 export const serviceScriptFilters: IFilters = [
   {
     type: 'radio',
-    label: 'service_script.target_type',
+    label: 'service.target_type',
     value: '',
     param: 'RangeTargetType',
     items: [
       {
-        label: 'service_script.target_types.0',
+        label: 'service.target_types.0',
         value: 0,
       },
       {
-        label: 'service_script.target_types.1',
+        label: 'service.target_types.1',
         value: 1,
       },
       {
-        label: 'service_script.target_types.2',
+        label: 'service.target_types.2',
         value: 2,
       },
     ],
