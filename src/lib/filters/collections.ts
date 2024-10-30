@@ -42,6 +42,7 @@ export const collectionOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const collectionFilters: IFilters = [
   {
     type: 'toggle',

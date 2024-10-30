@@ -40,7 +40,7 @@
     "add_collection": "關聯合集",
     "add_composer": "關聯曲師",
     "adjust_offset": "Click here to adjust the chart's offset",
-    "adm_status": "收錄狀態",
+    "admission_status": "收錄狀態",
     "author_placeholder": "僅整數；對應用戶須已認證",
     "bpm_placeholder": "若 BPM 有變化，按“最低BPM~最高BPM (主要BPM)”格式填寫，注意空格，所有符號須為半形",
     "chapters": "收錄章節",

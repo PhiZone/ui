@@ -2,7 +2,7 @@ import type { IFilters, OrderItem } from './types';
 
 export const recordOrderItems: OrderItem[] = [
   {
-    label: 'record.score',
+    label: 'common.score',
     field: 'Score',
   },
   {
@@ -66,6 +66,7 @@ export const recordOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const recordFilters: IFilters = [
   {
     type: 'toggle',
@@ -103,6 +104,28 @@ export const recordFilters: IFilters = [
         options: {
           inputType: 'text',
           placeholder: 'common.latest_date_created',
+        },
+      },
+    ],
+  },
+  {
+    type: 'input_group',
+    label: 'common.score',
+    items: [
+      {
+        value: '',
+        param: 'MinScore',
+        options: {
+          inputType: 'number',
+          placeholder: 'common.lowest_score',
+        },
+      },
+      {
+        value: '',
+        param: 'MaxScore',
+        options: {
+          inputType: 'number',
+          placeholder: 'common.highest_score',
         },
       },
     ],
@@ -311,28 +334,6 @@ export const recordFilters: IFilters = [
         options: {
           inputType: 'number',
           placeholder: 'record.highest_rks',
-        },
-      },
-    ],
-  },
-  {
-    type: 'input_group',
-    label: 'record.score',
-    items: [
-      {
-        value: '',
-        param: 'MinScore',
-        options: {
-          inputType: 'number',
-          placeholder: 'record.lowest_score',
-        },
-      },
-      {
-        value: '',
-        param: 'MaxScore',
-        options: {
-          inputType: 'number',
-          placeholder: 'record.highest_score',
         },
       },
     ],

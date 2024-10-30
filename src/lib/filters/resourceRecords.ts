@@ -2,7 +2,7 @@ import type { IFilters, OrderItem } from './types';
 
 export const resourceRecordOrderItems: OrderItem[] = [
   {
-    label: 'resource_record.type',
+    label: 'common.type',
     field: 'Type',
   },
   {
@@ -46,10 +46,11 @@ export const resourceRecordOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const resourceRecordFilters: IFilters = [
   {
     type: 'radio',
-    label: 'resource_record.type',
+    label: 'common.type',
     value: '',
     param: 'RangeType',
     items: [

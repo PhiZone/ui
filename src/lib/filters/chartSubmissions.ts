@@ -2,23 +2,23 @@ import type { IFilters, OrderItem } from './types';
 
 export const chartSubmissionOrderItems: OrderItem[] = [
   {
-    label: 'chart_submission.title',
+    label: 'chart.title',
     field: 'Title',
   },
   {
-    label: 'chart_submission.level_type',
+    label: 'chart.level_type',
     field: 'LevelType',
   },
   {
-    label: 'chart_submission.level',
+    label: 'chart.level',
     field: 'Level',
   },
   {
-    label: 'chart_submission.difficulty',
+    label: 'chart.difficulty',
     field: 'Difficulty',
   },
   {
-    label: 'chart_submission.format',
+    label: 'chart.format',
     field: 'Format',
   },
   {
@@ -30,19 +30,19 @@ export const chartSubmissionOrderItems: OrderItem[] = [
     field: 'Illustrator',
   },
   {
-    label: 'chart_submission.is_ranked',
+    label: 'chart.is_ranked',
     field: 'IsRanked',
   },
   {
-    label: 'chart_submission.note_count',
+    label: 'chart.note_count',
     field: 'NoteCount',
   },
   {
-    label: 'chart_submission.volunteer_status',
+    label: 'studio.submission.volunteer_status',
     field: 'VolunteerStatus',
   },
   {
-    label: 'chart_submission.admission_status',
+    label: 'studio.submission.admission_status',
     field: 'AdmissionStatus',
   },
   {
@@ -54,7 +54,7 @@ export const chartSubmissionOrderItems: OrderItem[] = [
     field: 'Accessibility',
   },
   {
-    label: 'chart_submission.status',
+    label: 'common.status',
     field: 'Status',
   },
   {
@@ -74,69 +74,9 @@ export const chartSubmissionOrderItems: OrderItem[] = [
 export const chartSubmissionFilters: IFilters = [
   {
     type: 'toggle',
-    label: 'chart_submission.is_ranked',
+    label: 'chart.is_ranked',
     value: false,
     param: 'IsRanked',
-  },
-  {
-    type: 'radio',
-    label: 'chart_submission.admission_status',
-    value: '',
-    param: 'RangeAdmissionStatus',
-    items: [
-      {
-        label: 'chart_submission.admission_statuses.0',
-        value: 0,
-      },
-      {
-        label: 'chart_submission.admission_statuses.1',
-        value: 1,
-      },
-      {
-        label: 'chart_submission.admission_statuses.2',
-        value: 2,
-      },
-    ],
-  },
-  {
-    type: 'radio',
-    label: 'chart_submission.status',
-    value: '',
-    param: 'RangeStatus',
-    items: [
-      {
-        label: 'chart_submission.statuses.0',
-        value: 0,
-      },
-      {
-        label: 'chart_submission.statuses.1',
-        value: 1,
-      },
-      {
-        label: 'chart_submission.statuses.2',
-        value: 2,
-      },
-    ],
-  },
-  {
-    type: 'radio',
-    label: 'chart_submission.volunteer_status',
-    value: '',
-    param: 'RangeVolunteerStatus',
-    items: [
-      {
-        label: 'chart_submission.volunteer_statuses.0',
-        value: 0,
-      },
-      {
-        label: 'chart_submission.volunteer_statuses.1',
-        value: 1,
-      },
-      {
-        label: 'chart_submission.volunteer_statuses.2',
-        value: 2,
-      },
-    ],
   },
   {
     type: 'radio',
@@ -155,8 +95,68 @@ export const chartSubmissionFilters: IFilters = [
     ],
   },
   {
+    type: 'radio',
+    label: 'common.status',
+    value: '',
+    param: 'RangeStatus',
+    items: [
+      {
+        label: 'studio.submission.statuses.0',
+        value: 0,
+      },
+      {
+        label: 'studio.submission.statuses.1',
+        value: 1,
+      },
+      {
+        label: 'studio.submission.statuses.2',
+        value: 2,
+      },
+    ],
+  },
+  {
+    type: 'radio',
+    label: 'studio.submission.admission_status',
+    value: '',
+    param: 'RangeAdmissionStatus',
+    items: [
+      {
+        label: 'studio.submission.statuses.0',
+        value: 0,
+      },
+      {
+        label: 'studio.submission.statuses.1',
+        value: 1,
+      },
+      {
+        label: 'studio.submission.statuses.2',
+        value: 2,
+      },
+    ],
+  },
+  {
+    type: 'radio',
+    label: 'studio.submission.volunteer_status',
+    value: '',
+    param: 'RangeVolunteerStatus',
+    items: [
+      {
+        label: 'studio.submission.statuses.0',
+        value: 0,
+      },
+      {
+        label: 'studio.submission.statuses.1',
+        value: 1,
+      },
+      {
+        label: 'studio.submission.statuses.2',
+        value: 2,
+      },
+    ],
+  },
+  {
     type: 'slider',
-    label: 'chart_submission.difficulty',
+    label: 'chart.difficulty',
     value: [12.0, 16.0],
     param: ['MinDifficulty', 'MaxDifficulty'],
     options: {
@@ -168,7 +168,7 @@ export const chartSubmissionFilters: IFilters = [
   },
   {
     type: 'select',
-    label: 'chart_submission.format',
+    label: 'chart.format',
     value: [],
     param: 'RangeFormat',
     options: {
@@ -177,44 +177,44 @@ export const chartSubmissionFilters: IFilters = [
     items: [
       {
         id: 0,
-        label: 'chart_submission.formats.0',
+        label: 'chart.formats.0',
         value: 0,
       },
       {
         id: 1,
-        label: 'chart_submission.formats.1',
+        label: 'chart.formats.1',
         value: 1,
       },
       {
         id: 2,
-        label: 'chart_submission.formats.2',
+        label: 'chart.formats.2',
         value: 2,
       },
       {
         id: 3,
-        label: 'chart_submission.formats.3',
+        label: 'chart.formats.3',
         value: 3,
       },
       {
         id: 4,
-        label: 'chart_submission.formats.4',
+        label: 'chart.formats.4',
         value: 4,
       },
     ],
   },
   {
     type: 'input',
-    label: 'chart_submission.level',
+    label: 'chart.level',
     value: '',
     param: 'ContainsLevel',
     options: {
       inputType: 'text',
-      placeholder: 'chart_submission.level',
+      placeholder: 'chart.level',
     },
   },
   {
     type: 'select',
-    label: 'chart_submission.level_type',
+    label: 'chart.level_type',
     value: [],
     param: 'RangeLevelType',
     options: {
@@ -223,41 +223,41 @@ export const chartSubmissionFilters: IFilters = [
     items: [
       {
         id: 0,
-        label: 'chart_submission.level_types.0',
+        label: 'chart.level_types.0',
         value: 0,
       },
       {
         id: 1,
-        label: 'chart_submission.level_types.1',
+        label: 'chart.level_types.1',
         value: 1,
       },
       {
         id: 2,
-        label: 'chart_submission.level_types.2',
+        label: 'chart.level_types.2',
         value: 2,
       },
       {
         id: 3,
-        label: 'chart_submission.level_types.3',
+        label: 'chart.level_types.3',
         value: 3,
       },
       {
         id: 4,
-        label: 'chart_submission.level_types.4',
+        label: 'chart.level_types.4',
         value: 4,
       },
     ],
   },
   {
     type: 'input_group',
-    label: 'chart_submission.note_count',
+    label: 'chart.note_count',
     items: [
       {
         value: '',
         param: 'MinNoteCount',
         options: {
           inputType: 'number',
-          placeholder: 'chart_submission.lowest_note_count',
+          placeholder: 'chart.lowest_note_count',
         },
       },
       {
@@ -265,19 +265,19 @@ export const chartSubmissionFilters: IFilters = [
         param: 'MaxNoteCount',
         options: {
           inputType: 'number',
-          placeholder: 'chart_submission.highest_note_count',
+          placeholder: 'chart.highest_note_count',
         },
       },
     ],
   },
   {
     type: 'input',
-    label: 'chart_submission.title',
+    label: 'chart.title',
     value: '',
     param: 'ContainsTitle',
     options: {
       inputType: 'text',
-      placeholder: 'chart_submission.title',
+      placeholder: 'chart.title',
     },
   },
   {

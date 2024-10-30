@@ -636,7 +636,7 @@
               {/if}
               <p>
                 <span class="badge mr-1">
-                  {$t('studio.submission.adm_status')}
+                  {$t('studio.submission.admission_status')}
                 </span>
                 {$t(`studio.submission.statuses.${submission.admissionStatus}`)}
               </p>

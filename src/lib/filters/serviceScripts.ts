@@ -14,10 +14,6 @@ export const serviceScriptOrderItems: OrderItem[] = [
     field: 'Description',
   },
   {
-    label: 'service.code',
-    field: 'Code',
-  },
-  {
     label: 'common.date_updated',
     field: 'DateUpdated',
   },
@@ -26,6 +22,7 @@ export const serviceScriptOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const serviceScriptFilters: IFilters = [
   {
     type: 'radio',

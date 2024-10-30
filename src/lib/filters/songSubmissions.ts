@@ -2,15 +2,15 @@ import type { IFilters, OrderItem } from './types';
 
 export const songSubmissionOrderItems: OrderItem[] = [
   {
-    label: 'song_submission.title',
+    label: 'song.title',
     field: 'Title',
   },
   {
-    label: 'song_submission.edition_type',
+    label: 'song.edition_type',
     field: 'EditionType',
   },
   {
-    label: 'song_submission.edition',
+    label: 'song.edition',
     field: 'Edition',
   },
   {
@@ -22,31 +22,31 @@ export const songSubmissionOrderItems: OrderItem[] = [
     field: 'Illustrator',
   },
   {
-    label: 'song_submission.bpm',
+    label: 'song.bpm',
     field: 'Bpm',
   },
   {
-    label: 'song_submission.min_bpm',
+    label: 'song.min_bpm',
     field: 'MinBpm',
   },
   {
-    label: 'song_submission.max_bpm',
+    label: 'song.max_bpm',
     field: 'MaxBpm',
   },
   {
-    label: 'song_submission.offset',
+    label: 'song.offset',
     field: 'Offset',
   },
   {
-    label: 'song_submission.originality_proof',
+    label: 'studio.submission.originality_proof',
     field: 'OriginalityProof',
   },
   {
-    label: 'song_submission.duration',
+    label: 'song.duration',
     field: 'Duration',
   },
   {
-    label: 'song_submission.message',
+    label: 'studio.submission.message',
     field: 'Message',
   },
   {
@@ -58,7 +58,7 @@ export const songSubmissionOrderItems: OrderItem[] = [
     field: 'Accessibility',
   },
   {
-    label: 'song_submission.status',
+    label: 'common.status',
     field: 'Status',
   },
   {
@@ -74,6 +74,7 @@ export const songSubmissionOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const songSubmissionFilters: IFilters = [
   {
     type: 'radio',
@@ -97,20 +98,20 @@ export const songSubmissionFilters: IFilters = [
   },
   {
     type: 'radio',
-    label: 'song_submission.status',
+    label: 'common.status',
     value: '',
     param: 'RangeStatus',
     items: [
       {
-        label: 'song_submission.statuses.0',
+        label: 'studio.submission.statuses.0',
         value: 0,
       },
       {
-        label: 'song_submission.statuses.1',
+        label: 'studio.submission.statuses.1',
         value: 1,
       },
       {
-        label: 'song_submission.statuses.2',
+        label: 'studio.submission.statuses.2',
         value: 2,
       },
     ],
@@ -191,14 +192,14 @@ export const songSubmissionFilters: IFilters = [
   },
   {
     type: 'input_group',
-    label: 'song_submission.bpm',
+    label: 'song.bpm',
     items: [
       {
         value: '',
         param: 'MinBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.lowest_bpm',
+          placeholder: 'song.lowest_bpm',
         },
       },
       {
@@ -206,21 +207,21 @@ export const songSubmissionFilters: IFilters = [
         param: 'MaxBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.highest_bpm',
+          placeholder: 'song.highest_bpm',
         },
       },
     ],
   },
   {
     type: 'input_group',
-    label: 'song_submission.duration',
+    label: 'song.duration',
     items: [
       {
         value: '',
         param: 'MinDuration',
         options: {
           inputType: 'text',
-          placeholder: 'song_submission.min_duration',
+          placeholder: 'song.min_duration',
         },
       },
       {
@@ -228,24 +229,24 @@ export const songSubmissionFilters: IFilters = [
         param: 'MaxDuration',
         options: {
           inputType: 'text',
-          placeholder: 'song_submission.max_duration',
+          placeholder: 'song.max_duration',
         },
       },
     ],
   },
   {
     type: 'input',
-    label: 'song_submission.edition',
+    label: 'song.edition',
     value: '',
     param: 'ContainsEdition',
     options: {
       inputType: 'text',
-      placeholder: 'song_submission.edition',
+      placeholder: 'song.edition',
     },
   },
   {
     type: 'select',
-    label: 'song_submission.edition_type',
+    label: 'song.edition_type',
     value: [],
     param: 'RangeEditionType',
     options: {
@@ -254,56 +255,56 @@ export const songSubmissionFilters: IFilters = [
     items: [
       {
         id: 0,
-        label: 'song_submission.edition_types.0',
+        label: 'song.edition_types.0',
         value: 0,
       },
       {
         id: 1,
-        label: 'song_submission.edition_types.1',
+        label: 'song.edition_types.1',
         value: 1,
       },
       {
         id: 2,
-        label: 'song_submission.edition_types.2',
+        label: 'song.edition_types.2',
         value: 2,
       },
       {
         id: 3,
-        label: 'song_submission.edition_types.3',
+        label: 'song.edition_types.3',
         value: 3,
       },
       {
         id: 4,
-        label: 'song_submission.edition_types.4',
+        label: 'song.edition_types.4',
         value: 4,
       },
       {
         id: 5,
-        label: 'song_submission.edition_types.5',
+        label: 'song.edition_types.5',
         value: 5,
       },
     ],
   },
   {
     type: 'input',
-    label: 'song_submission.lyrics',
+    label: 'song.lyrics',
     value: '',
     param: 'ContainsLyrics',
     options: {
       inputType: 'text',
-      placeholder: 'song_submission.lyrics',
+      placeholder: 'song.lyrics',
     },
   },
   {
     type: 'input_group',
-    label: 'song_submission.max_bpm',
+    label: 'song.max_bpm',
     items: [
       {
         value: '',
         param: 'MinMaxBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.lowest_max_bpm',
+          placeholder: 'song.lowest_max_bpm',
         },
       },
       {
@@ -311,31 +312,21 @@ export const songSubmissionFilters: IFilters = [
         param: 'MaxMaxBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.highest_max_bpm',
+          placeholder: 'song.highest_max_bpm',
         },
       },
     ],
   },
   {
-    type: 'input',
-    label: 'song_submission.message',
-    value: '',
-    param: 'ContainsMessage',
-    options: {
-      inputType: 'text',
-      placeholder: 'song_submission.message',
-    },
-  },
-  {
     type: 'input_group',
-    label: 'song_submission.min_bpm',
+    label: 'song.min_bpm',
     items: [
       {
         value: '',
         param: 'MinMinBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.lowest_min_bpm',
+          placeholder: 'song.lowest_min_bpm',
         },
       },
       {
@@ -343,21 +334,21 @@ export const songSubmissionFilters: IFilters = [
         param: 'MaxMinBpm',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.highest_min_bpm',
+          placeholder: 'song.highest_min_bpm',
         },
       },
     ],
   },
   {
     type: 'input_group',
-    label: 'song_submission.offset',
+    label: 'song.offset',
     items: [
       {
         value: '',
         param: 'MinOffset',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.lowest_offset',
+          placeholder: 'song.lowest_offset',
         },
       },
       {
@@ -365,19 +356,29 @@ export const songSubmissionFilters: IFilters = [
         param: 'MaxOffset',
         options: {
           inputType: 'number',
-          placeholder: 'song_submission.highest_offset',
+          placeholder: 'song.highest_offset',
         },
       },
     ],
   },
   {
     type: 'input',
-    label: 'song_submission.title',
+    label: 'song.title',
     value: '',
     param: 'ContainsTitle',
     options: {
       inputType: 'text',
-      placeholder: 'song_submission.title',
+      placeholder: 'song.title',
+    },
+  },
+  {
+    type: 'input',
+    label: 'studio.submission.message',
+    value: '',
+    param: 'ContainsMessage',
+    options: {
+      inputType: 'text',
+      placeholder: 'studio.submission.message',
     },
   },
 ];

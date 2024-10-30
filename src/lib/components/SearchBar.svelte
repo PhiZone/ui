@@ -31,7 +31,7 @@
   <div class="join text-sm lg:text-md">
     <label
       for="search-options-{filterType}"
-      class="btn btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
+      class="btn btn-square border-2 normal-border bg-base-100 hover:btn-outline join-item"
     >
       <i class="fa-solid fa-filter fa-lg"></i>
     </label>
@@ -42,12 +42,10 @@
         // @ts-ignore
         resource: $t(name).toLowerCase(),
       })}
-      class="input border-2 normal-border transition hover:input-secondary join-item w-full"
+      class="input border-2 normal-border transition hover:border-inherit join-item w-full"
       bind:value={text}
     />
-    <button
-      class="btn btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
-    >
+    <button class="btn btn-square border-2 normal-border hover:btn-outline bg-base-100 join-item">
       <i class="fa-solid fa-magnifying-glass fa-lg"></i>
     </button>
   </div>

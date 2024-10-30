@@ -2,10 +2,6 @@ import type { IFilters, OrderItem } from './types';
 
 export const userOrderItems: OrderItem[] = [
   {
-    label: 'user.avatar',
-    field: 'Avatar',
-  },
-  {
     label: 'user.gender',
     field: 'Gender',
   },
@@ -58,6 +54,7 @@ export const userOrderItems: OrderItem[] = [
     field: 'UserName',
   },
 ];
+
 export const userFilters: IFilters = [
   {
     type: 'radio',

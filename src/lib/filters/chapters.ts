@@ -42,6 +42,7 @@ export const chapterOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const chapterFilters: IFilters = [
   {
     type: 'toggle',

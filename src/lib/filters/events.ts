@@ -46,6 +46,7 @@ export const eventOrderItems: OrderItem[] = [
     field: 'DateCreated',
   },
 ];
+
 export const eventFilters: IFilters = [
   {
     type: 'toggle',
