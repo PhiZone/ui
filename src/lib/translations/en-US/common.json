@@ -121,9 +121,9 @@
   "image_cropper": "Image Cropper",
   "is_hidden": "Is Hidden",
   "is_locked": "Is Locked",
-  "is_unveiled": "Is Unveiled",
+  "is_unveiled": "Is Public",
   "jump_to": "Jump to",
-  "label": "Label",
+  "label": "Tag",
   "lang": {
     "en-US": "English",
     "ja": "Japanese",
