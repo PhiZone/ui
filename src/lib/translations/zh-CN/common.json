@@ -51,7 +51,7 @@
   "empty_v": "清空",
   "enable_option": "启用选项",
   "ends_at": "结束于 {{date}}",
-  "entries_per_page": "每页条目数量",
+  "entries_per_page": "每页条目数",
   "error": "错误",
   "error_msg": "错误信息：",
   "errors": {
@@ -114,7 +114,7 @@
       "unranked": "游玩该谱后，结算时数据不计入玩家 RKS；谱面审核较为宽松"
     }
   },
-  "highest_like_count": "最高点赞数量",
+  "highest_like_count": "最高点赞数",
   "highest_play_count": "最高游玩次数",
   "illustration": "插画",
   "illustrator": "画师",
@@ -141,9 +141,9 @@
     "privacy_policy": "隐私政策",
     "terms_of_service": "服务条款"
   },
-  "like_count": "点赞数量",
+  "like_count": "点赞数",
   "loading": "加载中……",
-  "lowest_like_count": "最低点赞数量",
+  "lowest_like_count": "最低点赞数",
   "lowest_play_count": "最低游玩次数",
   "manage": "管理",
   "more": "更多",
@@ -191,6 +191,8 @@
   "site_name": "PhiZone",
   "songs": "曲目",
   "source": "来源",
+  "lowest_score": "最低分数",
+  "highest_score": "最高分数",
   "starts_at": "开始于 {{date}}",
   "status": "状态",
   "studio": "创作中心",

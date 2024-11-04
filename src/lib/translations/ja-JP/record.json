@@ -1,5 +1,5 @@
 {
-  "acc": "准确率",
+  "accuracy": "准确率",
   "bad": "Bad",
   "date_played": "游玩时间",
   "full_combo": "全连",

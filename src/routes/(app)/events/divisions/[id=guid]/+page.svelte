@@ -571,7 +571,7 @@
                             <th>#</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            <th>{$t('record.acc')}</th>
+                            <th>{$t('record.accuracy')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
                             <th>{$t('record.bad')}</th>
@@ -654,7 +654,7 @@
                             <th>#</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            <th>{$t('record.acc')}</th>
+                            <th>{$t('record.accuracy')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
                             <th>{$t('record.bad')}</th>

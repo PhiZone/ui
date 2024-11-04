@@ -122,5 +122,8 @@
     "submissions": "稿件",
     "team": "队伍"
   },
-  "teams": "队伍"
+  "teams": "队伍",
+  "date_unveiled": "公布时间",
+  "earliest_date_unveiled": "最早公布时间",
+  "latest_date_unveiled": "最晚公布时间"
 }
