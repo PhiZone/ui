@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.legal.privacy_policy')} | {$t('common.title')}</title>
+  <title>{$t('common.legal.privacy_policy')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <select

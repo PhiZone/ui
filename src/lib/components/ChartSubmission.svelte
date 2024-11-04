@@ -91,7 +91,7 @@
       </p>
       <p class="truncate">
         <span class="badge mr-1">
-          {$t('studio.submission.adm_status')}
+          {$t('studio.submission.admission_status')}
         </span>
         {$t(`studio.submission.statuses.${chart.admissionStatus}`)}
       </p>

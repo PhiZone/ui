@@ -32,7 +32,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('pet.title')} - {$t('pet.subjective')} | {$t('common.title')}</title>
+  <title>{$t('pet.title')} - {$t('pet.subjective')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="page">

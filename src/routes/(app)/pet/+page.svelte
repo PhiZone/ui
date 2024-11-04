@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('pet.title')} | {$t('common.title')}</title>
+  <title>{$t('pet.title')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-300">

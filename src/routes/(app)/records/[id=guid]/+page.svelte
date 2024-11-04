@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('record.record')} | {$t('common.title')}</title>
+  <title>{$t('record.record')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $record.isSuccess}
@@ -60,7 +60,7 @@
               </span>
             </h1>
             <p class="flex gap-1 items-center">
-              <span class="badge">{$t('record.acc')}</span>
+              <span class="badge">{$t('record.accuracy')}</span>
               <span>{(record.accuracy * 100).toFixed(2)}%</span>
             </p>
             <p class="flex gap-1 items-center">

@@ -83,7 +83,7 @@
 <svelte:head>
   <title>
     {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
-      'common.title',
+      'common.site_name',
     )}
   </title>
 </svelte:head>
@@ -571,7 +571,7 @@
                             <th>#</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            <th>{$t('record.acc')}</th>
+                            <th>{$t('record.accuracy')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
                             <th>{$t('record.bad')}</th>
@@ -654,7 +654,7 @@
                             <th>#</th>
                             <th>{$t('record.player')}</th>
                             <th>{$t('common.score')}</th>
-                            <th>{$t('record.acc')}</th>
+                            <th>{$t('record.accuracy')}</th>
                             <th>{$t('record.perfect')}</th>
                             <th>{$t('record.good')}</th>
                             <th>{$t('record.bad')}</th>

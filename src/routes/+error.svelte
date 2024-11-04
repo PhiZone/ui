@@ -8,7 +8,7 @@
 <svelte:head>
   <title>
     {$page.status}
-    {$page.error?.message} | {$t('common.title')}
+    {$page.error?.message} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

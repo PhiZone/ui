@@ -126,7 +126,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.resource_records')} | {$t('common.title')}</title>
+  <title>{$t('common.resource_records')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <input

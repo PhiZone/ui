@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('session.login.login')} | {$t('common.title')}</title>
+  <title>{$t('session.login.login')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-300">

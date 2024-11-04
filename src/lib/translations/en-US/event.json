@@ -1,4 +1,5 @@
 {
+  "date_unveiled": "公布时间",
   "division": {
     "chart_pool": "Chart pool",
     "create_team": "Create Team",
@@ -17,18 +18,19 @@
     },
     "team_count": "Number of Teams",
     "types": {
-      "0": "Composition",
-      "1": "Charting",
+      "0": "Composer",
+      "1": "Chart Designer",
       "2": "Play"
     }
   },
   "divisions": "Divisions",
+  "earliest_date_unveiled": "最早公布时间",
   "event": "Event",
   "host_team": "Host Team",
   "hostship": {
     "already_joined": "You have already joined the host team for this event.",
     "index": "Index",
-    "invite_description": "Use an invitation code to invite others to the host team. The code will expire in 6 hours. Please ensure it is only shared with people you trust.",
+    "invite_description": "Use an invitation code to invite others to the host team. The code will expire in 6 hours. Please ensure that it is only shared with trusted entities.",
     "invite_msg": "{{user}} invites you to join the host team of the event {{event}}! Open the link {{link}} for more information.",
     "invite_msg_brief": "{{user}} invites you to join the host team of the event {{event}}",
     "is_admin": "Is Admin",
@@ -52,6 +54,7 @@
       "4": "Reserved Field"
     }
   },
+  "latest_date_unveiled": "最晚公布时间",
   "member": "Member",
   "members": "Members",
   "task": {
@@ -87,7 +90,7 @@
     "claimed_submission_count": "Claimed Number of Submissions",
     "created": "You created the team {{team}}!",
     "disband": "Disband",
-    "disband_confirmation": "Are you sure you want to disband this team? This operation is irreversible.",
+    "disband_confirmation": "Are you sure you want to disband this team? This cannot be undone.",
     "disbanded": "The team {{team}} has been disbanded.",
     "icon": "Team Logo",
     "invitation": {
@@ -97,7 +100,7 @@
       "copy": "Copy Invitation Code",
       "invitation": "Invitation",
       "invite_code": "Invitation Code",
-      "invite_description": "Use an invitation code to invite others to your team. The code will expire in 12 hours. Please ensure it is only shared with people you trust.",
+      "invite_description": "Use an invitation code to invite others to your team. The code will expire in 12 hours. Please ensure that it is only shared with trusted entities.",
       "invite_msg": "{{user}} invites you to join the team {{team}} participated in the event {{event}} ({{division}} division)! Enter the invitation code {{code}} or open the link {{link}} for more information.",
       "invite_msg_brief": "{{user}} invites you to join the team {{team}}",
       "join": "Accept and Join",

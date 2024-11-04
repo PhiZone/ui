@@ -36,7 +36,7 @@
       // @ts-ignore
       provider: SUPPORTED_APPS.find((app) => app.name.toLowerCase() === provider.toLowerCase())
         .name,
-    })} | {$t('common.title')}
+    })} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

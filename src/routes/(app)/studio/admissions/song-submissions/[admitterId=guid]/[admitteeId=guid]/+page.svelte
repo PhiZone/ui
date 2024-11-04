@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('studio.song_submission_admission')} | {$t('common.title')}</title>
+  <title>{$t('studio.song_submission_admission')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

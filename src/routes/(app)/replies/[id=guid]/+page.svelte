@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.reply')} | {$t('common.title')}</title>
+  <title>{$t('common.reply')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

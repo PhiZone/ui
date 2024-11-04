@@ -10,13 +10,13 @@ body {
 }
 
 .page {
-  min-height: calc(100vh - 232px);
+  min-height: calc(100vh - 219px);
   max-width: 1600px;
   @apply bg-base-300 pt-32 px-4 md:px-32 mx-auto;
 }
 
 .min-h-page {
-  min-height: calc(100vh - 232px);
+  min-height: calc(100vh - 219px);
 }
 
 .studio-page {
@@ -25,7 +25,7 @@ body {
 }
 
 .info-page {
-  min-height: calc(100vh - 232px);
+  min-height: calc(100vh - 219px);
   @apply bg-base-300 py-24 px-2 md:px-12 justify-center flex flex-col lg:flex-row;
 }
 
@@ -55,6 +55,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   @apply content-dense;
@@ -96,6 +97,12 @@ body {
   grid-row-start: 1;
 }
 
+.collapse-transition {
+  transition-property: grid-template-rows, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms, 150ms;
+}
+
 .richtext-link {
   @apply text-emerald-800 dark:text-emerald-200 hover:underline;
 }
@@ -121,4 +128,89 @@ body {
 .cropper-view-box {
   outline: 0;
   box-shadow: 0 0 0 1px #39f;
+}
+
+.daisy-ui .rangeSlider {
+  overflow: visible;
+  width: unset;
+}
+
+.svelecte {
+  .is-open {
+    z-index: 5 !important;
+  }
+
+  .sv-item--wrap:hover {
+    background-color: var(--sv-dropdown-selected-bg) !important;
+    color: oklch(var(--sc));
+  }
+  .sv-buttons {
+    margin: auto 0;
+  }
+  .sv-control,
+  .sv-buttons {
+    background-color: transparent !important;
+    border: 0 !important;
+    height: 100%;
+  }
+  .sv-item--content {
+    display: flex;
+    width: 100%;
+  }
+}
+
+:root {
+  --range-slider: oklch(var(--b2));
+  --range-handle-inactive: oklch(var(--bc));
+  --range-handle: oklch(var(--s));
+  --range-handle-focus: oklch(var(--s));
+  --range-handle-border: oklch(var(--s));
+  --range-range-inactive: oklch(var(--bc) / 0.5);
+  --range-range: oklch(var(--s) / 0.5);
+  --range-float-inactive: oklch(var(--s));
+  --range-float: oklch(var(--s));
+  --range-float-text: oklch(var(--sc));
+
+  --range-pip: oklch(var(--bc) / 0.7);
+  --range-pip-text: oklch(var(--bc) / 0.7);
+  --range-pip-active: oklch(var(--bc) / 0.8);
+  --range-pip-active-text: oklch(var(--bc) / 0.8);
+  --range-pip-hover: oklch(var(--bc) / 0.9);
+  --range-pip-hover-text: oklch(var(--bc) / 0.9);
+  --range-pip-in-range: oklch(var(--bc));
+  --range-pip-in-range-text: oklch(var(--bc));
+
+  --sv-min-height: 3rem;
+  --sv-bg: oklch(var(--b2));
+  --sv-color: oklch(var(--bc));
+  --sv-disabled-bg: #eee;
+  --sv-border: 1px solid #ccc;
+  --sv-border-radius: 4px;
+  --sv-general-padding: 4px;
+  --sv-control-bg: var(--sv-bg);
+  --sv-item-wrap-padding: 3px 3px 3px 6px;
+  --sv-item-selected-bg: oklch(var(--b2));
+  --sv-item-btn-color: oklch(var(--bc));
+  --sv-item-btn-color-hover: oklch(var(--sc)); /* same as icon-color-hover in default theme */
+  --sv-item-btn-bg: oklch(var(--b2));
+  --sv-item-btn-bg-hover: oklch(var(--s));
+  --sv-icon-color: oklch(var(--bc));
+  --sv-icon-color-hover: oklch(var(--s));
+  --sv-icon-bg: transparent;
+  --sv-icon-size: 20px;
+  --sv-separator-bg: #ccc;
+  --sv-btn-border: 0;
+  --sv-placeholder-color: oklch(var(--bc) / 0.5);
+  --sv-dropdown-bg: var(--sv-bg);
+  --sv-dropdown-offset: 1px;
+  --sv-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
+  --sv-dropdown-width: auto;
+  --sv-dropdown-shadow: 0 6px 12px #0000002d;
+  --sv-dropdown-height: 320px;
+  --sv-dropdown-active-bg: oklch(var(--b1));
+  --sv-dropdown-selected-bg: oklch(var(--s));
+  /*--sv-create-kbd-border: 1px solid #efefef;*/
+  /*--sv-create-kbd-bg: #fff;*/
+  /*--sv-create-disabled-bg: #fcbaba;*/
+  /*--sv-loader-border: 2px solid #ccc;*/
 }

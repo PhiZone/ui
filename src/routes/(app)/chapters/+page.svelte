@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.chapters')} | {$t('common.title')}</title>
+  <title>{$t('common.chapters')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

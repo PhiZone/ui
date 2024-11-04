@@ -74,7 +74,7 @@
 
 <svelte:head>
   <title>
-    {$t('service.service')} - {$query.data?.data.name} | {$t('common.title')}
+    {$t('service.service')} - {$query.data?.data.name} | {$t('common.site_name')}
   </title>
   {#if prefersDarkColorScheme()}
     {@html darkTheme}

@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('event.event')} - {$event.data?.data?.title} | {$t('common.title')}</title>
+  <title>{$t('event.event')} - {$event.data?.data?.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $event.isSuccess}

@@ -17,7 +17,7 @@
 
 <svelte:head>
   <title>
-    {$t('collection.collection')} - {$collection.data?.data?.title} | {$t('common.title')}
+    {$t('collection.collection')} - {$collection.data?.data?.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
