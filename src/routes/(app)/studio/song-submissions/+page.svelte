@@ -14,7 +14,7 @@
 
 <svelte:head>
   <title>
-    {$t('common.studio')} - {$t('studio.song_submission')} | {$t('common.title')}
+    {$t('common.studio')} - {$t('studio.song_submission')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

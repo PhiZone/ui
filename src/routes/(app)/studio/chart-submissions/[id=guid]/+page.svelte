@@ -155,7 +155,7 @@
       $submission.data?.data.song?.title ??
       $submission.data?.data.songSubmission?.title}
     [{$submission.data?.data.level}
-    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.title')}
+    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.site_name')}
   </title>
 </svelte:head>
 
@@ -591,7 +591,7 @@
                 {/if}
               </p>
               <p>
-                <span class="badge mr-1">{$t('chart.notes')}</span>
+                <span class="badge mr-1">{$t('chart.note_count')}</span>
                 {submission.noteCount}
               </p>
               <p>
@@ -636,7 +636,7 @@
               {/if}
               <p>
                 <span class="badge mr-1">
-                  {$t('studio.submission.adm_status')}
+                  {$t('studio.submission.admission_status')}
                 </span>
                 {$t(`studio.submission.statuses.${submission.admissionStatus}`)}
               </p>

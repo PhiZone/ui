@@ -2,21 +2,25 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { t } from '$lib/translations/config';
   import { goto } from '$app/navigation';
+  import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
+  import type { SearchFilterType } from '$lib/filters';
 
   export let data;
 
   $: ({ api } = data);
 
-  let type: string = 'charts';
+  let type: SearchFilterType = 'charts';
   let text = '';
 
-  $: href = `/${type}?${text ? `search=${text}` : ''}`;
+  let searchParams = new URLSearchParams();
+
+  $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
 
   $: headline = createQuery(api.headline.get());
 </script>
 
 <svelte:head>
-  <title>{$t('common.title')}</title>
+  <title>{$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $headline.isSuccess}
@@ -44,12 +48,12 @@
 <video autoplay muted loop class="bg-video">
   <source src="/background.webm" type="video/webm" />
 </video>
-<div class="hero min-h-screen">
+<div class="hero min-h-screen overflow-y-auto">
   <div class="hero-overlay bg-opacity-30 z-10" />
-  <div class="w-5/6 max-w-4xl form-control text-center z-10">
+  <div class="w-5/6 max-w-4xl form-control text-center py-32 z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />
-      <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.title')}</h1>
+      <h1 class="mb-3 text-6xl sm:text-8xl font-bold">{$t('common.site_name')}</h1>
       <p class="mb-5 sm:text-lg">
         {$t('home.description')}
       </p>
@@ -83,6 +87,9 @@
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>
       </div>
+      {#key type}
+        <SearchOptions {type} bind:params={searchParams} />
+      {/key}
     </form>
   </div>
 </div>
@@ -93,7 +100,7 @@
     display: block;
   }
   .bg-video {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

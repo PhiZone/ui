@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('pet.answer.answer')} | {$t('common.title')}</title>
+  <title>{$t('pet.answer.answer')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="info-page">

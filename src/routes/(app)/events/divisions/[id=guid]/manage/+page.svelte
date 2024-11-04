@@ -77,7 +77,7 @@
 <svelte:head>
   <title>
     {$t('common.manage')} | {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data
-      .title}) | {$t('common.title')}
+      .title}) | {$t('common.site_name')}
   </title>
 </svelte:head>
 

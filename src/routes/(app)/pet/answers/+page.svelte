@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('pet.answers')} | {$t('common.title')}</title>
+  <title>{$t('pet.answers')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

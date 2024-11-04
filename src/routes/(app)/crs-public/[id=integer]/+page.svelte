@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-  <title>示例谱面评分征集 - 群众投票 | {$t('common.title')}</title>
+  <title>示例谱面评分征集 - 群众投票 | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if data.data !== null}

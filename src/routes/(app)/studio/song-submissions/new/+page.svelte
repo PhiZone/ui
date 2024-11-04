@@ -188,7 +188,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.title')}</title>
+  <title>{$t('common.studio')} - {$t('studio.upload_song')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <!-- {#if illustrationCropping}
@@ -498,7 +498,7 @@
             >
               <label class="join my-2 w-full">
                 <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.song_title')}
+                  {$t('song.title')}
                 </span>
                 <input
                   type="text"
@@ -518,7 +518,7 @@
                   id="title"
                   name="Title"
                   bind:value={$form.Title}
-                  placeholder={$t('common.form.song_title')}
+                  placeholder={$t('song.title')}
                   class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                     $errors.Title ? 'hover:input-error' : 'hover:input-secondary'
                   }`}

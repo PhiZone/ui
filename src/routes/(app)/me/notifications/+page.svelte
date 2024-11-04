@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('notification.notifications')} | {$t('common.title')}</title>
+  <title>{$t('notification.notifications')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

@@ -19,7 +19,7 @@
 
 <svelte:head>
   <title>
-    {$t('application.application')} - {$application.data?.data.name} | {$t('common.title')}
+    {$t('application.application')} - {$application.data?.data.name} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

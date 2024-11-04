@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('chapter.chapter')} - {$chapter.data?.data?.title} | {$t('common.title')}</title>
+  <title>{$t('chapter.chapter')} - {$chapter.data?.data?.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $chapter.isSuccess}

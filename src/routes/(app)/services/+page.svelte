@@ -30,7 +30,7 @@
 
 <svelte:head>
   <title>
-    {$t('common.services')} | {$t('common.title')}
+    {$t('common.services')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

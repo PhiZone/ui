@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('record.record')} | {$t('common.title')}</title>
+  <title>{$t('record.record')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $record.isSuccess}

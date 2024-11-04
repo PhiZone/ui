@@ -28,7 +28,7 @@
 <svelte:head>
   <title>
     {$t('event.team.invitation.invitation')} | {$t('event.team.team')} - {$query.data?.data.team
-      .name} | {$t('event.event')} | {$t('common.title')}
+      .name} | {$t('event.event')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

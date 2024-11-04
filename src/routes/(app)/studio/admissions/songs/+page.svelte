@@ -18,7 +18,7 @@
       ? `- ${$t('studio.request.sent')}`
       : searchParams.rangeRequesteeId
         ? `- ${$t('studio.request.received')}`
-        : ''} | {$t('common.title')}
+        : ''} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
