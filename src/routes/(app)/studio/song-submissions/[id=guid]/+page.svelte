@@ -147,7 +147,7 @@
 
 <svelte:head>
   <title>
-    {$t('studio.song_submission')} - {$submission.data?.data.title} | {$t('common.title')}
+    {$t('studio.song_submission')} - {$submission.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
@@ -544,7 +544,7 @@
               <div class="md:w-1/3">
                 <p>
                   <span class="badge mr-1">
-                    {$t('common.form.song_title')}
+                    {$t('song.title')}
                   </span>
                   {submission.title}
                 </p>

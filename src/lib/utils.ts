@@ -6,6 +6,8 @@ import type API from './api';
 import type { UserDetailedDto } from './api';
 import type { EventDto } from './api/event';
 import { gen, hasPermission } from './hostshipPermissions';
+import type { ParsedQuery } from 'query-string';
+import queryString from 'query-string';
 
 export const parseLatex = (input: string) => {
   const result = input.matchAll(/(\$[^$]+\$)/g);
@@ -137,9 +139,13 @@ export const parseLyrics = (input: string) => {
   let offset;
   try {
     const offsetResult = input.matchAll(/offset:(\+|-)(\d+)/g).next();
-    const sign = offsetResult.value[1],
-      value = offsetResult.value[2];
-    offset = (sign === '+' ? parseInt(value) : -parseInt(value)) / 1000;
+    if (offsetResult.value) {
+      const sign = offsetResult.value[1],
+        value = offsetResult.value[2];
+      offset = (sign === '+' ? parseInt(value) : -parseInt(value)) / 1000;
+    } else {
+      offset = 0;
+    }
   } catch (e) {
     offset = 0;
   }
@@ -399,4 +405,34 @@ export const requestIdentity = async (
       await resp.json(),
     );
   }
+};
+
+export const convertToParsedQuery = (
+  params: URLSearchParams,
+): ParsedQuery<string | number | boolean> => {
+  const obj: Record<string, string> = {};
+
+  params.forEach((value, key) => {
+    obj[key] = value;
+  });
+
+  const parsed = queryString.parse(queryString.stringify(obj), {
+    parseBooleans: true,
+    parseNumbers: true,
+  });
+
+  return parsed as ParsedQuery<string | number | boolean>;
+};
+
+export const snakeToCamel = (input: string) => {
+  const arr = input.split('_');
+
+  return arr
+    .map((word, index) => {
+      if (index !== 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      return word;
+    })
+    .join('');
 };

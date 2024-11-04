@@ -64,7 +64,7 @@
           {/if}
         </p>
         <p class="truncate">
-          <span class="badge mr-1">{$t('chart.notes')}</span>
+          <span class="badge mr-1">{$t('chart.note_count')}</span>
           {chart.noteCount}
         </p>
         <p class="truncate">
@@ -172,6 +172,7 @@
     text-overflow: ellipsis;
     @media (min-width: 768px) {
       display: -webkit-box;
+      line-clamp: 2;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
@@ -181,6 +182,7 @@
     text-overflow: ellipsis;
     @media (min-width: 1100px) {
       display: -webkit-box;
+      line-clamp: 2;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }

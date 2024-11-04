@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('event.division.create_team')} | {$t('event.event')} | {$t('common.title')}</title>
+  <title>{$t('event.division.create_team')} | {$t('event.event')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="bg-base-300 min-h-screen">

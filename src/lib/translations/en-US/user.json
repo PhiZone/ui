@@ -1,9 +1,9 @@
 {
   "account": "Account",
   "account_inheritance": {
-    "code": "引继码",
-    "success": "账号引继成功！",
-    "title": "引继 Phigrim 账号"
+    "code": "Hand-over Code",
+    "success": "Successful account hand-over!",
+    "title": "Hand-over from Phigrim Account"
   },
   "avatar": "Avatar",
   "best_records": "Best Records",
@@ -11,9 +11,14 @@
   "charts": "Charts Created",
   "date_joined": "Date Joined",
   "date_of_birth": "Date of Birth",
+  "earliest_date_joined": "最早加入时间",
+  "earliest_date_of_birth": "最早生日",
+  "earliest_last_login": "最早上次登录",
   "exp": "Experience",
   "fans": "Fans",
   "follow": "Follow",
+  "followee_count": "关注数",
+  "follower_count": "粉丝数",
   "following": "Following",
   "gender": "Gender",
   "genders": {
@@ -21,11 +26,21 @@
     "1": "Male",
     "2": "Female"
   },
+  "highest_exp": "最高经验值",
+  "highest_followee_count": "最高关注数",
+  "highest_follower_count": "最高粉丝数",
+  "highest_rks": "最高 RKS",
   "id": "User ID",
-  "inheritance": {},
   "language": "Language",
   "last_login": "Last Login",
+  "latest_date_joined": "最晚加入时间",
+  "latest_date_of_birth": "最晚生日",
+  "latest_last_login": "最晚上次登录",
   "linked_accounts": "Linked Accounts",
+  "lowest_exp": "最低经验值",
+  "lowest_followee_count": "最低关注数",
+  "lowest_follower_count": "最低粉丝数",
+  "lowest_rks": "最低 RKS",
   "recent_records": "Recent Records",
   "region": "Region",
   "rks": "RKS",
@@ -40,6 +55,7 @@
     "Volunteer": "Volunteer"
   },
   "songs": "Songs Uploaded",
+  "tag": "头衔",
   "unfollow": "Unfollow",
   "user": "User",
   "username": "Username"

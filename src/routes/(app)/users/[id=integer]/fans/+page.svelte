@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('user.user')} - {$t('user.fans')} | {$t('common.title')}</title>
+  <title>{$t('user.user')} - {$t('user.fans')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $query.isSuccess}

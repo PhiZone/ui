@@ -58,7 +58,7 @@
     </div>
     <a class="title flex items-center normal-case font-extrabold text-2xl sm:text-4xl" href="/">
       <img src="/favicon.ico" alt="Logo" class="logo hidden xl:block" />
-      {$t('common.title')}
+      {$t('common.site_name')}
     </a>
     {#if $page.url.pathname.startsWith('/studio')}
       <label

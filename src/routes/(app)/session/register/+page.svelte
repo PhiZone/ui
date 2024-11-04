@@ -107,7 +107,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('session.registration.register')} | {$t('common.title')}</title>
+  <title>{$t('session.registration.register')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <input

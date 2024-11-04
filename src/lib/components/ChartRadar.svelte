@@ -17,7 +17,7 @@
     labels: [
       $t('chart.arrangement'),
       $t('chart.gameplay'),
-      $t('chart.vfx'),
+      $t('chart.visual_effects'),
       $t('chart.creativity'),
       $t('chart.concord'),
       $t('chart.impression'),

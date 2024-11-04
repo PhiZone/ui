@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('session.password_reset.password_reset')} | {$t('common.title')}</title>
+  <title>{$t('session.password_reset.password_reset')} | {$t('common.site_name')}</title>
 </svelte:head>
 
 <div class="hero min-h-screen bg-base-300">

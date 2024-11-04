@@ -10,7 +10,7 @@
 
 <svelte:head>
   <title>
-    {error.httpStatus} | {$t('common.title')}
+    {error.httpStatus} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
@@ -39,6 +39,6 @@
 
 <style>
   .page-height {
-    min-height: calc(100vh - 232px);
+    min-height: calc(100vh - 219px);
   }
 </style>

@@ -59,7 +59,7 @@
 <svelte:head>
   <title>
     {$t('event.host_team')}
-    | {$t('event.event')} - {$event.data?.data.title} | {$t('common.title')}
+    | {$t('event.event')} - {$event.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 <input type="checkbox" id="invite" class="modal-toggle" />

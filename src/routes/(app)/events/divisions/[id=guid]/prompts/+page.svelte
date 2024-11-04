@@ -72,7 +72,7 @@
   <title>
     {$t($division.data?.data.type == 2 ? 'event.division.chart_pool' : 'event.division.song_pool')} |
     {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
-      'common.title',
+      'common.site_name',
     )}
   </title>
 </svelte:head>

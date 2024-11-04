@@ -14,7 +14,7 @@
 <svelte:head>
   <title>
     {$t('resource_record.resource_record')} - {$resourceRecord.data?.data.title} | {$t(
-      'common.title',
+      'common.site_name',
     )}
   </title>
 </svelte:head>

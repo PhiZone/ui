@@ -125,7 +125,7 @@
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
-    | {$t('common.title')}
+    | {$t('common.site_name')}
   </title>
 </svelte:head>
 
@@ -303,7 +303,7 @@
                 <tr style:border-bottom-width="0px">
                   <td>
                     <div class="badge badge-lg badge-neutral w-full text-lg whitespace-nowrap">
-                      {$t('chart.vfx')}
+                      {$t('chart.visual_effects')}
                     </div>
                   </td>
                   <td>
@@ -442,7 +442,7 @@
                   {/if}
                 </p>
                 <p>
-                  <span class="badge mr-1">{$t('chart.notes')}</span>
+                  <span class="badge mr-1">{$t('chart.note_count')}</span>
                   {chart.noteCount}
                 </p>
                 <p>

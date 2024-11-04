@@ -19,7 +19,7 @@
       ? `- ${$t('studio.request.sent')}`
       : searchParams.rangeInviteeId
         ? `- ${$t('studio.request.received')}`
-        : ''} | {$t('common.title')}
+        : ''} | {$t('common.site_name')}
   </title>
 </svelte:head>
 

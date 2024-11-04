@@ -21,7 +21,7 @@
           $chart.data.data.level
         } ${getLevelDisplay($chart.data.data.difficulty)}]`
       : ''}
-    | {$t('common.title')}
+    | {$t('common.site_name')}
   </title>
 </svelte:head>
 {#if $leaderboard.isSuccess && $chart.isSuccess}
@@ -68,7 +68,7 @@
                       <th>#</th>
                       <th>{$t('record.player')}</th>
                       <th>{$t('common.score')}</th>
-                      <th>{$t('record.acc')}</th>
+                      <th>{$t('record.accuracy')}</th>
                       <th>{$t('record.perfect')}</th>
                       <th>{$t('record.good')}</th>
                       <th>{$t('record.bad')}</th>
@@ -154,7 +154,7 @@
                       <th>#</th>
                       <th>{$t('record.player')}</th>
                       <th>{$t('common.score')}</th>
-                      <th>{$t('record.acc')}</th>
+                      <th>{$t('record.accuracy')}</th>
                       <th>{$t('record.perfect')}</th>
                       <th>{$t('record.good')}</th>
                       <th>{$t('record.bad')}</th>

@@ -15,7 +15,7 @@
 <svelte:head>
   <title>
     {$t('common.charts')} | {$t('common.tag')} - #{$tag.data?.data.normalizedName} | {$t(
-      'common.title',
+      'common.site_name',
     )}
   </title>
 </svelte:head>

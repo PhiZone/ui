@@ -94,7 +94,7 @@
 <svelte:head>
   <title>
     {$t('event.task.task')} - {$query.data?.data.name} | {$t('event.event')} - {$event.data?.data
-      .title} ({$division.data?.data.title}) | {$t('common.title')}
+      .title} ({$division.data?.data.title}) | {$t('common.site_name')}
   </title>
   {#if prefersDarkColorScheme()}
     {@html darkTheme}

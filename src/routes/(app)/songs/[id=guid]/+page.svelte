@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.title')}</title>
+  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
 {#if $song.isSuccess}
@@ -222,7 +222,7 @@
             {/if}
             {#if $charts.isSuccess}
               <div
-                class="collapse collapse-arrow transition border-2 normal-border hover:border-secondary bg-base-100 rounded-box mt-3"
+                class="collapse collapse-arrow collapse-transition border-2 normal-border hover:border-secondary bg-base-100 rounded-box mt-3"
               >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>

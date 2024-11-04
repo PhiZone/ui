@@ -1,6 +1,8 @@
 {
+  "api_endpoint": "API 端点",
   "application": "应用",
   "bind_account": "绑定账号",
+  "homepage": "主页链接",
   "reverify": "重新验证",
   "types": {
     "0": "网页谱面播放器",
