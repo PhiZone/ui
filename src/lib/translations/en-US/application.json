@@ -1,6 +1,8 @@
 {
+  "api_endpoint": "API 端点",
   "application": "Application",
   "bind_account": "Bind Account",
+  "homepage": "主页链接",
   "reverify": "Reverify",
   "types": {
     "0": "Web Chart Player",

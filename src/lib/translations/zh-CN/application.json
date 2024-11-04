@@ -1,6 +1,8 @@
 {
+  "api_endpoint": "API 端点",
   "application": "应用",
   "bind_account": "绑定账号",
+  "homepage": "主页链接",
   "reverify": "重新验证",
   "types": {
     "0": "网页谱面播放器",
@@ -12,7 +14,5 @@
     "6": "服务",
     "7": "身份验证提供商"
   },
-  "visit": "访问主页",
-  "api_endpoint": "API 端点",
-  "homepage": "主页链接"
+  "visit": "访问主页"
 }

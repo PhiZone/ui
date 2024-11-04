@@ -1,4 +1,5 @@
 {
+  "date_unveiled": "公布时间",
   "division": {
     "chart_pool": "譜面池",
     "create_team": "建立隊伍",
@@ -23,6 +24,7 @@
     }
   },
   "divisions": "區域",
+  "earliest_date_unveiled": "最早公布时间",
   "event": "活動",
   "host_team": "主辦團隊",
   "hostship": {
@@ -52,6 +54,7 @@
       "4": "保留欄位"
     }
   },
+  "latest_date_unveiled": "最晚公布时间",
   "member": "成員",
   "members": "成員",
   "task": {

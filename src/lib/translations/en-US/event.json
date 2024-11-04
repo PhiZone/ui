@@ -1,4 +1,5 @@
 {
+  "date_unveiled": "公布时间",
   "division": {
     "chart_pool": "Chart pool",
     "create_team": "Create Team",
@@ -23,6 +24,7 @@
     }
   },
   "divisions": "Divisions",
+  "earliest_date_unveiled": "最早公布时间",
   "event": "Event",
   "host_team": "Host Team",
   "hostship": {
@@ -52,6 +54,7 @@
       "4": "Reserved Field"
     }
   },
+  "latest_date_unveiled": "最晚公布时间",
   "member": "Member",
   "members": "Members",
   "task": {

@@ -1,4 +1,5 @@
 {
+  "date_unveiled": "公布时间",
   "division": {
     "chart_pool": "谱池",
     "create_team": "创建队伍",
@@ -23,6 +24,7 @@
     }
   },
   "divisions": "赛道",
+  "earliest_date_unveiled": "最早公布时间",
   "event": "活动",
   "host_team": "主办团队",
   "hostship": {
@@ -52,6 +54,7 @@
       "4": "保留字段"
     }
   },
+  "latest_date_unveiled": "最晚公布时间",
   "member": "成员",
   "members": "成员",
   "task": {
@@ -122,8 +125,5 @@
     "submissions": "稿件",
     "team": "队伍"
   },
-  "teams": "队伍",
-  "date_unveiled": "公布时间",
-  "earliest_date_unveiled": "最早公布时间",
-  "latest_date_unveiled": "最晚公布时间"
+  "teams": "队伍"
 }

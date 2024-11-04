@@ -30,7 +30,7 @@ export const resourceRecordOrderItems: OrderItem[] = [
     field: 'Strategy',
   },
   {
-    label: 'resource_record.source',
+    label: 'common.source',
     field: 'Source',
   },
   {
@@ -191,12 +191,12 @@ export const resourceRecordFilters: IFilters = [
   },
   {
     type: 'input',
-    label: 'resource_record.source',
+    label: 'common.source',
     value: '',
     param: 'ContainsSource',
     options: {
       inputType: 'text',
-      placeholder: 'resource_record.source',
+      placeholder: 'common.source',
     },
   },
   {

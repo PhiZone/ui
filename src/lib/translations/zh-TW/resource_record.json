@@ -5,6 +5,7 @@
   "csv_file": "CSV 文件",
   "edition": "版本",
   "edition_placeholder": "版本名稱 /（改編後的）資源出處",
+  "edition_type": "版本类型",
   "edition_type_tips": {
     "0": "此版本為資源原版。",
     "1": "此版本為資源作者自行改編版。",
