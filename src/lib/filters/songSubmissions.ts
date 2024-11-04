@@ -38,10 +38,6 @@ export const songSubmissionOrderItems: OrderItem[] = [
     field: 'Offset',
   },
   {
-    label: 'studio.submission.originality_proof',
-    field: 'OriginalityProof',
-  },
-  {
     label: 'song.duration',
     field: 'Duration',
   },
