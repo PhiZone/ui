@@ -13,7 +13,6 @@
 
   $: {
     params = generateParams(data);
-    console.log(params);
     storeFilterValue(type, data);
   }
 
