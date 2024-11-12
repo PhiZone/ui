@@ -201,6 +201,5 @@ export const generateParams = (data: Data) => {
     }
   });
 
-  console.log(params);
   return params;
 };
