@@ -11,9 +11,9 @@
       setTimeout(async () => {
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
-          await goto($page.url.searchParams.get('uri') ?? '/');
+          await goto($page.params.uri ?? '/');
         } catch (e) {
-          window.location.href = $page.url.searchParams.get('uri') ?? '/';
+          window.location.href = $page.params.uri ?? '/';
         }
       }, 1000);
     }
