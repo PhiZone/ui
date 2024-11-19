@@ -29,7 +29,7 @@
   $: query = createQuery(api.chart.submission.asset.list({ ...searchParams, chartId: params.id }));
 
   const getFileType = (mime: string, fileName: string) => {
-    const extension = fileName.split('.').pop() ?? '';
+    const extension = fileName.toLowerCase().split('.').pop() ?? '';
     if (mime.startsWith('image/')) {
       return 0;
     } else if (mime.startsWith('audio/')) {
