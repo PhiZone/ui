@@ -4,7 +4,7 @@
   import ChartAsset from '$lib/components/ChartAsset.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-  import { getLevelDisplay, getUserPrivilege } from '$lib/utils';
+  import { getFileType, getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
 
   export let data;
@@ -27,25 +27,6 @@
 
   $: chart = createQuery(api.chart.info({ id: params.id }));
   $: query = createQuery(api.chart.asset.list({ ...searchParams, chartId: params.id }));
-
-  const getFileType = (mime: string, fileName: string) => {
-    const extension = fileName.split('.').pop() ?? '';
-    if (mime.startsWith('image/')) {
-      return 0;
-    } else if (mime.startsWith('audio/')) {
-      return 1;
-    } else if (mime.startsWith('video/')) {
-      return 2;
-    } else if (
-      mime.startsWith('text/') ||
-      mime == 'application/json' ||
-      ['yml', 'yaml'].includes(extension)
-    ) {
-      return 3;
-    } else {
-      return 5;
-    }
-  };
 
   const resolveFile = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
