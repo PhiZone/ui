@@ -60,7 +60,7 @@ export const actions = {
         }
 
         return fail(resp.status, { resourceForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }

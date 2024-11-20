@@ -27,7 +27,7 @@ export const load = async ({ url, fetch, locals }) => {
   let answers;
   try {
     answers = JSON.parse(searchParams.answers as string);
-  } catch (e) {
+  } catch {
     return { status: 1, form };
   }
   if (!searchParams.answers || !isNumberMatrix(answers)) return { status: 1, form };

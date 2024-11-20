@@ -14,7 +14,7 @@ export function stringifyFilter<T extends FilterBase>(opts: T, all = false) {
   const { perPage, ...rest } = opts;
   return queryString.stringify(
     camelcaseKeys(
-      { perPage: all ? -1 : perPage ?? PAGINATION_PER_PAGE, ...rest },
+      { perPage: all ? -1 : (perPage ?? PAGINATION_PER_PAGE), ...rest },
       { pascalCase: true },
     ),
     { arrayFormat: 'none', skipEmptyString: true },
@@ -48,7 +48,7 @@ export function createQueryCreator<T, O, K extends string>(
         const data = await resp.json();
         if (data.status === ResponseDtoStatus.Ok) return data;
         else throw { ...data, httpStatus: resp.status };
-      } catch (e) {
+      } catch {
         throw { httpStatus: resp.status };
       }
     },
