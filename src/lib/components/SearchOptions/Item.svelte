@@ -42,7 +42,7 @@
     class:px-5={!withJoin}
     class:gap-2={!withJoin}
     class:join-vertical={withVertical}
-    for={filter.param instanceof Array ? filter.param[0] : filter.param ?? filter.label}
+    for={filter.param instanceof Array ? filter.param[0] : (filter.param ?? filter.label)}
     on:mousedown={enable}
     on:click={enable}
   >

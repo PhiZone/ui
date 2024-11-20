@@ -530,7 +530,7 @@
                 ? 'tooltip tooltip-open tooltip-right tooltip-error'
                 : ''}
               data-tip={$errors.EditionType || $errors.Edition
-                ? $errors.EditionType ?? $errors.Edition
+                ? ($errors.EditionType ?? $errors.Edition)
                 : ''}
             >
               <label class="join my-2 w-full">

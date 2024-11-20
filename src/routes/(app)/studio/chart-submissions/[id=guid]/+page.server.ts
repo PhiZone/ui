@@ -72,7 +72,7 @@ export const actions = {
         }
 
         return fail(resp.status, { voteForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
@@ -112,7 +112,7 @@ export const actions = {
         }
 
         return fail(resp.status, { collabForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
@@ -154,7 +154,7 @@ export const actions = {
         }
 
         return fail(resp.status, { collectionForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }

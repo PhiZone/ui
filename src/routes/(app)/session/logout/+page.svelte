@@ -12,7 +12,7 @@
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
           await goto($page.url.searchParams.get('redirect') ?? '/');
-        } catch (e) {
+        } catch {
           window.location.href = $page.url.searchParams.get('redirect') ?? '/';
         }
       }, 1000);

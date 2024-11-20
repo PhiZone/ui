@@ -275,7 +275,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32">{$t('studio.submission.is_ranked')}</span>
+              <span class="w-32">{$t('chart.is_ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -590,7 +590,7 @@
                 class="tooltip tooltip-top tooltip-error w-full"
                 class:tooltip-open={status === Status.ERROR}
                 data-tip={status === Status.ERROR
-                  ? $t(`error.${errorCode}`) ?? $t('common.unknown_error')
+                  ? ($t(`error.${errorCode}`) ?? $t('common.unknown_error'))
                   : null}
               >
                 <button

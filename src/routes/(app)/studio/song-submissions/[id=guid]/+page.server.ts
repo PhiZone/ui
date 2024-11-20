@@ -74,7 +74,7 @@ export const actions = {
         }
 
         return fail(resp.status, { reviewForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
@@ -114,7 +114,7 @@ export const actions = {
         }
 
         return fail(resp.status, { collabForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
@@ -154,7 +154,7 @@ export const actions = {
         }
 
         return fail(resp.status, { chapterForm });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
