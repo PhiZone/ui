@@ -196,7 +196,7 @@
               {/if}
             </div>
             <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 place-self-center">{$t('studio.submission.is_ranked')}</span>
+              <span class="w-32 place-self-center">{$t('chart.is_ranked')}</span>
               <div class="flex w-1/3">
                 <input
                   type="checkbox"
@@ -417,7 +417,7 @@
                 ? 'tooltip tooltip-open tooltip-right tooltip-error'
                 : ''}
               data-tip={$errors.LevelType || $errors.Level
-                ? $errors.LevelType ?? $errors.Level
+                ? ($errors.LevelType ?? $errors.Level)
                 : ''}
             >
               <label class="join my-2 w-full">
