@@ -334,7 +334,7 @@
             class="tooltip tooltip-bottom tooltip-error w-full"
             class:tooltip-open={status === Status.ERROR}
             data-tip={status === Status.ERROR
-              ? $t(`error.${errorCode}`) ?? $t('common.unknown_error')
+              ? ($t(`error.${errorCode}`) ?? $t('common.unknown_error'))
               : null}
           >
             <button

@@ -59,7 +59,7 @@ export interface ApplicationUserDto {
 }
 
 // list
-export interface Filter extends FilterBase {}
+export type Filter = FilterBase;
 
 // info
 export interface InfoOpts {

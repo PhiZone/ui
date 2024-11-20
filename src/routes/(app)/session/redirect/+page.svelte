@@ -23,7 +23,7 @@
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
           await goto(build($page.url.searchParams.get('uri')) ?? '/');
-        } catch (e) {
+        } catch {
           window.location.href = build($page.url.searchParams.get('uri')) ?? '/';
         }
       }, 1000);

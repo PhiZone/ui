@@ -38,7 +38,7 @@ interface IFilterInput extends IFilterBase {
   options: IFilterInputOptions;
 }
 
-interface IFilterInputItem extends Omit<Omit<IFilterInput, 'label'>, 'type'> {}
+type IFilterInputItem = Omit<Omit<IFilterInput, 'label'>, 'type'>;
 
 interface IFilterInputGroup extends IFilterBase {
   type: 'input_group';

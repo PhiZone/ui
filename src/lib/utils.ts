@@ -146,7 +146,7 @@ export const parseLyrics = (input: string) => {
     } else {
       offset = 0;
     }
-  } catch (e) {
+  } catch {
     offset = 0;
   }
   const result = input.matchAll(/\[(\d{2,}):(\d{2}\.\d{2})\]([^\r\n]*)/g);
@@ -277,6 +277,39 @@ export const getUserLevel = (exp: number) => {
 
 export const getAvatar = (avatar: string | undefined | null, quality = 15) => {
   return getCompressedImage(avatar ?? PUBLIC_AVATAR, quality);
+};
+
+export const getFileType = (mime: string, fileName: string) => {
+  const extension = fileName.toLowerCase().split('.').pop() ?? '';
+  const isShader = [
+    'shader',
+    'metal',
+    'glsl',
+    'hlsl',
+    'wgsl',
+    'frag',
+    'spv',
+    'cg',
+    'fs',
+    'fx',
+  ].includes(extension);
+  if (mime.startsWith('image/')) {
+    return 0;
+  }
+  if (mime.startsWith('audio/')) {
+    return 1;
+  }
+  if (mime.startsWith('video/')) {
+    return 2;
+  }
+  if (
+    (!isShader && mime.startsWith('text/')) ||
+    mime === 'application/json' ||
+    ['yml', 'yaml'].includes(extension)
+  ) {
+    return 3;
+  }
+  return isShader ? 4 : 5;
 };
 
 export const getGrade = (score: number, fullCombo: boolean) => {

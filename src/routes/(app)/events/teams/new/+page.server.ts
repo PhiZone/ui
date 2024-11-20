@@ -70,7 +70,7 @@ export const actions = {
         }
 
         return fail(resp.status, { form });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }

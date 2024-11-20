@@ -201,7 +201,7 @@
           />
         </label>
         <label class="join my-2">
-          <p class="w-1/4">{$t('studio.submission.is_original')}</p>
+          <p class="w-1/4">{$t('song.is_original')}</p>
           <input
             id="is_original"
             name="isOriginal"
@@ -215,7 +215,7 @@
           data-tip={$reviewErrors.isOriginal}
         />
         <label class="join my-2">
-          <p class="w-1/4">{$t('studio.submission.is_hidden')}</p>
+          <p class="w-1/4">{$t('common.is_hidden')}</p>
           <input
             id="is_hidden"
             name="isHidden"
@@ -229,7 +229,7 @@
           data-tip={$reviewErrors.isHidden}
         />
         <label class="join my-2">
-          <p class="w-1/4">{$t('studio.submission.is_locked')}</p>
+          <p class="w-1/4">{$t('common.is_locked')}</p>
           <input
             id="is_locked"
             name="isLocked"

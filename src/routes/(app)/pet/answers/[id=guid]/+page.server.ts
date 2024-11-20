@@ -82,7 +82,7 @@ export const actions = {
         }
 
         return fail(resp.status, { form });
-      } catch (e) {
+      } catch {
         return fail(resp.status);
       }
     }
@@ -92,7 +92,7 @@ export const actions = {
 const compileQuestion = async (question: PetQuestionDto | string) => {
   return (
     (
-      await compile(typeof question === 'object' ? question.content : question ?? '', {
+      await compile(typeof question === 'object' ? question.content : (question ?? ''), {
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatexSvelte as Plugin],
       })

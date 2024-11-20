@@ -24,11 +24,12 @@
 {#if $chapter.isSuccess}
   {@const chapter = $chapter.data.data}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <dialog
     bind:this={illustrationModalEl}
     id="illustration_modal"
     class="modal"
-    on:click|self={illustrationModalEl.close}
+    on:click|self={() => illustrationModalEl.close()}
   >
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
       <button
