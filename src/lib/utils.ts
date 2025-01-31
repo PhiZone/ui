@@ -443,13 +443,7 @@ export const requestIdentity = async (
 export const convertToParsedQuery = (
   params: URLSearchParams,
 ): ParsedQuery<string | number | boolean> => {
-  const obj: Record<string, string> = {};
-
-  params.forEach((value, key) => {
-    obj[key] = value;
-  });
-
-  const parsed = queryString.parse(queryString.stringify(obj), {
+  const parsed = queryString.parse(params.toString(), {
     parseBooleans: true,
     parseNumbers: true,
   });
