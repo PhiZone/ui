@@ -1,5 +1,6 @@
 <script lang="ts">
   import '../app.css';
+  import 'katex/dist/katex.min.css';
   import 'cropperjs/dist/cropper.min.css';
   import { QueryClientProvider } from '@tanstack/svelte-query';
 
