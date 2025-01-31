@@ -2,6 +2,7 @@
   import '../app.css';
   import 'katex/dist/katex.min.css';
   import 'cropperjs/dist/cropper.min.css';
+  import '@fortawesome/fontawesome-free/css/all.min.css';
   import { QueryClientProvider } from '@tanstack/svelte-query';
 
   export let data;
