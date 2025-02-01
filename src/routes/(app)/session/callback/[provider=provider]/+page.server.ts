@@ -38,7 +38,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
         await resp.json(),
       );
     }
-    throw redirect(
+    redirect(
       303,
       resp.ok
         ? '/me/settings?level=success&message=session.bind_success&t=true'
@@ -62,7 +62,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
         `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
         error,
       );
-      throw redirect(
+      redirect(
         303,
         `/session/login?level=error&message=${encodeURI(
           error.error === 'invalid_token'
@@ -81,7 +81,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
     const { access_token, refresh_token } = await resp.json();
     setTokens(cookies, access_token, refresh_token);
 
-    throw redirect(303, url.searchParams.get('redirect') ?? '/');
+    redirect(303, url.searchParams.get('redirect') ?? '/');
   }
 
   const form = await superValidate(schema);
@@ -112,7 +112,7 @@ export const actions = {
       const redirectUri = url.searchParams.get('redirect');
       const external = redirectUri != null && redirectUri.startsWith('http');
       const result = await login(api, data.data.token, cookies);
-      throw redirect(
+      redirect(
         303,
         `${redirectUri ?? '/'}${
           external

@@ -47,7 +47,7 @@ export const actions = {
     const Tags = tagsRaw ? tagsRaw.split(TAG_JOINER).map((tag: string) => tag.trim()) : [];
     const resp = await api.chart.submission.create({ File, Illustration, Tags, ...rest });
     if (resp.ok) {
-      throw redirect(303, '/studio/chart-submissions' + url.search);
+      redirect(303, '/studio/chart-submissions' + url.search);
     } else {
       try {
         const error = await resp.json();

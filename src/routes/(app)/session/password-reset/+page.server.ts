@@ -39,7 +39,7 @@ export const actions = {
     const { ConfirmPassword: _, ...opts } = form.data;
     const resp = await api.auth.resetPassword(opts);
     if (resp.ok) {
-      throw redirect(303, '/session/login' + url.search);
+      redirect(303, '/session/login' + url.search);
     } else {
       const error = await resp.json();
       console.error(

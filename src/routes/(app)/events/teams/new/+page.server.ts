@@ -36,7 +36,7 @@ export const actions = {
     if (Icon.size == 0) Icon = null;
     const resp = await api.event.team.create({ Icon, ...rest });
     if (resp.ok) {
-      throw redirect(
+      redirect(
         303,
         `/events/divisions/${form.data.DivisionId}?level=success&message=${t.get(
           'event.team.created',

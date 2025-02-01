@@ -31,7 +31,7 @@ export const actions = {
 
     const resp = await api.auth.sendEmail({ ...form.data, Mode: SendEmailMode.PasswordReset });
     if (resp.ok) {
-      throw redirect(303, '/session/password-reset' + url.search);
+      redirect(303, '/session/password-reset' + url.search);
     } else {
       const error = await resp.json();
       console.error(

@@ -118,7 +118,7 @@ export const actions = {
           },
     );
     if (resp.ok) {
-      throw redirect(303, '/studio/song-submissions' + url.search);
+      redirect(303, '/studio/song-submissions' + url.search);
     } else {
       const respBackup = resp.clone();
       try {

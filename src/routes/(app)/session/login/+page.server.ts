@@ -30,6 +30,6 @@ export const actions = {
     const { access_token, refresh_token } = await resp.json();
     setTokens(cookies, access_token, refresh_token);
 
-    throw redirect(303, url.searchParams.get('redirect') ?? '/');
+    redirect(303, url.searchParams.get('redirect') ?? '/');
   },
 };

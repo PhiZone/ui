@@ -60,7 +60,7 @@ export const actions = {
       const redirectUri = url.searchParams.get('redirect');
       const external = redirectUri != null && redirectUri.startsWith('http');
       const result = await login(api, data.data.token, cookies);
-      throw redirect(
+      redirect(
         303,
         `${redirectUri ?? '/'}${
           external

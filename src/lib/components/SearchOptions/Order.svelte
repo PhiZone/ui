@@ -3,7 +3,6 @@
   import { dndzone, overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
   import type { IFilterOrder, IFilterOrderItem } from '$lib/filters/types';
   import { t } from '$lib/translations/config';
-  import type { RenderFunction } from 'svelecte/dist/Svelecte.svelte';
 
   export let filter: IFilterOrder;
 
@@ -39,7 +38,7 @@
       },
     };
   };
-  const renderer: RenderFunction = (item, _isSelection, _inputValue) => {
+  const renderer: Svelecte['$$prop_def']['renderer'] = (item, _isSelection, _inputValue) => {
     const {
       id,
       label,

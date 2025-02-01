@@ -91,7 +91,7 @@ export const actions = {
 
     const resp = await api.pet.answerSubjective({ ...form.data });
     if (resp.ok) {
-      throw redirect(303, '/pet/answers');
+      redirect(303, '/pet/answers');
     } else {
       const error = await resp.json();
       console.error(
