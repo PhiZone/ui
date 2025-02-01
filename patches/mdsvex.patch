@@ -1,0 +1,20 @@
+diff --git a/package.json b/package.json
+index 1461db4828abe94aa5fbe95bfbef9b5cd07af7be..dc048b9dac60436c65a0dfc36164ae0f70bd398a 100644
+--- a/package.json
++++ b/package.json
+@@ -5,6 +5,7 @@
+   "type": "module",
+   "exports": {
+     ".": {
++      "types": "./dist/main.es.d.ts",
+       "require": "./dist/main.cjs",
+       "default": "./dist/main.mjs"
+     },
+@@ -12,6 +13,7 @@
+   },
+   "main": "dist/main.cjs",
+   "module": "dist/main.mjs",
++  "types": "./dist/main.es.d.ts",
+   "repository": "https://github.com/pngwn/MDsveX",
+   "files": [
+     "dist/*",
