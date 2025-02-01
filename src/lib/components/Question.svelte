@@ -56,7 +56,7 @@
             class="textarea transition border-2 normal-border hover:textarea-secondary {textAreaCss}"
             placeholder={$t('pet.placeholder')}
             bind:value={text}
-          />
+          ></textarea>
         {:else}
           <div class="divider"></div>
           <p class="text-lg content">

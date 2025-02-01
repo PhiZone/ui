@@ -53,7 +53,7 @@
   </dialog>
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
-    <div class="hero-overlay bg-opacity-60" />
+    <div class="hero-overlay bg-opacity-60"></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w-[1600px] px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         {chapter.title}
@@ -106,13 +106,13 @@
                 <li class="overflow-hidden">
                   <div class="w-full h-[82px] flex px-5">
                     <div class="w-1/2">
-                      <div class="w-[300px] h-7 skeleton rounded" />
+                      <div class="w-[300px] h-7 skeleton rounded"></div>
                     </div>
                     <div class="w-5/12">
-                      <div class="w-[200px] h-7 skeleton rounded" />
+                      <div class="w-[200px] h-7 skeleton rounded"></div>
                     </div>
                     <div class="w-1/12 min-w-fit">
-                      <btn class="w-16 h-12 btn btn-sm" disabled />
+                      <btn class="w-16 h-12 btn btn-sm" disabled></btn>
                     </div>
                   </div>
                 </li>
@@ -138,5 +138,5 @@
 {:else if $chapter.isError}
   <Error error={$chapter.error} back="/chapters" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

@@ -33,7 +33,7 @@
   >
     <div
       class="hero-overlay bg-fixed bg-opacity-40 bg-gradient-to-t from-base-300 to-transparent"
-    />
+    ></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-16 2xl:px-32 mx-auto">
       <div class="flex justify-between">
         <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center">

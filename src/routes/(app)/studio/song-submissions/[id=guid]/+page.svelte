@@ -198,7 +198,7 @@
             class="tooltip tooltip-bottom tooltip-error"
             class:tooltip-open={!!$reviewErrors.status}
             data-tip={$reviewErrors.status}
-          />
+          ></div>
         </label>
         <label class="join my-2">
           <p class="w-1/4">{$t('song.is_original')}</p>
@@ -213,7 +213,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$reviewErrors.isOriginal}
           data-tip={$reviewErrors.isOriginal}
-        />
+        ></div>
         <label class="join my-2">
           <p class="w-1/4">{$t('common.is_hidden')}</p>
           <input
@@ -227,7 +227,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$reviewErrors.isHidden}
           data-tip={$reviewErrors.isHidden}
-        />
+        ></div>
         <label class="join my-2">
           <p class="w-1/4">{$t('common.is_locked')}</p>
           <input
@@ -241,7 +241,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$reviewErrors.isLocked}
           data-tip={$reviewErrors.isLocked}
-        />
+        ></div>
         <div
           class={$reviewErrors.message
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2'
@@ -257,7 +257,7 @@
               name="message"
               class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-3/4 h-48"
               placeholder={$t('common.write_reply')}
-            />
+            ></textarea>
           </label>
         </div>
         <div class="modal-action">
@@ -718,7 +718,7 @@
                     class="h-fit rounded-lg transition border-2 normal-border hover:shadow-lg"
                     alt="Illustration"
                   />
-                  <audio class="w-full" controls src={submission.file} />
+                  <audio class="w-full" controls src={submission.file}></audio>
                 </div>
                 <div class="flex gap-2 items-center justify-end">
                   {#if user && (($uploader.isSuccess && $uploader.data.data.id === user.id) || getUserPrivilege(user.role) >= 4)}
@@ -813,7 +813,7 @@
                 </label>
               {/if}
               {#if $collaborations.isLoading}
-                <div />
+                <div></div>
               {:else if $collaborations.isSuccess}
                 {#if $collaborations.data.data.length > 0}
                   <div class="flex flex-col gap-4">
@@ -859,7 +859,7 @@
                 </label>
               {/if}
               {#if $chapters.isLoading}
-                <div />
+                <div></div>
               {:else if $chapters.isSuccess}
                 {#if $chapters.data.data.length > 0}
                   {#each $chapters.data.data as admission}
@@ -954,5 +954,5 @@
 {:else if $submission.isError}
   <Error error={$submission.error} back="/studio/song-submissions" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

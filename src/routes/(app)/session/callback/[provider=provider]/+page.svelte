@@ -89,7 +89,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={$errors.Language}
                 data-tip={$errors.Language}
-              />
+              ></div>
             </div>
             <label class="label" for="region">
               <span class="label-text">{$t('session.registration.select_region')}</span>
@@ -110,7 +110,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.RegionCode}
                 data-tip={$errors.RegionCode}
-              />
+              ></div>
             </div>
             <div class="w-full flex flex-col justify-center mt-6">
               <button
@@ -132,7 +132,7 @@
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}
                 data-tip={$message}
-              />
+              ></div>
             </div>
           </form>
         </div>

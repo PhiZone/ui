@@ -174,7 +174,7 @@
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
-                />
+                ></textarea>
               </label>
             </div>
             <div class="w-full flex flex-col justify-center mt-6">

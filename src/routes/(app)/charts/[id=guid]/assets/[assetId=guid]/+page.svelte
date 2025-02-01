@@ -268,24 +268,24 @@
                     alt="Asset Content"
                   />
                 {:else if chartAsset.type === 1}
-                  <audio src={chartAsset.file} class="w-full" controls />
+                  <audio src={chartAsset.file} class="w-full" controls></audio>
                 {:else if chartAsset.type === 2}
                   <!-- svelte-ignore a11y-media-has-caption -->
                   <video
                     src={chartAsset.file}
                     class="rounded-lg transition border-2 normal-border hover:shadow-lg"
                     controls
-                  />
+                  ></video>
                 {:else if $content.isSuccess}
                   <textarea
                     class="h-[50vh] textarea transition border-2 normal-border hover:shadow-lg text-lg font-code"
                     readonly
                     value={$content.data}
-                  />
+                  ></textarea>
                 {:else if $content.isLoading}
                   <div
                     class="skeleton h-[50vh] rounded-lg transition border-2 normal-border hover:shadow-lg"
-                  />
+                  ></div>
                 {/if}
                 <div class="flex justify-end join">
                   <Download
@@ -347,7 +347,7 @@
 {:else if $chartAssetQuery.isError}
   <Error error={$chartAssetQuery.error} back="/charts/{chartId}/assets" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

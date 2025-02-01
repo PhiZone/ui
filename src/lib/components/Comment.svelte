@@ -65,7 +65,7 @@
         placeholder={$t('common.write_reply')}
         {disabled}
         bind:value={replyText}
-      />
+      ></textarea>
       <button
         class="ml-3 btn {disabled || replyText.length === 0
           ? 'btn-disabled'
@@ -78,7 +78,7 @@
     </div>
     <ul class="menu bg-base-100 w-full">
       {#if $query.isLoading}
-        <div />
+        <div></div>
       {:else if $query.isSuccess}
         {@const { total, perPage, data } = $query.data}
         {#if total && perPage && data && data.length > 0}

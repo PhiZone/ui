@@ -49,7 +49,7 @@
   <source src="/background.webm" type="video/webm" />
 </video>
 <div class="hero min-h-screen overflow-y-auto">
-  <div class="hero-overlay bg-opacity-30 z-10" />
+  <div class="hero-overlay bg-opacity-30 z-10"></div>
   <div class="w-5/6 max-w-4xl form-control text-center py-32 z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />

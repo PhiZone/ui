@@ -455,7 +455,7 @@
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider} />
+                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
                   {#if !!$errors.PreviewStart || !!$errors.PreviewEnd}
                     <span class="place-self-center w-1/3 text-error">
                       {$errors.PreviewStart ?? $errors.PreviewEnd}
@@ -817,7 +817,7 @@
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
-                />
+                ></textarea>
               </label>
             </div>
             <input type="hidden" id="tags" name="Tags" bind:value={tagsRaw} />

@@ -200,5 +200,5 @@
 {:else if $application.isError}
   <Error error={$application.error} back="/applications" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

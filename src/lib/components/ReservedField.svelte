@@ -52,7 +52,7 @@
       content = e.currentTarget.value ?? null;
       different = !((!content && !field?.content) || content == field?.content);
     }}
-  />
+  ></textarea>
   {#if editable}
     <div
       class="absolute right-3 bottom-3 tooltip tooltip-top tooltip-error"

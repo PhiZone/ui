@@ -351,7 +351,7 @@
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
-                />
+                ></textarea>
               </label>
               <button
                 type="button"

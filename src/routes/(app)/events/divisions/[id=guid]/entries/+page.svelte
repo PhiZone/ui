@@ -121,5 +121,5 @@
 {:else if $division.isError}
   <Error error={$division.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

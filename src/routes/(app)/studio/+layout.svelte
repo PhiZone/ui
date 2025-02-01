@@ -8,7 +8,7 @@
     <slot />
   </div>
   <div class="pt-[60px] drawer-side z-50">
-    <label for="studio-sidebar" class="drawer-overlay" />
+    <label for="studio-sidebar" class="drawer-overlay"></label>
     <ul
       class="menu px-4 min-w-fit w-60 h-full border-r-2 normal-border bg-base-200 bg-opacity-70 backdrop-blur-lg text-base-content text-lg"
     >

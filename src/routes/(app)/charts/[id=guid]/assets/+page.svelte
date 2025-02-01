@@ -194,5 +194,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/charts" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

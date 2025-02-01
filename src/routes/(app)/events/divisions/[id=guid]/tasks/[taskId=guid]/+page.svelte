@@ -295,7 +295,7 @@
               on:input={(e) => {
                 patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
               }}
-            />
+            ></textarea>
           </label>
         </div>
         <div
@@ -319,7 +319,7 @@
               on:input={(e) => {
                 patch = applyPatch(patch, 'replace', '/code', e.currentTarget.value);
               }}
-            />
+            ></textarea>
           </label>
           <button
             type="button"
@@ -469,7 +469,7 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/resource-records" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

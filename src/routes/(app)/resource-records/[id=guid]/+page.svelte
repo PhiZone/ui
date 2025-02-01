@@ -153,7 +153,7 @@
 {:else if $resourceRecord.isError}
   <Error error={$resourceRecord.error} back="/resource-records" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

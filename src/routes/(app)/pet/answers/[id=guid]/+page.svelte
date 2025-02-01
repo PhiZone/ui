@@ -143,7 +143,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.score}
                 data-tip={$errors.score}
-              />
+              ></div>
             </div>
             <div class="card-actions justify-end">
               <button
@@ -165,7 +165,7 @@
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}
                 data-tip={$message}
-              />
+              ></div>
             </div>
           </form>
         </div>

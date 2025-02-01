@@ -102,7 +102,7 @@
           data-tip="{$t('play_configuration.perfect')} ({editable.perfectJudgment}ms)"
           style:width="{editable.perfectJudgment / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-warning" />
+          <progress value="1" max="1" class="progress progress-warning"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment < 40
@@ -111,7 +111,7 @@
           data-tip="{$t('play_configuration.good')} ({editable.goodJudgment}ms)"
           style:width="{(editable.goodJudgment - editable.perfectJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-info" />
+          <progress value="1" max="1" class="progress progress-info"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment < 25
@@ -120,7 +120,7 @@
           data-tip="{$t('play_configuration.bad')} ({badJudgment}ms)"
           style:width="{(badJudgment - editable.goodJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-error" />
+          <progress value="1" max="1" class="progress progress-error"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment > 225
@@ -129,7 +129,7 @@
           data-tip={$t('play_configuration.miss_or_incoming')}
           style:width="{100 - badJudgment / 3.5}%"
         >
-          <progress value="0" max="1" class="progress" />
+          <progress value="0" max="1" class="progress"></progress>
         </div>
       </div>
       <div class="form-control">

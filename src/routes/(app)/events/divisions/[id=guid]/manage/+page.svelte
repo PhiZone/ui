@@ -88,7 +88,7 @@
     class="background min-h-screen"
     style:background-image="url({division.illustration ?? event.illustration})"
   >
-    <div class="hero-overlay bg-opacity-60" />
+    <div class="hero-overlay bg-opacity-60"></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
@@ -718,7 +718,7 @@
 {:else if $division.isError}
   <Error error={$division.error} back="/divisions" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

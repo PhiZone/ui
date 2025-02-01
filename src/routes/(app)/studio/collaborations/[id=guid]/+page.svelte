@@ -39,5 +39,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/studio/collaborations" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

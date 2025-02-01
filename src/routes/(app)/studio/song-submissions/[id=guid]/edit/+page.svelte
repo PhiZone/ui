@@ -530,7 +530,7 @@
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider} />
+                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
                   {#if !!errors?.get('PreviewStart') || !!errors?.get('PreviewEnd')}
                     <span class="place-self-center w-1/3 text-error">
                       {errors?.get('PreviewStart') ?? errors?.get('PreviewEnd')}
@@ -940,7 +940,7 @@
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
-                />
+                ></textarea>
               </label>
               <button
                 type="button"

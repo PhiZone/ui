@@ -504,7 +504,7 @@
                   </p>
                 {/if}
               </div>
-              <div class="divider lg:divider-horizontal" />
+              <div class="divider lg:divider-horizontal"></div>
               <div class="lg:w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
                 <div
@@ -723,5 +723,5 @@
 {:else if $chart.isError}
   <Error error={$chart.error} back="/charts" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

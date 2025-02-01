@@ -363,7 +363,7 @@
               $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={`${$t('common.description')}${$t('common.optional')}`}
-          />
+          ></textarea>
         </label>
       </div>
       <div class="modal-action">
@@ -623,5 +623,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

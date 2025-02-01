@@ -202,7 +202,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$voteErrors.score}
           data-tip={$voteErrors.score}
-        />
+        ></div>
         <div class="flex items-center gap-2">
           <input
             id="suggested_difficulty"
@@ -226,7 +226,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$voteErrors.score}
           data-tip={$voteErrors.score}
-        />
+        ></div>
         <div
           class={$voteErrors.message
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-4'
@@ -243,7 +243,7 @@
               class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-full h-48"
               placeholder={$t('studio.submission.write_message')}
               bind:value={message}
-            />
+            ></textarea>
           </label>
         </div>
         <div class="modal-action">
@@ -734,7 +734,7 @@
               <i class="fa-solid fa-angles-right"></i>
             </a>
             {#if $assets.isLoading}
-              <div />
+              <div></div>
             {:else if $assets.isSuccess}
               {#if $assets.data.data.length > 0}
                 <div class="result">
@@ -769,7 +769,7 @@
               </label>
             {/if}
             {#if $collaborations.isLoading}
-              <div />
+              <div></div>
             {:else if $collaborations.isSuccess}
               {#if $collaborations.data.data.length > 0}
                 <div class="flex flex-col gap-4">
@@ -814,7 +814,7 @@
                 </label>
               {/if}
               {#if $collections.isLoading}
-                <div />
+                <div></div>
               {:else if $collections.isSuccess}
                 {#if $collections.data.data.length > 0}
                   {#each $collections.data.data as admission}
@@ -957,5 +957,5 @@
 {:else if $submission.isError}
   <Error error={$submission.error} back="/studio/chart-submissions" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

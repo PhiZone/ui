@@ -228,7 +228,7 @@
           data-tip="{$t('play_configuration.perfect')} ({$form.perfectJudgment}ms)"
           style:width="{$form.perfectJudgment / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-warning" />
+          <progress value="1" max="1" class="progress progress-warning"></progress>
         </div>
         <div
           class="tooltip {$form.goodJudgment < 40
@@ -237,7 +237,7 @@
           data-tip="{$t('play_configuration.good')} ({$form.goodJudgment}ms)"
           style:width="{($form.goodJudgment - $form.perfectJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-info" />
+          <progress value="1" max="1" class="progress progress-info"></progress>
         </div>
         <div
           class="tooltip {$form.goodJudgment < 25
@@ -246,14 +246,14 @@
           data-tip="{$t('play_configuration.bad')} ({badJudgment}ms)"
           style:width="{(badJudgment - $form.goodJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-error" />
+          <progress value="1" max="1" class="progress progress-error"></progress>
         </div>
         <div
           class="tooltip {$form.goodJudgment > 225 ? 'tooltip-left' : ''} leading-[0px] h-[7.5px]"
           data-tip={$t('play_configuration.miss_or_incoming')}
           style:width="{100 - badJudgment / 3.5}%"
         >
-          <progress value="0" max="1" class="progress" />
+          <progress value="0" max="1" class="progress"></progress>
         </div>
       </div>
       <div class="form-control">
@@ -900,7 +900,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('Gender')}
                 data-tip={updateErrors?.get('Gender')}
-              />
+              ></div>
               <label class="join w-full mt-2">
                 <span
                   class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
@@ -922,7 +922,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('UserName')}
                 data-tip={updateErrors?.get('UserName')}
-              />
+              ></div>
               <label class="join w-full mt-2">
                 <span
                   class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
@@ -951,7 +951,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('Language')}
                 data-tip={updateErrors?.get('Language')}
-              />
+              ></div>
               <label class="join w-full mt-2">
                 <span
                   class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
@@ -977,7 +977,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('RegionCode')}
                 data-tip={updateErrors?.get('RegionCode')}
-              />
+              ></div>
               <label class="join w-full mt-2">
                 <span
                   class="btn no-animation join-item w-1/3 md:w-1/6 overflow-hidden text-ellipsis"
@@ -1033,7 +1033,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('DateOfBirth')}
                 data-tip={updateErrors?.get('DateOfBirth')}
-              />
+              ></div>
               <div class="relative mt-2">
                 <label class="join w-full">
                   <span
@@ -1049,7 +1049,7 @@
                     on:input={(e) => {
                       patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);
                     }}
-                  />
+                  ></textarea>
                 </label>
                 <button
                   type="button"
@@ -1069,7 +1069,7 @@
                 class="tooltip tooltip-bottom tooltip-error mb-2"
                 class:tooltip-open={!!updateErrors?.get('Biography')}
                 data-tip={updateErrors?.get('Biography')}
-              />
+              ></div>
               <div class="flex justify-center mt-2">
                 <div
                   class="tooltip tooltip-top tooltip-error w-full"

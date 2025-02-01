@@ -41,13 +41,13 @@
   >
     <div class="form-control">
       <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
-        <span style={`--value:${min};`} />
+        <span style={`--value:${min};`}></span>
       </span>
       min
     </div>
     <div class="form-control">
       <span class={`countdown font-code text-5xl ${min === 0 ? 'text-error' : ''}`}>
-        <span style={`--value:${sec};`} />
+        <span style={`--value:${sec};`}></span>
       </span>
       sec
     </div>

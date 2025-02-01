@@ -161,7 +161,7 @@
 {:else if $record.isError}
   <Error error={$record.error} back="/records" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

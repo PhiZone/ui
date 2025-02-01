@@ -64,7 +64,7 @@
           placeholder={$t('common.write_comment')}
           bind:value={commentText}
           {disabled}
-        />
+        ></textarea>
         <button
           class="ml-3 btn {disabled || commentText.length === 0
             ? 'btn-disabled'
@@ -76,7 +76,7 @@
         </button>
       </div>
       {#if $query.isLoading}
-        <div />
+        <div></div>
       {:else if $query.isSuccess}
         {@const { total, perPage, data } = $query.data}
         {#if total && perPage && data && data.length > 0}

@@ -202,7 +202,7 @@
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={$errors.UserName || emailConfirmationResult.errors.UserName}
               data-tip={$errors.UserName ?? emailConfirmationResult.errors.UserName}
-            />
+            ></div>
           </div>
           <label class="label" for="email">
             <span class="label-text">{$t('session.email')}</span>
@@ -222,7 +222,7 @@
               class="tooltip tooltip-right tooltip-error"
               class:tooltip-open={$errors.Email || emailConfirmationResult.errors.Email}
               data-tip={$errors.Email ?? emailConfirmationResult.errors.Email}
-            />
+            ></div>
           </div>
           {#if $form.UserName && $form.Email}<label class="label" for="password">
               <span class="label-text">{$t('session.password')}</span>
@@ -241,7 +241,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.Password}
                 data-tip={$errors.Password}
-              />
+              ></div>
             </div>
             <label class="label" for="confirm_password">
               <span class="label-text">{$t('session.confirm_password')}</span>
@@ -261,7 +261,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.ConfirmPassword}
                 data-tip={$errors.ConfirmPassword}
-              />
+              ></div>
             </div>
             <label class="label" for="language">
               <span class="label-text">{$t('session.registration.select_language')}</span>
@@ -290,7 +290,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={$errors.Language || emailConfirmationResult.errors.Language}
                 data-tip={$errors.Language ?? emailConfirmationResult.errors.Language}
-              />
+              ></div>
             </div>
             <label class="label" for="region">
               <span class="label-text">{$t('session.registration.select_region')}</span>
@@ -311,7 +311,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.RegionCode}
                 data-tip={$errors.RegionCode}
-              />
+              ></div>
             </div>
             <label class="label" for="email_confirmation_code">
               <span class="label-text">{$t('session.registration.email_confirmation_code')}</span>
@@ -357,7 +357,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.EmailConfirmationCode}
                 data-tip={$errors.EmailConfirmationCode}
-              />
+              ></div>
             </div>
           {/if}
           <div class="form-control">
@@ -403,7 +403,7 @@
               class="tooltip tooltip-bottom tooltip-error w-full"
               class:tooltip-open={!!$message}
               data-tip={$message}
-            />
+            ></div>
           </div>
         </form>
         <div class="divider"></div>

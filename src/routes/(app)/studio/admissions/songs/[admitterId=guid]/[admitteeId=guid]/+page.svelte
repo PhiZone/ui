@@ -33,5 +33,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/studio/admissions/songs" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

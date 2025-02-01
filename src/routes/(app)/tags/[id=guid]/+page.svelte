@@ -58,7 +58,7 @@
         <p class="py-3 text-center">{$t('common.empty')}</p>
       {/if}
     {:else}
-      <div class="min-h-page skeleton" />
+      <div class="min-h-page skeleton"></div>
     {/if}
     {#if $charts.isSuccess}
       {@const { total, perPage, data } = $charts.data}
@@ -91,11 +91,11 @@
         <p class="py-3 text-center">{$t('common.empty')}</p>
       {/if}
     {:else}
-      <div class="min-h-page skeleton" />
+      <div class="min-h-page skeleton"></div>
     {/if}
   </div>
 {:else if $tag.isError}
   <Error error={$tag.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

@@ -1,17 +1,6 @@
 {
-  "answers": [
-    "Highly compliant",
-    "Up to standard",
-    "Marginally compliant",
-    "Unsatisfactory"
-  ],
-  "aspect_names": [
-    "Sound Picking",
-    "Note Arrangement",
-    "Concord",
-    "Gameplay",
-    "Visual Effects"
-  ],
+  "answers": ["Highly compliant", "Up to standard", "Marginally compliant", "Unsatisfactory"],
+  "aspect_names": ["Sound Picking", "Note Arrangement", "Concord", "Gameplay", "Visual Effects"],
   "aspects": [
     "the sound pickings in this chart",
     "the arrangement of notes in this chart",
@@ -20,17 +9,10 @@
     "the visual effects of this chart"
   ],
   "current_score": "Current Score",
-  "innovation_answers": [
-    "Yes",
-    "No / No innovation in this aspect"
-  ],
+  "innovation_answers": ["Yes", "No / No innovation in this aspect"],
   "innovation_question": "Do you recognize the innovation in this aspect?",
   "question": "Which of the following do you think best describes {{aspect}}?",
-  "structure_answers": [
-    "Clear and reasonable",
-    "Partially illogical",
-    "Almost structureless"
-  ],
+  "structure_answers": ["Clear and reasonable", "Partially illogical", "Almost structureless"],
   "structure_question": "Which of the following do you think best describes the structural design in this aspect?",
   "title": "Chart Review Wizard"
 }

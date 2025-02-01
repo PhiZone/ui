@@ -270,7 +270,7 @@
     </div>
   </div>
   <div class="background min-h-screen" style:background-image="url({getAvatar(team.icon)})">
-    <div class="hero-overlay bg-opacity-70" />
+    <div class="hero-overlay bg-opacity-70"></div>
     <div class="min-h-page backdrop-blur-3xl py-24 px-2 md:px-12 flex flex-col items-center">
       <div class="py-3 flex flex-col sm:flex-row gap-4 items-center max-w-5xl">
         <div class="avatar">
@@ -501,5 +501,5 @@
 {:else if $team.isError}
   <Error error={$team.error} back="/events" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

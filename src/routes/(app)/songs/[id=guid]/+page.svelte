@@ -310,7 +310,7 @@
 {:else if $song.isError}
   <Error error={$song.error} back="/songs" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

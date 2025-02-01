@@ -273,7 +273,7 @@
               name="description"
               placeholder={$t('common.description')}
               class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-3/4 h-24"
-            />
+            ></textarea>
           </label>
         </div>
         <div class="modal-action mt-3">
@@ -385,5 +385,5 @@
 {:else if $division.isError}
   <Error error={$division.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
