@@ -19,7 +19,8 @@
 
   $: ({ user, id, divisionId, api } = data);
 
-  $: query = createQuery(api.event.task.info({ id }));
+  $: options = api.event.task.info({ id });
+  $: query = createQuery({ ...options });
   $: division = createQuery(api.event.division.info({ id: divisionId }));
   $: event = createQuery(
     api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
@@ -60,7 +61,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['event.task.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;

@@ -24,7 +24,8 @@
   $: ({ id, chartId, user, api, queryClient } = data);
 
   $: submission = createQuery(api.chart.submission.info({ id: chartId }));
-  $: query = createQuery(api.chart.submission.asset.info({ chartId, id }));
+  $: options = api.chart.submission.asset.info({ chartId, id });
+  $: query = createQuery({ ...options });
   $: content = createQuery({
     queryKey: ['chart-submission-asset-content'],
     queryFn: async () => await (await fetch($query.data?.data.file ?? '')).text(),
@@ -47,7 +48,7 @@
       });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['chart.submission.asset.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;

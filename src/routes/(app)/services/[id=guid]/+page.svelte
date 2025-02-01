@@ -21,7 +21,8 @@
 
   $: ({ searchParams, user, id, api } = data);
 
-  $: query = createQuery(api.service.info({ id }));
+  $: options = api.service.info({ id });
+  $: query = createQuery({ ...options });
 
   const queryClient = useQueryClient();
 
@@ -47,7 +48,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['service.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;

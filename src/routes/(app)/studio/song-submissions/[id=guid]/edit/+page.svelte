@@ -46,7 +46,8 @@
   let illustrationCropping = false;
   let illustrationSrc: string;
 
-  $: submission = createQuery(api.song.submission.info({ id }));
+  $: options = api.song.submission.info({ id });
+  $: submission = createQuery({ ...options });
   $: composer = createQuery(
     api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
   );
@@ -171,7 +172,7 @@
       const resp = await api.song.submission.updateFile(type, { id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['song.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -207,7 +208,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['song.submission.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -246,7 +247,7 @@
       const resp = await api.song.submission.updateFile('illustration', { id, File: e.detail });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['song.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         illustrationCropping = false;
         status = Status.OK;
       } else {

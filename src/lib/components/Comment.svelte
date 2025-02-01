@@ -22,6 +22,10 @@
 
   const queryClient = useQueryClient();
 
+  $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
+  $: options = api.reply.list({ commentId: comment.id, page: replyPage });
+  $: query = createQuery({ ...options });
+
   $: disabled = !user;
   let replyText = '';
   const sendReply = async () => {
@@ -30,15 +34,9 @@
       await api.reply.create({ commentId: comment.id, content: replyText, language: $locale });
       disabled = false;
       replyText = '';
-      await queryClient.invalidateQueries([
-        'reply.list',
-        { commentId: comment.id, page: replyPage },
-      ]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
     }
   };
-
-  $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
-  $: query = createQuery(api.reply.list({ commentId: comment.id, page: replyPage }));
 
   const replyTo = async (user: UserDto) => {
     replyText = `${$t('common.reply_to')}@${user.userName}${$t('common.colon')}`;

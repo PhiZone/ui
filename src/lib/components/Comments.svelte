@@ -24,6 +24,16 @@
 
   const queryClient = useQueryClient();
 
+  $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
+  $: options = api.comment.list({
+    type,
+    id,
+    page: commentPage,
+    order: ['likeCount', 'dateCreated'],
+    desc: [true, true],
+  });
+  $: query = createQuery({ ...options });
+
   $: disabled = !user;
   let commentText = '';
   const sendComment = async () => {
@@ -32,23 +42,9 @@
       await api.comment.create({ type, id, content: commentText, language: $locale });
       disabled = false;
       commentText = '';
-      await queryClient.invalidateQueries([
-        'comment.list',
-        { type, id, page: commentPage, order: ['likeCount', 'dateCreated'], desc: [true, true] },
-      ]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
     }
   };
-
-  $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
-  $: query = createQuery(
-    api.comment.list({
-      type,
-      id,
-      page: commentPage,
-      order: ['likeCount', 'dateCreated'],
-      desc: [true, true],
-    }),
-  );
 </script>
 
 <div class="indicator w-full my-4">

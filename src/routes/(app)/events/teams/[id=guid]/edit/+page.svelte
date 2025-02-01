@@ -27,7 +27,8 @@
   let iconCropperSrc: string;
   let iconSrc: string;
 
-  $: query = createQuery(api.event.team.info({ id }));
+  $: options = api.event.team.info({ id });
+  $: query = createQuery({ ...options });
   $: division = createQuery(
     api.event.division.info(
       { id: $query.data?.data.divisionId ?? '' },
@@ -64,7 +65,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['event.team.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -121,7 +122,7 @@
       const resp = await api.event.team.updateIcon({ id, File: e.detail });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['event.team.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         iconCropping = false;
         status = Status.OK;
       } else {

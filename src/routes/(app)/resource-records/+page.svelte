@@ -26,7 +26,8 @@
   let batchTotal = 0;
   let batch: CreateOpts[] | null = null;
 
-  $: query = createQuery(api.resourceRecord.list(searchParams));
+  $: options = api.resourceRecord.list(searchParams);
+  $: query = createQuery({ ...options });
 
   const queryClient = useQueryClient();
 
@@ -116,7 +117,7 @@
         batchStatus = Status.OK;
         batchModalOpen = false;
         batch = null;
-        await queryClient.invalidateQueries(['resourceRecord.list', searchParams]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
       } else {
         batchStatus = Status.ERROR;
         batchError = (await resp.json()).code;

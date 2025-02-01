@@ -25,7 +25,8 @@
   $: ({ id, chartId, user, api, queryClient } = data);
 
   $: chart = createQuery(api.chart.info({ id: chartId }));
-  $: chartAssetQuery = createQuery(api.chart.asset.info({ chartId, id }));
+  $: options = api.chart.asset.info({ chartId, id });
+  $: chartAssetQuery = createQuery({ ...options });
   $: content = createQuery({
     queryKey: ['chart-asset-content'],
     queryFn: async () => await (await fetch($chartAssetQuery.data?.data.file ?? '')).text(),
@@ -48,7 +49,7 @@
       });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['chart.asset.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;

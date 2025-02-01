@@ -29,7 +29,8 @@
   let error: ResponseDtoError | undefined = undefined;
   let errors: Map<string, string> | undefined = undefined;
 
-  $: submission = createQuery(api.chart.submission.info({ id }));
+  $: options = api.chart.submission.info({ id });
+  $: submission = createQuery({ ...options });
   $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
@@ -76,7 +77,7 @@
       const resp = await api.chart.submission.updateChart({ id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['chart.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -101,7 +102,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['chart.submission.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;

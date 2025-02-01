@@ -61,10 +61,12 @@
     return 0;
   };
 
-  $: chart = createQuery(api.chart.info({ id, includeAssets: true }));
+  $: chartOptions = api.chart.info({ id, includeAssets: true });
+  $: chart = createQuery({ ...chartOptions });
   $: collections = createQuery(api.chart.listAllAdmitters({ id }));
   $: leaderboard = createQuery(api.chart.leaderboard({ id }));
-  $: votes = createQuery(api.vote.listAll({ chartId: id }));
+  $: votesOptions = api.vote.listAll({ chartId: id });
+  $: votes = createQuery({ ...votesOptions });
   $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
   $: charter = richtext($chart.data?.data.authorName ?? $t('common.anonymous'));
 
@@ -266,8 +268,8 @@
                 status = Status.ERROR;
               } else if (result.type === 'success') {
                 status = Status.OK;
-                await queryClient.invalidateQueries(['chart.info', { id, includeAssets: true }]);
-                await queryClient.invalidateQueries(['vote.listAll', { chartId: id }]);
+                await queryClient.invalidateQueries({ queryKey: chartOptions.queryKey });
+                await queryClient.invalidateQueries({ queryKey: votesOptions.queryKey });
                 // TODO: toast
                 voteOpen = false;
               }
