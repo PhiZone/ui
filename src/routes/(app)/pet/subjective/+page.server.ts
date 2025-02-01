@@ -4,7 +4,8 @@ import rehypeKatexSvelte from 'rehype-katex-svelte';
 import remarkMath from 'remark-math';
 import queryString from 'query-string';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { Plugin } from 'unified';
 import type { KatexOptions } from 'katex';
 import { fail, redirect } from '@sveltejs/kit';
@@ -22,7 +23,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async ({ url, fetch, locals }) => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   let answers;
   try {
@@ -83,7 +84,7 @@ export const actions = {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });

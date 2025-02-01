@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { createQuery } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { convertTime, parseTime } from '$lib/utils';

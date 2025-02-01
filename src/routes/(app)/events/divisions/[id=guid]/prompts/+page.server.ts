@@ -3,7 +3,8 @@ import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
 import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const resourceSchema = z.object({
@@ -21,7 +22,7 @@ const resourceSchema = z.object({
 type ResourceSchema = z.infer<typeof resourceSchema>;
 
 export const load = async () => {
-  const resourceForm = await superValidate(resourceSchema);
+  const resourceForm = await superValidate(zod(resourceSchema));
   return { resourceForm };
 };
 
@@ -29,7 +30,7 @@ export const actions = {
   resource: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const resourceForm = await superValidate(formData, resourceSchema);
+    const resourceForm = await superValidate(formData, zod(resourceSchema));
 
     if (!resourceForm.valid) {
       return fail(400, { resourceForm });

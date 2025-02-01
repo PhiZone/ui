@@ -3,7 +3,7 @@
   import User from '$lib/components/User.svelte';
   import Question from '$lib/components/Question.svelte';
   import { getUserPrivilege } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
 
   export let data;
   $: ({ user, answer } = data);

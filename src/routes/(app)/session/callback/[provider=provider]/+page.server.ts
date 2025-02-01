@@ -2,7 +2,8 @@ import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import API, { Gender } from '$lib/api';
 import { SUPPORTED_APPS } from '$lib/constants';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { t } from '$lib/translations/config';
 import { setTokens } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
@@ -84,7 +85,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
     redirect(303, url.searchParams.get('redirect') ?? '/');
   }
 
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { register: true, provider: params.provider, form };
 };
 
@@ -93,7 +94,7 @@ export const actions = {
     const api = new API(fetch);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });

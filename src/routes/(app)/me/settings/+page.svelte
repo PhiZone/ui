@@ -13,7 +13,7 @@
     toLocalTime,
   } from '$lib/utils';
   import type { PatchElement } from '$lib/api/types';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';

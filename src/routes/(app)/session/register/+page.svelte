@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { locales, locale, t } from '$lib/translations/config';
   import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
   import { SendEmailMode } from '$lib/api/auth';

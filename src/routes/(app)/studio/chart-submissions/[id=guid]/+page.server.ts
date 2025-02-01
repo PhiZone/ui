@@ -3,7 +3,8 @@ import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
 import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const voteSchema = z.object({
@@ -31,9 +32,9 @@ type CollabSchema = z.infer<typeof collabSchema>;
 type CollectionSchema = z.infer<typeof collectionSchema>;
 
 export const load = async () => {
-  const voteForm = await superValidate(voteSchema);
-  const collabForm = await superValidate(collabSchema);
-  const collectionForm = await superValidate(collectionSchema);
+  const voteForm = await superValidate(zod(voteSchema));
+  const collabForm = await superValidate(zod(collabSchema));
+  const collectionForm = await superValidate(zod(collectionSchema));
   return { voteForm, collabForm, collectionForm };
 };
 
@@ -41,7 +42,7 @@ export const actions = {
   vote: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const voteForm = await superValidate(formData, voteSchema);
+    const voteForm = await superValidate(formData, zod(voteSchema));
 
     if (!voteForm.valid) {
       return fail(400, { voteForm });
@@ -81,7 +82,7 @@ export const actions = {
   collab: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const collabForm = await superValidate(formData, collabSchema);
+    const collabForm = await superValidate(formData, zod(collabSchema));
 
     if (!collabForm.valid) {
       return fail(400, { collabForm });
@@ -121,7 +122,7 @@ export const actions = {
   collection: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const collectionForm = await superValidate(formData, collectionSchema);
+    const collectionForm = await superValidate(formData, zod(collectionSchema));
 
     if (!collectionForm.valid) {
       return fail(400, { collectionForm });

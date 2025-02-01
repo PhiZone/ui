@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import EventTask from '$lib/components/EventTask.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { hasEventPermission } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
 

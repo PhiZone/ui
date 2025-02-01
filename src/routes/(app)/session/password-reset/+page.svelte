@@ -1,6 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
 
   export let data;
 

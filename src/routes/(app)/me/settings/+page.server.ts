@@ -1,6 +1,7 @@
 import API from '$lib/api';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
@@ -34,7 +35,7 @@ export const load = async ({ url, cookies }) => {
       cookies.delete('preferred_play_configuration', { path: '/' });
     }
   }
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form, preferredPlayConfiguration: cookies.get('preferred_play_configuration') };
 };
 
@@ -43,7 +44,7 @@ export const actions = {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });

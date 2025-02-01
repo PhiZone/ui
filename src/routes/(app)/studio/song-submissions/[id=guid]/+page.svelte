@@ -5,7 +5,7 @@
   import Collaboration from '$lib/components/Collaboration.svelte';
   import User from '$lib/components/User.svelte';
   import Song from '$lib/components/Song.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';

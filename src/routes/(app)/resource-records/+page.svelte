@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { Status } from '$lib/constants';
   import type { CreateOpts } from '$lib/api/resourceRecord';
   import { getUserPrivilege } from '$lib/utils';

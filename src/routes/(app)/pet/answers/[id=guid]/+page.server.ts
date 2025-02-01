@@ -6,7 +6,8 @@ import { compile } from 'mdsvex';
 import rehypeKatexSvelte from 'rehype-katex-svelte';
 import remarkMath from 'remark-math';
 import type { Plugin } from 'unified';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { toCamel } from '$lib/utils';
@@ -40,7 +41,7 @@ export const load = async ({ params, locals, fetch }) => {
     choices: null,
     language: locale.get(),
   };
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return {
     answer,
     form,
@@ -51,7 +52,7 @@ export const actions = {
   assess: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });

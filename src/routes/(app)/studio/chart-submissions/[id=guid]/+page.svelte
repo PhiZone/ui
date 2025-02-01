@@ -7,7 +7,7 @@
   import { LEVEL_TYPES } from '$lib/constants';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import Collaboration from '$lib/components/Collaboration.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import User from '$lib/components/User.svelte';
   import Song from '$lib/components/Song.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';

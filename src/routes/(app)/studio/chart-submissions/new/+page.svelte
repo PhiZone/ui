@@ -3,7 +3,7 @@
   import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
   import User from '$lib/components/User.svelte';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { createQuery } from '@tanstack/svelte-query';
   import { richtext } from '$lib/richtext';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';

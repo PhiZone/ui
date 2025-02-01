@@ -1,6 +1,7 @@
 import API from '$lib/api';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
@@ -13,7 +14,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -22,7 +23,7 @@ export const actions = {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });

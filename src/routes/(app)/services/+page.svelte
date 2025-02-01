@@ -3,7 +3,7 @@
   import { t } from '$lib/translations/config';
   import Service from '$lib/components/Service.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
   import Tag from '$lib/components/Tag.svelte';

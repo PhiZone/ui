@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
   import { range } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { createQuery } from '@tanstack/svelte-query';
 
   export let data;

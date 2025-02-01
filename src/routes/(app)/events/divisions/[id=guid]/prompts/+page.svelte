@@ -5,7 +5,7 @@
   import Chart from '$lib/components/Chart.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
   import Error from '$lib/components/Error.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
   import { getLevelDisplay, hasEventPermission } from '$lib/utils.js';

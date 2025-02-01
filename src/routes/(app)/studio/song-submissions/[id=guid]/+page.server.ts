@@ -3,7 +3,8 @@ import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
 import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const reviewSchema = z.object({
@@ -33,9 +34,9 @@ type CollabSchema = z.infer<typeof collabSchema>;
 type ChapterSchema = z.infer<typeof chapterSchema>;
 
 export const load = async () => {
-  const reviewForm = await superValidate(reviewSchema);
-  const collabForm = await superValidate(collabSchema);
-  const chapterForm = await superValidate(chapterSchema);
+  const reviewForm = await superValidate(zod(reviewSchema));
+  const collabForm = await superValidate(zod(collabSchema));
+  const chapterForm = await superValidate(zod(chapterSchema));
   return { reviewForm, collabForm, chapterForm };
 };
 
@@ -43,7 +44,7 @@ export const actions = {
   review: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const reviewForm = await superValidate(formData, reviewSchema);
+    const reviewForm = await superValidate(formData, zod(reviewSchema));
 
     if (!reviewForm.valid) {
       return fail(400, { reviewForm });
@@ -83,7 +84,7 @@ export const actions = {
   collab: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const collabForm = await superValidate(formData, collabSchema);
+    const collabForm = await superValidate(formData, zod(collabSchema));
 
     if (!collabForm.valid) {
       return fail(400, { collabForm });
@@ -123,7 +124,7 @@ export const actions = {
   chapter: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const chapterForm = await superValidate(formData, chapterSchema);
+    const chapterForm = await superValidate(formData, zod(chapterSchema));
 
     if (!chapterForm.valid) {
       return fail(400, { chapterForm });
