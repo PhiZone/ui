@@ -521,7 +521,7 @@
           class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="text-5xl py-3 font-bold gap-4 items-center content flex">
+            <div class="text-5xl py-3 font-bold gap-4 items-center flex">
               {#if submission.title}
                 {submission.title}
               {:else if submission.song}
