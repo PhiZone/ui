@@ -458,27 +458,27 @@
                     class="tooltip tooltip-left tooltip-success absolute top-6 right-6"
                     data-tip={$t('resource_record.strategies.0')}
                   >
-                    <button class="btn btn-xs btn-circle btn-success no-animation">
+                    <div class="btn btn-xs btn-circle btn-success no-animation">
                       <i class="fa-solid fa-check"></i>
-                    </button>
+                    </div>
                   </div>
                 {:else if resourceRecord.strategy === 4}
                   <div
                     class="tooltip tooltip-left tooltip-error absolute top-6 right-6"
                     data-tip={$t('resource_record.strategies.4')}
                   >
-                    <button class="btn btn-xs btn-circle btn-error no-animation">
+                    <div class="btn btn-xs btn-circle btn-error no-animation">
                       <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    </div>
                   </div>
                 {:else}
                   <div
                     class="tooltip tooltip-left tooltip-warning absolute top-6 right-6"
                     data-tip={$t(`resource_record.strategies.${resourceRecord.strategy}`)}
                   >
-                    <button class="btn btn-xs btn-circle btn-warning no-animation">
+                    <div class="btn btn-xs btn-circle btn-warning no-animation">
                       <i class="fa-solid fa-exclamation"></i>
-                    </button>
+                    </div>
                   </div>
                 {/if}
                 <div class="tooltip tooltip-bottom max-w-fit" data-tip={resourceRecord.title}>

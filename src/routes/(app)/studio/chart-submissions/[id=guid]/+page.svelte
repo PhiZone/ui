@@ -428,6 +428,7 @@
             />
             <button
               type="button"
+              aria-label={$t('common.search')}
               class={`btn border-2 normal-border w-1/6 join-item ${
                 $collectionSearch.isLoading
                   ? $collectionSearch.isError

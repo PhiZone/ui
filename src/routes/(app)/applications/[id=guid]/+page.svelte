@@ -48,9 +48,9 @@
                   class="tooltip tooltip-right tooltip-primary"
                   data-tip={$t('common.preferred')}
                 >
-                  <button class="btn btn-sm btn-circle btn-primary no-animation">
+                  <div class="btn btn-sm btn-circle btn-primary no-animation">
                     <i class="fa-solid fa-star"></i>
-                  </button>
+                  </div>
                 </div>
               {/if}
             </div>

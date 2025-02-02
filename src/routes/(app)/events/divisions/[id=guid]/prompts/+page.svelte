@@ -139,6 +139,7 @@
                       : 'hover:btn-secondary btn-outline'
                     : 'btn-disabled'
                 }`}
+                aria-label={$t('common.search')}
                 on:click={() => {
                   queryResource = true;
                 }}
@@ -210,6 +211,7 @@
                       : 'hover:btn-secondary btn-outline'
                     : 'btn-disabled'
                 }`}
+                aria-label={$t('common.search')}
                 on:click={() => {
                   queryResource = true;
                 }}

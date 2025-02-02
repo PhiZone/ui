@@ -99,7 +99,7 @@
           </div>
         {/if}
         {#if showFollow}
-          <button class="w-24 h-12 btn" disabled></button>
+          <div class="w-24 h-12 btn btn-disabled"></div>
         {/if}
       {:else if initUser || $query.isSuccess}
         {@const user = initUser ?? $query.data?.data}

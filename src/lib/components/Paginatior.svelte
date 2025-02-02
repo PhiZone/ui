@@ -26,6 +26,7 @@
       <a
         href="?{getSearch(page - 1)}"
         class="btn join-item text-lg {page > 1 ? 'border-2 hover:btn-outline' : 'btn-disabled'}"
+        aria-label="left"
       >
         <i class="fa-solid fa-arrow-left"></i>
       </a>
@@ -62,6 +63,7 @@
         class="btn join-item text-lg {page < totalPages
           ? 'border-2 hover:btn-outline'
           : 'btn-disabled'}"
+        aria-label="right"
       >
         <i class="fa-solid fa-arrow-right"></i>
       </a>

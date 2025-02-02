@@ -26,13 +26,13 @@
     <img src={getCompressedImage(event.illustration)} alt="Illustration" class="object-fill" />
     <div class="absolute bottom-2 right-2 flex gap-1">
       {#each event.divisions as division}
-        <button
+        <div
           class="btn btn-circle btn-xs w-[10px] btn-active no-animation {division.status == 2
             ? 'btn-success'
             : division.status == 3
               ? 'btn-error'
               : 'btn-ghost'}"
-        ></button>
+        ></div>
       {/each}
     </div>
   </figure>

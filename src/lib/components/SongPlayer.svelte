@@ -130,6 +130,7 @@
                 ? 'btn-active'
                 : 'btn-outline'} flex items-center justify-center"
               title={$t('song.loop')}
+              aria-label={$t('song.loop')}
               on:click={() => {
                 loop = !loop;
               }}
@@ -139,6 +140,7 @@
             <button
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.rewind')}
+              aria-label={$t('song.rewind')}
               on:click={() => {
                 let time = audio.currentTime - 10;
                 audio.currentTime = Math.max(time, 0);
@@ -152,6 +154,7 @@
               <button
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.pause')}
+                aria-label={$t('song.pause')}
                 on:click={() => {
                   pauseAudio();
                 }}
@@ -162,6 +165,7 @@
               <button
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.play')}
+                aria-label={$t('song.play')}
                 on:click={() => {
                   playAudio();
                 }}
@@ -172,6 +176,7 @@
             <button
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.fast_forward')}
+              aria-label={$t('song.fast_forward')}
               on:click={() => {
                 let time = audio.currentTime + 10;
                 audio.currentTime = Math.min(time, duration);
@@ -182,13 +187,14 @@
               <i class="fa-solid fa-forward"></i>
             </button>
             <div class="dropdown dropdown-hover dropdown-top float-right">
-              <button
+              <div
                 tabindex="0"
+                role="button"
                 class="btn btn-circle btn-sm rounded-full btn-primary border-2 btn-outline"
                 title={$t('song.volume')}
               >
                 <i class="fa-solid fa-volume-high"></i>
-              </button>
+              </div>
               <div
                 tabindex="-1"
                 class="dropdown-content menu p-2 shadow bg-base-100 bg-opacity-50 rounded-box w-[12vw] lg:w-[8vw]"

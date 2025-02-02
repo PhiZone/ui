@@ -850,9 +850,9 @@
     <div class="flex gap-2 items-center max-w-[140px] mb-1">
       {#if preferredPlayConfiguration == playConfiguration.id}
         <div class="tooltip tooltip-right tooltip-primary" data-tip={$t('common.preferred')}>
-          <button class="btn btn-xs btn-circle btn-primary no-animation">
+          <div class="btn btn-xs btn-circle btn-primary no-animation">
             <i class="fa-solid fa-star"></i>
-          </button>
+          </div>
         </div>
       {/if}
       {#if playConfiguration.name}

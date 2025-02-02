@@ -270,6 +270,7 @@
                   />
                   <button
                     type="button"
+                    aria-label={$t('common.search')}
                     class={`btn border-2 normal-border w-1/6 join-item ${
                       $songSearch.isLoading
                         ? $songSearch.isError
@@ -601,6 +602,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  aria-label={$t('common.add')}
                   on:click|preventDefault={() => {
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;

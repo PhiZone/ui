@@ -85,6 +85,7 @@
         />
         <button
           class="btn lg:btn-lg btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
+          aria-label={$t('common.search')}
         >
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>

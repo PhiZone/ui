@@ -80,26 +80,26 @@
       </h3>
       {#if response}
         {#if response.type === 0}
-          <button class="btn btn-xs btn-circle btn-info no-animation">
+          <div class="btn btn-xs btn-circle btn-info no-animation">
             <i class="fa-solid fa-info"></i>
-          </button>
+          </div>
         {:else if response.type === 1}
-          <button class="btn btn-xs btn-circle btn-success no-animation">
+          <div class="btn btn-xs btn-circle btn-success no-animation">
             <i class="fa-solid fa-check"></i>
-          </button>
+          </div>
         {:else if response.type === 2}
-          <button class="btn btn-xs btn-circle btn-success no-animation">
+          <div class="btn btn-xs btn-circle btn-success no-animation">
             <i class="fa-solid fa-share"></i>
-          </button>
+          </div>
         {:else}
-          <button class="btn btn-xs btn-circle btn-error no-animation">
+          <div class="btn btn-xs btn-circle btn-error no-animation">
             <i class="fa-solid fa-xmark"></i>
-          </button>
+          </div>
         {/if}
       {:else}
-        <button class="btn btn-xs btn-circle btn-warning no-animation">
+        <div class="btn btn-xs btn-circle btn-warning no-animation">
           <span class="loading loading-dots loading-xs"></span>
-        </button>
+        </div>
       {/if}
     </div>
     <div class="py-4 flex flex-col gap-4 min-w-fit">

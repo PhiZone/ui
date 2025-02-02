@@ -48,7 +48,10 @@
       class="input border-2 normal-border transition hover:border-inherit join-item w-full"
       bind:value={text}
     />
-    <button class="btn btn-square border-2 normal-border hover:btn-outline bg-base-100 join-item">
+    <button
+      class="btn btn-square border-2 normal-border hover:btn-outline bg-base-100 join-item"
+      aria-label={$t('common.search')}
+    >
       <i class="fa-solid fa-magnifying-glass fa-lg"></i>
     </button>
   </div>

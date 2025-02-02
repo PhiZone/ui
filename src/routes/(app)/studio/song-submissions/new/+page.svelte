@@ -411,6 +411,7 @@
                     {#if previewStatus === 2}
                       <button
                         type="button"
+                        aria-label={$t('song.pause')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click|preventDefault={handlePreviewPlay}
                       >
@@ -419,6 +420,7 @@
                     {:else}
                       <button
                         type="button"
+                        aria-label={$t('song.play')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
                         on:click|preventDefault={handlePreviewPlay}
                       >
@@ -853,6 +855,7 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                  aria-label={$t('common.add')}
                   on:click|preventDefault={() => {
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
