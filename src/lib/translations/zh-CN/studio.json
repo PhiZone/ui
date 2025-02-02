@@ -97,7 +97,12 @@
     "write_message": "对这张谱面进行评价",
     "your_id": "你的 ID"
   },
-  "upload_chart": "上传谱面",
+  "upload": "上传",
+  "choose_chart": "选择谱面",
+  "invalid_chart_bundle": "无法在上传的 ZIP 文件中找到有效的谱面。",
+  "multiple_charts": "上传的 ZIP 文件中包含多个谱面。如果继续，将只会处理第一个谱面。",
+  "confirm_chart": "确认谱面",
   "upload_song": "上传曲目",
+  "upload_chart": "上传谱面",
   "view_guide": "查看指南"
 }
