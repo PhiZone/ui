@@ -1,9 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { t } from '$lib/translations/config';
 
 const schema = z.object({
   Name: z.string(),
@@ -17,7 +19,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -25,7 +27,7 @@ export const actions = {
   default: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -36,7 +38,7 @@ export const actions = {
     if (Icon.size == 0) Icon = null;
     const resp = await api.event.team.create({ Icon, ...rest });
     if (resp.ok) {
-      throw redirect(
+      redirect(
         303,
         `/events/divisions/${form.data.DivisionId}?level=success&message=${t.get(
           'event.team.created',

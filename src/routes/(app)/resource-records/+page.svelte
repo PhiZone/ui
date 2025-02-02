@@ -1,14 +1,16 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { Status } from '$lib/constants';
+  import { superForm } from 'sveltekit-superforms';
+
   import type { CreateOpts } from '$lib/api/resourceRecord';
-  import { getUserPrivilege } from '$lib/utils';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import SearchBar from '$lib/components/SearchBar.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 
@@ -26,7 +28,8 @@
   let batchTotal = 0;
   let batch: CreateOpts[] | null = null;
 
-  $: query = createQuery(api.resourceRecord.list(searchParams));
+  $: options = api.resourceRecord.list(searchParams);
+  $: query = createQuery({ ...options });
 
   const queryClient = useQueryClient();
 
@@ -116,7 +119,7 @@
         batchStatus = Status.OK;
         batchModalOpen = false;
         batch = null;
-        await queryClient.invalidateQueries(['resourceRecord.list', searchParams]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
       } else {
         batchStatus = Status.ERROR;
         batchError = (await resp.json()).code;
@@ -362,7 +365,7 @@
               $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={`${$t('common.description')}${$t('common.optional')}`}
-          />
+          ></textarea>
         </label>
       </div>
       <div class="modal-action">
@@ -622,5 +625,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

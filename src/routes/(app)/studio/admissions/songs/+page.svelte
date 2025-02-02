@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Admission from '$lib/components/SongAdmission.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import Admission from '$lib/components/SongAdmission.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ searchParams, page, user, api } = data);
@@ -38,13 +39,13 @@
           </h1>
           <div class="join join-vertical md:join-horizontal min-w-fit max-w-fit">
             <a
-              href="/studio/admissions/songs?rangeRequesteeId={user?.id}"
+              href="/studio/admissions/songs?rangeRequesteeId={user.id}"
               class="btn btn-outline border-2 normal-border join-item min-w-fit"
             >
               {$t('studio.request.received')}
             </a>
             <a
-              href="/studio/admissions/songs?rangeRequesterId={user?.id}"
+              href="/studio/admissions/songs?rangeRequesterId={user.id}"
               class="btn btn-outline border-2 normal-border join-item min-w-fit"
             >
               {$t('studio.request.sent')}
@@ -67,5 +68,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/studio" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

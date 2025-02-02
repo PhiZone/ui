@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { useQueryClient } from '@tanstack/svelte-query';
   import { onMount } from 'svelte';
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
+
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { useQueryClient } from '@tanstack/svelte-query';
+  import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
 
   onMount(async () => {
     if (browser) {

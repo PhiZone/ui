@@ -1,21 +1,16 @@
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
-  import { locales, locale, t } from '$lib/translations/config';
+  import { superForm } from 'sveltekit-superforms';
+
   import { SUPPORTED_APPS } from '$lib/constants';
   import { REGIONS } from '$lib/constants';
+  import { locale, locales, t } from '$lib/translations/config';
 
   export let data;
   $: ({ provider, register } = data);
 
-  const {
-    form,
-    enhance: enhance,
-    message: message,
-    errors: errors,
-    constraints,
-    submitting: submitting,
-    allErrors: allErrors,
-  } = superForm(data.form);
+  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
+    data.form,
+  );
 
   $: regionMap = new Map(
     [
@@ -89,7 +84,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={$errors.Language}
                 data-tip={$errors.Language}
-              />
+              ></div>
             </div>
             <label class="label" for="region">
               <span class="label-text">{$t('session.registration.select_region')}</span>
@@ -110,7 +105,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.RegionCode}
                 data-tip={$errors.RegionCode}
-              />
+              ></div>
             </div>
             <div class="w-full flex flex-col justify-center mt-6">
               <button
@@ -132,7 +127,7 @@
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}
                 data-tip={$message}
-              />
+              ></div>
             </div>
           </form>
         </div>

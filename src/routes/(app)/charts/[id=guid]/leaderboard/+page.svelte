@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+
   import { goto, preloadData } from '$app/navigation';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
   import Region from '$lib/components/Region.svelte';
   import { t } from '$lib/translations/config';
   import { getAvatar, getLevelDisplay, parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
   const { searchParams, id, user, api } = data;
@@ -33,7 +34,7 @@
   >
     <div
       class="hero-overlay bg-fixed bg-opacity-40 bg-gradient-to-t from-base-300 to-transparent"
-    />
+    ></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-16 2xl:px-32 mx-auto">
       <div class="flex justify-between">
         <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center">

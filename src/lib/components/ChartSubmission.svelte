@@ -1,10 +1,13 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { page } from '$app/stores';
+
   import type { ChartSubmissionDto } from '$lib/api';
+
+  import { page } from '$app/stores';
+  import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
+
   import ChartLabel from './ChartDifficulty.svelte';
 
   $: ({ user, api } = $page.data);

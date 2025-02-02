@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
+
   import { t } from '$lib/translations/config';
   import { convertTime } from '$lib/utils';
 
   export let song: string;
   export let illustration: string;
   export let duration: number;
-  export let lyrics: Array<{ time: number; line: string }> | null = null;
+  export let lyrics: { time: number; line: string }[] | null = null;
 
   let playing = false;
   let time = 0;

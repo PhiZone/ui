@@ -1,12 +1,13 @@
 <script lang="ts">
-  import queryString from 'query-string';
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+  import queryString from 'query-string';
+
   import { goto } from '$app/navigation';
-  import Record from '$lib/components/Record.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import Record from '$lib/components/Record.svelte';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsModal.svelte';
+  import { t } from '$lib/translations/config';
   import { convertToParsedQuery } from '$lib/utils';
 
   export let data;
@@ -61,5 +62,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

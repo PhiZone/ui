@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserPrivilege, toLocalTime } from '$lib/utils';
 </script>
 

@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import Item from './Item.svelte';
+  import type { SearchFilterType } from '$lib/filters';
 
   import { generateParams, getFilterValue, getFullFilters, storeFilterValue } from '$lib/filters';
-  import type { SearchFilterType } from '$lib/filters';
+  import { t } from '$lib/translations/config';
+
+  import Item from './Item.svelte';
 
   export let type: SearchFilterType;
   export let params: URLSearchParams = new URLSearchParams();

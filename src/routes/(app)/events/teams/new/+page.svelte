@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+  import { superForm } from 'sveltekit-superforms';
+
   import { t } from '$lib/translations/config';
   import { range } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
 
@@ -174,7 +175,7 @@
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
-                />
+                ></textarea>
               </label>
             </div>
             <div class="w-full flex flex-col justify-center mt-6">

@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { createQuery } from '@tanstack/svelte-query';
+
   import type { PetAnswerDto } from '$lib/api/pet';
+
+  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
 
   export let answer: PetAnswerDto;
 

@@ -1,11 +1,14 @@
 <script lang="ts">
   import RangeSlider from 'svelte-range-slider-pips';
+
   import type { IFilter } from '$lib/filters/types';
-  import Input from './Input.svelte';
-  import Select from './Select.svelte';
-  import { t } from '$lib/translations/config';
+
   import { isOrderFilter } from '$lib/filters';
+  import { t } from '$lib/translations/config';
+
+  import Input from './Input.svelte';
   import Order from './Order.svelte';
+  import Select from './Select.svelte';
 
   export let filter: IFilter;
 

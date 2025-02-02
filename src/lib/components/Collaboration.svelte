@@ -1,11 +1,14 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
+  import { createQuery } from '@tanstack/svelte-query';
+
+  import type { CollaborationDto } from '$lib/api/collaboration';
+
   import { page } from '$app/stores';
-  import User from '$lib/components/User.svelte';
   import ChartSubmission from '$lib/components/ChartSubmission.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
-  import type { CollaborationDto } from '$lib/api/collaboration';
-  import { createQuery } from '@tanstack/svelte-query';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
+
   import Delete from './Delete.svelte';
 
   export let collaboration: CollaborationDto;

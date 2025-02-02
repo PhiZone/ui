@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import SongSubmissionAdmission from '$lib/components/SongSubmissionAdmission.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import SongSubmissionAdmission from '$lib/components/SongSubmissionAdmission.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
 
@@ -33,5 +34,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/studio/admissions/song-submissions" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

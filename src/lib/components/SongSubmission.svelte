@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { createQuery } from '@tanstack/svelte-query';
+  import { readable } from 'svelte/store';
+
   import type { SongSubmissionDto } from '$lib/api';
+
+  import { page } from '$app/stores';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getCompressedImage, parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
-  import { readable } from 'svelte/store';
 
   $: ({ user, api } = $page.data);
 

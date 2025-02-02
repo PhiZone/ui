@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import User from '$lib/components/User.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ searchParams, id, page, api } = data);
@@ -35,5 +36,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/users" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

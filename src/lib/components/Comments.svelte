@@ -1,10 +1,13 @@
 <script lang="ts">
+  import type { ParsedQuery } from 'query-string';
+
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
   import { page } from '$app/stores';
   import { locale, t } from '$lib/translations/config';
-  import type { ParsedQuery } from 'query-string';
+
   import CommentComponent from './Comment.svelte';
   import Paginator from './Paginatior.svelte';
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   $: ({ user, api } = $page.data);
 
@@ -24,6 +27,16 @@
 
   const queryClient = useQueryClient();
 
+  $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
+  $: options = api.comment.list({
+    type,
+    id,
+    page: commentPage,
+    order: ['likeCount', 'dateCreated'],
+    desc: [true, true],
+  });
+  $: query = createQuery({ ...options });
+
   $: disabled = !user;
   let commentText = '';
   const sendComment = async () => {
@@ -32,23 +45,9 @@
       await api.comment.create({ type, id, content: commentText, language: $locale });
       disabled = false;
       commentText = '';
-      await queryClient.invalidateQueries([
-        'comment.list',
-        { type, id, page: commentPage, order: ['likeCount', 'dateCreated'], desc: [true, true] },
-      ]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
     }
   };
-
-  $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
-  $: query = createQuery(
-    api.comment.list({
-      type,
-      id,
-      page: commentPage,
-      order: ['likeCount', 'dateCreated'],
-      desc: [true, true],
-    }),
-  );
 </script>
 
 <div class="indicator w-full my-4">
@@ -68,7 +67,7 @@
           placeholder={$t('common.write_comment')}
           bind:value={commentText}
           {disabled}
-        />
+        ></textarea>
         <button
           class="ml-3 btn {disabled || commentText.length === 0
             ? 'btn-disabled'
@@ -80,7 +79,7 @@
         </button>
       </div>
       {#if $query.isLoading}
-        <div />
+        <div></div>
       {:else if $query.isSuccess}
         {@const { total, perPage, data } = $query.data}
         {#if total && perPage && data && data.length > 0}

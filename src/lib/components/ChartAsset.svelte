@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { createQuery } from '@tanstack/svelte-query';
+
   import type { ChartAssetDto } from '$lib/api/chart.asset';
   import type { ChartAssetSubmissionDto } from '$lib/api/chart.submission.asset';
+
+  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import { createQuery } from '@tanstack/svelte-query';
 
   $: ({ api } = $page.data);
 

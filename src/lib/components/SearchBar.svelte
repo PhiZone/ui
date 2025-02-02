@@ -1,10 +1,13 @@
 <script lang="ts">
   import queryString, { type ParsedQuery } from 'query-string';
-  import { t } from '$lib/translations/config';
-  import { goto } from '$app/navigation';
-  import SearchOptions from './SearchOptions/SearchOptionsModal.svelte';
+
   import type { SearchFilterType } from '$lib/filters';
+
+  import { goto } from '$app/navigation';
+  import { t } from '$lib/translations/config';
   import { convertToParsedQuery, snakeToCamel } from '$lib/utils';
+
+  import SearchOptions from './SearchOptions/SearchOptionsModal.svelte';
 
   export let name: string;
   export let pageName = 'page';

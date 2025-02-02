@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
   import type { SongSubmissionAdmissionDto } from '$lib/api/admission';
+
+  import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
+
   import ChartSubmission from './ChartSubmission.svelte';
   import SongSubmission from './SongSubmission.svelte';
   import User from './User.svelte';

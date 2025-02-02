@@ -1,5 +1,5 @@
-import { getUserPrivilege } from '$lib/utils';
 import API from '$lib/api';
+import { getUserPrivilege } from '$lib/utils';
 
 export const load = async ({ parent, locals, fetch }) => {
   const { user } = await parent();

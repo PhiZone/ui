@@ -1,18 +1,20 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import type { ReplyDto, UserDto } from '$lib/api';
-  import { getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { t } from '$lib/translations/config';
+
+  import { page } from '$app/stores';
   import { richtext } from '$lib/richtext';
-  import Like from './Like.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege, parseDateTime } from '$lib/utils';
+
   import Delete from './Delete.svelte';
+  import Like from './Like.svelte';
   import User from './User.svelte';
 
   $: ({ user } = $page.data);
 
   export let kind: 'mini' | 'full' = 'mini';
   export let reply: ReplyDto;
-  export let replyTo: (reply: UserDto) => void = (_) => {};
+  export let replyTo: ((reply: UserDto) => void) | undefined = undefined;
 
   $: content = richtext(reply.content);
 </script>
@@ -25,7 +27,7 @@
       <div
         class="ml-2 sm:w-3/4 content"
         on:click={() => {
-          replyTo(reply.owner);
+          replyTo?.(reply.owner);
         }}
         on:keyup
       >
@@ -35,7 +37,7 @@
       <p
         class="hidden md:inline sm:w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
         on:click={() => {
-          replyTo(reply.owner);
+          replyTo?.(reply.owner);
         }}
         on:keyup
       >

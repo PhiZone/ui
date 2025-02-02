@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import User from '$lib/components/User.svelte';
+  import 'katex/dist/katex.min.css';
+  import { superForm } from 'sveltekit-superforms';
+
   import Question from '$lib/components/Question.svelte';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms/client';
 
   export let data;
   $: ({ user, answer } = data);
@@ -143,7 +145,7 @@
                 class="tooltip tooltip-right tooltip-error"
                 class:tooltip-open={!!$errors.score}
                 data-tip={$errors.score}
-              />
+              ></div>
             </div>
             <div class="card-actions justify-end">
               <button
@@ -165,7 +167,7 @@
                 class="tooltip tooltip-bottom tooltip-error w-full"
                 class:tooltip-open={!!$message}
                 data-tip={$message}
-              />
+              ></div>
             </div>
           </form>
         </div>

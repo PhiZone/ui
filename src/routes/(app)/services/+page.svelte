@@ -1,14 +1,15 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Service from '$lib/components/Service.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { getUserPrivilege } from '$lib/utils';
+  import { superForm } from 'sveltekit-superforms';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import SearchBar from '$lib/components/SearchBar.svelte';
+  import Service from '$lib/components/Service.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import { TAG_JOINER } from '$lib/constants';
-  import SearchBar from '$lib/components/SearchBar.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 
@@ -113,7 +114,7 @@
               $errors.code ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={$t('common.code')}
-          />
+          ></textarea>
         </label>
       </div>
       <div
@@ -159,7 +160,7 @@
             class={`textarea transition border-2 normal-border join-item ${
               $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
-          />
+          ></textarea>
         </label>
       </div>
       <input type="hidden" id="parameters" name="parameters" bind:value={tagsRaw} />
@@ -281,5 +282,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

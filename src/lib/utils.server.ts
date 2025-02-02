@@ -1,6 +1,9 @@
 import type { Cookies } from '@sveltejs/kit';
-import type API from './api';
+
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+
+import type API from './api';
+
 import { setTokens } from './utils';
 
 export const login = async (api: API, token: string, cookies: Cookies) => {

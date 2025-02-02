@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { goto, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
   import type { PlayConfigurationDto } from '$lib/api/playConfiguration';
   import type { PatchElement } from '$lib/api/types';
+
+  import { goto, invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { applyPatch, parseDateTime } from '$lib/utils';
+
   import Delete from './Delete.svelte';
   import UpdateSuccess from './UpdateSuccess.svelte';
 
@@ -102,7 +104,7 @@
           data-tip="{$t('play_configuration.perfect')} ({editable.perfectJudgment}ms)"
           style:width="{editable.perfectJudgment / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-warning" />
+          <progress value="1" max="1" class="progress progress-warning"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment < 40
@@ -111,7 +113,7 @@
           data-tip="{$t('play_configuration.good')} ({editable.goodJudgment}ms)"
           style:width="{(editable.goodJudgment - editable.perfectJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-info" />
+          <progress value="1" max="1" class="progress progress-info"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment < 25
@@ -120,7 +122,7 @@
           data-tip="{$t('play_configuration.bad')} ({badJudgment}ms)"
           style:width="{(badJudgment - editable.goodJudgment) / 3.5}%"
         >
-          <progress value="1" max="1" class="progress progress-error" />
+          <progress value="1" max="1" class="progress progress-error"></progress>
         </div>
         <div
           class="tooltip {editable.goodJudgment > 225
@@ -129,7 +131,7 @@
           data-tip={$t('play_configuration.miss_or_incoming')}
           style:width="{100 - badJudgment / 3.5}%"
         >
-          <progress value="0" max="1" class="progress" />
+          <progress value="0" max="1" class="progress"></progress>
         </div>
       </div>
       <div class="form-control">

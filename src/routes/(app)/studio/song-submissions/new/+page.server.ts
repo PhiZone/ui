@@ -1,11 +1,13 @@
 /* eslint-disable prefer-const */
 import { fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
+import { t } from '$lib/translations/config';
 // import { parseFile } from '$lib/utils';
 
 const schema = z
@@ -50,7 +52,7 @@ const schema = z
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -62,7 +64,7 @@ export const actions = {
   default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -118,7 +120,7 @@ export const actions = {
           },
     );
     if (resp.ok) {
-      throw redirect(303, '/studio/song-submissions' + url.search);
+      redirect(303, '/studio/song-submissions' + url.search);
     } else {
       const respBackup = resp.clone();
       try {

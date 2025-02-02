@@ -1,7 +1,10 @@
-import I18n from 'sveltekit-i18n';
 import type { Translations } from '@sveltekit-i18n/base';
-import lang from './lang.json';
+
+import I18n from 'sveltekit-i18n';
+
 import { DEFAULT_LOCALE } from '$lib/constants';
+
+import lang from './lang.json';
 
 const createLoaders = (
   lang: string,

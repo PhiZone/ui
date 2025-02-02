@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+  import { superForm } from 'sveltekit-superforms';
+
+  import Error from '$lib/components/Error.svelte';
   import EventTask from '$lib/components/EventTask.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { t } from '$lib/translations/config';
   import { hasEventPermission } from '$lib/utils';
-  import Error from '$lib/components/Error.svelte';
 
   export let data;
 
@@ -217,7 +218,7 @@
               $errors.description ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
             placeholder={$t('common.description')}
-          />
+          ></textarea>
         </label>
       </div>
       <div
@@ -235,7 +236,7 @@
             class={`textarea transition border-2 normal-border join-item ${
               $errors.code ? 'hover:textarea-error' : 'hover:textarea-secondary'
             } w-3/4 h-28`}
-          />
+          ></textarea>
         </label>
       </div>
       <div class="modal-action">
@@ -299,5 +300,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

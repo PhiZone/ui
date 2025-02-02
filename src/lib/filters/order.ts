@@ -1,14 +1,15 @@
-import type { IFilterOrder, OrderItem } from './types';
 import { t } from '$lib/translations/config';
 
-type Item = {
+import type { IFilterOrder, OrderItem } from './types';
+
+interface Item {
   id: string | number;
   label: string;
   value: {
     field: string;
     desc: boolean;
   };
-};
+}
 
 export const getOrderFieldId = (field: string, desc: boolean) =>
   `${field}_${desc ? 'desc' : 'asc'}`;

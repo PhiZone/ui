@@ -1,7 +1,8 @@
-import { browser } from '$app/environment';
-import { htmlEscape } from 'escape-goat';
 import dompurify from 'dompurify';
+import { htmlEscape } from 'escape-goat';
 import { type Readable, readable } from 'svelte/store';
+
+import { browser } from '$app/environment';
 
 export function preprocess(content: string): string {
   return htmlEscape(browser ? dompurify.sanitize(content) : content);

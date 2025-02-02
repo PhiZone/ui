@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { superForm } from 'sveltekit-superforms';
+
   import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms/client';
 
   export let data;
 
@@ -35,7 +36,7 @@
           class="tooltip tooltip-right tooltip-error"
           class:tooltip-open={!!$errors.Email}
           data-tip={$errors.Email}
-        />
+        ></div>
       </div>
       <div class="mt-10">
         <div

@@ -1,15 +1,12 @@
-import API from '$lib/api';
-import type { PetQuestionDto } from '$lib/api/pet';
-import { locale, t } from '$lib/translations/config';
 import { fail } from '@sveltejs/kit';
-import { compile } from 'mdsvex';
-import rehypeKatexSvelte from 'rehype-katex-svelte';
-import remarkMath from 'remark-math';
-import type { Plugin } from 'unified';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils';
+import { locale, t } from '$lib/translations/config';
+import { renderMarkdown, toCamel } from '$lib/utils';
 
 const schema = z.object({
   id: z.string(),
@@ -30,17 +27,17 @@ export const load = async ({ params, locals, fetch }) => {
     throw fail(resp.status, t.get(`error.${error.code}`));
   }
   const answer = (await resp.json()).data;
-  answer.question1.content = await compileQuestion(answer.question1);
-  answer.question2.content = await compileQuestion(answer.question2);
-  answer.question3.content = await compileQuestion(answer.question3);
+  answer.question1.content = renderMarkdown(answer.question1.content);
+  answer.question2.content = renderMarkdown(answer.question2.content);
+  answer.question3.content = renderMarkdown(answer.question3.content);
   answer.question4 = {
     position: 19,
     type: 2,
-    content: await compileQuestion(t.get('pet.chart_question')),
+    content: t.get('pet.chart_question'),
     choices: null,
     language: locale.get(),
   };
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return {
     answer,
     form,
@@ -51,7 +48,7 @@ export const actions = {
   assess: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -87,18 +84,4 @@ export const actions = {
       }
     }
   },
-};
-
-const compileQuestion = async (question: PetQuestionDto | string) => {
-  return (
-    (
-      await compile(typeof question === 'object' ? question.content : (question ?? ''), {
-        remarkPlugins: [remarkMath],
-        rehypePlugins: [rehypeKatexSvelte as Plugin],
-      })
-    )?.code
-      .replaceAll('\\', '')
-      .replaceAll('{@html "', '')
-      .replaceAll('"}', '') ?? ''
-  );
 };

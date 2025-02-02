@@ -1,27 +1,30 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import { applyPatch, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import Error from '$lib/components/Error.svelte';
-  import Delete from '$lib/components/Delete.svelte';
   import Highlight, { LineNumbers } from 'svelte-highlight';
-  import lightTheme from 'svelte-highlight/styles/unikitty-light';
-  import darkTheme from 'svelte-highlight/styles/unikitty-dark';
   import csharp from 'svelte-highlight/languages/csharp';
+  import darkTheme from 'svelte-highlight/styles/unikitty-dark';
+  import lightTheme from 'svelte-highlight/styles/unikitty-light';
+
+  import type { ServiceScriptDto } from '$lib/api/service';
+  import type { PatchElement } from '$lib/api/types';
+
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { Status } from '$lib/constants';
-  import type { PatchElement } from '$lib/api/types';
-  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import type { ServiceScriptDto } from '$lib/api/service';
-  import Tag from '$lib/components/Tag.svelte';
+  import Delete from '$lib/components/Delete.svelte';
+  import Error from '$lib/components/Error.svelte';
   import ServiceRequest from '$lib/components/ServiceRequest.svelte';
+  import Tag from '$lib/components/Tag.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getUserPrivilege, parseDateTime } from '$lib/utils';
 
   export let data;
 
   $: ({ searchParams, user, id, api } = data);
 
-  $: query = createQuery(api.service.info({ id }));
+  $: options = api.service.info({ id });
+  $: query = createQuery({ ...options });
 
   const queryClient = useQueryClient();
 
@@ -47,7 +50,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['service.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -180,7 +183,7 @@
               on:input={(e) => {
                 patch = applyPatch(patch, 'replace', '/code', e.currentTarget.value);
               }}
-            />
+            ></textarea>
           </label>
         </div>
         <div
@@ -248,7 +251,7 @@
               on:input={(e) => {
                 patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
               }}
-            />
+            ></textarea>
           </label>
           <button
             type="button"
@@ -457,7 +460,7 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/resource-records" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

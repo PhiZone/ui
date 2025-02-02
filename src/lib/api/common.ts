@@ -1,12 +1,15 @@
-import { PAGINATION_PER_PAGE } from '$lib/constants';
 import type { FetchQueryOptions, QueryKey, QueryObserverOptions } from '@tanstack/svelte-query';
+
 import camelcaseKeys from 'camelcase-keys';
 import queryString from 'query-string';
+
+import { PAGINATION_PER_PAGE } from '$lib/constants';
+
 import {
   type FilterBase,
+  type R,
   type ResponseDtoError,
   type ResponseDtoOk,
-  type R,
   ResponseDtoStatus,
 } from './types';
 

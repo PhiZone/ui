@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
   import type { ChapterAdmissionDto, CollectionAdmissionDto } from '$lib/api/admission';
+
+  import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
 
   const { api } = $page.data;
 

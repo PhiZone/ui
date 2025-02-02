@@ -1,15 +1,16 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Error from '$lib/components/Error.svelte';
+
   import { goto, preloadData } from '$app/navigation';
-  import { getAvatar, hasEventPermission } from '$lib/utils';
-  import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import ReservedField from '$lib/components/ReservedField.svelte';
-  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
   import Region from '$lib/components/Region.svelte';
+  import ReservedField from '$lib/components/ReservedField.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
+  import { t } from '$lib/translations/config';
+  import { getAvatar, hasEventPermission } from '$lib/utils';
 
   export let data;
 
@@ -88,7 +89,7 @@
     class="background min-h-screen"
     style:background-image="url({division.illustration ?? event.illustration})"
   >
-    <div class="hero-overlay bg-opacity-60" />
+    <div class="hero-overlay bg-opacity-60"></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
@@ -718,7 +719,7 @@
 {:else if $division.isError}
   <Error error={$division.error} back="/divisions" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { IFilter } from '$lib/filters/types';
+
   import { t } from '$lib/translations/config';
 
   export let filter: IFilter;

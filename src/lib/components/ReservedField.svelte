@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
   import type { ReservedFieldDto } from '$lib/api/event';
-  import { Status } from '$lib/constants';
+
   import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   $: ({ api } = $page.data);
 
@@ -52,7 +53,7 @@
       content = e.currentTarget.value ?? null;
       different = !((!content && !field?.content) || content == field?.content);
     }}
-  />
+  ></textarea>
   {#if editable}
     <div
       class="absolute right-3 bottom-3 tooltip tooltip-top tooltip-error"

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import type { ChartDto, RecordDto } from '$lib/api';
+
+  import { page } from '$app/stores';
   import {
     getCompressedImage,
     getGrade,

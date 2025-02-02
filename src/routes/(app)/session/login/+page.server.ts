@@ -1,7 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { setTokens } from '$lib/utils';
-import API from '$lib/api';
+
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API from '$lib/api';
+import { setTokens } from '$lib/utils';
 
 export const actions = {
   default: async ({ request, cookies, url, fetch }) => {
@@ -30,6 +31,6 @@ export const actions = {
     const { access_token, refresh_token } = await resp.json();
     setTokens(cookies, access_token, refresh_token);
 
-    throw redirect(303, url.searchParams.get('redirect') ?? '/');
+    redirect(303, url.searchParams.get('redirect') ?? '/');
   },
 };

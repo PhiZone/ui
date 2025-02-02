@@ -1,16 +1,17 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Song from '$lib/components/Song.svelte';
-  import Chart from '$lib/components/Chart.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
-  import Error from '$lib/components/Error.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { goto } from '$app/navigation';
+  import { superForm } from 'sveltekit-superforms';
+
   import { browser } from '$app/environment';
-  import { getLevelDisplay, hasEventPermission } from '$lib/utils.js';
-  import { CREATE, REMOVE, RESOURCE } from '$lib/hostshipPermissions';
+  import { goto } from '$app/navigation';
+  import Chart from '$lib/components/Chart.svelte';
   import Delete from '$lib/components/Delete.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import { CREATE, REMOVE, RESOURCE } from '$lib/hostshipPermissions';
+  import { t } from '$lib/translations/config';
+  import { getLevelDisplay, hasEventPermission } from '$lib/utils.js';
 
   export let data;
   $: ({ user, id, searchParams, page, api } = data);
@@ -273,7 +274,7 @@
               name="description"
               placeholder={$t('common.description')}
               class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-3/4 h-24"
-            />
+            ></textarea>
           </label>
         </div>
         <div class="modal-action mt-3">
@@ -385,5 +386,5 @@
 {:else if $division.isError}
   <Error error={$division.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
