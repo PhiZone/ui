@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+
+  import type { ChapterAdmitterDto, ChapterDto } from '$lib/api/chapter';
+
   import { page } from '$app/stores';
-  import type { ChapterDto, ChapterAdmitterDto } from '$lib/api/chapter';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
+
   import Like from './Like.svelte';
 
   $: ({ api } = $page.data);

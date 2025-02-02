@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms';
   import { createQuery } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
-  import { convertTime, parseTime } from '$lib/utils';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import User from '$lib/components/User.svelte';
-  import Song from '$lib/components/Song.svelte';
+  import { onDestroy } from 'svelte';
+  import { superForm } from 'sveltekit-superforms';
+
   // import Cropper from '$lib/components/ImageCropper.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import Song from '$lib/components/Song.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import { onDestroy } from 'svelte';
+  import User from '$lib/components/User.svelte';
   import { TAG_JOINER } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { convertTime, parseTime } from '$lib/utils';
 
   export let data;
 

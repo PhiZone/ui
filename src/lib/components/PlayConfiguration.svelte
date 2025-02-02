@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { goto, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
   import type { PlayConfigurationDto } from '$lib/api/playConfiguration';
   import type { PatchElement } from '$lib/api/types';
+
+  import { goto, invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { applyPatch, parseDateTime } from '$lib/utils';
+
   import Delete from './Delete.svelte';
   import UpdateSuccess from './UpdateSuccess.svelte';
 

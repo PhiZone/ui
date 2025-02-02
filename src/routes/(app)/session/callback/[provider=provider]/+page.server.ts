@@ -1,14 +1,15 @@
-import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import API, { Gender } from '$lib/api';
-import { SUPPORTED_APPS } from '$lib/constants';
-import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { t } from '$lib/translations/config';
-import { setTokens } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import queryString from 'query-string';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API, { Gender } from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { SUPPORTED_APPS } from '$lib/constants';
+import { t } from '$lib/translations/config';
+import { setTokens } from '$lib/utils';
 import { login } from '$lib/utils.server';
 
 const schema = z.object({

@@ -1,11 +1,12 @@
-import API from '$lib/api';
-import { ResponseDtoStatus } from '$lib/api/types';
-import { t } from '$lib/translations/config';
-import { toCamel } from '$lib/utils';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+
+import API from '$lib/api';
+import { ResponseDtoStatus } from '$lib/api/types';
+import { t } from '$lib/translations/config';
+import { toCamel } from '$lib/utils';
 
 const resourceSchema = z.object({
   resourceType: z.enum(['songs', 'charts', 'records', 'tags']),

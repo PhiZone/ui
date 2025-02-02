@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import type { PetQuestionDto } from '$lib/api/pet';
+
+  import { t } from '$lib/translations/config';
 
   export let id: number;
   export let question: PetQuestionDto;

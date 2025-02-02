@@ -1,9 +1,10 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms';
-  import { locales, locale, t } from '$lib/translations/config';
-  import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
+
   import { SendEmailMode } from '$lib/api/auth';
   import { ResponseDtoStatus } from '$lib/api/types';
+  import { REGIONS, Status, SUPPORTED_APPS } from '$lib/constants';
+  import { locale, locales, t } from '$lib/translations/config';
   import { getAvatar, parseDateTime, requestIdentity } from '$lib/utils';
 
   export let data;

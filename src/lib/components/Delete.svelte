@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
   import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   const { api } = $page.data;
 

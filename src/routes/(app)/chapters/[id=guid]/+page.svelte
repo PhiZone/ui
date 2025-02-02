@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Song from '$lib/components/Song.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import User from '$lib/components/User.svelte';
+
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
 

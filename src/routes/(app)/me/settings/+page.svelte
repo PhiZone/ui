@@ -1,23 +1,25 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import { superForm } from 'sveltekit-superforms';
+
+  import type { PatchElement } from '$lib/api/types';
+
   import { goto, invalidateAll } from '$app/navigation';
-  import { locales, locale, t } from '$lib/translations/config';
-  import { Status, REGIONS, SUPPORTED_APPS } from '$lib/constants';
+  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import { REGIONS, Status, SUPPORTED_APPS } from '$lib/constants';
+  import { locale, locales, t } from '$lib/translations/config';
   import {
     applyPatch,
-    requestIdentity,
     getAvatar,
     getUserColor,
     parseDateTime,
+    requestIdentity,
     toLocalTime,
   } from '$lib/utils';
-  import type { PatchElement } from '$lib/api/types';
-  import { superForm } from 'sveltekit-superforms';
-  import PlayConfiguration from '$lib/components/PlayConfiguration.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
-  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
 
   export let data;
 

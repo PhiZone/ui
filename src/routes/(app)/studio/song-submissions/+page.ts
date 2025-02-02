@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+
 import { getUserPrivilege } from '$lib/utils';
 
 export const load = async ({ url, parent }) => {

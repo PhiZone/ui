@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
   import Cropper from 'cropperjs';
+  import 'cropperjs/dist/cropper.min.css';
+  import { createEventDispatcher, onMount } from 'svelte';
+
   import { t } from '$lib/translations/config';
 
   export let open = false;

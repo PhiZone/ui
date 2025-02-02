@@ -1,10 +1,11 @@
-import API from '$lib/api';
-import { locale, t } from '$lib/translations/config';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { locale, t } from '$lib/translations/config';
 import { renderMarkdown, toCamel } from '$lib/utils';
 
 const schema = z.object({

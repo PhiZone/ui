@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 import type API from '.';
-import { createQueryCreator } from './common';
 import type { R } from './types';
+
+import { createQueryCreator } from './common';
 
 export interface Headline {
   headline: string | null;

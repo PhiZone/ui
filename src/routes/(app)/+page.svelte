@@ -1,9 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+
+  import type { SearchFilterType } from '$lib/filters';
+
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
-  import type { SearchFilterType } from '$lib/filters';
+  import { t } from '$lib/translations/config';
 
   export let data;
 

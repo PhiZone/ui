@@ -1,4 +1,6 @@
 <script lang="ts">
+  import 'katex/dist/katex.min.css';
+
   import { goto } from '$app/navigation';
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';

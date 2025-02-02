@@ -1,6 +1,7 @@
 import type API from '.';
 import type { FilterBase, R } from './types';
-import { stringifyFilter, createQueryCreator } from './common';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface PetQuestionDto {
   choices: string[] | null;

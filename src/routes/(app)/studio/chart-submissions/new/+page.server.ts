@@ -1,12 +1,13 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
-import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 import { ChartLevel } from '$lib/api/chart';
+import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
+import { t } from '$lib/translations/config';
 
 const schema = z.object({
   Title: z.string().max(100, t.get('error.ValueTooLong')).optional(),

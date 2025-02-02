@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+
   import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
-  import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 

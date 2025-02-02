@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+
+  import Error from '$lib/components/Error.svelte';
   import Event from '$lib/components/Event.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import Error from '$lib/components/Error.svelte';
   import SearchBar from '$lib/components/SearchBar.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ searchParams, page, api } = data);

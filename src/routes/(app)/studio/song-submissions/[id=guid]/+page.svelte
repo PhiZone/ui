@@ -1,21 +1,22 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+  import { readable } from 'svelte/store';
+  import { superForm } from 'sveltekit-superforms';
+
+  import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
+  import Collaboration from '$lib/components/Collaboration.svelte';
+  import Delete from '$lib/components/Delete.svelte';
+  import Download from '$lib/components/Download.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import Service from '$lib/components/Service.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import Tag from '$lib/components/Tag.svelte';
+  import User from '$lib/components/User.svelte';
+  import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
-  import Collaboration from '$lib/components/Collaboration.svelte';
-  import User from '$lib/components/User.svelte';
-  import Song from '$lib/components/Song.svelte';
-  import { superForm } from 'sveltekit-superforms';
-  import { richtext } from '$lib/richtext';
-  import { readable } from 'svelte/store';
-  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
-  import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
-  import Error from '$lib/components/Error.svelte';
-  import Tag from '$lib/components/Tag.svelte';
-  import Service from '$lib/components/Service.svelte';
-  import Download from '$lib/components/Download.svelte';
-  import EventDivision from '$lib/components/EventDivision.svelte';
-  import Delete from '$lib/components/Delete.svelte';
 
   export let data;
 

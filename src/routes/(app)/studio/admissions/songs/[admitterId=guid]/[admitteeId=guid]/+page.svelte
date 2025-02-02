@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import SongAdmission from '$lib/components/SongAdmission.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import SongAdmission from '$lib/components/SongAdmission.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
 

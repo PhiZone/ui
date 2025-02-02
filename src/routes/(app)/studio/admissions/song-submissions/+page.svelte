@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Admission from '$lib/components/SongSubmissionAdmission.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import Admission from '$lib/components/SongSubmissionAdmission.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ searchParams, page, user, api } = data);

@@ -1,10 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { t } from '$lib/translations/config';
 
 const schema = z.object({
   Name: z.string(),

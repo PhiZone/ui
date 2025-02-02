@@ -1,5 +1,6 @@
-import type { IFilterOrder, OrderItem } from './types';
 import { t } from '$lib/translations/config';
+
+import type { IFilterOrder, OrderItem } from './types';
 
 interface Item {
   id: string | number;

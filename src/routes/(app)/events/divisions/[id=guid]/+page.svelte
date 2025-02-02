@@ -1,17 +1,18 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Like from '$lib/components/Like.svelte';
+  import queryString from 'query-string';
+
+  import { goto, invalidateAll, preloadData } from '$app/navigation';
+  import Chart from '$lib/components/Chart.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
-  import { goto, invalidateAll, preloadData } from '$app/navigation';
-  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
-  import Song from '$lib/components/Song.svelte';
-  import Chart from '$lib/components/Chart.svelte';
+  import Like from '$lib/components/Like.svelte';
   import Record from '$lib/components/Record.svelte';
-  import Timer from '$lib/components/Timer.svelte';
+  import Song from '$lib/components/Song.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import queryString from 'query-string';
+  import Timer from '$lib/components/Timer.svelte';
+  import { t } from '$lib/translations/config';
+  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
 
   export let data;
 

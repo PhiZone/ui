@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ResponseDtoError } from '$lib/api/types';
+
   import { t } from '$lib/translations/config';
 
   export let id = 'update-success';

@@ -118,13 +118,13 @@ interface IFilterRadio extends IFilterBase {
 export type {
   IFilterBase,
   IFilterInput,
-  IFilterInputItem,
   IFilterInputGroup,
-  IFilterSelect,
+  IFilterInputItem,
   IFilterOrder,
+  IFilterRadio,
+  IFilterSelect,
   IFilterSlider,
   IFilterToggle,
-  IFilterRadio,
 };
 export type IFilter =
   | IFilterInput

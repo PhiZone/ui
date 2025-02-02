@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+
   import { goto, preloadData } from '$app/navigation';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
   import Region from '$lib/components/Region.svelte';
   import { t } from '$lib/translations/config';
   import { getAvatar, getLevelDisplay, parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
   const { searchParams, id, user, api } = data;

@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { Status } from '$lib/constants';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import { applyPatch, convertTime, parseTime } from '$lib/utils';
-  import type { SongSubmissionDto } from '$lib/api';
-  import { invalidateAll } from '$app/navigation';
-  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
   import { onDestroy, onMount } from 'svelte';
-  import User from '$lib/components/User.svelte';
+
+  import type { SongSubmissionDto } from '$lib/api';
+  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
+
+  import { invalidateAll } from '$app/navigation';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import UpdateError from '$lib/components/UpdateError.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import User from '$lib/components/User.svelte';
+  import { Status } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, convertTime, parseTime } from '$lib/utils';
 
   export let data;
 

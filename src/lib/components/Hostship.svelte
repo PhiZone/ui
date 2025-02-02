@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import type { EventDto, HostshipDto } from '$lib/api/event';
   import type { PatchElement } from '$lib/api/types';
+
+  import { page } from '$app/stores';
   import { Status } from '$lib/constants';
   import { analyze, gen, HOSTSHIP, REMOVE, UPDATE } from '$lib/hostshipPermissions';
   import { t } from '$lib/translations/config';
   import { applyPatch, hasEventPermission } from '$lib/utils';
+
   import Delete from './Delete.svelte';
   import Tag from './Tag.svelte';
   import User from './User.svelte';

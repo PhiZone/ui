@@ -1,4 +1,14 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+
+  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
+  import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Follow from '$lib/components/Follow.svelte';
+  import Record from '$lib/components/Record.svelte';
+  import Region from '$lib/components/Region.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import { PAGINATION_PER_PAGE } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import {
     getAvatar,
@@ -8,15 +18,6 @@
     parseMonthAndDay,
     toLocalTime,
   } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
-  import Record from '$lib/components/Record.svelte';
-  import Follow from '$lib/components/Follow.svelte';
-  import Chart from '$lib/components/Chart.svelte';
-  import Song from '$lib/components/Song.svelte';
-  import { PAGINATION_PER_PAGE } from '$lib/constants';
-  import Error from '$lib/components/Error.svelte';
-  import Region from '$lib/components/Region.svelte';
-  import ApplicationLink from '$lib/components/ApplicationLink.svelte';
 
   export let data;
 

@@ -1,9 +1,10 @@
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import gitignore from 'eslint-config-flat-gitignore';
-import eslintPluginSvelte from 'eslint-plugin-svelte';
-import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import perfectionist from 'eslint-plugin-perfectionist';
+import prettier from 'eslint-plugin-prettier/recommended';
+import svelte from 'eslint-plugin-svelte';
 import * as svelteParser from 'svelte-eslint-parser';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   gitignore(),
@@ -11,17 +12,29 @@ export default tseslint.config(
     ignores: ['**/*.cjs'],
   },
   eslint.configs.recommended,
-  eslintPluginSvelte.configs['flat/recommended'],
-  eslintPluginSvelte.configs['flat/prettier'],
+  svelte.configs['flat/recommended'],
+  svelte.configs['flat/prettier'],
   tseslint.configs.strict,
   tseslint.configs.stylistic,
+  {
+    plugins: { perfectionist },
+    rules: {
+      'perfectionist/sort-imports': [
+        'warn',
+        { type: 'natural', sortSideEffects: true, internalPattern: ['^\\$.*'] },
+      ],
+      'perfectionist/sort-named-imports': ['warn', { type: 'natural' }],
+      'perfectionist/sort-exports': ['warn', { type: 'natural' }],
+      'perfectionist/sort-named-exports': ['warn', { type: 'natural' }],
+    },
+  },
   {
     files: ['**/*.svelte'],
     languageOptions: {
       parser: svelteParser,
       parserOptions: {
-        parser: tseslint.parser,
         extraFileExtensions: ['.svelte'],
+        parser: tseslint.parser,
       },
     },
   },
@@ -48,5 +61,5 @@ export default tseslint.config(
       'svelte/no-at-html-tags': 'off',
     },
   },
-  eslintPluginPrettier,
+  prettier,
 );

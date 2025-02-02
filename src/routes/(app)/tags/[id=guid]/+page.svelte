@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Song from '$lib/components/Song.svelte';
-  import Error from '$lib/components/Error.svelte';
+
   import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Song from '$lib/components/Song.svelte';
   import { PAGINATION_PER_PAGE } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ id, api } = data);

@@ -1,14 +1,16 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
   import { superForm } from 'sveltekit-superforms';
-  import { Status } from '$lib/constants';
+
   import type { CreateOpts } from '$lib/api/resourceRecord';
-  import { getUserPrivilege } from '$lib/utils';
+
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import SearchBar from '$lib/components/SearchBar.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 

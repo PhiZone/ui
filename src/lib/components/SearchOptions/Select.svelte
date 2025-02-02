@@ -1,7 +1,9 @@
 <script lang="ts">
   import Svelecte from 'svelecte';
   import { dndzone, overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
+
   import type { IFilterSelect } from '$lib/filters/types';
+
   import { t } from '$lib/translations/config';
 
   export let filter: IFilterSelect;

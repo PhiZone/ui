@@ -1,17 +1,19 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { invalidateAll } from '$app/navigation';
-  import { t } from '$lib/translations/config';
+
+  import type { ChartAssetSubmissionDto } from '$lib/api/chart.submission.asset';
   import type { PatchElement } from '$lib/api/types';
-  import { Status } from '$lib/constants';
-  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
+
+  import { invalidateAll } from '$app/navigation';
+  import ChartSubmission from '$lib/components/ChartSubmission.svelte';
   import Delete from '$lib/components/Delete.svelte';
+  import Download from '$lib/components/Download.svelte';
+  import Error from '$lib/components/Error.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import User from '$lib/components/User.svelte';
-  import ChartSubmission from '$lib/components/ChartSubmission.svelte';
-  import type { ChartAssetSubmissionDto } from '$lib/api/chart.submission.asset';
-  import Error from '$lib/components/Error.svelte';
-  import Download from '$lib/components/Download.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
   export let data;
 

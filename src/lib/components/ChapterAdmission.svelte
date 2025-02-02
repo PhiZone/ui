@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
   import type { ChapterAdmissionDto } from '$lib/api/admission';
-  import Song from './Song.svelte';
-  import Chapter from './Chapter.svelte';
-  import User from './User.svelte';
+
+  import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
+
   import AdmissionDelete from './AdmissionDelete.svelte';
+  import Chapter from './Chapter.svelte';
+  import Song from './Song.svelte';
+  import User from './User.svelte';
 
   export let admission: ChapterAdmissionDto;
   export let showSong = true;

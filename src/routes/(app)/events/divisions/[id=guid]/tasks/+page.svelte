@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+  import { superForm } from 'sveltekit-superforms';
+
+  import Error from '$lib/components/Error.svelte';
   import EventTask from '$lib/components/EventTask.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms';
+  import { t } from '$lib/translations/config';
   import { hasEventPermission } from '$lib/utils';
-  import Error from '$lib/components/Error.svelte';
 
   export let data;
 

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms';
-  import { locales, locale, t } from '$lib/translations/config';
+
   import { SUPPORTED_APPS } from '$lib/constants';
   import { REGIONS } from '$lib/constants';
+  import { locale, locales, t } from '$lib/translations/config';
 
   export let data;
   $: ({ provider, register } = data);

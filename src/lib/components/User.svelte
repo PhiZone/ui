@@ -1,9 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+
+  import type { UserDto } from '$lib/api';
+
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserLevel } from '$lib/utils';
-  import type { UserDto } from '$lib/api';
+
   import Follow from './Follow.svelte';
 
   $: ({ api } = $page.data);

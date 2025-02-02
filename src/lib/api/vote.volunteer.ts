@@ -1,6 +1,7 @@
-import { createQueryCreator, stringifyFilter } from './common';
-import type { FilterBase, R } from './types';
 import type API from '.';
+import type { FilterBase, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface VolunteerVoteDto {
   chartId: string;

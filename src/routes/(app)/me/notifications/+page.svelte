@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Notification from '$lib/components/Notification.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
+
   import { invalidateAll } from '$app/navigation';
   import Error from '$lib/components/Error.svelte';
+  import Notification from '$lib/components/Notification.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ searchParams, page, api } = data);

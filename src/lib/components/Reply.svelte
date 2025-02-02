@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import type { ReplyDto, UserDto } from '$lib/api';
-  import { getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { t } from '$lib/translations/config';
+
+  import { page } from '$app/stores';
   import { richtext } from '$lib/richtext';
-  import Like from './Like.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege, parseDateTime } from '$lib/utils';
+
   import Delete from './Delete.svelte';
+  import Like from './Like.svelte';
   import User from './User.svelte';
 
   $: ({ user } = $page.data);

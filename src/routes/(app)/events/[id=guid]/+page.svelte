@@ -1,14 +1,15 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import EventDivision from '$lib/components/EventDivision.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import User from '$lib/components/User.svelte';
+
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
+  import Like from '$lib/components/Like.svelte';
   import Service from '$lib/components/Service.svelte';
-  import { hasEventPermission } from '$lib/utils';
+  import User from '$lib/components/User.svelte';
   import { CREATE, HOSTSHIP, REMOVE, UPDATE } from '$lib/hostshipPermissions';
+  import { t } from '$lib/translations/config';
+  import { hasEventPermission } from '$lib/utils';
 
   export let data;
 

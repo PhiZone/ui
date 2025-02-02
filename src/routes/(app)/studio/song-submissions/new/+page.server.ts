@@ -1,12 +1,13 @@
 /* eslint-disable prefer-const */
 import { fail, redirect } from '@sveltejs/kit';
-import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
+import { t } from '$lib/translations/config';
 // import { parseFile } from '$lib/utils';
 
 const schema = z

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
+
   import VoteScore from './VoteScore.svelte';
 
   export let score: number;

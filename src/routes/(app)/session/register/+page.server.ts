@@ -1,7 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
 import API, { Gender } from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';

@@ -1,8 +1,10 @@
 <script lang="ts">
   import { useQueryClient } from '@tanstack/svelte-query';
+
+  import type { UserDto } from '$lib/api';
+
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
-  import type { UserDto } from '$lib/api';
 
   $: ({ api } = $page.data);
 

@@ -1,15 +1,16 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Error from '$lib/components/Error.svelte';
+
   import { goto, preloadData } from '$app/navigation';
-  import { getAvatar, hasEventPermission } from '$lib/utils';
-  import Song from '$lib/components/Song.svelte';
   import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
-  import ReservedField from '$lib/components/ReservedField.svelte';
-  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
   import Region from '$lib/components/Region.svelte';
+  import ReservedField from '$lib/components/ReservedField.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import { RESERVED_FIELD, RESOURCE, TEAM, UPDATE } from '$lib/hostshipPermissions.js';
+  import { t } from '$lib/translations/config';
+  import { getAvatar, hasEventPermission } from '$lib/utils';
 
   export let data;
 

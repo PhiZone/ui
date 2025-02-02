@@ -1,15 +1,19 @@
 import type { Cookies } from '@sveltejs/kit';
-import { USER_LEVELS, DEFAULT_LOCALE } from './constants';
+import type { ParsedQuery } from 'query-string';
+
+import { micromark } from 'micromark';
+import { math, mathHtml } from 'micromark-extension-math';
+import queryString from 'query-string';
+
 import { PUBLIC_AVATAR } from '$env/static/public';
-import type { PatchElement } from './api/types';
+
 import type API from './api';
 import type { UserDetailedDto } from './api';
 import type { EventDto } from './api/event';
+import type { PatchElement } from './api/types';
+
+import { DEFAULT_LOCALE, USER_LEVELS } from './constants';
 import { gen, hasPermission } from './hostshipPermissions';
-import type { ParsedQuery } from 'query-string';
-import queryString from 'query-string';
-import { micromark } from 'micromark';
-import { math, mathHtml } from 'micromark-extension-math';
 
 export const renderMarkdown = (input: string) => {
   return micromark(input, {

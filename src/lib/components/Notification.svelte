@@ -1,11 +1,13 @@
 <script lang="ts">
   import type { NotificationDto } from '$lib/api';
+
+  import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
+  import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
+
   import User from './User.svelte';
-  import { page } from '$app/stores';
-  import { invalidateAll } from '$app/navigation';
 
   $: ({ user, api } = $page.data);
 

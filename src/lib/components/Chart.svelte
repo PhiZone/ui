@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { ChartDto } from '$lib/api';
+  import type { ChartAdmitteeDto } from '$lib/api/chart';
+
+  import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
+
+  import ChartLabel from './ChartDifficulty.svelte';
   import Like from './Like.svelte';
   import Rating from './Rating.svelte';
-  import type { ChartAdmitteeDto } from '$lib/api/chart';
-  import ChartLabel from './ChartDifficulty.svelte';
 
   export let chart: ChartDto | ChartAdmitteeDto;
   export let kind: 'full' | 'inline' = 'full';

@@ -1,10 +1,13 @@
 <script lang="ts">
+  import type { ParsedQuery } from 'query-string';
+
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
   import { page } from '$app/stores';
   import { locale, t } from '$lib/translations/config';
-  import type { ParsedQuery } from 'query-string';
+
   import CommentComponent from './Comment.svelte';
   import Paginator from './Paginatior.svelte';
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   $: ({ user, api } = $page.data);
 

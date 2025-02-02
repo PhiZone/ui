@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+
   import Collaboration from '$lib/components/Collaboration.svelte';
-  import { getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
 

@@ -1,7 +1,8 @@
+import { QueryClient } from '@tanstack/svelte-query';
+
+import { browser } from '$app/environment';
 import API from '$lib/api';
 import { loadTranslations, locale } from '$lib/translations/config';
-import { browser } from '$app/environment';
-import { QueryClient } from '@tanstack/svelte-query';
 
 export const load = async ({ url, data, fetch }) => {
   await loadTranslations(data.language, url.pathname);

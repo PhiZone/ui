@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import User from '$lib/components/User.svelte';
-  import Question from '$lib/components/Question.svelte';
-  import { getUserPrivilege } from '$lib/utils';
+  import 'katex/dist/katex.min.css';
   import { superForm } from 'sveltekit-superforms';
+
+  import Question from '$lib/components/Question.svelte';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege } from '$lib/utils';
 
   export let data;
   $: ({ user, answer } = data);

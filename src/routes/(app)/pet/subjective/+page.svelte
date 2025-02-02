@@ -1,7 +1,9 @@
 <script lang="ts">
+  import 'katex/dist/katex.min.css';
+  import { superForm } from 'sveltekit-superforms';
+
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms';
 
   export let data;
   $: ({ questions, error } = data);

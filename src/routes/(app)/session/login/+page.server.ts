@@ -1,7 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { setTokens } from '$lib/utils';
-import API from '$lib/api';
+
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API from '$lib/api';
+import { setTokens } from '$lib/utils';
 
 export const actions = {
   default: async ({ request, cookies, url, fetch }) => {

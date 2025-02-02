@@ -1,7 +1,8 @@
 import type { UserDto } from '.';
 import type API from '.';
-import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface AuthorDto extends UserDto {
   position: string | null;

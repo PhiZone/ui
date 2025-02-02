@@ -1,19 +1,21 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import { applyPatch, hasEventPermission, parseDateTime } from '$lib/utils';
-  import Error from '$lib/components/Error.svelte';
-  import Delete from '$lib/components/Delete.svelte';
   import Highlight, { LineNumbers } from 'svelte-highlight';
-  import lightTheme from 'svelte-highlight/styles/unikitty-light';
-  import darkTheme from 'svelte-highlight/styles/unikitty-dark';
   import csharp from 'svelte-highlight/languages/csharp';
+  import darkTheme from 'svelte-highlight/styles/unikitty-dark';
+  import lightTheme from 'svelte-highlight/styles/unikitty-light';
+
+  import type { EventTaskDto } from '$lib/api/event';
+  import type { PatchElement } from '$lib/api/types';
+
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { Status } from '$lib/constants';
-  import type { PatchElement } from '$lib/api/types';
+  import Delete from '$lib/components/Delete.svelte';
+  import Error from '$lib/components/Error.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import type { EventTaskDto } from '$lib/api/event';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, hasEventPermission, parseDateTime } from '$lib/utils';
 
   export let data;
 

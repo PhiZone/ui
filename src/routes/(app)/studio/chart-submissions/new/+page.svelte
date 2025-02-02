@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
-  import User from '$lib/components/User.svelte';
-  import { getLevelColor, getLevelDisplay } from '$lib/utils';
-  import { superForm } from 'sveltekit-superforms';
   import { createQuery } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
-  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
-  import type { SongDto } from '$lib/api/song';
+  import { superForm } from 'sveltekit-superforms';
+
   import type { SongSubmissionDto } from '$lib/api';
+  import type { SongDto } from '$lib/api/song';
+
+  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import Tag from '$lib/components/Tag.svelte';
+  import User from '$lib/components/User.svelte';
+  import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { getLevelColor, getLevelDisplay } from '$lib/utils';
 
   export let data;
 

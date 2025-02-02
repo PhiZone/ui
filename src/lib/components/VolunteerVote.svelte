@@ -1,12 +1,15 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import type { VolunteerVoteDto } from '$lib/api/vote.volunteer';
+  import { createQuery } from '@tanstack/svelte-query';
+
   import type { ChartSubmissionDto } from '$lib/api';
+  import type { VolunteerVoteDto } from '$lib/api/vote.volunteer';
+
+  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
-  import VoteScore from './VoteScore.svelte';
+
   import DifficultySuggestion from './DifficultySuggestion.svelte';
+  import VoteScore from './VoteScore.svelte';
 
   export let vote: VolunteerVoteDto;
   export let submission: ChartSubmissionDto;

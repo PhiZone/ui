@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { locale, t } from '$lib/translations/config';
-  import type { CommentDto, UserDto } from '$lib/api';
-  import { getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
-  import { page } from '$app/stores';
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import type { ParsedQuery } from 'query-string';
+
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
+  import type { CommentDto, UserDto } from '$lib/api';
+
+  import { page } from '$app/stores';
+  import { richtext } from '$lib/richtext';
+  import { locale, t } from '$lib/translations/config';
+  import { getUserPrivilege, parseDateTime } from '$lib/utils';
+
+  import Delete from './Delete.svelte';
   import Like from './Like.svelte';
   import Paginator from './Paginatior.svelte';
-  import Delete from './Delete.svelte';
-  import User from './User.svelte';
   import ReplyComponent from './Reply.svelte';
+  import User from './User.svelte';
 
   $: ({ user, api } = $page.data);
 

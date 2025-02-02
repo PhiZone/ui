@@ -1,12 +1,13 @@
-import API from '$lib/api';
-import { z } from 'zod';
+import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail } from '@sveltejs/kit';
-import { t } from '$lib/translations/config';
+import { z } from 'zod';
+
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils';
 import { TAG_JOINER } from '$lib/constants';
+import { t } from '$lib/translations/config';
+import { toCamel } from '$lib/utils';
 
 const schema = z.object({
   resourceId: z.string().optional(),

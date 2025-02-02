@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
+
   import { t } from '$lib/translations/config';
   import { convertTime } from '$lib/utils';
 

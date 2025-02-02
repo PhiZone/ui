@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { applyPatch, getAvatar, range } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
   import type { EventTeamDto } from '$lib/api/event';
-  import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
-  import { Status } from '$lib/constants';
+
+  import { invalidateAll } from '$app/navigation';
+  import Delete from '$lib/components/Delete.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import Delete from '$lib/components/Delete.svelte';
   import User from '$lib/components/User.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getAvatar, range } from '$lib/utils';
 
   export let data;
 

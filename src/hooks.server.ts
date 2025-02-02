@@ -1,8 +1,9 @@
-import API from '$lib/api';
-import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import { getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
 import type { Handle } from '@sveltejs/kit';
+
+import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API from '$lib/api';
 import { locales } from '$lib/translations/config';
+import { getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
 
 export const handle = (async ({ event, resolve }) => {
   let accessToken = event.cookies.get('access_token');

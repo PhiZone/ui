@@ -4,8 +4,8 @@
   // `fetch` here is hard coded
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
+  import { Status, SUPPORTED_APPS } from '$lib/constants';
   import { t } from '$lib/translations/config';
-  import { SUPPORTED_APPS, Status } from '$lib/constants';
   import { getAvatar, requestIdentity } from '$lib/utils';
   // import { useQueryClient } from '@tanstack/svelte-query';
 

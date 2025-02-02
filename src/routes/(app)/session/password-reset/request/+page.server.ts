@@ -1,9 +1,10 @@
-import API from '$lib/api';
-import { z } from 'zod';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+import API from '$lib/api';
 import { SendEmailMode } from '$lib/api/auth';
-import { fail, redirect } from '@sveltejs/kit';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
 import { parseDateTime } from '$lib/utils';
