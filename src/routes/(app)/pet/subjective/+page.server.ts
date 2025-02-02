@@ -1,17 +1,12 @@
-import API from '$lib/api';
-import { compile } from 'mdsvex';
-import rehypeKatexSvelte from 'rehype-katex-svelte';
-import remarkMath from 'remark-math';
 import queryString from 'query-string';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { Plugin } from 'unified';
-import type { KatexOptions } from 'katex';
 import { fail, redirect } from '@sveltejs/kit';
-import { locale, t } from '$lib/translations/config';
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils';
+import { locale, t } from '$lib/translations/config';
+import { renderMarkdown, toCamel } from '$lib/utils';
 
 const schema = z.object({
   answer1: z.string(),
@@ -47,30 +42,10 @@ export const load = async ({ url, fetch, locals }) => {
     language: locale.get(),
   });
   for (const question of questions) {
-    question.content =
-      (
-        await compile(question.content ?? '', {
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-        })
-      )?.code
-        .replaceAll('\\', '')
-        .replaceAll('{@html "', '')
-        .replaceAll('"}', '') ?? '';
-    question.choices = await Promise.all(
-      (question.choices ?? []).map(
-        async (choice) =>
-          (
-            await compile(choice ?? '', {
-              remarkPlugins: [remarkMath],
-              rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-            })
-          )?.code
-            .replaceAll('\\', '')
-            .replaceAll('{@html "', '')
-            .replaceAll('"}', '') ?? '',
-      ),
-    );
+    question.content = renderMarkdown(question.content);
+    if (question.choices) {
+      question.choices = question.choices.map(renderMarkdown);
+    }
   }
   return {
     status: 0,

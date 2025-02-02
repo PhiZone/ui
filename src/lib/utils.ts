@@ -8,52 +8,14 @@ import type { EventDto } from './api/event';
 import { gen, hasPermission } from './hostshipPermissions';
 import type { ParsedQuery } from 'query-string';
 import queryString from 'query-string';
+import { micromark } from 'micromark';
+import { math, mathHtml } from 'micromark-extension-math';
 
-export const parseLatex = (input: string) => {
-  const result = input.matchAll(/(\$[^$]+\$)/g);
-  let element = result.next();
-  const latex = [];
-  while (element.value) {
-    latex.push({
-      index: element.value.index,
-      text: element.value[0],
-      length: element.value[0].length,
-    });
-    if (element.done) {
-      break;
-    }
-    element = result.next();
-  }
-  const array = [];
-  if (latex.length === 0) {
-    array.push({
-      latex: false,
-      text: input,
-    });
-    return array;
-  }
-  let i = 0;
-  for (let j = 0; i < input.length && j < latex.length; j++) {
-    if (i < latex[j].index) {
-      array.push({
-        latex: false,
-        text: input.substring(i, latex[j].index),
-      });
-      i = latex[j].index;
-    }
-    array.push({
-      latex: true,
-      text: latex[j].text.substring(1, latex[j].length - 1),
-    });
-    i += latex[j].length;
-  }
-  if (i < input.length - 1) {
-    array.push({
-      latex: false,
-      text: input.substring(i),
-    });
-  }
-  return array;
+export const renderMarkdown = (input: string) => {
+  return micromark(input, {
+    extensions: [math()],
+    htmlExtensions: [mathHtml()],
+  });
 };
 
 export const getUserPrivilege = (role: string | null | undefined) => {

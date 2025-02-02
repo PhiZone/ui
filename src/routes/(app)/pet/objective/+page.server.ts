@@ -1,10 +1,6 @@
-import API from '$lib/api';
 import { fail } from '@sveltejs/kit';
-import { compile } from 'mdsvex';
-import rehypeKatexSvelte from 'rehype-katex-svelte';
-import remarkMath from 'remark-math';
-import type { Plugin } from 'unified';
-import type { KatexOptions } from 'katex';
+import API from '$lib/api';
+import { renderMarkdown } from '$lib/utils';
 
 export const load = async ({ fetch, locals }) => {
   const api = new API(fetch, locals.accessToken);
@@ -19,30 +15,10 @@ export const load = async ({ fetch, locals }) => {
   }
   const questions = (await resp.json()).data;
   for (const question of questions) {
-    question.content =
-      (
-        await compile(question.content ?? '', {
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-        })
-      )?.code
-        .replaceAll('\\', '')
-        .replaceAll('{@html "', '')
-        .replaceAll('"}', '') ?? '';
-    question.choices = await Promise.all(
-      (question.choices ?? []).map(
-        async (choice) =>
-          (
-            await compile(choice ?? '', {
-              remarkPlugins: [remarkMath],
-              rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-            })
-          )?.code
-            .replaceAll('\\', '')
-            .replaceAll('{@html "', '')
-            .replaceAll('"}', '') ?? '',
-      ),
-    );
+    question.content = renderMarkdown(question.content);
+    if (question.choices) {
+      question.choices = question.choices.map(renderMarkdown);
+    }
   }
   return {
     questions,
