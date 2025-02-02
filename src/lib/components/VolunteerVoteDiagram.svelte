@@ -8,11 +8,12 @@
     PointElement,
     Tooltip,
   } from 'chart.js';
-  import { Line } from 'svelte-chartjs';
 
   import type { VolunteerVoteDto } from '$lib/api/vote.volunteer';
 
   import { t } from '$lib/translations/config';
+
+  import Line from './chart/Line.svelte';
 
   export let votes: VolunteerVoteDto[];
   export let ranked: boolean;

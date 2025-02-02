@@ -7,11 +7,12 @@
     RadialLinearScale,
     Tooltip,
   } from 'chart.js';
-  import { Radar } from 'svelte-chartjs';
 
   import type { ChartDto } from '$lib/api';
 
   import { t } from '$lib/translations/config';
+
+  import Radar from './chart/Radar.svelte';
 
   export let chart: ChartDto;
 

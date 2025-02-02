@@ -117,9 +117,6 @@ importers:
       svelte:
         specifier: ^5.19.6
         version: 5.19.6
-      svelte-chartjs:
-        specifier: ^3.1.5
-        version: 3.1.5(chart.js@4.4.7)(svelte@5.19.6)
       svelte-check:
         specifier: ^4.1.4
         version: 4.1.4(picomatch@4.0.2)(svelte@5.19.6)(typescript@5.7.3)
@@ -1974,12 +1971,6 @@ packages:
     resolution: {integrity: sha512-eKtwtTwv8l72yj/foEZu3dsg4Rm77/TNCNSr0e1GK8sOGd+kspesKWoRz1dHfztriGCQaCPMJ3ClIyzsi0n8vg==}
     peerDependencies:
       svelte: ^5.2.7
-
-  svelte-chartjs@3.1.5:
-    resolution: {integrity: sha512-ka2zh7v5FiwfAX1oMflZ0HkNkgjHjFqANgRyC+vNYXfxtx2ku68Zo+2KgbKeBH2nS1ThDqkIACPzGxy4T0UaoA==}
-    peerDependencies:
-      chart.js: ^3.5.0 || ^4.0.0
-      svelte: ^4.0.0
 
   svelte-check@4.1.4:
     resolution: {integrity: sha512-v0j7yLbT29MezzaQJPEDwksybTE2Ups9rUxEXy92T06TiA0cbqcO8wAOwNUVkFW6B0hsYHA+oAX3BS8b/2oHtw==}
@@ -3997,11 +3988,6 @@ snapshots:
 
   svelecte@5.1.4(svelte@5.19.6):
     dependencies:
-      svelte: 5.19.6
-
-  svelte-chartjs@3.1.5(chart.js@4.4.7)(svelte@5.19.6):
-    dependencies:
-      chart.js: 4.4.7
       svelte: 5.19.6
 
   svelte-check@4.1.4(picomatch@4.0.2)(svelte@5.19.6)(typescript@5.7.3):

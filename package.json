@@ -41,7 +41,6 @@
     "prettier-plugin-svelte": "^3.3.3",
     "svelecte": "^5.1.4",
     "svelte": "^5.19.6",
-    "svelte-chartjs": "^3.1.5",
     "svelte-check": "^4.1.4",
     "svelte-dnd-action": "^0.9.57",
     "svelte-eslint-parser": "^0.43.0",
