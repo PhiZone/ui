@@ -26,7 +26,7 @@
 
   $: ({ id, chartId, user, api, queryClient } = data);
 
-  $: chart = createQuery(api.chart.info({ id: chartId }));
+  $: chartQuery = createQuery(api.chart.info({ id: chartId }));
   $: options = api.chart.asset.info({ chartId, id });
   $: chartAssetQuery = createQuery({ ...options });
   $: content = createQuery({
@@ -92,10 +92,10 @@
 <svelte:head>
   <title>
     {$t('chart.assets')} - {$chartAssetQuery.data?.data.name} | {$t('chart.chart')} -
-    {$chart.isSuccess
-      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
-          $chart.data.data.level
-        } ${getLevelDisplay($chart.data.data.difficulty)}]`
+    {$chartQuery.isSuccess
+      ? `${$chartQuery.data.data.title ?? $chartQuery.data.data.song.title} [${
+          $chartQuery.data.data.level
+        } ${getLevelDisplay($chartQuery.data.data.difficulty)}]`
       : ''} | {$t('common.site_name')}
   </title>
 </svelte:head>
@@ -332,8 +332,8 @@
           <AnonymizationNotice />
         {/if}
       </div>
-      {#if $chart.isSuccess}
-        {@const chart = $chart.data.data}
+      {#if $chartQuery.isSuccess}
+        {@const chart = $chartQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"

@@ -26,10 +26,10 @@
 
   $: ({ id, api } = data);
 
-  $: user = createQuery(api.user.info({ id }));
-  $: charts = createQuery(api.chart.list({ rangeOwnerId: [id] }));
-  $: songs = createQuery(api.song.list({ rangeOwnerId: [id] }));
-  $: recentRecords = createQuery(
+  $: userQuery = createQuery(api.user.info({ id }));
+  $: chartsQuery = createQuery(api.chart.list({ rangeOwnerId: [id] }));
+  $: songsQuery = createQuery(api.song.list({ rangeOwnerId: [id] }));
+  $: recentRecordsQuery = createQuery(
     api.record.list({ rangeOwnerId: [id], order: ['dateCreated'], desc: [true] }),
   );
   $: bestRecords = createQuery(
@@ -40,11 +40,13 @@
 </script>
 
 <svelte:head>
-  <title>{$t('user.user')} - {$user.data?.data.userName ?? ''} | {$t('common.site_name')}</title>
+  <title>
+    {$t('user.user')} - {$userQuery.data?.data.userName ?? ''} | {$t('common.site_name')}
+  </title>
 </svelte:head>
 
-{#if $user.isSuccess}
-  {@const user = $user.data.data}
+{#if $userQuery.isSuccess}
+  {@const user = $userQuery.data.data}
   <div class="info-page">
     <div class="mx-4 md:w-full max-w-[1800px]">
       <div class="indicator w-full my-4">
@@ -183,9 +185,9 @@
             </div>
           </figure>
           <div class="card-body py-3">
-            {#if $charts.isSuccess}
-              {@const total = $charts.data.total}
-              {@const charts = $charts.data.data}
+            {#if $chartsQuery.isSuccess}
+              {@const total = $chartsQuery.data.total}
+              {@const charts = $chartsQuery.data.data}
               <div class="flex items-center mt-6 mb-2 justify-between">
                 <h2 class="text-3xl font-bold">
                   {$t('user.charts')}
@@ -215,9 +217,9 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if $songs.isSuccess}
-              {@const total = $songs.data.total}
-              {@const songs = $songs.data.data}
+            {#if $songsQuery.isSuccess}
+              {@const total = $songsQuery.data.total}
+              {@const songs = $songsQuery.data.data}
               <div class="flex items-center mt-6 mb-2 justify-between">
                 <h2 class="text-3xl font-bold">
                   {$t('user.songs')}
@@ -247,9 +249,9 @@
                 <p class="py-3 text-center">{$t('common.empty')}</p>
               {/if}
             {/if}
-            {#if $recentRecords.isSuccess}
-              {@const total = $recentRecords.data.total}
-              {@const recentRecords = $recentRecords.data.data}
+            {#if $recentRecordsQuery.isSuccess}
+              {@const total = $recentRecordsQuery.data.total}
+              {@const recentRecords = $recentRecordsQuery.data.data}
               <div class="flex items-center mt-6 mb-2 justify-between">
                 <h2 class="text-3xl font-bold">
                   {$t('user.recent_records')}
@@ -306,8 +308,8 @@
       </div>
     </div>
   </div>
-{:else if $user.isError}
-  <Error error={$user.error} back="/users" />
+{:else if $userQuery.isError}
+  <Error error={$userQuery.error} back="/users" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

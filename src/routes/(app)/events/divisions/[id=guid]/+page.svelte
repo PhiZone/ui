@@ -18,11 +18,14 @@
 
   $: ({ searchParams, index, id, api, user } = data);
 
-  $: division = createQuery(api.event.division.info({ id }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  $: divisionQuery = createQuery(api.event.division.info({ id }));
+  $: eventQuery = createQuery(
+    api.event.info(
+      { id: $divisionQuery.data?.data.eventId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
-  $: leaderboard = createQuery(
+  $: leaderboardQuery = createQuery(
     api.event.division.leaderboard(
       {
         id,
@@ -31,7 +34,7 @@
       { enabled: index == 1 },
     ),
   );
-  $: tasks = createQuery(
+  $: tasksQuery = createQuery(
     api.event.task.listAll({
       rangeDivisionId: [id],
       rangeType: [0],
@@ -39,39 +42,56 @@
     }),
   );
   $: divisionTag = createQuery(
-    api.tag.info({ id: $division.data?.data.tagId ?? '' }, { enabled: $division.isSuccess }),
+    api.tag.info(
+      { id: $divisionQuery.data?.data.tagId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
-  $: tags = createQuery(api.event.division.listAllTags({ id }, { enabled: $division.isSuccess }));
+  $: tagsQuery = createQuery(
+    api.event.division.listAllTags({ id }, { enabled: $divisionQuery.isSuccess }),
+  );
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 0 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 0 },
     ),
   );
   $: chartPrompts = createQuery(
     api.event.division.listChartPrompts(
       { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 0 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 0 },
     ),
   );
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
-      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
       {
-        enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2,
+        id,
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+        perPage: 10,
+      },
+      {
+        enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 && index == 2,
       },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
-      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
+      {
+        id,
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+        perPage: 10,
+      },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 2 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
-      { id, ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''), perPage: 10 },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
+      {
+        id,
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+        perPage: 10,
+      },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 2 },
     ),
   );
 
@@ -83,15 +103,15 @@
 
 <svelte:head>
   <title>
-    {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
+    {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery.data?.data.title}) | {$t(
       'common.site_name',
     )}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
@@ -362,8 +382,8 @@
                   {$t('common.more')}
                   <i class="fa-solid fa-angles-right"></i>
                 </a>
-              {:else if index == 1 && $leaderboard.isSuccess}
-                {@const leaderboard = $leaderboard.data.data}
+              {:else if index == 1 && $leaderboardQuery.isSuccess}
+                {@const leaderboard = $leaderboardQuery.data.data}
                 <div class="overflow-x-auto">
                   <table class="table">
                     <thead>
@@ -709,8 +729,8 @@
             {/if} -->
             </div>
           </div>
-          {#if $divisionTag.isSuccess && $tags.isSuccess}
-            {@const tags = [$divisionTag.data.data, ...$tags.data.data]}
+          {#if $divisionTag.isSuccess && $tagsQuery.isSuccess}
+            {@const tags = [$divisionTag.data.data, ...$tagsQuery.data.data]}
             <div class="indicator w-full my-4">
               <span
                 class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -760,8 +780,8 @@
                 <div class="stat-value text-3xl">{division.entryCount}</div>
               </div>
             </div>
-            {#if $tasks.isSuccess}
-              {@const tasks = $tasks.data.data}
+            {#if $tasksQuery.isSuccess}
+              {@const tasks = $tasksQuery.data.data}
               <ul class="steps steps-vertical">
                 {#each tasks as task}
                   <li
@@ -795,8 +815,8 @@
       <Comments type="events/divisions" id={division.id} {searchParams} />
     </div>
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} back="/divisions" />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} back="/divisions" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

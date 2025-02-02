@@ -71,37 +71,40 @@
   let collabOpen = false;
   let chapterOpen = false;
 
-  $: submission = createQuery(api.song.submission.info({ id }));
+  $: submissionQuery = createQuery(api.song.submission.info({ id }));
   $: uploader = createQuery(
-    api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
-  );
-  $: reviewer = createQuery(
     api.user.info(
-      { id: $submission.data?.data.reviewerId ?? 0 },
-      { enabled: $submission.isSuccess && !!$submission.data?.data.reviewerId },
+      { id: $submissionQuery.data?.data.ownerId ?? 0 },
+      { enabled: $submissionQuery.isSuccess },
+    ),
+  );
+  $: reviewerQuery = createQuery(
+    api.user.info(
+      { id: $submissionQuery.data?.data.reviewerId ?? 0 },
+      { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.reviewerId },
     ),
   );
   $: representation = createQuery(
     api.song.info(
-      { id: $submission.data?.data.representationId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+      { id: $submissionQuery.data?.data.representationId ?? '' },
+      { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
     ),
   );
   $: resourceRecords = createQuery(
     api.resourceRecord.listAll(
       {
-        search: `${$submission.data?.data.title} ${$submission.data?.data.edition} ${$submission.data?.data.authorName}`,
+        search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
         rangeStrategy: [1, 2, 3, 4],
       },
-      { enabled: $submission.isSuccess },
+      { enabled: $submissionQuery.isSuccess },
     ),
   );
   $: songDuplications = createQuery(
     api.song.listAll(
       {
-        search: `${$submission.data?.data.title} ${$submission.data?.data.edition} ${$submission.data?.data.authorName}`,
+        search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
       },
-      { enabled: $submission.isSuccess },
+      { enabled: $submissionQuery.isSuccess },
     ),
   );
   $: collaborator = createQuery(
@@ -116,29 +119,29 @@
   );
   $: chapters = createQuery(
     api.admission.listChapter(
-      { rangeAdmitteeId: [$submission.data?.data.representationId ?? ''] },
-      { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
+      { rangeAdmitteeId: [$submissionQuery.data?.data.representationId ?? ''] },
+      { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data.data.representationId },
     ),
   );
-  $: services = createQuery(api.service.list({ rangeTargetType: [0] }));
+  $: servicesQuery = createQuery(api.service.list({ rangeTargetType: [0] }));
 
-  $: composer = $submission.data?.data.originalityProof
-    ? richtext($submission.data?.data.authorName ?? '')
-    : readable($submission.data?.data.authorName);
+  $: composer = $submissionQuery.data?.data.originalityProof
+    ? richtext($submissionQuery.data?.data.authorName ?? '')
+    : readable($submissionQuery.data?.data.authorName);
   $: composerText =
-    $submission.data?.data.originalityProof && $submission.data?.data.authorName
-      ? $submission.data?.data.authorName.replaceAll(
+    $submissionQuery.data?.data.originalityProof && $submissionQuery.data?.data.authorName
+      ? $submissionQuery.data?.data.authorName.replaceAll(
           /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
           (_, __, ___, display: string) => display,
         )
-      : $submission.data?.data.authorName;
+      : $submissionQuery.data?.data.authorName;
   $: eventParticipation = createQuery(
     api.chart.submission.checkEvent(
-      { strings: $submission.data?.data.tags ?? [] },
-      { enabled: $submission.isSuccess, retry: 0 },
+      { strings: $submissionQuery.data?.data.tags ?? [] },
+      { enabled: $submissionQuery.isSuccess, retry: 0 },
     ),
   );
-  $: event = createQuery(
+  $: eventQuery = createQuery(
     api.event.info(
       { id: $eventParticipation.data?.data.division?.eventId ?? '' },
       { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
@@ -148,12 +151,12 @@
 
 <svelte:head>
   <title>
-    {$t('studio.song_submission')} - {$submission.data?.data.title} | {$t('common.site_name')}
+    {$t('studio.song_submission')} - {$submissionQuery.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $submission.isSuccess}
-  {@const submission = $submission.data.data}
+{#if $submissionQuery.isSuccess}
+  {@const submission = $submissionQuery.data.data}
   <input
     type="checkbox"
     id="studio-song-submission"
@@ -694,8 +697,8 @@
                   </span>
                   {$t(`studio.submission.statuses.${submission.status}`)}
                 </p>
-                {#if $reviewer.isSuccess}
-                  {@const reviewer = $reviewer.data.data}
+                {#if $reviewerQuery.isSuccess}
+                  {@const reviewer = $reviewerQuery.data.data}
                   <p>
                     <span class="badge mr-1">
                       {$t('studio.submission.reviewer')}
@@ -880,8 +883,8 @@
           </div>
         </div>
       {/if}
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -936,9 +939,9 @@
       {/if}
       {#if $eventParticipation.isSuccess}
         {@const participation = $eventParticipation.data.data}
-        {#if participation.division && $event.isSuccess}
+        {#if participation.division && $eventQuery.isSuccess}
           {@const division = participation.division}
-          {@const event = $event.data.data}
+          {@const event = $eventQuery.data.data}
           <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
@@ -952,8 +955,8 @@
       {/if}
     </div>
   </div>
-{:else if $submission.isError}
-  <Error error={$submission.error} back="/studio/song-submissions" />
+{:else if $submissionQuery.isError}
+  <Error error={$submissionQuery.error} back="/studio/song-submissions" />
 {:else}
   <div class="min-h-screen skeleton"></div>
 {/if}

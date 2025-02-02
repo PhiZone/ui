@@ -14,10 +14,10 @@
   $: owner = createQuery(api.user.info({ id: answer.ownerId }));
 </script>
 
-<a
+<div
   class="card card-side w-full bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
-  href={`/pet/answers/${answer.id}`}
 >
+  <a class="absolute top-0 left-0 right-0 bottom-0" href={`/pet/answers/${answer.id}`}>{''}</a>
   <figure class="w-1/6 min-w-fit">
     <div
       class="relative inline-flex items-center justify-center form-control border-r normal-border px-3 py-3 mx-auto my-auto"
@@ -49,7 +49,7 @@
     </p>
     <div class="w-full flex justify-between items-center">
       <p class="text-sm opacity-70 flex justify-end items-center gap-2">
-        <a href={`/users/${answer.ownerId}`} target="_blank" class="hover:underline">
+        <a href={`/users/${answer.ownerId}`} class="hover:underline">
           {$owner.data?.data.userName ?? ''}
         </a>
         <span>·</span>
@@ -59,4 +59,4 @@
       </p>
     </div>
   </div>
-</a>
+</div>

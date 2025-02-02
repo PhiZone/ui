@@ -16,9 +16,12 @@
 
   $: ({ searchParams, index, page, id, api, user } = data);
 
-  $: division = createQuery(api.event.division.info({ id }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  $: divisionQuery = createQuery(api.event.division.info({ id }));
+  $: eventQuery = createQuery(
+    api.event.info(
+      { id: $divisionQuery.data?.data.eventId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
   $: teams = createQuery(api.event.team.list({ rangeDivisionId: [id], perPage, ...searchParams }));
   $: reservedFieldsHeader = createQuery(api.event.division.listReservedFields({ id }));
@@ -31,16 +34,16 @@
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 0 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 0 },
     ),
   );
   $: chartPrompts = createQuery(
     api.event.division.listChartPrompts(
       { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 0 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 0 },
     ),
   );
-  $: resources = createQuery(
+  $: resourcesQuery = createQuery(
     api.event.resource.list(
       { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
       { enabled: index == 2 },
@@ -55,19 +58,19 @@
   $: songEntries = createQuery(
     api.event.division.listSongEntries(
       { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 && index == 2 },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
       { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 2 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
       { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 2 },
     ),
   );
 
@@ -77,14 +80,14 @@
 
 <svelte:head>
   <title>
-    {$t('common.manage')} | {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data
-      .title}) | {$t('common.site_name')}
+    {$t('common.manage')} | {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery
+      .data?.data.title}) | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <div
     class="background min-h-screen"
     style:background-image="url({division.illustration ?? event.illustration})"
@@ -410,8 +413,8 @@
                 {:else}
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
-              {:else if index == 2 && $resources.isSuccess && $reservedFieldsResource.isSuccess && $reservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
-                {@const { total, perPage, data } = $resources.data}
+              {:else if index == 2 && $resourcesQuery.isSuccess && $reservedFieldsResource.isSuccess && $reservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
+                {@const { total, perPage, data } = $resourcesQuery.data}
                 {@const resources = data.map((e, i) => {
                   e.reservedFields = $reservedFieldsResource.data.data[i];
                   if (
@@ -716,8 +719,8 @@
       </div>
     </div>
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} back="/divisions" />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} back="/divisions" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

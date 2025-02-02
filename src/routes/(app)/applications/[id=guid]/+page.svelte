@@ -14,18 +14,18 @@
 
   $: ({ searchParams, id, user, api, preferredApplication } = data);
 
-  $: application = createQuery(api.application.info({ id }));
-  $: services = createQuery(api.service.list({ rangeResourceId: [id] }));
+  $: applicationQuery = createQuery(api.application.info({ id }));
+  $: servicesQuery = createQuery(api.service.list({ rangeResourceId: [id] }));
 </script>
 
 <svelte:head>
   <title>
-    {$t('application.application')} - {$application.data?.data.name} | {$t('common.site_name')}
+    {$t('application.application')} - {$applicationQuery.data?.data.name} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $application.isSuccess}
-  {@const application = $application.data.data}
+{#if $applicationQuery.isSuccess}
+  {@const application = $applicationQuery.data.data}
   <div class="info-page">
     <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
@@ -155,8 +155,8 @@
           </div>
         </div>
       </div>
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -198,8 +198,8 @@
       </div>
     </div>
   </div>
-{:else if $application.isError}
-  <Error error={$application.error} back="/applications" />
+{:else if $applicationQuery.isError}
+  <Error error={$applicationQuery.error} back="/applications" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

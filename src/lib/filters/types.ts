@@ -1,4 +1,5 @@
 import type Svelecte from 'svelecte';
+import type { ComponentProps } from 'svelte';
 
 interface Item {
   label: string;
@@ -61,10 +62,10 @@ interface IFilterSelect extends IFilterBase {
     | IFilterSelectItem
     | IFilterSelectItem[];
   param: string;
-  // items: Svelecte['$$prop_def']['options']
+  // items: ComponentProps<typeof Svelecte>['options']
   items: IFilterSelectItem[];
   // see https://svelecte.vercel.app/options for more information
-  options?: Svelecte['$$prop_def'];
+  options?: ComponentProps<typeof Svelecte>;
 }
 
 export interface IFilterOrderItem {
@@ -77,10 +78,10 @@ interface IFilterOrder extends IFilterBase {
   type: 'select';
   value: Record<string, never> | { id: string | number }[] | IFilterOrderItem[];
   param: 'Order';
-  // items: Svelecte['$$prop_def']['options']
+  // items: ComponentProps<typeof Svelecte>['options']
   items: IFilterOrderItem[];
   // see https://svelecte.vercel.app/options for more information
-  options?: Svelecte['$$prop_def'];
+  options?: ComponentProps<typeof Svelecte>;
 }
 
 interface IFilterToggle extends IFilterBase {

@@ -63,13 +63,13 @@
   };
 
   $: chartOptions = api.chart.info({ id, includeAssets: true });
-  $: chart = createQuery({ ...chartOptions });
+  $: chartQuery = createQuery({ ...chartOptions });
   $: collections = createQuery(api.chart.listAllAdmitters({ id }));
   $: leaderboard = createQuery(api.chart.leaderboard({ id }));
   $: votesOptions = api.vote.listAll({ chartId: id });
   $: votes = createQuery({ ...votesOptions });
   $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
-  $: charter = richtext($chart.data?.data.authorName ?? $t('common.anonymous'));
+  $: charter = richtext($chartQuery.data?.data.authorName ?? $t('common.anonymous'));
 
   $: preferredPlayConfigurationQuery = createQuery(
     api.playConfiguration.list(
@@ -123,17 +123,17 @@
 <svelte:head>
   <title>
     {$t('chart.chart')} -
-    {$chart.isSuccess
-      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
-          $chart.data.data.level
-        } ${getLevelDisplay($chart.data.data.difficulty)}]`
+    {$chartQuery.isSuccess
+      ? `${$chartQuery.data.data.title ?? $chartQuery.data.data.song.title} [${
+          $chartQuery.data.data.level
+        } ${getLevelDisplay($chartQuery.data.data.difficulty)}]`
       : ''}
     | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $chart.isSuccess}
-  {@const chart = $chart.data.data}
+{#if $chartQuery.isSuccess}
+  {@const chart = $chartQuery.data.data}
   {#if user}
     <input type="checkbox" id="play" class="modal-toggle" bind:checked={playOpen} />
     <div class="modal" role="dialog">
@@ -721,8 +721,8 @@
       {/if}
     </div>
   </div>
-{:else if $chart.isError}
-  <Error error={$chart.error} back="/charts" />
+{:else if $chartQuery.isError}
+  <Error error={$chartQuery.error} back="/charts" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

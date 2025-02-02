@@ -10,24 +10,24 @@
   export let data;
   const { searchParams, id, user, api } = data;
 
-  $: chart = createQuery(api.chart.info({ id }));
-  $: leaderboard = createQuery(api.chart.leaderboard({ id, ...searchParams }));
+  $: chartQuery = createQuery(api.chart.info({ id }));
+  $: leaderboardQuery = createQuery(api.chart.leaderboard({ id, ...searchParams }));
 </script>
 
 <svelte:head>
   <title>
     {$t('common.leaderboard')} | {$t('chart.chart')} -
-    {$chart.isSuccess
-      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
-          $chart.data.data.level
-        } ${getLevelDisplay($chart.data.data.difficulty)}]`
+    {$chartQuery.isSuccess
+      ? `${$chartQuery.data.data.title ?? $chartQuery.data.data.song.title} [${
+          $chartQuery.data.data.level
+        } ${getLevelDisplay($chartQuery.data.data.difficulty)}]`
       : ''}
     | {$t('common.site_name')}
   </title>
 </svelte:head>
-{#if $leaderboard.isSuccess && $chart.isSuccess}
-  {@const leaderboard = $leaderboard.data.data}
-  {@const chart = $chart.data.data}
+{#if $leaderboardQuery.isSuccess && $chartQuery.isSuccess}
+  {@const leaderboard = $leaderboardQuery.data.data}
+  {@const chart = $chartQuery.data.data}
   <div
     class="background min-h-screen"
     style:background-image="url({chart.illustration ?? chart.song.illustration})"

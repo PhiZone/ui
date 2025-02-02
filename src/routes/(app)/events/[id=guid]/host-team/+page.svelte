@@ -12,13 +12,13 @@
 
   $: ({ id, user, api, url } = data);
 
-  $: event = createQuery(api.event.info({ id }));
-  $: hostships = createQuery(api.event.listAllHostships({ rangeEventId: [id] }));
+  $: eventQuery = createQuery(api.event.info({ id }));
+  $: hostshipsQuery = createQuery(api.event.listAllHostships({ rangeEventId: [id] }));
 
-  $: isOwner = getUserPrivilege(user?.role) >= 6 || $event.data?.data.ownerId === user?.id;
+  $: isOwner = getUserPrivilege(user?.role) >= 6 || $eventQuery.data?.data.ownerId === user?.id;
   $: isAdmin =
     getUserPrivilege(user?.role) >= 6 ||
-    user?.hostships?.some((hostship) => $event.data?.data.id === id && hostship.isAdmin);
+    user?.hostships?.some((hostship) => $eventQuery.data?.data.id === id && hostship.isAdmin);
 
   let status = Status.WAITING;
   let copied = false;
@@ -60,7 +60,7 @@
 <svelte:head>
   <title>
     {$t('event.host_team')}
-    | {$t('event.event')} - {$event.data?.data.title} | {$t('common.site_name')}
+    | {$t('event.event')} - {$eventQuery.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 <input type="checkbox" id="invite" class="modal-toggle" />
@@ -151,7 +151,7 @@
           {/each}
           {#if isAdmin}
             <label
-              for="new-permission-{$event.data?.data.id}"
+              for="new-permission-{$eventQuery.data?.data.id}"
               class="btn border-2 normal-border btn-outline btn-xs btn-circle"
             >
               <i class="fa-solid fa-plus"></i>
@@ -179,7 +179,7 @@
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               user: user.userName,
-              event: $event.data?.data.title,
+              event: $eventQuery.data?.data.title,
               link: `${url.protocol}//${url.host}/events/invite?code=${inviteCode}`,
             }),
           );
@@ -226,7 +226,7 @@
 </div>
 <input
   type="checkbox"
-  id="new-permission-{$event.data?.data.id}"
+  id="new-permission-{$eventQuery.data?.data.id}"
   class="modal-toggle"
   bind:checked={permissionOpen}
 />
@@ -234,7 +234,7 @@
   <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
     <h3 class="font-bold text-lg">{$t('common.add')}</h3>
     <label
-      for="new-permission-{$event.data?.data.id}"
+      for="new-permission-{$eventQuery.data?.data.id}"
       class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
@@ -314,7 +314,7 @@
       <div class="flex justify-between">
         <h1 class="text-4xl font-bold mb-6">{$t('event.host_team')}</h1>
         <div class="join">
-          {#if hasEventPermission(user, $event.data?.data, CREATE, HOSTSHIP)}
+          {#if hasEventPermission(user, $eventQuery.data?.data, CREATE, HOSTSHIP)}
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
             <label
               for="invite"
@@ -328,7 +328,7 @@
             </label>
           {/if}
           <a
-            href="/events/{$event.data?.data.id}"
+            href="/events/{$eventQuery.data?.data.id}"
             class="btn border-2 normal-border btn-outline join-item"
           >
             {$t('common.back')}
@@ -346,9 +346,9 @@
           class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            {#if $event.isSuccess && $hostships.isSuccess}
-              {@const event = $event.data.data}
-              {@const hostships = $hostships.data.data}
+            {#if $eventQuery.isSuccess && $hostshipsQuery.isSuccess}
+              {@const event = $eventQuery.data.data}
+              {@const hostships = $hostshipsQuery.data.data}
               {#if hostships.length > 0}
                 <div class="flex flex-col gap-4">
                   {#each hostships as hostship}

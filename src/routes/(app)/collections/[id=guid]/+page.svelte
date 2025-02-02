@@ -12,18 +12,18 @@
 
   $: ({ searchParams, id, api } = data);
 
-  $: collection = createQuery(api.collection.info({ id }));
-  $: charts = createQuery(api.collection.listCharts({ id }));
+  $: collectionQuery = createQuery(api.collection.info({ id }));
+  $: chartsQuery = createQuery(api.collection.listCharts({ id }));
 </script>
 
 <svelte:head>
   <title>
-    {$t('collection.collection')} - {$collection.data?.data?.title} | {$t('common.site_name')}
+    {$t('collection.collection')} - {$collectionQuery.data?.data?.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $collection.isSuccess}
-  {@const collection = $collection.data.data}
+{#if $collectionQuery.isSuccess}
+  {@const collection = $collectionQuery.data.data}
   <input type="checkbox" id="illustration" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
@@ -96,7 +96,7 @@
         </span>
         <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
           <div class="card-body">
-            {#if $charts.isLoading}
+            {#if $chartsQuery.isLoading}
               <ul class="menu bg-base-100 w-full">
                 <li class="overflow-hidden">
                   <div class="w-full h-[82px] flex px-5">
@@ -112,8 +112,8 @@
                   </div>
                 </li>
               </ul>
-            {:else if $charts.isSuccess}
-              {@const charts = $charts.data.data}
+            {:else if $chartsQuery.isSuccess}
+              {@const charts = $chartsQuery.data.data}
               {#if charts.length > 0}
                 <ul class="menu bg-base-100 w-full">
                   {#each charts as chart}
@@ -130,8 +130,8 @@
       <Comments type="collections" id={collection.id} {searchParams} />
     </div>
   </div>
-{:else if $collection.isError}
-  <Error error={$collection.error} back="/collections" />
+{:else if $collectionQuery.isError}
+  <Error error={$collectionQuery.error} back="/collections" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

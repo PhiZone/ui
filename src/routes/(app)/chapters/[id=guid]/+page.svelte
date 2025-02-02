@@ -14,16 +14,18 @@
 
   $: ({ searchParams, id, api } = data);
 
-  $: chapter = createQuery(api.chapter.info({ id }));
-  $: songs = createQuery(api.chapter.listSongs({ id }));
+  $: chapterQuery = createQuery(api.chapter.info({ id }));
+  $: songsQuery = createQuery(api.chapter.listSongs({ id }));
 </script>
 
 <svelte:head>
-  <title>{$t('chapter.chapter')} - {$chapter.data?.data?.title} | {$t('common.site_name')}</title>
+  <title>
+    {$t('chapter.chapter')} - {$chapterQuery.data?.data?.title} | {$t('common.site_name')}
+  </title>
 </svelte:head>
 
-{#if $chapter.isSuccess}
-  {@const chapter = $chapter.data.data}
+{#if $chapterQuery.isSuccess}
+  {@const chapter = $chapterQuery.data.data}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <dialog
@@ -102,7 +104,7 @@
         </span>
         <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
           <div class="card-body">
-            {#if $songs.isLoading}
+            {#if $songsQuery.isLoading}
               <ul class="menu bg-base-100 w-full">
                 <li class="overflow-hidden">
                   <div class="w-full h-[82px] flex px-5">
@@ -118,8 +120,8 @@
                   </div>
                 </li>
               </ul>
-            {:else if $songs.isSuccess}
-              {@const songs = $songs.data.data}
+            {:else if $songsQuery.isSuccess}
+              {@const songs = $songsQuery.data.data}
               {#if songs.length > 0}
                 <ul class="menu bg-base-100 w-full">
                   {#each songs as song}
@@ -136,8 +138,8 @@
       <Comments type="chapters" id={chapter.id} {searchParams} />
     </div>
   </div>
-{:else if $chapter.isError}
-  <Error error={$chapter.error} back="/chapters" />
+{:else if $chapterQuery.isError}
+  <Error error={$chapterQuery.error} back="/chapters" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

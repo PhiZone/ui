@@ -20,29 +20,29 @@
 
   $: ({ searchParams, id, user, api } = data);
 
-  $: song = createQuery(api.song.info({ id }));
-  $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
+  $: songQuery = createQuery(api.song.info({ id }));
+  $: chartsQuery = createQuery(api.chart.listAll({ rangeSongId: [id] }));
   $: chapters = createQuery(api.song.listAllAdmitters({ id }));
   $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
   $: composer =
-    $song.data?.data.isOriginal && $song.data?.data.authorName
-      ? richtext($song.data?.data.authorName)
-      : readable($song.data?.data.authorName ?? $t('common.anonymous'));
+    $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
+      ? richtext($songQuery.data?.data.authorName)
+      : readable($songQuery.data?.data.authorName ?? $t('common.anonymous'));
   $: composerText =
-    $song.data?.data.isOriginal && $song.data?.data.authorName
-      ? $song.data?.data.authorName.replaceAll(
+    $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
+      ? $songQuery.data?.data.authorName.replaceAll(
           /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
           (_, __, ___, display: string) => display,
         )
-      : $song.data?.data.authorName;
+      : $songQuery.data?.data.authorName;
 </script>
 
 <svelte:head>
-  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.site_name')}</title>
+  <title>{$t('song.song')} - {$songQuery.data?.data.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $song.isSuccess}
-  {@const song = $song.data.data}
+{#if $songQuery.isSuccess}
+  {@const song = $songQuery.data.data}
 
   <input type="checkbox" id="license-{song.id}" class="modal-toggle" />
   <div class="modal">
@@ -221,15 +221,15 @@
                 {song.description}
               </p>
             {/if}
-            {#if $charts.isSuccess}
+            {#if $chartsQuery.isSuccess}
               <div
                 class="collapse collapse-arrow collapse-transition border-2 normal-border hover:border-secondary bg-base-100 rounded-box mt-3"
               >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
                 <div class="collapse-content">
-                  {#if $charts.isSuccess}
-                    {@const charts = $charts.data.data}
+                  {#if $chartsQuery.isSuccess}
+                    {@const charts = $chartsQuery.data.data}
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
@@ -308,8 +308,8 @@
       {/if}
     </div>
   </div>
-{:else if $song.isError}
-  <Error error={$song.error} back="/songs" />
+{:else if $songQuery.isError}
+  <Error error={$songQuery.error} back="/songs" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

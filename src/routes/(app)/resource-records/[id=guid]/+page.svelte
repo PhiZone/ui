@@ -9,19 +9,19 @@
 
   $: ({ id, api } = data);
 
-  $: resourceRecord = createQuery(api.resourceRecord.info({ id }));
+  $: resourceRecordQuery = createQuery(api.resourceRecord.info({ id }));
 </script>
 
 <svelte:head>
   <title>
-    {$t('resource_record.resource_record')} - {$resourceRecord.data?.data.title} | {$t(
+    {$t('resource_record.resource_record')} - {$resourceRecordQuery.data?.data.title} | {$t(
       'common.site_name',
     )}
   </title>
 </svelte:head>
 
-{#if $resourceRecord.isSuccess}
-  {@const resourceRecord = $resourceRecord.data.data}
+{#if $resourceRecordQuery.isSuccess}
+  {@const resourceRecord = $resourceRecordQuery.data.data}
 
   <input type="checkbox" id="license-{resourceRecord.id}" class="modal-toggle" />
   <div class="modal">
@@ -151,8 +151,8 @@
       </div>
     </div>
   </div>
-{:else if $resourceRecord.isError}
-  <Error error={$resourceRecord.error} back="/resource-records" />
+{:else if $resourceRecordQuery.isError}
+  <Error error={$resourceRecordQuery.error} back="/resource-records" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

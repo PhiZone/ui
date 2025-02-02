@@ -12,9 +12,12 @@
   export let data;
   $: ({ id, searchParams, page, api } = data);
 
-  $: division = createQuery(api.event.division.info({ id }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  $: divisionQuery = createQuery(api.event.division.info({ id }));
+  $: eventQuery = createQuery(
+    api.event.info(
+      { id: $divisionQuery.data?.data.eventId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
   // $: songPrompts = createQuery(
   //   api.event.division.listSongPrompts(
@@ -32,44 +35,44 @@
     api.event.division.listSongEntries(
       {
         id,
-        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
         ...searchParams,
       },
-      { enabled: $division.isSuccess && $division.data.data.type == 0 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 },
     ),
   );
   $: chartEntries = createQuery(
     api.event.division.listChartEntries(
       {
         id,
-        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
         ...searchParams,
       },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
     ),
   );
   $: recordEntries = createQuery(
     api.event.division.listRecordEntries(
       {
         id,
-        ...queryString.parse($division.data?.data.suggestedEntrySearch ?? ''),
+        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
         ...searchParams,
       },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
     ),
   );
 </script>
 
 <svelte:head>
   <title>
-    {$t('event.division.entries')} | {$t('event.event')} - {$event.data?.data.title} ({$division
+    {$t('event.division.entries')} | {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery
       .data?.data.title}) | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess && (($division.data.data.type == 0 && $songEntries.isSuccess) || ($division.data.data.type == 1 && $chartEntries.isSuccess) || ($division.data.data.type == 2 && $recordEntries.isSuccess))}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess && (($divisionQuery.data.data.type == 0 && $songEntries.isSuccess) || ($divisionQuery.data.data.type == 1 && $chartEntries.isSuccess) || ($divisionQuery.data.data.type == 2 && $recordEntries.isSuccess))}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <div class="page">
     <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
       <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
@@ -119,8 +122,8 @@
       {/if}
     {/if}
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

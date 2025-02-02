@@ -36,51 +36,58 @@
   let newResourceId: string | null = null;
   let resourceOpen = false;
 
-  $: division = createQuery(api.event.division.info({ id }));
-  $: if (browser && $division.isSuccess && $division.data.data.type == 0) {
+  $: divisionQuery = createQuery(api.event.division.info({ id }));
+  $: if (browser && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0) {
     goto(`/events/divisions/${id}`);
   }
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  $: eventQuery = createQuery(
+    api.event.info(
+      { id: $divisionQuery.data?.data.eventId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
   $: songPrompts = createQuery(
     api.event.division.listSongPrompts(
       { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
     ),
   );
   $: chartPrompts = createQuery(
     api.event.division.listChartPrompts(
       { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 },
+      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
     ),
   );
   $: songSearch = createQuery(
     api.song.listAll(
       { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $division.isSuccess && $division.data.data.type == 1 },
+      { enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
     ),
   );
   $: chartSearch = createQuery(
     api.chart.listAll(
       { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $division.isSuccess && $division.data.data.type == 2 },
+      { enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
     ),
   );
 </script>
 
 <svelte:head>
   <title>
-    {$t($division.data?.data.type == 2 ? 'event.division.chart_pool' : 'event.division.song_pool')} |
-    {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
+    {$t(
+      $divisionQuery.data?.data.type == 2
+        ? 'event.division.chart_pool'
+        : 'event.division.song_pool',
+    )} |
+    {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery.data?.data.title}) | {$t(
       'common.site_name',
     )}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess && (($division.data.data.type == 1 && $songPrompts.isSuccess) || ($division.data.data.type == 2 && $chartPrompts.isSuccess))}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess && (($divisionQuery.data.data.type == 1 && $songPrompts.isSuccess) || ($divisionQuery.data.data.type == 2 && $chartPrompts.isSuccess))}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <input type="checkbox" id="new-resource" class="modal-toggle" bind:checked={resourceOpen} />
   <div class="modal">
     <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
@@ -383,8 +390,8 @@
       {/if}
     {/if}
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

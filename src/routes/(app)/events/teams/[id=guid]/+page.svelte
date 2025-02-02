@@ -16,24 +16,27 @@
   export let data;
   const { user, id, api, url } = data;
 
-  $: team = createQuery(api.event.team.info({ id }));
-  $: division = createQuery(
+  $: teamQuery = createQuery(api.event.team.info({ id }));
+  $: divisionQuery = createQuery(
     api.event.division.info(
-      { id: $team.data?.data.divisionId ?? '' },
-      { enabled: $team.isSuccess },
+      { id: $teamQuery.data?.data.divisionId ?? '' },
+      { enabled: $teamQuery.isSuccess },
     ),
   );
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  $: eventQuery = createQuery(
+    api.event.info(
+      { id: $divisionQuery.data?.data.eventId ?? '' },
+      { enabled: $divisionQuery.isSuccess },
+    ),
   );
   $: resources = createQuery(
     api.event.listAllResources(
       {
         rangeType: [1],
-        rangeDivisionId: [$team.data?.data.divisionId ?? ''],
-        rangeTeamId: [$team.data?.data.id ?? ''],
+        rangeDivisionId: [$teamQuery.data?.data.divisionId ?? ''],
+        rangeTeamId: [$teamQuery.data?.data.id ?? ''],
       },
-      { enabled: $team.isSuccess },
+      { enabled: $teamQuery.isSuccess },
     ),
   );
   $: songs = createQuery(
@@ -43,8 +46,8 @@
         enabled:
           $resources.isSuccess &&
           $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 0,
+          $divisionQuery.isSuccess &&
+          $divisionQuery.data?.data.type == 0,
       },
     ),
   );
@@ -55,8 +58,8 @@
         enabled:
           $resources.isSuccess &&
           $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 1,
+          $divisionQuery.isSuccess &&
+          $divisionQuery.data?.data.type == 1,
       },
     ),
   );
@@ -67,8 +70,8 @@
         enabled:
           $resources.isSuccess &&
           $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 2,
+          $divisionQuery.isSuccess &&
+          $divisionQuery.data?.data.type == 2,
       },
     ),
   );
@@ -96,13 +99,13 @@
 <svelte:head>
   <title>
     {$t('event.team.team')} -
-    {$team.isSuccess ? $team.data.data.name : ''}
+    {$teamQuery.isSuccess ? $teamQuery.data.data.name : ''}
     | {$t('event.event')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $team.isSuccess}
-  {@const team = $team.data.data}
+{#if $teamQuery.isSuccess}
+  {@const team = $teamQuery.data.data}
   <input type="checkbox" id="invite" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box text-left">
@@ -132,8 +135,8 @@
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 user: user.userName,
-                event: $event.data?.data.title,
-                division: $division.data?.data.title,
+                event: $eventQuery.data?.data.title,
+                division: $divisionQuery.data?.data.title,
                 team: team.name,
                 code: inviteCode,
                 link: `${url.protocol}//${url.host}/events/teams/invite?code=${inviteCode}`,
@@ -328,7 +331,7 @@
                   </div>
                 </div>
                 <div class="flex justify-center gap-2">
-                  {#if hasEventPermission(user, $event.data?.data, UPDATE, TEAM) || user?.id === team.ownerId}
+                  {#if hasEventPermission(user, $eventQuery.data?.data, UPDATE, TEAM) || user?.id === team.ownerId}
                     <a
                       href="/events/teams/{team.id}/edit"
                       class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
@@ -357,7 +360,7 @@
                       {$t('event.team.leave')}
                     </label>
                   {/if}
-                  {#if hasEventPermission(user, $event.data?.data, REMOVE, TEAM) || user?.id == team.ownerId}
+                  {#if hasEventPermission(user, $eventQuery.data?.data, REMOVE, TEAM) || user?.id == team.ownerId}
                     <label
                       for="disband"
                       class="btn border-2 normal-border btn-outline hover:btn-error text-lg w-32 min-w-fit"
@@ -381,9 +384,9 @@
               </span>
               <User id={team.ownerId} />
             </div>
-            {#if $division.isSuccess && $event.isSuccess}
-              {@const division = $division.data.data}
-              {@const event = $event.data.data}
+            {#if $divisionQuery.isSuccess && $eventQuery.isSuccess}
+              {@const division = $divisionQuery.data.data}
+              {@const event = $eventQuery.data.data}
               <div class="indicator w-full my-4">
                 <span
                   class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -499,8 +502,8 @@
       </div>
     </div>
   </div>
-{:else if $team.isError}
-  <Error error={$team.error} back="/events" />
+{:else if $teamQuery.isError}
+  <Error error={$teamQuery.error} back="/events" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

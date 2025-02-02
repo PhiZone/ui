@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { ComponentProps } from 'svelte';
+
   import Svelecte from 'svelecte';
   import { dndzone, overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
 
@@ -40,7 +42,11 @@
       },
     };
   };
-  const renderer: Svelecte['$$prop_def']['renderer'] = (item, _isSelection, _inputValue) => {
+  const renderer: ComponentProps<typeof Svelecte>['renderer'] = (
+    item,
+    _isSelection,
+    _inputValue,
+  ) => {
     const {
       id,
       label,

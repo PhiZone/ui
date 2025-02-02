@@ -15,17 +15,17 @@
 
   $: ({ searchParams, id, user, api } = data);
 
-  $: event = createQuery(api.event.info({ id }));
-  $: divisions = createQuery(api.event.listDivisions({ id }));
-  $: services = createQuery(api.service.list({ rangeResourceId: [id] }));
+  $: eventQuery = createQuery(api.event.info({ id }));
+  $: divisionsQuery = createQuery(api.event.listDivisions({ id }));
+  $: servicesQuery = createQuery(api.service.list({ rangeResourceId: [id] }));
 </script>
 
 <svelte:head>
-  <title>{$t('event.event')} - {$event.data?.data?.title} | {$t('common.site_name')}</title>
+  <title>{$t('event.event')} - {$eventQuery.data?.data?.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $event.isSuccess}
-  {@const event = $event.data.data}
+{#if $eventQuery.isSuccess}
+  {@const event = $eventQuery.data.data}
   {@const hasHostshipPerm =
     hasEventPermission(user, event, CREATE, HOSTSHIP) ||
     hasEventPermission(user, event, UPDATE, HOSTSHIP) ||
@@ -106,7 +106,7 @@
         </span>
         <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
           <div class="card-body">
-            {#if $divisions.isLoading}
+            {#if $divisionsQuery.isLoading}
               <ul class="menu bg-base-100 w-full">
                 <li class="overflow-hidden">
                   <div class="w-full h-[82px] flex px-5">
@@ -122,8 +122,8 @@
                   </div>
                 </li>
               </ul>
-            {:else if $divisions.isSuccess}
-              {@const divisions = $divisions.data.data}
+            {:else if $divisionsQuery.isSuccess}
+              {@const divisions = $divisionsQuery.data.data}
               {#if divisions.length > 0}
                 <ul class="menu bg-base-100 w-full gap-2">
                   {#each divisions as division}
@@ -137,8 +137,8 @@
           </div>
         </div>
       </div>
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -199,8 +199,8 @@
       <Comments type="events" id={event.id} {searchParams} />
     </div>
   </div>
-{:else if $event.isError}
-  <Error error={$event.error} back="/events" />
+{:else if $eventQuery.isError}
+  <Error error={$eventQuery.error} back="/events" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}
