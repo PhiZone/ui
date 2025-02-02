@@ -313,7 +313,7 @@
   </p>
 {/if}
 
-<style>
+<style lang="postcss">
   h1 {
     @apply text-6xl font-bold mb-6 mt-8;
   }

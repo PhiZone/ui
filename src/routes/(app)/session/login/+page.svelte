@@ -124,7 +124,7 @@
           </div>
         </form>
         <div class="divider"></div>
-        <div class="apps">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] justify-center gap-2">
           {#each SUPPORTED_APPS as app}
             <button
               class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
@@ -154,10 +154,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .apps {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    @apply grid justify-center gap-2;
-  }
-</style>

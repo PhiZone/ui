@@ -7,15 +7,9 @@
   export let data;
   $: ({ provider, register } = data);
 
-  const {
-    form,
-    enhance: enhance,
-    message: message,
-    errors: errors,
-    constraints,
-    submitting: submitting,
-    allErrors: allErrors,
-  } = superForm(data.form);
+  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
+    data.form,
+  );
 
   $: regionMap = new Map(
     [

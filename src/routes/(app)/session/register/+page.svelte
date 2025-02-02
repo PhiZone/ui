@@ -9,15 +9,9 @@
   export let data;
   $: ({ api } = data);
 
-  const {
-    form,
-    enhance: enhance,
-    message: message,
-    errors: errors,
-    constraints,
-    submitting: submitting,
-    allErrors: allErrors,
-  } = superForm(data.form);
+  const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
+    data.form,
+  );
 
   let emailConfirmationResult: {
     status?: Status;
@@ -407,7 +401,7 @@
           </div>
         </form>
         <div class="divider"></div>
-        <div class="apps">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] justify-center gap-2">
           {#each SUPPORTED_APPS as app}
             <button
               class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
@@ -439,10 +433,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .apps {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    @apply grid justify-center gap-2;
-  }
-</style>

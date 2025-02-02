@@ -800,7 +800,7 @@
   <div class="min-h-page skeleton"></div>
 {/if}
 
-<style>
+<style lang="postcss">
   .gradient:not(:hover) {
     @apply bg-gradient-to-tl from-indigo-700 via-purple-600 to-pink-500;
   }
