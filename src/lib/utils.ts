@@ -267,9 +267,9 @@ export const getLevelColor = (type: number | undefined) => {
 };
 
 export const getUserLevel = (exp: number) => {
-  for (let i = 0; i < USER_LEVELS.length; ++i) {
-    if (exp < USER_LEVELS[i].exp) {
-      return USER_LEVELS[i].level - 1;
+  for (const level of USER_LEVELS) {
+    if (exp < level.exp) {
+      return level.level - 1;
     }
   }
   return USER_LEVELS[USER_LEVELS.length - 1].level;

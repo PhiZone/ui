@@ -13,7 +13,8 @@ export default tseslint.config(
   eslint.configs.recommended,
   eslintPluginSvelte.configs['flat/recommended'],
   eslintPluginSvelte.configs['flat/prettier'],
-  tseslint.configs.recommended,
+  tseslint.configs.strict,
+  tseslint.configs.stylistic,
   {
     files: ['**/*.svelte'],
     languageOptions: {

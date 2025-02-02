@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import type API from '.';
 import { createQueryCreator } from './common';
 import type { R } from './types';

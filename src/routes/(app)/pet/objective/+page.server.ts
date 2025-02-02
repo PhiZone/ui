@@ -18,10 +18,10 @@ export const load = async ({ fetch, locals }) => {
     throw fail(resp.status, { error: error.code });
   }
   const questions = (await resp.json()).data;
-  for (let i = 0; i < questions.length; i++) {
-    questions[i].content =
+  for (const question of questions) {
+    question.content =
       (
-        await compile(questions[i].content ?? '', {
+        await compile(question.content ?? '', {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
         })
@@ -29,8 +29,8 @@ export const load = async ({ fetch, locals }) => {
         .replaceAll('\\', '')
         .replaceAll('{@html "', '')
         .replaceAll('"}', '') ?? '';
-    questions[i].choices = await Promise.all(
-      (questions[i].choices ?? []).map(
+    question.choices = await Promise.all(
+      (question.choices ?? []).map(
         async (choice) =>
           (
             await compile(choice ?? '', {

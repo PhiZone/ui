@@ -40,7 +40,7 @@ export interface CreateOpts {
 }
 
 export interface UseOpts extends InfoOpts {
-  parameters: { [key: string]: string };
+  parameters: Record<string, string>;
 }
 
 export interface ServiceResponseDto {

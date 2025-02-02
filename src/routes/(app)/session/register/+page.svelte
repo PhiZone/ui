@@ -16,7 +16,7 @@
   let emailConfirmationResult: {
     status?: Status;
     message?: string;
-    errors: { [id: string]: string[] | undefined };
+    errors: Record<string, string[] | undefined>;
   } = {
     errors: {},
   };
