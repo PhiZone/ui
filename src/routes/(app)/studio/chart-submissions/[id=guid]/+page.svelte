@@ -668,7 +668,7 @@
                   {$t('common.edit')}
                 </a>
               {/if}
-              {#if getUserPrivilege(user?.role) >= 4}
+              {#if getUserPrivilege(user.role) >= 4}
                 <label
                   for="chart-review-wizard"
                   class="btn border-2 normal-border btn-outline text-lg w-32"

@@ -38,13 +38,13 @@
           </h1>
           <div class="join join-vertical md:join-horizontal min-w-fit max-w-fit">
             <a
-              href="/studio/admissions/chapters?rangeRequesteeId={user?.id}"
+              href="/studio/admissions/chapters?rangeRequesteeId={user.id}"
               class="btn btn-outline border-2 normal-border join-item min-w-fit"
             >
               {$t('studio.request.received')}
             </a>
             <a
-              href="/studio/admissions/chapters?rangeRequesterId={user?.id}"
+              href="/studio/admissions/chapters?rangeRequesterId={user.id}"
               class="btn btn-outline border-2 normal-border join-item min-w-fit"
             >
               {$t('studio.request.sent')}

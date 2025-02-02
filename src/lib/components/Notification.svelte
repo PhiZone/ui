@@ -10,6 +10,8 @@
   $: ({ user, api } = $page.data);
 
   export let notification: NotificationDto;
+  let dateRead: string | Date | null;
+  $: dateRead = notification.dateRead;
 
   $: content = richtext(notification.content);
 </script>
@@ -23,7 +25,7 @@
   </span>
   <div
     class={`card w-full min-w-fit h-fit card-side bg-base-100 transition hover:shadow-lg overflow-hidden border-2 ${
-      notification.dateRead ? 'normal-border' : 'border-secondary'
+      dateRead ? 'normal-border' : 'border-secondary'
     }`}
   >
     <figure class="w-1/4 xs:w-1/6">
@@ -50,20 +52,20 @@
               </span>
               {parseDateTime(notification.dateCreated, true, user?.language)}
             </p>
-            {#if notification.dateRead}
+            {#if dateRead}
               <p class="min-w-fit">
                 <span class="badge mr-1">
                   {$t('notification.date_read')}
                 </span>
-                {parseDateTime(notification.dateRead, true, user?.language)}
+                {parseDateTime(dateRead, true, user?.language)}
               </p>
             {/if}
           </div>
         </div>
         <button
-          class="btn border-2 hover:btn-outline {notification.dateRead ? 'hidden' : ''}"
+          class="btn border-2 hover:btn-outline {dateRead ? 'hidden' : ''}"
           on:click={async () => {
-            notification.dateRead = new Date();
+            dateRead = new Date();
             const resp = await api.notification.read({ id: notification.id });
             if (resp.ok) {
               invalidateAll();

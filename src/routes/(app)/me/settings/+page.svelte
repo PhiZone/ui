@@ -21,9 +21,7 @@
 
   export let data;
 
-  $: ({ api, searchParams, page: playConfigurationPage } = data);
-
-  const user = data.user!;
+  $: ({ user, api, searchParams, page: playConfigurationPage } = data);
 
   const queryClient = useQueryClient();
   const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
@@ -82,7 +80,7 @@
     errorCode = '';
     dateAvailable = undefined;
     updateErrors = undefined;
-    const resp = await api.user.update({ id: user!.id }, patch);
+    const resp = await api.user.update({ id: user.id }, patch);
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
