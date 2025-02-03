@@ -4,7 +4,7 @@ export const load = async ({ data, params, url, parent }) => {
   const { user, api, queryClient } = await parent();
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   const id = params.id;
-  await Promise.allSettled([
+  const promises = [
     queryClient.prefetchQuery(api.chart.info({ id, includeAssets: true })),
     queryClient.prefetchQuery(api.chart.listAllAdmitters({ id })),
     queryClient.prefetchQuery(api.chart.leaderboard({ id })),
@@ -18,15 +18,22 @@ export const load = async ({ data, params, url, parent }) => {
       }),
     ),
     queryClient.prefetchQuery(api.authorship.listAll({ rangeResourceId: [id] })),
-  ]);
-  if (data.preferredPlayConfiguration && user) {
-    await queryClient.prefetchQuery(
-      api.playConfiguration.list({ rangeId: [data.preferredPlayConfiguration] }),
-    );
+  ];
+  if (user) {
+    if (data.preferredPlayConfiguration) {
+      promises.push(
+        queryClient.prefetchQuery(
+          api.playConfiguration.list({ rangeId: [data.preferredPlayConfiguration] }),
+        ),
+      );
+    }
+    if (data.preferredApplication) {
+      promises.push(
+        queryClient.prefetchQuery(api.application.list({ rangeId: [data.preferredApplication] })),
+      );
+    }
   }
-  if (data.preferredApplication && user) {
-    await queryClient.prefetchQuery(api.application.list({ rangeId: [data.preferredApplication] }));
-  }
+  await Promise.allSettled(promises);
 
   return {
     searchParams,
