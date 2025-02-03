@@ -225,7 +225,7 @@
       </div>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
-          <div class="text-5xl py-3 flex font-bold gap-4 items-center content">
+          <div class="text-5xl py-3 flex font-bold gap-4 items-center">
             {#if $song.isSuccess}
               <a class="hover:underline" href={`/songs/${$song.data.data.id}`} target="_blank">
                 {$song.data.data.title}
