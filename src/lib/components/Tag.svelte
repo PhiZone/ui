@@ -13,7 +13,7 @@
       ? 'hover:badge-outline'
       : ''} border-2 inline-flex gap-1"
   >
-    <p>{tag}</p>
+    {tag}
     {#if removeFunction}
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
