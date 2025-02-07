@@ -12,7 +12,7 @@
     user: UserDto;
     instantResp?: boolean;
   }
-  let { user = $bindable(), instantResp = true }: Props = $props();
+  let { user = $bindable(), instantResp = false }: Props = $props();
 
   const queryClient = useQueryClient();
 
@@ -57,6 +57,8 @@
       );
     }
   };
+
+  $inspect(user);
 </script>
 
 {#if !user.dateFollowed}
