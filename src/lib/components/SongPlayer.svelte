@@ -16,12 +16,12 @@
   let time = $state(0);
   let loop = $state(false);
 
-  // TODO: ssr?
-  let audio = $derived(new Audio(song));
+  let audio: HTMLAudioElement = $state()!; // FIXME: hack
   let line = $state('');
   let lyricsIndex = -1;
 
   onMount(() => {
+    audio = new Audio(song);
     audio.volume = 0.4;
   });
 
