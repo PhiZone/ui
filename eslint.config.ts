@@ -59,7 +59,13 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-non-null-assertion': 'off',
       'svelte/no-at-html-tags': 'off',
+      'svelte/valid-compile': 'off',
     },
   },
   prettier,
+  {
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
 );
