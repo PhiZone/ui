@@ -4,21 +4,24 @@
   import { t } from '$lib/translations/config';
   import { convertTime } from '$lib/utils';
 
-  export let song: string;
-  export let illustration: string;
-  export let duration: number;
-  export let lyrics: { time: number; line: string }[] | null = null;
+  interface Props {
+    song: string;
+    illustration: string;
+    duration: number;
+    lyrics?: { time: number; line: string }[];
+  }
+  let { song, illustration, duration, lyrics }: Props = $props();
 
-  let playing = false;
-  let time = 0;
-  let loop = false;
+  let playing = $state(false);
+  let time = $state(0);
+  let loop = $state(false);
 
-  let audio: HTMLAudioElement;
-  let line = '';
+  // TODO: ssr?
+  let audio = $derived(new Audio(song));
+  let line = $state('');
   let lyricsIndex = -1;
 
   onMount(() => {
-    audio = new Audio(song);
     audio.volume = 0.4;
   });
 
@@ -49,14 +52,14 @@
     line = lyrics[lyricsIndex].line;
   };
 
-  let timer: NodeJS.Timeout;
+  let timer: number;
 
   const playAudio = () => {
     audio.currentTime = time;
     syncLyrics();
     audio.play();
     playing = true;
-    timer = setInterval(() => {
+    timer = window.setInterval(() => {
       time = audio ? audio.currentTime : 0;
       if (lyrics && lyricsIndex < lyrics.length - 1 && lyrics[lyricsIndex + 1].time < time) {
         line = lyrics[++lyricsIndex].line;
@@ -106,10 +109,10 @@
           bind:value={time}
           step={0.001}
           class="range range-primary range-xs"
-          on:mousedown={() => {
+          onmousedown={() => {
             pauseAudio();
           }}
-          on:mouseup={() => {
+          onmouseup={() => {
             playAudio();
           }}
         />
@@ -131,7 +134,7 @@
                 : 'btn-outline'} flex items-center justify-center"
               title={$t('song.loop')}
               aria-label={$t('song.loop')}
-              on:click={() => {
+              onclick={() => {
                 loop = !loop;
               }}
             >
@@ -141,7 +144,7 @@
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.rewind')}
               aria-label={$t('song.rewind')}
-              on:click={() => {
+              onclick={() => {
                 let time = audio.currentTime - 10;
                 audio.currentTime = Math.max(time, 0);
                 time = audio.currentTime;
@@ -155,7 +158,7 @@
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.pause')}
                 aria-label={$t('song.pause')}
-                on:click={() => {
+                onclick={() => {
                   pauseAudio();
                 }}
               >
@@ -166,7 +169,7 @@
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.play')}
                 aria-label={$t('song.play')}
-                on:click={() => {
+                onclick={() => {
                   playAudio();
                 }}
               >
@@ -177,7 +180,7 @@
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.fast_forward')}
               aria-label={$t('song.fast_forward')}
-              on:click={() => {
+              onclick={() => {
                 let time = audio.currentTime + 10;
                 audio.currentTime = Math.min(time, duration);
                 time = audio.currentTime;

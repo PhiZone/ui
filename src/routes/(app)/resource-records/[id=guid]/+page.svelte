@@ -5,11 +5,10 @@
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, api } = $derived(data);
 
-  $: ({ id, api } = data);
-
-  $: resourceRecordQuery = createQuery(api.resourceRecord.info({ id }));
+  let resourceRecordQuery = $derived(createQuery(api.resourceRecord.info({ id })));
 </script>
 
 <svelte:head>

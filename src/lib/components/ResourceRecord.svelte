@@ -3,7 +3,10 @@
 
   import { t } from '$lib/translations/config';
 
-  export let resourceRecord: ResourceRecordDto;
+  interface Props {
+    resourceRecord: ResourceRecordDto;
+  }
+  let { resourceRecord }: Props = $props();
 </script>
 
 <div

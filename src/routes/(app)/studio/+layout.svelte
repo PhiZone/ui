@@ -1,11 +1,13 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
+
+  let { children } = $props();
 </script>
 
 <div class="drawer xl:drawer-open">
   <input id="studio-sidebar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
-    <slot />
+    {@render children?.()}
   </div>
   <div class="pt-[60px] drawer-side z-50">
     <label for="studio-sidebar" class="drawer-overlay"></label>

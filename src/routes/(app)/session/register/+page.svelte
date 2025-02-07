@@ -7,8 +7,8 @@
   import { locale, locales, t } from '$lib/translations/config';
   import { getAvatar, parseDateTime, requestIdentity } from '$lib/utils';
 
-  export let data;
-  $: ({ api } = data);
+  let { data } = $props();
+  let { api } = $derived(data);
 
   const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
     data.form,
@@ -18,26 +18,28 @@
     status?: Status;
     message?: string;
     errors: Record<string, string[] | undefined>;
-  } = {
+  } = $state({
     errors: {},
-  };
+  });
 
-  $: regionMap = new Map(
-    [
-      ...REGIONS.reduce((map, region) => {
-        map.set(region, $t(`region.${region}`));
-        return map;
-      }, new Map<string, string>()).entries(),
-    ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+  let regionMap = $derived(
+    new Map(
+      [
+        ...REGIONS.reduce((map, region) => {
+          map.set(region, $t(`region.${region}`));
+          return map;
+        }, new Map<string, string>()).entries(),
+      ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+    ),
   );
 
-  let regionCode = data.user?.region;
+  let regionCode = $state(data.user?.region);
 
-  let min = 0,
-    sec = 54,
-    emailConfirmationAvailable = true,
+  let min = $state(0),
+    sec = $state(54),
+    emailConfirmationAvailable = $state(true),
     emailConfirmationTimer: NodeJS.Timeout,
-    emailConfirmationModal = false;
+    emailConfirmationModal = $state(false);
 
   const confirmEmail = async () => {
     emailConfirmationResult = {
@@ -97,8 +99,8 @@
     }
   };
 
-  let legalAgreement = false;
-  let appSelected = '';
+  let legalAgreement = $state(false);
+  let appSelected = $state('');
 </script>
 
 <svelte:head>
@@ -128,7 +130,7 @@
   id="legal-agreement"
   class="modal-toggle"
   checked={!!appSelected && !legalAgreement}
-  on:change={() => {
+  onchange={() => {
     appSelected = '';
   }}
 />
@@ -144,7 +146,7 @@
       <input
         type="checkbox"
         bind:checked={legalAgreement}
-        on:click={async () => {
+        onclick={async () => {
           await requestIdentity(appSelected, api, false, true);
           appSelected = '';
         }}
@@ -267,7 +269,7 @@
                 name="Language"
                 bind:value={$form.Language}
                 {...$constraints.Language}
-                on:input={(e) => {
+                oninput={(e) => {
                   $locale = e.currentTarget.value;
                 }}
                 class="select transition border-2 normal-border hover:select-secondary w-full max-w-xs"
@@ -336,7 +338,7 @@
                         : 'border-2 normal-border btn-outline'} join-item w-full"
                     disabled={emailConfirmationResult.status === Status.SENDING ||
                       !emailConfirmationAvailable}
-                    on:click={confirmEmail}
+                    onclick={confirmEmail}
                   >
                     {!emailConfirmationAvailable
                       ? `${min}m ${sec}s`
@@ -407,7 +409,7 @@
             <button
               class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
               disabled={appSelected === app.name}
-              on:click={async () => {
+              onclick={async () => {
                 appSelected = app.name;
                 if (legalAgreement) {
                   await requestIdentity(appSelected, api, false, true);

@@ -8,12 +8,11 @@
   import User from '$lib/components/User.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, api } = $derived(data);
 
-  $: ({ searchParams, id, api } = data);
-
-  $: collectionQuery = createQuery(api.collection.info({ id }));
-  $: chartsQuery = createQuery(api.collection.listCharts({ id }));
+  let collectionQuery = $derived(createQuery(api.collection.info({ id })));
+  let chartsQuery = $derived(createQuery(api.collection.listCharts({ id })));
 </script>
 
 <svelte:head>

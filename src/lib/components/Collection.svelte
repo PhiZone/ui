@@ -3,19 +3,22 @@
 
   import type { CollectionAdmitterDto, CollectionDto } from '$lib/api/collection';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
 
   import Like from './Like.svelte';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let collection: CollectionDto | CollectionAdmitterDto;
-  export let fixedHeight = true;
-  export let showLike = true;
+  interface Props {
+    collection: CollectionDto | CollectionAdmitterDto;
+    fixedHeight?: boolean;
+    showLike?: boolean;
+  }
+  let { collection, fixedHeight = true, showLike = true }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: collection.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: collection.ownerId })));
 </script>
 
 <a

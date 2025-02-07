@@ -5,9 +5,12 @@
 
   import ServiceRequest from './ServiceRequest.svelte';
 
-  export let service: ServiceScriptDto;
-  export let resourcePath: string | undefined = undefined;
-  export let resourceId: string | undefined = undefined;
+  interface Props {
+    service: ServiceScriptDto;
+    resourcePath?: string;
+    resourceId?: string;
+  }
+  let { service, resourcePath = $bindable(), resourceId = $bindable() }: Props = $props();
 
   if (service.targetType === 2) {
     resourcePath = undefined;
@@ -38,8 +41,8 @@
         </span>
       </p>
     {/if}
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="card-actions justify-end" on:click|preventDefault on:keyup>
+    <!-- FIXME: preventDefault? -->
+    <div class="card-actions justify-end">
       <ServiceRequest {service} {resourcePath} {resourceId} />
     </div>
   </div>

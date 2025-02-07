@@ -10,17 +10,17 @@
   import { t } from '$lib/translations/config';
   import { convertToParsedQuery } from '$lib/utils';
 
-  export let data;
-  $: ({ searchParams, page, api } = data);
+  let { data } = $props();
+  let { searchParams, page, api } = $derived(data);
 
-  $: query = createQuery(api.record.list(searchParams));
+  let query = $derived(createQuery(api.record.list(searchParams)));
 
   let text = '';
-  let params = new URLSearchParams();
+  let params = $state(new URLSearchParams());
 
   const getSearch = (text: string) => {
-    if (params.size > 0) searchParams = convertToParsedQuery(params);
-    return queryString.stringify({ ...searchParams, page: 1, search: text });
+    let query = params.size > 0 ? convertToParsedQuery(params) : searchParams;
+    return queryString.stringify({ ...query, page: 1, search: text });
   };
 </script>
 
@@ -35,7 +35,8 @@
       <h1 class="text-4xl font-bold">{$t('common.records')}</h1>
       <form
         class="form-control"
-        on:submit|preventDefault={() => {
+        onsubmit={(e) => {
+          e.preventDefault();
           goto(`?${getSearch(text)}`);
         }}
       >

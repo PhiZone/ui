@@ -1,13 +1,16 @@
 <script lang="ts">
   import type { EventTaskDto } from '$lib/api/event';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  $: ({ user } = $page.data);
+  let { user } = $derived(page.data);
 
-  export let task: EventTaskDto;
+  interface Props {
+    task: EventTaskDto;
+  }
+  let { task }: Props = $props();
 </script>
 
 <a

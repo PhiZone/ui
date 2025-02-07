@@ -9,14 +9,16 @@
   import Song from '$lib/components/Song.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ id, searchParams, page, api } = data);
+  let { data } = $props();
+  let { id, searchParams, page, api } = $derived(data);
 
-  $: divisionQuery = createQuery(api.event.division.info({ id }));
-  $: eventQuery = createQuery(
-    api.event.info(
-      { id: $divisionQuery.data?.data.eventId ?? '' },
-      { enabled: $divisionQuery.isSuccess },
+  let divisionQuery = $derived(createQuery(api.event.division.info({ id })));
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
   // $: songPrompts = createQuery(
@@ -31,34 +33,40 @@
   //     { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 0 },
   //   ),
   // );
-  $: songEntries = createQuery(
-    api.event.division.listSongEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        ...searchParams,
-      },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 },
+  let songEntries = $derived(
+    createQuery(
+      api.event.division.listSongEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          ...searchParams,
+        },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 },
+      ),
     ),
   );
-  $: chartEntries = createQuery(
-    api.event.division.listChartEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        ...searchParams,
-      },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+  let chartEntries = $derived(
+    createQuery(
+      api.event.division.listChartEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          ...searchParams,
+        },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+      ),
     ),
   );
-  $: recordEntries = createQuery(
-    api.event.division.listRecordEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        ...searchParams,
-      },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+  let recordEntries = $derived(
+    createQuery(
+      api.event.division.listRecordEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          ...searchParams,
+        },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+      ),
     ),
   );
 </script>

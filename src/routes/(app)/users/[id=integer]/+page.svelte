@@ -19,24 +19,23 @@
     toLocalTime,
   } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, api } = $derived(data);
 
-  let userNameEl: HTMLParagraphElement;
-  let userNameOffsetWidth = 0;
+  let userNameEl: HTMLParagraphElement | undefined = $state();
+  let userNameOffsetWidth = $state(0);
 
-  $: ({ id, api } = data);
-
-  $: userQuery = createQuery(api.user.info({ id }));
-  $: chartsQuery = createQuery(api.chart.list({ rangeOwnerId: [id] }));
-  $: songsQuery = createQuery(api.song.list({ rangeOwnerId: [id] }));
-  $: recentRecordsQuery = createQuery(
-    api.record.list({ rangeOwnerId: [id], order: ['dateCreated'], desc: [true] }),
+  let userQuery = $derived(createQuery(api.user.info({ id })));
+  let chartsQuery = $derived(createQuery(api.chart.list({ rangeOwnerId: [id] })));
+  let songsQuery = $derived(createQuery(api.song.list({ rangeOwnerId: [id] })));
+  let recentRecordsQuery = $derived(
+    createQuery(api.record.list({ rangeOwnerId: [id], order: ['dateCreated'], desc: [true] })),
   );
-  $: bestRecords = createQuery(
-    api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] }),
+  let bestRecords = $derived(
+    createQuery(api.record.list({ rangeOwnerId: [id], order: ['rks'], desc: [true] })),
   );
 
-  $: isUserNameEllipsis = userNameEl && userNameOffsetWidth != userNameEl.scrollWidth;
+  let isUserNameEllipsis = $derived(userNameEl && userNameOffsetWidth != userNameEl.scrollWidth);
 </script>
 
 <svelte:head>
@@ -83,7 +82,7 @@
               <p
                 bind:this={userNameEl}
                 bind:offsetWidth={userNameOffsetWidth}
-                class={'text-3xl text-center font-bold h-fit text-ellipsis'}
+                class="text-3xl text-center font-bold h-fit text-ellipsis"
                 class:tooltip={isUserNameEllipsis}
                 style="overflow-inline: clip;"
                 data-tip={user.userName}

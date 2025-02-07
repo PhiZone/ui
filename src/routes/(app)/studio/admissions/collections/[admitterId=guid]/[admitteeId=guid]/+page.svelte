@@ -6,11 +6,10 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { user, admitterId, admitteeId, api } = $derived(data);
 
-  $: ({ user, admitterId, admitteeId, api } = data);
-
-  $: query = createQuery(api.admission.infoCollection({ admitterId, admitteeId }));
+  let query = $derived(createQuery(api.admission.infoCollection({ admitterId, admitteeId })));
 </script>
 
 <svelte:head>

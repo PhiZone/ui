@@ -11,13 +11,12 @@
   import { t } from '$lib/translations/config';
   import { hasEventPermission } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, user, api } = $derived(data);
 
-  $: ({ searchParams, id, user, api } = data);
-
-  $: eventQuery = createQuery(api.event.info({ id }));
-  $: divisionsQuery = createQuery(api.event.listDivisions({ id }));
-  $: servicesQuery = createQuery(api.service.list({ rangeResourceId: [id] }));
+  let eventQuery = $derived(createQuery(api.event.info({ id })));
+  let divisionsQuery = $derived(createQuery(api.event.listDivisions({ id })));
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeResourceId: [id] })));
 </script>
 
 <svelte:head>

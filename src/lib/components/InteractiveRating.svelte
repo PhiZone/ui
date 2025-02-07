@@ -1,7 +1,10 @@
 <script lang="ts">
-  export let rating = 0;
-  export let aspect: string;
-  export let size = 'lg';
+  interface Props {
+    rating?: number;
+    aspect: string;
+    size?: string;
+  }
+  let { rating = $bindable(0), aspect, size = 'lg' }: Props = $props();
 </script>
 
 <input type="hidden" id={aspect} name={aspect} value={rating} />
@@ -11,7 +14,7 @@
       type="radio"
       class={i > 0 ? 'mask mask-star-2' : 'rating-hidden'}
       checked={rating > i - 1 && rating <= i}
-      on:click={() => {
+      onclick={() => {
         rating = i;
       }}
     />

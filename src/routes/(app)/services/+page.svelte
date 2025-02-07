@@ -11,22 +11,21 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, page, user, api } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  $: ({ searchParams, page, user, api } = data);
-
-  let targetType = 0;
-  let tagsRaw = '';
+  let targetType = $state(0);
+  let tagsRaw = $state('');
   let tags: string[] = [];
-  let showTags = true;
-  let newTag = '';
+  let showTags = $state(true);
+  let newTag = $state('');
 
-  $: query = createQuery(api.service.list(searchParams));
+  let query = $derived(createQuery(api.service.list(searchParams)));
 
-  $: resourcePath = searchParams?.resourcePath as string | undefined;
-  $: resourceId = searchParams?.resourceId as string | undefined;
+  let resourcePath = $derived(searchParams?.resourcePath as string | undefined);
+  let resourceId = $derived(searchParams?.resourceId as string | undefined);
 </script>
 
 <svelte:head>
@@ -61,7 +60,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -129,7 +128,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -174,7 +173,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
                 if (!newTag || tags.includes(newTag)) return;
@@ -196,7 +195,8 @@
           <button
             class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
             aria-label={$t('common.add')}
-            on:click|preventDefault={() => {
+            onclick={(e) => {
+              e.preventDefault();
               if (!newTag || tags.includes(newTag)) return;
               showTags = false;
               tags.push(newTag);
@@ -206,7 +206,6 @@
                 showTags = true;
               }, 0);
             }}
-            on:keyup
           >
             <i class="fa-solid fa-plus"></i>
           </button>

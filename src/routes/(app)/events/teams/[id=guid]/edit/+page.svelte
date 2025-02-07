@@ -13,43 +13,46 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getAvatar, range } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, api } = $derived(data);
 
-  $: ({ id, api } = data);
+  let team: EventTeamDto = $state()!;
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let errors: Map<string, string> | undefined = $state();
+  let positions: (string | null)[] = $state()!;
+  let deleted: boolean[] = $state()!;
 
-  let team: EventTeamDto;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let errors: Map<string, string> | undefined = undefined;
-  let positions: (string | null)[];
-  let deleted: boolean[];
+  let iconFiles: FileList | undefined = $state();
+  let iconCropping = $state(false);
+  let iconCropperSrc: string | undefined = $state();
+  let iconSrc: string | undefined = $state();
 
-  let iconFiles: FileList;
-  let iconCropping = false;
-  let iconCropperSrc: string;
-  let iconSrc: string;
-
-  $: options = api.event.team.info({ id });
-  $: query = createQuery({ ...options });
-  $: division = createQuery(
-    api.event.division.info(
-      { id: $query.data?.data.divisionId ?? '' },
-      { enabled: $query.isSuccess },
+  let options = $derived(api.event.team.info({ id }));
+  let query = $derived(createQuery({ ...options }));
+  let division = $derived(
+    createQuery(
+      api.event.division.info(
+        { id: $query.data?.data.divisionId ?? '' },
+        { enabled: $query.isSuccess },
+      ),
     ),
   );
 
-  $: if (!team && $query.isSuccess) {
-    team = $query.data.data;
-    positions = team.participants.map((e) => e.position);
-    deleted = team.participants.map(() => false);
-  }
+  $effect(() => {
+    if (!team && $query.isSuccess) {
+      team = $query.data.data;
+      positions = team.participants.map((e) => e.position);
+      deleted = team.participants.map(() => false);
+    }
+  });
 
-  let patch = new Array<PatchElement>();
+  let patch = $state(new Array<PatchElement>());
 
   const queryClient = useQueryClient();
 
   const handleIcon = () => {
-    if (iconFiles.length > 0) {
+    if (iconFiles && iconFiles.length > 0) {
       const reader = new FileReader();
       reader.readAsDataURL(iconFiles[0]);
       reader.onload = () => {
@@ -110,18 +113,18 @@
   <Cropper
     bind:open={iconCropping}
     title={$t('common.image_cropper')}
-    src={iconCropperSrc}
+    src={iconCropperSrc!}
     aspectRatio={1}
     rounded
-    on:submit={async (e) => {
+    submit={async (blob) => {
       const reader = new FileReader();
-      reader.readAsDataURL(e.detail);
+      reader.readAsDataURL(blob);
       reader.onload = () => {
         if (typeof reader.result === 'string') {
           iconSrc = reader.result;
         }
       };
-      const resp = await api.event.team.updateIcon({ id, File: e.detail });
+      const resp = await api.event.team.updateIcon({ id, File: blob });
       if (resp.ok) {
         invalidateAll();
         await queryClient.invalidateQueries({ queryKey: options.queryKey });
@@ -149,7 +152,7 @@
       </div>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg my-4">
         <div class="card-body">
-          <form class="w-full form-control" on:submit|preventDefault>
+          <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
             <!-- <div class="flex items-center my-2">
               <span class="w-32">{$t('event.team.icon')}</span>
               <input
@@ -184,7 +187,7 @@
                   accept=".jpg, .jpeg, .png, .webp"
                   class="w-full sm:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
                   bind:files={iconFiles}
-                  on:change={handleIcon}
+                  onchange={handleIcon}
                 />
                 <span class="hidden sm:inline sm:w-1/3">{$t('common.form.tips.image')}</span>
               </div>
@@ -204,7 +207,7 @@
                     errors?.get('Name') ? 'hover:input-error' : 'hover:input-secondary'
                   } w-3/4`}
                   bind:value={team.name}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/name', e.currentTarget.value);
                   }}
                 />
@@ -226,14 +229,14 @@
                   <select
                     id="claimed_participant_count"
                     name="ClaimedParticipantCount"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
                     }}
                     class="select transition border-2 normal-border join-item w-3/4 hover:select-secondary"
                     value={team.claimedParticipantCount}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       team.claimedParticipantCount = parseInt(e.currentTarget.value);
                       patch = applyPatch(
                         patch,
@@ -258,7 +261,7 @@
                       errors?.get('Name') ? 'hover:input-error' : 'hover:input-secondary'
                     } w-3/4`}
                     value={team.claimedParticipantCount}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       team.claimedParticipantCount = parseInt(e.currentTarget.value);
                       patch = applyPatch(
                         patch,
@@ -287,14 +290,14 @@
                   <select
                     id="claimed_submission_count"
                     name="ClaimedSubmissionCount"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
                     }}
                     class="select transition border-2 normal-border join-item w-3/4 hover:select-secondary"
                     value={team.claimedSubmissionCount}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       team.claimedSubmissionCount = parseInt(e.currentTarget.value);
                       patch = applyPatch(
                         patch,
@@ -319,7 +322,7 @@
                       errors?.get('Name') ? 'hover:input-error' : 'hover:input-secondary'
                     } w-3/4`}
                     value={team.claimedSubmissionCount}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       team.claimedSubmissionCount = parseInt(e.currentTarget.value);
                       patch = applyPatch(
                         patch,
@@ -350,7 +353,7 @@
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
                   bind:value={team.description}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
                 ></textarea>
@@ -360,7 +363,7 @@
                 class="absolute right-2 bottom-2 btn btn-sm {team.description
                   ? 'border-2 hover:btn-outline backdrop-blur'
                   : 'btn-disabled'}"
-                on:click={() => {
+                onclick={() => {
                   team.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
                 }}
@@ -384,7 +387,7 @@
                       ? 'btn-ghost'
                       : 'btn-outline border-2 normal-border'} w-full"
                   disabled={status === Status.SENDING}
-                  on:click={update}
+                  onclick={update}
                 >
                   {status === Status.ERROR
                     ? $t('common.error')
@@ -438,7 +441,7 @@
                         class:btn-disabled={deleted[index] ||
                           (!participant.position && !positions[index]) ||
                           positions[index] == participant.position}
-                        on:click={() => {
+                        onclick={() => {
                           updatePosition(index);
                         }}
                       >

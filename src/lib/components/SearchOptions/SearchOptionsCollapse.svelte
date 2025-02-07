@@ -6,18 +6,21 @@
 
   import Item from './Item.svelte';
 
-  export let type: SearchFilterType;
-  export let params: URLSearchParams = new URLSearchParams();
+  interface Props {
+    type: SearchFilterType;
+    params?: URLSearchParams;
+  }
+  let { type, params = $bindable(new URLSearchParams()) }: Props = $props();
 
-  $: filters = getFullFilters(type, true);
-  $: data = getFilterValue(filters);
+  let filters = $derived(getFullFilters(type, true));
+  let data = $derived(getFilterValue(filters));
 
-  $: {
+  $effect(() => {
     params = generateParams(data);
     storeFilterValue(type, data);
-  }
+  });
 
-  let open = false;
+  let open = $state(false);
 </script>
 
 <div
@@ -30,21 +33,21 @@
   </div>
   <div class="collapse-content px-0 md:px-4 overflow-y-auto">
     <div class="form-control items-stretch w-full">
-      {#each filters as filter}
-        {#if filter instanceof Array}
+      {#each filters as _, i}
+        {#if filters[i] instanceof Array}
           <div class="flex flex-wrap md:flex-nowrap items-center gap-x-0 md:gap-x-5">
-            {#each filter as filter}
-              <Item bind:filter />
+            {#each filters[i] as _, j}
+              <Item bind:filter={filters[i][j]} />
             {/each}
           </div>
         {:else}
-          <Item bind:filter />
+          <Item bind:filter={filters[i]} />
         {/if}
       {/each}
       <button
         type="submit"
         class="btn mx-1 border-2 normal-border bg-base-100 hover:btn-outline my-2"
-        on:click={() => (open = false)}
+        onclick={() => (open = false)}
       >
         {$t('common.search')}
       </button>

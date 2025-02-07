@@ -16,25 +16,26 @@
   import { t } from '$lib/translations/config';
   import { convertTime, parseDateTime, parseLyrics, parseTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, user, api } = $derived(data);
 
-  $: ({ searchParams, id, user, api } = data);
-
-  $: songQuery = createQuery(api.song.info({ id }));
-  $: chartsQuery = createQuery(api.chart.listAll({ rangeSongId: [id] }));
-  $: chapters = createQuery(api.song.listAllAdmitters({ id }));
-  $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
-  $: composer =
+  let songQuery = $derived(createQuery(api.song.info({ id })));
+  let chartsQuery = $derived(createQuery(api.chart.listAll({ rangeSongId: [id] })));
+  let chapters = $derived(createQuery(api.song.listAllAdmitters({ id })));
+  let authorships = $derived(createQuery(api.authorship.listAll({ rangeResourceId: [id] })));
+  let composer = $derived(
     $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
       ? richtext($songQuery.data?.data.authorName)
-      : readable($songQuery.data?.data.authorName ?? $t('common.anonymous'));
-  $: composerText =
+      : readable($songQuery.data?.data.authorName ?? $t('common.anonymous')),
+  );
+  let composerText = $derived(
     $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
       ? $songQuery.data?.data.authorName.replaceAll(
           /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
           (_, __, ___, display: string) => display,
         )
-      : $songQuery.data?.data.authorName;
+      : $songQuery.data?.data.authorName,
+  );
 </script>
 
 <svelte:head>
@@ -209,7 +210,7 @@
                   song={song.file}
                   illustration={song.illustration}
                   duration={parseTime(song.duration)}
-                  lyrics={song.lyrics ? parseLyrics(song.lyrics) : null}
+                  lyrics={song.lyrics ? parseLyrics(song.lyrics) : undefined}
                 />
               </div>
             </div>

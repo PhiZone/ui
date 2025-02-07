@@ -15,8 +15,11 @@
 
   import Line from './chart/Line.svelte';
 
-  export let votes: VolunteerVoteDto[];
-  export let ranked: boolean;
+  interface Props {
+    votes: VolunteerVoteDto[];
+    ranked: boolean;
+  }
+  let { votes, ranked }: Props = $props();
 
   const datasets = [
     {
@@ -68,7 +71,7 @@
     });
   }
 
-  $: data = {
+  let data = $derived({
     labels: Array.from({ length: 6 }, (_, index) =>
       $t('studio.submission.vote_diagram.n_votes', {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -77,7 +80,7 @@
       }),
     ),
     datasets: datasets,
-  };
+  });
 
   ChartJS.register(PointElement, LineElement, LinearScale, CategoryScale, Tooltip, Filler);
   ChartJS.defaults.font.family = "'Outfit', 'Noto Sans SC', sans-serif";

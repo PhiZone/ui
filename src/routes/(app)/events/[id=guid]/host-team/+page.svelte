@@ -8,33 +8,35 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege, hasEventPermission } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, user, api, url } = $derived(data);
 
-  $: ({ id, user, api, url } = data);
+  let eventQuery = $derived(createQuery(api.event.info({ id })));
+  let hostshipsQuery = $derived(createQuery(api.event.listAllHostships({ rangeEventId: [id] })));
 
-  $: eventQuery = createQuery(api.event.info({ id }));
-  $: hostshipsQuery = createQuery(api.event.listAllHostships({ rangeEventId: [id] }));
-
-  $: isOwner = getUserPrivilege(user?.role) >= 6 || $eventQuery.data?.data.ownerId === user?.id;
-  $: isAdmin =
+  let isOwner = $derived(
+    getUserPrivilege(user?.role) >= 6 || $eventQuery.data?.data.ownerId === user?.id,
+  );
+  let isAdmin = $derived(
     getUserPrivilege(user?.role) >= 6 ||
-    user?.hostships?.some((hostship) => $eventQuery.data?.data.id === id && hostship.isAdmin);
+      user?.hostships?.some((hostship) => $eventQuery.data?.data.id === id && hostship.isAdmin),
+  );
 
-  let status = Status.WAITING;
-  let copied = false;
-  let errorCode = '';
-  let inviteCode = '';
-  let showTags = true;
+  let status = $state(Status.WAITING);
+  let copied = $state(false);
+  let errorCode = $state('');
+  let inviteCode = $state('');
+  let showTags = $state(true);
 
-  let newIsAdmin = false;
-  let newIsUnveiled = false;
-  let newPosition = '';
-  let newPermissions: number[] = [];
+  let newIsAdmin = $state(false);
+  let newIsUnveiled = $state(false);
+  let newPosition = $state('');
+  let newPermissions: number[] = $state([]);
 
-  let permissionOpen = false;
-  let permissionOperation = 0;
-  let permissionScope = 0;
-  let permissionIndex = 0;
+  let permissionOpen = $state(false);
+  let permissionOperation = $state(0);
+  let permissionScope = $state(0);
+  let permissionIndex = $state(0);
 
   const createInvitation = async () => {
     status = Status.SENDING;
@@ -112,7 +114,7 @@
             class="btn btn-sm {newPosition
               ? 'border-2 hover:btn-outline backdrop-blur'
               : 'btn-disabled'}"
-            on:click={() => {
+            onclick={() => {
               newPosition = '';
             }}
           >
@@ -173,7 +175,7 @@
         class="btn btn-outline border-2 {copied
           ? 'btn-success btn-active'
           : 'normal-border'} md:w-2/5 w-full"
-        on:click={() => {
+        onclick={() => {
           navigator.clipboard.writeText(
             $t('event.hostship.invite_msg', {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -212,7 +214,7 @@
               ? 'btn-ghost'
               : 'btn-outline border-2 normal-border'} w-full"
           disabled={status === Status.SENDING}
-          on:click={createInvitation}
+          onclick={createInvitation}
         >
           {status === Status.ERROR
             ? $t('common.error')
@@ -286,7 +288,7 @@
       <div class="modal-action mt-3">
         <button
           class="btn btn-outline border-2 normal-border w-full"
-          on:click={() => {
+          onclick={() => {
             showTags = false;
             const permission = gen(
               permissionOperation,
@@ -300,7 +302,6 @@
               showTags = true;
             }, 0);
           }}
-          on:keyup
         >
           {$t('common.confirm')}
         </button>
@@ -315,14 +316,14 @@
         <h1 class="text-4xl font-bold mb-6">{$t('event.host_team')}</h1>
         <div class="join">
           {#if hasEventPermission(user, $eventQuery.data?.data, CREATE, HOSTSHIP)}
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <label
               for="invite"
               class="btn border-2 normal-border btn-outline join-item"
-              on:click={() => {
+              onclick={() => {
                 if (!inviteCode) createInvitation();
               }}
-              on:keyup
+              onkeyup={null}
             >
               {$t('event.team.invitation.invite_code')}
             </label>

@@ -13,73 +13,85 @@
   import { t } from '$lib/translations/config';
   import { getAvatar, hasEventPermission } from '$lib/utils';
 
-  export let data;
-  const { user, id, api, url } = data;
+  let { data } = $props();
+  let { user, id, api, url } = $derived(data);
 
-  $: teamQuery = createQuery(api.event.team.info({ id }));
-  $: divisionQuery = createQuery(
-    api.event.division.info(
-      { id: $teamQuery.data?.data.divisionId ?? '' },
-      { enabled: $teamQuery.isSuccess },
+  let teamQuery = $derived(createQuery(api.event.team.info({ id })));
+  let divisionQuery = $derived(
+    createQuery(
+      api.event.division.info(
+        { id: $teamQuery.data?.data.divisionId ?? '' },
+        { enabled: $teamQuery.isSuccess },
+      ),
     ),
   );
-  $: eventQuery = createQuery(
-    api.event.info(
-      { id: $divisionQuery.data?.data.eventId ?? '' },
-      { enabled: $divisionQuery.isSuccess },
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: resources = createQuery(
-    api.event.listAllResources(
-      {
-        rangeType: [1],
-        rangeDivisionId: [$teamQuery.data?.data.divisionId ?? ''],
-        rangeTeamId: [$teamQuery.data?.data.id ?? ''],
-      },
-      { enabled: $teamQuery.isSuccess },
+  let resources = $derived(
+    createQuery(
+      api.event.listAllResources(
+        {
+          rangeType: [1],
+          rangeDivisionId: [$teamQuery.data?.data.divisionId ?? ''],
+          rangeTeamId: [$teamQuery.data?.data.id ?? ''],
+        },
+        { enabled: $teamQuery.isSuccess },
+      ),
     ),
   );
-  $: songs = createQuery(
-    api.song.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $divisionQuery.isSuccess &&
-          $divisionQuery.data?.data.type == 0,
-      },
+  let songs = $derived(
+    createQuery(
+      api.song.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 0,
+        },
+      ),
     ),
   );
-  $: charts = createQuery(
-    api.chart.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $divisionQuery.isSuccess &&
-          $divisionQuery.data?.data.type == 1,
-      },
+  let charts = $derived(
+    createQuery(
+      api.chart.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 1,
+        },
+      ),
     ),
   );
-  $: records = createQuery(
-    api.record.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $divisionQuery.isSuccess &&
-          $divisionQuery.data?.data.type == 2,
-      },
+  let records = $derived(
+    createQuery(
+      api.record.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 2,
+        },
+      ),
     ),
   );
 
-  let status = Status.WAITING;
-  let copied = false;
-  let errorCode = '';
-  let inviteCode = '';
+  let status = $state(Status.WAITING);
+  let copied = $state(false);
+  let errorCode = $state('');
+  let inviteCode = $state('');
 
   const createInvitation = async () => {
     status = Status.SENDING;
@@ -129,7 +141,7 @@
           class="btn btn-outline border-2 {copied
             ? 'btn-success btn-active'
             : 'normal-border'} md:w-2/5 w-full"
-          on:click={() => {
+          onclick={() => {
             navigator.clipboard.writeText(
               $t('event.team.invitation.invite_msg', {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -171,7 +183,7 @@
                 ? 'btn-ghost'
                 : 'btn-outline border-2 normal-border'} w-full"
             disabled={status === Status.SENDING}
-            on:click={createInvitation}
+            onclick={createInvitation}
           >
             {status === Status.ERROR
               ? $t('common.error')
@@ -197,12 +209,12 @@
         {$t('event.team.leave_confirmation')}
       </p>
       <div class="modal-action">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="leave"
           class="btn border-2 normal-border btn-outline"
-          on:click={async () => {
+          onclick={async () => {
             const resp = await api.DELETE(`/events/teams/${id}/participants/${user?.id}`);
             if (resp.ok || resp.status === 404) {
               goto(
@@ -242,12 +254,12 @@
         {$t('event.team.disband_confirmation')}
       </p>
       <div class="modal-action">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="disband"
           class="btn border-2 normal-border btn-outline"
-          on:click={async () => {
+          onclick={async () => {
             const resp = await api.DELETE(`/events/teams/${id}`);
             if (resp.ok || resp.status === 404) {
               goto(
@@ -339,14 +351,14 @@
                       {$t('common.edit_info')}
                     </a>
                     {#if team.participants.length < team.claimedParticipantCount}
-                      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                       <label
                         for="invite"
                         class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
-                        on:click={() => {
+                        onclick={() => {
                           if (!inviteCode) createInvitation();
                         }}
-                        on:keyup
+                        onkeyup={null}
                       >
                         {$t('event.team.invitation.invite_code')}
                       </label>

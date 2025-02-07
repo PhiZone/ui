@@ -13,49 +13,58 @@
   import { t } from '$lib/translations/config';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
 
-  $: ({ user, api } = data);
+  let { user, api } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  let isRanked = false;
-  let authorName = '';
-  let levelType = 0;
-  let level = '';
-  let difficulty = '';
-  let tagsRaw = '';
+  let isRanked = $state(false);
+  let authorName = $state('');
+  let levelType = $state(0);
+  let level = $state('');
+  let difficulty = $state('');
+  let tagsRaw = $state('');
   let tags: string[] = [];
-  let showTags = true;
-  let newTag = '';
-  let newCharterId: number | null = null;
-  let newCharterDisplay = '';
-  let queryCharter = false;
-  let chart = '';
-  let songSwitch = false;
-  let parent: SongDto | SongSubmissionDto | undefined;
+  let showTags = $state(true);
+  let newTag = $state('');
+  let newCharterId: number | null = $state(null);
+  let newCharterDisplay = $state('');
+  let queryCharter = $state(false);
+  let chart = $state('');
+  let songSwitch = $state(false);
+  let parent: SongDto | SongSubmissionDto | undefined = $state();
 
-  let querySong = true;
-  let newSongSearch: string;
-  let newSongId: string | null = null;
+  let querySong = $state(true);
+  let newSongSearch: string | undefined = $state();
+  let newSongId: string | null = $state(null);
 
-  $: charter = createQuery(
-    api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
+  let charter = $derived(
+    createQuery(
+      api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
+    ),
   );
-  $: songSearch = createQuery(
-    api.song.listAll({ search: newSongSearch ?? undefined }, { enabled: querySong }),
+  let songSearch = $derived(
+    createQuery(api.song.listAll({ search: newSongSearch }, { enabled: querySong })),
   );
-  $: songSubmission = createQuery(
-    api.song.submission.listAll({ order: ['dateCreated'], desc: [true] }, { enabled: !songSwitch }),
+  let songSubmission = $derived(
+    createQuery(
+      api.song.submission.listAll(
+        { order: ['dateCreated'], desc: [true] },
+        { enabled: !songSwitch },
+      ),
+    ),
   );
-  $: charterPreview = richtext(authorName ?? '');
-  $: existingTags = createQuery(
-    api.tag.listAll(
-      {
-        rangeNormalizedName:
-          tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
-      },
-      { enabled: !showTags && tags.length > 0 },
+  let charterPreview = $derived(richtext(authorName ?? ''));
+  let existingTags = $derived(
+    createQuery(
+      api.tag.listAll(
+        {
+          rangeNormalizedName:
+            tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+        },
+        { enabled: !showTags && tags.length > 0 },
+      ),
     ),
   );
 
@@ -110,7 +119,7 @@
             $charter.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newCharterId}
-          on:input={() => {
+          oninput={() => {
             queryCharter = false;
           }}
         />
@@ -122,7 +131,7 @@
                 : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
-          on:click={() => {
+          onclick={() => {
             queryCharter = true;
           }}
         >
@@ -141,14 +150,14 @@
         />
       </label>
       <div class="modal-action mt-3 px-4">
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="studio-charter"
           class="btn border-2 normal-border btn-outline"
-          on:click={() => {
+          onclick={() => {
             authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
-          on:keyup
+          onkeyup={null}
         >
           {$t('common.submit')}
         </label>
@@ -189,7 +198,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:input={loadChart}
+                oninput={loadChart}
               />
               {#if !!$errors.File}
                 <span class="w-2/3 text-error">{$errors.File}</span>
@@ -258,10 +267,10 @@
                       $songSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={newSongSearch}
-                    on:input={() => {
+                    oninput={() => {
                       querySong = false;
                     }}
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter' && newSongSearch) {
                         e.preventDefault();
                         querySong = true;
@@ -278,7 +287,8 @@
                           : 'hover:btn-secondary btn-outline'
                         : 'btn-disabled'
                     }`}
-                    on:click|preventDefault={() => {
+                    onclick={(e) => {
+                      e.preventDefault();
                       querySong = true;
                     }}
                   >
@@ -295,7 +305,7 @@
                   name="SongId"
                   class="select transition border-2 normal-border hover:select-secondary w-3/4 join-item"
                   bind:value={newSongId}
-                  on:input={resolveSong}
+                  oninput={resolveSong}
                 >
                   {#if $songSearch.isSuccess}
                     {#each $songSearch.data.data as song}
@@ -367,7 +377,7 @@
                       $songSubmission.isError ? 'hover:select-error' : 'hover:select-secondary'
                     }`}
                     value=""
-                    on:input={resolveSong}
+                    oninput={resolveSong}
                   >
                     {#if $songSubmission.isSuccess}
                       {#each $songSubmission.data.data as song}
@@ -441,7 +451,7 @@
                 </select>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -466,7 +476,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -489,7 +499,7 @@
                     class={`btn ${getLevelColor(
                       levelType,
                     )} btn-sm text-xl cursor-default no-animation`}
-                    on:click|preventDefault
+                    onclick={(e) => e.preventDefault()}
                   >
                     {level}
                     {getLevelDisplay(parseFloat(difficulty))}
@@ -507,7 +517,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -520,15 +530,15 @@
                   }`}
                   bind:value={authorName}
                 />
-                <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                 <label
                   for="studio-charter"
                   class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
-                  on:click={() => {
+                  onclick={() => {
                     newCharterId = null;
                     newCharterDisplay = '';
                   }}
-                  on:keyup
+                  onkeyup={null}
                 >
                   {$t('studio.submission.add_charter')}
                 </label>
@@ -581,7 +591,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       if (!newTag || tags.includes(newTag)) return;
@@ -603,7 +613,8 @@
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
                   aria-label={$t('common.add')}
-                  on:click|preventDefault={() => {
+                  onclick={(e) => {
+                    e.preventDefault();
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
                     tags.push(newTag);

@@ -1,20 +1,18 @@
 <script lang="ts">
   import type { ChapterAdmissionDto, CollectionAdmissionDto } from '$lib/api/admission';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
-  const { api } = $page.data;
+  let { api } = $derived(page.data);
 
-  interface $$Props {
+  interface Props {
     target: ChapterAdmissionDto | CollectionAdmissionDto;
     type: 'chapter' | 'collection';
     class: string;
   }
-
-  export let target: ChapterAdmissionDto | CollectionAdmissionDto;
-  export let type: 'chapter' | 'collection';
-  let deleted = false;
+  let { target, type, ...rest }: Props = $props();
+  let deleted = $state(false);
 </script>
 
 <input type="checkbox" id="delete-{target.admitter.id}-{target.admittee.id}" class="modal-toggle" />
@@ -35,12 +33,12 @@
       })}
     </p>
     <div class="modal-action">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
       <label
         for="delete-{target.admitter.id}-{target.admittee.id}"
         class="btn border-2 normal-border btn-outline"
-        on:click={async () => {
+        onclick={async () => {
           const resp = await api.DELETE(
             `/admissions/${type}s/${target.admitter.id}/${target.admittee.id}`,
           );
@@ -62,7 +60,7 @@
 
 <label
   for="delete-{target.admitter.id}-{target.admittee.id}"
-  class="btn {deleted ? 'btn-ghost btn-disabled' : 'border-2 btn-ghost'} {$$restProps.class}"
+  class="btn {deleted ? 'btn-ghost btn-disabled' : 'border-2 btn-ghost'} {rest.class}"
 >
   <i class="fa-regular fa-trash-can fa-lg"></i>
   {$t('common.delete')}

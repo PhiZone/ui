@@ -1,17 +1,15 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
 
-  interface $$Props {
+  interface Props {
     file: string;
     name: string;
     inline?: boolean;
     class: string;
   }
+  let { file, name, inline = false, ...rest }: Props = $props();
 
-  export let file: string;
-  export let name: string;
-  export let inline: boolean | undefined = false;
-  let progress: number | undefined = undefined;
+  let progress: number | undefined = $state();
 
   const getBlob = async (response: Response) => {
     while (response.body === null);
@@ -59,8 +57,8 @@
 
 {#if progress === undefined}
   <button
-    class="btn {inline ? 'btn-xs' : ''} btn-ghost border-2 hover:btn-outline {$$restProps.class}"
-    on:click={download}
+    class="btn {inline ? 'btn-xs' : ''} btn-ghost border-2 hover:btn-outline {rest.class}"
+    onclick={download}
   >
     {#if !inline}
       <i class="fa-solid fa-file-arrow-down fa-lg"></i>
@@ -68,14 +66,14 @@
     {$t('common.download')}
   </button>
 {:else if progress < 1}
-  <button class="btn {inline ? 'btn-xs' : ''} btn-ghost btn-disabled {$$restProps.class}">
+  <button class="btn {inline ? 'btn-xs' : ''} btn-ghost btn-disabled {rest.class}">
     {#if !inline}
       <span class="loading loading-dots loading-xs"></span>
     {/if}
     <span>{(progress * 100).toFixed(0)}%</span>
   </button>
 {:else}
-  <button class="btn {inline ? 'btn-xs' : ''} btn-success no-animation {$$restProps.class}">
+  <button class="btn {inline ? 'btn-xs' : ''} btn-success no-animation {rest.class}">
     {#if !inline}
       <i class="fa-solid fa-check fa-lg"></i>
     {/if}

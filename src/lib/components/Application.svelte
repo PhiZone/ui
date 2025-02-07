@@ -3,19 +3,22 @@
 
   import type { ApplicationDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
 
   import Like from './Like.svelte';
 
-  $: ({ api, preferredApplication } = $page.data);
+  let { api, preferredApplication } = $derived(page.data);
 
-  export let application: ApplicationDto;
-  export let fixedHeight = true;
-  export let showLike = true;
+  interface Props {
+    application: ApplicationDto;
+    fixedHeight?: boolean;
+    showLike?: boolean;
+  }
+  let { application, fixedHeight = true, showLike = true }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: application.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: application.ownerId })));
 </script>
 
 <div

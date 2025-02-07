@@ -10,12 +10,11 @@
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, user, api, preferredApplication } = $derived(data);
 
-  $: ({ searchParams, id, user, api, preferredApplication } = data);
-
-  $: applicationQuery = createQuery(api.application.info({ id }));
-  $: servicesQuery = createQuery(api.service.list({ rangeResourceId: [id] }));
+  let applicationQuery = $derived(createQuery(api.application.info({ id })));
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeResourceId: [id] })));
 </script>
 
 <svelte:head>
@@ -104,7 +103,7 @@
                     {#if preferredApplication == application.id}
                       <button
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
-                        on:click={() => {
+                        onclick={() => {
                           goto('?preferred=0');
                         }}
                       >
@@ -114,7 +113,7 @@
                     {:else}
                       <button
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
-                        on:click={() => {
+                        onclick={() => {
                           goto('?preferred=1');
                         }}
                       >

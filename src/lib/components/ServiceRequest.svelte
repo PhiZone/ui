@@ -2,31 +2,28 @@
   import type { ServiceResponseDto, ServiceScriptDto } from '$lib/api/service';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
 
-  const { api } = $page.data;
+  let { api } = $derived(page.data);
 
-  export let service: ServiceScriptDto;
-  export let resourcePath: string | undefined = undefined;
-  export let resourceId: string | undefined = undefined;
-
-  interface $$Props {
+  interface Props {
     service: ServiceScriptDto;
     resourcePath?: string;
     resourceId?: string;
     class?: string;
   }
+  let { service, resourcePath, resourceId, ...rest }: Props = $props();
 
-  let status = Status.WAITING;
-  let response: ServiceResponseDto | undefined;
+  let status = $state(Status.WAITING);
+  let response: ServiceResponseDto | undefined = $state();
 
-  let parameters = service.parameters.map(() => '');
+  let parameters = $state(service.parameters.map(() => ''));
   let useOnResource = resourcePath && resourceId;
   let idIndex = service.parameters.findIndex((p) => p.toLowerCase() === 'id');
-  let showParams = service.parameters.length > 0;
-  let paramsOpen = false;
+  let showParams = $state(service.parameters.length > 0);
+  let paramsOpen = $state(false);
   if (useOnResource && idIndex !== -1) {
     parameters[idIndex] = resourceId ?? '';
     if (service.parameters.length === 1) {
@@ -124,18 +121,16 @@
       </div>
     </div>
     <div class="modal-action">
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <btn
+      <button
         class="btn {status !== Status.SENDING
           ? 'btn-success border-2 btn-outline'
           : 'btn-ghost btn-disabled'} on:keyup"
-        on:click={() => {
+        onclick={() => {
           status = Status.WAITING;
         }}
-        on:keyup
       >
         {$t('common.confirm')}
-      </btn>
+      </button>
     </div>
   </div>
 </div>
@@ -145,7 +140,7 @@
   <div class="modal-box text-left">
     <button
       class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2"
-      on:click={() => {
+      onclick={() => {
         paramsOpen = false;
       }}
     >
@@ -161,7 +156,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -174,7 +169,7 @@
       {/each}
     </div>
     <div class="modal-action">
-      <button class="btn border-2 normal-border btn-outline" on:click={submit}>
+      <button class="btn border-2 normal-border btn-outline" onclick={submit}>
         {$t('common.submit')}
       </button>
     </div>
@@ -184,12 +179,15 @@
 <button
   class="btn btn-ghost {status === Status.SENDING
     ? 'btn-disabled'
-    : 'btn-outline border-2 normal-border'} {$$restProps.class}"
-  on:click|preventDefault={showParams
-    ? () => {
-        paramsOpen = true;
-      }
-    : submit}
+    : 'btn-outline border-2 normal-border'} {rest.class}"
+  onclick={(e) => {
+    e.preventDefault();
+    if (showParams) {
+      paramsOpen = true;
+    } else {
+      submit();
+    }
+  }}
 >
   {#if status != Status.SENDING}
     <span>{$t('service.use')}</span>

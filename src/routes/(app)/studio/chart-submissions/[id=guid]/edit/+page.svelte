@@ -16,58 +16,69 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getLevelDisplay } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, user, api } = $derived(data);
 
-  $: ({ id, user, api } = data);
+  let options = $derived(api.chart.submission.info({ id }));
+  let submission = $derived(createQuery({ ...options }));
 
-  let chart: ChartSubmissionDto;
-  let showTags = true;
-  let newTag = '';
-  let newCharterId: number | null = null;
-  let newCharterDisplay = '';
-  let queryCharter = false;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let error: ResponseDtoError | undefined = undefined;
-  let errors: Map<string, string> | undefined = undefined;
-
-  $: options = api.chart.submission.info({ id });
-  $: submission = createQuery({ ...options });
-  $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
-  $: charter = createQuery(
-    api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
-  );
-  $: charterPreview = richtext(chart.authorName ?? '');
-  $: song = createQuery(
-    api.song.info(
-      { id: $submission.data?.data.songId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data.data.songId },
+  let chart: ChartSubmissionDto = $state($submission.data?.data)!; // FIXME: hack
+  let showTags = $state(true);
+  let newTag = $state('');
+  let newCharterId: number | null = $state(null);
+  let newCharterDisplay = $state('');
+  let queryCharter = $state(false);
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let error: ResponseDtoError | undefined = $state();
+  let errors: Map<string, string> | undefined = $state();
+  let assets = $derived(createQuery(api.chart.submission.asset.listAll({ chartId: id })));
+  let charter = $derived(
+    createQuery(
+      api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
     ),
   );
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      { id: $submission.data?.data.songSubmissionId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data.data.songSubmissionId },
+  let charterPreview = $derived(richtext(chart.authorName ?? ''));
+  let song = $derived(
+    createQuery(
+      api.song.info(
+        { id: $submission.data?.data.songId ?? '' },
+        { enabled: $submission.isSuccess && !!$submission.data.data.songId },
+      ),
     ),
   );
-  $: parent = $song.isSuccess
-    ? $song.data.data
-    : $songSubmission.isSuccess
-      ? $songSubmission.data.data
-      : undefined;
-  $: existingTags = createQuery(
-    api.tag.listAll(
-      {
-        rangeNormalizedName:
-          chart.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
-      },
-      { enabled: (!showTags || $submission.isSuccess) && chart.tags.length > 0 },
+  let songSubmission = $derived(
+    createQuery(
+      api.song.submission.info(
+        { id: $submission.data?.data.songSubmissionId ?? '' },
+        { enabled: $submission.isSuccess && !!$submission.data.data.songSubmissionId },
+      ),
+    ),
+  );
+  let parent = $derived(
+    $song.isSuccess
+      ? $song.data.data
+      : $songSubmission.isSuccess
+        ? $songSubmission.data.data
+        : undefined,
+  );
+  let existingTags = $derived(
+    createQuery(
+      api.tag.listAll(
+        {
+          rangeNormalizedName:
+            chart.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+        },
+        { enabled: (!showTags || $submission.isSuccess) && chart.tags.length > 0 },
+      ),
     ),
   );
 
-  $: if (!chart && $submission.isSuccess) {
-    chart = $submission.data.data;
-  }
+  $effect(() => {
+    if (!chart && $submission.isSuccess) {
+      chart = $submission.data.data;
+    }
+  });
 
   const queryClient = useQueryClient();
 
@@ -94,7 +105,7 @@
     }
   };
 
-  let patch = new Array<PatchElement>();
+  let patch = $state(new Array<PatchElement>());
 
   const update = async () => {
     status = Status.SENDING;
@@ -164,7 +175,7 @@
             $charter.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newCharterId}
-          on:input={() => {
+          oninput={() => {
             queryCharter = false;
           }}
         />
@@ -176,7 +187,7 @@
                 : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
-          on:click={() => {
+          onclick={() => {
             queryCharter = true;
           }}
         >
@@ -195,14 +206,14 @@
         />
       </label>
       <div class="modal-action mt-3 px-4">
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="studio-charter"
           class="btn border-2 normal-border btn-outline"
-          on:click={() => {
+          onclick={() => {
             chart.authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
-          on:keyup
+          onkeyup={null}
         >
           {$t('common.submit')}
         </label>
@@ -256,7 +267,7 @@
           >
             {$t('studio.submission.adjust_offset')}
           </a>
-          <form class="w-full form-control" on:submit|preventDefault>
+          <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
             <div class="flex items-center my-2">
               <span class="w-32">{$t('common.form.chart')}</span>
               <input
@@ -269,7 +280,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:input={handleChart}
+                oninput={handleChart}
               />
               {#if !!errors?.get('File')}
                 <span class="w-2/3 text-error">{errors?.get('File')}</span>
@@ -288,7 +299,7 @@
                     ? 'toggle-error'
                     : 'toggle-secondary'}"
                   bind:checked={chart.isRanked}
-                  on:input={() => {
+                  oninput={() => {
                     patch = applyPatch(patch, 'replace', '/isRanked', !chart.isRanked);
                   }}
                 />
@@ -317,7 +328,7 @@
                   class={`select transition border-2 normal-border join-item w-3/4 ${
                     errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(
                       patch,
                       'replace',
@@ -352,7 +363,7 @@
                     errors?.get('LevelType') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   bind:value={chart.levelType}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/levelType', e.currentTarget.value);
                   }}
                 >
@@ -362,7 +373,7 @@
                 </select>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -374,7 +385,7 @@
                     errors?.get('Level') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={chart.level}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/level', e.currentTarget.value);
                   }}
                 />
@@ -392,7 +403,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -404,7 +415,7 @@
                     errors?.get('Difficulty') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   value={chart.difficulty}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     chart.difficulty = parseFloat(e.currentTarget.value);
                     patch = applyPatch(patch, 'replace', '/difficulty', chart.difficulty);
                   }}
@@ -423,7 +434,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -435,19 +446,19 @@
                     errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={chart.authorName}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
                   }}
                 />
-                <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                 <label
                   for="studio-charter"
                   class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
-                  on:click={() => {
+                  onclick={() => {
                     newCharterId = null;
                     newCharterDisplay = '';
                   }}
-                  on:keyup
+                  onkeyup={null}
                 >
                   {$t('studio.submission.add_charter')}
                 </label>
@@ -493,7 +504,7 @@
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
                   bind:value={chart.description}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
                 ></textarea>
@@ -503,7 +514,7 @@
                 class="absolute right-2 bottom-2 btn btn-sm {chart.description
                   ? 'border-2 hover:btn-outline backdrop-blur'
                   : 'btn-disabled'}"
-                on:click={() => {
+                onclick={() => {
                   chart.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
                 }}
@@ -521,7 +532,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       if (!newTag || chart.tags.includes(newTag)) return;
@@ -543,7 +554,8 @@
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
                   aria-label={$t('common.add')}
-                  on:click|preventDefault={() => {
+                  onclick={(e) => {
+                    e.preventDefault();
                     if (!newTag || chart.tags.includes(newTag)) return;
                     showTags = false;
                     chart.tags.push(newTag);
@@ -553,7 +565,6 @@
                       showTags = true;
                     }, 0);
                   }}
-                  on:keyup
                 >
                   <i class="fa-solid fa-plus"></i>
                 </button>
@@ -604,7 +615,7 @@
                       ? 'btn-ghost'
                       : 'btn-outline border-2 normal-border'} w-full"
                   disabled={status == Status.SENDING}
-                  on:click={update}
+                  onclick={update}
                 >
                   {status === Status.ERROR
                     ? $t('common.error')

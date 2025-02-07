@@ -8,9 +8,12 @@
 
   import { t } from '$lib/translations/config';
 
-  export let filter: IFilterOrder;
+  interface Props {
+    filter: IFilterOrder;
+  }
+  let { filter = $bindable() }: Props = $props();
 
-  $: count = 0; // only for update component
+  let count = $state(0); // only for update component
 
   overrideItemIdKeyNameBeforeInitialisingDndZones('id');
 

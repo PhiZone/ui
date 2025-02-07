@@ -7,11 +7,11 @@
   import { t } from '$lib/translations/config';
   import { getAvatar, getLevelDisplay, parseDateTime } from '$lib/utils';
 
-  export let data;
-  const { searchParams, id, user, api } = data;
+  let { data } = $props();
+  let { searchParams, id, user, api } = $derived(data);
 
-  $: chartQuery = createQuery(api.chart.info({ id }));
-  $: leaderboardQuery = createQuery(api.chart.leaderboard({ id, ...searchParams }));
+  let chartQuery = $derived(createQuery(api.chart.info({ id })));
+  let leaderboardQuery = $derived(createQuery(api.chart.leaderboard({ id, ...searchParams })));
 </script>
 
 <svelte:head>
@@ -85,10 +85,10 @@
                         class="transition bg-opacity-25 {record.ownerId === user?.id
                           ? 'bg-info-content'
                           : 'bg-base-100'} hover:bg-opacity-75 hover:cursor-pointer"
-                        on:click={() => {
+                        onclick={() => {
                           goto(`/records/${record.id}`);
                         }}
-                        on:mouseenter={() => {
+                        onmouseenter={() => {
                           preloadData(`/records/${record.id}`);
                         }}
                       >

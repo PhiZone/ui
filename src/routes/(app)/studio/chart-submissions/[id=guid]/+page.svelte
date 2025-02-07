@@ -27,8 +27,8 @@
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data;
-  $: ({ id, user, api } = data);
+  let { data } = $props();
+  let { id, user, api } = $derived(data);
 
   const {
     enhance: voteEnhance,
@@ -75,80 +75,94 @@
     },
   });
 
-  let score = 0;
-  let suggestedDifficulty = 0;
-  let message = '';
-  let queryCollaborator = false;
-  let newCollaboratorId: number | null = null;
-  let queryCollection = true;
-  let newCollectionSearch: string;
-  let newCollectionId: string | null = null;
-  let voteOpen = false;
-  let collabOpen = false;
-  let collectionOpen = false;
+  let score = $state(0);
+  let suggestedDifficulty = $state(0);
+  let message = $state('');
+  let queryCollaborator = $state(false);
+  let newCollaboratorId: number | null = $state(null);
+  let queryCollection = $state(true);
+  let newCollectionSearch: string | undefined = $state();
+  let newCollectionId: string | null = $state(null);
+  let voteOpen = $state(false);
+  let collabOpen = $state(false);
+  let collectionOpen = $state(false);
 
-  $: submissionQuery = createQuery(api.chart.submission.info({ id }));
-  $: uploader = createQuery(
-    api.user.info(
-      { id: $submissionQuery.data?.data.ownerId ?? 0 },
-      { enabled: $submissionQuery.isSuccess },
+  let submissionQuery = $derived(createQuery(api.chart.submission.info({ id })));
+  let uploader = $derived(
+    createQuery(
+      api.user.info(
+        { id: $submissionQuery.data?.data.ownerId ?? 0 },
+        { enabled: $submissionQuery.isSuccess },
+      ),
     ),
   );
-  $: votesQuery = createQuery(
-    api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] }),
+  let votesQuery = $derived(
+    createQuery(api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] })),
   );
-  $: representation = createQuery(
-    api.chart.info(
-      { id: $submissionQuery.data?.data.representationId ?? '' },
-      { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
+  let representation = $derived(
+    createQuery(
+      api.chart.info(
+        { id: $submissionQuery.data?.data.representationId ?? '' },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
+      ),
     ),
   );
-  $: collaborator = createQuery(
-    api.user.info(
-      { id: newCollaboratorId ?? 0 },
-      { enabled: !!newCollaboratorId && queryCollaborator },
+  let collaborator = $derived(
+    createQuery(
+      api.user.info(
+        { id: newCollaboratorId ?? 0 },
+        { enabled: !!newCollaboratorId && queryCollaborator },
+      ),
     ),
   );
-  $: collaborations = createQuery(api.chart.submission.listAllCollaborations({ id }));
-  $: collectionSearch = createQuery(
-    api.collection.listAll(
-      { search: newCollectionSearch ?? undefined },
-      { enabled: queryCollection },
+  let collaborations = $derived(createQuery(api.chart.submission.listAllCollaborations({ id })));
+  let collectionSearch = $derived(
+    createQuery(
+      api.collection.listAll({ search: newCollectionSearch }, { enabled: queryCollection }),
     ),
   );
-  $: collections = createQuery(
-    api.admission.listCollection(
-      { rangeAdmitteeId: [$submissionQuery.data?.data.representationId ?? ''] },
-      { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data.data.representationId },
+  let collections = $derived(
+    createQuery(
+      api.admission.listCollection(
+        { rangeAdmitteeId: [$submissionQuery.data?.data.representationId ?? ''] },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data.data.representationId },
+      ),
     ),
   );
-  $: servicesQuery = createQuery(api.service.list({ rangeTargetType: [1] }));
-  $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
-  $: charter = richtext($submissionQuery.data?.data.authorName ?? '');
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeTargetType: [1] })));
+  let assets = $derived(createQuery(api.chart.submission.asset.listAll({ chartId: id })));
+  let charter = $derived(richtext($submissionQuery.data?.data.authorName ?? ''));
 
-  $: averageSuggestedDifficulty =
+  let averageSuggestedDifficulty = $derived(
     $votesQuery.isSuccess && $submissionQuery.isSuccess
       ? $votesQuery.data.data
           .filter((vote) => vote.dateCreated >= $submissionQuery.data!.data.dateFileUpdated)
           .reduce((total, vote) => total + vote.suggestedDifficulty, 0) /
-        $votesQuery.data.data.filter(
-          (vote) => vote.dateCreated >= $submissionQuery.data!.data.dateFileUpdated,
-        ).length
-      : 0;
+          $votesQuery.data.data.filter(
+            (vote) => vote.dateCreated >= $submissionQuery.data!.data.dateFileUpdated,
+          ).length
+      : 0,
+  );
 
-  $: difficultyDifference = $submissionQuery.isSuccess
-    ? averageSuggestedDifficulty - $submissionQuery.data.data.difficulty
-    : 0;
-  $: eventParticipation = createQuery(
-    api.chart.submission.checkEvent(
-      { strings: $submissionQuery.data?.data.tags ?? [] },
-      { enabled: $submissionQuery.isSuccess, retry: 0 },
+  let difficultyDifference = $derived(
+    $submissionQuery.isSuccess
+      ? averageSuggestedDifficulty - $submissionQuery.data.data.difficulty
+      : 0,
+  );
+  let eventParticipation = $derived(
+    createQuery(
+      api.chart.submission.checkEvent(
+        { strings: $submissionQuery.data?.data.tags ?? [] },
+        { enabled: $submissionQuery.isSuccess, retry: 0 },
+      ),
     ),
   );
-  $: eventQuery = createQuery(
-    api.event.info(
-      { id: $eventParticipation.data?.data.division?.eventId ?? '' },
-      { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $eventParticipation.data?.data.division?.eventId ?? '' },
+        { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+      ),
     ),
   );
 </script>
@@ -219,7 +233,7 @@
             step="0.1"
           />
           <DifficultySuggestion
-            bind:suggested={suggestedDifficulty}
+            suggested={suggestedDifficulty}
             actual={submission.difficulty}
             size={16}
             centered={false}
@@ -312,7 +326,7 @@
                 $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
-              on:input={() => {
+              oninput={() => {
                 queryCollaborator = false;
               }}
             />
@@ -325,7 +339,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryCollaborator = true;
               }}
             >
@@ -422,7 +436,7 @@
                 $collectionSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollectionSearch}
-              on:input={() => {
+              oninput={() => {
                 queryCollection = false;
               }}
             />
@@ -436,7 +450,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryCollection = true;
               }}
             >

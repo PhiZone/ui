@@ -3,19 +3,22 @@
 
   import type { EventDto } from '$lib/api/event';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
 
   import Like from './Like.svelte';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let event: EventDto;
-  export let fixedHeight = true;
-  export let showLike = true;
+  interface Props {
+    event: EventDto;
+    fixedHeight?: boolean;
+    showLike?: boolean;
+  }
+  let { event, fixedHeight = true, showLike = true }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: event.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: event.ownerId })));
 </script>
 
 <a

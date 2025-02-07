@@ -7,18 +7,17 @@
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { api } = $derived(data);
 
-  $: ({ api } = data);
+  let type: SearchFilterType = $state('charts');
+  let text = $state('');
 
-  let type: SearchFilterType = 'charts';
-  let text = '';
+  let searchParams = $state(new URLSearchParams());
 
-  let searchParams = new URLSearchParams();
+  let href = $derived(`/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`);
 
-  $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
-
-  $: headlineQuery = createQuery(api.headline.get());
+  let headlineQuery = $derived(createQuery(api.headline.get()));
 </script>
 
 <svelte:head>
@@ -60,7 +59,13 @@
         {$t('home.description')}
       </p>
     </div>
-    <form class="form-control" on:submit|preventDefault={() => goto(href)}>
+    <form
+      class="form-control"
+      onsubmit={(e) => {
+        e.preventDefault();
+        goto(href);
+      }}
+    >
       <div class="join text-sm lg:text-md">
         <select
           class="select border-2 normal-border transition hover:select-secondary lg:select-lg join-item max-w-1/3"

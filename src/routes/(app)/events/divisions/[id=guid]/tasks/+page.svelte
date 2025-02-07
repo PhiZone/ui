@@ -8,27 +8,28 @@
   import { t } from '$lib/translations/config';
   import { hasEventPermission } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, page, user, id, api } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  $: ({ searchParams, page, user, id, api } = data);
+  let type = $state(0);
 
-  let type = 0;
-
-  $: query = createQuery(api.event.task.list(searchParams));
-  $: division = createQuery(api.event.division.info({ id }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  let query = $derived(createQuery(api.event.task.list(searchParams)));
+  let division = $derived(createQuery(api.event.division.info({ id })));
+  let event = $derived(
+    createQuery(
+      api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+    ),
   );
 
-  let year = new Date().getFullYear();
-  let month = new Date().getMonth() + 1;
-  let day = new Date().getDate();
-  let hour = new Date().getHours();
-  let minute = new Date().getMinutes();
-  let second = new Date().getSeconds();
-  let dateExecuted = new Date().toISOString();
+  let year = $state(new Date().getFullYear());
+  let month = $state(new Date().getMonth() + 1);
+  let day = $state(new Date().getDate());
+  let hour = $state(new Date().getHours());
+  let minute = $state(new Date().getMinutes());
+  let second = $state(new Date().getSeconds());
+  let dateExecuted = $state(new Date().toISOString());
 
   const handleDateExecuted = () => {
     const date = new Date(year, month - 1, day, hour, minute, second);
@@ -70,7 +71,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -121,7 +122,7 @@
             <div class="join w-3/4">
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   year = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}
@@ -134,7 +135,7 @@
               </select>
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   month = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}
@@ -147,7 +148,7 @@
               </select>
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   day = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}
@@ -160,7 +161,7 @@
               </select>
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   hour = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}
@@ -173,7 +174,7 @@
               </select>
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   minute = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}
@@ -186,7 +187,7 @@
               </select>
               <select
                 class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                on:input={(e) => {
+                oninput={(e) => {
                   second = parseInt(e.currentTarget.value);
                   handleDateExecuted();
                 }}

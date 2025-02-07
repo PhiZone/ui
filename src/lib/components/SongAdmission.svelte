@@ -1,19 +1,22 @@
 <script lang="ts">
   import type { SongAdmissionDto } from '$lib/api/admission';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
   import ChartSubmission from './ChartSubmission.svelte';
   import Song from './Song.svelte';
   import User from './User.svelte';
 
-  export let admission: SongAdmissionDto;
-  export let showRequestee = false;
+  let { user, api } = $derived(page.data);
 
-  $: ({ user, api } = $page.data);
+  interface Props {
+    admission: SongAdmissionDto;
+    showRequestee?: boolean;
+  }
+  let { admission = $bindable(), showRequestee = false }: Props = $props();
 
-  let disabled = false;
+  let disabled = $state(false);
 
   const review = async (approve: boolean) => {
     disabled = true;
@@ -72,7 +75,7 @@
               <div class="join w-80">
                 <button
                   class="btn hover:btn-primary border-2 normal-border btn-outline join-item w-1/2"
-                  on:click={() => {
+                  onclick={() => {
                     review(true);
                   }}
                 >
@@ -80,7 +83,7 @@
                 </button>
                 <button
                   class="btn hover:btn-accent border-2 normal-border btn-outline join-item w-1/2"
-                  on:click={() => {
+                  onclick={() => {
                     review(false);
                   }}
                 >

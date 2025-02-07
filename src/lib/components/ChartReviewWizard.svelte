@@ -3,20 +3,23 @@
 
   import VoteScore from './VoteScore.svelte';
 
-  export let score: number;
-  export let message: string;
-  export let onConfirm: () => void;
+  interface Props {
+    score: number;
+    message: string;
+    onConfirm: () => void;
+  }
+  let { score = $bindable(), message = $bindable(), onConfirm }: Props = $props();
 
   const answers = [3, 2, 0, -3];
   const innovationAnswers = [1, 0];
   const structureAnswers = [1, 0, -1];
 
-  let step = 0,
-    scores: number[] = [],
-    innovationScores: number[] = [],
-    structureScores: number[] = [],
-    realScores: number[] = [],
-    realScore = 0,
+  let step = $state(0),
+    scores: number[] = $state([]),
+    innovationScores: number[] = $state([]),
+    structureScores: number[] = $state([]),
+    realScores: number[] = $state([]),
+    realScore = $state(0),
     questions = [...Array(5).keys()].map((i) =>
       $t('review_wizard.question', {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -80,7 +83,7 @@
             name="score"
             class="radio border-2 radio-secondary"
             bind:group={scores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={answers[i]}
           />
           <p class="text-base">{$t(`review_wizard.answers.${i}`)}</p>
@@ -97,7 +100,7 @@
               name="innovation"
               class="radio border-2 radio-secondary"
               bind:group={innovationScores[step]}
-              on:change={calculate}
+              onchange={calculate}
               value={innovationAnswers[i]}
             />
             <p class="text-base">{$t(`review_wizard.innovation_answers.${i}`)}</p>
@@ -115,7 +118,7 @@
               name="structure"
               class="radio border-2 radio-secondary"
               bind:group={structureScores[step]}
-              on:change={calculate}
+              onchange={calculate}
               value={structureAnswers[i]}
             />
             <p class="text-base">{$t(`review_wizard.structure_answers.${i}`)}</p>
@@ -132,7 +135,7 @@
         <button
           class="btn btn-outline border-2 normal-border join-item"
           disabled={step <= 0}
-          on:click={() => {
+          onclick={() => {
             step--;
           }}
         >
@@ -141,20 +144,20 @@
         {#if step < 4}
           <button
             class="btn btn-outline border-2 normal-border join-item"
-            on:click={() => {
+            onclick={() => {
               step++;
             }}
-            on:change={calculate}
+            onchange={calculate}
           >
             {$t('common.continue')}
           </button>
         {:else}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events -->
+          <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
           <label
             for="chart-review-wizard"
             class="btn btn-outline border-2 normal-border join-item"
-            on:click={() => {
+            onclick={() => {
               calculate();
               if (message) {
                 message += `\n${[...Array(5).keys()]

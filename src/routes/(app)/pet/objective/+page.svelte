@@ -5,17 +5,17 @@
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ questions } = data);
+  let { data } = $props();
+  let { questions } = $derived(data);
 
   const timeLimit = 30;
   const timeDue = new Date();
   timeDue.setMinutes(timeDue.getMinutes() + timeLimit);
 
-  let min = timeLimit - 1;
-  let sec = 59;
+  let min = $state(timeLimit - 1);
+  let sec = $state(59);
 
-  let timeUp = false;
+  let timeUp = $state(false);
 
   let timer = setInterval(() => {
     if (sec === 0 && min === 0) {
@@ -28,7 +28,7 @@
     sec = Math.floor((diff % (1000 * 60)) / 1000);
   }, 100);
 
-  let answers: number[][] = [];
+  let answers: number[][] = $state([]);
 </script>
 
 <svelte:head>
@@ -58,7 +58,7 @@
       <ul class="flex flex-col gap-4">
         {#each questions as question, i}
           <li>
-            <Question id={i + 1} {question} bind:choices={answers[i]} text={null} />
+            <Question id={i + 1} {question} bind:choices={answers[i]} />
           </li>
         {/each}
       </ul>
@@ -70,7 +70,7 @@
               : 'normal-border hover:btn-outline'
           } my-5`}
           data-tip={$t('pet.time_up')}
-          on:click={() => {
+          onclick={() => {
             goto(`subjective?answers=${JSON.stringify(answers)}`);
           }}
         >

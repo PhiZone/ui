@@ -6,18 +6,21 @@
 
   import Item from './Item.svelte';
 
-  export let type: SearchFilterType;
-  export let params: URLSearchParams = new URLSearchParams();
+  interface Props {
+    type: SearchFilterType;
+    params?: URLSearchParams;
+  }
+  let { type, params = $bindable(new URLSearchParams()) }: Props = $props();
 
-  $: filters = getFullFilters(type, true);
-  $: data = getFilterValue(filters);
+  let filters = $derived(getFullFilters(type, true));
+  let data = $derived(getFilterValue(filters));
 
-  $: {
+  $effect(() => {
     params = generateParams(data);
     storeFilterValue(type, data);
-  }
+  });
 
-  let open = false;
+  let open = $state(false);
 </script>
 
 <input type="checkbox" id="search-options-{type}" class="modal-toggle" bind:checked={open} />
@@ -33,22 +36,22 @@
       {$t('common.search_options')}
     </div>
     <div class="form-control items-stretch w-full my-4 max-h overflow-y-auto">
-      {#each filters as filter}
-        {#if filter instanceof Array}
+      {#each filters as _, i}
+        {#if filters[i] instanceof Array}
           <div class="flex flex-wrap md:flex-nowrap items-center gap-x-0 md:gap-x-5">
-            {#each filter as filter}
-              <Item bind:filter />
+            {#each filters[i] as _, j}
+              <Item bind:filter={filters[i][j]} />
             {/each}
           </div>
         {:else}
-          <Item bind:filter />
+          <Item bind:filter={filters[i]} />
         {/if}
       {/each}
     </div>
     <button
       type="submit"
       class="btn mx-1 w-full border-2 normal-border bg-base-100 hover:btn-outline my-2"
-      on:click={() => (open = false)}
+      onclick={() => (open = false)}
     >
       {$t('common.search')}
     </button>

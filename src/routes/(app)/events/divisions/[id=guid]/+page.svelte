@@ -14,91 +14,108 @@
   import { t } from '$lib/translations/config';
   import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, index, id, api, user } = $derived(data);
 
-  $: ({ searchParams, index, id, api, user } = data);
-
-  $: divisionQuery = createQuery(api.event.division.info({ id }));
-  $: eventQuery = createQuery(
-    api.event.info(
-      { id: $divisionQuery.data?.data.eventId ?? '' },
-      { enabled: $divisionQuery.isSuccess },
+  let divisionQuery = $derived(createQuery(api.event.division.info({ id })));
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: leaderboardQuery = createQuery(
-    api.event.division.leaderboard(
-      {
-        id,
-        ...searchParams,
-      },
-      { enabled: index == 1 },
+  let leaderboardQuery = $derived(
+    createQuery(
+      api.event.division.leaderboard(
+        {
+          id,
+          ...searchParams,
+        },
+        { enabled: index == 1 },
+      ),
     ),
   );
-  $: tasksQuery = createQuery(
-    api.event.task.listAll({
-      rangeDivisionId: [id],
-      rangeType: [0],
-      order: ['dateExecuted', 'dateCreated'],
-    }),
-  );
-  $: divisionTag = createQuery(
-    api.tag.info(
-      { id: $divisionQuery.data?.data.tagId ?? '' },
-      { enabled: $divisionQuery.isSuccess },
+  let tasksQuery = $derived(
+    createQuery(
+      api.event.task.listAll({
+        rangeDivisionId: [id],
+        rangeType: [0],
+        order: ['dateExecuted', 'dateCreated'],
+      }),
     ),
   );
-  $: tagsQuery = createQuery(
-    api.event.division.listAllTags({ id }, { enabled: $divisionQuery.isSuccess }),
-  );
-  $: songPrompts = createQuery(
-    api.event.division.listSongPrompts(
-      { id },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 0 },
+  let divisionTag = $derived(
+    createQuery(
+      api.tag.info(
+        { id: $divisionQuery.data?.data.tagId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: chartPrompts = createQuery(
-    api.event.division.listChartPrompts(
-      { id },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 0 },
+  let tagsQuery = $derived(
+    createQuery(api.event.division.listAllTags({ id }, { enabled: $divisionQuery.isSuccess })),
+  );
+  let songPrompts = $derived(
+    createQuery(
+      api.event.division.listSongPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 0 },
+      ),
     ),
   );
-  $: songEntries = createQuery(
-    api.event.division.listSongEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        perPage: 10,
-      },
-      {
-        enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 && index == 2,
-      },
+  let chartPrompts = $derived(
+    createQuery(
+      api.event.division.listChartPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 0 },
+      ),
     ),
   );
-  $: chartEntries = createQuery(
-    api.event.division.listChartEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        perPage: 10,
-      },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 2 },
+  let songEntries = $derived(
+    createQuery(
+      api.event.division.listSongEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          perPage: 10,
+        },
+        {
+          enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 && index == 2,
+        },
+      ),
     ),
   );
-  $: recordEntries = createQuery(
-    api.event.division.listRecordEntries(
-      {
-        id,
-        ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
-        perPage: 10,
-      },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 2 },
+  let chartEntries = $derived(
+    createQuery(
+      api.event.division.listChartEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          perPage: 10,
+        },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 2 },
+      ),
+    ),
+  );
+  let recordEntries = $derived(
+    createQuery(
+      api.event.division.listRecordEntries(
+        {
+          id,
+          ...queryString.parse($divisionQuery.data?.data.suggestedEntrySearch ?? ''),
+          perPage: 10,
+        },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 2 },
+      ),
     ),
   );
 
   const maxMemberDisplay = 2;
-  let teamName = '';
-  let inviteCode = '';
-  let focus = 0;
+  let teamName = $state('');
+  let inviteCode = $state('');
+  let focus = $state(0);
 </script>
 
 <svelte:head>
@@ -148,11 +165,11 @@
       >
         ✕
       </label>
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div class="flex flex-col lg:flex-row py-4">
         <div
           class="form-control flex-grow"
-          on:mouseenter={() => {
+          onmouseenter={() => {
             focus = 1;
           }}
         >
@@ -163,7 +180,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -175,7 +192,7 @@
           </label>
           <button
             class="btn btn-outline border-2 normal-border hover:btn-secondary join-item"
-            on:click={() => {
+            onclick={() => {
               goto(`/events/teams/new?divisionId=${division.id}&name=${teamName}`);
             }}
             disabled={focus == 2}
@@ -187,7 +204,7 @@
           <div class="divider lg:divider-horizontal">{$t('common.or')}</div>
           <div
             class="form-control flex-grow"
-            on:mouseenter={() => {
+            onmouseenter={() => {
               focus = 2;
             }}
           >
@@ -198,7 +215,7 @@
               </span>
               <input
                 type="text"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -210,7 +227,7 @@
             </label>
             <button
               class="btn btn-outline border-2 normal-border hover:btn-secondary join-item"
-              on:click={() => {
+              onclick={() => {
                 goto(`/events/teams/invite?code=${inviteCode.slice(-6)}`);
               }}
               disabled={focus == 1}
@@ -312,40 +329,21 @@
         <div class="lg:w-full">
           <div role="tablist" class="tabs tabs-lifted backdrop-blur-xl rounded-t-2xl mt-4">
             {#if division.type !== 0}
-              <div
+              <a
                 role="tab"
+                href="?index=0"
                 tabindex="0"
                 class="tab {index == 0 ? 'tab-active' : ''}"
-                on:click={() => {
-                  index = 0;
-                }}
-                on:keyup
               >
                 {$t(division.type === 1 ? 'event.division.song_pool' : 'event.division.chart_pool')}
-              </div>
+              </a>
             {/if}
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 1 ? 'tab-active' : ''}"
-              on:click={() => {
-                index = 1;
-              }}
-              on:keyup
-            >
+            <a role="tab" href="?index=1" tabindex="0" class="tab {index == 1 ? 'tab-active' : ''}">
               {$t('common.leaderboard')}
-            </div>
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 2 ? 'tab-active' : ''}"
-              on:click={() => {
-                index = 2;
-              }}
-              on:keyup
-            >
+            </a>
+            <a role="tab" href="?index=2" tabindex="0" class="tab {index == 2 ? 'tab-active' : ''}">
               {$t('event.division.entries')}
-            </div>
+            </a>
           </div>
           <div
             class="card rounded-t-none w-full bg-base-100 transition border-t-0 border-2 normal-border hover:shadow-lg mb-4"
@@ -403,10 +401,10 @@
                             .includes(user?.id ?? 0)
                             ? 'bg-info-content bg-opacity-20'
                             : 'bg-base-100 bg-opacity-0 hover:bg-base-300'} hover:bg-opacity-75 hover:cursor-pointer"
-                          on:click={() => {
+                          onclick={() => {
                             goto(`/events/teams/${team.id}`);
                           }}
-                          on:mouseenter={() => {
+                          onmouseenter={() => {
                             preloadData(`/events/teams/${team.id}`);
                           }}
                         >

@@ -3,10 +3,10 @@
 
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ api } = data);
+  let { data } = $props();
+  let { api } = $derived(data);
 
-  $: headlineQuery = createQuery(api.headline.getStudio());
+  let headlineQuery = $derived(createQuery(api.headline.getStudio()));
 </script>
 
 <svelte:head>

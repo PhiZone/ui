@@ -1,10 +1,13 @@
 <script lang="ts">
   import type { TagDto } from '$lib/api/tag';
 
-  export let tag: TagDto | string;
-  export let full = false;
-  export let removeFunction: (() => void) | undefined = undefined;
-  export let removeHover = false;
+  interface Props {
+    tag: TagDto | string;
+    full?: boolean;
+    removeFunction?: () => void;
+    removeHover?: boolean;
+  }
+  let { tag, full = false, removeFunction, removeHover = $bindable(false) }: Props = $props();
 </script>
 
 {#if !tag || typeof tag === 'string'}
@@ -15,15 +18,15 @@
   >
     {tag}
     {#if removeFunction}
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <span
         class="cursor-pointer"
-        on:click={removeFunction}
-        on:keyup
-        on:mouseenter={() => {
+        onclick={removeFunction}
+        onmouseenter={() => {
           removeHover = true;
         }}
-        on:mouseleave={() => {
+        onmouseleave={() => {
           removeHover = false;
         }}
       >
@@ -65,15 +68,15 @@
   >
     <p>{tag.name}</p>
     {#if removeFunction}
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <span
         class="cursor-pointer"
-        on:click={removeFunction}
-        on:keyup
-        on:mouseenter={() => {
+        onclick={removeFunction}
+        onmouseenter={() => {
           removeHover = true;
         }}
-        on:mouseleave={() => {
+        onmouseleave={() => {
           removeHover = false;
         }}
       >

@@ -3,19 +3,22 @@
 
   import type { ChartSubmissionDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
 
   import ChartLabel from './ChartDifficulty.svelte';
 
-  $: ({ user, api } = $page.data);
+  let { user, api } = $derived(page.data);
 
-  export let chart: ChartSubmissionDto;
+  interface Props {
+    chart: ChartSubmissionDto;
+  }
+  let { chart }: Props = $props();
 
-  $: charter = richtext(chart.authorName ?? '');
-  $: uploader = createQuery(api.user.info({ id: chart.ownerId }));
+  let charter = $derived(richtext(chart.authorName ?? ''));
+  let uploader = $derived(createQuery(api.user.info({ id: chart.ownerId })));
 </script>
 
 <div

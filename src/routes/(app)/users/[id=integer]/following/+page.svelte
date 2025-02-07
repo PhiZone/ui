@@ -6,10 +6,10 @@
   import User from '$lib/components/User.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, id, page, api } = data);
+  let { data } = $props();
+  let { searchParams, id, page, api } = $derived(data);
 
-  $: query = createQuery(api.user.followees({ id, page }));
+  let query = $derived(createQuery(api.user.followees({ id, page })));
 </script>
 
 <svelte:head>

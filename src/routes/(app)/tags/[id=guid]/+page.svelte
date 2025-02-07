@@ -7,12 +7,12 @@
   import { PAGINATION_PER_PAGE } from '$lib/constants';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ id, api } = data);
+  let { data } = $props();
+  let { id, api } = $derived(data);
 
-  $: tag = createQuery(api.tag.info({ id }));
-  $: songs = createQuery(api.song.listTag({ id }));
-  $: charts = createQuery(api.chart.listTag({ id }));
+  let tag = $derived(createQuery(api.tag.info({ id })));
+  let songs = $derived(createQuery(api.song.listTag({ id })));
+  let charts = $derived(createQuery(api.chart.listTag({ id })));
 </script>
 
 <svelte:head>

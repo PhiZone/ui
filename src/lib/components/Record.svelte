@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ChartDto, RecordDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import {
     getCompressedImage,
     getGrade,
@@ -10,16 +10,18 @@
     parseDateTime,
   } from '$lib/utils';
 
-  $: ({ user } = $page.data);
+  let { user } = $derived(page.data);
 
-  export let record: RecordDto;
-  export let chart: ChartDto | undefined = undefined;
-  export let rank: number | undefined = undefined;
-  export let showChart = true;
+  interface Props {
+    record: RecordDto;
+    chart?: ChartDto;
+    rank?: number;
+    showChart?: boolean;
+  }
+  let { record, chart, rank, showChart = true }: Props = $props();
 
-  let c = record.chart ?? chart;
-
-  $: grade = getGrade(record.score, record.isFullCombo);
+  let c = $derived(record.chart ?? chart);
+  let grade = $derived(getGrade(record.score, record.isFullCombo));
 </script>
 
 <div

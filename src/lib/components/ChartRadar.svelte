@@ -14,9 +14,12 @@
 
   import Radar from './chart/Radar.svelte';
 
-  export let chart: ChartDto;
+  interface Props {
+    chart: ChartDto;
+  }
+  let { chart }: Props = $props();
 
-  $: data = {
+  let data = $derived({
     labels: [
       $t('chart.arrangement'),
       $t('chart.gameplay'),
@@ -42,7 +45,7 @@
         borderWidth: 2,
       },
     ],
-  };
+  });
 
   ChartJS.register(PointElement, LineElement, RadialLinearScale, Tooltip, Filler);
   ChartJS.defaults.font.family = "'Outfit', 'Noto Sans SC', sans-serif";

@@ -17,31 +17,33 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, hasEventPermission, parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
 
-  $: ({ user, id, divisionId, api } = data);
+  let { user, id, divisionId, api } = $derived(data);
 
-  $: options = api.event.task.info({ id });
-  $: query = createQuery({ ...options });
-  $: division = createQuery(api.event.division.info({ id: divisionId }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+  let options = $derived(api.event.task.info({ id }));
+  let query = $derived(createQuery({ ...options }));
+  let division = $derived(createQuery(api.event.division.info({ id: divisionId })));
+  let event = $derived(
+    createQuery(
+      api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
+    ),
   );
 
   const queryClient = useQueryClient();
 
-  let task: EventTaskDto;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let errors: Map<string, string> | undefined = undefined;
-  let patch = new Array<PatchElement>();
+  let task: EventTaskDto = $state($query.data?.data)!;
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let errors: Map<string, string> | undefined = $state();
+  let patch = $state(new Array<PatchElement>());
 
-  let year = new Date().getFullYear();
-  let month = new Date().getMonth() + 1;
-  let day = new Date().getDate();
-  let hour = new Date().getHours();
-  let minute = new Date().getMinutes();
-  let second = new Date().getSeconds();
+  let year = $state(new Date().getFullYear());
+  let month = $state(new Date().getMonth() + 1);
+  let day = $state(new Date().getDate());
+  let hour = $state(new Date().getHours());
+  let minute = $state(new Date().getMinutes());
+  let second = $state(new Date().getSeconds());
 
   const handleDateExecuted = () => {
     const date = new Date(year, month - 1, day, hour, minute, second);
@@ -80,18 +82,20 @@
     }
   };
 
-  $: if (!task && $query.isSuccess) {
-    task = $query.data.data;
-    if (task.dateExecuted) {
-      const date = new Date(task.dateExecuted);
-      year = date.getFullYear();
-      month = date.getMonth() + 1;
-      day = date.getDate();
-      hour = date.getHours();
-      minute = date.getMinutes();
-      second = date.getSeconds();
+  $effect.pre(() => {
+    if (!task && $query.isSuccess) {
+      task = $query.data.data;
+      if (task.dateExecuted) {
+        const date = new Date(task.dateExecuted);
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        hour = date.getHours();
+        minute = date.getMinutes();
+        second = date.getSeconds();
+      }
     }
-  }
+  });
 </script>
 
 <svelte:head>
@@ -136,7 +140,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -148,7 +152,7 @@
                 errors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={task.name}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/name', e.currentTarget.value);
               }}
             />
@@ -171,7 +175,7 @@
                 errors?.get('type') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
               value={task.type}
-              on:input={(e) => {
+              oninput={(e) => {
                 task.type = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/type', task.type);
               }}
@@ -196,7 +200,7 @@
               <div class="join w-3/4">
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     year = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -209,7 +213,7 @@
                 </select>
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     month = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -222,7 +226,7 @@
                 </select>
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     day = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -235,7 +239,7 @@
                 </select>
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     hour = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -248,7 +252,7 @@
                 </select>
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     minute = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -261,7 +265,7 @@
                 </select>
                 <select
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     second = parseInt(e.currentTarget.value);
                     handleDateExecuted();
                   }}
@@ -294,7 +298,7 @@
                 errors?.get('description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
               } w-3/4 h-28`}
               bind:value={task.description}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
               }}
             ></textarea>
@@ -318,7 +322,7 @@
                 errors?.get('code') ? 'hover:textarea-error' : 'hover:textarea-secondary'
               } w-3/4 h-28`}
               bind:value={task.code}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/code', e.currentTarget.value);
               }}
             ></textarea>
@@ -328,7 +332,7 @@
             class="absolute right-2 bottom-2 btn btn-sm {task.code
               ? 'border-2 hover:btn-outline backdrop-blur'
               : 'btn-disabled'}"
-            on:click={() => {
+            onclick={() => {
               task.code = '';
               patch = applyPatch(patch, 'remove', '/code');
             }}
@@ -352,7 +356,7 @@
                   ? 'btn-ghost'
                   : 'btn-outline border-2 normal-border'} w-full"
               disabled={status === Status.SENDING}
-              on:click={update}
+              onclick={update}
             >
               {status === Status.ERROR
                 ? $t('common.error')
@@ -460,8 +464,11 @@
           <div
             class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100 overflow-hidden"
           >
-            <Highlight language={csharp} code={task.code} let:highlighted>
-              <LineNumbers {highlighted} hideBorder />
+            {/* @ts-expect-error svelte-highlight does not support svelte 5 */ null}
+            <Highlight language={csharp} code={task.code}>
+              {#snippet children({ highlighted })}
+                <LineNumbers {highlighted} hideBorder />
+              {/snippet}
             </Highlight>
           </div>
         </div>

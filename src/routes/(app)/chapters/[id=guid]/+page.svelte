@@ -3,19 +3,19 @@
 
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
+  import Illustration from '$lib/components/Illustration.svelte';
   import Like from '$lib/components/Like.svelte';
   import Song from '$lib/components/Song.svelte';
   import User from '$lib/components/User.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, api } = $derived(data);
 
-  let illustrationModalEl: HTMLDialogElement;
+  let chapterQuery = $derived(createQuery(api.chapter.info({ id })));
+  let songsQuery = $derived(createQuery(api.chapter.listSongs({ id })));
 
-  $: ({ searchParams, id, api } = data);
-
-  $: chapterQuery = createQuery(api.chapter.info({ id }));
-  $: songsQuery = createQuery(api.chapter.listSongs({ id }));
+  let illustrationOpen = $state(false);
 </script>
 
 <svelte:head>
@@ -26,34 +26,11 @@
 
 {#if $chapterQuery.isSuccess}
   {@const chapter = $chapterQuery.data.data}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <dialog
-    bind:this={illustrationModalEl}
-    id="illustration_modal"
-    class="modal"
-    on:click|self={() => illustrationModalEl.close()}
-  >
-    <div class="modal-box bg-base-100 p-0 max-w-fit aspect-video">
-      <button
-        on:click|self={() => illustrationModalEl.close()}
-        class="btn btn-sm btn-circle btn-ghost border-2 hover:btn-outline absolute right-2 top-2 text-white mix-blend-difference hover:text-inherit hover:mix-blend-normal"
-      >
-        ✕
-      </button>
-      <div class="absolute left-2 bottom-2">
-        <div class="join join-horizontal">
-          <div class="btn btn-secondary btn-xs join-item text-base no-animation">
-            {$t('common.illustrator')}
-          </div>
-          <div class="btn btn-xs join-item text-base no-animation">
-            {chapter.illustrator}
-          </div>
-        </div>
-      </div>
-      <img src={chapter.illustration} alt="Illustration" class="object-cover" />
-    </div>
-  </dialog>
+  <Illustration
+    bind:open={illustrationOpen}
+    illustrator={chapter.illustrator}
+    illustration={chapter.illustration}
+  />
 
   <div class="background min-h-screen" style:background-image="url({chapter.illustration})">
     <div class="hero-overlay bg-opacity-60"></div>
@@ -77,7 +54,7 @@
             class="btn-md w-36 text-lg border-neutral-content text-neutral-content btn-outline backdrop-blur"
           />
           <button
-            on:click={() => illustrationModalEl.showModal()}
+            onclick={() => (illustrationOpen = true)}
             class="btn border-2 border-neutral-content text-neutral-content btn-outline btn-md min-w-fit w-36 text-lg backdrop-blur"
           >
             {$t('common.view_illustration')}

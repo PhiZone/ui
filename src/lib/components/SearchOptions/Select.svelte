@@ -6,7 +6,10 @@
 
   import { t } from '$lib/translations/config';
 
-  export let filter: IFilterSelect;
+  interface Props {
+    filter: IFilterSelect;
+  }
+  let { filter = $bindable() }: Props = $props();
 
   overrideItemIdKeyNameBeforeInitialisingDndZones('id');
 

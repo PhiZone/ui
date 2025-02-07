@@ -11,20 +11,24 @@
   import { t } from '$lib/translations/config';
   import { getGrade, parseDateTime } from '$lib/utils';
 
-  export let data;
-  $: ({ searchParams, id, api } = data);
+  let { data } = $props();
+  let { searchParams, id, api } = $derived(data);
 
-  $: recordQuery = createQuery(api.record.info({ id }));
-  $: chart = createQuery(
-    api.chart.info(
-      { id: $recordQuery.data?.data.chartId ?? '' },
-      { enabled: $recordQuery.isSuccess },
+  let recordQuery = $derived(createQuery(api.record.info({ id })));
+  let chart = $derived(
+    createQuery(
+      api.chart.info(
+        { id: $recordQuery.data?.data.chartId ?? '' },
+        { enabled: $recordQuery.isSuccess },
+      ),
     ),
   );
-  $: application = createQuery(
-    api.application.info(
-      { id: $recordQuery.data?.data.applicationId ?? '' },
-      { enabled: $recordQuery.isSuccess },
+  let application = $derived(
+    createQuery(
+      api.application.info(
+        { id: $recordQuery.data?.data.applicationId ?? '' },
+        { enabled: $recordQuery.isSuccess },
+      ),
     ),
   );
 </script>

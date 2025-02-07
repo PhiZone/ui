@@ -3,17 +3,20 @@
 
   import { range } from '$lib/utils';
 
-  export let studio = false;
-  export let total: number;
-  export let perPage: number;
-  export let page: number;
-  export let pageName = 'page';
-  export let searchParams: ParsedQuery<string | number | boolean>;
+  interface Props {
+    studio?: boolean;
+    total: number;
+    perPage: number;
+    page: number;
+    pageName?: string;
+    searchParams: ParsedQuery<string | number | boolean>;
+  }
+  let { studio = false, total, perPage, page, pageName = 'page', searchParams }: Props = $props();
 
-  $: totalPages = Math.ceil(total / perPage);
-  $: nearbyPagesStart = page <= 5 ? 1 : page - 3;
-  $: nearbyPagesEnd = page >= totalPages - 4 ? totalPages : page + 3;
-  $: nearbyPages = range(nearbyPagesStart, nearbyPagesEnd + 1);
+  let totalPages = $derived(Math.ceil(total / perPage));
+  let nearbyPagesStart = $derived(page <= 5 ? 1 : page - 3);
+  let nearbyPagesEnd = $derived(page >= totalPages - 4 ? totalPages : page + 3);
+  let nearbyPages = $derived(range(nearbyPagesStart, nearbyPagesEnd + 1));
 
   const getSearch = (page: number) => {
     return queryString.stringify({ ...searchParams, [pageName]: page });

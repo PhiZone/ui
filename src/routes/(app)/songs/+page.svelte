@@ -7,10 +7,10 @@
   import Song from '$lib/components/Song.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, api } = data);
+  let { data } = $props();
+  let { searchParams, page, api } = $derived(data);
 
-  $: query = createQuery(api.song.list(searchParams));
+  let query = $derived(createQuery(api.song.list(searchParams)));
 </script>
 
 <svelte:head>

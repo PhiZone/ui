@@ -2,7 +2,7 @@
   import type { EventDto, HostshipDto } from '$lib/api/event';
   import type { PatchElement } from '$lib/api/types';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status } from '$lib/constants';
   import { analyze, gen, HOSTSHIP, REMOVE, UPDATE } from '$lib/hostshipPermissions';
   import { t } from '$lib/translations/config';
@@ -12,24 +12,27 @@
   import Tag from './Tag.svelte';
   import User from './User.svelte';
 
-  const { user, api } = $page.data;
+  let { user, api } = page.data;
 
-  export let event: EventDto;
-  export let hostship: HostshipDto;
-  export let isOwner = false;
-  export let isAdmin = false;
+  interface Props {
+    event: EventDto;
+    hostship: HostshipDto;
+    isOwner?: boolean;
+    isAdmin?: boolean;
+  }
+  let { event, hostship = $bindable(), isOwner = false, isAdmin = false }: Props = $props();
 
-  let deleted = false;
-  let patch = new Array<PatchElement>();
-  let status = Status.WAITING;
-  let errorCode = '';
+  let deleted = $state(false);
+  let patch = $state(new Array<PatchElement>());
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
   let updateErrors: Map<string, string> | undefined = undefined;
-  let showTags = true;
+  let showTags = $state(true);
 
-  let permissionOpen = false;
-  let permissionOperation = 0;
-  let permissionScope = 0;
-  let permissionIndex = 0;
+  let permissionOpen = $state(false);
+  let permissionOperation = $state(0);
+  let permissionScope = $state(0);
+  let permissionIndex = $state(0);
 
   const update = async () => {
     status = Status.SENDING;
@@ -120,7 +123,7 @@
       <div class="modal-action mt-3">
         <button
           class="btn btn-outline border-2 normal-border w-full"
-          on:click={() => {
+          onclick={() => {
             showTags = false;
             const permission = gen(
               permissionOperation,
@@ -135,7 +138,6 @@
               showTags = true;
             }, 0);
           }}
-          on:keyup
         >
           {$t('common.confirm')}
         </button>
@@ -158,7 +160,7 @@
           class="checkbox transition-all border-2 normal-border {deleted || !isOwner
             ? 'checkbox-disabled'
             : 'hover:checkbox-secondary'}"
-          on:change={() => {
+          onchange={() => {
             patch = applyPatch(patch, 'replace', '/isAdmin', hostship.isAdmin);
           }}
         />
@@ -175,7 +177,7 @@
           !hasEventPermission(user, event, UPDATE, HOSTSHIP)
             ? 'checkbox-disabled'
             : 'hover:checkbox-secondary'}"
-          on:change={() => {
+          onchange={() => {
             patch = applyPatch(patch, 'replace', '/isUnveiled', hostship.isUnveiled);
           }}
         />
@@ -193,7 +195,7 @@
           : 'hover:input-secondary'}"
         disabled={deleted || !hasEventPermission(user, event, UPDATE, HOSTSHIP)}
         bind:value={hostship.position}
-        on:input={() => {
+        oninput={() => {
           patch = applyPatch(patch, 'replace', '/position', hostship.position);
         }}
       />
@@ -203,7 +205,7 @@
           class="btn btn-xs {hostship.position && !deleted
             ? 'border-2 hover:btn-outline backdrop-blur'
             : 'btn-disabled'}"
-          on:click={() => {
+          onclick={() => {
             hostship.position = '';
             patch = applyPatch(patch, 'remove', '/position');
           }}
@@ -269,7 +271,7 @@
             ? 'btn-ghost'
             : 'btn-outline border-2 normal-border'} w-full"
         disabled={deleted || patch.length === 0 || status === Status.SENDING}
-        on:click={update}
+        onclick={update}
       >
         {status === Status.ERROR
           ? $t('common.error')

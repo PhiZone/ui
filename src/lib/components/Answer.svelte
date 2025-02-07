@@ -3,15 +3,18 @@
 
   import type { PetAnswerDto } from '$lib/api/pet';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  export let answer: PetAnswerDto;
+  let { user, api } = $derived(page.data);
 
-  $: ({ user, api } = $page.data);
+  interface Props {
+    answer: PetAnswerDto;
+  }
+  let { answer }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: answer.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: answer.ownerId })));
 </script>
 
 <div

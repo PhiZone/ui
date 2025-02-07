@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+  import { onMount } from 'svelte';
   import { superForm } from 'sveltekit-superforms';
 
-  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import Chart from '$lib/components/Chart.svelte';
   import Delete from '$lib/components/Delete.svelte';
@@ -13,8 +13,8 @@
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, hasEventPermission } from '$lib/utils.js';
 
-  export let data;
-  $: ({ user, id, searchParams, page, api } = data);
+  let { data } = $props();
+  let { user, id, searchParams, page, api } = $derived(data);
 
   const {
     enhance: resourceEnhance,
@@ -31,43 +31,59 @@
     },
   });
 
-  let queryResource = true;
-  let newResourceSearch: string;
-  let newResourceId: string | null = null;
-  let resourceOpen = false;
+  let queryResource = $state(true);
+  let newResourceSearch: string | undefined = $state();
+  let newResourceId: string | null = $state(null);
+  let resourceOpen = $state(false);
 
-  $: divisionQuery = createQuery(api.event.division.info({ id }));
-  $: if (browser && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0) {
-    goto(`/events/divisions/${id}`);
-  }
-  $: eventQuery = createQuery(
-    api.event.info(
-      { id: $divisionQuery.data?.data.eventId ?? '' },
-      { enabled: $divisionQuery.isSuccess },
+  let divisionQuery = $derived(createQuery(api.event.division.info({ id })));
+  onMount(() => {
+    if ($divisionQuery.isSuccess && $divisionQuery.data.data.type == 0) {
+      goto(`/events/divisions/${id}`);
+    }
+  });
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: songPrompts = createQuery(
-    api.event.division.listSongPrompts(
-      { id },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+  let songPrompts = $derived(
+    createQuery(
+      api.event.division.listSongPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+      ),
     ),
   );
-  $: chartPrompts = createQuery(
-    api.event.division.listChartPrompts(
-      { id },
-      { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+  let chartPrompts = $derived(
+    createQuery(
+      api.event.division.listChartPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+      ),
     ),
   );
-  $: songSearch = createQuery(
-    api.song.listAll(
-      { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+  let songSearch = $derived(
+    createQuery(
+      api.song.listAll(
+        { search: newResourceSearch },
+        {
+          enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1,
+        },
+      ),
     ),
   );
-  $: chartSearch = createQuery(
-    api.chart.listAll(
-      { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+  let chartSearch = $derived(
+    createQuery(
+      api.chart.listAll(
+        { search: newResourceSearch },
+        {
+          enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2,
+        },
+      ),
     ),
   );
 </script>
@@ -126,7 +142,7 @@
                   $songSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
                 }`}
                 bind:value={newResourceSearch}
-                on:input={() => {
+                oninput={() => {
                   queryResource = false;
                 }}
               />
@@ -140,7 +156,7 @@
                     : 'btn-disabled'
                 }`}
                 aria-label={$t('common.search')}
-                on:click={() => {
+                onclick={() => {
                   queryResource = true;
                 }}
               >
@@ -198,7 +214,7 @@
                   $chartSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
                 }`}
                 bind:value={newResourceSearch}
-                on:input={() => {
+                oninput={() => {
                   queryResource = false;
                 }}
               />
@@ -212,7 +228,7 @@
                     : 'btn-disabled'
                 }`}
                 aria-label={$t('common.search')}
-                on:click={() => {
+                onclick={() => {
                   queryResource = true;
                 }}
               >

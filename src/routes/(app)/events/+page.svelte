@@ -7,10 +7,10 @@
   import SearchBar from '$lib/components/SearchBar.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, api } = data);
+  let { data } = $props();
+  let { searchParams, page, api } = $derived(data);
 
-  $: query = createQuery(api.event.list(searchParams));
+  let query = $derived(createQuery(api.event.list(searchParams)));
 </script>
 
 <svelte:head>

@@ -18,56 +18,63 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, convertTime, parseTime } from '$lib/utils';
 
-  export let data;
-
-  $: ({ id, user, api } = data);
+  let { data } = $props();
+  let { id, user, api } = $derived(data);
 
   interface TargetElement extends HTMLElement {
     noUiSlider?: API;
   }
 
-  let song: SongSubmissionDto;
-  let isOriginal = false;
-  let audio: HTMLAudioElement | undefined;
-  let slider: TargetElement;
-  let showPreview = 0;
-  let previewStatus = 0;
+  let options = $derived(api.song.submission.info({ id }));
+  let submission = $derived(createQuery({ ...options }));
+
+  let song: SongSubmissionDto = $state($submission.data?.data)!; // FIXME: hack
+  let isOriginal = $state(false);
+  let audio: HTMLAudioElement | undefined = $state();
+  let slider: TargetElement | undefined = $state();
+  let showPreview = $state(0);
+  let previewStatus = $state(0);
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
-  let previewTime = 0;
-  let showTags = true;
-  let newTag = '';
-  let newComposerId: number | null = null;
-  let newComposerDisplay = '';
-  let queryComposer = false;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let error: ResponseDtoError | undefined = undefined;
-  let errors: Map<string, string> | undefined = undefined;
-  let illustrationFiles: FileList;
-  let illustrationCropping = false;
-  let illustrationSrc: string;
+  let previewTime = $state(0);
+  let showTags = $state(true);
+  let newTag = $state('');
+  let newComposerId: number | null = $state(null);
+  let newComposerDisplay = $state('');
+  let queryComposer = $state(false);
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let error: ResponseDtoError | undefined = $state();
+  let errors: Map<string, string> | undefined = $state();
+  let illustrationFiles: FileList | undefined = $state();
+  let illustrationCropping = $state(false);
+  let illustrationSrc: string = $state('');
 
-  $: options = api.song.submission.info({ id });
-  $: submission = createQuery({ ...options });
-  $: composer = createQuery(
-    api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
-  );
-  $: composerPreview = richtext(song.authorName ?? '');
-  $: existingTags = createQuery(
-    api.tag.listAll(
-      {
-        rangeNormalizedName:
-          song.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
-      },
-      { enabled: (!showTags || $submission.isSuccess) && song.tags.length > 0 },
+  $effect(() => {
+    if (!song && $submission.isSuccess) {
+      song = $submission.data.data;
+      isOriginal = !!song.originalityProof;
+    }
+  });
+
+  let composer = $derived(
+    createQuery(
+      api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
     ),
   );
 
-  $: if (!song && $submission.isSuccess) {
-    song = $submission.data.data;
-    isOriginal = !!song.originalityProof;
-  }
+  let composerPreview = $derived(richtext(song.authorName ?? ''));
+  let existingTags = $derived(
+    createQuery(
+      api.tag.listAll(
+        {
+          rangeNormalizedName:
+            song.tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+        },
+        { enabled: (!showTags || $submission.isSuccess) && song.tags.length > 0 },
+      ),
+    ),
+  );
 
   onMount(() => {
     if (song) {
@@ -84,7 +91,7 @@
   const handlePreview = () => {
     pausePreview();
     previewStatus = 0;
-    const values = slider.noUiSlider?.get() as string[];
+    const values = slider!.noUiSlider?.get() as string[];
     song.previewStart = convertTime(parseFloat(values[0]));
     song.previewEnd = convertTime(parseFloat(values[1]));
     previewTime = parseTime(song.previewStart);
@@ -101,7 +108,7 @@
     audio = new Audio(url);
     showPreview = 1;
     audio.addEventListener('loadedmetadata', () => {
-      if (!audio) return;
+      if (!audio || !slider) return;
       showPreview = 2;
       audio.volume = 0.5;
       slider.noUiSlider?.destroy();
@@ -190,7 +197,7 @@
   };
 
   const handleIllustration = () => {
-    if (illustrationFiles.length > 0) {
+    if (illustrationFiles && illustrationFiles.length > 0) {
       const reader = new FileReader();
       reader.readAsDataURL(illustrationFiles[0]);
       reader.onload = () => {
@@ -200,7 +207,7 @@
     }
   };
 
-  let patch = new Array<PatchElement>();
+  let patch = $state(new Array<PatchElement>());
 
   const update = async () => {
     status = Status.SENDING;
@@ -245,8 +252,8 @@
     title={$t('common.image_cropper')}
     src={illustrationSrc}
     aspectRatio={16 / 9}
-    on:submit={async (e) => {
-      const resp = await api.song.submission.updateFile('illustration', { id, File: e.detail });
+    submit={async (blob) => {
+      const resp = await api.song.submission.updateFile('illustration', { id, File: blob });
       if (resp.ok) {
         invalidateAll();
         await queryClient.invalidateQueries({ queryKey: options.queryKey });
@@ -296,7 +303,7 @@
             $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
-          on:input={() => {
+          oninput={() => {
             queryComposer = false;
           }}
         />
@@ -308,7 +315,7 @@
                 : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
-          on:click={() => {
+          onclick={() => {
             queryComposer = true;
           }}
         >
@@ -327,14 +334,14 @@
         />
       </label>
       <div class="modal-action mt-3 px-4">
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="studio-composer"
           class="btn border-2 normal-border btn-outline"
-          on:click={() => {
+          onclick={() => {
             song.authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
-          on:keyup
+          onkeyup={null}
         >
           {$t('common.submit')}
         </label>
@@ -354,7 +361,7 @@
       </div>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
-          <form class="w-full form-control" on:submit|preventDefault>
+          <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
             <div class="flex justify-start items-center my-2 w-full">
               <span class="w-32 place-self-center">{$t('song.original')}</span>
               <div class="flex w-1/3">
@@ -362,7 +369,7 @@
                   type="checkbox"
                   class="toggle border-2 toggle-secondary"
                   bind:checked={isOriginal}
-                  on:change={() => {
+                  onchange={() => {
                     if (isOriginal) {
                       if (song.editionType > 2) {
                         song.editionType = 0;
@@ -390,8 +397,8 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:change={handleAudio}
-                on:input={handleFile}
+                onchange={handleAudio}
+                oninput={handleFile}
               />
               {#if !!errors?.get('File')}
                 <span class="w-2/3 text-error">{errors?.get('File')}</span>
@@ -412,7 +419,7 @@
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
                 bind:files={illustrationFiles}
-                on:change={handleIllustration}
+                onchange={handleIllustration}
               />
               {#if !!errors?.get('Illustration')}
                 <span class="w-2/3 text-error">
@@ -437,7 +444,7 @@
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     handleFile(e, 'originalityProof');
                   }}
                 />
@@ -465,7 +472,7 @@
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     handleFile(e, 'license');
                   }}
                 />
@@ -486,7 +493,7 @@
                         type="button"
                         aria-label={$t('song.pause')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click={handlePreviewPlay}
+                        onclick={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-pause fa-xl"></i>
                       </button>
@@ -495,7 +502,7 @@
                         type="button"
                         aria-label={$t('song.play')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click={handlePreviewPlay}
+                        onclick={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-play fa-lg"></i>
                       </button>
@@ -506,7 +513,7 @@
                       type="text"
                       id="preview_start"
                       name="PreviewStart"
-                      on:keydown={(e) => {
+                      onkeydown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
                         }
@@ -514,7 +521,7 @@
                       placeholder={$t('studio.submission.start')}
                       class="input w-1/6 text-right"
                       value={convertTime(song.previewStart)}
-                      on:input={(e) => {
+                      oninput={(e) => {
                         if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
                           return;
                         song.previewStart = convertTime(parseTime(e.currentTarget.value));
@@ -527,7 +534,7 @@
                         pausePreview();
                         previewStatus = 0;
                         previewTime = parseTime(song.previewStart);
-                        slider.noUiSlider?.set([
+                        slider!.noUiSlider?.set([
                           parseTime(song.previewStart),
                           parseTime(song.previewEnd),
                         ]);
@@ -544,7 +551,7 @@
                       type="text"
                       id="preview_end"
                       name="PreviewEnd"
-                      on:keydown={(e) => {
+                      onkeydown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
                         }
@@ -552,7 +559,7 @@
                       placeholder={$t('studio.submission.end')}
                       class="input w-1/6 text-left"
                       value={convertTime(song.previewEnd)}
-                      on:input={(e) => {
+                      oninput={(e) => {
                         if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
                           return;
                         song.previewEnd = convertTime(parseTime(e.currentTarget.value));
@@ -564,7 +571,7 @@
                           return;
                         pausePreview();
                         previewStatus = 0;
-                        slider.noUiSlider?.set([
+                        slider!.noUiSlider?.set([
                           parseTime(song.previewStart),
                           parseTime(song.previewEnd),
                         ]);
@@ -584,7 +591,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -596,7 +603,7 @@
                     errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.title}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/title', e.currentTarget.value);
                   }}
                 />
@@ -621,7 +628,7 @@
                     errors?.get('EditionType') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   bind:value={song.editionType}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(
                       patch,
                       'replace',
@@ -642,7 +649,7 @@
                 {#if song.editionType !== 0}
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -654,7 +661,7 @@
                       errors?.get('Edition') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.edition}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       patch = applyPatch(patch, 'replace', '/edition', e.currentTarget.value);
                     }}
                   />
@@ -696,7 +703,7 @@
                     errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
                   }`}
                   value={`${song.accessibility}`}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(
                       patch,
                       'replace',
@@ -731,7 +738,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -745,20 +752,20 @@
                     errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.authorName}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
                   }}
                 />
                 {#if isOriginal}
-                  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                   <label
                     for="studio-composer"
                     class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
-                    on:click={() => {
+                    onclick={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
                     }}
-                    on:keyup
+                    onkeyup={null}
                   >
                     {$t('studio.submission.add_composer')}
                   </label>
@@ -787,7 +794,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -799,7 +806,7 @@
                     errors?.get('Illustrator') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.illustrator}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/illustrator', e.currentTarget.value);
                   }}
                 />
@@ -818,7 +825,7 @@
                 <div class="flex w-3/4">
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -830,7 +837,7 @@
                       errors?.get('MinBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.minBpm}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       patch = applyPatch(
                         patch,
                         'replace',
@@ -841,7 +848,7 @@
                   />
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -853,7 +860,7 @@
                       errors?.get('Bpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.bpm}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       patch = applyPatch(
                         patch,
                         'replace',
@@ -864,7 +871,7 @@
                   />
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -876,7 +883,7 @@
                       errors?.get('MaxBpm') ? 'hover:input-error' : 'hover:input-secondary'
                     }`}
                     bind:value={song.maxBpm}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       patch = applyPatch(
                         patch,
                         'replace',
@@ -900,7 +907,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -912,7 +919,7 @@
                     errors?.get('Offset') ? 'hover:input-error' : 'hover:input-secondary'
                   }`}
                   bind:value={song.offset}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(
                       patch,
                       'replace',
@@ -941,7 +948,7 @@
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
                   bind:value={song.description}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
                 ></textarea>
@@ -951,7 +958,7 @@
                 class="absolute right-2 bottom-2 btn btn-sm {song.description
                   ? 'border-2 hover:btn-outline backdrop-blur'
                   : 'btn-disabled'}"
-                on:click={() => {
+                onclick={() => {
                   song.description = '';
                   patch = applyPatch(patch, 'remove', '/description');
                 }}
@@ -969,7 +976,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       if (!newTag || song.tags.includes(newTag)) return;
@@ -991,7 +998,8 @@
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
                   aria-label={$t('common.add')}
-                  on:click|preventDefault={() => {
+                  onclick={(e) => {
+                    e.preventDefault();
                     if (!newTag || song.tags.includes(newTag)) return;
                     showTags = false;
                     song.tags.push(newTag);
@@ -1001,7 +1009,6 @@
                       showTags = true;
                     }, 0);
                   }}
-                  on:keyup
                 >
                   <i class="fa-solid fa-plus"></i>
                 </button>
@@ -1052,7 +1059,7 @@
                       ? 'btn-ghost'
                       : 'btn-outline border-2 normal-border'} w-full"
                   disabled={status == Status.SENDING}
-                  on:click={update}
+                  onclick={update}
                 >
                   {status === Status.ERROR
                     ? $t('common.error')

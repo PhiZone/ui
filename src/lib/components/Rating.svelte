@@ -1,7 +1,10 @@
-<script>
-  export let rating = 0;
-  export let size = 'sm';
-  export let direction = 'right';
+<script lang="ts">
+  interface Props {
+    rating?: number;
+    size?: string;
+    direction?: string;
+  }
+  let { rating = 0, size = 'sm', direction = 'right' }: Props = $props();
 </script>
 
 <div class="tooltip tooltip-{direction}" data-tip={rating.toFixed(2)}>
