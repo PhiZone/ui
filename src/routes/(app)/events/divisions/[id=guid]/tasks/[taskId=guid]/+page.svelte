@@ -82,7 +82,7 @@
     }
   };
 
-  $effect.pre(() => {
+  $effect(() => {
     if (!task && $query.isSuccess) {
       task = $query.data.data;
       if (task.dateExecuted) {
@@ -111,7 +111,7 @@
 </svelte:head>
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $query.isSuccess}
+{#if $query.isSuccess && task}
   <input
     type="checkbox"
     id="task-update-{task.id}"

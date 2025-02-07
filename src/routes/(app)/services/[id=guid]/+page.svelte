@@ -88,7 +88,7 @@
 </svelte:head>
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $query.isSuccess}
+{#if $query.isSuccess && service}
   <input
     type="checkbox"
     id="service-update-{service.id}"

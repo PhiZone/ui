@@ -8,6 +8,7 @@
   import type { PatchElement, ResponseDtoError } from '$lib/api/types';
 
   import { invalidateAll } from '$app/navigation';
+  import Error from '$lib/components/Error.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import UpdateError from '$lib/components/UpdateError.svelte';
@@ -246,738 +247,774 @@
   onClick={() => (status = Status.WAITING)}
 />
 
-{#if illustrationCropping}
-  <Cropper
-    bind:open={illustrationCropping}
-    title={$t('common.image_cropper')}
-    src={illustrationSrc}
-    aspectRatio={16 / 9}
-    submit={async (blob) => {
-      const resp = await api.song.submission.updateFile('illustration', { id, File: blob });
-      if (resp.ok) {
-        invalidateAll();
-        await queryClient.invalidateQueries({ queryKey: options.queryKey });
-        illustrationCropping = false;
-        status = Status.OK;
-      } else {
-        status = Status.ERROR;
-        const data = await resp.json();
-        errorCode = data.code;
-        console.error(
-          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
-          data,
-        );
-      }
-    }}
-  />
-{/if}
+{#if $submission.isSuccess && song}
+  {#if illustrationCropping}
+    <Cropper
+      bind:open={illustrationCropping}
+      title={$t('common.image_cropper')}
+      src={illustrationSrc}
+      aspectRatio={16 / 9}
+      submit={async (blob) => {
+        const resp = await api.song.submission.updateFile('illustration', { id, File: blob });
+        if (resp.ok) {
+          invalidateAll();
+          await queryClient.invalidateQueries({ queryKey: options.queryKey });
+          illustrationCropping = false;
+          status = Status.OK;
+        } else {
+          status = Status.ERROR;
+          const data = await resp.json();
+          errorCode = data.code;
+          console.error(
+            `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+            data,
+          );
+        }
+      }}
+    />
+  {/if}
 
-<input type="checkbox" id="studio-composer" class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box bg-base-100 form-control gap-3">
-    <div class="flex gap-3 items-center">
-      <h3 class="font-bold text-lg">{$t('studio.submission.add_composer')}</h3>
-      {#if user}
-        <p class="opacity-80">
-          ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
-        </p>
-      {/if}
-    </div>
-    <label
-      for="studio-composer"
-      class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
-    >
-      ✕
-    </label>
-    <div
-      class={$composer.isError
-        ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
-        : 'w-full my-2 px-4'}
-      data-tip={$composer.isError ? $t(`error.${$composer.error.code}`) : ''}
-    >
-      <label class="join w-full">
-        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
-        <input
-          placeholder={$t('studio.submission.author_placeholder')}
-          class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
-            $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
-          }`}
-          bind:value={newComposerId}
-          oninput={() => {
-            queryComposer = false;
-          }}
-        />
-        <button
-          class={`btn border-2 normal-border join-item ${
-            newComposerId || $composer.isLoading
-              ? $composer.isError
-                ? 'btn-error'
-                : 'hover:btn-secondary btn-outline'
-              : 'btn-disabled'
-          }`}
-          onclick={() => {
-            queryComposer = true;
-          }}
-        >
-          {$t('common.fetch')}
-        </button>
+  <input type="checkbox" id="studio-composer" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box bg-base-100 form-control gap-3">
+      <div class="flex gap-3 items-center">
+        <h3 class="font-bold text-lg">{$t('studio.submission.add_composer')}</h3>
+        {#if user}
+          <p class="opacity-80">
+            ({$t('studio.submission.your_id')}{$t('common.colon')}{user.id})
+          </p>
+        {/if}
+      </div>
+      <label
+        for="studio-composer"
+        class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
+      >
+        ✕
       </label>
-    </div>
-    {#if newComposerId && $composer.isSuccess}
-      <User id={newComposerId} initUser={$composer.data.data} kind="mini" target="_blank" />
-      <label class="join w-full px-4">
-        <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('common.form.composer')}</span>
-        <input
-          placeholder={$t('common.form.composer')}
-          class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
-          bind:value={newComposerDisplay}
-        />
-      </label>
-      <div class="modal-action mt-3 px-4">
-        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-        <label
-          for="studio-composer"
-          class="btn border-2 normal-border btn-outline"
-          onclick={() => {
-            song.authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
-          }}
-          onkeyup={null}
-        >
-          {$t('common.submit')}
+      <div
+        class={$composer.isError
+          ? 'tooltip tooltip-open tooltip-bottom tooltip-error w-full my-2 px-4'
+          : 'w-full my-2 px-4'}
+        data-tip={$composer.isError ? $t(`error.${$composer.error.code}`) : ''}
+      >
+        <label class="join w-full">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">{$t('user.id')}</span>
+          <input
+            placeholder={$t('studio.submission.author_placeholder')}
+            class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+              $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
+            }`}
+            bind:value={newComposerId}
+            oninput={() => {
+              queryComposer = false;
+            }}
+          />
+          <button
+            class={`btn border-2 normal-border join-item ${
+              newComposerId || $composer.isLoading
+                ? $composer.isError
+                  ? 'btn-error'
+                  : 'hover:btn-secondary btn-outline'
+                : 'btn-disabled'
+            }`}
+            onclick={() => {
+              queryComposer = true;
+            }}
+          >
+            {$t('common.fetch')}
+          </button>
         </label>
       </div>
-    {/if}
+      {#if newComposerId && $composer.isSuccess}
+        <User id={newComposerId} initUser={$composer.data.data} kind="mini" target="_blank" />
+        <label class="join w-full px-4">
+          <span class="btn no-animation join-item w-1/4 min-w-fit">
+            {$t('common.form.composer')}
+          </span>
+          <input
+            placeholder={$t('common.form.composer')}
+            class="input transition border-2 normal-border hover:input-secondary join-item w-3/4"
+            bind:value={newComposerDisplay}
+          />
+        </label>
+        <div class="modal-action mt-3 px-4">
+          <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+          <label
+            for="studio-composer"
+            class="btn border-2 normal-border btn-outline"
+            onclick={() => {
+              song.authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
+            }}
+            onkeyup={null}
+          >
+            {$t('common.submit')}
+          </label>
+        </div>
+      {/if}
+    </div>
   </div>
-</div>
 
-<div class="bg-base-300 min-h-screen">
-  <div class="pt-32 pb-4 flex justify-center">
-    <div class="w-3/4 max-w-6xl min-w-20">
-      <div class="flex justify-between">
-        <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
-        <a href="/studio/song-submissions/{song.id}" class="btn border-2 normal-border btn-outline">
-          {$t('common.back')}
-        </a>
-      </div>
-      <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
-        <div class="card-body">
-          <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
-            <div class="flex justify-start items-center my-2 w-full">
-              <span class="w-32 place-self-center">{$t('song.original')}</span>
-              <div class="flex w-1/3">
-                <input
-                  type="checkbox"
-                  class="toggle border-2 toggle-secondary"
-                  bind:checked={isOriginal}
-                  onchange={() => {
-                    if (isOriginal) {
-                      if (song.editionType > 2) {
-                        song.editionType = 0;
+  <div class="bg-base-300 min-h-screen">
+    <div class="pt-32 pb-4 flex justify-center">
+      <div class="w-3/4 max-w-6xl min-w-20">
+        <div class="flex justify-between">
+          <h1 class="text-4xl font-bold mb-6">{$t('studio.edit_song')}</h1>
+          <a
+            href="/studio/song-submissions/{song.id}"
+            class="btn border-2 normal-border btn-outline"
+          >
+            {$t('common.back')}
+          </a>
+        </div>
+        <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
+          <div class="card-body">
+            <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
+              <div class="flex justify-start items-center my-2 w-full">
+                <span class="w-32 place-self-center">{$t('song.original')}</span>
+                <div class="flex w-1/3">
+                  <input
+                    type="checkbox"
+                    class="toggle border-2 toggle-secondary"
+                    bind:checked={isOriginal}
+                    onchange={() => {
+                      if (isOriginal) {
+                        if (song.editionType > 2) {
+                          song.editionType = 0;
+                        }
+                        if (/\[PZUser:(\d+):(.+?):PZRT\]/gi.test(song.authorName)) {
+                          song.authorName = '';
+                        }
                       }
-                      if (/\[PZUser:(\d+):(.+?):PZRT\]/gi.test(song.authorName)) {
-                        song.authorName = '';
-                      }
-                    }
-                  }}
-                />
+                    }}
+                  />
+                </div>
+                <span class="place-self-center w-2/3">
+                  {$t(`common.form.tips.${isOriginal ? 'original' : 'reposted'}`)}
+                </span>
               </div>
-              <span class="place-self-center w-2/3">
-                {$t(`common.form.tips.${isOriginal ? 'original' : 'reposted'}`)}
-              </span>
-            </div>
-            <div class="flex items-center my-2">
-              <span class="w-32">{$t('common.form.audio')}</span>
-              <input
-                type="file"
-                id="file"
-                name="File"
-                accept=".mp3, .wav, .flac, .ogg"
-                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
-                  errors?.get('File')
-                    ? 'input-error file:btn-error'
-                    : 'input-secondary file:btn-outline file:bg-secondary'
-                }`}
-                onchange={handleAudio}
-                oninput={handleFile}
-              />
-              {#if !!errors?.get('File')}
-                <span class="w-2/3 text-error">{errors?.get('File')}</span>
-              {:else}
-                <span class="w-2/3">{$t('common.form.tips.audio')}</span>
-              {/if}
-            </div>
-            <div class="flex items-center my-2">
-              <span class="w-32">{$t('common.form.illustration')}</span>
-              <input
-                type="file"
-                id="illustration"
-                name="Illustration"
-                accept=".jpg, .jpeg, .png, .webp"
-                class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
-                  errors?.get('Illustration')
-                    ? 'input-error file:btn-error'
-                    : 'input-secondary file:btn-outline file:bg-secondary'
-                }`}
-                bind:files={illustrationFiles}
-                onchange={handleIllustration}
-              />
-              {#if !!errors?.get('Illustration')}
-                <span class="w-2/3 text-error">
-                  {errors?.get('Illustration')}
-                </span>
-              {:else}
-                <span class="w-2/3">{$t('common.form.tips.illustration')}</span>
-              {/if}
-            </div>
-            {#if isOriginal}
               <div class="flex items-center my-2">
-                <span class="w-32">
-                  {$t('common.form.originality_proof')}
-                </span>
+                <span class="w-32">{$t('common.form.audio')}</span>
                 <input
                   type="file"
-                  id="originality_proof"
-                  name="OriginalityProof"
-                  accept=".zip"
+                  id="file"
+                  name="File"
+                  accept=".mp3, .wav, .flac, .ogg"
                   class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
-                    errors?.get('OriginalityProof')
+                    errors?.get('File')
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
-                  oninput={(e) => {
-                    handleFile(e, 'originalityProof');
-                  }}
+                  onchange={handleAudio}
+                  oninput={handleFile}
                 />
-                {#if !!errors?.get('OriginalityProof')}
-                  <span class="w-2/3 text-error">
-                    {errors?.get('OriginalityProof')}
-                  </span>
+                {#if !!errors?.get('File')}
+                  <span class="w-2/3 text-error">{errors?.get('File')}</span>
                 {:else}
-                  <span class="w-2/3">
-                    {$t('common.form.tips.originality_proof')}
-                  </span>
+                  <span class="w-2/3">{$t('common.form.tips.audio')}</span>
                 {/if}
               </div>
-            {/if}
-            {#if song.editionType === 3}
               <div class="flex items-center my-2">
-                <span class="w-32">{$t('common.form.license')}</span>
+                <span class="w-32">{$t('common.form.illustration')}</span>
                 <input
                   type="file"
-                  id="license"
-                  name="License"
+                  id="illustration"
+                  name="Illustration"
                   accept=".jpg, .jpeg, .png, .webp"
                   class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
-                    errors?.get('License')
+                    errors?.get('Illustration')
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
-                  oninput={(e) => {
-                    handleFile(e, 'license');
-                  }}
+                  bind:files={illustrationFiles}
+                  onchange={handleIllustration}
                 />
-                {#if !!errors?.get('License')}
-                  <span class="w-2/3 text-error">{errors?.get('License')}</span>
+                {#if !!errors?.get('Illustration')}
+                  <span class="w-2/3 text-error">
+                    {errors?.get('Illustration')}
+                  </span>
                 {:else}
-                  <span class="w-2/3">{$t('common.form.tips.license')}</span>
+                  <span class="w-2/3">{$t('common.form.tips.illustration')}</span>
                 {/if}
               </div>
-            {/if}
-            {#if showPreview}
-              <div class="flex my-2">
-                <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
-                <div class="flex w-full gap-2">
-                  <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
-                    {#if previewStatus === 2}
-                      <button
-                        type="button"
-                        aria-label={$t('song.pause')}
-                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        onclick={handlePreviewPlay}
-                      >
-                        <i class="fa-solid fa-pause fa-xl"></i>
-                      </button>
-                    {:else}
-                      <button
-                        type="button"
-                        aria-label={$t('song.play')}
-                        class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        onclick={handlePreviewPlay}
-                      >
-                        <i class="fa-solid fa-play fa-lg"></i>
-                      </button>
+              {#if isOriginal}
+                <div class="flex items-center my-2">
+                  <span class="w-32">
+                    {$t('common.form.originality_proof')}
+                  </span>
+                  <input
+                    type="file"
+                    id="originality_proof"
+                    name="OriginalityProof"
+                    accept=".zip"
+                    class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
+                      errors?.get('OriginalityProof')
+                        ? 'input-error file:btn-error'
+                        : 'input-secondary file:btn-outline file:bg-secondary'
+                    }`}
+                    oninput={(e) => {
+                      handleFile(e, 'originalityProof');
+                    }}
+                  />
+                  {#if !!errors?.get('OriginalityProof')}
+                    <span class="w-2/3 text-error">
+                      {errors?.get('OriginalityProof')}
+                    </span>
+                  {:else}
+                    <span class="w-2/3">
+                      {$t('common.form.tips.originality_proof')}
+                    </span>
+                  {/if}
+                </div>
+              {/if}
+              {#if song.editionType === 3}
+                <div class="flex items-center my-2">
+                  <span class="w-32">{$t('common.form.license')}</span>
+                  <input
+                    type="file"
+                    id="license"
+                    name="License"
+                    accept=".jpg, .jpeg, .png, .webp"
+                    class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
+                      errors?.get('License')
+                        ? 'input-error file:btn-error'
+                        : 'input-secondary file:btn-outline file:bg-secondary'
+                    }`}
+                    oninput={(e) => {
+                      handleFile(e, 'license');
+                    }}
+                  />
+                  {#if !!errors?.get('License')}
+                    <span class="w-2/3 text-error">{errors?.get('License')}</span>
+                  {:else}
+                    <span class="w-2/3">{$t('common.form.tips.license')}</span>
+                  {/if}
+                </div>
+              {/if}
+              {#if showPreview}
+                <div class="flex my-2">
+                  <span class="w-32 place-self-center">{$t('common.form.song_preview')}</span>
+                  <div class="flex w-full gap-2">
+                    <div class="tooltip place-self-center" data-tip={convertTime(previewTime)}>
+                      {#if previewStatus === 2}
+                        <button
+                          type="button"
+                          aria-label={$t('song.pause')}
+                          class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
+                          onclick={handlePreviewPlay}
+                        >
+                          <i class="fa-solid fa-pause fa-xl"></i>
+                        </button>
+                      {:else}
+                        <button
+                          type="button"
+                          aria-label={$t('song.play')}
+                          class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
+                          onclick={handlePreviewPlay}
+                        >
+                          <i class="fa-solid fa-play fa-lg"></i>
+                        </button>
+                      {/if}
+                    </div>
+                    {#if !errors?.get('PreviewStart') && !errors?.get('PreviewEnd') && showPreview === 2}
+                      <input
+                        type="text"
+                        id="preview_start"
+                        name="PreviewStart"
+                        onkeydown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                          }
+                        }}
+                        placeholder={$t('studio.submission.start')}
+                        class="input w-1/6 text-right"
+                        value={convertTime(song.previewStart)}
+                        oninput={(e) => {
+                          if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                            return;
+                          song.previewStart = convertTime(parseTime(e.currentTarget.value));
+                          if (
+                            parseTime(song.previewStart) < 0 ||
+                            parseTime(song.previewStart) > parseTime(song.previewEnd) ||
+                            (audio && parseTime(song.previewStart) > audio.duration)
+                          )
+                            return;
+                          pausePreview();
+                          previewStatus = 0;
+                          previewTime = parseTime(song.previewStart);
+                          slider!.noUiSlider?.set([
+                            parseTime(song.previewStart),
+                            parseTime(song.previewEnd),
+                          ]);
+                        }}
+                      />
+                    {/if}
+                    <div class="slider place-self-center w-2/3" bind:this={slider}></div>
+                    {#if !!errors?.get('PreviewStart') || !!errors?.get('PreviewEnd')}
+                      <span class="place-self-center w-1/3 text-error">
+                        {errors?.get('PreviewStart') ?? errors?.get('PreviewEnd')}
+                      </span>
+                    {:else if showPreview === 2}
+                      <input
+                        type="text"
+                        id="preview_end"
+                        name="PreviewEnd"
+                        onkeydown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                          }
+                        }}
+                        placeholder={$t('studio.submission.end')}
+                        class="input w-1/6 text-left"
+                        value={convertTime(song.previewEnd)}
+                        oninput={(e) => {
+                          if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                            return;
+                          song.previewEnd = convertTime(parseTime(e.currentTarget.value));
+                          if (
+                            parseTime(song.previewEnd) < 0 ||
+                            parseTime(song.previewStart) > parseTime(song.previewEnd) ||
+                            (audio && parseTime(song.previewEnd) > audio.duration)
+                          )
+                            return;
+                          pausePreview();
+                          previewStatus = 0;
+                          slider!.noUiSlider?.set([
+                            parseTime(song.previewStart),
+                            parseTime(song.previewEnd),
+                          ]);
+                        }}
+                      />
                     {/if}
                   </div>
-                  {#if !errors?.get('PreviewStart') && !errors?.get('PreviewEnd') && showPreview === 2}
-                    <input
-                      type="text"
-                      id="preview_start"
-                      name="PreviewStart"
-                      onkeydown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                        }
-                      }}
-                      placeholder={$t('studio.submission.start')}
-                      class="input w-1/6 text-right"
-                      value={convertTime(song.previewStart)}
-                      oninput={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
-                          return;
-                        song.previewStart = convertTime(parseTime(e.currentTarget.value));
-                        if (
-                          parseTime(song.previewStart) < 0 ||
-                          parseTime(song.previewStart) > parseTime(song.previewEnd) ||
-                          (audio && parseTime(song.previewStart) > audio.duration)
-                        )
-                          return;
-                        pausePreview();
-                        previewStatus = 0;
-                        previewTime = parseTime(song.previewStart);
-                        slider!.noUiSlider?.set([
-                          parseTime(song.previewStart),
-                          parseTime(song.previewEnd),
-                        ]);
-                      }}
-                    />
-                  {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
-                  {#if !!errors?.get('PreviewStart') || !!errors?.get('PreviewEnd')}
-                    <span class="place-self-center w-1/3 text-error">
-                      {errors?.get('PreviewStart') ?? errors?.get('PreviewEnd')}
-                    </span>
-                  {:else if showPreview === 2}
-                    <input
-                      type="text"
-                      id="preview_end"
-                      name="PreviewEnd"
-                      onkeydown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                        }
-                      }}
-                      placeholder={$t('studio.submission.end')}
-                      class="input w-1/6 text-left"
-                      value={convertTime(song.previewEnd)}
-                      oninput={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
-                          return;
-                        song.previewEnd = convertTime(parseTime(e.currentTarget.value));
-                        if (
-                          parseTime(song.previewEnd) < 0 ||
-                          parseTime(song.previewStart) > parseTime(song.previewEnd) ||
-                          (audio && parseTime(song.previewEnd) > audio.duration)
-                        )
-                          return;
-                        pausePreview();
-                        previewStatus = 0;
-                        slider!.noUiSlider?.set([
-                          parseTime(song.previewStart),
-                          parseTime(song.previewEnd),
-                        ]);
-                      }}
-                    />
-                  {/if}
                 </div>
-              </div>
-            {/if}
-            <div
-              class={errors?.get('Title') ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
-              data-tip={errors?.get('Title')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('song.title')}
-                </span>
-                <input
-                  type="text"
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
-                  }}
-                  id="title"
-                  name="Title"
-                  placeholder={$t('song.title')}
-                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
-                  }`}
-                  bind:value={song.title}
-                  oninput={(e) => {
-                    patch = applyPatch(patch, 'replace', '/title', e.currentTarget.value);
-                  }}
-                />
-              </label>
-            </div>
-            <div
-              class={errors?.get('EditionType') || errors?.get('Edition')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('EditionType') ?? errors?.get('Edition')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.song_edition')}
-                </span>
-                <select
-                  id="edition_type"
-                  name="EditionType"
-                  class={`select transition border-2 normal-border join-item ${
-                    song.editionType === 0 ? 'w-3/4' : 'w-1/6'
-                  } ${
-                    errors?.get('EditionType') ? 'hover:select-error' : 'hover:select-secondary'
-                  }`}
-                  bind:value={song.editionType}
-                  oninput={(e) => {
-                    patch = applyPatch(
-                      patch,
-                      'replace',
-                      '/editionType',
-                      parseInt(e.currentTarget.value),
-                    );
-                  }}
-                >
-                  {#each [...Array(3).keys()] as i}
-                    <option value={i}>{$t(`song.edition_types.${i}`)}</option>
-                  {/each}
-                  {#if !isOriginal}
-                    {#each [...Array(3).keys()] as i}
-                      <option value={i + 3}>{$t(`song.edition_types.${i + 3}`)}</option>
-                    {/each}
-                  {/if}
-                </select>
-                {#if song.editionType !== 0}
-                  <input
-                    type="text"
-                    onkeydown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                    id="edition"
-                    name="Edition"
-                    placeholder={$t('studio.submission.edition_placeholder')}
-                    class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
-                      errors?.get('Edition') ? 'hover:input-error' : 'hover:input-secondary'
-                    }`}
-                    bind:value={song.edition}
-                    oninput={(e) => {
-                      patch = applyPatch(patch, 'replace', '/edition', e.currentTarget.value);
-                    }}
-                  />
-                {/if}
-              </label>
-            </div>
-            {#if song.edition}
-              <div class="flex my-2">
-                <span class="w-1/4 place-self-center">
-                  {$t('common.form.edition_preview')}
-                </span>
-                <div class="w-3/4">
-                  <button
-                    type="button"
-                    class="btn btn-xs btn-shallow text-sm font-normal no-animation"
-                  >
-                    {$t(`song.edition_types.${song.editionType}`)}
-                  </button>
-                  {#if song.edition}
-                    {song.edition}
-                  {/if}
-                </div>
-              </div>
-            {/if}
-            <div
-              class={errors?.get('Accessibility')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('Accessibility')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.accessibility')}
-                </span>
-                <select
-                  id="accessibility"
-                  name="Accessibility"
-                  class={`select transition border-2 normal-border join-item w-3/4 ${
-                    errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
-                  }`}
-                  value={`${song.accessibility}`}
-                  oninput={(e) => {
-                    patch = applyPatch(
-                      patch,
-                      'replace',
-                      '/accessibility',
-                      parseInt(e.currentTarget.value),
-                    );
-                  }}
-                >
-                  <option value="0">
-                    {$t('common.accessibilities.0')} - {$t('song.accessibility_tips.0')}
-                  </option>
-                  {#if isOriginal || song.editionType === 3}
-                    <option value="1">
-                      {$t('common.accessibilities.1')} - {$t('song.accessibility_tips.1')}
-                    </option>
-                    <option value="2">
-                      {$t('common.accessibilities.2')} - {$t('song.accessibility_tips.2')}
-                    </option>
-                  {/if}
-                </select>
-              </label>
-            </div>
-            <div
-              class={errors?.get('AuthorName')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('AuthorName')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.composer')}
-                </span>
-                <input
-                  type="text"
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
-                  }}
-                  id="author_name"
-                  name="AuthorName"
-                  placeholder={$t('common.form.composer')}
-                  class={`input transition border-2 normal-border join-item ${
-                    isOriginal ? 'w-7/12' : 'w-9/12'
-                  } min-w-[180px] ${
-                    errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
-                  }`}
-                  bind:value={song.authorName}
-                  oninput={(e) => {
-                    patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
-                  }}
-                />
-                {#if isOriginal}
-                  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                  <label
-                    for="studio-composer"
-                    class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
-                    onclick={() => {
-                      newComposerId = null;
-                      newComposerDisplay = '';
-                    }}
-                    onkeyup={null}
-                  >
-                    {$t('studio.submission.add_composer')}
-                  </label>
-                {/if}
-              </label>
-            </div>
-            {#if isOriginal && song.authorName}
-              <div class="flex my-2">
-                <span class="w-1/4 place-self-center">
-                  {$t('common.form.composer_preview')}
-                </span>
-                <p class="w-3/4 content">
-                  {@html $composerPreview}
-                </p>
-              </div>
-            {/if}
-            <div
-              class={errors?.get('Illustrator')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('Illustrator')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.form.illustrator')}
-                </span>
-                <input
-                  type="text"
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
-                  }}
-                  id="illustrator"
-                  name="Illustrator"
-                  placeholder={$t('common.form.illustrator')}
-                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Illustrator') ? 'hover:input-error' : 'hover:input-secondary'
-                  }`}
-                  bind:value={song.illustrator}
-                  oninput={(e) => {
-                    patch = applyPatch(patch, 'replace', '/illustrator', e.currentTarget.value);
-                  }}
-                />
-              </label>
-            </div>
-            <div
-              class={errors?.get('MinBpm') || errors?.get('Bpm') || errors?.get('MaxBpm')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('MinBpm') ?? errors?.get('Bpm') ?? errors?.get('MaxBpm') ?? ''}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('song.bpm')}
-                </span>
-                <div class="flex w-3/4">
-                  <input
-                    type="text"
-                    onkeydown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                    id="min_bpm"
-                    name="MinBpm"
-                    placeholder={$t('studio.submission.min_bpm')}
-                    class={`input transition border-2 normal-border join-item w-1/3 ${
-                      errors?.get('MinBpm') ? 'hover:input-error' : 'hover:input-secondary'
-                    }`}
-                    bind:value={song.minBpm}
-                    oninput={(e) => {
-                      patch = applyPatch(
-                        patch,
-                        'replace',
-                        '/minBpm',
-                        parseFloat(e.currentTarget.value),
-                      );
-                    }}
-                  />
-                  <input
-                    type="text"
-                    onkeydown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                    id="bpm"
-                    name="Bpm"
-                    placeholder={$t('studio.submission.main_bpm')}
-                    class={`input transition border-2 normal-border join-item w-1/3 ${
-                      errors?.get('Bpm') ? 'hover:input-error' : 'hover:input-secondary'
-                    }`}
-                    bind:value={song.bpm}
-                    oninput={(e) => {
-                      patch = applyPatch(
-                        patch,
-                        'replace',
-                        '/bpm',
-                        parseFloat(e.currentTarget.value),
-                      );
-                    }}
-                  />
-                  <input
-                    type="text"
-                    onkeydown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                    id="max_bpm"
-                    name="MaxBpm"
-                    placeholder={$t('studio.submission.max_bpm')}
-                    class={`input transition border-2 normal-border join-item w-1/3 ${
-                      errors?.get('MaxBpm') ? 'hover:input-error' : 'hover:input-secondary'
-                    }`}
-                    bind:value={song.maxBpm}
-                    oninput={(e) => {
-                      patch = applyPatch(
-                        patch,
-                        'replace',
-                        '/maxBpm',
-                        parseFloat(e.currentTarget.value),
-                      );
-                    }}
-                  />
-                </div>
-              </label>
-            </div>
-            <div
-              class={errors?.get('Offset')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error'
-                : ''}
-              data-tip={errors?.get('Offset')}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('song.offset')}
-                </span>
-                <input
-                  type="text"
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
-                  }}
-                  id="offset"
-                  name="Offset"
-                  placeholder={$t('studio.submission.offset_placeholder')}
-                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Offset') ? 'hover:input-error' : 'hover:input-secondary'
-                  }`}
-                  bind:value={song.offset}
-                  oninput={(e) => {
-                    patch = applyPatch(
-                      patch,
-                      'replace',
-                      '/offset',
-                      parseInt(e.currentTarget.value),
-                    );
-                  }}
-                />
-              </label>
-            </div>
-            <div
-              class={errors?.get('Description')
-                ? 'tooltip tooltip-open tooltip-right tooltip-error relative my-2'
-                : 'relative my-2'}
-              data-tip={errors?.get('Description')}
-            >
-              <label class="join w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.description')}{$t('common.optional')}
-                </span>
-                <textarea
-                  id="description"
-                  name="Description"
-                  class={`textarea transition border-2 normal-border join-item ${
-                    errors?.get('Description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
-                  } w-3/4 h-28`}
-                  placeholder={`${$t('common.description')}${$t('common.optional')}`}
-                  bind:value={song.description}
-                  oninput={(e) => {
-                    patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
-                  }}
-                ></textarea>
-              </label>
-              <button
-                type="button"
-                class="absolute right-2 bottom-2 btn btn-sm {song.description
-                  ? 'border-2 hover:btn-outline backdrop-blur'
-                  : 'btn-disabled'}"
-                onclick={() => {
-                  song.description = '';
-                  patch = applyPatch(patch, 'remove', '/description');
-                }}
+              {/if}
+              <div
+                class={errors?.get('Title')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('Title')}
               >
-                {$t('common.empty_v')}
-              </button>
-            </div>
-            <div
-              class={errors?.get('Tags') ? 'tooltip tooltip-open tooltip-right tooltip-error' : ''}
-              data-tip={errors?.get('Tags') ?? ''}
-            >
-              <label class="join my-2 w-full">
-                <span class="btn no-animation join-item w-1/4 min-w-[64px]">
-                  {$t('common.tags')}
-                </span>
-                <input
-                  type="text"
-                  onkeydown={(e) => {
-                    if (e.key === 'Enter') {
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('song.title')}
+                  </span>
+                  <input
+                    type="text"
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}
+                    id="title"
+                    name="Title"
+                    placeholder={$t('song.title')}
+                    class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                      errors?.get('Title') ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={song.title}
+                    oninput={(e) => {
+                      patch = applyPatch(patch, 'replace', '/title', e.currentTarget.value);
+                    }}
+                  />
+                </label>
+              </div>
+              <div
+                class={errors?.get('EditionType') || errors?.get('Edition')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('EditionType') ?? errors?.get('Edition')}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.form.song_edition')}
+                  </span>
+                  <select
+                    id="edition_type"
+                    name="EditionType"
+                    class={`select transition border-2 normal-border join-item ${
+                      song.editionType === 0 ? 'w-3/4' : 'w-1/6'
+                    } ${
+                      errors?.get('EditionType') ? 'hover:select-error' : 'hover:select-secondary'
+                    }`}
+                    bind:value={song.editionType}
+                    oninput={(e) => {
+                      patch = applyPatch(
+                        patch,
+                        'replace',
+                        '/editionType',
+                        parseInt(e.currentTarget.value),
+                      );
+                    }}
+                  >
+                    {#each [...Array(3).keys()] as i}
+                      <option value={i}>{$t(`song.edition_types.${i}`)}</option>
+                    {/each}
+                    {#if !isOriginal}
+                      {#each [...Array(3).keys()] as i}
+                        <option value={i + 3}>{$t(`song.edition_types.${i + 3}`)}</option>
+                      {/each}
+                    {/if}
+                  </select>
+                  {#if song.editionType !== 0}
+                    <input
+                      type="text"
+                      onkeydown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                        }
+                      }}
+                      id="edition"
+                      name="Edition"
+                      placeholder={$t('studio.submission.edition_placeholder')}
+                      class={`input transition border-2 normal-border join-item w-7/12 min-w-[180px] ${
+                        errors?.get('Edition') ? 'hover:input-error' : 'hover:input-secondary'
+                      }`}
+                      bind:value={song.edition}
+                      oninput={(e) => {
+                        patch = applyPatch(patch, 'replace', '/edition', e.currentTarget.value);
+                      }}
+                    />
+                  {/if}
+                </label>
+              </div>
+              {#if song.edition}
+                <div class="flex my-2">
+                  <span class="w-1/4 place-self-center">
+                    {$t('common.form.edition_preview')}
+                  </span>
+                  <div class="w-3/4">
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-shallow text-sm font-normal no-animation"
+                    >
+                      {$t(`song.edition_types.${song.editionType}`)}
+                    </button>
+                    {#if song.edition}
+                      {song.edition}
+                    {/if}
+                  </div>
+                </div>
+              {/if}
+              <div
+                class={errors?.get('Accessibility')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('Accessibility')}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.accessibility')}
+                  </span>
+                  <select
+                    id="accessibility"
+                    name="Accessibility"
+                    class={`select transition border-2 normal-border join-item w-3/4 ${
+                      errors?.get('Accessibility') ? 'hover:select-error' : 'hover:select-secondary'
+                    }`}
+                    value={`${song.accessibility}`}
+                    oninput={(e) => {
+                      patch = applyPatch(
+                        patch,
+                        'replace',
+                        '/accessibility',
+                        parseInt(e.currentTarget.value),
+                      );
+                    }}
+                  >
+                    <option value="0">
+                      {$t('common.accessibilities.0')} - {$t('song.accessibility_tips.0')}
+                    </option>
+                    {#if isOriginal || song.editionType === 3}
+                      <option value="1">
+                        {$t('common.accessibilities.1')} - {$t('song.accessibility_tips.1')}
+                      </option>
+                      <option value="2">
+                        {$t('common.accessibilities.2')} - {$t('song.accessibility_tips.2')}
+                      </option>
+                    {/if}
+                  </select>
+                </label>
+              </div>
+              <div
+                class={errors?.get('AuthorName')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('AuthorName')}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.form.composer')}
+                  </span>
+                  <input
+                    type="text"
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}
+                    id="author_name"
+                    name="AuthorName"
+                    placeholder={$t('common.form.composer')}
+                    class={`input transition border-2 normal-border join-item ${
+                      isOriginal ? 'w-7/12' : 'w-9/12'
+                    } min-w-[180px] ${
+                      errors?.get('AuthorName') ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={song.authorName}
+                    oninput={(e) => {
+                      patch = applyPatch(patch, 'replace', '/authorName', e.currentTarget.value);
+                    }}
+                  />
+                  {#if isOriginal}
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                    <label
+                      for="studio-composer"
+                      class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
+                      onclick={() => {
+                        newComposerId = null;
+                        newComposerDisplay = '';
+                      }}
+                      onkeyup={null}
+                    >
+                      {$t('studio.submission.add_composer')}
+                    </label>
+                  {/if}
+                </label>
+              </div>
+              {#if isOriginal && song.authorName}
+                <div class="flex my-2">
+                  <span class="w-1/4 place-self-center">
+                    {$t('common.form.composer_preview')}
+                  </span>
+                  <p class="w-3/4 content">
+                    {@html $composerPreview}
+                  </p>
+                </div>
+              {/if}
+              <div
+                class={errors?.get('Illustrator')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('Illustrator')}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.form.illustrator')}
+                  </span>
+                  <input
+                    type="text"
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}
+                    id="illustrator"
+                    name="Illustrator"
+                    placeholder={$t('common.form.illustrator')}
+                    class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                      errors?.get('Illustrator') ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={song.illustrator}
+                    oninput={(e) => {
+                      patch = applyPatch(patch, 'replace', '/illustrator', e.currentTarget.value);
+                    }}
+                  />
+                </label>
+              </div>
+              <div
+                class={errors?.get('MinBpm') || errors?.get('Bpm') || errors?.get('MaxBpm')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('MinBpm') ??
+                  errors?.get('Bpm') ??
+                  errors?.get('MaxBpm') ??
+                  ''}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('song.bpm')}
+                  </span>
+                  <div class="flex w-3/4">
+                    <input
+                      type="text"
+                      onkeydown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                        }
+                      }}
+                      id="min_bpm"
+                      name="MinBpm"
+                      placeholder={$t('studio.submission.min_bpm')}
+                      class={`input transition border-2 normal-border join-item w-1/3 ${
+                        errors?.get('MinBpm') ? 'hover:input-error' : 'hover:input-secondary'
+                      }`}
+                      bind:value={song.minBpm}
+                      oninput={(e) => {
+                        patch = applyPatch(
+                          patch,
+                          'replace',
+                          '/minBpm',
+                          parseFloat(e.currentTarget.value),
+                        );
+                      }}
+                    />
+                    <input
+                      type="text"
+                      onkeydown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                        }
+                      }}
+                      id="bpm"
+                      name="Bpm"
+                      placeholder={$t('studio.submission.main_bpm')}
+                      class={`input transition border-2 normal-border join-item w-1/3 ${
+                        errors?.get('Bpm') ? 'hover:input-error' : 'hover:input-secondary'
+                      }`}
+                      bind:value={song.bpm}
+                      oninput={(e) => {
+                        patch = applyPatch(
+                          patch,
+                          'replace',
+                          '/bpm',
+                          parseFloat(e.currentTarget.value),
+                        );
+                      }}
+                    />
+                    <input
+                      type="text"
+                      onkeydown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                        }
+                      }}
+                      id="max_bpm"
+                      name="MaxBpm"
+                      placeholder={$t('studio.submission.max_bpm')}
+                      class={`input transition border-2 normal-border join-item w-1/3 ${
+                        errors?.get('MaxBpm') ? 'hover:input-error' : 'hover:input-secondary'
+                      }`}
+                      bind:value={song.maxBpm}
+                      oninput={(e) => {
+                        patch = applyPatch(
+                          patch,
+                          'replace',
+                          '/maxBpm',
+                          parseFloat(e.currentTarget.value),
+                        );
+                      }}
+                    />
+                  </div>
+                </label>
+              </div>
+              <div
+                class={errors?.get('Offset')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('Offset')}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('song.offset')}
+                  </span>
+                  <input
+                    type="text"
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}
+                    id="offset"
+                    name="Offset"
+                    placeholder={$t('studio.submission.offset_placeholder')}
+                    class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                      errors?.get('Offset') ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={song.offset}
+                    oninput={(e) => {
+                      patch = applyPatch(
+                        patch,
+                        'replace',
+                        '/offset',
+                        parseInt(e.currentTarget.value),
+                      );
+                    }}
+                  />
+                </label>
+              </div>
+              <div
+                class={errors?.get('Description')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error relative my-2'
+                  : 'relative my-2'}
+                data-tip={errors?.get('Description')}
+              >
+                <label class="join w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.description')}{$t('common.optional')}
+                  </span>
+                  <textarea
+                    id="description"
+                    name="Description"
+                    class={`textarea transition border-2 normal-border join-item ${
+                      errors?.get('Description')
+                        ? 'hover:textarea-error'
+                        : 'hover:textarea-secondary'
+                    } w-3/4 h-28`}
+                    placeholder={`${$t('common.description')}${$t('common.optional')}`}
+                    bind:value={song.description}
+                    oninput={(e) => {
+                      patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
+                    }}
+                  ></textarea>
+                </label>
+                <button
+                  type="button"
+                  class="absolute right-2 bottom-2 btn btn-sm {song.description
+                    ? 'border-2 hover:btn-outline backdrop-blur'
+                    : 'btn-disabled'}"
+                  onclick={() => {
+                    song.description = '';
+                    patch = applyPatch(patch, 'remove', '/description');
+                  }}
+                >
+                  {$t('common.empty_v')}
+                </button>
+              </div>
+              <div
+                class={errors?.get('Tags')
+                  ? 'tooltip tooltip-open tooltip-right tooltip-error'
+                  : ''}
+                data-tip={errors?.get('Tags') ?? ''}
+              >
+                <label class="join my-2 w-full">
+                  <span class="btn no-animation join-item w-1/4 min-w-[64px]">
+                    {$t('common.tags')}
+                  </span>
+                  <input
+                    type="text"
+                    onkeydown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (!newTag || song.tags.includes(newTag)) return;
+                        showTags = false;
+                        song.tags.push(newTag);
+                        patch = applyPatch(patch, 'replace', '/tags', song.tags);
+                        newTag = '';
+                        setTimeout(() => {
+                          showTags = true;
+                        }, 0);
+                      }
+                    }}
+                    id="new_tag"
+                    class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
+                      errors?.get('Tags') ? 'hover:input-error' : 'hover:input-secondary'
+                    }`}
+                    bind:value={newTag}
+                  />
+                  <button
+                    class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
+                    aria-label={$t('common.add')}
+                    onclick={(e) => {
                       e.preventDefault();
                       if (!newTag || song.tags.includes(newTag)) return;
                       showTags = false;
@@ -987,94 +1024,78 @@
                       setTimeout(() => {
                         showTags = true;
                       }, 0);
-                    }
-                  }}
-                  id="new_tag"
-                  class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
-                    errors?.get('Tags') ? 'hover:input-error' : 'hover:input-secondary'
-                  }`}
-                  bind:value={newTag}
-                />
-                <button
-                  class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  aria-label={$t('common.add')}
-                  onclick={(e) => {
-                    e.preventDefault();
-                    if (!newTag || song.tags.includes(newTag)) return;
-                    showTags = false;
-                    song.tags.push(newTag);
-                    patch = applyPatch(patch, 'replace', '/tags', song.tags);
-                    newTag = '';
-                    setTimeout(() => {
-                      showTags = true;
-                    }, 0);
-                  }}
-                >
-                  <i class="fa-solid fa-plus"></i>
-                </button>
-              </label>
-            </div>
-            {#if showTags}
-              <div class="flex gap-1 flex-wrap">
-                {#each song.tags as tag, i}
-                  <Tag
-                    {tag}
-                    removeFunction={() => {
-                      showTags = false;
-                      song.tags.splice(i, 1);
-                      patch = applyPatch(patch, 'replace', '/tags', song.tags);
-                      setTimeout(() => {
-                        showTags = true;
-                      }, 0);
                     }}
-                  />
-                {/each}
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </label>
               </div>
-            {/if}
-            {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
-              <div class="flex my-2">
-                <div class="w-1/4 flex flex-col gap-2">
-                  <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
-                  <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
-                </div>
-                <div class="w-3/4 result">
-                  {#each $existingTags.data.data as tag}
-                    <Tag {tag} full />
+              {#if showTags}
+                <div class="flex gap-1 flex-wrap">
+                  {#each song.tags as tag, i}
+                    <Tag
+                      {tag}
+                      removeFunction={() => {
+                        showTags = false;
+                        song.tags.splice(i, 1);
+                        patch = applyPatch(patch, 'replace', '/tags', song.tags);
+                        setTimeout(() => {
+                          showTags = true;
+                        }, 0);
+                      }}
+                    />
                   {/each}
                 </div>
-              </div>
-            {/if}
-            <div class="w-full flex flex-col justify-center mt-6">
-              <div
-                class="tooltip tooltip-top tooltip-error w-full"
-                class:tooltip-open={status === Status.ERROR}
-                data-tip={status === Status.ERROR
-                  ? ($t(`error.${errorCode}`) ?? $t('common.unknown_error'))
-                  : null}
-              >
-                <button
-                  class="btn {status === Status.ERROR
-                    ? 'btn-error'
-                    : status === Status.SENDING
-                      ? 'btn-ghost'
-                      : 'btn-outline border-2 normal-border'} w-full"
-                  disabled={status == Status.SENDING}
-                  onclick={update}
+              {/if}
+              {#if $existingTags.isSuccess && $existingTags.data.data.length > 0}
+                <div class="flex my-2">
+                  <div class="w-1/4 flex flex-col gap-2">
+                    <h2 class="text-lg font-bold">{$t('studio.submission.existing_tags')}</h2>
+                    <p class="text-base">{$t('studio.submission.existing_tags_description')}</p>
+                  </div>
+                  <div class="w-3/4 result">
+                    {#each $existingTags.data.data as tag}
+                      <Tag {tag} full />
+                    {/each}
+                  </div>
+                </div>
+              {/if}
+              <div class="w-full flex flex-col justify-center mt-6">
+                <div
+                  class="tooltip tooltip-top tooltip-error w-full"
+                  class:tooltip-open={status === Status.ERROR}
+                  data-tip={status === Status.ERROR
+                    ? ($t(`error.${errorCode}`) ?? $t('common.unknown_error'))
+                    : null}
                 >
-                  {status === Status.ERROR
-                    ? $t('common.error')
-                    : status === Status.SENDING
-                      ? $t('common.waiting')
-                      : $t('common.submit')}
-                </button>
+                  <button
+                    class="btn {status === Status.ERROR
+                      ? 'btn-error'
+                      : status === Status.SENDING
+                        ? 'btn-ghost'
+                        : 'btn-outline border-2 normal-border'} w-full"
+                    disabled={status == Status.SENDING}
+                    onclick={update}
+                  >
+                    {status === Status.ERROR
+                      ? $t('common.error')
+                      : status === Status.SENDING
+                        ? $t('common.waiting')
+                        : $t('common.submit')}
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+{:else if $submission.isError}
+  <Error error={$submission.error} back="/studio/song-submissions" />
+{:else}
+  <div class="min-h-page skeleton"></div>
+{/if}
 
 <style>
   .noUi-target {

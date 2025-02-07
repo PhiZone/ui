@@ -104,7 +104,7 @@
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $query.isSuccess}
+{#if $query.isSuccess && chartAssetDto}
   {@const chartAsset = $query.data.data}
 
   <input
