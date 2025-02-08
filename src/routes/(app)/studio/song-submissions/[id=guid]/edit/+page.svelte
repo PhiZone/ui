@@ -1,8 +1,7 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import noUiSlider, { type API } from 'nouislider';
-  import 'nouislider/dist/nouislider.css';
   import { onDestroy, onMount } from 'svelte';
+  import RangeSlider from 'svelte-range-slider-pips';
 
   import type { SongSubmissionDto } from '$lib/api';
   import type { PatchElement, ResponseDtoError } from '$lib/api/types';
@@ -22,22 +21,20 @@
   let { data } = $props();
   let { id, user, api } = $derived(data);
 
-  interface TargetElement extends HTMLElement {
-    noUiSlider?: API;
-  }
-
   let options = $derived(api.song.submission.info({ id }));
   let submission = $derived(createQuery({ ...options }));
 
+  const timePattern = /^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/;
   let song: SongSubmissionDto = $state($submission.data?.data)!; // FIXME: hack
   let isOriginal = $state(false);
   let audio: HTMLAudioElement | undefined = $state();
-  let slider: TargetElement | undefined = $state();
+  let audioDuration = $state(60);
   let showPreview = $state(0);
   let previewStatus = $state(0);
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = $state(0);
+  let previewRange = $state([0, Infinity]);
   let showTags = $state(true);
   let newTag = $state('');
   let newComposerId: number | null = $state(null);
@@ -92,10 +89,7 @@
   const handlePreview = () => {
     pausePreview();
     previewStatus = 0;
-    const values = slider!.noUiSlider?.get() as string[];
-    song.previewStart = convertTime(parseFloat(values[0]));
-    song.previewEnd = convertTime(parseFloat(values[1]));
-    previewTime = parseTime(song.previewStart);
+    previewTime = previewRange[0];
   };
 
   const handleAudio = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
@@ -109,35 +103,20 @@
     audio = new Audio(url);
     showPreview = 1;
     audio.addEventListener('loadedmetadata', () => {
-      if (!audio || !slider) return;
+      if (!audio) return;
       showPreview = 2;
       audio.volume = 0.5;
-      slider.noUiSlider?.destroy();
-      noUiSlider.create(slider, {
-        start: [
-          !resetPreview ? parseTime(song.previewStart) : 0.2 * audio.duration,
-          !resetPreview ? parseTime(song.previewEnd) : 0.8 * audio.duration,
-        ],
-        connect: true,
-        range: {
-          min: 0,
-          max: audio.duration,
-        },
-      });
+      audioDuration = audio.duration;
+      previewRange = [0.2 * audio.duration, 0.8 * audio.duration];
       handlePreview();
-      slider.noUiSlider?.on('slide', handlePreview);
-      slider.noUiSlider?.on('set', () => {
-        patch = applyPatch(patch, 'replace', '/previewStart', parsePreviewTime(song.previewStart));
-        patch = applyPatch(patch, 'replace', '/previewEnd', parsePreviewTime(song.previewEnd));
-      });
     });
   };
 
   const handlePreviewPlay = () => {
     if (!audio) return;
     if (previewStatus === 0) {
-      audio.currentTime = parseTime(song.previewStart);
-      previewTime = parseTime(song.previewStart);
+      audio.currentTime = previewRange[0];
+      previewTime = previewRange[0];
     }
     if (previewStatus === 2) {
       pausePreview();
@@ -150,10 +129,10 @@
         () => {
           if (!audio) return;
           pausePreview();
-          audio.currentTime = parseTime(song.previewStart);
+          audio.currentTime = previewRange[0];
           previewStatus = 0;
         },
-        (parseTime(song.previewEnd) - previewTime) * 1e3,
+        (previewRange[1] - previewTime) * 1e3,
       );
       audio.play();
       previewStatus = 2;
@@ -165,6 +144,11 @@
     audio.pause();
     clearTimeout(previewTimeout);
     clearInterval(previewTimer);
+  };
+
+  const restartPreview = () => {
+    pausePreview();
+    handlePreviewPlay();
   };
 
   const parsePreviewTime = (time: string) => {
@@ -522,33 +506,81 @@
                         name="PreviewStart"
                         onkeydown={(e) => {
                           if (e.key === 'Enter') {
-                            e.preventDefault();
+                            e.currentTarget.blur();
                           }
                         }}
                         placeholder={$t('studio.submission.start')}
                         class="input w-1/6 text-right"
-                        value={convertTime(song.previewStart)}
-                        oninput={(e) => {
-                          if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                        value={convertTime(previewRange[0])}
+                        onblur={(e) => {
+                          // discard changes if the input is invalid
+                          if (!timePattern.test(e.currentTarget.value)) {
+                            e.currentTarget.value = convertTime(previewRange[0]);
                             return;
-                          song.previewStart = convertTime(parseTime(e.currentTarget.value));
-                          if (
-                            parseTime(song.previewStart) < 0 ||
-                            parseTime(song.previewStart) > parseTime(song.previewEnd) ||
-                            (audio && parseTime(song.previewStart) > audio.duration)
-                          )
+                          }
+                          previewRange[0] = parseTime(e.currentTarget.value);
+                          patch = applyPatch(
+                            patch,
+                            'replace',
+                            '/previewStart',
+                            parsePreviewTime(convertTime(previewRange[0])),
+                          );
+                          if (previewRange[0] < 0 || (audio && previewRange[0] > audio.duration))
                             return;
-                          pausePreview();
+                          if (previewRange[0] > previewRange[1]) {
+                            previewRange[1] = Math.min(
+                              previewRange[0] + 5,
+                              audio?.duration || Infinity,
+                            );
+                            patch = applyPatch(
+                              patch,
+                              'replace',
+                              '/previewEnd',
+                              parsePreviewTime(convertTime(previewRange[1])),
+                            );
+                          }
+
                           previewStatus = 0;
-                          previewTime = parseTime(song.previewStart);
-                          slider!.noUiSlider?.set([
-                            parseTime(song.previewStart),
-                            parseTime(song.previewEnd),
-                          ]);
+                          previewTime = previewRange[0];
+                          restartPreview();
                         }}
                       />
                     {/if}
-                    <div class="slider place-self-center w-2/3" bind:this={slider}></div>
+                    <div class="place-self-center w-2/3 daisy-ui">
+                      <!-- TODO: display audio.currentTime in slider -->
+                      <RangeSlider
+                        min={0}
+                        max={audioDuration}
+                        bind:values={previewRange}
+                        on:change={handlePreview}
+                        on:stop={(e) => {
+                          patch = applyPatch(
+                            patch,
+                            'replace',
+                            '/previewStart',
+                            parsePreviewTime(convertTime(previewRange[0])),
+                          );
+                          patch = applyPatch(
+                            patch,
+                            'replace',
+                            '/previewEnd',
+                            parsePreviewTime(convertTime(previewRange[1])),
+                          );
+                          restartPreview();
+                        }}
+                        pips
+                        step={0.01}
+                        pipstep={(audioDuration < 60 ? 7.5 : 30) / 0.01}
+                        formatter={(value, index, percent) => {
+                          return percent !== 100 && index && index % 2
+                            ? ''
+                            : convertTime(value, true);
+                        }}
+                        range
+                        pushy
+                        all="label"
+                      />
+                    </div>
                     {#if !!errors?.get('PreviewStart') || !!errors?.get('PreviewEnd')}
                       <span class="place-self-center w-1/3 text-error">
                         {errors?.get('PreviewStart') ?? errors?.get('PreviewEnd')}
@@ -560,28 +592,39 @@
                         name="PreviewEnd"
                         onkeydown={(e) => {
                           if (e.key === 'Enter') {
+                            e.currentTarget.blur();
                             e.preventDefault();
                           }
                         }}
                         placeholder={$t('studio.submission.end')}
-                        class="input w-1/6 text-left"
-                        value={convertTime(song.previewEnd)}
-                        oninput={(e) => {
-                          if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                        class="input w-1/6 text-left hover:input-secondary"
+                        value={convertTime(previewRange[1])}
+                        onblur={(e) => {
+                          // discard changes if the input is invalid
+                          if (!timePattern.test(e.currentTarget.value)) {
+                            e.currentTarget.value = convertTime(previewRange[1]);
                             return;
-                          song.previewEnd = convertTime(parseTime(e.currentTarget.value));
-                          if (
-                            parseTime(song.previewEnd) < 0 ||
-                            parseTime(song.previewStart) > parseTime(song.previewEnd) ||
-                            (audio && parseTime(song.previewEnd) > audio.duration)
-                          )
+                          }
+                          previewRange[1] = parseTime(e.currentTarget.value);
+                          patch = applyPatch(
+                            patch,
+                            'replace',
+                            '/previewEnd',
+                            parsePreviewTime(convertTime(previewRange[1])),
+                          );
+                          if (previewRange[1] < 0 || (audio && previewRange[1] > audio.duration))
                             return;
-                          pausePreview();
+                          if (previewRange[0] > previewRange[1]) {
+                            previewRange[0] = Math.max(previewRange[1] - 5, 0);
+                            patch = applyPatch(
+                              patch,
+                              'replace',
+                              '/previewStart',
+                              parsePreviewTime(convertTime(previewRange[0])),
+                            );
+                          }
                           previewStatus = 0;
-                          slider!.noUiSlider?.set([
-                            parseTime(song.previewStart),
-                            parseTime(song.previewEnd),
-                          ]);
+                          restartPreview();
                         }}
                       />
                     {/if}
@@ -1096,15 +1139,3 @@
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}
-
-<style>
-  .noUi-target {
-    --tw-border-opacity: 0.5;
-    --tw-bg-opacity: 1;
-    background: hsl(var(--b1) / var(--tw-bg-opacity));
-    box-shadow: none;
-    border-width: 1px;
-    border-color: hsl(var(--bc) / var(--tw-border-opacity));
-    border-radius: var(--rounded-badge, 1.9rem /* 30.4px */);
-  }
-</style>

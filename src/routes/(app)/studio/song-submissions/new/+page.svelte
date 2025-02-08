@@ -1,8 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import noUiSlider, { type API } from 'nouislider';
-  import 'nouislider/dist/nouislider.css';
   import { onDestroy } from 'svelte';
+  import RangeSlider from 'svelte-range-slider-pips';
   import { superForm } from 'sveltekit-superforms';
 
   // import Cropper from '$lib/components/ImageCropper.svelte';
@@ -20,25 +19,22 @@
 
   const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  interface TargetElement extends HTMLElement {
-    noUiSlider?: API;
-  }
-
   onDestroy(() => {
     pausePreview();
   });
 
+  const timePattern = /^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/;
   let audio: HTMLAudioElement | undefined = $state();
+  let audioDuration = $state(60);
   let illustration = $state(false);
   // let illustrationFileSrc: string;
   // let illustrationOriginalSrc: string;
   // let illustrationCropping = false;
   let originalityProof = $state(false);
-  let slider: TargetElement | undefined = $state();
   let isOriginal = $state(false);
   let showPreview = $state(0);
-  let previewStart = $state(0);
-  let previewEnd = $state(0);
+  // NOTE: using previewRange instead of previewStart and previewEnd for RangeSlider bind
+  let previewRange = $state([0, Infinity]);
   let previewStatus = $state(0);
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
@@ -98,42 +94,32 @@
   const handlePreview = () => {
     pausePreview();
     previewStatus = 0;
-    const values = slider!.noUiSlider?.get() as string[];
-    previewStart = parseFloat(values[0]);
-    previewEnd = parseFloat(values[1]);
-    previewTime = previewStart;
+    previewTime = previewRange[0];
   };
 
   const handleAudio = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+    pausePreview();
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       audio = new Audio(URL.createObjectURL(target.files[0]));
       showPreview = 1;
       audio.addEventListener('loadedmetadata', () => {
-        if (!audio || !slider) return;
+        if (!audio) return;
         showPreview = 2;
         audio.volume = 0.5;
-        slider.noUiSlider?.destroy();
-        noUiSlider.create(slider, {
-          start: [0.2 * audio.duration, 0.8 * audio.duration],
-          connect: true,
-          range: {
-            min: 0,
-            max: audio.duration,
-          },
-        });
+        audioDuration = audio.duration;
+        previewRange = [0.2 * audio.duration, 0.8 * audio.duration];
         handlePreview();
-        slider.noUiSlider?.on('slide', handlePreview);
       });
     }
   };
 
-  const handlePreviewPlay = (e: MouseEvent) => {
+  const handlePreviewPlay = (e: Event) => {
     e.preventDefault();
     if (!audio) return;
     if (previewStatus === 0) {
-      audio.currentTime = previewStart;
-      previewTime = previewStart;
+      audio.currentTime = previewRange[0];
+      previewTime = previewRange[0];
     }
     if (previewStatus === 2) {
       pausePreview();
@@ -146,10 +132,10 @@
         () => {
           if (!audio) return;
           pausePreview();
-          audio.currentTime = previewStart;
+          audio.currentTime = previewRange[0];
           previewStatus = 0;
         },
-        (previewEnd - previewTime) * 1e3,
+        (previewRange[1] - previewTime) * 1e3,
       );
       audio.play();
       previewStatus = 2;
@@ -161,6 +147,11 @@
     audio.pause();
     clearTimeout(previewTimeout);
     clearInterval(previewTimer);
+  };
+
+  const restartPreview = (e: Event) => {
+    pausePreview();
+    handlePreviewPlay(e);
   };
 
   // TODO The file list of an input field of type "file" in an HTML form is read-only
@@ -443,30 +434,55 @@
                       name="PreviewStart"
                       onkeydown={(e) => {
                         if (e.key === 'Enter') {
-                          e.preventDefault();
+                          e.currentTarget.blur();
                         }
                       }}
                       placeholder={$t('studio.submission.start')}
-                      class="input w-1/6 text-right"
-                      value={convertTime(previewStart)}
-                      oninput={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                      class="input w-1/6 text-right hover:input-secondary"
+                      value={convertTime(previewRange[0])}
+                      onblur={(e) => {
+                        // discard changes if the input is invalid
+                        if (!timePattern.test(e.currentTarget.value)) {
+                          e.currentTarget.value = convertTime(previewRange[0]);
                           return;
-                        previewStart = parseTime(e.currentTarget.value);
-                        if (
-                          previewStart < 0 ||
-                          previewStart > previewEnd ||
-                          (audio && previewStart > audio.duration)
-                        )
+                        }
+                        previewRange[0] = parseTime(e.currentTarget.value);
+                        if (previewRange[0] < 0 || (audio && previewRange[0] > audio.duration))
                           return;
-                        pausePreview();
+                        if (previewRange[0] > previewRange[1]) {
+                          previewRange[1] = Math.min(
+                            previewRange[0] + 5,
+                            audio?.duration || Infinity,
+                          );
+                        }
+
                         previewStatus = 0;
-                        previewTime = previewStart;
-                        slider!.noUiSlider?.set([previewStart, previewEnd]);
+                        previewTime = previewRange[0];
+                        restartPreview(e);
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
+                  <div class="place-self-center w-2/3 daisy-ui">
+                    <!-- TODO: display audio.currentTime in slider -->
+                    <RangeSlider
+                      min={0}
+                      max={audioDuration}
+                      bind:values={previewRange}
+                      on:change={handlePreview}
+                      on:stop={restartPreview}
+                      pips
+                      step={0.01}
+                      pipstep={(audioDuration < 60 ? 7.5 : 30) / 0.01}
+                      formatter={(value, index, percent) => {
+                        return percent !== 100 && index && index % 2
+                          ? ''
+                          : convertTime(value, true);
+                      }}
+                      range
+                      pushy
+                      all="label"
+                    />
+                  </div>
                   {#if !!$errors.PreviewStart || !!$errors.PreviewEnd}
                     <span class="place-self-center w-1/3 text-error">
                       {$errors.PreviewStart ?? $errors.PreviewEnd}
@@ -478,25 +494,27 @@
                       name="PreviewEnd"
                       onkeydown={(e) => {
                         if (e.key === 'Enter') {
+                          e.currentTarget.blur();
                           e.preventDefault();
                         }
                       }}
                       placeholder={$t('studio.submission.end')}
-                      class="input w-1/6 text-left"
-                      value={convertTime(previewEnd)}
-                      oninput={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                      class="input w-1/6 text-left hover:input-secondary"
+                      value={convertTime(previewRange[1])}
+                      onblur={(e) => {
+                        // discard changes if the input is invalid
+                        if (!timePattern.test(e.currentTarget.value)) {
+                          e.currentTarget.value = convertTime(previewRange[1]);
                           return;
-                        previewEnd = parseTime(e.currentTarget.value);
-                        if (
-                          previewEnd < 0 ||
-                          previewStart > previewEnd ||
-                          (audio && previewEnd > audio.duration)
-                        )
+                        }
+                        previewRange[1] = parseTime(e.currentTarget.value);
+                        if (previewRange[1] < 0 || (audio && previewRange[1] > audio.duration))
                           return;
-                        pausePreview();
+                        if (previewRange[0] > previewRange[1]) {
+                          previewRange[0] = Math.max(previewRange[1] - 5, 0);
+                        }
                         previewStatus = 0;
-                        slider!.noUiSlider?.set([previewStart, previewEnd]);
+                        restartPreview(e);
                       }}
                     />
                   {/if}
@@ -968,15 +986,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .noUi-target {
-    --tw-border-opacity: 0.5;
-    --tw-bg-opacity: 1;
-    background: hsl(var(--b1) / var(--tw-bg-opacity));
-    box-shadow: none;
-    border-width: 1px;
-    border-color: hsl(var(--bc) / var(--tw-border-opacity));
-    border-radius: var(--rounded-badge, 1.9rem /* 30.4px */);
-  }
-</style>
