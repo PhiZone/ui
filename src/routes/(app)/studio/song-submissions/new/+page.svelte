@@ -438,7 +438,7 @@
                         }
                       }}
                       placeholder={$t('studio.submission.start')}
-                      class="input w-1/6 text-right hover:input-secondary"
+                      class="input w-1/6 text-right border-2 transition hover:input-secondary"
                       value={convertTime(previewRange[0])}
                       onblur={(e) => {
                         // discard changes if the input is invalid
@@ -496,7 +496,7 @@
                         }
                       }}
                       placeholder={$t('studio.submission.end')}
-                      class="input w-1/6 text-left hover:input-secondary"
+                      class="input w-1/6 text-left border-2 transition hover:input-secondary"
                       value={convertTime(previewRange[1])}
                       onblur={(e) => {
                         // discard changes if the input is invalid

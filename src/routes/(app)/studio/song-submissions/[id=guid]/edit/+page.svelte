@@ -107,7 +107,9 @@
       showPreview = 2;
       audio.volume = 0.5;
       audioDuration = audio.duration;
-      previewRange = [0.2 * audio.duration, 0.8 * audio.duration];
+      previewRange = resetPreview
+        ? [0.2 * audio.duration, 0.8 * audio.duration]
+        : [parseTime(song.previewStart), parseTime(song.previewEnd)];
       handlePreview();
     });
   };
@@ -510,7 +512,7 @@
                           }
                         }}
                         placeholder={$t('studio.submission.start')}
-                        class="input w-1/6 text-right"
+                        class="input w-1/6 text-right border-2 transition hover:input-secondary"
                         value={convertTime(previewRange[0])}
                         onblur={(e) => {
                           // discard changes if the input is invalid
@@ -594,7 +596,7 @@
                           }
                         }}
                         placeholder={$t('studio.submission.end')}
-                        class="input w-1/6 text-left hover:input-secondary"
+                        class="input w-1/6 text-left border-2 transition hover:input-secondary"
                         value={convertTime(previewRange[1])}
                         onblur={(e) => {
                           // discard changes if the input is invalid
