@@ -465,6 +465,7 @@
                   <div class="place-self-center w-2/3 daisy-ui">
                     <!-- TODO: display audio.currentTime in slider -->
                     <RangeSlider
+                      id="preview-slider"
                       min={0}
                       max={audioDuration}
                       bind:values={previewRange}
@@ -472,12 +473,8 @@
                       on:stop={restartPreview}
                       pips
                       step={0.01}
-                      pipstep={(audioDuration < 60 ? 7.5 : 30) / 0.01}
-                      formatter={(value, index, percent) => {
-                        return percent !== 100 && index && index % 2
-                          ? ''
-                          : convertTime(value, true);
-                      }}
+                      pipstep={(audioDuration < 60 ? 5 : audioDuration < 600 ? 30 : 300) / 0.01}
+                      formatter={(value) => convertTime(value, true)}
                       range
                       pushy
                       all="label"
@@ -986,3 +983,33 @@
     </div>
   </div>
 </div>
+
+<style>
+  :global #preview-slider {
+    .pip .pipVal {
+      display: none;
+    }
+
+    .pip:nth-of-type(1) .pipVal,
+    .pip:nth-last-of-type(1) .pipVal {
+      display: inline-flex;
+    }
+    .pip:nth-last-of-type(2) .pipVal {
+      display: none;
+    }
+    .pip:nth-of-type(odd) {
+      width: 1.5px;
+    }
+
+    @screen sm {
+      .pip:nth-of-type(4n + 1) .pipVal {
+        display: inline-flex;
+      }
+    }
+    @screen lg {
+      .pip:nth-of-type(odd) .pipVal {
+        display: inline-flex;
+      }
+    }
+  }
+</style>
