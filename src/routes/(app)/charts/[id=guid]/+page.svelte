@@ -503,14 +503,14 @@
                   </p>
                 {/if}
                 {#if chart.tags.length > 0}
-                  <p class="inline-flex gap-1 flex-wrap">
+                  <div class="inline-flex gap-1 flex-wrap">
                     <span class="badge">
                       {$t('common.tags')}
                     </span>
                     {#each chart.tags as tag}
                       <Tag {tag} />
                     {/each}
-                  </p>
+                  </div>
                 {/if}
               </div>
               <div class="divider lg:divider-horizontal"></div>
