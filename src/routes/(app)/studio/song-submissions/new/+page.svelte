@@ -989,18 +989,13 @@
     .pip .pipVal {
       display: none;
     }
-
+    .pip:nth-of-type(odd) {
+      width: 1.5px;
+    }
     .pip:nth-of-type(1) .pipVal,
     .pip:nth-last-of-type(1) .pipVal {
       display: inline-flex;
     }
-    .pip:nth-last-of-type(2) .pipVal {
-      display: none;
-    }
-    .pip:nth-of-type(odd) {
-      width: 1.5px;
-    }
-
     @screen sm {
       .pip:nth-of-type(4n + 1) .pipVal {
         display: inline-flex;
@@ -1010,6 +1005,9 @@
       .pip:nth-of-type(odd) .pipVal {
         display: inline-flex;
       }
+    }
+    .pip:nth-last-of-type(2) .pipVal {
+      display: none;
     }
   }
 </style>
