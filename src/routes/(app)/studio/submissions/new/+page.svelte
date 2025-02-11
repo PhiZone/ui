@@ -164,7 +164,7 @@
         {:else}
           <iframe
             class="w-full h-full rounded-2xl"
-            src="https://insider.phizone.cn/player"
+            src="/player"
             title="PhiZone Player"
             bind:this={iframe}
             on:load={() => {
