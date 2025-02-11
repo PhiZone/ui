@@ -11,9 +11,6 @@ importers:
       '@fortawesome/fontawesome-free':
         specifier: ^6.7.2
         version: 6.7.2
-      '@sveltejs/adapter-vercel':
-        specifier: ^5.6.1
-        version: 5.6.1(@sveltejs/kit@2.16.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(rollup@4.34.0)
       '@tanstack/svelte-query':
         specifier: ^5.65.0
         version: 5.65.0(svelte@4.2.19)
@@ -42,6 +39,9 @@ importers:
       '@sveltejs/adapter-node':
         specifier: ^5.2.12
         version: 5.2.12(@sveltejs/kit@2.16.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))
+      '@sveltejs/adapter-vercel':
+        specifier: ^5.6.1
+        version: 5.6.1(@sveltejs/kit@2.16.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(rollup@4.34.0)
       '@sveltejs/kit':
         specifier: ^2.16.1
         version: 2.16.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13)))(svelte@4.2.19)(vite@5.4.14(@types/node@18.18.13))
