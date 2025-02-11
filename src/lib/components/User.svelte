@@ -1,9 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+
+  import type { UserDto } from '$lib/api';
+
   import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserLevel } from '$lib/utils';
-  import type { UserDto } from '$lib/api';
+
   import Follow from './Follow.svelte';
 
   $: ({ api } = $page.data);
@@ -21,11 +24,11 @@
 {#if kind === 'embedded' || kind === 'embedded-mini'}
   {#if !initUser && $query.isLoading}
     <div class="avatar {kind === 'embedded' ? 'flex-col' : ''} items-center">
-      <div class="{kind === 'embedded' ? 'w-[72px]' : 'w-10'} rounded-full skeleton" />
-      <p class="h-7 max-w-[120px] rounded skeleton" />
+      <div class="{kind === 'embedded' ? 'w-[72px]' : 'w-10'} rounded-full skeleton"></div>
+      <p class="h-7 max-w-[120px] rounded skeleton"></p>
     </div>
     <div class="flex gap-1">
-      <span class="h-4 w-6 skeleton" />
+      <span class="h-4 w-6 skeleton"></span>
     </div>
   {:else if initUser || $query.isSuccess}
     {@const user = initUser ?? $query.data?.data}
@@ -81,22 +84,22 @@
       {#if !initUser && $query.isLoading}
         <div>
           <div class="avatar flex items-center min-w-fit">
-            <div class="w-12 rounded-full skeleton" />
+            <div class="w-12 rounded-full skeleton"></div>
             <p class="ml-2 flex gap-1 items-center">
-              <span class="rounded h-5 w-16 skeleton" />
-              <span class="rounded h-5 w-10 skeleton" />
+              <span class="rounded h-5 w-16 skeleton"></span>
+              <span class="rounded h-5 w-10 skeleton"></span>
             </p>
           </div>
         </div>
         {#if kind === 'full'}
           <div class="px-3 w-full flex flex-col gap-2 {fixedHeight ? 'h-3/4' : ''}">
-            <span class="rounded h-6 w-full skeleton" />
-            <span class="rounded h-6 w-full skeleton" />
-            <span class="rounded h-6 w-full skeleton" />
+            <span class="rounded h-6 w-full skeleton"></span>
+            <span class="rounded h-6 w-full skeleton"></span>
+            <span class="rounded h-6 w-full skeleton"></span>
           </div>
         {/if}
         {#if showFollow}
-          <button class="w-24 h-12 btn" disabled />
+          <button class="w-24 h-12 btn" disabled></button>
         {/if}
       {:else if initUser || $query.isSuccess}
         {@const user = initUser ?? $query.data?.data}

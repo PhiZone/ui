@@ -1,5 +1,6 @@
-import API from '$lib/api';
 import { fail } from '@sveltejs/kit';
+
+import API from '$lib/api';
 
 export const load = async ({ cookies }) => {
   const preferredPlayConfiguration = cookies.get('preferred_play_configuration');

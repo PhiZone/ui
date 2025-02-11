@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import { createQuery } from '@tanstack/svelte-query';
+
   import Hostship from '$lib/components/Hostship.svelte';
-  import { getUserPrivilege, hasEventPermission } from '$lib/utils';
+  import Tag from '$lib/components/Tag.svelte';
   import { Status } from '$lib/constants';
   import { analyze, CREATE, gen, HOSTSHIP } from '$lib/hostshipPermissions';
-  import Tag from '$lib/components/Tag.svelte';
+  import { t } from '$lib/translations/config';
+  import { getUserPrivilege, hasEventPermission } from '$lib/utils';
 
   export let data;
 

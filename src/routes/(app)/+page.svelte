@@ -1,9 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+
+  import type { SearchFilterType } from '$lib/filters';
+
   import { goto } from '$app/navigation';
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
-  import type { SearchFilterType } from '$lib/filters';
+  import { t } from '$lib/translations/config';
 
   export let data;
 
@@ -49,7 +51,7 @@
   <source src="/background.webm" type="video/webm" />
 </video>
 <div class="hero min-h-screen overflow-y-auto">
-  <div class="hero-overlay bg-opacity-30 z-10" />
+  <div class="hero-overlay bg-opacity-30 z-10"></div>
   <div class="w-5/6 max-w-4xl form-control text-center py-32 z-10">
     <div class="text-neutral-content">
       <img class="logo" src="/favicon.ico" alt="Logo" />

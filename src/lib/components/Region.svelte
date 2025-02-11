@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import type { RegionDto } from '$lib/api/user';
+
+  import { t } from '$lib/translations/config';
 
   export let region: RegionDto | string | undefined;
   export let width = 21;

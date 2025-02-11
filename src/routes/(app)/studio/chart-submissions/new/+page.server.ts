@@ -1,11 +1,13 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+
 import API from '$lib/api';
-import { t } from '$lib/translations/config';
-import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 import { ChartLevel } from '$lib/api/chart';
+import { Accessibility, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
+import { t } from '$lib/translations/config';
 
 const schema = z.object({
   Title: z.string().max(100, t.get('error.ValueTooLong')).optional(),
@@ -27,7 +29,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -35,7 +37,7 @@ export const actions = {
   default: async ({ request, url, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -47,7 +49,7 @@ export const actions = {
     const Tags = tagsRaw ? tagsRaw.split(TAG_JOINER).map((tag: string) => tag.trim()) : [];
     const resp = await api.chart.submission.create({ File, Illustration, Tags, ...rest });
     if (resp.ok) {
-      throw redirect(303, '/studio/chart-submissions' + url.search);
+      redirect(303, '/studio/chart-submissions' + url.search);
     } else {
       try {
         const error = await resp.json();

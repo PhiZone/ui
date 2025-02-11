@@ -1,26 +1,27 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+
   import { enhance } from '$app/forms';
-  import { t } from '$lib/translations/config';
-  import { getLevelDisplay, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
-  import { Status } from '$lib/constants';
-  import Song from '$lib/components/Song.svelte';
-  import User from '$lib/components/User.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import Collection from '$lib/components/Collection.svelte';
-  import Record from '$lib/components/Record.svelte';
-  import Comments from '$lib/components/Comments.svelte';
-  import ChartRadar from '$lib/components/ChartRadar.svelte';
-  import Rating from '$lib/components/Rating.svelte';
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
   import ChartAsset from '$lib/components/ChartAsset.svelte';
+  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
+  import ChartRadar from '$lib/components/ChartRadar.svelte';
+  import Collection from '$lib/components/Collection.svelte';
+  import Comments from '$lib/components/Comments.svelte';
+  import Download from '$lib/components/Download.svelte';
   import Error from '$lib/components/Error.svelte';
   import InteractiveRating from '$lib/components/InteractiveRating.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Rating from '$lib/components/Rating.svelte';
+  import Record from '$lib/components/Record.svelte';
+  import Song from '$lib/components/Song.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import ChartLabel from '$lib/components/ChartDifficulty.svelte';
-  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
-  import Download from '$lib/components/Download.svelte';
+  import User from '$lib/components/User.svelte';
+  import { Status } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { getLevelDisplay, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
 
   export let data, form;
   const {
@@ -61,10 +62,12 @@
     return 0;
   };
 
-  $: chart = createQuery(api.chart.info({ id, includeAssets: true }));
+  $: chartOptions = api.chart.info({ id, includeAssets: true });
+  $: chart = createQuery({ ...chartOptions });
   $: collections = createQuery(api.chart.listAllAdmitters({ id }));
   $: leaderboard = createQuery(api.chart.leaderboard({ id }));
-  $: votes = createQuery(api.vote.listAll({ chartId: id }));
+  $: votesOptions = api.vote.listAll({ chartId: id });
+  $: votes = createQuery({ ...votesOptions });
   $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
   $: charter = richtext($chart.data?.data.authorName ?? $t('common.anonymous'));
 
@@ -266,8 +269,8 @@
                 status = Status.ERROR;
               } else if (result.type === 'success') {
                 status = Status.OK;
-                await queryClient.invalidateQueries(['chart.info', { id, includeAssets: true }]);
-                await queryClient.invalidateQueries(['vote.listAll', { chartId: id }]);
+                await queryClient.invalidateQueries({ queryKey: chartOptions.queryKey });
+                await queryClient.invalidateQueries({ queryKey: votesOptions.queryKey });
                 // TODO: toast
                 voteOpen = false;
               }
@@ -502,7 +505,7 @@
                   </p>
                 {/if}
               </div>
-              <div class="divider lg:divider-horizontal" />
+              <div class="divider lg:divider-horizontal"></div>
               <div class="lg:w-1/2 float-right p-4 form-control gap-3">
                 <ChartRadar {chart} />
                 <div
@@ -721,5 +724,5 @@
 {:else if $chart.isError}
   <Error error={$chart.error} back="/charts" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

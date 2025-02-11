@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
+  import type { ServiceResponseDto, ServiceScriptDto } from '$lib/api/service';
+
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { Status } from '$lib/constants';
-  import type { ServiceResponseDto, ServiceScriptDto } from '$lib/api/service';
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/translations/config';
 
   const { api } = $page.data;
 

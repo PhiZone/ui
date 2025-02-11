@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
   import { page } from '$app/stores';
   import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   const { api } = $page.data;
 
@@ -18,7 +18,7 @@
   export let path: string;
   export let name: string | undefined = undefined;
   export let hasText = false;
-  export let onDelete: () => void = () => {};
+  export let onDelete: $$Props['onDelete'] = undefined;
   let status = Status.WAITING;
   let confirm = 0;
 
@@ -27,7 +27,7 @@
     const resp = await api.DELETE(`/${path}/${id}`);
     if (resp.ok || resp.status === 404) {
       status = Status.OK;
-      onDelete();
+      onDelete?.();
     } else {
       console.error(
         `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,

@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { page } from '$app/stores';
   import type { CollectionAdmissionDto } from '$lib/api/admission';
+
+  import { page } from '$app/stores';
+  import { t } from '$lib/translations/config';
+
+  import AdmissionDelete from './AdmissionDelete.svelte';
   import Chart from './Chart.svelte';
   import Collection from './Collection.svelte';
   import User from './User.svelte';
-  import AdmissionDelete from './AdmissionDelete.svelte';
 
   export let admission: CollectionAdmissionDto;
   export let showChart = true;

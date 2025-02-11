@@ -1,17 +1,18 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Like from '$lib/components/Like.svelte';
+  import queryString from 'query-string';
+
+  import { goto, invalidateAll, preloadData } from '$app/navigation';
+  import Chart from '$lib/components/Chart.svelte';
   import Comments from '$lib/components/Comments.svelte';
   import Error from '$lib/components/Error.svelte';
-  import { goto, invalidateAll, preloadData } from '$app/navigation';
-  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
-  import Song from '$lib/components/Song.svelte';
-  import Chart from '$lib/components/Chart.svelte';
+  import Like from '$lib/components/Like.svelte';
   import Record from '$lib/components/Record.svelte';
-  import Timer from '$lib/components/Timer.svelte';
+  import Song from '$lib/components/Song.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import queryString from 'query-string';
+  import Timer from '$lib/components/Timer.svelte';
+  import { t } from '$lib/translations/config';
+  import { getAvatar, isEventHost, parseDateTime } from '$lib/utils';
 
   export let data;
 
@@ -206,7 +207,7 @@
     class="background min-h-screen"
     style:background-image="url({division.illustration ?? event.illustration})"
   >
-    <div class="hero-overlay bg-opacity-60" />
+    <div class="hero-overlay bg-opacity-60"></div>
     <div class="pt-32 pb-24 w-full flex flex-col max-w px-4 md:px-32 mx-auto">
       <h1 class="text-7xl font-bold drop-shadow-xl text-neutral-content">
         <a class="transition hover:text-accent" href="/events/{event.id}">{event.title}</a>
@@ -797,10 +798,10 @@
 {:else if $division.isError}
   <Error error={$division.error} back="/divisions" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
-<style>
+<style lang="postcss">
   .gradient:not(:hover) {
     @apply bg-gradient-to-tl from-indigo-700 via-purple-600 to-pink-500;
   }

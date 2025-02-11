@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ResourceRecordDto } from '$lib/api/resourceRecord';
+
   import { t } from '$lib/translations/config';
 
   export let resourceRecord: ResourceRecordDto;

@@ -1,19 +1,20 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import { convertTime, parseTime, parseLyrics, parseDateTime } from '$lib/utils';
-  import Comments from '$lib/components/Comments.svelte';
-  import User from '$lib/components/User.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import Chapter from '$lib/components/Chapter.svelte';
-  import Player from '$lib/components/SongPlayer.svelte';
-  import Chart from '$lib/components/Chart.svelte';
-  import { richtext } from '$lib/richtext';
   import { readable } from 'svelte/store';
-  import Error from '$lib/components/Error.svelte';
-  import Tag from '$lib/components/Tag.svelte';
+
   import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Chapter from '$lib/components/Chapter.svelte';
+  import Chart from '$lib/components/Chart.svelte';
+  import Comments from '$lib/components/Comments.svelte';
   import Download from '$lib/components/Download.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Player from '$lib/components/SongPlayer.svelte';
+  import Tag from '$lib/components/Tag.svelte';
+  import User from '$lib/components/User.svelte';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { convertTime, parseDateTime, parseLyrics, parseTime } from '$lib/utils';
 
   export let data;
 
@@ -310,7 +311,7 @@
 {:else if $song.isError}
   <Error error={$song.error} back="/songs" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

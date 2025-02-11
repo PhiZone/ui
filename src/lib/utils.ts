@@ -1,59 +1,25 @@
 import type { Cookies } from '@sveltejs/kit';
-import { USER_LEVELS, DEFAULT_LOCALE } from './constants';
+import type { ParsedQuery } from 'query-string';
+
+import { micromark } from 'micromark';
+import { math, mathHtml } from 'micromark-extension-math';
+import queryString from 'query-string';
+
 import { PUBLIC_AVATAR } from '$env/static/public';
-import type { PatchElement } from './api/types';
+
 import type API from './api';
 import type { UserDetailedDto } from './api';
 import type { EventDto } from './api/event';
-import { gen, hasPermission } from './hostshipPermissions';
-import type { ParsedQuery } from 'query-string';
-import queryString from 'query-string';
+import type { PatchElement } from './api/types';
 
-export const parseLatex = (input: string) => {
-  const result = input.matchAll(/(\$[^$]+\$)/g);
-  let element = result.next();
-  const latex = [];
-  while (element.value) {
-    latex.push({
-      index: element.value.index,
-      text: element.value[0],
-      length: element.value[0].length,
-    });
-    if (element.done) {
-      break;
-    }
-    element = result.next();
-  }
-  const array = [];
-  if (latex.length === 0) {
-    array.push({
-      latex: false,
-      text: input,
-    });
-    return array;
-  }
-  let i = 0;
-  for (let j = 0; i < input.length && j < latex.length; j++) {
-    if (i < latex[j].index) {
-      array.push({
-        latex: false,
-        text: input.substring(i, latex[j].index),
-      });
-      i = latex[j].index;
-    }
-    array.push({
-      latex: true,
-      text: latex[j].text.substring(1, latex[j].length - 1),
-    });
-    i += latex[j].length;
-  }
-  if (i < input.length - 1) {
-    array.push({
-      latex: false,
-      text: input.substring(i),
-    });
-  }
-  return array;
+import { DEFAULT_LOCALE, USER_LEVELS } from './constants';
+import { gen, hasPermission } from './hostshipPermissions';
+
+export const renderMarkdown = (input: string) => {
+  return micromark(input, {
+    extensions: [math()],
+    htmlExtensions: [mathHtml()],
+  });
 };
 
 export const getUserPrivilege = (role: string | null | undefined) => {
@@ -267,9 +233,9 @@ export const getLevelColor = (type: number | undefined) => {
 };
 
 export const getUserLevel = (exp: number) => {
-  for (let i = 0; i < USER_LEVELS.length; ++i) {
-    if (exp < USER_LEVELS[i].exp) {
-      return USER_LEVELS[i].level - 1;
+  for (const level of USER_LEVELS) {
+    if (exp < level.exp) {
+      return level.level - 1;
     }
   }
   return USER_LEVELS[USER_LEVELS.length - 1].level;
@@ -443,13 +409,7 @@ export const requestIdentity = async (
 export const convertToParsedQuery = (
   params: URLSearchParams,
 ): ParsedQuery<string | number | boolean> => {
-  const obj: Record<string, string> = {};
-
-  params.forEach((value, key) => {
-    obj[key] = value;
-  });
-
-  const parsed = queryString.parse(queryString.stringify(obj), {
+  const parsed = queryString.parse(params.toString(), {
     parseBooleans: true,
     parseNumbers: true,
   });

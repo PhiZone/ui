@@ -1,9 +1,11 @@
-import { stringifyFilter, createQueryCreator } from './common';
-import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
-import type API from '.';
 import { serialize } from 'object-to-formdata';
+
+import type API from '.';
 import type { UserDto } from '.';
 import type { ReservedFieldDto } from './event';
+import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface EventTeamDto {
   claimedParticipantCount: number;

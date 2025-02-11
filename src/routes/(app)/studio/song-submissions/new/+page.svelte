@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { superForm } from 'sveltekit-superforms/client';
   import { createQuery } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
-  import { convertTime, parseTime } from '$lib/utils';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import User from '$lib/components/User.svelte';
-  import Song from '$lib/components/Song.svelte';
+  import { onDestroy } from 'svelte';
+  import { superForm } from 'sveltekit-superforms';
+
   // import Cropper from '$lib/components/ImageCropper.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import Song from '$lib/components/Song.svelte';
   import Tag from '$lib/components/Tag.svelte';
-  import { onDestroy } from 'svelte';
+  import User from '$lib/components/User.svelte';
   import { TAG_JOINER } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { convertTime, parseTime } from '$lib/utils';
 
   export let data;
 
@@ -455,7 +456,7 @@
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider} />
+                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
                   {#if !!$errors.PreviewStart || !!$errors.PreviewEnd}
                     <span class="place-self-center w-1/3 text-error">
                       {$errors.PreviewStart ?? $errors.PreviewEnd}
@@ -817,7 +818,7 @@
                     $errors.Description ? 'hover:textarea-error' : 'hover:textarea-secondary'
                   } w-3/4 h-28`}
                   placeholder={`${$t('common.description')}${$t('common.optional')}`}
-                />
+                ></textarea>
               </label>
             </div>
             <input type="hidden" id="tags" name="Tags" bind:value={tagsRaw} />

@@ -1,9 +1,11 @@
-import { stringifyFilter, createQueryCreator } from './common';
-import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
-import type { HostshipDto } from './event';
-import type API from '.';
 import { serialize } from 'object-to-formdata';
+
+import type API from '.';
 import type { ApplicationDto } from '.';
+import type { HostshipDto } from './event';
+import type { CodeDto, FileUpdateOpts, FilterBase, PatchElement, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export enum Gender {
   Unset,

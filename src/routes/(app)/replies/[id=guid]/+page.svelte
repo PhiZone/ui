@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Reply from '$lib/components/Reply.svelte';
+
   import Error from '$lib/components/Error.svelte';
+  import Reply from '$lib/components/Reply.svelte';
+  import { t } from '$lib/translations/config';
 
   export let data;
 
@@ -33,5 +34,5 @@
 {:else if $query.isError}
   <Error error={$query.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

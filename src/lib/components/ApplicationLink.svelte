@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { requestIdentity, getAppUserLink, getAvatar } from '$lib/utils';
   import type { ApplicationUserDto } from '$lib/api/user';
-  import Delete from './Delete.svelte';
-  import { SUPPORTED_APPS } from '$lib/constants';
+
   import { page } from '$app/stores';
+  import { SUPPORTED_APPS } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { getAppUserLink, getAvatar, requestIdentity } from '$lib/utils';
+
+  import Delete from './Delete.svelte';
 
   export let appLink: ApplicationUserDto;
   export let kind: 'full' | 'mini' = 'full';

@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { ResponseDtoError } from '$lib/api/types';
+
   import { t } from '$lib/translations/config';
 
-  export let id = 'update-success';
+  export let id = 'update-error';
   export let checked: boolean;
   export let onClick: () => void;
   export let error: ResponseDtoError | undefined = undefined;

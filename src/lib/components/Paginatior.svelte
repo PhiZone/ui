@@ -1,5 +1,6 @@
 <script lang="ts">
   import queryString, { type ParsedQuery } from 'query-string';
+
   import { range } from '$lib/utils';
 
   export let studio = false;

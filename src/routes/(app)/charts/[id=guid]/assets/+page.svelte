@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
+  import { superForm } from 'sveltekit-superforms';
+
   import ChartAsset from '$lib/components/ChartAsset.svelte';
-  import Paginator from '$lib/components/Paginatior.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
-  import { getFileType, getLevelDisplay, getUserPrivilege } from '$lib/utils';
   import Error from '$lib/components/Error.svelte';
+  import Paginator from '$lib/components/Paginatior.svelte';
+  import { t } from '$lib/translations/config';
+  import { getFileType, getLevelDisplay, getUserPrivilege } from '$lib/utils';
 
   export let data;
 
@@ -194,5 +195,5 @@
 {:else if $query.isError}
   <Error error={$query.error} back="/charts" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

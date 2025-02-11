@@ -1,8 +1,10 @@
 import queryString from 'query-string';
-import { createQueryCreator, stringifyFilter } from './common';
+
+import type API from '.';
 import type { FilterBase, R } from './types';
 import type { UserDto } from './user';
-import type API from '.';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface NotificationDto {
   content: string;

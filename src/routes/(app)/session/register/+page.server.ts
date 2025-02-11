@@ -1,6 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
+
 import API, { Gender } from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
 import { t } from '$lib/translations/config';
@@ -38,7 +40,7 @@ const schema = z
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -47,7 +49,7 @@ export const actions = {
     const api = new API(fetch);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -60,7 +62,7 @@ export const actions = {
       const redirectUri = url.searchParams.get('redirect');
       const external = redirectUri != null && redirectUri.startsWith('http');
       const result = await login(api, data.data.token, cookies);
-      throw redirect(
+      redirect(
         303,
         `${redirectUri ?? '/'}${
           external

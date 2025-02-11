@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { applyPatch, getAvatar, range } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
   import type { EventTeamDto } from '$lib/api/event';
-  import { invalidateAll } from '$app/navigation';
   import type { PatchElement } from '$lib/api/types';
-  import { Status } from '$lib/constants';
+
+  import { invalidateAll } from '$app/navigation';
+  import Delete from '$lib/components/Delete.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import Delete from '$lib/components/Delete.svelte';
   import User from '$lib/components/User.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getAvatar, range } from '$lib/utils';
 
   export let data;
 
@@ -27,7 +29,8 @@
   let iconCropperSrc: string;
   let iconSrc: string;
 
-  $: query = createQuery(api.event.team.info({ id }));
+  $: options = api.event.team.info({ id });
+  $: query = createQuery({ ...options });
   $: division = createQuery(
     api.event.division.info(
       { id: $query.data?.data.divisionId ?? '' },
@@ -64,7 +67,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['event.team.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -121,7 +124,7 @@
       const resp = await api.event.team.updateIcon({ id, File: e.detail });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['event.team.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         iconCropping = false;
         status = Status.OK;
       } else {
@@ -350,7 +353,7 @@
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
-                />
+                ></textarea>
               </label>
               <button
                 type="button"

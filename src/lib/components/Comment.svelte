@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { locale, t } from '$lib/translations/config';
-  import type { CommentDto, UserDto } from '$lib/api';
-  import { getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { richtext } from '$lib/richtext';
-  import { page } from '$app/stores';
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
   import type { ParsedQuery } from 'query-string';
+
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+
+  import type { CommentDto, UserDto } from '$lib/api';
+
+  import { page } from '$app/stores';
+  import { richtext } from '$lib/richtext';
+  import { locale, t } from '$lib/translations/config';
+  import { getUserPrivilege, parseDateTime } from '$lib/utils';
+
+  import Delete from './Delete.svelte';
   import Like from './Like.svelte';
   import Paginator from './Paginatior.svelte';
-  import Delete from './Delete.svelte';
-  import User from './User.svelte';
   import ReplyComponent from './Reply.svelte';
+  import User from './User.svelte';
 
   $: ({ user, api } = $page.data);
 
@@ -22,6 +26,10 @@
 
   const queryClient = useQueryClient();
 
+  $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
+  $: options = api.reply.list({ commentId: comment.id, page: replyPage });
+  $: query = createQuery({ ...options });
+
   $: disabled = !user;
   let replyText = '';
   const sendReply = async () => {
@@ -30,15 +38,9 @@
       await api.reply.create({ commentId: comment.id, content: replyText, language: $locale });
       disabled = false;
       replyText = '';
-      await queryClient.invalidateQueries([
-        'reply.list',
-        { commentId: comment.id, page: replyPage },
-      ]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
     }
   };
-
-  $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
-  $: query = createQuery(api.reply.list({ commentId: comment.id, page: replyPage }));
 
   const replyTo = async (user: UserDto) => {
     replyText = `${$t('common.reply_to')}@${user.userName}${$t('common.colon')}`;
@@ -67,7 +69,7 @@
         placeholder={$t('common.write_reply')}
         {disabled}
         bind:value={replyText}
-      />
+      ></textarea>
       <button
         class="ml-3 btn {disabled || replyText.length === 0
           ? 'btn-disabled'
@@ -80,7 +82,7 @@
     </div>
     <ul class="menu bg-base-100 w-full">
       {#if $query.isLoading}
-        <div />
+        <div></div>
       {:else if $query.isSuccess}
         {@const { total, perPage, data } = $query.data}
         {#if total && perPage && data && data.length > 0}

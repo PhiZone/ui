@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import Song from '$lib/components/Song.svelte';
-  import Error from '$lib/components/Error.svelte';
+
   import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Song from '$lib/components/Song.svelte';
   import { PAGINATION_PER_PAGE } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   export let data;
   $: ({ id, api } = data);
@@ -58,7 +59,7 @@
         <p class="py-3 text-center">{$t('common.empty')}</p>
       {/if}
     {:else}
-      <div class="min-h-page skeleton" />
+      <div class="min-h-page skeleton"></div>
     {/if}
     {#if $charts.isSuccess}
       {@const { total, perPage, data } = $charts.data}
@@ -91,11 +92,11 @@
         <p class="py-3 text-center">{$t('common.empty')}</p>
       {/if}
     {:else}
-      <div class="min-h-page skeleton" />
+      <div class="min-h-page skeleton"></div>
     {/if}
   </div>
 {:else if $tag.isError}
   <Error error={$tag.error} />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

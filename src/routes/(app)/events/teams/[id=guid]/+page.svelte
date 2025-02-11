@@ -1,16 +1,17 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import { getAvatar, hasEventPermission } from '$lib/utils';
+
+  import { goto } from '$app/navigation';
+  import Chart from '$lib/components/Chart.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
+  import Record from '$lib/components/Record.svelte';
   import Song from '$lib/components/Song.svelte';
   import User from '$lib/components/User.svelte';
-  import Record from '$lib/components/Record.svelte';
-  import Error from '$lib/components/Error.svelte';
-  import Chart from '$lib/components/Chart.svelte';
-  import { UPDATE, TEAM, REMOVE } from '$lib/hostshipPermissions';
   import { Status } from '$lib/constants';
-  import { goto } from '$app/navigation';
-  import EventDivision from '$lib/components/EventDivision.svelte';
+  import { REMOVE, TEAM, UPDATE } from '$lib/hostshipPermissions';
+  import { t } from '$lib/translations/config';
+  import { getAvatar, hasEventPermission } from '$lib/utils';
 
   export let data;
   const { user, id, api, url } = data;
@@ -270,7 +271,7 @@
     </div>
   </div>
   <div class="background min-h-screen" style:background-image="url({getAvatar(team.icon)})">
-    <div class="hero-overlay bg-opacity-70" />
+    <div class="hero-overlay bg-opacity-70"></div>
     <div class="min-h-page backdrop-blur-3xl py-24 px-2 md:px-12 flex flex-col items-center">
       <div class="py-3 flex flex-col sm:flex-row gap-4 items-center max-w-5xl">
         <div class="avatar">
@@ -501,5 +502,5 @@
 {:else if $team.isError}
   <Error error={$team.error} back="/events" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}

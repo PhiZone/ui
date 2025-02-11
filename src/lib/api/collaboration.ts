@@ -1,6 +1,7 @@
 import type API from '.';
-import { stringifyFilter, createQueryCreator } from './common';
 import type { FilterBase, PatchElement, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface CollaborationDto {
   dateCreated: string;

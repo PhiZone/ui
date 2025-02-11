@@ -1,9 +1,9 @@
 import type Svelecte from 'svelecte';
 
-type Item = {
+interface Item {
   label: string;
   value: string | number;
-};
+}
 type Range = [min: number, max: number];
 
 interface IFilterBase {
@@ -46,11 +46,11 @@ interface IFilterInputGroup extends IFilterBase {
   items: IFilterInputItem[];
 }
 
-export type IFilterSelectItem = {
+export interface IFilterSelectItem {
   id: string | number;
   label: string;
   value: string | number;
-};
+}
 
 interface IFilterSelect extends IFilterBase {
   type: 'select';
@@ -67,11 +67,11 @@ interface IFilterSelect extends IFilterBase {
   options?: Svelecte['$$prop_def'];
 }
 
-export type IFilterOrderItem = {
+export interface IFilterOrderItem {
   id: string | number;
   label: string;
   value: { field: string; desc: boolean };
-};
+}
 
 interface IFilterOrder extends IFilterBase {
   type: 'select';
@@ -118,13 +118,13 @@ interface IFilterRadio extends IFilterBase {
 export type {
   IFilterBase,
   IFilterInput,
-  IFilterInputItem,
   IFilterInputGroup,
-  IFilterSelect,
+  IFilterInputItem,
   IFilterOrder,
+  IFilterRadio,
+  IFilterSelect,
   IFilterSlider,
   IFilterToggle,
-  IFilterRadio,
 };
 export type IFilter =
   | IFilterInput
@@ -137,7 +137,7 @@ export type IFilter =
   | IFilterCheckbox;
 
 export type IFilters = (IFilter | IFilter[])[];
-export type OrderItem = {
+export interface OrderItem {
   label: string;
   field: string;
-};
+}

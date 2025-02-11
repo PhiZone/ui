@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { readable } from 'svelte/store';
+
   import type { SongAdmitteeDto, SongDto } from '$lib/api';
+
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getCompressedImage } from '$lib/utils';
-  import { readable } from 'svelte/store';
+
   import Like from './Like.svelte';
 
   export let song: SongDto | SongAdmitteeDto;

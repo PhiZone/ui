@@ -1,18 +1,20 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { LEVEL_TYPES, Status } from '$lib/constants';
-  import User from '$lib/components/User.svelte';
-  import { applyPatch, getLevelDisplay } from '$lib/utils';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
-  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
-  import { invalidateAll } from '$app/navigation';
-  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
+
   import type { ChartSubmissionDto } from '$lib/api/chart.submission';
-  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
-  import Tag from '$lib/components/Tag.svelte';
+  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
+
+  import { invalidateAll } from '$app/navigation';
+  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
+  import Tag from '$lib/components/Tag.svelte';
   import UpdateError from '$lib/components/UpdateError.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import User from '$lib/components/User.svelte';
+  import { LEVEL_TYPES, Status } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getLevelDisplay } from '$lib/utils';
 
   export let data;
 
@@ -29,7 +31,8 @@
   let error: ResponseDtoError | undefined = undefined;
   let errors: Map<string, string> | undefined = undefined;
 
-  $: submission = createQuery(api.chart.submission.info({ id }));
+  $: options = api.chart.submission.info({ id });
+  $: submission = createQuery({ ...options });
   $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
   $: charter = createQuery(
     api.user.info({ id: newCharterId ?? 0 }, { enabled: !!newCharterId && queryCharter }),
@@ -76,7 +79,7 @@
       const resp = await api.chart.submission.updateChart({ id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['chart.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -101,7 +104,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['chart.submission.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -493,7 +496,7 @@
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
-                />
+                ></textarea>
               </label>
               <button
                 type="button"

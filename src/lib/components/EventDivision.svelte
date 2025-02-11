@@ -1,8 +1,10 @@
 <script lang="ts">
   import type { EventDivisionDto } from '$lib/api/event';
   import type { EventDto } from '$lib/api/event';
+
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
+
   import Like from './Like.svelte';
 
   export let kind: 'inline' | 'full' = 'inline';

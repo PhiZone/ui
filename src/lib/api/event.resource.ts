@@ -1,7 +1,8 @@
-import { stringifyFilter, createQueryCreator } from './common';
-import type { FilterBase, PatchElement, R } from './types';
 import type API from '.';
 import type { ReservedFieldDto } from './event';
+import type { FilterBase, PatchElement, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface EventResourceDto {
   dateCreated: string;

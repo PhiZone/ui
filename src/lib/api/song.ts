@@ -1,9 +1,10 @@
-import { stringifyFilter, createQueryCreator } from './common';
-import type { Accessibility, FilterBase, R } from './types';
-import type { ChapterAdmitterDto } from './chapter';
 import type API from '.';
-import SongSubmissionAPI from './song.submission';
+import type { ChapterAdmitterDto } from './chapter';
 import type { TagDto } from './tag';
+import type { Accessibility, FilterBase, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
+import SongSubmissionAPI from './song.submission';
 
 export interface ChartLevelDto {
   count: number;

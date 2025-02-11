@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { ServiceScriptDto } from '$lib/api/service';
+
   import { t } from '$lib/translations/config';
+
   import ServiceRequest from './ServiceRequest.svelte';
 
   export let service: ServiceScriptDto;

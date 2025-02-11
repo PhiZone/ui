@@ -1,16 +1,18 @@
 <script lang="ts">
-  import { Line } from 'svelte-chartjs';
   import {
-    Chart as ChartJS,
-    PointElement,
-    LineElement,
-    Tooltip,
-    Filler,
     CategoryScale,
+    Chart as ChartJS,
+    Filler,
     LinearScale,
+    LineElement,
+    PointElement,
+    Tooltip,
   } from 'chart.js';
-  import { t } from '$lib/translations/config';
+  import { Line } from 'svelte-chartjs';
+
   import type { VolunteerVoteDto } from '$lib/api/vote.volunteer';
+
+  import { t } from '$lib/translations/config';
 
   export let votes: VolunteerVoteDto[];
   export let ranked: boolean;

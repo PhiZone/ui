@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+
 import { getUserPrivilege } from '$lib/utils';
 
 export const load = async ({ url, parent }) => {
@@ -8,7 +9,7 @@ export const load = async ({ url, parent }) => {
   searchParams.page = page;
   searchParams.order = searchParams.order ?? ['dateUpdated'];
   searchParams.desc = searchParams.desc ?? [true];
-  if (getUserPrivilege(user?.role) < 4) searchParams.ownerId = user.id;
+  if (getUserPrivilege(user.role) < 4) searchParams.ownerId = user.id;
   await queryClient.prefetchQuery(api.song.submission.list(searchParams));
   return {
     searchParams,

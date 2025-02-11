@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+
   import { t } from '$lib/translations/config';
 
   export let data;

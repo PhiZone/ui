@@ -1,18 +1,20 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { invalidateAll } from '$app/navigation';
-  import { t } from '$lib/translations/config';
+
+  import type { ChartAssetDto } from '$lib/api/chart.asset';
   import type { PatchElement } from '$lib/api/types';
-  import { Status } from '$lib/constants';
-  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
+
+  import { invalidateAll } from '$app/navigation';
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Chart from '$lib/components/Chart.svelte';
   import Delete from '$lib/components/Delete.svelte';
+  import Download from '$lib/components/Download.svelte';
+  import Error from '$lib/components/Error.svelte';
   import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import User from '$lib/components/User.svelte';
-  import Chart from '$lib/components/Chart.svelte';
-  import type { ChartAssetDto } from '$lib/api/chart.asset';
-  import Error from '$lib/components/Error.svelte';
-  import Download from '$lib/components/Download.svelte';
-  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import { Status } from '$lib/constants';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
   export let data;
 
@@ -25,7 +27,8 @@
   $: ({ id, chartId, user, api, queryClient } = data);
 
   $: chart = createQuery(api.chart.info({ id: chartId }));
-  $: chartAssetQuery = createQuery(api.chart.asset.info({ chartId, id }));
+  $: options = api.chart.asset.info({ chartId, id });
+  $: chartAssetQuery = createQuery({ ...options });
   $: content = createQuery({
     queryKey: ['chart-asset-content'],
     queryFn: async () => await (await fetch($chartAssetQuery.data?.data.file ?? '')).text(),
@@ -48,7 +51,7 @@
       });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['chart.asset.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -267,24 +270,24 @@
                     alt="Asset Content"
                   />
                 {:else if chartAsset.type === 1}
-                  <audio src={chartAsset.file} class="w-full" controls />
+                  <audio src={chartAsset.file} class="w-full" controls></audio>
                 {:else if chartAsset.type === 2}
                   <!-- svelte-ignore a11y-media-has-caption -->
                   <video
                     src={chartAsset.file}
                     class="rounded-lg transition border-2 normal-border hover:shadow-lg"
                     controls
-                  />
+                  ></video>
                 {:else if $content.isSuccess}
                   <textarea
                     class="h-[50vh] textarea transition border-2 normal-border hover:shadow-lg text-lg font-code"
                     readonly
                     value={$content.data}
-                  />
+                  ></textarea>
                 {:else if $content.isLoading}
                   <div
                     class="skeleton h-[50vh] rounded-lg transition border-2 normal-border hover:shadow-lg"
-                  />
+                  ></div>
                 {/if}
                 <div class="flex justify-end join">
                   <Download
@@ -346,7 +349,7 @@
 {:else if $chartAssetQuery.isError}
   <Error error={$chartAssetQuery.error} back="/charts/{chartId}/assets" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

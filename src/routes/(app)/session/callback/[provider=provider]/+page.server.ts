@@ -1,13 +1,15 @@
-import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
-import API, { Gender } from '$lib/api';
-import { SUPPORTED_APPS } from '$lib/constants';
-import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
-import { t } from '$lib/translations/config';
-import { setTokens } from '$lib/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import queryString from 'query-string';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
+import API, { Gender } from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { SUPPORTED_APPS } from '$lib/constants';
+import { t } from '$lib/translations/config';
+import { setTokens } from '$lib/utils';
 import { login } from '$lib/utils.server';
 
 const schema = z.object({
@@ -38,7 +40,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
         await resp.json(),
       );
     }
-    throw redirect(
+    redirect(
       303,
       resp.ok
         ? '/me/settings?level=success&message=session.bind_success&t=true'
@@ -62,7 +64,7 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
         `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
         error,
       );
-      throw redirect(
+      redirect(
         303,
         `/session/login?level=error&message=${encodeURI(
           error.error === 'invalid_token'
@@ -81,10 +83,10 @@ export const load = async ({ cookies, url, params, locals, fetch }) => {
     const { access_token, refresh_token } = await resp.json();
     setTokens(cookies, access_token, refresh_token);
 
-    throw redirect(303, url.searchParams.get('redirect') ?? '/');
+    redirect(303, url.searchParams.get('redirect') ?? '/');
   }
 
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { register: true, provider: params.provider, form };
 };
 
@@ -93,7 +95,7 @@ export const actions = {
     const api = new API(fetch);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -112,7 +114,7 @@ export const actions = {
       const redirectUri = url.searchParams.get('redirect');
       const external = redirectUri != null && redirectUri.startsWith('http');
       const result = await login(api, data.data.token, cookies);
-      throw redirect(
+      redirect(
         303,
         `${redirectUri ?? '/'}${
           external

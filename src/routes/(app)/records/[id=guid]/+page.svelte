@@ -1,14 +1,15 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { t } from '$lib/translations/config';
-  import { getGrade, parseDateTime } from '$lib/utils';
-  import User from '$lib/components/User.svelte';
+
+  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Application from '$lib/components/Application.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import Comments from '$lib/components/Comments.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import Application from '$lib/components/Application.svelte';
   import Error from '$lib/components/Error.svelte';
-  import AnonymizationNotice from '$lib/components/AnonymizationNotice.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import User from '$lib/components/User.svelte';
+  import { t } from '$lib/translations/config';
+  import { getGrade, parseDateTime } from '$lib/utils';
 
   export let data;
   $: ({ searchParams, id, api } = data);
@@ -161,7 +162,7 @@
 {:else if $record.isError}
   <Error error={$record.error} back="/records" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
 
 <style>

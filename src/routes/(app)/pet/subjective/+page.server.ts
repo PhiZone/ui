@@ -1,16 +1,13 @@
-import API from '$lib/api';
-import { compile } from 'mdsvex';
-import rehypeKatexSvelte from 'rehype-katex-svelte';
-import remarkMath from 'remark-math';
-import queryString from 'query-string';
-import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
-import type { Plugin } from 'unified';
-import type { KatexOptions } from 'katex';
 import { fail, redirect } from '@sveltejs/kit';
-import { locale, t } from '$lib/translations/config';
+import queryString from 'query-string';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
-import { toCamel } from '$lib/utils';
+import { locale, t } from '$lib/translations/config';
+import { renderMarkdown, toCamel } from '$lib/utils';
 
 const schema = z.object({
   answer1: z.string(),
@@ -22,7 +19,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async ({ url, fetch, locals }) => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   const searchParams = queryString.parse(url.search, { parseNumbers: true, parseBooleans: true });
   let answers;
   try {
@@ -45,31 +42,11 @@ export const load = async ({ url, fetch, locals }) => {
     choices: null,
     language: locale.get(),
   });
-  for (let i = 0; i < questions.length; i++) {
-    questions[i].content =
-      (
-        await compile(questions[i].content ?? '', {
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-        })
-      )?.code
-        .replaceAll('\\', '')
-        .replaceAll('{@html "', '')
-        .replaceAll('"}', '') ?? '';
-    questions[i].choices = await Promise.all(
-      (questions[i].choices ?? []).map(
-        async (choice) =>
-          (
-            await compile(choice ?? '', {
-              remarkPlugins: [remarkMath],
-              rehypePlugins: [rehypeKatexSvelte as Plugin<[KatexOptions?], string, unknown>],
-            })
-          )?.code
-            .replaceAll('\\', '')
-            .replaceAll('{@html "', '')
-            .replaceAll('"}', '') ?? '',
-      ),
-    );
+  for (const question of questions) {
+    question.content = renderMarkdown(question.content);
+    if (question.choices) {
+      question.choices = question.choices.map(renderMarkdown);
+    }
   }
   return {
     status: 0,
@@ -83,7 +60,7 @@ export const actions = {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -91,7 +68,7 @@ export const actions = {
 
     const resp = await api.pet.answerSubjective({ ...form.data });
     if (resp.ok) {
-      throw redirect(303, '/pet/answers');
+      redirect(303, '/pet/answers');
     } else {
       const error = await resp.json();
       console.error(

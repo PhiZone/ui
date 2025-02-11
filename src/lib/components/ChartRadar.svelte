@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { Radar } from 'svelte-chartjs';
   import {
     Chart as ChartJS,
-    PointElement,
+    Filler,
     LineElement,
+    PointElement,
     RadialLinearScale,
     Tooltip,
-    Filler,
   } from 'chart.js';
-  import { t } from '$lib/translations/config';
+  import { Radar } from 'svelte-chartjs';
+
   import type { ChartDto } from '$lib/api';
+
+  import { t } from '$lib/translations/config';
 
   export let chart: ChartDto;
 

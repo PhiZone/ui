@@ -1,9 +1,11 @@
-import API from '$lib/api';
-import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
 import { fail, redirect } from '@sveltejs/kit';
-import { t } from '$lib/translations/config';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+import API from '$lib/api';
 import { ResponseDtoStatus } from '$lib/api/types';
+import { t } from '$lib/translations/config';
 import { toCamel } from '$lib/utils';
 
 const schema = z.object({
@@ -13,7 +15,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export const load = async () => {
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
   return { form };
 };
 
@@ -22,7 +24,7 @@ export const actions = {
     const api = new API(fetch, locals.accessToken);
 
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -30,7 +32,7 @@ export const actions = {
 
     const resp = await api.user.inheritTapTap(form.data);
     if (resp.ok) {
-      throw redirect(303, '/me?level=success&message=user.account_inheritance.success&t=true');
+      redirect(303, '/me?level=success&message=user.account_inheritance.success&t=true');
     } else {
       const error = await resp.json();
       console.error(

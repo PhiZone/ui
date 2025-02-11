@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { createQuery } from '@tanstack/svelte-query';
+
   import type { ApplicationDto } from '$lib/api';
+
+  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
+
   import Like from './Like.svelte';
 
   $: ({ api, preferredApplication } = $page.data);

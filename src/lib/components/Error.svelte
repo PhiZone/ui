@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import type { ResponseDtoError } from '$lib/api/types';
+
+  import { page } from '$app/stores';
   import { t } from '$lib/translations/config';
 
   export let error: ResponseDtoError;

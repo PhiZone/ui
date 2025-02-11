@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { Status } from '$lib/constants';
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { richtext } from '$lib/richtext';
   import noUiSlider, { type API } from 'nouislider';
   import 'nouislider/dist/nouislider.css';
-  import { applyPatch, convertTime, parseTime } from '$lib/utils';
-  import type { SongSubmissionDto } from '$lib/api';
-  import { invalidateAll } from '$app/navigation';
-  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
   import { onDestroy, onMount } from 'svelte';
-  import User from '$lib/components/User.svelte';
+
+  import type { SongSubmissionDto } from '$lib/api';
+  import type { PatchElement, ResponseDtoError } from '$lib/api/types';
+
+  import { invalidateAll } from '$app/navigation';
   import Cropper from '$lib/components/ImageCropper.svelte';
-  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import UpdateError from '$lib/components/UpdateError.svelte';
+  import UpdateSuccess from '$lib/components/UpdateSuccess.svelte';
+  import User from '$lib/components/User.svelte';
+  import { Status } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { applyPatch, convertTime, parseTime } from '$lib/utils';
 
   export let data;
 
@@ -46,7 +48,8 @@
   let illustrationCropping = false;
   let illustrationSrc: string;
 
-  $: submission = createQuery(api.song.submission.info({ id }));
+  $: options = api.song.submission.info({ id });
+  $: submission = createQuery({ ...options });
   $: composer = createQuery(
     api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
   );
@@ -171,7 +174,7 @@
       const resp = await api.song.submission.updateFile(type, { id, File: target.files[0] });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['song.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         status = Status.OK;
       } else {
         status = Status.ERROR;
@@ -207,7 +210,7 @@
     if (resp.ok) {
       status = Status.OK;
       invalidateAll();
-      await queryClient.invalidateQueries(['song.submission.info', { id }]);
+      await queryClient.invalidateQueries({ queryKey: options.queryKey });
       patch = [];
     } else {
       status = Status.ERROR;
@@ -246,7 +249,7 @@
       const resp = await api.song.submission.updateFile('illustration', { id, File: e.detail });
       if (resp.ok) {
         invalidateAll();
-        await queryClient.invalidateQueries(['song.submission.info', { id }]);
+        await queryClient.invalidateQueries({ queryKey: options.queryKey });
         illustrationCropping = false;
         status = Status.OK;
       } else {
@@ -529,7 +532,7 @@
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider} />
+                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
                   {#if !!errors?.get('PreviewStart') || !!errors?.get('PreviewEnd')}
                     <span class="place-self-center w-1/3 text-error">
                       {errors?.get('PreviewStart') ?? errors?.get('PreviewEnd')}
@@ -939,7 +942,7 @@
                   on:input={(e) => {
                     patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
                   }}
-                />
+                ></textarea>
               </label>
               <button
                 type="button"

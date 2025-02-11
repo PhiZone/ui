@@ -1,4 +1,8 @@
-import { stringifyFilter, createQueryCreator } from './common';
+import { serialize } from 'object-to-formdata';
+
+import type API from '.';
+import type { UserDto } from '.';
+import type { EventDivisionDto } from './event.division';
 import type {
   Accessibility,
   CodeDto,
@@ -7,14 +11,12 @@ import type {
   PublicResourceFilterBase,
   R,
 } from './types';
-import type { EventDivisionDto } from './event.division';
-import type API from '.';
-import { serialize } from 'object-to-formdata';
-import type { UserDto } from '.';
+
+import { createQueryCreator, stringifyFilter } from './common';
 import EventDivisionAPI from './event.division';
-import EventTeamAPI from './event.team';
-import EventTaskAPI from './event.task';
 import EventResourceAPI from './event.resource';
+import EventTaskAPI from './event.task';
+import EventTeamAPI from './event.team';
 
 export interface EventDto {
   accessibility: number;
@@ -227,5 +229,5 @@ export default class EventAPI {
 }
 
 export type { EventDivisionDto } from './event.division';
-export type { EventTeamDto } from './event.team';
 export type { EventTaskDto } from './event.task';
+export type { EventTeamDto } from './event.team';

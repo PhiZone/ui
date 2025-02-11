@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { ChartDto, ChartSubmissionDto } from '$lib/api';
-  import { getLevelColor, getLevelDisplay } from '$lib/utils';
+
   import { t } from '$lib/translations/config';
+  import { getLevelColor, getLevelDisplay } from '$lib/utils';
 
   export let chart: ChartDto | ChartSubmissionDto;
   export let large = false;

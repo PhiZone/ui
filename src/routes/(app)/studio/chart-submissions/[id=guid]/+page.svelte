@@ -1,30 +1,31 @@
 <script lang="ts">
-  import { t } from '$lib/translations/config';
-  import { richtext } from '$lib/richtext';
-  import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
   import { createQuery } from '@tanstack/svelte-query';
-  import VolunteerVote from '$lib/components/VolunteerVote.svelte';
-  import { LEVEL_TYPES } from '$lib/constants';
+  import { superForm } from 'sveltekit-superforms';
+
   import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
-  import Collaboration from '$lib/components/Collaboration.svelte';
-  import { superForm } from 'sveltekit-superforms/client';
-  import User from '$lib/components/User.svelte';
-  import Song from '$lib/components/Song.svelte';
-  import SongSubmission from '$lib/components/SongSubmission.svelte';
   import Chart from '$lib/components/Chart.svelte';
   import ChartAssetSubmission from '$lib/components/ChartAsset.svelte';
-  import CollectionAdmission from '$lib/components/CollectionAdmission.svelte';
-  import Error from '$lib/components/Error.svelte';
-  import ChartReviewWizard from '$lib/components/ChartReviewWizard.svelte';
-  import VoteScore from '$lib/components/VoteScore.svelte';
-  import DifficultySuggestion from '$lib/components/DifficultySuggestion.svelte';
-  import Tag from '$lib/components/Tag.svelte';
-  import VolunteerVoteDiagram from '$lib/components/VolunteerVoteDiagram.svelte';
   import ChartLabel from '$lib/components/ChartDifficulty.svelte';
-  import Service from '$lib/components/Service.svelte';
-  import Download from '$lib/components/Download.svelte';
-  import EventDivision from '$lib/components/EventDivision.svelte';
+  import ChartReviewWizard from '$lib/components/ChartReviewWizard.svelte';
+  import Collaboration from '$lib/components/Collaboration.svelte';
+  import CollectionAdmission from '$lib/components/CollectionAdmission.svelte';
   import Delete from '$lib/components/Delete.svelte';
+  import DifficultySuggestion from '$lib/components/DifficultySuggestion.svelte';
+  import Download from '$lib/components/Download.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import EventDivision from '$lib/components/EventDivision.svelte';
+  import Service from '$lib/components/Service.svelte';
+  import Song from '$lib/components/Song.svelte';
+  import SongSubmission from '$lib/components/SongSubmission.svelte';
+  import Tag from '$lib/components/Tag.svelte';
+  import User from '$lib/components/User.svelte';
+  import VolunteerVote from '$lib/components/VolunteerVote.svelte';
+  import VolunteerVoteDiagram from '$lib/components/VolunteerVoteDiagram.svelte';
+  import VoteScore from '$lib/components/VoteScore.svelte';
+  import { LEVEL_TYPES } from '$lib/constants';
+  import { richtext } from '$lib/richtext';
+  import { t } from '$lib/translations/config';
+  import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
   export let data;
   $: ({ id, user, api } = data);
@@ -202,7 +203,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$voteErrors.score}
           data-tip={$voteErrors.score}
-        />
+        ></div>
         <div class="flex items-center gap-2">
           <input
             id="suggested_difficulty"
@@ -226,7 +227,7 @@
           class="tooltip tooltip-bottom tooltip-error"
           class:tooltip-open={!!$voteErrors.score}
           data-tip={$voteErrors.score}
-        />
+        ></div>
         <div
           class={$voteErrors.message
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-4'
@@ -243,7 +244,7 @@
               class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-full h-48"
               placeholder={$t('studio.submission.write_message')}
               bind:value={message}
-            />
+            ></textarea>
           </label>
         </div>
         <div class="modal-action">
@@ -668,7 +669,7 @@
                   {$t('common.edit')}
                 </a>
               {/if}
-              {#if getUserPrivilege(user?.role) >= 4}
+              {#if getUserPrivilege(user.role) >= 4}
                 <label
                   for="chart-review-wizard"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
@@ -734,7 +735,7 @@
               <i class="fa-solid fa-angles-right"></i>
             </a>
             {#if $assets.isLoading}
-              <div />
+              <div></div>
             {:else if $assets.isSuccess}
               {#if $assets.data.data.length > 0}
                 <div class="result">
@@ -769,7 +770,7 @@
               </label>
             {/if}
             {#if $collaborations.isLoading}
-              <div />
+              <div></div>
             {:else if $collaborations.isSuccess}
               {#if $collaborations.data.data.length > 0}
                 <div class="flex flex-col gap-4">
@@ -814,7 +815,7 @@
                 </label>
               {/if}
               {#if $collections.isLoading}
-                <div />
+                <div></div>
               {:else if $collections.isSuccess}
                 {#if $collections.data.data.length > 0}
                   {#each $collections.data.data as admission}
@@ -957,5 +958,5 @@
 {:else if $submission.isError}
   <Error error={$submission.error} back="/studio/chart-submissions" />
 {:else}
-  <div class="min-h-screen skeleton" />
+  <div class="min-h-screen skeleton"></div>
 {/if}

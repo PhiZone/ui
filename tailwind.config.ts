@@ -1,7 +1,9 @@
-const typography = require('@tailwindcss/typography');
-const daisyui = require('daisyui');
+import type { Config } from 'tailwindcss';
 
-const config = {
+import typography from '@tailwindcss/typography';
+import daisyui from 'daisyui';
+
+export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
 
   theme: {
@@ -14,6 +16,4 @@ const config = {
     themes: ['garden', 'dracula'],
     darkTheme: 'dracula',
   },
-};
-
-module.exports = config;
+} satisfies Config;

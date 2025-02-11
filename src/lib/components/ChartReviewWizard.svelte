@@ -1,10 +1,11 @@
 <script lang="ts">
   import { t } from '$lib/translations/config';
+
   import VoteScore from './VoteScore.svelte';
 
-  export let score: number,
-    message: string,
-    onConfirm: () => void = () => {};
+  export let score: number;
+  export let message: string;
+  export let onConfirm: () => void;
 
   const answers = [3, 2, 0, -3];
   const innovationAnswers = [1, 0];

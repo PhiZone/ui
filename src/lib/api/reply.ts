@@ -1,7 +1,8 @@
-import { stringifyFilter, createQueryCreator } from './common';
 import type API from '.';
-import type { FilterBase, R } from './types';
 import type { UserDto } from '.';
+import type { FilterBase, R } from './types';
+
+import { createQueryCreator, stringifyFilter } from './common';
 
 export interface ReplyDto {
   id: string;

@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { createQuery } from '@tanstack/svelte-query';
+
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import Timer from '$lib/components/Timer.svelte';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { getAvatar } from '$lib/utils';
-  import { createQuery } from '@tanstack/svelte-query';
 
   export let data;
   $: ({ user, api, code, url } = data);

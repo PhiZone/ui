@@ -1,13 +1,14 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+
+  import { goto } from '$app/navigation';
+  import Comments from '$lib/components/Comments.svelte';
+  import Error from '$lib/components/Error.svelte';
+  import Like from '$lib/components/Like.svelte';
+  import Service from '$lib/components/Service.svelte';
+  import User from '$lib/components/User.svelte';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
-  import Comments from '$lib/components/Comments.svelte';
-  import User from '$lib/components/User.svelte';
-  import Like from '$lib/components/Like.svelte';
-  import { goto } from '$app/navigation';
-  import Error from '$lib/components/Error.svelte';
-  import Service from '$lib/components/Service.svelte';
 
   export let data;
 
@@ -200,5 +201,5 @@
 {:else if $application.isError}
   <Error error={$application.error} back="/applications" />
 {:else}
-  <div class="min-h-page skeleton" />
+  <div class="min-h-page skeleton"></div>
 {/if}
