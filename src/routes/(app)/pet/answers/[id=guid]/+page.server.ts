@@ -8,6 +8,12 @@ import { ResponseDtoStatus } from '$lib/api/types';
 import { locale, t } from '$lib/translations/config';
 import { renderMarkdown, toCamel } from '$lib/utils';
 
+import type { Config } from '@sveltejs/adapter-vercel';
+
+export const config: Config = {
+  runtime: 'nodejs22.x',
+};
+
 const schema = z.object({
   id: z.string(),
   score: z.number().min(0).max(60),

@@ -9,6 +9,12 @@ import { ResponseDtoStatus } from '$lib/api/types';
 import { locale, t } from '$lib/translations/config';
 import { renderMarkdown, toCamel } from '$lib/utils';
 
+import type { Config } from '@sveltejs/adapter-vercel';
+
+export const config: Config = {
+  runtime: 'nodejs22.x',
+};
+
 const schema = z.object({
   answer1: z.string(),
   answer2: z.string(),

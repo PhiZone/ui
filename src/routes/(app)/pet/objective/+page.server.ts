@@ -3,6 +3,12 @@ import { fail } from '@sveltejs/kit';
 import API from '$lib/api';
 import { renderMarkdown } from '$lib/utils';
 
+import type { Config } from '@sveltejs/adapter-vercel';
+
+export const config: Config = {
+  runtime: 'nodejs22.x',
+};
+
 export const load = async ({ fetch, locals }) => {
   const api = new API(fetch, locals.accessToken);
   const resp = await api.pet.listObjective();
