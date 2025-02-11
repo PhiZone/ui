@@ -1,0 +1,36 @@
+name: Sync changes to Cloudflare
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  merge-to-dev-cf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Checkout dev-cf branch
+        run: |
+          git fetch origin dev-cf || true
+          git checkout dev-cf
+
+      - name: Merge dev branch into dev-cf
+        run: |
+          git merge dev --no-ff --commit --message "Automated merge of dev into dev-cf"
+
+      - name: Push changes to dev-cf
+        run: |
+          git push origin dev-cf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
