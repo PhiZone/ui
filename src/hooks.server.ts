@@ -32,7 +32,6 @@ export const handle = (async ({ event, resolve }) => {
       resp = await api.user.me();
       if (resp.ok) {
         event.locals.user = (await resp.json()).data;
-        event.cookies.set('last_retrieval', Date.now().toString(), { path: '/' });
       }
     }
   }
