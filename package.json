@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite dev --host",
     "build": "vite build",
+    "build:cf": "sh adapt-cf.sh && vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -14,6 +15,7 @@
     "pret:fix": "prettier --write ./**/*.{js,cjs,ts,html,css,svelte,md,json}"
   },
   "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^5.0.2",
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.16.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
