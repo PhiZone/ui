@@ -27,7 +27,7 @@ jobs:
 
       - name: Merge dev branch into dev-cf
         run: |
-          git merge origin/dev -allow-unrelated-histories --no-ff --commit --message "Automated merge of dev into dev-cf"
+          git merge origin/dev --allow-unrelated-histories --no-ff --commit --message "Automated merge of dev into dev-cf"
 
       - name: Push changes to dev-cf
         run: |
