@@ -29,6 +29,8 @@
   <p>
     By visiting and using the services offered by the websites (
     <a href="https://www.phizone.cn/">www.phizone.cn</a>
+    ,
+    <a href="https://insider.phizone.cn/">insider.phizone.cn</a>
     ) or the API (
     <a href="https://api.phizone.cn/">api.phizone.cn</a>
     ) (henceforth referenced as "PhiZone"), you are acknowledging your full compliance to the terms and
@@ -264,6 +266,8 @@
   <p>
     访问与使用网站（
     <a href="https://www.phizone.cn/">www.phizone.cn</a>
+    、
+    <a href="https://insider.phizone.cn/">insider.phizone.cn</a>
     ）与 API（
     <a href="https://api.phizone.cn/">api.phizone.cn</a>
     ）（以下统称“PhiZone”）即代表你完全理解并遵守此处列出的条款，且保证你不会将 PhiZone 及其提供的任何内容用于任何被条款禁止或违反中华人民共和国法律的目的。

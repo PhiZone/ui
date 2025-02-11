@@ -7,6 +7,35 @@
 
 <footer class="footer relative pt-[24px] pb-3 px-10 bg-base-300 text-base z-1">
   <div>
+    <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
+    <a
+      href="https://www.phizone.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
+      {$t('common.footer.main')}
+    </a>
+    <a
+      href="https://insider.phizone.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
+      {$t('common.footer.insider')}
+    </a>
+    <a
+      href="https://status.phi.zone/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link link-hover"
+    >
+      {$t('common.footer.status')}
+    </a>
+    <!-- <a href="/about" class="link link-hover">{$t('common.footer.about')}</a>
+  <a href="/feedback" class="link link-hover">{$t('common.footer.feedback')}</a> -->
+  </div>
+  <div>
     <span class="footer-title text-lg">{$t('common.footer.legal')}</span>
     <a href="/legal/{$locale}/terms-of-service" class="link link-hover">
       {$t('common.legal.terms_of_service')}
@@ -78,6 +107,9 @@
   </div>
   <div class="md:place-self-center md:justify-self-end">
     <div class="grid grid-flow-col gap-4">
+      <a href="https://discord.gg/q5MVeHeRhv" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-discord fa-lg"></i>
+      </a>
       <a href="https://space.bilibili.com/325599863" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-bilibili fa-lg"></i>
       </a>
