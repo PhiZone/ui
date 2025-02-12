@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/player/:match*", "destination": "https://phizone-player.vercel.app/:match*" }
+  ]
+}
