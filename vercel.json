@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    {
+      "source": "/player/play/:match*",
+      "destination": "https://phizone-player.vercel.app/play/:match*"
+    },
     { "source": "/player/:match*", "destination": "https://phizone-player.vercel.app/:match*" },
     { "source": "/player/", "destination": "https://phizone-player.vercel.app/" }
   ]
