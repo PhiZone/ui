@@ -49,10 +49,26 @@
     };
   }
 
+  interface EventMessage {
+    type: 'event';
+    payload: {
+      name:
+        | 'ready'
+        | 'errored'
+        | 'started'
+        | 'progress'
+        | 'paused'
+        | 'resumed'
+        | 'restarted'
+        | 'finished';
+      value?: number;
+    };
+  }
+
   let steps = [
     'studio.choose_chart',
-    'studio.confirm_chart',
     'studio.upload_song',
+    'studio.confirm_chart',
     'studio.upload_chart',
   ];
 
@@ -90,7 +106,11 @@
 
     addEventListener(
       'message',
-      (e: MessageEvent<InputResponseMessage | ChartBundleMessage | FileOutputMessage>) => {
+      (
+        e: MessageEvent<
+          InputResponseMessage | ChartBundleMessage | FileOutputMessage | EventMessage
+        >,
+      ) => {
         // if (e.origin !== location.origin) return;
         const message = e.data;
         if (message.type === 'inputResponse') {
@@ -114,6 +134,10 @@
               '*',
             );
           }
+          return;
+        }
+        if (message.type === 'event' && message.payload.name === 'ready') {
+          iframe?.contentWindow?.postMessage({ type: 'zipInput', payload: { input: [zip] } }, '*');
           return;
         }
         if (message.type === 'bundle') {
@@ -146,15 +170,13 @@
         </li>
       {/each}
     </ul>
-    {#if step < 2}
-      <div
-        class="self-center my-8 mx-12 adaptive-width aspect-[3/2] card flex justify-center items-center bg-base-100 transition border-2 normal-border hover:shadow-lg"
-      >
+    {#if step === 0}
+      <div class="self-center my-8 mx-12 justify-center items-center">
         {#if !zip}
           <input
             type="file"
             accept={isAndroidOrIos ? null : '.pez,application/zip'}
-            class="file-input file-input-bordered border-2 w-full max-w-xs file:btn dark:file:btn-neutral file:no-animation border-gray-200 rounded-lg transition hover:border-blue-500 hover:ring-blue-500 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600"
+            class="file-input file-input-bordered border-2 w-full max-w-xs file:btn file:rounded-none dark:file:btn-neutral file:no-animation border-gray-200 rounded-lg transition hover:border-blue-500 hover:ring-blue-500 hover:file:bg-blue-500 hover:file:border-blue-500 focus:border-blue-500 focus:ring-blue-500 focus:file:bg-blue-500 focus:file:border-blue-500 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600"
             on:input={async (e) => {
               const fileList = e.currentTarget.files;
               if (!fileList || fileList.length === 0) return;
@@ -162,17 +184,21 @@
             }}
           />
         {:else}
+          <span class="loading loading-dots loading-lg"></span>
+        {/if}
+      </div>
+    {/if}
+    {#if step <= 2}
+      <div
+        class="self-center my-8 mx-12 adaptive-width aspect-[3/2] card flex justify-center items-center bg-base-200 transition border-2 normal-border hover:shadow-lg"
+        class:hidden={step <= 1}
+      >
+        {#if zip}
           <iframe
             class="w-full h-full rounded-2xl"
             src="/player"
             title="PhiZone Player"
             bind:this={iframe}
-            on:load={() => {
-              if (!iframe || !zip) {
-                console.warn('iframe or zip not ready');
-              }
-              iframe?.contentWindow?.postMessage({ type: 'zipInput', payload: [zip] }, '*');
-            }}
           ></iframe>
         {/if}
       </div>
