@@ -7,9 +7,9 @@ cd .. &&
     find src -type f -exec sed -i 's/{base}/\/player/g' {} + &&
     sed -i '3,4d' src/routes/+layout.svelte &&
     cd ../repo &&
-    mkdir src/routes/\(player\) &&
-    mkdir src/routes/\(player\)/player &&
-    cp -r ../player/src/routes/* src/routes/\(player\)/player/ &&
+    mkdir src/routes/player &&
+    mkdir src/routes/player/\(player\) &&
+    cp -r ../player/src/routes/* src/routes/player/\(player\)/ &&
     mkdir src/lib/player &&
     cp -r ../player/src/lib/* src/lib/player/ &&
     mkdir static/player &&
