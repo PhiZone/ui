@@ -5,15 +5,19 @@
   "chapter_admissions": "章節收錄申請",
   "chart_submission": "譜面稿件",
   "chart_submissions": "譜面稿件",
+  "choose_chart": "选择谱面",
   "collaboration": "合作邀請",
   "collaborations": "合作邀請",
   "collection_admission": "合集收錄申請",
   "collection_admissions": "合集收錄申請",
+  "confirm_chart": "确认谱面",
   "description": "在這裡，為 Phigros 譜面二創社區助力。",
   "drawer": "側邊選單",
   "edit_chart": "編輯譜面",
   "edit_song": "編輯曲目",
   "homepage": "首頁",
+  "invalid_chart_bundle": "无法在上传的 ZIP 文件中找到有效的谱面。",
+  "multiple_charts": "上传的 ZIP 文件中包含多个谱面。如果继续，将只会处理第一个谱面。",
   "request": {
     "accept": "接受",
     "accepted": "已接受",
@@ -97,6 +101,7 @@
     "write_message": "對這張譜面進行評價",
     "your_id": "您的 ID"
   },
+  "upload": "上传",
   "upload_chart": "上傳譜面",
   "upload_song": "上傳曲目",
   "view_guide": "查看說明指南"
