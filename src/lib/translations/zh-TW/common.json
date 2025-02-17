@@ -71,15 +71,15 @@
     "donate": "贊助",
     "external_links": "外部連結",
     "feedback": "回饋",
-    "insider": "内測站點",
+    "homepage": "首頁",
     "internal_links": "內部連結",
     "legal": "法律條款",
-    "main": "主站點",
     "phifans": "PhiFans",
     "phigrim": "Phigrim",
     "phira": "Phira",
     "phitogether": "PhiTogether",
     "pigeon_games": "鴿遊",
+    "player": "PhiZone Player",
     "status": "伺服器狀態"
   },
   "form": {

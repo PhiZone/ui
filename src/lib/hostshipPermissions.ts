@@ -25,6 +25,7 @@ export const gen = (operation: number, scope: number, index: number | null = nul
   if (index !== null && (index & (1 << OPERATION)) !== 0) throw new Error('Index is out of range.');
   return (operation << OPERATION) | (scope << SCOPE) | (index !== null ? index : 0);
 };
+
 export const analyze = (permission: number) => {
   return {
     operation: (permission >> OPERATION) - ((permission >> SCOPE) << (SCOPE - OPERATION)),

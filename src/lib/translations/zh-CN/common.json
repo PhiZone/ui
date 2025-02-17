@@ -71,15 +71,15 @@
     "donate": "赞助",
     "external_links": "外部链接",
     "feedback": "反馈",
-    "insider": "内测站点",
+    "homepage": "主页",
     "internal_links": "内部链接",
     "legal": "法律条款",
-    "main": "主站点",
     "phifans": "PhiFans",
     "phigrim": "Phigrim",
     "phira": "Phira",
     "phitogether": "PhiTogether",
     "pigeon_games": "鸽游",
+    "player": "PhiZone Player",
     "status": "服务器状态"
   },
   "form": {
