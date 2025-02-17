@@ -7,21 +7,11 @@
 <footer class="footer relative pt-[24px] pb-3 px-10 bg-base-300 text-base z-1">
   <div>
     <span class="footer-title text-lg">{$t('common.footer.internal_links')}</span>
-    <a
-      href="https://www.phi.zone/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      {$t('common.footer.main')}
+    <a href="/" class="link link-hover">
+      {$t('common.footer.homepage')}
     </a>
-    <a
-      href="https://insider.phizone.cn/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      {$t('common.footer.insider')}
+    <a href="/player" class="link link-hover">
+      {$t('common.footer.player')}
     </a>
     <a
       href="https://status.phi.zone/"
