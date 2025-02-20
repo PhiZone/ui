@@ -5,11 +5,10 @@
   import Reply from '$lib/components/Reply.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { id, api } = $derived(data);
 
-  $: ({ id, api } = data);
-
-  $: query = createQuery(api.reply.info({ id }));
+  let query = $derived(createQuery(api.reply.info({ id })));
 </script>
 
 <svelte:head>

@@ -2,20 +2,26 @@
   import type { NotificationDto } from '$lib/api';
 
   import { invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
   import User from './User.svelte';
 
-  $: ({ user, api } = $page.data);
+  let { user, api } = $derived(page.data);
 
-  export let notification: NotificationDto;
-  let dateRead: string | Date | null;
-  $: dateRead = notification.dateRead;
+  interface Props {
+    notification: NotificationDto;
+  }
+  let { notification }: Props = $props();
 
-  $: content = richtext(notification.content);
+  let dateRead: string | Date | undefined = $state();
+  $effect(() => {
+    dateRead = notification.dateRead ?? undefined;
+  });
+
+  let content = $derived(richtext(notification.content));
 </script>
 
 <div class="indicator w-full my-4">
@@ -66,7 +72,7 @@
         </div>
         <button
           class="btn border-2 hover:btn-outline {dateRead ? 'hidden' : ''}"
-          on:click={async () => {
+          onclick={async () => {
             dateRead = new Date();
             const resp = await api.notification.read({ id: notification.id });
             if (resp.ok) {

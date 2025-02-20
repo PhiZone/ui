@@ -1,10 +1,10 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  interface $$Props {
+  interface Props {
     type:
       | 'comments'
       | 'replies'
@@ -21,23 +21,10 @@
     liked: boolean;
     class: string;
   }
+  let { type, id, likes = $bindable(), liked = $bindable(), ...rest }: Props = $props();
 
-  export let type:
-    | 'comments'
-    | 'replies'
-    | 'records'
-    | 'charts'
-    | 'songs'
-    | 'chapters'
-    | 'applications'
-    | 'collections'
-    | 'events'
-    | 'events/divisions';
-  export let id: string;
-  export let likes: number;
-  export let liked: boolean;
-
-  const like = async () => {
+  const like = async (e: MouseEvent) => {
+    e.preventDefault();
     liked = true;
     likes++;
     const resp = await api.like.like({
@@ -48,7 +35,7 @@
       liked = false;
       likes--;
       if (resp.status === 401) {
-        goto(`/session/login?redirect=${$page.url.pathname + $page.url.search}`);
+        goto(`/session/login?redirect=${page.url.pathname + page.url.search}`);
       } else {
         const data = await resp.json();
         console.error(
@@ -59,7 +46,8 @@
     }
   };
 
-  const unlike = async () => {
+  const unlike = async (e: MouseEvent) => {
+    e.preventDefault();
     liked = false;
     likes--;
     const resp = await api.like.unlike({ type, id });
@@ -78,16 +66,16 @@
 
 {#if !liked}
   <button
-    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
-    on:click|preventDefault={like}
+    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {rest.class}"
+    onclick={like}
   >
     <i class="fa-regular fa-heart fa-lg"></i>
     <p class="text-left max-w-fit">{likes}</p>
   </button>
 {:else}
   <button
-    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {$$restProps.class}"
-    on:click|preventDefault={unlike}
+    class="btn btn-ghost border-2 hover:btn-outline overflow-hidden flex justify-center gap-2 {rest.class}"
+    onclick={unlike}
   >
     <i class="fa-solid fa-heart fa-lg"></i>
     <p class="text-left max-w-fit">{likes}</p>

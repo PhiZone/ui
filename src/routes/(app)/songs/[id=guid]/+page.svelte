@@ -16,33 +16,34 @@
   import { t } from '$lib/translations/config';
   import { convertTime, parseDateTime, parseLyrics, parseTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, user, api } = $derived(data);
 
-  $: ({ searchParams, id, user, api } = data);
-
-  $: song = createQuery(api.song.info({ id }));
-  $: charts = createQuery(api.chart.listAll({ rangeSongId: [id] }));
-  $: chapters = createQuery(api.song.listAllAdmitters({ id }));
-  $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
-  $: composer =
-    $song.data?.data.isOriginal && $song.data?.data.authorName
-      ? richtext($song.data?.data.authorName)
-      : readable($song.data?.data.authorName ?? $t('common.anonymous'));
-  $: composerText =
-    $song.data?.data.isOriginal && $song.data?.data.authorName
-      ? $song.data?.data.authorName.replaceAll(
+  let songQuery = $derived(createQuery(api.song.info({ id })));
+  let chartsQuery = $derived(createQuery(api.chart.listAll({ rangeSongId: [id] })));
+  let chapters = $derived(createQuery(api.song.listAllAdmitters({ id })));
+  let authorships = $derived(createQuery(api.authorship.listAll({ rangeResourceId: [id] })));
+  let composer = $derived(
+    $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
+      ? richtext($songQuery.data?.data.authorName)
+      : readable($songQuery.data?.data.authorName ?? $t('common.anonymous')),
+  );
+  let composerText = $derived(
+    $songQuery.data?.data.isOriginal && $songQuery.data?.data.authorName
+      ? $songQuery.data?.data.authorName.replaceAll(
           /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
           (_, __, ___, display: string) => display,
         )
-      : $song.data?.data.authorName;
+      : $songQuery.data?.data.authorName,
+  );
 </script>
 
 <svelte:head>
-  <title>{$t('song.song')} - {$song.data?.data.title} | {$t('common.site_name')}</title>
+  <title>{$t('song.song')} - {$songQuery.data?.data.title} | {$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $song.isSuccess}
-  {@const song = $song.data.data}
+{#if $songQuery.isSuccess}
+  {@const song = $songQuery.data.data}
 
   <input type="checkbox" id="license-{song.id}" class="modal-toggle" />
   <div class="modal">
@@ -170,14 +171,14 @@
                       </p>
                     {/if}
                     {#if song.tags.length > 0}
-                      <p class="inline-flex gap-1 flex-wrap">
+                      <div class="inline-flex gap-1 flex-wrap">
                         <span class="badge">
                           {$t('common.tags')}
                         </span>
                         {#each song.tags as tag}
                           <Tag {tag} />
                         {/each}
-                      </p>
+                      </div>
                     {/if}
                   </div>
                 </div>
@@ -209,7 +210,7 @@
                   song={song.file}
                   illustration={song.illustration}
                   duration={parseTime(song.duration)}
-                  lyrics={song.lyrics ? parseLyrics(song.lyrics) : null}
+                  lyrics={song.lyrics ? parseLyrics(song.lyrics) : undefined}
                 />
               </div>
             </div>
@@ -221,15 +222,15 @@
                 {song.description}
               </p>
             {/if}
-            {#if $charts.isSuccess}
+            {#if $chartsQuery.isSuccess}
               <div
                 class="collapse collapse-arrow collapse-transition border-2 normal-border hover:border-secondary bg-base-100 rounded-box mt-3"
               >
                 <input type="checkbox" />
                 <div class="collapse-title text-base text-center">{$t('song.charts')}</div>
                 <div class="collapse-content">
-                  {#if $charts.isSuccess}
-                    {@const charts = $charts.data.data}
+                  {#if $chartsQuery.isSuccess}
+                    {@const charts = $chartsQuery.data.data}
                     {#if charts.length > 0}
                       <ul class="menu">
                         {#each charts as chart}
@@ -308,8 +309,8 @@
       {/if}
     </div>
   </div>
-{:else if $song.isError}
-  <Error error={$song.error} back="/songs" />
+{:else if $songQuery.isError}
+  <Error error={$songQuery.error} back="/songs" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

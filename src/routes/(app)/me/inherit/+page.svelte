@@ -3,7 +3,7 @@
 
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 </script>

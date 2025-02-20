@@ -6,10 +6,10 @@
   import Paginator from '$lib/components/Paginatior.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, api } = data);
+  let { data } = $props();
+  let { searchParams, page, api } = $derived(data);
 
-  $: query = createQuery(api.pet.listAnswers(searchParams));
+  let query = $derived(createQuery(api.pet.listAnswers(searchParams)));
 </script>
 
 <svelte:head>

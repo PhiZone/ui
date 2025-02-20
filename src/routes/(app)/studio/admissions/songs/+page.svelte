@@ -6,10 +6,10 @@
   import Admission from '$lib/components/SongAdmission.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, user, api } = data);
+  let { data } = $props();
+  let { searchParams, page, user, api } = $derived(data);
 
-  $: query = createQuery(api.admission.listSong(searchParams));
+  let query = $derived(createQuery(api.admission.listSong(searchParams)));
 </script>
 
 <svelte:head>

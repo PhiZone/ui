@@ -7,10 +7,10 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
-  $: ({ searchParams, page, user, api } = data);
+  let { data } = $props();
+  let { searchParams, page, user, api } = $derived(data);
 
-  $: query = createQuery(api.collaboration.list(searchParams));
+  let query = $derived(createQuery(api.collaboration.list(searchParams)));
 </script>
 
 <svelte:head>

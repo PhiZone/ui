@@ -7,12 +7,12 @@
   import Paginator from '$lib/components/Paginatior.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, api } = data);
+  let { data } = $props();
+  let { searchParams, page, api } = $derived(data);
 
-  let disabled = false;
+  let disabled = $state(false);
 
-  $: query = createQuery(api.notification.list(searchParams));
+  let query = $derived(createQuery(api.notification.list(searchParams)));
 </script>
 
 <svelte:head>
@@ -38,7 +38,7 @@
               class="join-item btn border-2 normal-border {disabled
                 ? 'btn-disabled'
                 : 'btn-outline'}"
-              on:click={async () => {
+              onclick={async () => {
                 if (!$query.isSuccess || $query.data.data.length === 0) return;
                 disabled = true;
                 const resp = await api.notification.readList(searchParams);

@@ -3,9 +3,12 @@
 
   import { t } from '$lib/translations/config';
 
-  export let filter: Omit<Omit<IFilterInput, 'label'>, 'type'>;
+  interface Props {
+    filter: Omit<Omit<IFilterInput, 'label'>, 'type'>;
+  }
+  let { filter = $bindable() }: Props = $props();
 
-  let type = 'input';
+  let type = $state('input');
   let placeholder = filter.options.placeholder ? $t(filter.options.placeholder) : '';
 </script>
 
@@ -28,7 +31,7 @@
     minlength={filter.options.range?.[0]}
     maxlength={filter.options.range?.[1]}
     class="input border-2 normal-border min-w-0 transition hover:input-secondary join-item flex-1"
-    on:focus={() => (type = filter.options.inputType)}
-    on:focusout={() => (type = filter.value ? type : 'input')}
+    onfocus={() => (type = filter.options.inputType)}
+    onfocusout={() => (type = filter.value ? type : 'input')}
   />
 {/if}

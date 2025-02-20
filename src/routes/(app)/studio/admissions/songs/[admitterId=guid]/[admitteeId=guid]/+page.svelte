@@ -5,11 +5,10 @@
   import SongAdmission from '$lib/components/SongAdmission.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { admitterId, admitteeId, api } = $derived(data);
 
-  $: ({ admitterId, admitteeId, api } = data);
-
-  $: query = createQuery(api.admission.infoSong({ admitterId, admitteeId }));
+  let query = $derived(createQuery(api.admission.infoSong({ admitterId, admitteeId })));
 </script>
 
 <svelte:head>

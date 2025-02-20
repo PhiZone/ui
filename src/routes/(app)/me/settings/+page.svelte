@@ -21,44 +21,55 @@
     toLocalTime,
   } from '$lib/utils';
 
-  export let data;
-
-  $: ({ user, api, searchParams, page: playConfigurationPage } = data);
+  let { data } = $props();
+  let { user, api, searchParams, page: playConfigurationPage } = $derived(data);
 
   const queryClient = useQueryClient();
   const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
   const minJudgment = 5;
 
-  let avatarFiles: FileList;
-  let avatarCropping = false;
-  let avatarSrc: string;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let dateAvailable: Date | undefined = undefined;
-  let updateErrors: Map<string, string> | undefined = undefined;
-  let bindDisabled = '';
+  let avatarFiles: FileList | undefined = $state();
+  let avatarCropping = $state(false);
+  let avatarSrc: string | undefined = $state();
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let dateAvailable: Date | undefined = $state();
+  let updateErrors: Map<string, string> | undefined = $state();
+  let bindDisabled = $state('');
 
-  $: regionMap = new Map(
-    [
-      ...REGIONS.reduce((map, region) => {
-        map.set(region, $t(`region.${region}`));
-        return map;
-      }, new Map<string, string>()).entries(),
-    ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+  let regionMap = $derived(
+    new Map(
+      [
+        ...REGIONS.reduce((map, region) => {
+          map.set(region, $t(`region.${region}`));
+          return map;
+        }, new Map<string, string>()).entries(),
+      ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+    ),
   );
+  let dateOfBirth = $derived(user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date());
+  let year = $state((() => dateOfBirth.getFullYear())());
+  let month = $state((() => dateOfBirth.getMonth() + 1)());
+  let day = $state((() => dateOfBirth.getDate())());
+  let badJudgment = $derived($form.goodJudgment * 1.125);
+  let playConfigurations = $derived(createQuery(api.playConfiguration.list(searchParams)));
 
-  $: year = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getFullYear();
-  $: month = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getMonth() + 1;
-  $: day = (user.dateOfBirth ? toLocalTime(user.dateOfBirth) : new Date()).getDate();
+  let rksFactor = $derived.by(() => {
+    var x = 0.8 * $form.perfectJudgment + 0.225 * $form.goodJudgment;
 
-  $: badJudgment = $form.goodJudgment * 1.125;
-  $: rksFactor = calculateRksFactor($form.perfectJudgment, $form.goodJudgment);
-
-  $: playConfigurations = createQuery(api.playConfiguration.list(searchParams));
+    if (x > 150) {
+      return 0;
+    } else if (x > 100) {
+      return (x * x) / 7500 - (4 * x) / 75 + 5;
+    } else {
+      x -= 100;
+      return -((x * x * x) / 4e6) + 1;
+    }
+  });
 
   const handleAvatar = () => {
-    if (avatarFiles.length > 0) {
+    if (avatarFiles && avatarFiles.length > 0) {
       const reader = new FileReader();
       reader.readAsDataURL(avatarFiles[0]);
       reader.onload = () => {
@@ -75,7 +86,7 @@
     }
   };
 
-  let patch = new Array<PatchElement>();
+  let patch = $state(new Array<PatchElement>());
 
   const update = async () => {
     status = Status.SENDING;
@@ -102,19 +113,6 @@
     }
   };
 
-  const calculateRksFactor = (perfectJudgment: number, goodJudgment: number) => {
-    var x = 0.8 * perfectJudgment + 0.225 * goodJudgment;
-
-    if (x > 150) {
-      return 0;
-    } else if (x > 100) {
-      return (x * x) / 7500 - (4 * x) / 75 + 5;
-    } else {
-      x -= 100;
-      return -((x * x * x) / 4e6) + 1;
-    }
-  };
-
   const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
 
   const phigrim = {
@@ -134,11 +132,11 @@
   <Cropper
     bind:open={avatarCropping}
     title={$t('common.image_cropper')}
-    src={avatarSrc}
+    src={avatarSrc!}
     aspectRatio={1}
     rounded
-    on:submit={async (e) => {
-      const resp = await api.user.updateAvatar({ id: user.id, File: e.detail });
+    submit={async (blob) => {
+      const resp = await api.user.updateAvatar({ id: user.id, File: blob });
       if (resp.ok) {
         invalidateAll();
         await queryClient.invalidateQueries(api.user.info({ id: user.id }));
@@ -171,7 +169,7 @@
         <button
           class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
           disabled={bindDisabled === app.name}
-          on:click={async () => {
+          onclick={async () => {
             bindDisabled = app.name;
             await requestIdentity(app.name, api, true);
             bindDisabled = '';
@@ -191,7 +189,7 @@
       {/each}
       <button
         class="btn btn-lg btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
-        on:click={() => goto('/me/inherit')}
+        onclick={() => goto('/me/inherit')}
       >
         <div class="avatar">
           <div class="w-6 rounded-full">
@@ -265,7 +263,7 @@
             <span class="w-1/4">{$t('play_configuration.perfect')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -276,7 +274,7 @@
               max="150"
               bind:value={$form.perfectJudgment}
               class={`range join-item w-7/12 ${$errors.perfectJudgment ? 'range-error' : ''}`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const perfectJudgment = parseInt(e.currentTarget.value);
                 if (
                   $form.goodJudgment <
@@ -290,14 +288,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.perfectJudgment}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.perfectJudgment}`;
                   return;
@@ -328,7 +326,7 @@
             <span class="w-1/4">{$t('play_configuration.good')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -344,14 +342,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.goodJudgment}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${Math.round($form.goodJudgment)}`;
                   return;
@@ -388,7 +386,7 @@
               <span class="w-1/2">{$t('play_configuration.simultaneous_note_hint')}</span>
               <input
                 type="checkbox"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -412,7 +410,7 @@
               <span class="w-1/2">{$t('play_configuration.fc_ap_indicator')}</span>
               <input
                 type="checkbox"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -433,7 +431,7 @@
             <span class="w-1/4">{$t('play_configuration.note_size')}</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -448,14 +446,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.noteSize}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.noteSize}`;
                   return;
@@ -480,7 +478,7 @@
             <span class="w-1/4">{$t('play_configuration.background_luminance')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -494,14 +492,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.backgroundLuminance}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.backgroundLuminance}`;
                   return;
@@ -524,7 +522,7 @@
             <span class="w-1/4">{$t('play_configuration.background_blur')}</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -539,14 +537,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.backgroundBlur}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.backgroundBlur}`;
                   return;
@@ -569,7 +567,7 @@
             <span class="w-1/4">{$t('play_configuration.chart_offset')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -583,14 +581,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.chartOffset}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.chartOffset}`;
                   return;
@@ -613,7 +611,7 @@
             <span class="w-1/4">{$t('play_configuration.hit_sound_volume')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -627,14 +625,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.hitSoundVolume}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.hitSoundVolume}`;
                   return;
@@ -657,7 +655,7 @@
             <span class="w-1/4">{$t('play_configuration.music_volume')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -671,14 +669,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={$form.musicVolume}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${$form.musicVolume}`;
                   return;
@@ -706,7 +704,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -725,7 +723,7 @@
           class="absolute right-2 top-[7.5px] btn btn-sm {$form.name
             ? 'border-2 hover:btn-outline backdrop-blur'
             : 'btn-disabled'}"
-          on:click={() => {
+          onclick={() => {
             $form.name = undefined;
           }}
         >
@@ -741,7 +739,7 @@
             {$t('play_configuration.chart_mirroring')}
           </span>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -770,7 +768,7 @@
             {$t('play_configuration.aspect_ratio')}
           </span>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -788,7 +786,7 @@
             {/each}
           </select>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -870,12 +868,12 @@
                   accept=".jpg, .jpeg, .png, .webp"
                   class="w-full sm:w-1/3 file:mr-2 file:py-2 file:border-0 file:btn input-secondary file:btn-outline file:bg-secondary"
                   bind:files={avatarFiles}
-                  on:change={handleAvatar}
+                  onchange={handleAvatar}
                 />
                 <span class="hidden sm:inline sm:w-1/3">{$t('common.form.tips.image')}</span>
               </div>
             </div>
-            <form class="form-control" on:submit|preventDefault>
+            <form class="form-control" onsubmit={(e) => e.preventDefault()}>
               <input type="number" name="id" value={user.id} hidden />
               <label class="join w-full mt-2">
                 <span
@@ -887,7 +885,7 @@
                   bind:value={user.gender}
                   name="Gender"
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/gender', e.currentTarget.value);
                   }}
                 >
@@ -913,7 +911,7 @@
                   placeholder={$t('user.username')}
                   class="input transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
                   value={user.userName}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/userName', e.currentTarget.value);
                   }}
                 />
@@ -933,7 +931,7 @@
                   bind:value={$locale}
                   name="Language"
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     patch = applyPatch(patch, 'replace', '/language', e.currentTarget.value);
                   }}
                 >
@@ -961,7 +959,7 @@
                 <select
                   name="RegionCode"
                   class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-2/3 md:w-5/6"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     user.region.code = e.currentTarget.value;
                     patch = applyPatch(patch, 'replace', '/regionCode', e.currentTarget.value);
                   }}
@@ -988,7 +986,7 @@
                   <select
                     name="YearOfBirth"
                     class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/3"
-                    on:input={(e) => {
+                    oninput={(e) => {
                       year = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
                     }}
@@ -1002,7 +1000,7 @@
                   <select
                     name="MonthOfBirth"
                     class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/3"
-                    on:input={(e) => {
+                    oninput={(e) => {
                       month = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
                     }}
@@ -1016,7 +1014,7 @@
                   <select
                     name="DayOfBirth"
                     class="select transition border-2 normal-border hover:input-secondary join-item flex-shrink w-1/3"
-                    on:input={(e) => {
+                    oninput={(e) => {
                       day = parseInt(e.currentTarget.value);
                       handleDateOfBirth();
                     }}
@@ -1046,7 +1044,7 @@
                     name="Bio"
                     class="textarea transition border-2 normal-border hover:textarea-secondary join-item w-2/3 md:w-5/6 h-48"
                     bind:value={user.biography}
-                    on:input={(e) => {
+                    oninput={(e) => {
                       patch = applyPatch(patch, 'replace', '/biography', e.currentTarget.value);
                     }}
                   ></textarea>
@@ -1056,7 +1054,7 @@
                   class="absolute right-2 bottom-2 btn btn-sm {user.biography
                     ? 'border-2 hover:btn-outline backdrop-blur'
                     : 'btn-disabled'}"
-                  on:click={() => {
+                  onclick={() => {
                     if (!user) return;
                     user.biography = '';
                     patch = applyPatch(patch, 'remove', '/biography');
@@ -1093,7 +1091,7 @@
                         ? 'btn-ghost'
                         : 'btn-outline border-2 normal-border'} w-full"
                     disabled={status == Status.SENDING}
-                    on:click={update}
+                    onclick={update}
                   >
                     {status === Status.ERROR
                       ? $t('common.error')

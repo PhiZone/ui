@@ -5,23 +5,25 @@
   import { REGIONS } from '$lib/constants';
   import { locale, locales, t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ provider, register } = data);
+  let { data } = $props();
+  let { provider, register } = $derived(data);
 
   const { form, enhance, message, errors, constraints, submitting, allErrors } = superForm(
     data.form,
   );
 
-  $: regionMap = new Map(
-    [
-      ...REGIONS.reduce((map, region) => {
-        map.set(region, $t(`region.${region}`));
-        return map;
-      }, new Map<string, string>()).entries(),
-    ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+  let regionMap = $derived(
+    new Map(
+      [
+        ...REGIONS.reduce((map, region) => {
+          map.set(region, $t(`region.${region}`));
+          return map;
+        }, new Map<string, string>()).entries(),
+      ].sort((a, b) => a[1].localeCompare(b[1], $locale)),
+    ),
   );
 
-  let regionCode = data.user?.region;
+  let regionCode = $state(data.user?.region);
 </script>
 
 <svelte:head>
@@ -66,7 +68,7 @@
                 name="Language"
                 bind:value={$form.Language}
                 {...$constraints.Language}
-                on:input={(e) => {
+                oninput={(e) => {
                   $locale = e.currentTarget.value;
                 }}
                 class="select transition border-2 normal-border hover:select-secondary w-full max-w-xs"

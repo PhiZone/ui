@@ -4,19 +4,22 @@
   import type { ChartSubmissionDto } from '$lib/api';
   import type { VolunteerVoteDto } from '$lib/api/vote.volunteer';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
   import DifficultySuggestion from './DifficultySuggestion.svelte';
   import VoteScore from './VoteScore.svelte';
 
-  export let vote: VolunteerVoteDto;
-  export let submission: ChartSubmissionDto;
+  let { api } = $derived(page.data);
 
-  $: ({ api } = $page.data);
+  interface Props {
+    vote: VolunteerVoteDto;
+    submission: ChartSubmissionDto;
+  }
+  let { vote, submission }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: vote.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: vote.ownerId })));
 </script>
 
 <div class="indicator w-full my-4">

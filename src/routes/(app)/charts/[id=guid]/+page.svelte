@@ -23,8 +23,8 @@
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, getUserLevel, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data, form;
-  const {
+  let { data, form } = $props();
+  let {
     searchParams,
     id,
     user,
@@ -32,7 +32,7 @@
     queryClient,
     preferredPlayConfiguration,
     preferredApplication,
-  } = data;
+  } = $derived(data);
 
   const getMultiplier = (level: number): number => {
     switch (level) {
@@ -62,78 +62,86 @@
     return 0;
   };
 
-  $: chartOptions = api.chart.info({ id, includeAssets: true });
-  $: chart = createQuery({ ...chartOptions });
-  $: collections = createQuery(api.chart.listAllAdmitters({ id }));
-  $: leaderboard = createQuery(api.chart.leaderboard({ id }));
-  $: votesOptions = api.vote.listAll({ chartId: id });
-  $: votes = createQuery({ ...votesOptions });
-  $: myVote = createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] }));
-  $: charter = richtext($chart.data?.data.authorName ?? $t('common.anonymous'));
+  let status = $state(Status.WAITING);
+  let arrangement = $state(0);
+  let gameplay = $state(0);
+  let vfx = $state(0);
+  let creativity = $state(0);
+  let concord = $state(0);
+  let impression = $state(0);
+  let voteOpen = $state(false);
+  let voteSync = $state(false);
+  let playOpen = $state(false);
+  let selectedPlayConfiguration = $state((() => preferredPlayConfiguration ?? '')());
+  let selectedApplication = $state((() => preferredApplication ?? '')());
+  let playStatus = $state(Status.WAITING);
 
-  $: preferredPlayConfigurationQuery = createQuery(
-    api.playConfiguration.list(
-      { rangeId: [preferredPlayConfiguration ?? ''] },
-      { enabled: !!preferredPlayConfiguration && !!user },
+  let chartOptions = $derived(api.chart.info({ id, includeAssets: true }));
+  let chartQuery = $derived(createQuery({ ...chartOptions }));
+  let collections = $derived(createQuery(api.chart.listAllAdmitters({ id })));
+  let leaderboard = $derived(createQuery(api.chart.leaderboard({ id })));
+  let votesOptions = $derived(api.vote.listAll({ chartId: id }));
+  let votes = $derived(createQuery({ ...votesOptions }));
+  let myVote = $derived(
+    createQuery(api.vote.listAll({ chartId: id, rangeOwnerId: [user?.id ?? 0] })),
+  );
+  let charter = $derived(richtext($chartQuery.data?.data.authorName ?? $t('common.anonymous')));
+  let preferredPlayConfigurationQuery = $derived(
+    createQuery(
+      api.playConfiguration.list(
+        { rangeId: [preferredPlayConfiguration ?? ''] },
+        { enabled: !!preferredPlayConfiguration && !!user },
+      ),
     ),
   );
-  $: preferredApplicationQuery = createQuery(
-    api.application.list(
-      { rangeId: [preferredApplication ?? ''], rangeType: [0] },
-      { enabled: !!preferredApplication && !!user },
+  let preferredApplicationQuery = $derived(
+    createQuery(
+      api.application.list(
+        { rangeId: [preferredApplication ?? ''], rangeType: [0] },
+        { enabled: !!preferredApplication && !!user },
+      ),
     ),
   );
-
-  $: playConfigurations = createQuery(
-    api.playConfiguration.listAll(
-      { rangeOwnerId: [user?.id ?? 0] },
-      { enabled: playOpen && !!user },
+  let playConfigurations = $derived(
+    createQuery(
+      api.playConfiguration.listAll(
+        { rangeOwnerId: [user?.id ?? 0] },
+        { enabled: playOpen && !!user },
+      ),
     ),
   );
-  $: applications = createQuery(
-    api.application.listAll({ rangeType: [0] }, { enabled: playOpen && !!user }),
+  let applications = $derived(
+    createQuery(api.application.listAll({ rangeType: [0] }, { enabled: playOpen && !!user })),
   );
-  $: authorships = createQuery(api.authorship.listAll({ rangeResourceId: [id] }));
+  let authorships = $derived(createQuery(api.authorship.listAll({ rangeResourceId: [id] })));
 
-  let status = Status.WAITING;
-  let arrangement = 0;
-  let gameplay = 0;
-  let vfx = 0;
-  let creativity = 0;
-  let concord = 0;
-  let impression = 0;
-  let voteOpen = false;
-  let voteSync = false;
-  let playOpen = false;
-  let selectedPlayConfiguration = preferredPlayConfiguration ?? '';
-  let selectedApplication = preferredApplication ?? '';
-  let playStatus = Status.WAITING;
-
-  $: if (!voteSync && $myVote.isSuccess && $myVote.data.data.length > 0) {
-    arrangement = $myVote.data.data[0].arrangement;
-    gameplay = $myVote.data.data[0].gameplay;
-    vfx = $myVote.data.data[0].visualEffects;
-    creativity = $myVote.data.data[0].creativity;
-    concord = $myVote.data.data[0].concord;
-    impression = $myVote.data.data[0].impression;
-    voteSync = true;
-  }
+  $effect(() => {
+    if (!voteSync && $myVote.isSuccess && $myVote.data.data.length > 0) {
+      arrangement = $myVote.data.data[0].arrangement;
+      gameplay = $myVote.data.data[0].gameplay;
+      vfx = $myVote.data.data[0].visualEffects;
+      creativity = $myVote.data.data[0].creativity;
+      concord = $myVote.data.data[0].concord;
+      impression = $myVote.data.data[0].impression;
+      voteSync = true;
+    }
+  });
 </script>
 
 <svelte:head>
   <title>
     {$t('chart.chart')} -
-    {$chart.isSuccess
-      ? `${$chart.data.data.title ?? $chart.data.data.song.title} [${
-          $chart.data.data.level
-        } ${getLevelDisplay($chart.data.data.difficulty)}]`
+    {$chartQuery.isSuccess
+      ? `${$chartQuery.data.data.title ?? $chartQuery.data.data.song.title} [${
+          $chartQuery.data.data.level
+        } ${getLevelDisplay($chartQuery.data.data.difficulty)}]`
       : ''}
     | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $chart.isSuccess}
-  {@const chart = $chart.data.data}
+{#if $chartQuery.isSuccess}
+  {@const chart = $chartQuery.data.data}
   {#if user}
     <input type="checkbox" id="play" class="modal-toggle" bind:checked={playOpen} />
     <div class="modal" role="dialog">
@@ -152,7 +160,7 @@
                 {$t('play_configuration.play_configuration')}
               </span>
               <select
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -175,7 +183,7 @@
                 {$t('application.application')}
               </span>
               <select
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -200,12 +208,12 @@
                 : playStatus === Status.ERROR
                   ? 'btn-error'
                   : 'border-2 normal-border btn-ghost hover:btn-outline'} join-item"
-              on:click={async () => {
+              onclick={async () => {
                 playStatus = Status.SENDING;
                 const resp = await api.chart.play({
                   chartId: chart.id,
-                  configurationId: selectedPlayConfiguration ?? '',
-                  applicationId: selectedApplication ?? '',
+                  configurationId: selectedPlayConfiguration,
+                  applicationId: selectedApplication,
                 });
                 if (resp.ok && $applications.isSuccess) {
                   const data = await resp.json();
@@ -495,14 +503,14 @@
                   </p>
                 {/if}
                 {#if chart.tags.length > 0}
-                  <p class="inline-flex gap-1 flex-wrap">
+                  <div class="inline-flex gap-1 flex-wrap">
                     <span class="badge">
                       {$t('common.tags')}
                     </span>
                     {#each chart.tags as tag}
                       <Tag {tag} />
                     {/each}
-                  </p>
+                  </div>
                 {/if}
               </div>
               <div class="divider lg:divider-horizontal"></div>
@@ -555,7 +563,7 @@
                       {#if chart.accessibility !== 2}
                         <button
                           class="btn btn-ghost border-2 hover:btn-outline join-item"
-                          on:click={async () => {
+                          onclick={async () => {
                             if (
                               $preferredPlayConfigurationQuery.isSuccess &&
                               $preferredPlayConfigurationQuery.data.data.length > 0 &&
@@ -721,8 +729,8 @@
       {/if}
     </div>
   </div>
-{:else if $chart.isError}
-  <Error error={$chart.error} back="/charts" />
+{:else if $chartQuery.isError}
+  <Error error={$chartQuery.error} back="/charts" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

@@ -1,23 +1,26 @@
 <script lang="ts">
   import type { ApplicationUserDto } from '$lib/api/user';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { SUPPORTED_APPS } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { getAppUserLink, getAvatar, requestIdentity } from '$lib/utils';
 
   import Delete from './Delete.svelte';
 
-  export let appLink: ApplicationUserDto;
-  export let kind: 'full' | 'mini' = 'full';
+  let { api } = $derived(page.data);
 
-  $: ({ api } = $page.data);
+  interface Props {
+    appLink: ApplicationUserDto;
+    kind?: 'full' | 'mini';
+  }
+  let { appLink, kind = 'full' }: Props = $props();
 
   const link = appLink.remoteUserId
     ? getAppUserLink(appLink.application.name, appLink.remoteUserId)
     : null;
 
-  let disabled = false;
+  let disabled = $state(false);
 </script>
 
 {#if kind === 'full'}
@@ -68,7 +71,7 @@
         <button
           class="btn btn-sm {disabled ? 'btn-ghost' : 'btn-outline border-2 normal-border'}"
           {disabled}
-          on:click={async () => {
+          onclick={async () => {
             disabled = true;
             await requestIdentity(appLink.application.name, api, true);
             disabled = false;

@@ -18,9 +18,8 @@
   import { t } from '$lib/translations/config';
   import { convertTime, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data;
-
-  $: ({ id, user, api } = data);
+  let { data } = $props();
+  let { id, user, api } = $derived(data);
 
   const {
     enhance: reviewEnhance,
@@ -62,98 +61,122 @@
     },
   });
 
-  let queryCollaborator = false;
-  let newCollaboratorId: number | null = null;
-  let queryChapter = true;
-  let newChapterSearch: string;
-  let newChapterId: string | null = null;
-  let reviewOpen = false;
-  let collabOpen = false;
-  let chapterOpen = false;
+  let queryCollaborator = $state(false);
+  let newCollaboratorId: number | null = $state(null);
+  let queryChapter = $state(true);
+  let newChapterSearch: string | undefined = $state();
+  let newChapterId: string | null = $state(null);
+  let reviewOpen = $state(false);
+  let collabOpen = $state(false);
+  let chapterOpen = $state(false);
 
-  $: submission = createQuery(api.song.submission.info({ id }));
-  $: uploader = createQuery(
-    api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
-  );
-  $: reviewer = createQuery(
-    api.user.info(
-      { id: $submission.data?.data.reviewerId ?? 0 },
-      { enabled: $submission.isSuccess && !!$submission.data?.data.reviewerId },
+  let submissionQuery = $derived(createQuery(api.song.submission.info({ id })));
+  let uploader = $derived(
+    createQuery(
+      api.user.info(
+        { id: $submissionQuery.data?.data.ownerId ?? 0 },
+        { enabled: $submissionQuery.isSuccess },
+      ),
     ),
   );
-  $: representation = createQuery(
-    api.song.info(
-      { id: $submission.data?.data.representationId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+  let reviewerQuery = $derived(
+    createQuery(
+      api.user.info(
+        { id: $submissionQuery.data?.data.reviewerId ?? 0 },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.reviewerId },
+      ),
     ),
   );
-  $: resourceRecords = createQuery(
-    api.resourceRecord.listAll(
-      {
-        search: `${$submission.data?.data.title} ${$submission.data?.data.edition} ${$submission.data?.data.authorName}`,
-        rangeStrategy: [1, 2, 3, 4],
-      },
-      { enabled: $submission.isSuccess },
+  let representation = $derived(
+    createQuery(
+      api.song.info(
+        { id: $submissionQuery.data?.data.representationId ?? '' },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
+      ),
     ),
   );
-  $: songDuplications = createQuery(
-    api.song.listAll(
-      {
-        search: `${$submission.data?.data.title} ${$submission.data?.data.edition} ${$submission.data?.data.authorName}`,
-      },
-      { enabled: $submission.isSuccess },
+  let resourceRecords = $derived(
+    createQuery(
+      api.resourceRecord.listAll(
+        {
+          search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
+          rangeStrategy: [1, 2, 3, 4],
+        },
+        { enabled: $submissionQuery.isSuccess },
+      ),
     ),
   );
-  $: collaborator = createQuery(
-    api.user.info(
-      { id: newCollaboratorId ?? 0 },
-      { enabled: !!newCollaboratorId && queryCollaborator },
+  let songDuplications = $derived(
+    createQuery(
+      api.song.listAll(
+        {
+          search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
+        },
+        { enabled: $submissionQuery.isSuccess },
+      ),
     ),
   );
-  $: collaborations = createQuery(api.song.submission.listAllCollaborations({ id }));
-  $: chapterSearch = createQuery(
-    api.chapter.listAll({ search: newChapterSearch ?? undefined }, { enabled: queryChapter }),
-  );
-  $: chapters = createQuery(
-    api.admission.listChapter(
-      { rangeAdmitteeId: [$submission.data?.data.representationId ?? ''] },
-      { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
+  let collaborator = $derived(
+    createQuery(
+      api.user.info(
+        { id: newCollaboratorId ?? 0 },
+        { enabled: !!newCollaboratorId && queryCollaborator },
+      ),
     ),
   );
-  $: services = createQuery(api.service.list({ rangeTargetType: [0] }));
+  let collaborations = $derived(createQuery(api.song.submission.listAllCollaborations({ id })));
+  let chapterSearch = $derived(
+    createQuery(api.chapter.listAll({ search: newChapterSearch }, { enabled: queryChapter })),
+  );
+  let chapters = $derived(
+    createQuery(
+      api.admission.listChapter(
+        { rangeAdmitteeId: [$submissionQuery.data?.data.representationId ?? ''] },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data.data.representationId },
+      ),
+    ),
+  );
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeTargetType: [0] })));
 
-  $: composer = $submission.data?.data.originalityProof
-    ? richtext($submission.data?.data.authorName ?? '')
-    : readable($submission.data?.data.authorName);
-  $: composerText =
-    $submission.data?.data.originalityProof && $submission.data?.data.authorName
-      ? $submission.data?.data.authorName.replaceAll(
+  let composer = $derived(
+    $submissionQuery.data?.data.originalityProof
+      ? richtext($submissionQuery.data?.data.authorName ?? '')
+      : readable($submissionQuery.data?.data.authorName),
+  );
+  let composerText = $derived(
+    $submissionQuery.data?.data.originalityProof && $submissionQuery.data?.data.authorName
+      ? $submissionQuery.data?.data.authorName.replaceAll(
           /\[PZUser(Mention)?:(\d+):(.+?):PZRT\]/gi,
           (_, __, ___, display: string) => display,
         )
-      : $submission.data?.data.authorName;
-  $: eventParticipation = createQuery(
-    api.chart.submission.checkEvent(
-      { strings: $submission.data?.data.tags ?? [] },
-      { enabled: $submission.isSuccess, retry: 0 },
+      : $submissionQuery.data?.data.authorName,
+  );
+  let eventParticipation = $derived(
+    createQuery(
+      api.chart.submission.checkEvent(
+        { strings: $submissionQuery.data?.data.tags ?? [] },
+        { enabled: $submissionQuery.isSuccess, retry: 0 },
+      ),
     ),
   );
-  $: event = createQuery(
-    api.event.info(
-      { id: $eventParticipation.data?.data.division?.eventId ?? '' },
-      { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $eventParticipation.data?.data.division?.eventId ?? '' },
+        { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+      ),
     ),
   );
 </script>
 
 <svelte:head>
   <title>
-    {$t('studio.song_submission')} - {$submission.data?.data.title} | {$t('common.site_name')}
+    {$t('studio.song_submission')} - {$submissionQuery.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $submission.isSuccess}
-  {@const submission = $submission.data.data}
+{#if $submissionQuery.isSuccess}
+  {@const submission = $submissionQuery.data.data}
   <input
     type="checkbox"
     id="studio-song-submission"
@@ -175,7 +198,7 @@
         method="POST"
         action="?/review"
         use:reviewEnhance
-        on:submit={() => {
+        onsubmit={() => {
           reviewOpen = false;
         }}
       >
@@ -323,7 +346,7 @@
                 $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
-              on:input={() => {
+              oninput={() => {
                 queryCollaborator = false;
               }}
             />
@@ -336,7 +359,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryCollaborator = true;
               }}
             >
@@ -433,12 +456,13 @@
                 $chapterSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newChapterSearch}
-              on:input={() => {
+              oninput={() => {
                 queryChapter = false;
               }}
             />
             <button
               type="button"
+              aria-label={$t('common.search')}
               class={`btn border-2 normal-border w-1/6 join-item ${
                 $chapterSearch.isLoading
                   ? $chapterSearch.isError
@@ -446,7 +470,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryChapter = true;
               }}
             >
@@ -679,14 +703,14 @@
                   </p>
                 {/if}
                 {#if submission.tags.length > 0}
-                  <p class="inline-flex gap-1 flex-wrap">
+                  <div class="inline-flex gap-1 flex-wrap">
                     <span class="badge">
                       {$t('common.tags')}
                     </span>
                     {#each submission.tags as tag}
                       <Tag {tag} />
                     {/each}
-                  </p>
+                  </div>
                 {/if}
                 <p>
                   <span class="badge mr-1">
@@ -694,8 +718,8 @@
                   </span>
                   {$t(`studio.submission.statuses.${submission.status}`)}
                 </p>
-                {#if $reviewer.isSuccess}
-                  {@const reviewer = $reviewer.data.data}
+                {#if $reviewerQuery.isSuccess}
+                  {@const reviewer = $reviewerQuery.data.data}
                   <p>
                     <span class="badge mr-1">
                       {$t('studio.submission.reviewer')}
@@ -880,8 +904,8 @@
           </div>
         </div>
       {/if}
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -936,9 +960,9 @@
       {/if}
       {#if $eventParticipation.isSuccess}
         {@const participation = $eventParticipation.data.data}
-        {#if participation.division && $event.isSuccess}
+        {#if participation.division && $eventQuery.isSuccess}
           {@const division = participation.division}
-          {@const event = $event.data.data}
+          {@const event = $eventQuery.data.data}
           <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
@@ -952,8 +976,8 @@
       {/if}
     </div>
   </div>
-{:else if $submission.isError}
-  <Error error={$submission.error} back="/studio/song-submissions" />
+{:else if $submissionQuery.isError}
+  <Error error={$submissionQuery.error} back="/studio/song-submissions" />
 {:else}
   <div class="min-h-screen skeleton"></div>
 {/if}

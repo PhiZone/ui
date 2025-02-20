@@ -3,11 +3,14 @@
 
   import { t } from '$lib/translations/config';
 
-  export let id = 'update-error';
-  export let checked: boolean;
-  export let onClick: () => void;
-  export let error: ResponseDtoError | undefined = undefined;
-  export let buttonText: string | undefined = undefined;
+  interface Props {
+    id?: string;
+    checked: boolean;
+    onClick: () => void;
+    error?: ResponseDtoError;
+    buttonText?: string;
+  }
+  let { id = 'update-error', checked, onClick, error, buttonText }: Props = $props();
 </script>
 
 <input type="checkbox" {id} class="modal-toggle" {checked} />
@@ -18,10 +21,9 @@
       <p class="py-4">{error.message}</p>
     {/if}
     <div class="modal-action">
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <btn class="btn border-2 btn-outline" on:click={onClick} on:keyup>
+      <button class="btn border-2 btn-outline" onclick={onClick}>
         {buttonText ?? $t('common.confirm')}
-      </btn>
+      </button>
     </div>
   </div>
 </div>

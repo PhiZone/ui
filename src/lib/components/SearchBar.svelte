@@ -9,14 +9,17 @@
 
   import SearchOptions from './SearchOptions/SearchOptionsModal.svelte';
 
-  export let name: string;
-  export let pageName = 'page';
-  export let searchParams: ParsedQuery<string | number | boolean>;
+  interface Props {
+    name: string;
+    pageName?: string;
+    searchParams: ParsedQuery<string | number | boolean>;
+  }
+  let { name, pageName = 'page', searchParams = $bindable() }: Props = $props();
 
-  let text = '';
-  let params = new URLSearchParams();
+  let text = $state('');
+  let params = $state(new URLSearchParams());
 
-  $: filterType = snakeToCamel(name.split('.').pop() ?? '') as SearchFilterType;
+  let filterType = $derived(snakeToCamel(name.split('.').pop() ?? '') as SearchFilterType);
 
   const getSearch = (text: string) => {
     if (params.size > 0) searchParams = convertToParsedQuery(params);
@@ -26,7 +29,8 @@
 
 <form
   class="form-control"
-  on:submit|preventDefault={() => {
+  onsubmit={(e) => {
+    e.preventDefault();
     goto(`?${getSearch(text)}`);
   }}
 >
@@ -48,7 +52,10 @@
       class="input border-2 normal-border transition hover:border-inherit join-item w-full"
       bind:value={text}
     />
-    <button class="btn btn-square border-2 normal-border hover:btn-outline bg-base-100 join-item">
+    <button
+      class="btn btn-square border-2 normal-border hover:btn-outline bg-base-100 join-item"
+      aria-label={$t('common.search')}
+    >
       <i class="fa-solid fa-magnifying-glass fa-lg"></i>
     </button>
   </div>

@@ -4,14 +4,14 @@
 
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
   const build = (target: string | null) => {
     if (!target) return null;
     let targetUrl = new URL(target);
 
-    for (let [key, value] of $page.url.searchParams.entries()) {
+    for (let [key, value] of page.url.searchParams.entries()) {
       if (key === 'uri') continue;
       targetUrl.searchParams.append(key, value);
     }
@@ -23,9 +23,9 @@
       setTimeout(async () => {
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
-          await goto(build($page.url.searchParams.get('uri')) ?? '/');
+          await goto(build(page.url.searchParams.get('uri')) ?? '/');
         } catch {
-          window.location.href = build($page.url.searchParams.get('uri')) ?? '/';
+          window.location.href = build(page.url.searchParams.get('uri')) ?? '/';
         }
       }, 1000);
     }

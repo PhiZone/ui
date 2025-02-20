@@ -11,17 +11,24 @@
   import { t } from '$lib/translations/config';
   import { getGrade, parseDateTime } from '$lib/utils';
 
-  export let data;
-  $: ({ searchParams, id, api } = data);
+  let { data } = $props();
+  let { searchParams, id, api } = $derived(data);
 
-  $: record = createQuery(api.record.info({ id }));
-  $: chart = createQuery(
-    api.chart.info({ id: $record.data?.data.chartId ?? '' }, { enabled: $record.isSuccess }),
+  let recordQuery = $derived(createQuery(api.record.info({ id })));
+  let chart = $derived(
+    createQuery(
+      api.chart.info(
+        { id: $recordQuery.data?.data.chartId ?? '' },
+        { enabled: $recordQuery.isSuccess },
+      ),
+    ),
   );
-  $: application = createQuery(
-    api.application.info(
-      { id: $record.data?.data.applicationId ?? '' },
-      { enabled: $record.isSuccess },
+  let application = $derived(
+    createQuery(
+      api.application.info(
+        { id: $recordQuery.data?.data.applicationId ?? '' },
+        { enabled: $recordQuery.isSuccess },
+      ),
     ),
   );
 </script>
@@ -30,8 +37,8 @@
   <title>{$t('record.record')} | {$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $record.isSuccess}
-  {@const record = $record.data.data}
+{#if $recordQuery.isSuccess}
+  {@const record = $recordQuery.data.data}
   {@const grade = getGrade(record.score, record.isFullCombo)}
   <div class="info-page">
     <div class="mx-auto lg:mx-4 min-w-fit w-[40vw]">
@@ -159,8 +166,8 @@
       {/if}
     </div>
   </div>
-{:else if $record.isError}
-  <Error error={$record.error} back="/records" />
+{:else if $recordQuery.isError}
+  <Error error={$recordQuery.error} back="/records" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

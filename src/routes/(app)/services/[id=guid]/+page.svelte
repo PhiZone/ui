@@ -19,22 +19,21 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, user, id, api } = $derived(data);
 
-  $: ({ searchParams, user, id, api } = data);
-
-  $: options = api.service.info({ id });
-  $: query = createQuery({ ...options });
+  let options = $derived(api.service.info({ id }));
+  let query = $derived(createQuery({ ...options }));
 
   const queryClient = useQueryClient();
 
-  let service: ServiceScriptDto;
-  let status = Status.WAITING;
-  let errorCode = '';
-  let errors: Map<string, string> | undefined = undefined;
-  let patch = new Array<PatchElement>();
-  let showTags = true;
-  let newTag = '';
+  let service: ServiceScriptDto = $state($query.data?.data)!; // FIXME: hack
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let errors: Map<string, string> | undefined = $state();
+  let patch = $state(new Array<PatchElement>());
+  let showTags = $state(true);
+  let newTag = $state('');
 
   const prefersDarkColorScheme = () =>
     browser &&
@@ -67,12 +66,14 @@
     }
   };
 
-  $: if (!service && $query.isSuccess) {
-    service = $query.data.data;
-  }
+  $effect(() => {
+    if (!service && $query.isSuccess) {
+      service = $query.data.data;
+    }
+  });
 
-  $: resourcePath = searchParams?.resourcePath as string | undefined;
-  $: resourceId = searchParams?.resourceId as string | undefined;
+  let resourcePath = $derived(searchParams?.resourcePath as string | undefined);
+  let resourceId = $derived(searchParams?.resourceId as string | undefined);
 </script>
 
 <svelte:head>
@@ -87,7 +88,7 @@
 </svelte:head>
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $query.isSuccess}
+{#if $query.isSuccess && service}
   <input
     type="checkbox"
     id="service-update-{service.id}"
@@ -116,7 +117,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -128,7 +129,7 @@
                 errors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={service.name}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/name', e.currentTarget.value);
               }}
             />
@@ -151,7 +152,7 @@
                 errors?.get('targetType') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
               value={service.targetType}
-              on:input={(e) => {
+              oninput={(e) => {
                 service.targetType = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/targetType', service.targetType);
               }}
@@ -180,7 +181,7 @@
                 errors?.get('code') ? 'hover:textarea-error' : 'hover:textarea-secondary'
               } w-3/4 h-28`}
               bind:value={service.code}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/code', e.currentTarget.value);
               }}
             ></textarea>
@@ -198,7 +199,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -210,7 +211,7 @@
                 errors?.get('resourceId') ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={service.resourceId}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/resourceId', e.currentTarget.value);
               }}
             />
@@ -221,7 +222,7 @@
               class="btn btn-sm {service.resourceId
                 ? 'border-2 hover:btn-outline backdrop-blur'
                 : 'btn-disabled'}"
-              on:click={() => {
+              onclick={() => {
                 service.resourceId = '';
                 patch = applyPatch(patch, 'remove', '/resourceId');
               }}
@@ -248,7 +249,7 @@
                 errors?.get('description') ? 'hover:textarea-error' : 'hover:textarea-secondary'
               } w-3/4 h-28`}
               bind:value={service.description}
-              on:input={(e) => {
+              oninput={(e) => {
                 patch = applyPatch(patch, 'replace', '/description', e.currentTarget.value);
               }}
             ></textarea>
@@ -258,7 +259,7 @@
             class="absolute right-2 bottom-2 btn btn-sm {service.description
               ? 'border-2 hover:btn-outline backdrop-blur'
               : 'btn-disabled'}"
-            on:click={() => {
+            onclick={() => {
               service.description = '';
               patch = applyPatch(patch, 'remove', '/description');
             }}
@@ -278,7 +279,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                   if (!newTag || service.parameters.includes(newTag)) return;
@@ -299,7 +300,9 @@
             />
             <button
               class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-              on:click|preventDefault={() => {
+              aria-label={$t('common.add')}
+              onclick={(e) => {
+                e.preventDefault();
                 if (!newTag || service.parameters.includes(newTag)) return;
                 showTags = false;
                 service.parameters.push(newTag);
@@ -309,7 +312,6 @@
                   showTags = true;
                 }, 0);
               }}
-              on:keyup
             >
               <i class="fa-solid fa-plus"></i>
             </button>
@@ -348,7 +350,7 @@
                   ? 'btn-ghost'
                   : 'btn-outline border-2 normal-border'} w-full"
               disabled={status === Status.SENDING}
-              on:click={update}
+              onclick={update}
             >
               {status === Status.ERROR
                 ? $t('common.error')
@@ -449,8 +451,11 @@
           <div
             class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100 overflow-hidden"
           >
-            <Highlight language={csharp} code={service.code} let:highlighted>
-              <LineNumbers {highlighted} hideBorder />
+            {/* @ts-expect-error svelte-highlight does not support svelte 5 */ null}
+            <Highlight language={csharp} code={service.code}>
+              {#snippet children({ highlighted })}
+                <LineNumbers {highlighted} hideBorder />
+              {/snippet}
             </Highlight>
           </div>
         </div>

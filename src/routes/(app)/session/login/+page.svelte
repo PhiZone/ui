@@ -3,18 +3,17 @@
   // see: https://github.com/sveltejs/kit/blob/ed19b648876fabd089672bddb142c3c22b262d8d/packages/kit/src/runtime/app/forms.js#L102
   // `fetch` here is hard coded
   import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status, SUPPORTED_APPS } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { getAvatar, requestIdentity } from '$lib/utils';
-  // import { useQueryClient } from '@tanstack/svelte-query';
 
-  export let data, form;
-  $: ({ api } = data);
+  let { data, form } = $props();
+  let { api } = $derived(data);
 
-  let status = Status.WAITING;
-  let msg = '';
-  let appDisabled = '';
+  let status = $state(Status.WAITING);
+  let msg = $state('');
+  let appDisabled = $state('');
 
   const clear = () => {
     if (status !== Status.WAITING) {
@@ -45,7 +44,7 @@
         <form
           method="POST"
           class="form-control"
-          on:focusin={clear}
+          onfocusin={clear}
           use:enhance={() => {
             status = Status.SENDING;
 
@@ -90,12 +89,12 @@
           />
           <div class="label flex justify-between">
             <a
-              href="/session/password-reset/request{$page.url.search}"
+              href="/session/password-reset/request{page.url.search}"
               class="label-text-alt link link-hover"
             >
               {$t('session.login.forgot_password')}
             </a>
-            <a href="/session/register{$page.url.search}" class="label-text-alt link link-hover">
+            <a href="/session/register{page.url.search}" class="label-text-alt link link-hover">
               {$t('session.registration.register')}
             </a>
           </div>
@@ -129,7 +128,7 @@
             <button
               class="btn btn-outline border-2 normal-border inline-flex items-center gap-2 w-full"
               disabled={appDisabled === app.name}
-              on:click={async () => {
+              onclick={async () => {
                 appDisabled = app.name;
                 await requestIdentity(app.name, api);
                 appDisabled = '';

@@ -7,26 +7,25 @@
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { api } = $derived(data);
 
-  $: ({ api } = data);
+  let type: SearchFilterType = $state('charts');
+  let text = $state('');
 
-  let type: SearchFilterType = 'charts';
-  let text = '';
+  let searchParams = $state(new URLSearchParams());
 
-  let searchParams = new URLSearchParams();
+  let href = $derived(`/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`);
 
-  $: href = `/${type}?${text ? `search=${text}&` : ''}${searchParams.toString()}`;
-
-  $: headline = createQuery(api.headline.get());
+  let headlineQuery = $derived(createQuery(api.headline.get()));
 </script>
 
 <svelte:head>
   <title>{$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $headline.isSuccess}
-  {@const headline = $headline.data.data.headline}
+{#if $headlineQuery.isSuccess}
+  {@const headline = $headlineQuery.data.data.headline}
   {#if headline}
     <div
       class="alert w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
@@ -35,14 +34,14 @@
       <span class="content">{headline}</span>
     </div>
   {/if}
-{:else if $headline.isError && [400, 401, 403, 404, 500, 502].includes($headline.error.httpStatus)}
+{:else if $headlineQuery.isError && [400, 401, 403, 404, 500, 502].includes($headlineQuery.error.httpStatus)}
   <div
     class="alert alert-error w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
   >
     <i class="fa-solid fa-circle-error fa-xl"></i>
     <span class="content">
-      {$headline.error.httpStatus}
-      {$t(`common.errors.${$headline.error.httpStatus}`)}
+      {$headlineQuery.error.httpStatus}
+      {$t(`common.errors.${$headlineQuery.error.httpStatus}`)}
     </span>
   </div>
 {/if}
@@ -60,7 +59,13 @@
         {$t('home.description')}
       </p>
     </div>
-    <form class="form-control" on:submit|preventDefault={() => goto(href)}>
+    <form
+      class="form-control"
+      onsubmit={(e) => {
+        e.preventDefault();
+        goto(href);
+      }}
+    >
       <div class="join text-sm lg:text-md">
         <select
           class="select border-2 normal-border transition hover:select-secondary lg:select-lg join-item max-w-1/3"
@@ -85,6 +90,7 @@
         />
         <button
           class="btn lg:btn-lg btn-square border-2 normal-border bg-base-100 hover:bg-secondary hover:btn-secondary join-item"
+          aria-label={$t('common.search')}
         >
           <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </button>

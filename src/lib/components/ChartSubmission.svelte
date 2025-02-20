@@ -3,19 +3,22 @@
 
   import type { ChartSubmissionDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getCompressedImage, parseDateTime } from '$lib/utils';
 
   import ChartLabel from './ChartDifficulty.svelte';
 
-  $: ({ user, api } = $page.data);
+  let { user, api } = $derived(page.data);
 
-  export let chart: ChartSubmissionDto;
+  interface Props {
+    chart: ChartSubmissionDto;
+  }
+  let { chart }: Props = $props();
 
-  $: charter = richtext(chart.authorName ?? '');
-  $: uploader = createQuery(api.user.info({ id: chart.ownerId }));
+  let charter = $derived(richtext(chart.authorName ?? ''));
+  let uploader = $derived(createQuery(api.user.info({ id: chart.ownerId })));
 </script>
 
 <div
@@ -44,27 +47,27 @@
             class="tooltip tooltip-right tooltip-success"
             data-tip={$t('studio.submission.statuses.1')}
           >
-            <button class="btn btn-xs btn-circle btn-success no-animation">
+            <div class="btn btn-xs btn-circle btn-success no-animation">
               <i class="fa-solid fa-check"></i>
-            </button>
+            </div>
           </div>
         {:else if chart.status === 2}
           <div
             class="tooltip tooltip-right tooltip-error"
             data-tip={$t('studio.submission.statuses.2')}
           >
-            <button class="btn btn-xs btn-circle btn-error no-animation">
+            <div class="btn btn-xs btn-circle btn-error no-animation">
               <i class="fa-solid fa-xmark"></i>
-            </button>
+            </div>
           </div>
         {:else if !chart.dateVoted || new Date(chart.dateVoted) < new Date(chart.dateFileUpdated)}
           <div
             class="tooltip tooltip-right tooltip-warning"
             data-tip={$t('studio.submission.statuses.0')}
           >
-            <button class="btn btn-xs btn-circle btn-warning no-animation">
+            <div class="btn btn-xs btn-circle btn-warning no-animation">
               <i class="fa-solid fa-exclamation"></i>
-            </button>
+            </div>
           </div>
         {/if}
       </div>

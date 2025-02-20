@@ -7,10 +7,13 @@
 
   import Like from './Like.svelte';
 
-  export let kind: 'inline' | 'full' = 'inline';
-  export let division: EventDivisionDto;
-  export let event: EventDto;
-  export let showLike = true;
+  interface Props {
+    kind?: 'inline' | 'full';
+    division: EventDivisionDto;
+    event: EventDto;
+    showLike?: boolean;
+  }
+  let { kind = 'inline', division, event, showLike = true }: Props = $props();
 </script>
 
 {#if kind === 'inline'}

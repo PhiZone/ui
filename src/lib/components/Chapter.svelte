@@ -3,19 +3,22 @@
 
   import type { ChapterAdmitterDto, ChapterDto } from '$lib/api/chapter';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
 
   import Like from './Like.svelte';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let chapter: ChapterDto | ChapterAdmitterDto;
-  export let fixedHeight = true;
-  export let showLike = true;
+  interface Props {
+    chapter: ChapterDto | ChapterAdmitterDto;
+    fixedHeight?: boolean;
+    showLike?: boolean;
+  }
+  let { chapter, fixedHeight = true, showLike = true }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: chapter.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: chapter.ownerId })));
 </script>
 
 <a

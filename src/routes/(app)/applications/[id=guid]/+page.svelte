@@ -10,22 +10,21 @@
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, user, api, preferredApplication } = $derived(data);
 
-  $: ({ searchParams, id, user, api, preferredApplication } = data);
-
-  $: application = createQuery(api.application.info({ id }));
-  $: services = createQuery(api.service.list({ rangeResourceId: [id] }));
+  let applicationQuery = $derived(createQuery(api.application.info({ id })));
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeResourceId: [id] })));
 </script>
 
 <svelte:head>
   <title>
-    {$t('application.application')} - {$application.data?.data.name} | {$t('common.site_name')}
+    {$t('application.application')} - {$applicationQuery.data?.data.name} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $application.isSuccess}
-  {@const application = $application.data.data}
+{#if $applicationQuery.isSuccess}
+  {@const application = $applicationQuery.data.data}
   <div class="info-page">
     <div class="mx-4 min-w-[300px] max-w-7xl">
       <div class="indicator w-full my-4">
@@ -48,9 +47,9 @@
                   class="tooltip tooltip-right tooltip-primary"
                   data-tip={$t('common.preferred')}
                 >
-                  <button class="btn btn-sm btn-circle btn-primary no-animation">
+                  <div class="btn btn-sm btn-circle btn-primary no-animation">
                     <i class="fa-solid fa-star"></i>
-                  </button>
+                  </div>
                 </div>
               {/if}
             </div>
@@ -104,7 +103,7 @@
                     {#if preferredApplication == application.id}
                       <button
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
-                        on:click={() => {
+                        onclick={() => {
                           goto('?preferred=0');
                         }}
                       >
@@ -114,7 +113,7 @@
                     {:else}
                       <button
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
-                        on:click={() => {
+                        onclick={() => {
                           goto('?preferred=1');
                         }}
                       >
@@ -155,8 +154,8 @@
           </div>
         </div>
       </div>
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -198,8 +197,8 @@
       </div>
     </div>
   </div>
-{:else if $application.isError}
-  <Error error={$application.error} back="/applications" />
+{:else if $applicationQuery.isError}
+  <Error error={$applicationQuery.error} back="/applications" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

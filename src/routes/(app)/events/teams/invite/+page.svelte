@@ -1,29 +1,31 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+  import { onMount } from 'svelte';
 
-  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import Timer from '$lib/components/Timer.svelte';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { getAvatar } from '$lib/utils';
 
-  export let data;
-  $: ({ user, api, code, url } = data);
+  let { data } = $props();
+  let { user, api, code, url } = $derived(data);
 
-  $: query = createQuery(api.event.team.infoInvite({ code }));
+  let query = $derived(createQuery(api.event.team.infoInvite({ code })));
 
   const maxMemberDisplay = 6;
 
-  let position = '';
-  let status = Status.WAITING;
-  let errorCode = '';
+  let position = $state('');
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
 
-  let timeUp = false;
+  let timeUp = $state(false);
 
-  $: if (!user && browser) {
-    goto(`/session/login?redirect=${url.pathname + url.search}`);
-  }
+  onMount(() => {
+    if (!user) {
+      goto(`/session/login?redirect=${url.pathname + url.search}`);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -156,7 +158,7 @@
               </span>
               <input
                 type="text"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -186,7 +188,7 @@
                     ? 'btn-ghost'
                     : 'btn-outline border-2 normal-border'} w-full"
                 disabled={status === Status.SENDING || timeUp}
-                on:click={async () => {
+                onclick={async () => {
                   status = Status.SENDING;
                   errorCode = '';
                   const resp = await api.event.team.acceptInvite({ code, position });

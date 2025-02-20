@@ -1,13 +1,23 @@
 <script lang="ts">
-  export let suggested: number;
-  export let actual: number;
-  export let size = 20;
-  export let centered = true;
-  export let compact = false;
-  export let obsolete = false;
+  interface Props {
+    suggested: number;
+    actual: number;
+    size?: number;
+    centered?: boolean;
+    compact?: boolean;
+    obsolete?: boolean;
+  }
+  let {
+    suggested,
+    actual,
+    size = 20,
+    centered = true,
+    compact = false,
+    obsolete = false,
+  }: Props = $props();
 
-  $: difference = suggested - actual;
-  $: displayedDifference = Math.round((suggested - actual) * 10) / 10;
+  let difference = $derived(suggested - actual);
+  let displayedDifference = $derived(Math.round((suggested - actual) * 10) / 10);
 </script>
 
 <div class="flex flex-col">

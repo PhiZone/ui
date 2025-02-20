@@ -6,11 +6,10 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { user, id, api } = $derived(data);
 
-  $: ({ user, id, api } = data);
-
-  $: query = createQuery(api.collaboration.info({ id }));
+  let query = $derived(createQuery(api.collaboration.info({ id })));
 </script>
 
 <svelte:head>

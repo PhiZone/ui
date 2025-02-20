@@ -3,7 +3,7 @@
   import type { PatchElement } from '$lib/api/types';
 
   import { goto, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
   import { applyPatch, parseDateTime } from '$lib/utils';
@@ -11,29 +11,27 @@
   import Delete from './Delete.svelte';
   import UpdateSuccess from './UpdateSuccess.svelte';
 
-  $: ({ user, api, preferredPlayConfiguration } = $page.data);
-
-  export let playConfiguration: PlayConfigurationDto;
-  export let fixedHeight = true;
+  interface Props {
+    playConfiguration: PlayConfigurationDto;
+    fixedHeight?: boolean;
+  }
+  let { playConfiguration, fixedHeight = true }: Props = $props();
 
   const minJudgment = 5;
 
-  let patch = new Array<PatchElement>();
-  let status = Status.WAITING;
-  let errorCode = '';
-  let updateErrors: Map<string, string> | undefined = undefined;
+  let patch = $state(new Array<PatchElement>());
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let updateErrors: Map<string, string> | undefined = $state();
   const { backgroundLuminance, hitSoundVolume, musicVolume, ...rest } = playConfiguration;
-  let editable: PlayConfigurationDto = {
+  let editable: PlayConfigurationDto = $state({
     backgroundLuminance: backgroundLuminance * 100,
     hitSoundVolume: hitSoundVolume * 100,
     musicVolume: musicVolume * 100,
     ...rest,
-  };
-  let aspectRatio1 = playConfiguration.aspectRatio ? playConfiguration.aspectRatio[0] : 16;
-  let aspectRatio2 = playConfiguration.aspectRatio ? playConfiguration.aspectRatio[1] : 9;
-
-  $: badJudgment = editable.goodJudgment * 1.125;
-  $: rksFactor = calculateRksFactor(editable.perfectJudgment, editable.goodJudgment);
+  });
+  let aspectRatio1 = $state(playConfiguration.aspectRatio ? playConfiguration.aspectRatio[0] : 16);
+  let aspectRatio2 = $state(playConfiguration.aspectRatio ? playConfiguration.aspectRatio[1] : 9);
 
   const update = async () => {
     status = Status.SENDING;
@@ -72,6 +70,9 @@
   };
 
   const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+  let { user, api, preferredPlayConfiguration } = $derived(page.data);
+  let badJudgment = $derived(editable.goodJudgment * 1.125);
+  let rksFactor = $derived(calculateRksFactor(editable.perfectJudgment, editable.goodJudgment));
 </script>
 
 <UpdateSuccess
@@ -95,7 +96,7 @@
       ✕
     </label>
     <h3 class="font-bold text-lg mb-2">{$t('play_configuration.play_configuration')}</h3>
-    <form class="w-full form-control gap-4" on:submit|preventDefault>
+    <form class="w-full form-control gap-4" onsubmit={(e) => e.preventDefault()}>
       <div class="flex w-full pt-6">
         <div
           class="tooltip {editable.perfectJudgment < 45
@@ -145,7 +146,7 @@
             <span class="w-1/4">{$t('play_configuration.perfect')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -158,7 +159,7 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('perfectJudgment') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const perfectJudgment = parseInt(e.currentTarget.value);
                 if (
                   editable.goodJudgment <
@@ -173,14 +174,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.perfectJudgment}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.perfectJudgment}`;
                   return;
@@ -217,7 +218,7 @@
             <span class="w-1/4">{$t('play_configuration.good')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -232,21 +233,21 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('goodJudgment') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const goodJudgment = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/goodJudgment', goodJudgment);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.goodJudgment}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${Math.round(editable.goodJudgment)}`;
                   return;
@@ -287,7 +288,7 @@
               <span class="w-1/2">{$t('play_configuration.simultaneous_note_hint')}</span>
               <input
                 type="checkbox"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -298,7 +299,7 @@
                 class={`toggle border-2 transition ${
                   updateErrors?.get('simultaneousNoteHint') ? 'toggle-error' : ''
                 }`}
-                on:input={() => {
+                oninput={() => {
                   patch = applyPatch(
                     patch,
                     'replace',
@@ -319,7 +320,7 @@
               <span class="w-1/2">{$t('play_configuration.fc_ap_indicator')}</span>
               <input
                 type="checkbox"
-                on:keydown={(e) => {
+                onkeydown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                   }
@@ -330,7 +331,7 @@
                 class={`toggle border-2 transition ${
                   updateErrors?.get('fcApIndicator') ? 'toggle-error' : ''
                 }`}
-                on:input={() => {
+                oninput={() => {
                   patch = applyPatch(patch, 'replace', '/fcApIndicator', !editable.fcApIndicator);
                 }}
               />
@@ -347,7 +348,7 @@
             <span class="w-1/4">{$t('play_configuration.note_size')}</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -359,21 +360,21 @@
               step="0.1"
               bind:value={editable.noteSize}
               class={`range join-item w-7/12 ${updateErrors?.get('noteSize') ? 'range-error' : ''}`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const noteSize = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/noteSize', noteSize);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.noteSize}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.noteSize}`;
                   return;
@@ -399,7 +400,7 @@
             <span class="w-1/4">{$t('play_configuration.background_luminance')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -412,7 +413,7 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('backgroundLuminance') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const backgroundLuminance = parseInt(e.currentTarget.value);
                 patch = applyPatch(
                   patch,
@@ -424,14 +425,14 @@
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.backgroundLuminance}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.backgroundLuminance}`;
                   return;
@@ -462,7 +463,7 @@
             <span class="w-1/4">{$t('play_configuration.background_blur')}</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -476,21 +477,21 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('backgroundBlur') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const backgroundBlur = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/backgroundBlur', backgroundBlur);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.backgroundBlur}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?([0-9]*[.])?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.backgroundBlur}`;
                   return;
@@ -516,7 +517,7 @@
             <span class="w-1/4">{$t('play_configuration.chart_offset')} (ms)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -529,21 +530,21 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('chartOffset') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const chartOffset = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/chartOffset', chartOffset);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.chartOffset}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.chartOffset}`;
                   return;
@@ -569,7 +570,7 @@
             <span class="w-1/4">{$t('play_configuration.hit_sound_volume')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -582,21 +583,21 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('hitSoundVolume') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const hitSoundVolume = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/hitSoundVolume', hitSoundVolume / 100);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.hitSoundVolume}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.hitSoundVolume}`;
                   return;
@@ -627,7 +628,7 @@
             <span class="w-1/4">{$t('play_configuration.music_volume')} (%)</span>
             <input
               type="range"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -640,21 +641,21 @@
               class={`range join-item w-7/12 ${
                 updateErrors?.get('musicVolume') ? 'range-error' : ''
               }`}
-              on:input={(e) => {
+              oninput={(e) => {
                 const musicVolume = parseInt(e.currentTarget.value);
                 patch = applyPatch(patch, 'replace', '/musicVolume', musicVolume / 100);
               }}
             />
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
               value={editable.musicVolume}
               class="input w-1/6 text-right text-xl font-bold"
-              on:focusout={(e) => {
+              onfocusout={(e) => {
                 if (!/^[+-]?[0-9]+$/.test(e.currentTarget.value)) {
                   e.currentTarget.value = `${editable.musicVolume}`;
                   return;
@@ -683,7 +684,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -695,7 +696,7 @@
             class={`input transition border-2 normal-border join-item w-3/4 ${
               updateErrors?.get('name') ? 'hover:input-error' : 'hover:input-secondary'
             }`}
-            on:input={(e) => {
+            oninput={(e) => {
               patch = applyPatch(patch, 'replace', '/name', e.currentTarget.value);
             }}
           />
@@ -705,7 +706,7 @@
           class="absolute right-2 top-[7.5px] btn btn-sm {editable.name
             ? 'border-2 hover:btn-outline backdrop-blur'
             : 'btn-disabled'}"
-          on:click={() => {
+          onclick={() => {
             editable.name = null;
           }}
         >
@@ -723,7 +724,7 @@
             {$t('play_configuration.chart_mirroring')}
           </span>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -734,7 +735,7 @@
             class={`select transition border-2 normal-border join-item w-3/4 ${
               updateErrors?.get('chartMirroring') ? 'hover:select-error' : 'hover:select-secondary'
             }`}
-            on:input={(e) => {
+            oninput={(e) => {
               const chartMirroring = parseInt(e.currentTarget.value);
               patch = applyPatch(patch, 'replace', '/chartMirroring', chartMirroring);
             }}
@@ -756,7 +757,7 @@
             {$t('play_configuration.aspect_ratio')}
           </span>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -767,7 +768,7 @@
             class={`select transition border-2 normal-border join-item w-[37.5%] ${
               updateErrors?.get('aspectRatio1') ? 'hover:select-error' : 'hover:select-secondary'
             }`}
-            on:input={(e) => {
+            oninput={(e) => {
               const aspectRatio1 = parseInt(e.currentTarget.value);
               patch = applyPatch(patch, 'replace', '/aspectRatio/0', aspectRatio1);
             }}
@@ -778,7 +779,7 @@
             {/each}
           </select>
           <select
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -789,7 +790,7 @@
             class={`select transition border-2 normal-border join-item w-[37.5%] ${
               updateErrors?.get('aspectRatio2') ? 'hover:select-error' : 'hover:select-secondary'
             }`}
-            on:input={(e) => {
+            oninput={(e) => {
               const aspectRatio2 = parseInt(e.currentTarget.value);
               patch = applyPatch(patch, 'replace', '/aspectRatio/1', aspectRatio2);
             }}
@@ -818,7 +819,7 @@
                 ? 'btn-ghost'
                 : 'btn-outline border-2 normal-border'} w-full"
             disabled={status === Status.SENDING}
-            on:click={update}
+            onclick={update}
           >
             {status === Status.ERROR
               ? $t('common.error')
@@ -850,9 +851,9 @@
     <div class="flex gap-2 items-center max-w-[140px] mb-1">
       {#if preferredPlayConfiguration == playConfiguration.id}
         <div class="tooltip tooltip-right tooltip-primary" data-tip={$t('common.preferred')}>
-          <button class="btn btn-xs btn-circle btn-primary no-animation">
+          <div class="btn btn-xs btn-circle btn-primary no-animation">
             <i class="fa-solid fa-star"></i>
-          </button>
+          </div>
         </div>
       {/if}
       {#if playConfiguration.name}
@@ -923,7 +924,7 @@
         </label>
         <button
           class="btn btn-sm border-2 normal-border btn-outline join-item"
-          on:click={() => {
+          onclick={() => {
             goto(
               preferredPlayConfiguration == playConfiguration.id
                 ? '?preferredPlayConfiguration=none'

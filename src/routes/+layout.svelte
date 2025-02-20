@@ -4,11 +4,11 @@
 
   import '../app.css';
 
-  export let data;
+  let { data, children } = $props();
 </script>
 
 <QueryClientProvider client={data.queryClient}>
-  <slot />
+  {@render children?.()}
 </QueryClientProvider>
 
 <div class="border-indigo-500" hidden></div>

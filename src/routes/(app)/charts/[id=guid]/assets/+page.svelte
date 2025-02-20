@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { FormEventHandler } from 'svelte/elements';
+
   import { createQuery } from '@tanstack/svelte-query';
   import { superForm } from 'sveltekit-superforms';
 
@@ -8,7 +10,8 @@
   import { t } from '$lib/translations/config';
   import { getFileType, getLevelDisplay, getUserPrivilege } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, page, user, api, params } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form, {
     onResult({ result }) {
@@ -18,18 +21,16 @@
     },
   });
 
-  $: ({ searchParams, page, user, api, params } = data);
-
-  let name = '';
-  let type = 5;
+  let name = $state('');
+  let type = $state(5);
   let fileInput: HTMLInputElement;
   let file: File | null = null;
-  let modalOpen = false;
+  let modalOpen = $state(false);
 
-  $: chart = createQuery(api.chart.info({ id: params.id }));
-  $: query = createQuery(api.chart.asset.list({ ...searchParams, chartId: params.id }));
+  let chart = $derived(createQuery(api.chart.info({ id: params.id })));
+  let query = $derived(createQuery(api.chart.asset.list({ ...searchParams, chartId: params.id })));
 
-  const resolveFile = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+  const resolveFile: FormEventHandler<HTMLInputElement> = (e) => {
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       file = target.files[0];
@@ -79,7 +80,7 @@
               ? 'input-error file:btn-error'
               : 'input-secondary file:btn-outline file:bg-secondary'
           }`}
-          on:input={resolveFile}
+          oninput={resolveFile}
         />
       </div>
       <div
@@ -92,7 +93,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -164,7 +165,7 @@
         {#if getUserPrivilege(user?.role) >= 6}
           <button
             class="btn border-2 normal-border hover:btn-outline join-item"
-            on:click={() => {
+            onclick={() => {
               fileInput.click();
             }}
           >

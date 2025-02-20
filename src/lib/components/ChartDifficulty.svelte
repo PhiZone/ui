@@ -4,10 +4,13 @@
   import { t } from '$lib/translations/config';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
 
-  export let chart: ChartDto | ChartSubmissionDto;
-  export let large = false;
-  export let inline = false;
-  export let css = '';
+  interface Props {
+    chart: ChartDto | ChartSubmissionDto;
+    large?: boolean;
+    inline?: boolean;
+    css?: string;
+  }
+  let { chart, large = false, inline = false, css = '' }: Props = $props();
 </script>
 
 <div

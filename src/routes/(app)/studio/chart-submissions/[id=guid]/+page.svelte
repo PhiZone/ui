@@ -27,8 +27,8 @@
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data;
-  $: ({ id, user, api } = data);
+  let { data } = $props();
+  let { id, user, api } = $derived(data);
 
   const {
     enhance: voteEnhance,
@@ -75,93 +75,110 @@
     },
   });
 
-  let score = 0;
-  let suggestedDifficulty = 0;
-  let message = '';
-  let queryCollaborator = false;
-  let newCollaboratorId: number | null = null;
-  let queryCollection = true;
-  let newCollectionSearch: string;
-  let newCollectionId: string | null = null;
-  let voteOpen = false;
-  let collabOpen = false;
-  let collectionOpen = false;
+  let score = $state(0);
+  let suggestedDifficulty = $state(0);
+  let message = $state('');
+  let queryCollaborator = $state(false);
+  let newCollaboratorId: number | null = $state(null);
+  let queryCollection = $state(true);
+  let newCollectionSearch: string | undefined = $state();
+  let newCollectionId: string | null = $state(null);
+  let voteOpen = $state(false);
+  let collabOpen = $state(false);
+  let collectionOpen = $state(false);
 
-  $: submission = createQuery(api.chart.submission.info({ id }));
-  $: uploader = createQuery(
-    api.user.info({ id: $submission.data?.data.ownerId ?? 0 }, { enabled: $submission.isSuccess }),
-  );
-  $: votes = createQuery(
-    api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] }),
-  );
-  $: representation = createQuery(
-    api.chart.info(
-      { id: $submission.data?.data.representationId ?? '' },
-      { enabled: $submission.isSuccess && !!$submission.data?.data.representationId },
+  let submissionQuery = $derived(createQuery(api.chart.submission.info({ id })));
+  let uploader = $derived(
+    createQuery(
+      api.user.info(
+        { id: $submissionQuery.data?.data.ownerId ?? 0 },
+        { enabled: $submissionQuery.isSuccess },
+      ),
     ),
   );
-  $: collaborator = createQuery(
-    api.user.info(
-      { id: newCollaboratorId ?? 0 },
-      { enabled: !!newCollaboratorId && queryCollaborator },
+  let votesQuery = $derived(
+    createQuery(api.vote.volunteer.listAll({ chartId: id, order: ['dateCreated'], desc: [true] })),
+  );
+  let representation = $derived(
+    createQuery(
+      api.chart.info(
+        { id: $submissionQuery.data?.data.representationId ?? '' },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
+      ),
     ),
   );
-  $: collaborations = createQuery(api.chart.submission.listAllCollaborations({ id }));
-  $: collectionSearch = createQuery(
-    api.collection.listAll(
-      { search: newCollectionSearch ?? undefined },
-      { enabled: queryCollection },
+  let collaborator = $derived(
+    createQuery(
+      api.user.info(
+        { id: newCollaboratorId ?? 0 },
+        { enabled: !!newCollaboratorId && queryCollaborator },
+      ),
     ),
   );
-  $: collections = createQuery(
-    api.admission.listCollection(
-      { rangeAdmitteeId: [$submission.data?.data.representationId ?? ''] },
-      { enabled: $submission.isSuccess && !!$submission.data.data.representationId },
+  let collaborations = $derived(createQuery(api.chart.submission.listAllCollaborations({ id })));
+  let collectionSearch = $derived(
+    createQuery(
+      api.collection.listAll({ search: newCollectionSearch }, { enabled: queryCollection }),
     ),
   );
-  $: services = createQuery(api.service.list({ rangeTargetType: [1] }));
-  $: assets = createQuery(api.chart.submission.asset.listAll({ chartId: id }));
-  $: charter = richtext($submission.data?.data.authorName ?? '');
+  let collections = $derived(
+    createQuery(
+      api.admission.listCollection(
+        { rangeAdmitteeId: [$submissionQuery.data?.data.representationId ?? ''] },
+        { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data.data.representationId },
+      ),
+    ),
+  );
+  let servicesQuery = $derived(createQuery(api.service.list({ rangeTargetType: [1] })));
+  let assets = $derived(createQuery(api.chart.submission.asset.listAll({ chartId: id })));
+  let charter = $derived(richtext($submissionQuery.data?.data.authorName ?? ''));
 
-  $: averageSuggestedDifficulty =
-    $votes.isSuccess && $submission.isSuccess
-      ? $votes.data.data
-          .filter((vote) => vote.dateCreated >= $submission.data!.data.dateFileUpdated)
+  let averageSuggestedDifficulty = $derived(
+    $votesQuery.isSuccess && $submissionQuery.isSuccess
+      ? $votesQuery.data.data
+          .filter((vote) => vote.dateCreated >= $submissionQuery.data!.data.dateFileUpdated)
           .reduce((total, vote) => total + vote.suggestedDifficulty, 0) /
-        $votes.data.data.filter(
-          (vote) => vote.dateCreated >= $submission.data!.data.dateFileUpdated,
-        ).length
-      : 0;
+          $votesQuery.data.data.filter(
+            (vote) => vote.dateCreated >= $submissionQuery.data!.data.dateFileUpdated,
+          ).length
+      : 0,
+  );
 
-  $: difficultyDifference = $submission.isSuccess
-    ? averageSuggestedDifficulty - $submission.data.data.difficulty
-    : 0;
-  $: eventParticipation = createQuery(
-    api.chart.submission.checkEvent(
-      { strings: $submission.data?.data.tags ?? [] },
-      { enabled: $submission.isSuccess, retry: 0 },
+  let difficultyDifference = $derived(
+    $submissionQuery.isSuccess
+      ? averageSuggestedDifficulty - $submissionQuery.data.data.difficulty
+      : 0,
+  );
+  let eventParticipation = $derived(
+    createQuery(
+      api.chart.submission.checkEvent(
+        { strings: $submissionQuery.data?.data.tags ?? [] },
+        { enabled: $submissionQuery.isSuccess, retry: 0 },
+      ),
     ),
   );
-  $: event = createQuery(
-    api.event.info(
-      { id: $eventParticipation.data?.data.division?.eventId ?? '' },
-      { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $eventParticipation.data?.data.division?.eventId ?? '' },
+        { enabled: $eventParticipation.isSuccess && !!$eventParticipation.data?.data.division },
+      ),
     ),
   );
 </script>
 
 <svelte:head>
   <title>
-    {$t('studio.chart_submission')} - {$submission.data?.data.title ??
-      $submission.data?.data.song?.title ??
-      $submission.data?.data.songSubmission?.title}
-    [{$submission.data?.data.level}
-    {getLevelDisplay($submission.data?.data.difficulty)}] | {$t('common.site_name')}
+    {$t('studio.chart_submission')} - {$submissionQuery.data?.data.title ??
+      $submissionQuery.data?.data.song?.title ??
+      $submissionQuery.data?.data.songSubmission?.title}
+    [{$submissionQuery.data?.data.level}
+    {getLevelDisplay($submissionQuery.data?.data.difficulty)}] | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $submission.isSuccess}
-  {@const submission = $submission.data.data}
+{#if $submissionQuery.isSuccess}
+  {@const submission = $submissionQuery.data.data}
   <ChartReviewWizard
     bind:score
     bind:message
@@ -216,7 +233,7 @@
             step="0.1"
           />
           <DifficultySuggestion
-            bind:suggested={suggestedDifficulty}
+            suggested={suggestedDifficulty}
             actual={submission.difficulty}
             size={16}
             centered={false}
@@ -309,7 +326,7 @@
                 $collaborator.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollaboratorId}
-              on:input={() => {
+              oninput={() => {
                 queryCollaborator = false;
               }}
             />
@@ -322,7 +339,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryCollaborator = true;
               }}
             >
@@ -419,12 +436,13 @@
                 $collectionSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
               }`}
               bind:value={newCollectionSearch}
-              on:input={() => {
+              oninput={() => {
                 queryCollection = false;
               }}
             />
             <button
               type="button"
+              aria-label={$t('common.search')}
               class={`btn border-2 normal-border w-1/6 join-item ${
                 $collectionSearch.isLoading
                   ? $collectionSearch.isError
@@ -432,7 +450,7 @@
                     : 'hover:btn-secondary btn-outline'
                   : 'btn-disabled'
               }`}
-              on:click={() => {
+              onclick={() => {
                 queryCollection = true;
               }}
             >
@@ -517,7 +535,7 @@
           class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            <div class="text-5xl py-3 font-bold gap-4 items-center content flex">
+            <div class="text-5xl py-3 font-bold gap-4 items-center flex">
               {#if submission.title}
                 {submission.title}
               {:else if submission.song}
@@ -626,14 +644,14 @@
                 </p>
               {/if}
               {#if submission.tags.length > 0}
-                <p class="inline-flex gap-1 flex-wrap">
+                <div class="inline-flex gap-1 flex-wrap">
                   <span class="badge">
                     {$t('common.tags')}
                   </span>
                   {#each submission.tags as tag}
                     <Tag {tag} />
                   {/each}
-                </p>
+                </div>
               {/if}
               <p>
                 <span class="badge mr-1">
@@ -835,8 +853,8 @@
           </div>
         </div>
       {/if}
-      {#if $services.isSuccess && $services.data.data.length > 0}
-        {@const services = $services.data.data}
+      {#if $servicesQuery.isSuccess && $servicesQuery.data.data.length > 0}
+        {@const services = $servicesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -864,8 +882,8 @@
           </div>
         </div>
       {/if}
-      {#if $votes.isSuccess}
-        {@const votes = $votes.data.data}
+      {#if $votesQuery.isSuccess}
+        {@const votes = $votesQuery.data.data}
         <div class="indicator w-full my-4">
           <span
             class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -939,9 +957,9 @@
       {/if}
       {#if $eventParticipation.isSuccess}
         {@const participation = $eventParticipation.data.data}
-        {#if participation.division && $event.isSuccess}
+        {#if participation.division && $eventQuery.isSuccess}
           {@const division = participation.division}
-          {@const event = $event.data.data}
+          {@const event = $eventQuery.data.data}
           <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start lg:indicator-end badge badge-neutral badge-lg min-w-fit text-lg"
@@ -955,8 +973,8 @@
       {/if}
     </div>
   </div>
-{:else if $submission.isError}
-  <Error error={$submission.error} back="/studio/chart-submissions" />
+{:else if $submissionQuery.isError}
+  <Error error={$submissionQuery.error} back="/studio/chart-submissions" />
 {:else}
   <div class="min-h-screen skeleton"></div>
 {/if}

@@ -5,17 +5,17 @@
   import Question from '$lib/components/Question.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ questions, error } = data);
+  let { data } = $props();
+  let { questions, error } = $derived(data);
 
   const timeLimit = 60;
   const timeDue = new Date();
   timeDue.setMinutes(timeDue.getMinutes() + timeLimit);
 
-  let min = timeLimit - 1;
-  let sec = 59;
+  let min = $state(timeLimit - 1);
+  let sec = $state(59);
 
-  let timeUp = false;
+  let timeUp = $state(false);
 
   let timer = setInterval(() => {
     if (sec === 0 && min === 0) {
@@ -28,7 +28,7 @@
     sec = Math.floor((diff % (1000 * 60)) / 1000);
   }, 100);
 
-  let answers: string[] = [];
+  let answers: string[] = $state([]);
 
   const { enhance, message, errors: _errors, submitting, allErrors } = superForm(data.form);
 </script>
@@ -60,7 +60,7 @@
       <ul class="flex flex-col gap-4">
         {#each questions as question, i}
           <li>
-            <Question id={i + 16} {question} choices={null} bind:text={answers[i]} />
+            <Question id={i + 16} {question} bind:text={answers[i]} />
             <!-- <div
               class="tooltip tooltip-bottom tooltip-error"
               class:tooltip-open={$errors._errors && !!$errors._errors[i]}

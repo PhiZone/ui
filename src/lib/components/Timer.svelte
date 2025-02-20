@@ -2,14 +2,18 @@
   import { t } from '$lib/translations/config';
   import { parseDateTime } from '$lib/utils';
 
-  export let timeDue: Date = new Date();
-  export let timeUp = false;
-  export let text: string;
-  export let onTimeUp: (() => void) | undefined = undefined;
+  interface Props {
+    timeDue?: Date;
+    timeUp?: boolean;
+    text: string;
+    onTimeUp?: () => void;
+  }
+  let { timeDue = new Date(), timeUp = $bindable(false), text, onTimeUp }: Props = $props();
 
-  let hour: number;
-  let min: number;
-  let sec: number;
+  // TODO: rewrite this
+  let hour = $state(0);
+  let min = $state(0);
+  let sec = $state(1);
 
   let timer = setInterval(() => {
     const diff = timeDue.getTime() - new Date().getTime();

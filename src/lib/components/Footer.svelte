@@ -75,10 +75,20 @@
   </div>
   <div class="md:place-self-center md:justify-self-end">
     <div class="grid grid-flow-col gap-4">
-      <a href="https://discord.gg/q5MVeHeRhv" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://discord.gg/q5MVeHeRhv"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Discord"
+      >
         <i class="fa-brands fa-discord fa-lg"></i>
       </a>
-      <a href="https://space.bilibili.com/325599863" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://space.bilibili.com/325599863"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Bilibili"
+      >
         <i class="fa-brands fa-bilibili fa-lg"></i>
       </a>
     </div>

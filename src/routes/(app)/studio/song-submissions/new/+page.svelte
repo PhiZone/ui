@@ -1,8 +1,7 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import noUiSlider, { type API } from 'nouislider';
-  import 'nouislider/dist/nouislider.css';
   import { onDestroy } from 'svelte';
+  import RangeSlider from 'svelte-range-slider-pips';
   import { superForm } from 'sveltekit-superforms';
 
   // import Cropper from '$lib/components/ImageCropper.svelte';
@@ -15,89 +14,91 @@
   import { t } from '$lib/translations/config';
   import { convertTime, parseTime } from '$lib/utils';
 
-  export let data;
-
-  $: ({ user, api } = data);
+  let { data } = $props();
+  let { user, api } = $derived(data);
 
   const { form, enhance, message, errors, submitting, allErrors } = superForm(data.form);
-
-  interface TargetElement extends HTMLElement {
-    noUiSlider?: API;
-  }
 
   onDestroy(() => {
     pausePreview();
   });
 
-  let audio: HTMLAudioElement | undefined;
-  let illustration = false;
+  const timePattern = /^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/;
+  let audio: HTMLAudioElement | undefined = $state();
+  let audioDuration = $state(60);
+  let illustration = $state(false);
   // let illustrationFileSrc: string;
   // let illustrationOriginalSrc: string;
   // let illustrationCropping = false;
-  let originalityProof = false;
-  let slider: TargetElement;
-  let isOriginal = false;
-  let showPreview = 0;
-  let previewStart = 0;
-  let previewEnd = 0;
-  let previewStatus = 0;
+  let originalityProof = $state(false);
+  let isOriginal = $state(false);
+  let showPreview = $state(0);
+  // NOTE: using previewRange instead of previewStart and previewEnd for RangeSlider bind
+  let previewRange = $state([0, Infinity]);
+  let previewStatus = $state(0);
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
-  let previewTime = 0;
-  let authorName = '';
-  let editionType = 0;
-  let edition = '';
-  let tagsRaw = '';
+  let previewTime = $state(0);
+  let authorName = $state('');
+  let editionType = $state(0);
+  let edition = $state('');
+  let tagsRaw = $state('');
   let tags: string[] = [];
-  let showTags = true;
-  let newTag = '';
-  let newComposerId: number | null = null;
-  let newComposerDisplay = '';
-  let queryComposer = false;
-  let querySongDuplications = false;
-  let queryResourceRecords = false;
+  let showTags = $state(true);
+  let newTag = $state('');
+  let newComposerId: number | null = $state(null);
+  let newComposerDisplay = $state('');
+  let queryComposer = $state(false);
+  let querySongDuplications = $state(false);
+  let queryResourceRecords = $state(false);
 
-  $: composer = createQuery(
-    api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
-  );
-  $: composerPreview = richtext(authorName ?? '');
-  $: songDuplications = createQuery(
-    api.song.listAll(
-      {
-        search: `${$form.Title} ${edition} ${authorName}`,
-      },
-      { enabled: querySongDuplications && !!$form.Title && !!authorName },
+  let composer = $derived(
+    createQuery(
+      api.user.info({ id: newComposerId ?? 0 }, { enabled: !!newComposerId && queryComposer }),
     ),
   );
-  $: resourceRecords = createQuery(
-    api.resourceRecord.listAll(
-      {
-        search: `${$form.Title} ${edition} ${authorName}`,
-        rangeStrategy: [1, 2, 3, 4],
-      },
-      { enabled: queryResourceRecords && !!$form.Title && !!authorName },
+  let composerPreview = $derived(richtext(authorName ?? ''));
+  let songDuplications = $derived(
+    createQuery(
+      api.song.listAll(
+        {
+          search: `${$form.Title} ${edition} ${authorName}`,
+        },
+        { enabled: querySongDuplications && !!$form.Title && !!authorName },
+      ),
     ),
   );
-  $: existingTags = createQuery(
-    api.tag.listAll(
-      {
-        rangeNormalizedName:
-          tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
-      },
-      { enabled: !showTags && tags.length > 0 },
+  let resourceRecords = $derived(
+    createQuery(
+      api.resourceRecord.listAll(
+        {
+          search: `${$form.Title} ${edition} ${authorName}`,
+          rangeStrategy: [1, 2, 3, 4],
+        },
+        { enabled: queryResourceRecords && !!$form.Title && !!authorName },
+      ),
+    ),
+  );
+  let existingTags = $derived(
+    createQuery(
+      api.tag.listAll(
+        {
+          rangeNormalizedName:
+            tags.map((tag) => (tag ? tag.replace(/\s/g, '').toUpperCase() : '')) ?? undefined,
+        },
+        { enabled: !showTags && tags.length > 0 },
+      ),
     ),
   );
 
   const handlePreview = () => {
     pausePreview();
     previewStatus = 0;
-    const values = slider.noUiSlider?.get() as string[];
-    previewStart = parseFloat(values[0]);
-    previewEnd = parseFloat(values[1]);
-    previewTime = previewStart;
+    previewTime = previewRange[0];
   };
 
   const handleAudio = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+    pausePreview();
     const target = e.currentTarget;
     if (target.files && target.files.length > 0) {
       audio = new Audio(URL.createObjectURL(target.files[0]));
@@ -106,26 +107,19 @@
         if (!audio) return;
         showPreview = 2;
         audio.volume = 0.5;
-        slider.noUiSlider?.destroy();
-        noUiSlider.create(slider, {
-          start: [0.2 * audio.duration, 0.8 * audio.duration],
-          connect: true,
-          range: {
-            min: 0,
-            max: audio.duration,
-          },
-        });
+        audioDuration = audio.duration;
+        previewRange = [0.2 * audio.duration, 0.8 * audio.duration];
         handlePreview();
-        slider.noUiSlider?.on('slide', handlePreview);
       });
     }
   };
 
-  const handlePreviewPlay = () => {
+  const handlePreviewPlay = (e: Event) => {
+    e.preventDefault();
     if (!audio) return;
     if (previewStatus === 0) {
-      audio.currentTime = previewStart;
-      previewTime = previewStart;
+      audio.currentTime = previewRange[0];
+      previewTime = previewRange[0];
     }
     if (previewStatus === 2) {
       pausePreview();
@@ -138,10 +132,10 @@
         () => {
           if (!audio) return;
           pausePreview();
-          audio.currentTime = previewStart;
+          audio.currentTime = previewRange[0];
           previewStatus = 0;
         },
-        (previewEnd - previewTime) * 1e3,
+        (previewRange[1] - previewTime) * 1e3,
       );
       audio.play();
       previewStatus = 2;
@@ -153,6 +147,11 @@
     audio.pause();
     clearTimeout(previewTimeout);
     clearInterval(previewTimer);
+  };
+
+  const restartPreview = (e: Event) => {
+    pausePreview();
+    handlePreviewPlay(e);
   };
 
   // TODO The file list of an input field of type "file" in an HTML form is read-only
@@ -233,7 +232,7 @@
             $composer.isError ? 'hover:input-error' : 'hover:input-secondary'
           }`}
           bind:value={newComposerId}
-          on:input={() => {
+          oninput={() => {
             queryComposer = false;
           }}
         />
@@ -245,7 +244,7 @@
                 : 'hover:btn-secondary btn-outline'
               : 'btn-disabled'
           }`}
-          on:click={() => {
+          onclick={() => {
             queryComposer = true;
           }}
         >
@@ -264,14 +263,14 @@
         />
       </label>
       <div class="modal-action mt-3 px-4">
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="studio-composer"
           class="btn border-2 normal-border btn-outline"
-          on:click={() => {
+          onclick={() => {
             authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}
-          on:keyup
+          onkeyup={null}
         >
           {$t('common.submit')}
         </label>
@@ -294,7 +293,7 @@
                   type="checkbox"
                   class="toggle border-2 toggle-secondary"
                   bind:checked={isOriginal}
-                  on:change={() => {
+                  onchange={() => {
                     if (isOriginal) {
                       if (editionType > 2) {
                         editionType = 0;
@@ -322,7 +321,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:change={handleAudio}
+                onchange={handleAudio}
               />
               {#if !!$errors.File}
                 <span class="w-2/3 text-error">{$errors.File}</span>
@@ -342,7 +341,7 @@
                     ? 'input-error file:btn-error'
                     : 'input-secondary file:btn-outline file:bg-secondary'
                 }`}
-                on:input={() => {
+                oninput={() => {
                   illustration = true;
                 }}
               />
@@ -367,7 +366,7 @@
                       ? 'input-error file:btn-error'
                       : 'input-secondary file:btn-outline file:bg-secondary'
                   }`}
-                  on:input={(e) => {
+                  oninput={(e) => {
                     if (e.currentTarget.files && e.currentTarget.files.length > 0) {
                       originalityProof = true;
                     }
@@ -411,16 +410,18 @@
                     {#if previewStatus === 2}
                       <button
                         type="button"
+                        aria-label={$t('song.pause')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click|preventDefault={handlePreviewPlay}
+                        onclick={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-pause fa-xl"></i>
                       </button>
                     {:else}
                       <button
                         type="button"
+                        aria-label={$t('song.play')}
                         class="btn border-2 normal-border hover:btn-secondary btn-square btn-sm btn-outline"
-                        on:click|preventDefault={handlePreviewPlay}
+                        onclick={handlePreviewPlay}
                       >
                         <i class="fa-solid fa-play fa-lg"></i>
                       </button>
@@ -431,32 +432,54 @@
                       type="text"
                       id="preview_start"
                       name="PreviewStart"
-                      on:keydown={(e) => {
+                      onkeydown={(e) => {
                         if (e.key === 'Enter') {
-                          e.preventDefault();
+                          e.currentTarget.blur();
                         }
                       }}
                       placeholder={$t('studio.submission.start')}
-                      class="input w-1/6 text-right"
-                      value={convertTime(previewStart)}
-                      on:input={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                      class="input w-1/6 text-right border-2 transition hover:input-secondary"
+                      value={convertTime(previewRange[0])}
+                      onblur={(e) => {
+                        // discard changes if the input is invalid
+                        if (!timePattern.test(e.currentTarget.value)) {
+                          e.currentTarget.value = convertTime(previewRange[0]);
                           return;
-                        previewStart = parseTime(e.currentTarget.value);
-                        if (
-                          previewStart < 0 ||
-                          previewStart > previewEnd ||
-                          (audio && previewStart > audio.duration)
-                        )
+                        }
+                        previewRange[0] = parseTime(e.currentTarget.value);
+                        if (previewRange[0] < 0 || (audio && previewRange[0] > audio.duration))
                           return;
-                        pausePreview();
+                        if (previewRange[0] > previewRange[1]) {
+                          previewRange[1] = Math.min(
+                            previewRange[0] + 5,
+                            audio?.duration || Infinity,
+                          );
+                        }
+
                         previewStatus = 0;
-                        previewTime = previewStart;
-                        slider.noUiSlider?.set([previewStart, previewEnd]);
+                        previewTime = previewRange[0];
+                        restartPreview(e);
                       }}
                     />
                   {/if}
-                  <div class="slider place-self-center w-2/3" bind:this={slider}></div>
+                  <div class="place-self-center w-2/3 daisy-ui">
+                    <!-- TODO: display audio.currentTime in slider -->
+                    <RangeSlider
+                      id="preview-slider"
+                      min={0}
+                      max={audioDuration}
+                      bind:values={previewRange}
+                      on:change={handlePreview}
+                      on:stop={restartPreview}
+                      pips
+                      step={0.01}
+                      pipstep={(audioDuration < 60 ? 5 : audioDuration < 600 ? 30 : 300) / 0.01}
+                      formatter={(value) => convertTime(value, true)}
+                      range
+                      pushy
+                      all="label"
+                    />
+                  </div>
                   {#if !!$errors.PreviewStart || !!$errors.PreviewEnd}
                     <span class="place-self-center w-1/3 text-error">
                       {$errors.PreviewStart ?? $errors.PreviewEnd}
@@ -466,27 +489,29 @@
                       type="text"
                       id="preview_end"
                       name="PreviewEnd"
-                      on:keydown={(e) => {
+                      onkeydown={(e) => {
                         if (e.key === 'Enter') {
+                          e.currentTarget.blur();
                           e.preventDefault();
                         }
                       }}
                       placeholder={$t('studio.submission.end')}
-                      class="input w-1/6 text-left"
-                      value={convertTime(previewEnd)}
-                      on:input={(e) => {
-                        if (!/^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/g.test(e.currentTarget.value))
+                      class="input w-1/6 text-left border-2 transition hover:input-secondary"
+                      value={convertTime(previewRange[1])}
+                      onblur={(e) => {
+                        // discard changes if the input is invalid
+                        if (!timePattern.test(e.currentTarget.value)) {
+                          e.currentTarget.value = convertTime(previewRange[1]);
                           return;
-                        previewEnd = parseTime(e.currentTarget.value);
-                        if (
-                          previewEnd < 0 ||
-                          previewStart > previewEnd ||
-                          (audio && previewEnd > audio.duration)
-                        )
+                        }
+                        previewRange[1] = parseTime(e.currentTarget.value);
+                        if (previewRange[1] < 0 || (audio && previewRange[1] > audio.duration))
                           return;
-                        pausePreview();
+                        if (previewRange[0] > previewRange[1]) {
+                          previewRange[0] = Math.max(previewRange[1] - 5, 0);
+                        }
                         previewStatus = 0;
-                        slider.noUiSlider?.set([previewStart, previewEnd]);
+                        restartPreview(e);
                       }}
                     />
                   {/if}
@@ -503,16 +528,16 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
                   }}
-                  on:input={() => {
+                  oninput={() => {
                     querySongDuplications = false;
                     queryResourceRecords = false;
                   }}
-                  on:focusout={() => {
+                  onfocusout={() => {
                     querySongDuplications = true;
                     queryResourceRecords = true;
                   }}
@@ -545,11 +570,11 @@
                     editionType === 0 ? 'w-3/4' : 'w-1/6'
                   } ${$errors.EditionType ? 'hover:select-error' : 'hover:select-secondary'}`}
                   bind:value={editionType}
-                  on:input={() => {
+                  oninput={() => {
                     querySongDuplications = false;
                     queryResourceRecords = false;
                   }}
-                  on:focusout={() => {
+                  onfocusout={() => {
                     querySongDuplications = true;
                     queryResourceRecords = true;
                   }}
@@ -566,16 +591,16 @@
                 {#if editionType !== 0}
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
                     }}
-                    on:input={() => {
+                    oninput={() => {
                       querySongDuplications = false;
                       queryResourceRecords = false;
                     }}
-                    on:focusout={() => {
+                    onfocusout={() => {
                       querySongDuplications = true;
                       queryResourceRecords = true;
                     }}
@@ -599,7 +624,7 @@
                   <button
                     type="button"
                     class="btn btn-xs btn-shallow text-sm font-normal cursor-default no-animation"
-                    on:click|preventDefault
+                    onclick={(e) => e.preventDefault()}
                   >
                     {$t(`song.edition_types.${editionType}`)}
                   </button>
@@ -650,16 +675,16 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
                   }}
-                  on:input={() => {
+                  oninput={() => {
                     querySongDuplications = false;
                     queryResourceRecords = false;
                   }}
-                  on:focusout={() => {
+                  onfocusout={() => {
                     querySongDuplications = true;
                     queryResourceRecords = true;
                   }}
@@ -674,15 +699,15 @@
                   bind:value={authorName}
                 />
                 {#if isOriginal}
-                  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                   <label
                     for="studio-composer"
                     class="btn border-2 normal-border btn-outline hover:btn-secondary join-item w-1/6"
-                    on:click={() => {
+                    onclick={() => {
                       newComposerId = null;
                       newComposerDisplay = '';
                     }}
-                    on:keyup
+                    onkeyup={null}
                   >
                     {$t('studio.submission.add_composer')}
                   </label>
@@ -709,7 +734,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -736,7 +761,7 @@
                 <div class="flex w-3/4">
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -750,7 +775,7 @@
                   />
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -764,7 +789,7 @@
                   />
                   <input
                     type="text"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -789,7 +814,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                     }
@@ -832,7 +857,7 @@
                 </span>
                 <input
                   type="text"
-                  on:keydown={(e) => {
+                  onkeydown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       if (!newTag || tags.includes(newTag)) return;
@@ -853,7 +878,9 @@
                 />
                 <button
                   class="btn border-2 normal-border btn-outline btn-square hover:btn-secondary join-item"
-                  on:click|preventDefault={() => {
+                  aria-label={$t('common.add')}
+                  onclick={(e) => {
+                    e.preventDefault();
                     if (!newTag || tags.includes(newTag)) return;
                     showTags = false;
                     tags.push(newTag);
@@ -863,7 +890,6 @@
                       showTags = true;
                     }, 0);
                   }}
-                  on:keyup
                 >
                   <i class="fa-solid fa-plus"></i>
                 </button>
@@ -959,13 +985,29 @@
 </div>
 
 <style>
-  .noUi-target {
-    --tw-border-opacity: 0.5;
-    --tw-bg-opacity: 1;
-    background: hsl(var(--b1) / var(--tw-bg-opacity));
-    box-shadow: none;
-    border-width: 1px;
-    border-color: hsl(var(--bc) / var(--tw-border-opacity));
-    border-radius: var(--rounded-badge, 1.9rem /* 30.4px */);
+  :global #preview-slider {
+    .pip .pipVal {
+      display: none;
+    }
+    .pip:nth-of-type(odd) {
+      width: 1.5px;
+    }
+    .pip:nth-of-type(1) .pipVal,
+    .pip:nth-last-of-type(1) .pipVal {
+      display: inline-flex;
+    }
+    @screen sm {
+      .pip:nth-of-type(4n + 1) .pipVal {
+        display: inline-flex;
+      }
+    }
+    @screen lg {
+      .pip:nth-of-type(odd) .pipVal {
+        display: inline-flex;
+      }
+    }
+    .pip:nth-last-of-type(2) .pipVal {
+      display: none;
+    }
   }
 </style>
