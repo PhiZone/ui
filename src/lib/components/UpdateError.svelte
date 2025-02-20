@@ -10,7 +10,7 @@
     error?: ResponseDtoError;
     buttonText?: string;
   }
-  let { id = 'update-success', checked, onClick, error, buttonText }: Props = $props();
+  let { id = 'update-error', checked, onClick, error, buttonText }: Props = $props();
 </script>
 
 <input type="checkbox" {id} class="modal-toggle" {checked} />

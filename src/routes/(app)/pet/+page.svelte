@@ -32,7 +32,7 @@
             </button>
           </a>
         {/if}
-        {#if status != 1 && status != 3}
+        {#if status !== 1 && status !== 3}
           <a href="/pet/answers" class="w-1/2 sm:w-1/4">
             <button class="btn border-2 normal-border btn-outline btn-lg w-full">
               {$t(getUserPrivilege(user?.role) >= 5 ? 'pet.manage' : 'pet.view_history')}

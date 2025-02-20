@@ -1,11 +1,14 @@
 import type { Handle } from '@sveltejs/kit';
 
+import { building } from '$app/environment';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import API from '$lib/api';
 import { locales } from '$lib/translations/config';
 import { getUserPrivilege, parseAcceptLanguage, setTokens } from '$lib/utils';
 
 export const handle = (async ({ event, resolve }) => {
+  if (building) return await resolve(event);
+
   let accessToken = event.cookies.get('access_token');
   let refreshToken = event.cookies.get('refresh_token');
 
@@ -82,5 +85,6 @@ export const handle = (async ({ event, resolve }) => {
         '\x1b[0m '
       : '') + event.url.pathname,
   );
+
   return await resolve(event);
 }) satisfies Handle;

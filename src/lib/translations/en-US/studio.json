@@ -5,15 +5,19 @@
   "chapter_admissions": "Chapter Admissions",
   "chart_submission": "Chart Submission",
   "chart_submissions": "Chart Submissions",
+  "choose_chart": "选择谱面",
   "collaboration": "Collaboration",
   "collaborations": "Collaborations",
   "collection_admission": "Collection Admission",
   "collection_admissions": "Collection Admissions",
+  "confirm_chart": "确认谱面",
   "description": "Right here, devote your efforts to Phigros Fanmade.",
   "drawer": "Drawer",
   "edit_chart": "Edit Chart",
   "edit_song": "Edit Song",
   "homepage": "Homepage",
+  "invalid_chart_bundle": "无法在上传的 ZIP 文件中找到有效的谱面。",
+  "multiple_charts": "上传的 ZIP 文件中包含多个谱面。如果继续，将只会处理第一个谱面。",
   "request": {
     "accept": "Accept",
     "accepted": "Accepted",
@@ -97,6 +101,7 @@
     "write_message": "Comment on this chart in a few sentences",
     "your_id": "Your ID"
   },
+  "upload": "上传",
   "upload_chart": "Upload Chart",
   "upload_song": "Upload Song",
   "view_guide": "View Guide"
