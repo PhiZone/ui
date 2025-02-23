@@ -3,17 +3,21 @@
 
   import type { UserDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let user: UserDto;
-  export let instantResp = true;
+  interface Props {
+    user: UserDto;
+    instantResp?: boolean;
+  }
+  let { user = $bindable(), instantResp = false }: Props = $props();
 
   const queryClient = useQueryClient();
 
-  const follow = async () => {
+  const follow = async (e: MouseEvent) => {
+    e.preventDefault();
     if (instantResp) {
       user.followerCount++;
       user.dateFollowed = new Date().toISOString();
@@ -33,7 +37,8 @@
     }
   };
 
-  const unfollow = async () => {
+  const unfollow = async (e: MouseEvent) => {
+    e.preventDefault();
     if (instantResp) {
       user.followerCount--;
       user.dateFollowed = null;
@@ -52,6 +57,8 @@
       );
     }
   };
+
+  $inspect(user);
 </script>
 
 {#if !user.dateFollowed}
@@ -59,17 +66,13 @@
     type="button"
     class="w-fit btn btn-outline btn-primary text-sm border-2"
     disabled={!user}
-    on:click={follow}
+    onclick={follow}
   >
     {$t('user.follow')}
     {user.followerCount}
   </button>
 {:else}
-  <button
-    type="button"
-    class="w-fit btn btn-outline btn-ghost text-sm border-2"
-    on:click={unfollow}
-  >
+  <button type="button" class="w-fit btn btn-outline btn-ghost text-sm border-2" onclick={unfollow}>
     {$t('user.unfollow')}
     {user.followerCount}
   </button>

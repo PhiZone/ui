@@ -16,22 +16,30 @@
   import ReplyComponent from './Reply.svelte';
   import User from './User.svelte';
 
-  $: ({ user, api } = $page.data);
+  let { user, api } = $derived($page.data);
 
-  export let type: string | undefined = undefined;
-  export let comment: CommentDto;
-  export let showUser = true;
-  export let showSource = false;
-  export let searchParams: ParsedQuery<string | number | boolean>;
+  interface Props {
+    type?: string;
+    comment: CommentDto;
+    showUser?: boolean;
+    showSource?: boolean;
+    searchParams: ParsedQuery<string | number | boolean>;
+  }
+  let { type, comment, showUser = true, showSource = false, searchParams }: Props = $props();
 
   const queryClient = useQueryClient();
 
-  $: replyPage = typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1;
-  $: options = api.reply.list({ commentId: comment.id, page: replyPage });
-  $: query = createQuery({ ...options });
+  let replyPage = $derived(
+    typeof searchParams.reply_page === 'number' ? searchParams.reply_page : 1,
+  );
+  let options = $derived(api.reply.list({ commentId: comment.id, page: replyPage }));
+  let query = $derived(createQuery({ ...options }));
 
-  $: disabled = !user;
-  let replyText = '';
+  let disabled = $state(false);
+  $effect(() => {
+    disabled = !user;
+  });
+  let replyText = $state('');
   const sendReply = async () => {
     if (replyText.length > 0) {
       disabled = true;
@@ -49,8 +57,8 @@
     // )}`;
   };
 
-  $: source = `${type}/${comment.resourceId}`;
-  $: content = richtext(comment.content);
+  let source = $derived(`${type}/${comment.resourceId}`);
+  let content = $derived(richtext(comment.content));
 </script>
 
 <input type="checkbox" id="comment-{comment.id}-replies" class="modal-toggle" />
@@ -75,7 +83,7 @@
           ? 'btn-disabled'
           : 'border-2 btn-outline'} btn-primary w-1/12 min-w-fit"
         disabled={disabled || replyText.length === 0}
-        on:click={sendReply}
+        onclick={sendReply}
       >
         {$t('common.send')}
       </button>

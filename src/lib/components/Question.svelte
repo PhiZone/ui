@@ -3,12 +3,22 @@
 
   import { t } from '$lib/translations/config';
 
-  export let id: number;
-  export let question: PetQuestionDto;
-  export let choices: number[] | null = [];
-  export let text: string | null;
-  export let textAreaCss = 'text-base h-52';
-  export let answer: string | undefined = undefined;
+  interface Props {
+    id: number;
+    question: PetQuestionDto;
+    choices?: number[];
+    text?: string;
+    textAreaCss?: string;
+    answer?: string;
+  }
+  let {
+    id,
+    question,
+    choices = $bindable([]),
+    text = $bindable(),
+    textAreaCss = 'text-base h-52',
+    answer,
+  }: Props = $props();
 </script>
 
 <div class="indicator w-full my-4">

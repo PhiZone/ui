@@ -1,8 +1,11 @@
 <script lang="ts">
-  export let score: number;
-  export let size = 20;
-  export let centered = true;
-  export let obsolete = false;
+  interface Props {
+    score: number;
+    size?: number;
+    centered?: boolean;
+    obsolete?: boolean;
+  }
+  let { score, size = 20, centered = true, obsolete = false }: Props = $props();
 </script>
 
 <div

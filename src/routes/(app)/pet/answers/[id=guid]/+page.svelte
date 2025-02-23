@@ -7,8 +7,8 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
-  $: ({ user, answer } = data);
+  let { data } = $props();
+  let { user, answer } = $derived(data);
 
   const {
     // form: reviewForm,
@@ -18,7 +18,7 @@
     submitting,
     allErrors,
   } = superForm(data.form);
-  let score = 0;
+  let score = $state(0);
 </script>
 
 <svelte:head>
@@ -58,34 +58,10 @@
         </div>
       </div>
     </div>
-    <Question
-      id={16}
-      question={answer.question1}
-      choices={null}
-      text={null}
-      answer={answer.answer1}
-    />
-    <Question
-      id={17}
-      question={answer.question2}
-      choices={null}
-      text={null}
-      answer={answer.answer2}
-    />
-    <Question
-      id={18}
-      question={answer.question3}
-      choices={null}
-      text={null}
-      answer={answer.answer3}
-    />
-    <Question
-      id={19}
-      question={answer.question4}
-      choices={null}
-      text={null}
-      answer={answer.chart}
-    />
+    <Question id={16} question={answer.question1} answer={answer.answer1} />
+    <Question id={17} question={answer.question2} answer={answer.answer2} />
+    <Question id={18} question={answer.question3} answer={answer.answer3} />
+    <Question id={19} question={answer.question4} answer={answer.chart} />
   </div>
   <div class="w-80 form-control mx-auto lg:mx-4">
     <div class="indicator w-full my-4">
@@ -128,7 +104,7 @@
                   name="score"
                   bind:value={score}
                   class="input w-1/4 text-right text-xl font-bold"
-                  on:input={(e) => {
+                  oninput={(e) => {
                     if (!/^\d+$/.test(e.currentTarget.value)) {
                       e.currentTarget.value = `${score}`;
                       return;

@@ -3,13 +3,24 @@
 
   import { t } from '$lib/translations/config';
 
-  export let region: RegionDto | string | undefined;
-  export let width = 21;
-  export let showFlag = true;
-  export let showText = true;
-  export let overallCss = '';
-  export let flagCss = '';
-  export let textCss = '';
+  interface Props {
+    region?: RegionDto | string;
+    width?: number;
+    showFlag?: boolean;
+    showText?: boolean;
+    overallCss?: string;
+    flagCss?: string;
+    textCss?: string;
+  }
+  let {
+    region,
+    width = 21,
+    showFlag = true,
+    showText = true,
+    overallCss = '',
+    flagCss = '',
+    textCss = '',
+  }: Props = $props();
 
   const code = typeof region == 'object' ? region.code : region;
   const nonrecognized = ['TW'];

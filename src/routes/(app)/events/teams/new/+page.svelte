@@ -5,28 +5,31 @@
   import { t } from '$lib/translations/config';
   import { range } from '$lib/utils';
 
-  export let data;
-
-  $: ({ api, divisionId, name } = data);
+  let { data } = $props();
+  let { api, divisionId, name } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  let claimedParticipantCount: number | null = null;
-  let claimedSubmissionCount: number | null = null;
+  let claimedParticipantCount: number | null = $state(null);
+  let claimedSubmissionCount: number | null = $state(null);
 
-  $: division = createQuery(api.event.division.info({ id: divisionId }));
+  let division = $derived(createQuery(api.event.division.info({ id: divisionId })));
 
-  $: if (claimedParticipantCount === null && $division.isSuccess) {
-    claimedParticipantCount =
-      $division.data.data.minParticipantPerTeamCount ??
-      $division.data.data.maxParticipantPerTeamCount ??
-      1;
-  }
+  $effect(() => {
+    if (claimedParticipantCount === null && $division.isSuccess) {
+      claimedParticipantCount =
+        $division.data.data.minParticipantPerTeamCount ??
+        $division.data.data.maxParticipantPerTeamCount ??
+        1;
+    }
+  });
 
-  $: if (claimedSubmissionCount === null && $division.isSuccess) {
-    claimedSubmissionCount =
-      $division.data.data.minSubmissionCount ?? $division.data.data.maxSubmissionCount ?? 1;
-  }
+  $effect(() => {
+    if (claimedSubmissionCount === null && $division.isSuccess) {
+      claimedSubmissionCount =
+        $division.data.data.minSubmissionCount ?? $division.data.data.maxSubmissionCount ?? 1;
+    }
+  });
 </script>
 
 <svelte:head>
@@ -92,7 +95,7 @@
                   <select
                     id="claimed_participant_count"
                     name="ClaimedParticipantCount"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }
@@ -133,7 +136,7 @@
                   <select
                     id="claimed_submission_count"
                     name="ClaimedSubmissionCount"
-                    on:keydown={(e) => {
+                    onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                       }

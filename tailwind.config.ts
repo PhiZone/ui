@@ -11,7 +11,13 @@ export default {
     extend: {},
   },
 
-  plugins: [daisyui, forms, typography],
+  plugins: [
+    daisyui,
+    typography,
+    forms({
+      strategy: 'class',
+    }),
+  ],
 
   daisyui: {
     themes: ['garden', 'dracula'],

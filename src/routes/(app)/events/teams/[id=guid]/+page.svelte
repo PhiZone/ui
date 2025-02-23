@@ -13,70 +13,85 @@
   import { t } from '$lib/translations/config';
   import { getAvatar, hasEventPermission } from '$lib/utils';
 
-  export let data;
-  const { user, id, api, url } = data;
+  let { data } = $props();
+  let { user, id, api, url } = $derived(data);
 
-  $: team = createQuery(api.event.team.info({ id }));
-  $: division = createQuery(
-    api.event.division.info(
-      { id: $team.data?.data.divisionId ?? '' },
-      { enabled: $team.isSuccess },
+  let teamQuery = $derived(createQuery(api.event.team.info({ id })));
+  let divisionQuery = $derived(
+    createQuery(
+      api.event.division.info(
+        { id: $teamQuery.data?.data.divisionId ?? '' },
+        { enabled: $teamQuery.isSuccess },
+      ),
     ),
   );
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
-  );
-  $: resources = createQuery(
-    api.event.listAllResources(
-      {
-        rangeType: [1],
-        rangeDivisionId: [$team.data?.data.divisionId ?? ''],
-        rangeTeamId: [$team.data?.data.id ?? ''],
-      },
-      { enabled: $team.isSuccess },
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: songs = createQuery(
-    api.song.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 0,
-      },
+  let resources = $derived(
+    createQuery(
+      api.event.listAllResources(
+        {
+          rangeType: [1],
+          rangeDivisionId: [$teamQuery.data?.data.divisionId ?? ''],
+          rangeTeamId: [$teamQuery.data?.data.id ?? ''],
+        },
+        { enabled: $teamQuery.isSuccess },
+      ),
     ),
   );
-  $: charts = createQuery(
-    api.chart.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 1,
-      },
+  let songs = $derived(
+    createQuery(
+      api.song.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 0,
+        },
+      ),
     ),
   );
-  $: records = createQuery(
-    api.record.list(
-      { rangeId: $resources.data?.data.map((e) => e.resourceId) },
-      {
-        enabled:
-          $resources.isSuccess &&
-          $resources.data.data.length > 0 &&
-          $division.isSuccess &&
-          $division.data?.data.type == 2,
-      },
+  let charts = $derived(
+    createQuery(
+      api.chart.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 1,
+        },
+      ),
+    ),
+  );
+  let records = $derived(
+    createQuery(
+      api.record.list(
+        { rangeId: $resources.data?.data.map((e) => e.resourceId) },
+        {
+          enabled:
+            $resources.isSuccess &&
+            $resources.data.data.length > 0 &&
+            $divisionQuery.isSuccess &&
+            $divisionQuery.data?.data.type == 2,
+        },
+      ),
     ),
   );
 
-  let status = Status.WAITING;
-  let copied = false;
-  let errorCode = '';
-  let inviteCode = '';
+  let status = $state(Status.WAITING);
+  let copied = $state(false);
+  let errorCode = $state('');
+  let inviteCode = $state('');
 
   const createInvitation = async () => {
     status = Status.SENDING;
@@ -96,13 +111,13 @@
 <svelte:head>
   <title>
     {$t('event.team.team')} -
-    {$team.isSuccess ? $team.data.data.name : ''}
+    {$teamQuery.isSuccess ? $teamQuery.data.data.name : ''}
     | {$t('event.event')} | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $team.isSuccess}
-  {@const team = $team.data.data}
+{#if $teamQuery.isSuccess}
+  {@const team = $teamQuery.data.data}
   <input type="checkbox" id="invite" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box text-left">
@@ -126,14 +141,14 @@
           class="btn btn-outline border-2 {copied
             ? 'btn-success btn-active'
             : 'normal-border'} md:w-2/5 w-full"
-          on:click={() => {
+          onclick={() => {
             navigator.clipboard.writeText(
               $t('event.team.invitation.invite_msg', {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 user: user.userName,
-                event: $event.data?.data.title,
-                division: $division.data?.data.title,
+                event: $eventQuery.data?.data.title,
+                division: $divisionQuery.data?.data.title,
                 team: team.name,
                 code: inviteCode,
                 link: `${url.protocol}//${url.host}/events/teams/invite?code=${inviteCode}`,
@@ -168,7 +183,7 @@
                 ? 'btn-ghost'
                 : 'btn-outline border-2 normal-border'} w-full"
             disabled={status === Status.SENDING}
-            on:click={createInvitation}
+            onclick={createInvitation}
           >
             {status === Status.ERROR
               ? $t('common.error')
@@ -194,12 +209,12 @@
         {$t('event.team.leave_confirmation')}
       </p>
       <div class="modal-action">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="leave"
           class="btn border-2 normal-border btn-outline"
-          on:click={async () => {
+          onclick={async () => {
             const resp = await api.DELETE(`/events/teams/${id}/participants/${user?.id}`);
             if (resp.ok || resp.status === 404) {
               goto(
@@ -239,12 +254,12 @@
         {$t('event.team.disband_confirmation')}
       </p>
       <div class="modal-action">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <label
           for="disband"
           class="btn border-2 normal-border btn-outline"
-          on:click={async () => {
+          onclick={async () => {
             const resp = await api.DELETE(`/events/teams/${id}`);
             if (resp.ok || resp.status === 404) {
               goto(
@@ -328,7 +343,7 @@
                   </div>
                 </div>
                 <div class="flex justify-center gap-2">
-                  {#if hasEventPermission(user, $event.data?.data, UPDATE, TEAM) || user?.id === team.ownerId}
+                  {#if hasEventPermission(user, $eventQuery.data?.data, UPDATE, TEAM) || user?.id === team.ownerId}
                     <a
                       href="/events/teams/{team.id}/edit"
                       class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
@@ -336,14 +351,14 @@
                       {$t('common.edit_info')}
                     </a>
                     {#if team.participants.length < team.claimedParticipantCount}
-                      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                       <label
                         for="invite"
                         class="btn border-2 normal-border btn-outline text-lg w-32 min-w-fit"
-                        on:click={() => {
+                        onclick={() => {
                           if (!inviteCode) createInvitation();
                         }}
-                        on:keyup
+                        onkeyup={null}
                       >
                         {$t('event.team.invitation.invite_code')}
                       </label>
@@ -357,7 +372,7 @@
                       {$t('event.team.leave')}
                     </label>
                   {/if}
-                  {#if hasEventPermission(user, $event.data?.data, REMOVE, TEAM) || user?.id == team.ownerId}
+                  {#if hasEventPermission(user, $eventQuery.data?.data, REMOVE, TEAM) || user?.id == team.ownerId}
                     <label
                       for="disband"
                       class="btn border-2 normal-border btn-outline hover:btn-error text-lg w-32 min-w-fit"
@@ -381,9 +396,9 @@
               </span>
               <User id={team.ownerId} />
             </div>
-            {#if $division.isSuccess && $event.isSuccess}
-              {@const division = $division.data.data}
-              {@const event = $event.data.data}
+            {#if $divisionQuery.isSuccess && $eventQuery.isSuccess}
+              {@const division = $divisionQuery.data.data}
+              {@const event = $eventQuery.data.data}
               <div class="indicator w-full my-4">
                 <span
                   class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
@@ -499,8 +514,8 @@
       </div>
     </div>
   </div>
-{:else if $team.isError}
-  <Error error={$team.error} back="/events" />
+{:else if $teamQuery.isError}
+  <Error error={$teamQuery.error} back="/events" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

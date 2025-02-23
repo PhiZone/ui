@@ -15,28 +15,31 @@
   import { t } from '$lib/translations/config';
   import { applyPatch, getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, chartId, user, api, queryClient } = $derived(data);
 
-  let patch = new Array<PatchElement>();
-  let status = Status.WAITING;
-  let errorCode = '';
-  let updateErrors: Map<string, string> | undefined = undefined;
-  let chartAssetDto: ChartAssetSubmissionDto;
+  let submission = $derived(createQuery(api.chart.submission.info({ id: chartId })));
+  let options = $derived(api.chart.submission.asset.info({ chartId, id }));
+  let query = $derived(createQuery({ ...options }));
+  let content = $derived(
+    createQuery({
+      queryKey: ['chart-submission-asset-content'],
+      queryFn: async () => await (await fetch($query.data?.data.file ?? '')).text(),
+      enabled: $query.isSuccess && $query.data.data.type >= 3,
+    }),
+  );
 
-  $: ({ id, chartId, user, api, queryClient } = data);
+  let patch = $state(new Array<PatchElement>());
+  let status = $state(Status.WAITING);
+  let errorCode = $state('');
+  let updateErrors: Map<string, string> | undefined = $state();
+  let chartAssetDto: ChartAssetSubmissionDto = $state($query.data?.data)!; // FIXME: hack
 
-  $: submission = createQuery(api.chart.submission.info({ id: chartId }));
-  $: options = api.chart.submission.asset.info({ chartId, id });
-  $: query = createQuery({ ...options });
-  $: content = createQuery({
-    queryKey: ['chart-submission-asset-content'],
-    queryFn: async () => await (await fetch($query.data?.data.file ?? '')).text(),
-    enabled: $query.isSuccess && $query.data.data.type >= 3,
+  $effect(() => {
+    if (!chartAssetDto && $query.isSuccess) {
+      chartAssetDto = $query.data.data;
+    }
   });
-
-  $: if (!chartAssetDto && $query.isSuccess) {
-    chartAssetDto = $query.data.data;
-  }
 
   const handleFile = async (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     const target = e.currentTarget;
@@ -101,7 +104,7 @@
 
 <UpdateSuccess checked={status === Status.OK} onClick={() => (status = Status.WAITING)} />
 
-{#if $query.isSuccess}
+{#if $query.isSuccess && chartAssetDto}
   {@const chartAsset = $query.data.data}
 
   <input
@@ -119,7 +122,7 @@
         ✕
       </label>
       <h3 class="font-bold text-lg mb-2">{$t('chart.asset.asset')}</h3>
-      <form class="w-full form-control" on:submit|preventDefault>
+      <form class="w-full form-control" onsubmit={(e) => e.preventDefault()}>
         <div
           class={updateErrors?.get('File')
             ? 'tooltip tooltip-open tooltip-bottom tooltip-error my-2 flex items-center'
@@ -136,7 +139,7 @@
                 ? 'input-error file:btn-error'
                 : 'input-secondary file:btn-outline file:bg-secondary'
             }`}
-            on:input={handleFile}
+            oninput={handleFile}
           />
         </div>
         <div
@@ -151,7 +154,7 @@
             </span>
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -163,7 +166,7 @@
               class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
                 updateErrors?.get('Name') ? 'hover:input-error' : 'hover:input-secondary'
               }`}
-              on:input={() => {
+              oninput={() => {
                 patch = applyPatch(patch, 'replace', '/name', chartAssetDto.name);
               }}
             />
@@ -186,7 +189,7 @@
                 updateErrors?.get('Type') ? 'hover:select-error' : 'hover:select-secondary'
               }`}
               value={chartAssetDto.type}
-              on:input={(e) => {
+              oninput={(e) => {
                 const type = parseInt(e.currentTarget.value);
                 chartAssetDto.type = type;
                 patch = applyPatch(patch, 'replace', '/type', chartAssetDto.type);
@@ -212,7 +215,7 @@
                   ? 'btn-ghost'
                   : 'btn-outline border-2 normal-border'} w-full"
               disabled={status === Status.SENDING}
-              on:click={update}
+              onclick={update}
             >
               {status === Status.ERROR
                 ? $t('common.error')
@@ -271,7 +274,7 @@
                 {:else if chartAsset.type === 1}
                   <audio src={chartAsset.file} class="w-full" controls></audio>
                 {:else if chartAsset.type === 2}
-                  <!-- svelte-ignore a11y-media-has-caption -->
+                  <!-- svelte-ignore a11y_media_has_caption -->
                   <video
                     src={chartAsset.file}
                     class="rounded-lg transition border-2 normal-border hover:shadow-lg"

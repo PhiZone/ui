@@ -3,19 +3,22 @@
 
   import type { EventDto } from '$lib/api/event';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getCompressedImage } from '$lib/utils';
 
   import Like from './Like.svelte';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let event: EventDto;
-  export let fixedHeight = true;
-  export let showLike = true;
+  interface Props {
+    event: EventDto;
+    fixedHeight?: boolean;
+    showLike?: boolean;
+  }
+  let { event, fixedHeight = true, showLike = true }: Props = $props();
 
-  $: owner = createQuery(api.user.info({ id: event.ownerId }));
+  let owner = $derived(createQuery(api.user.info({ id: event.ownerId })));
 </script>
 
 <a
@@ -26,13 +29,13 @@
     <img src={getCompressedImage(event.illustration)} alt="Illustration" class="object-fill" />
     <div class="absolute bottom-2 right-2 flex gap-1">
       {#each event.divisions as division}
-        <button
+        <div
           class="btn btn-circle btn-xs w-[10px] btn-active no-animation {division.status == 2
             ? 'btn-success'
             : division.status == 3
               ? 'btn-error'
               : 'btn-ghost'}"
-        ></button>
+        ></div>
       {/each}
     </div>
   </figure>

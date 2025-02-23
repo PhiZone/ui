@@ -1,12 +1,16 @@
 <script lang="ts">
-  export let score: number, message: string;
+  interface Props {
+    score: number;
+    message: string;
+  }
+  let { score = $bindable(), message = $bindable() }: Props = $props();
 
-  let step = 0,
-    scores: number[] = [],
-    creativityScores: number[] = [],
-    structureScores: number[] = [],
-    realScores: number[] = [],
-    realScore = 0,
+  let step = $state(0),
+    scores: number[] = $state([]),
+    creativityScores: number[] = $state([]),
+    structureScores: number[] = $state([]),
+    realScores: number[] = $state([]),
+    realScore = $state(0),
     questions = [
       '这张谱面的采音怎么样？',
       '这张谱面的配置怎么样？',
@@ -69,7 +73,7 @@
           name="score"
           class="radio border-2 radio-secondary"
           bind:group={scores[step]}
-          on:change={calculate}
+          onchange={calculate}
           value={3}
         />
         <p class="text-base">高度符合标准</p>
@@ -80,7 +84,7 @@
           name="score"
           class="radio border-2 radio-secondary"
           bind:group={scores[step]}
-          on:change={calculate}
+          onchange={calculate}
           value={2}
         />
         <p class="text-base">满足谱面需求</p>
@@ -91,7 +95,7 @@
           name="score"
           class="radio border-2 radio-secondary"
           bind:group={scores[step]}
-          on:change={calculate}
+          onchange={calculate}
           value={0}
         />
         <p class="text-base">勉强满足谱面基本需求</p>
@@ -102,7 +106,7 @@
           name="score"
           class="radio border-2 radio-secondary"
           bind:group={scores[step]}
-          on:change={calculate}
+          onchange={calculate}
           value={-3}
         />
         <p class="text-base">不能满足谱面基本需求</p>
@@ -117,7 +121,7 @@
             name="creativity"
             class="radio border-2 radio-secondary"
             bind:group={creativityScores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={1}
           />
           <p class="text-base">可以认可</p>
@@ -128,7 +132,7 @@
             name="creativity"
             class="radio border-2 radio-secondary"
             bind:group={creativityScores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={0}
           />
           <p class="text-base">不能认可或无创新点</p>
@@ -144,7 +148,7 @@
             name="structure"
             class="radio border-2 radio-secondary"
             bind:group={structureScores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={1}
           />
           <p class="text-base">结构明晰合理</p>
@@ -155,7 +159,7 @@
             name="structure"
             class="radio border-2 radio-secondary"
             bind:group={structureScores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={0}
           />
           <p class="text-base">部分段落结构崩塌</p>
@@ -166,7 +170,7 @@
             name="structure"
             class="radio border-2 radio-secondary"
             bind:group={structureScores[step]}
-            on:change={calculate}
+            onchange={calculate}
             value={-1}
           />
           <p class="text-base">几乎没有结构</p>
@@ -179,7 +183,7 @@
         <button
           class="btn btn-outline border-2 normal-border join-item"
           disabled={step <= 0}
-          on:click={() => {
+          onclick={() => {
             step--;
           }}
         >
@@ -188,20 +192,20 @@
         {#if step < 4}
           <button
             class="btn btn-outline border-2 normal-border join-item"
-            on:click={() => {
+            onclick={() => {
               step++;
             }}
-            on:change={calculate}
+            onchange={calculate}
           >
             继续
           </button>
         {:else}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events -->
+          <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
           <label
             for="vote-helper"
             class="btn btn-outline border-2 normal-border join-item"
-            on:click={() => {
+            onclick={() => {
               calculate();
               if (message) {
                 message += `\n采音：${realScores[0]}；配置：${realScores[1]}；契合度：${realScores[2]}；手感：${realScores[3]}；特效：${realScores[4]}\n`;

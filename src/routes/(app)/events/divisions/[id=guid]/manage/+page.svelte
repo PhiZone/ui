@@ -12,79 +12,100 @@
   import { t } from '$lib/translations/config';
   import { getAvatar, hasEventPermission } from '$lib/utils';
 
-  export let data;
-
-  $: ({ searchParams, index, page, id, api, user } = data);
-
-  $: division = createQuery(api.event.division.info({ id }));
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
-  );
-  $: teams = createQuery(api.event.team.list({ rangeDivisionId: [id], perPage, ...searchParams }));
-  $: reservedFieldsHeader = createQuery(api.event.division.listReservedFields({ id }));
-  $: reservedFieldsTeam = createQuery(
-    api.event.team.listReservedFields(
-      { rangeDivisionId: [id], perPage, ...searchParams },
-      { enabled: index == 1 },
-    ),
-  );
-  $: songPrompts = createQuery(
-    api.event.division.listSongPrompts(
-      { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 0 },
-    ),
-  );
-  $: chartPrompts = createQuery(
-    api.event.division.listChartPrompts(
-      { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 0 },
-    ),
-  );
-  $: resources = createQuery(
-    api.event.resource.list(
-      { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
-      { enabled: index == 2 },
-    ),
-  );
-  $: reservedFieldsResource = createQuery(
-    api.event.resource.listReservedFields(
-      { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
-      { enabled: index == 2 },
-    ),
-  );
-  $: songEntries = createQuery(
-    api.event.division.listSongEntries(
-      { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 0 && index == 2 },
-    ),
-  );
-  $: chartEntries = createQuery(
-    api.event.division.listChartEntries(
-      { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 && index == 2 },
-    ),
-  );
-  $: recordEntries = createQuery(
-    api.event.division.listRecordEntries(
-      { id, perPage, ...searchParams },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 && index == 2 },
-    ),
-  );
+  let { data } = $props();
+  let { searchParams, index, page, id, api, user } = $derived(data);
 
   const maxMemberDisplay = 2;
   const perPage = 12;
+  let divisionQuery = $derived(createQuery(api.event.division.info({ id })));
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
+    ),
+  );
+  let teams = $derived(
+    createQuery(api.event.team.list({ rangeDivisionId: [id], perPage, ...searchParams })),
+  );
+  let reservedFieldsHeader = $derived(createQuery(api.event.division.listReservedFields({ id })));
+  let reservedFieldsTeam = $derived(
+    createQuery(
+      api.event.team.listReservedFields(
+        { rangeDivisionId: [id], perPage, ...searchParams },
+        { enabled: index == 1 },
+      ),
+    ),
+  );
+  let songPrompts = $derived(
+    createQuery(
+      api.event.division.listSongPrompts(
+        { id, perPage, ...searchParams },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 0 },
+      ),
+    ),
+  );
+  let chartPrompts = $derived(
+    createQuery(
+      api.event.division.listChartPrompts(
+        { id, perPage, ...searchParams },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 0 },
+      ),
+    ),
+  );
+  let resourcesQuery = $derived(
+    createQuery(
+      api.event.resource.list(
+        { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
+        { enabled: index == 2 },
+      ),
+    ),
+  );
+  let reservedFieldsResource = $derived(
+    createQuery(
+      api.event.resource.listReservedFields(
+        { rangeDivisionId: [id], rangeType: [1], perPage, ...searchParams },
+        { enabled: index == 2 },
+      ),
+    ),
+  );
+  let songEntries = $derived(
+    createQuery(
+      api.event.division.listSongEntries(
+        { id, perPage, ...searchParams },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 0 && index == 2 },
+      ),
+    ),
+  );
+  let chartEntries = $derived(
+    createQuery(
+      api.event.division.listChartEntries(
+        { id, perPage, ...searchParams },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 && index == 2 },
+      ),
+    ),
+  );
+  let recordEntries = $derived(
+    createQuery(
+      api.event.division.listRecordEntries(
+        { id, perPage, ...searchParams },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 && index == 2 },
+      ),
+    ),
+  );
 </script>
 
 <svelte:head>
   <title>
-    {$t('common.manage')} | {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data
-      .title}) | {$t('common.site_name')}
+    {$t('common.manage')} | {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery
+      .data?.data.title}) | {$t('common.site_name')}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <div
     class="background min-h-screen"
     style:background-image="url({division.illustration ?? event.illustration})"
@@ -107,40 +128,21 @@
         <div class="lg:w-full">
           <div role="tablist" class="tabs tabs-lifted backdrop-blur-xl rounded-t-2xl mt-4">
             {#if division.type !== 0}
-              <div
+              <a
                 role="tab"
+                href="?index=0"
                 tabindex="0"
                 class="tab {index == 0 ? 'tab-active' : ''}"
-                on:click={() => {
-                  goto('?index=0');
-                }}
-                on:keyup
               >
                 {$t(division.type === 1 ? 'event.division.song_pool' : 'event.division.chart_pool')}
-              </div>
+              </a>
             {/if}
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 1 ? 'tab-active' : ''}"
-              on:click={() => {
-                goto('?index=1');
-              }}
-              on:keyup
-            >
+            <a role="tab" href="?index=1" tabindex="0" class="tab {index == 1 ? 'tab-active' : ''}">
               {$t('event.teams')}
-            </div>
-            <div
-              role="tab"
-              tabindex="0"
-              class="tab {index == 2 ? 'tab-active' : ''}"
-              on:click={() => {
-                goto('?index=2');
-              }}
-              on:keyup
-            >
+            </a>
+            <a role="tab" href="?index=2" tabindex="0" class="tab {index == 2 ? 'tab-active' : ''}">
               {$t('event.division.entries')}
-            </div>
+            </a>
           </div>
           <div
             class="card rounded-t-none w-full bg-base-100 transition border-t-0 border-2 normal-border hover:shadow-lg mb-4"
@@ -225,10 +227,10 @@
                             <td>{i + (page - 1) * perPage + 1}</td>
                             <td
                               class="hover:underline hover:cursor-pointer min-w-[180px]"
-                              on:click={() => {
+                              onclick={() => {
                                 goto(`/events/teams/${team.id}`);
                               }}
-                              on:mouseenter={() => {
+                              onmouseenter={() => {
                                 preloadData(`/events/teams/${team.id}`);
                               }}
                             >
@@ -410,8 +412,8 @@
                 {:else}
                   <p class="py-3 text-center">{$t('common.empty')}</p>
                 {/if}
-              {:else if index == 2 && $resources.isSuccess && $reservedFieldsResource.isSuccess && $reservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
-                {@const { total, perPage, data } = $resources.data}
+              {:else if index == 2 && $resourcesQuery.isSuccess && $reservedFieldsResource.isSuccess && $reservedFieldsHeader.isSuccess && ($songEntries.isSuccess || $chartEntries.isSuccess || $recordEntries.isSuccess)}
+                {@const { total, perPage, data } = $resourcesQuery.data}
                 {@const resources = data.map((e, i) => {
                   e.reservedFields = $reservedFieldsResource.data.data[i];
                   if (
@@ -716,8 +718,8 @@
       </div>
     </div>
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} back="/divisions" />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} back="/divisions" />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

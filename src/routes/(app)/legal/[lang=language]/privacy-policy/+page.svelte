@@ -2,8 +2,8 @@
   import { goto } from '$app/navigation';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ lang, langs } = data);
+  let { data } = $props();
+  let { lang, langs } = $derived(data);
 </script>
 
 <svelte:head>
@@ -12,7 +12,7 @@
 
 <select
   class="select transition border-2 normal-border hover:select-secondary self-end w-full max-w-xs"
-  on:input={(e) => {
+  oninput={(e) => {
     goto(`/legal/${e.currentTarget.value}/privacy-policy`);
   }}
 >

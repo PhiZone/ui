@@ -10,13 +10,22 @@
   import Like from './Like.svelte';
   import Rating from './Rating.svelte';
 
-  export let chart: ChartDto | ChartAdmitteeDto;
-  export let kind: 'full' | 'inline' = 'full';
-  export let showSong = true;
-  export let showCharter = true;
-  export let showLike = true;
+  interface Props {
+    chart: ChartDto | ChartAdmitteeDto;
+    kind?: 'full' | 'inline';
+    showSong?: boolean;
+    showCharter?: boolean;
+    showLike?: boolean;
+  }
+  let {
+    chart,
+    kind = 'full',
+    showSong = true,
+    showCharter = true,
+    showLike = true,
+  }: Props = $props();
 
-  $: charter = richtext(chart.authorName ?? $t('common.anonymous'));
+  let charter = $derived(richtext(chart.authorName ?? $t('common.anonymous')));
 </script>
 
 {#if kind === 'full'}

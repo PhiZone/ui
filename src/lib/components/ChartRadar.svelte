@@ -7,15 +7,19 @@
     RadialLinearScale,
     Tooltip,
   } from 'chart.js';
-  import { Radar } from 'svelte-chartjs';
 
   import type { ChartDto } from '$lib/api';
 
   import { t } from '$lib/translations/config';
 
-  export let chart: ChartDto;
+  import Radar from './chart/Radar.svelte';
 
-  $: data = {
+  interface Props {
+    chart: ChartDto;
+  }
+  let { chart }: Props = $props();
+
+  let data = $derived({
     labels: [
       $t('chart.arrangement'),
       $t('chart.gameplay'),
@@ -41,7 +45,7 @@
         borderWidth: 2,
       },
     ],
-  };
+  });
 
   ChartJS.register(PointElement, LineElement, RadialLinearScale, Tooltip, Filler);
   ChartJS.defaults.font.family = "'Outfit', 'Noto Sans SC', sans-serif";

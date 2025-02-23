@@ -4,15 +4,20 @@
   import type { ChartAssetDto } from '$lib/api/chart.asset';
   import type { ChartAssetSubmissionDto } from '$lib/api/chart.submission.asset';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let chartAsset: ChartAssetDto | ChartAssetSubmissionDto;
+  interface Props {
+    chartAsset: ChartAssetDto | ChartAssetSubmissionDto;
+  }
+  let { chartAsset }: Props = $props();
 
-  $: owner = createQuery(
-    api.user.info({ id: chartAsset.ownerId ?? 0 }, { enabled: chartAsset.ownerId !== null }),
+  let owner = $derived(
+    createQuery(
+      api.user.info({ id: chartAsset.ownerId ?? 0 }, { enabled: chartAsset.ownerId !== null }),
+    ),
   );
 </script>
 

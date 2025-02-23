@@ -8,33 +8,35 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege, hasEventPermission } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { id, user, api, url } = $derived(data);
 
-  $: ({ id, user, api, url } = data);
+  let eventQuery = $derived(createQuery(api.event.info({ id })));
+  let hostshipsQuery = $derived(createQuery(api.event.listAllHostships({ rangeEventId: [id] })));
 
-  $: event = createQuery(api.event.info({ id }));
-  $: hostships = createQuery(api.event.listAllHostships({ rangeEventId: [id] }));
-
-  $: isOwner = getUserPrivilege(user?.role) >= 6 || $event.data?.data.ownerId === user?.id;
-  $: isAdmin =
+  let isOwner = $derived(
+    getUserPrivilege(user?.role) >= 6 || $eventQuery.data?.data.ownerId === user?.id,
+  );
+  let isAdmin = $derived(
     getUserPrivilege(user?.role) >= 6 ||
-    user?.hostships?.some((hostship) => $event.data?.data.id === id && hostship.isAdmin);
+      user?.hostships?.some((hostship) => $eventQuery.data?.data.id === id && hostship.isAdmin),
+  );
 
-  let status = Status.WAITING;
-  let copied = false;
-  let errorCode = '';
-  let inviteCode = '';
-  let showTags = true;
+  let status = $state(Status.WAITING);
+  let copied = $state(false);
+  let errorCode = $state('');
+  let inviteCode = $state('');
+  let showTags = $state(true);
 
-  let newIsAdmin = false;
-  let newIsUnveiled = false;
-  let newPosition = '';
-  let newPermissions: number[] = [];
+  let newIsAdmin = $state(false);
+  let newIsUnveiled = $state(false);
+  let newPosition = $state('');
+  let newPermissions: number[] = $state([]);
 
-  let permissionOpen = false;
-  let permissionOperation = 0;
-  let permissionScope = 0;
-  let permissionIndex = 0;
+  let permissionOpen = $state(false);
+  let permissionOperation = $state(0);
+  let permissionScope = $state(0);
+  let permissionIndex = $state(0);
 
   const createInvitation = async () => {
     status = Status.SENDING;
@@ -60,7 +62,7 @@
 <svelte:head>
   <title>
     {$t('event.host_team')}
-    | {$t('event.event')} - {$event.data?.data.title} | {$t('common.site_name')}
+    | {$t('event.event')} - {$eventQuery.data?.data.title} | {$t('common.site_name')}
   </title>
 </svelte:head>
 <input type="checkbox" id="invite" class="modal-toggle" />
@@ -112,7 +114,7 @@
             class="btn btn-sm {newPosition
               ? 'border-2 hover:btn-outline backdrop-blur'
               : 'btn-disabled'}"
-            on:click={() => {
+            onclick={() => {
               newPosition = '';
             }}
           >
@@ -151,7 +153,7 @@
           {/each}
           {#if isAdmin}
             <label
-              for="new-permission-{$event.data?.data.id}"
+              for="new-permission-{$eventQuery.data?.data.id}"
               class="btn border-2 normal-border btn-outline btn-xs btn-circle"
             >
               <i class="fa-solid fa-plus"></i>
@@ -173,13 +175,13 @@
         class="btn btn-outline border-2 {copied
           ? 'btn-success btn-active'
           : 'normal-border'} md:w-2/5 w-full"
-        on:click={() => {
+        onclick={() => {
           navigator.clipboard.writeText(
             $t('event.hostship.invite_msg', {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               user: user.userName,
-              event: $event.data?.data.title,
+              event: $eventQuery.data?.data.title,
               link: `${url.protocol}//${url.host}/events/invite?code=${inviteCode}`,
             }),
           );
@@ -212,7 +214,7 @@
               ? 'btn-ghost'
               : 'btn-outline border-2 normal-border'} w-full"
           disabled={status === Status.SENDING}
-          on:click={createInvitation}
+          onclick={createInvitation}
         >
           {status === Status.ERROR
             ? $t('common.error')
@@ -226,7 +228,7 @@
 </div>
 <input
   type="checkbox"
-  id="new-permission-{$event.data?.data.id}"
+  id="new-permission-{$eventQuery.data?.data.id}"
   class="modal-toggle"
   bind:checked={permissionOpen}
 />
@@ -234,7 +236,7 @@
   <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
     <h3 class="font-bold text-lg">{$t('common.add')}</h3>
     <label
-      for="new-permission-{$event.data?.data.id}"
+      for="new-permission-{$eventQuery.data?.data.id}"
       class="btn border-2 normal-border hover:btn-secondary btn-outline btn-sm btn-circle absolute right-2 top-2"
     >
       ✕
@@ -286,7 +288,7 @@
       <div class="modal-action mt-3">
         <button
           class="btn btn-outline border-2 normal-border w-full"
-          on:click={() => {
+          onclick={() => {
             showTags = false;
             const permission = gen(
               permissionOperation,
@@ -300,7 +302,6 @@
               showTags = true;
             }, 0);
           }}
-          on:keyup
         >
           {$t('common.confirm')}
         </button>
@@ -314,21 +315,21 @@
       <div class="flex justify-between">
         <h1 class="text-4xl font-bold mb-6">{$t('event.host_team')}</h1>
         <div class="join">
-          {#if hasEventPermission(user, $event.data?.data, CREATE, HOSTSHIP)}
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+          {#if hasEventPermission(user, $eventQuery.data?.data, CREATE, HOSTSHIP)}
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <label
               for="invite"
               class="btn border-2 normal-border btn-outline join-item"
-              on:click={() => {
+              onclick={() => {
                 if (!inviteCode) createInvitation();
               }}
-              on:keyup
+              onkeyup={null}
             >
               {$t('event.team.invitation.invite_code')}
             </label>
           {/if}
           <a
-            href="/events/{$event.data?.data.id}"
+            href="/events/{$eventQuery.data?.data.id}"
             class="btn border-2 normal-border btn-outline join-item"
           >
             {$t('common.back')}
@@ -346,9 +347,9 @@
           class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
         >
           <div class="card-body py-10">
-            {#if $event.isSuccess && $hostships.isSuccess}
-              {@const event = $event.data.data}
-              {@const hostships = $hostships.data.data}
+            {#if $eventQuery.isSuccess && $hostshipsQuery.isSuccess}
+              {@const event = $eventQuery.data.data}
+              {@const hostships = $hostshipsQuery.data.data}
               {#if hostships.length > 0}
                 <div class="flex flex-col gap-4">
                   {#each hostships as hostship}

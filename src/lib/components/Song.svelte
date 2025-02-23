@@ -9,14 +9,18 @@
 
   import Like from './Like.svelte';
 
-  export let song: SongDto | SongAdmitteeDto;
-  export let kind: 'full' | 'inline' = 'full';
-  export let showLike = true;
+  interface Props {
+    song: SongDto | SongAdmitteeDto;
+    kind?: 'full' | 'inline';
+    showLike?: boolean;
+  }
+  let { song, kind = 'full', showLike = true }: Props = $props();
 
-  $: composer =
+  let composer = $derived(
     song.isOriginal && song.authorName
       ? richtext(song.authorName)
-      : readable(song.authorName ?? $t('common.anonymous'));
+      : readable(song.authorName ?? $t('common.anonymous')),
+  );
 </script>
 
 {#if kind === 'full'}

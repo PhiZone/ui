@@ -6,10 +6,10 @@
   import Paginator from '$lib/components/Paginatior.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, user, api } = data);
+  let { data } = $props();
+  let { searchParams, page, user, api } = $derived(data);
 
-  $: query = createQuery(api.admission.listChapter(searchParams));
+  let query = $derived(createQuery(api.admission.listChapter(searchParams)));
 </script>
 
 <svelte:head>

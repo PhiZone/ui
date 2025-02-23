@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ReplyDto, UserDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getUserPrivilege, parseDateTime } from '$lib/utils';
@@ -10,36 +10,40 @@
   import Like from './Like.svelte';
   import User from './User.svelte';
 
-  $: ({ user } = $page.data);
+  let { user } = $derived(page.data);
 
-  export let kind: 'mini' | 'full' = 'mini';
-  export let reply: ReplyDto;
-  export let replyTo: ((reply: UserDto) => void) | undefined = undefined;
+  interface Props {
+    kind?: 'mini' | 'full';
+    reply: ReplyDto;
+    replyTo?: (reply: UserDto) => void;
+  }
+  let { kind = 'mini', reply, replyTo }: Props = $props();
 
-  $: content = richtext(reply.content);
+  let content = $derived(richtext(reply.content));
 </script>
 
 {#if kind === 'mini'}
   <li class="max-w-full">
     <div class="flex flex-col sm:flex-row w-full">
       <User id={reply.ownerId} initUser={reply.owner} kind="embedded-mini" />
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- TODO: better UX -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div
         class="ml-2 sm:w-3/4 content"
-        on:click={() => {
+        onclick={() => {
           replyTo?.(reply.owner);
         }}
-        on:keyup
+        onkeyup={null}
       >
         {@html $content}
       </div>
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
       <p
         class="hidden md:inline sm:w-1/6 min-w-fit text-sm opacity-70 overflow-hidden"
-        on:click={() => {
+        onclick={() => {
           replyTo?.(reply.owner);
         }}
-        on:keyup
+        onkeyup={null}
       >
         {parseDateTime(reply.dateCreated, true, user?.language)}
       </p>

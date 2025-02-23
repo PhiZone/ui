@@ -3,42 +3,52 @@
 
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { locale, t } from '$lib/translations/config';
 
   import CommentComponent from './Comment.svelte';
   import Paginator from './Paginatior.svelte';
 
-  $: ({ user, api } = $page.data);
+  let { user, api } = $derived(page.data);
 
-  export let type:
-    | 'chapters'
-    | 'songs'
-    | 'charts'
-    | 'records'
-    | 'applications'
-    | 'collections'
-    | 'events'
-    | 'events/divisions';
-  export let id: string;
-  export let showUser = true;
-  export let showSource = false;
-  export let searchParams: ParsedQuery<string | number | boolean>;
+  interface Props {
+    type:
+      | 'chapters'
+      | 'songs'
+      | 'charts'
+      | 'records'
+      | 'applications'
+      | 'collections'
+      | 'events'
+      | 'events/divisions';
+    id: string;
+    showUser?: boolean;
+    showSource?: boolean;
+    searchParams: ParsedQuery<string | number | boolean>;
+  }
+  let { type, id, showUser = true, showSource = false, searchParams }: Props = $props();
 
   const queryClient = useQueryClient();
 
-  $: commentPage = typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1;
-  $: options = api.comment.list({
-    type,
-    id,
-    page: commentPage,
-    order: ['likeCount', 'dateCreated'],
-    desc: [true, true],
-  });
-  $: query = createQuery({ ...options });
+  let commentPage = $derived(
+    typeof searchParams.comment_page === 'number' ? searchParams.comment_page : 1,
+  );
+  let options = $derived(
+    api.comment.list({
+      type,
+      id,
+      page: commentPage,
+      order: ['likeCount', 'dateCreated'],
+      desc: [true, true],
+    }),
+  );
+  let query = $derived(createQuery({ ...options }));
 
-  $: disabled = !user;
-  let commentText = '';
+  let disabled = $state(false);
+  $effect(() => {
+    disabled = !user;
+  });
+  let commentText = $state('');
   const sendComment = async () => {
     if (commentText.length > 0) {
       disabled = true;
@@ -72,7 +82,7 @@
           class="ml-3 btn {disabled || commentText.length === 0
             ? 'btn-disabled'
             : 'border-2 btn-outline'} btn-primary w-1/12 min-w-fit"
-          on:click={sendComment}
+          onclick={sendComment}
           disabled={disabled || commentText.length === 0}
         >
           {$t('common.send')}

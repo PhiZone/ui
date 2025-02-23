@@ -1,9 +1,15 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import type { IFilter } from '$lib/filters/types';
 
   import { t } from '$lib/translations/config';
 
-  export let filter: IFilter;
+  interface Props {
+    filter: IFilter;
+    children?: Snippet;
+  }
+  let { filter = $bindable(), children }: Props = $props();
 
   const joinTypes: IFilter['type'][] = ['input', 'input_group', 'select'];
 
@@ -20,8 +26,8 @@
   {@const withJoin = joinTypes.includes(type)}
   {@const withVertical = type == 'input_group' || (type == 'select' && options?.multiple)}
 
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <label
     class="label text-sm md:text-md w-full md:join-horizontal rounded-xl transition"
     class:opacity-50={!isEnable}
@@ -34,8 +40,8 @@
     class:gap-2={!withJoin}
     class:join-vertical={withVertical}
     for={filter.param instanceof Array ? filter.param[0] : (filter.param ?? filter.label)}
-    on:mousedown={enable}
-    on:click={enable}
+    onmousedown={enable}
+    onclick={enable}
   >
     <span
       class={'inline-flex flex-nowrap label-text no-animation join-item whitespace-nowrap min-w-[40%] md:w-1/4 h-[unset] text-left align-middle'}
@@ -56,6 +62,6 @@
         {$t(label)}
       </span>
     </span>
-    <slot />
+    {@render children?.()}
   </label>
 {/if}

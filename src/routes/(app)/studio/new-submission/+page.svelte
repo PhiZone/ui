@@ -72,10 +72,10 @@
     'studio.upload_chart',
   ];
 
-  let step = 0;
-  let isAndroidOrIos = false;
-  let iframe: HTMLIFrameElement;
-  let zip: File | null = null;
+  let step = $state(0);
+  let isAndroidOrIos = $state(false);
+  let iframe: HTMLIFrameElement | undefined = $state(undefined);
+  let zip: File | null = $state(null);
   let bundle: ChartBundle;
 
   onMount(() => {
@@ -121,7 +121,7 @@
             confirm($t('studio.multiple_charts'))
           ) {
             step = 1;
-            iframe.contentWindow?.postMessage(
+            iframe?.contentWindow?.postMessage(
               {
                 type: 'play',
                 payload: {
@@ -177,7 +177,7 @@
             type="file"
             accept={isAndroidOrIos ? null : '.pez,application/zip'}
             class="file-input file-input-bordered border-2 w-full max-w-xs file:btn file:rounded-none dark:file:btn-neutral file:no-animation border-gray-200 rounded-lg transition hover:border-blue-500 hover:ring-blue-500 hover:file:bg-blue-500 hover:file:border-blue-500 focus:border-blue-500 focus:ring-blue-500 focus:file:bg-blue-500 focus:file:border-blue-500 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600"
-            on:input={async (e) => {
+            oninput={async (e) => {
               const fileList = e.currentTarget.files;
               if (!fileList || fileList.length === 0) return;
               zip = fileList[0];

@@ -2,21 +2,24 @@
   import type { ReservedFieldDto } from '$lib/api/event';
 
   import { invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let type: 'teams' | 'resources';
-  export let id: string;
-  export let field: ReservedFieldDto | null;
-  export let headerIndex: number | undefined;
-  export let editable: boolean;
+  interface Props {
+    type: 'teams' | 'resources';
+    id: string;
+    field: ReservedFieldDto | null;
+    headerIndex?: number;
+    editable: boolean;
+  }
+  let { type, id, field, headerIndex, editable }: Props = $props();
 
-  let status = Status.WAITING;
-  let content = field?.content ?? null;
-  let different = false;
+  let status = $state(Status.WAITING);
+  let content = $state(field?.content ?? null);
+  let different = $state(false);
   let errorCode = '';
 
   const update = async () => {
@@ -49,7 +52,7 @@
     class:textarea-disabled={!editable}
     disabled={!editable}
     value={content ?? ''}
-    on:input={(e) => {
+    oninput={(e) => {
       content = e.currentTarget.value ?? null;
       different = !((!content && !field?.content) || content == field?.content);
     }}
@@ -71,7 +74,7 @@
             ? 'btn-ghost'
             : 'btn-outline normal-border'} w-full backdrop-blur"
         disabled={status == Status.SENDING || !different}
-        on:click={update}
+        onclick={update}
       >
         {status === Status.ERROR
           ? $t('common.error')

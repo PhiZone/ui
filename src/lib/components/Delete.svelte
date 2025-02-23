@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Status } from '$lib/constants';
   import { t } from '$lib/translations/config';
 
-  const { api } = $page.data;
+  const { api } = page.data;
 
-  interface $$Props {
+  interface Props {
     id: string;
     path: string;
     name?: string;
@@ -13,14 +13,10 @@
     hasText?: boolean;
     onDelete?: () => void;
   }
+  let { id, path, name, hasText = false, onDelete, ...rest }: Props = $props();
 
-  export let id: string;
-  export let path: string;
-  export let name: string | undefined = undefined;
-  export let hasText = false;
-  export let onDelete: $$Props['onDelete'] = undefined;
-  let status = Status.WAITING;
-  let confirm = 0;
+  let status = $state(Status.WAITING);
+  let confirm = $state(0);
 
   const doDelete = async () => {
     status = Status.SENDING;
@@ -55,9 +51,9 @@
       })}
     </p>
     <div class="modal-action">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <label for="delete-{id}" class="btn border-2 normal-border btn-outline" on:click={doDelete}>
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+      <label for="delete-{id}" class="btn border-2 normal-border btn-outline" onclick={doDelete}>
         {$t('common.confirm')}
       </label>
     </div>
@@ -67,9 +63,7 @@
 {#if name}
   <label
     for="delete-{id}"
-    class="btn btn-ghost {status != Status.WAITING
-      ? 'btn-disabled'
-      : 'border-2'} {$$restProps.class}"
+    class="btn btn-ghost {status != Status.WAITING ? 'btn-disabled' : 'border-2'} {rest.class}"
   >
     {#if status != Status.SENDING}
       <span><i class="fa-regular fa-trash-can fa-lg"></i></span>
@@ -82,10 +76,8 @@
   </label>
 {:else}
   <button
-    class="btn btn-ghost {status != Status.WAITING
-      ? 'btn-disabled'
-      : 'border-2'} {$$restProps.class}"
-    on:click={async () => {
+    class="btn btn-ghost {status != Status.WAITING ? 'btn-disabled' : 'border-2'} {rest.class}"
+    onclick={async () => {
       confirm += 1;
       setTimeout(() => {
         if (confirm === 1) confirm = 0;

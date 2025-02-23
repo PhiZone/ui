@@ -1,4 +1,5 @@
 import eslint from '@eslint/js';
+import query from '@tanstack/eslint-plugin-query';
 import gitignore from 'eslint-config-flat-gitignore';
 import perfectionist from 'eslint-plugin-perfectionist';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -16,6 +17,7 @@ export default tseslint.config(
   svelte.configs['flat/prettier'],
   tseslint.configs.strict,
   tseslint.configs.stylistic,
+  query.configs['flat/recommended'],
   {
     plugins: { perfectionist },
     rules: {
@@ -59,7 +61,13 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-non-null-assertion': 'off',
       'svelte/no-at-html-tags': 'off',
+      'svelte/valid-compile': 'off',
     },
   },
   prettier,
+  {
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
 );

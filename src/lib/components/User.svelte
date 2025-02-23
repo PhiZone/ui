@@ -3,22 +3,32 @@
 
   import type { UserDto } from '$lib/api';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserLevel } from '$lib/utils';
 
   import Follow from './Follow.svelte';
 
-  $: ({ api } = $page.data);
+  let { api } = $derived(page.data);
 
-  export let id: number;
-  export let initUser: UserDto | undefined = undefined;
-  export let kind: 'full' | 'mini' | 'embedded' | 'embedded-mini' = 'full';
-  export let fixedHeight = false;
-  export let showFollow = true;
-  export let target = '_self';
+  interface Props {
+    id: number;
+    initUser?: UserDto;
+    kind?: 'full' | 'mini' | 'embedded' | 'embedded-mini';
+    fixedHeight?: boolean;
+    showFollow?: boolean;
+    target?: string;
+  }
+  let {
+    id,
+    initUser,
+    kind = 'full',
+    fixedHeight = false,
+    showFollow = true,
+    target = '_self',
+  }: Props = $props();
 
-  $: query = createQuery(api.user.info({ id }, { enabled: !initUser }));
+  let query = $derived(createQuery(api.user.info({ id }, { enabled: !initUser })));
 </script>
 
 {#if kind === 'embedded' || kind === 'embedded-mini'}
@@ -99,7 +109,7 @@
           </div>
         {/if}
         {#if showFollow}
-          <button class="w-24 h-12 btn" disabled></button>
+          <div class="w-24 h-12 btn btn-disabled"></div>
         {/if}
       {:else if initUser || $query.isSuccess}
         {@const user = initUser ?? $query.data?.data}
@@ -150,10 +160,8 @@
             </div>
           {/if}
           {#if showFollow}
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div on:click|preventDefault on:keyup>
-              <Follow {user} />
-            </div>
+            <!-- TODO: preventDefault -->
+            <Follow {user} />
           {/if}
         {/if}
       {/if}

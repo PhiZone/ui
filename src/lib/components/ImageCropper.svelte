@@ -1,24 +1,31 @@
 <script lang="ts">
   import Cropper from 'cropperjs';
   import 'cropperjs/dist/cropper.min.css';
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   import { t } from '$lib/translations/config';
 
-  export let open = false;
-  export let title: string;
-  export let src: string;
-  export let aspectRatio: number | undefined = undefined;
-  export let rounded = false;
-
-  const dispatch = createEventDispatcher<{
-    submit: Blob;
-  }>();
+  interface Props {
+    open?: boolean;
+    title: string;
+    src: string;
+    aspectRatio?: number | undefined;
+    rounded?: boolean;
+    submit?: (blob: Blob) => void;
+  }
+  let {
+    open = $bindable(false),
+    title,
+    src,
+    aspectRatio = undefined,
+    rounded = false,
+    submit,
+  }: Props = $props();
 
   let el: HTMLImageElement;
   let cropper: Cropper;
-  let croppable = false;
-  let submitting = false;
+  let croppable = $state(false);
+  let submitting = $state(false);
 
   onMount(() => {
     croppable = false;
@@ -31,11 +38,6 @@
       },
     });
   });
-
-  const submit = () => {
-    submitting = true;
-    cropper.getCroppedCanvas().toBlob((blob) => dispatch('submit', blob!));
-  };
 </script>
 
 <input type="checkbox" id="imagecropper" class="modal-toggle" bind:checked={open} />
@@ -54,7 +56,10 @@
     <button
       class="btn border-2 normal-border {!submitting ? 'btn-outline' : 'btn-ghost'}"
       disabled={!croppable || submitting}
-      on:click={submit}
+      onclick={() => {
+        submitting = true;
+        cropper.getCroppedCanvas().toBlob((blob) => submit?.(blob!));
+      }}
     >
       {$t(!submitting ? 'common.submit' : 'common.waiting')}
     </button>

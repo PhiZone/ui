@@ -4,17 +4,20 @@
   import { t } from '$lib/translations/config';
   import { convertTime } from '$lib/utils';
 
-  export let song: string;
-  export let illustration: string;
-  export let duration: number;
-  export let lyrics: { time: number; line: string }[] | null = null;
+  interface Props {
+    song: string;
+    illustration: string;
+    duration: number;
+    lyrics?: { time: number; line: string }[];
+  }
+  let { song, illustration, duration, lyrics }: Props = $props();
 
-  let playing = false;
-  let time = 0;
-  let loop = false;
+  let playing = $state(false);
+  let time = $state(0);
+  let loop = $state(false);
 
-  let audio: HTMLAudioElement;
-  let line = '';
+  let audio: HTMLAudioElement = $state()!; // FIXME: hack
+  let line = $state('');
   let lyricsIndex = -1;
 
   onMount(() => {
@@ -49,14 +52,14 @@
     line = lyrics[lyricsIndex].line;
   };
 
-  let timer: NodeJS.Timeout;
+  let timer: number;
 
   const playAudio = () => {
     audio.currentTime = time;
     syncLyrics();
     audio.play();
     playing = true;
-    timer = setInterval(() => {
+    timer = window.setInterval(() => {
       time = audio ? audio.currentTime : 0;
       if (lyrics && lyricsIndex < lyrics.length - 1 && lyrics[lyricsIndex + 1].time < time) {
         line = lyrics[++lyricsIndex].line;
@@ -106,10 +109,10 @@
           bind:value={time}
           step={0.001}
           class="range range-primary range-xs"
-          on:mousedown={() => {
+          onmousedown={() => {
             pauseAudio();
           }}
-          on:mouseup={() => {
+          onmouseup={() => {
             playAudio();
           }}
         />
@@ -130,7 +133,8 @@
                 ? 'btn-active'
                 : 'btn-outline'} flex items-center justify-center"
               title={$t('song.loop')}
-              on:click={() => {
+              aria-label={$t('song.loop')}
+              onclick={() => {
                 loop = !loop;
               }}
             >
@@ -139,7 +143,8 @@
             <button
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.rewind')}
-              on:click={() => {
+              aria-label={$t('song.rewind')}
+              onclick={() => {
                 let time = audio.currentTime - 10;
                 audio.currentTime = Math.max(time, 0);
                 time = audio.currentTime;
@@ -152,7 +157,8 @@
               <button
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.pause')}
-                on:click={() => {
+                aria-label={$t('song.pause')}
+                onclick={() => {
                   pauseAudio();
                 }}
               >
@@ -162,7 +168,8 @@
               <button
                 class="btn btn-circle btn-secondary border-2 btn-outline"
                 title={$t('song.play')}
-                on:click={() => {
+                aria-label={$t('song.play')}
+                onclick={() => {
                   playAudio();
                 }}
               >
@@ -172,7 +179,8 @@
             <button
               class="btn btn-circle btn-sm btn-primary border-2 btn-outline"
               title={$t('song.fast_forward')}
-              on:click={() => {
+              aria-label={$t('song.fast_forward')}
+              onclick={() => {
                 let time = audio.currentTime + 10;
                 audio.currentTime = Math.min(time, duration);
                 time = audio.currentTime;
@@ -182,13 +190,14 @@
               <i class="fa-solid fa-forward"></i>
             </button>
             <div class="dropdown dropdown-hover dropdown-top float-right">
-              <button
+              <div
                 tabindex="0"
+                role="button"
                 class="btn btn-circle btn-sm rounded-full btn-primary border-2 btn-outline"
                 title={$t('song.volume')}
               >
                 <i class="fa-solid fa-volume-high"></i>
-              </button>
+              </div>
               <div
                 tabindex="-1"
                 class="dropdown-content menu p-2 shadow bg-base-100 bg-opacity-50 rounded-box w-[12vw] lg:w-[8vw]"

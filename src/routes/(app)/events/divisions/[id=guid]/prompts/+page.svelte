@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
+  import { onMount } from 'svelte';
   import { superForm } from 'sveltekit-superforms';
 
-  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import Chart from '$lib/components/Chart.svelte';
   import Delete from '$lib/components/Delete.svelte';
@@ -13,8 +13,8 @@
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, hasEventPermission } from '$lib/utils.js';
 
-  export let data;
-  $: ({ user, id, searchParams, page, api } = data);
+  let { data } = $props();
+  let { user, id, searchParams, page, api } = $derived(data);
 
   const {
     enhance: resourceEnhance,
@@ -31,56 +31,79 @@
     },
   });
 
-  let queryResource = true;
-  let newResourceSearch: string;
-  let newResourceId: string | null = null;
-  let resourceOpen = false;
+  let queryResource = $state(true);
+  let newResourceSearch: string | undefined = $state();
+  let newResourceId: string | null = $state(null);
+  let resourceOpen = $state(false);
 
-  $: division = createQuery(api.event.division.info({ id }));
-  $: if (browser && $division.isSuccess && $division.data.data.type == 0) {
-    goto(`/events/divisions/${id}`);
-  }
-  $: event = createQuery(
-    api.event.info({ id: $division.data?.data.eventId ?? '' }, { enabled: $division.isSuccess }),
-  );
-  $: songPrompts = createQuery(
-    api.event.division.listSongPrompts(
-      { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 1 },
+  let divisionQuery = $derived(createQuery(api.event.division.info({ id })));
+  onMount(() => {
+    if ($divisionQuery.isSuccess && $divisionQuery.data.data.type == 0) {
+      goto(`/events/divisions/${id}`);
+    }
+  });
+  let eventQuery = $derived(
+    createQuery(
+      api.event.info(
+        { id: $divisionQuery.data?.data.eventId ?? '' },
+        { enabled: $divisionQuery.isSuccess },
+      ),
     ),
   );
-  $: chartPrompts = createQuery(
-    api.event.division.listChartPrompts(
-      { id },
-      { enabled: $division.isSuccess && $division.data.data.type == 2 },
+  let songPrompts = $derived(
+    createQuery(
+      api.event.division.listSongPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1 },
+      ),
     ),
   );
-  $: songSearch = createQuery(
-    api.song.listAll(
-      { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $division.isSuccess && $division.data.data.type == 1 },
+  let chartPrompts = $derived(
+    createQuery(
+      api.event.division.listChartPrompts(
+        { id },
+        { enabled: $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2 },
+      ),
     ),
   );
-  $: chartSearch = createQuery(
-    api.chart.listAll(
-      { search: newResourceSearch ?? undefined },
-      { enabled: queryResource && $division.isSuccess && $division.data.data.type == 2 },
+  let songSearch = $derived(
+    createQuery(
+      api.song.listAll(
+        { search: newResourceSearch },
+        {
+          enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 1,
+        },
+      ),
+    ),
+  );
+  let chartSearch = $derived(
+    createQuery(
+      api.chart.listAll(
+        { search: newResourceSearch },
+        {
+          enabled: queryResource && $divisionQuery.isSuccess && $divisionQuery.data.data.type == 2,
+        },
+      ),
     ),
   );
 </script>
 
 <svelte:head>
   <title>
-    {$t($division.data?.data.type == 2 ? 'event.division.chart_pool' : 'event.division.song_pool')} |
-    {$t('event.event')} - {$event.data?.data.title} ({$division.data?.data.title}) | {$t(
+    {$t(
+      $divisionQuery.data?.data.type == 2
+        ? 'event.division.chart_pool'
+        : 'event.division.song_pool',
+    )} |
+    {$t('event.event')} - {$eventQuery.data?.data.title} ({$divisionQuery.data?.data.title}) | {$t(
       'common.site_name',
     )}
   </title>
 </svelte:head>
 
-{#if $division.isSuccess && $event.isSuccess && (($division.data.data.type == 1 && $songPrompts.isSuccess) || ($division.data.data.type == 2 && $chartPrompts.isSuccess))}
-  {@const division = $division.data.data}
-  {@const event = $event.data.data}
+{#if $divisionQuery.isSuccess && $eventQuery.isSuccess && (($divisionQuery.data.data.type == 1 && $songPrompts.isSuccess) || ($divisionQuery.data.data.type == 2 && $chartPrompts.isSuccess))}
+  {@const division = $divisionQuery.data.data}
+  {@const event = $eventQuery.data.data}
   <input type="checkbox" id="new-resource" class="modal-toggle" bind:checked={resourceOpen} />
   <div class="modal">
     <div class="modal-box bg-base-100 form-control gap-3 min-w-[40vw]">
@@ -119,7 +142,7 @@
                   $songSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
                 }`}
                 bind:value={newResourceSearch}
-                on:input={() => {
+                oninput={() => {
                   queryResource = false;
                 }}
               />
@@ -132,7 +155,8 @@
                       : 'hover:btn-secondary btn-outline'
                     : 'btn-disabled'
                 }`}
-                on:click={() => {
+                aria-label={$t('common.search')}
+                onclick={() => {
                   queryResource = true;
                 }}
               >
@@ -190,7 +214,7 @@
                   $chartSearch.isError ? 'hover:input-error' : 'hover:input-secondary'
                 }`}
                 bind:value={newResourceSearch}
-                on:input={() => {
+                oninput={() => {
                   queryResource = false;
                 }}
               />
@@ -203,7 +227,8 @@
                       : 'hover:btn-secondary btn-outline'
                     : 'btn-disabled'
                 }`}
-                on:click={() => {
+                aria-label={$t('common.search')}
+                onclick={() => {
                   queryResource = true;
                 }}
               >
@@ -383,8 +408,8 @@
       {/if}
     {/if}
   </div>
-{:else if $division.isError}
-  <Error error={$division.error} />
+{:else if $divisionQuery.isError}
+  <Error error={$divisionQuery.error} />
 {:else}
   <div class="min-h-page skeleton"></div>
 {/if}

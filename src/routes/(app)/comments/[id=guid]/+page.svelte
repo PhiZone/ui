@@ -5,11 +5,10 @@
   import Error from '$lib/components/Error.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, id, api } = $derived(data);
 
-  $: ({ searchParams, id, api } = data);
-
-  $: query = createQuery(api.comment.info({ id }));
+  let query = $derived(createQuery(api.comment.info({ id })));
 </script>
 
 <svelte:head>

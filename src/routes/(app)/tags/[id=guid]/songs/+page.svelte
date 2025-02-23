@@ -6,11 +6,11 @@
   import Song from '$lib/components/Song.svelte';
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ searchParams, page, id, api } = data);
+  let { data } = $props();
+  let { searchParams, page, id, api } = $derived(data);
 
-  $: tag = createQuery(api.tag.info({ id }));
-  $: query = createQuery(api.song.listTag({ id, ...searchParams }));
+  let tag = $derived(createQuery(api.tag.info({ id })));
+  let query = $derived(createQuery(api.song.listTag({ id, ...searchParams })));
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
   import { getAvatar, getUserColor, getUserPrivilege, toLocalTime } from '$lib/utils';
 </script>
@@ -9,10 +9,10 @@
 >
   <div class="navbar-start w-[160px] lg:w-1/2 z-20">
     <div class="dropdown">
-      <!-- svelte-ignore a11y-label-has-associated-control -->
+      <!-- svelte-ignore a11y_label_has_associated_control -->
       <label
         tabindex="-1"
-        class="btn btn-ghost btn-circle {$page.url.pathname.startsWith('/studio')
+        class="btn btn-ghost btn-circle {page.url.pathname.startsWith('/studio')
           ? 'xl:hidden'
           : 'lg:hidden'}"
       >
@@ -46,8 +46,8 @@
         <li>
           <a href="/records">{$t('common.records')}</a>
         </li>
-        {#if !$page.url.pathname.startsWith('/session')}
-          {@const { user } = $page.data}
+        {#if !page.url.pathname.startsWith('/session')}
+          {@const { user } = page.data}
           {#if user}
             <li class="rounded-full">
               <a href="/pet">{$t('common.navbar.pet')}</a>
@@ -60,7 +60,7 @@
       <img src="/favicon.ico" alt="Logo" class="logo hidden xl:block" />
       {$t('common.site_name')}
     </a>
-    {#if $page.url.pathname.startsWith('/studio')}
+    {#if page.url.pathname.startsWith('/studio')}
       <label
         for="studio-sidebar"
         class="btn btn-sm border-2 btn-outline normal-border drawer-button mx-4 xl:hidden"
@@ -70,7 +70,7 @@
     {/if}
   </div>
   <div
-    class="navbar-center hidden {$page.url.pathname.startsWith('/studio') ? 'xl:flex' : 'lg:flex'}"
+    class="navbar-center hidden {page.url.pathname.startsWith('/studio') ? 'xl:flex' : 'lg:flex'}"
   >
     <ul class="menu menu-horizontal p-0 text-lg">
       <li>
@@ -97,8 +97,8 @@
       <li>
         <a href="/records">{$t('common.records')}</a>
       </li>
-      {#if !$page.url.pathname.startsWith('/session')}
-        {@const { user } = $page.data}
+      {#if !page.url.pathname.startsWith('/session')}
+        {@const { user } = page.data}
         {#if user}
           <li class="rounded-full">
             <a href="/pet">{$t('common.navbar.pet')}</a>
@@ -108,14 +108,14 @@
     </ul>
   </div>
   <div class="navbar-end flex-grow">
-    {#if !$page.url.pathname.startsWith('/session')}
-      {#if $page.data.user}
-        {@const { user } = $page.data}
+    {#if !page.url.pathname.startsWith('/session')}
+      {#if page.data.user}
+        {@const { user } = page.data}
         <a data-sveltekit-preload-code href="/me/notifications">
           <button class="btn btn-ghost btn-circle">
             <div class="indicator">
               <i class="fa-regular fa-bell fa-lg"></i>
-              {#if user.notifications && user.notifications > 0 && !$page.url.pathname.startsWith('/me/notifications')}
+              {#if user.notifications && user.notifications > 0 && !page.url.pathname.startsWith('/me/notifications')}
                 <span class="badge h-4 badge-xs badge-primary indicator-item">
                   {user.notifications}
                 </span>
@@ -124,14 +124,14 @@
           </button>
         </a>
         <div class="dropdown dropdown-end relative">
-          <!-- svelte-ignore a11y-label-has-associated-control -->
+          <!-- svelte-ignore a11y_label_has_associated_control -->
           <label
             tabindex="-1"
             class="btn h-14 w-14 btn-ghost border-0 btn-circle avatar bg-opacity-80 bg-{getUserColor(
               user.role,
             )}"
           >
-            {#if user.dateOfBirth && toLocalTime(user.dateOfBirth).getMonth() === new Date().getMonth() && toLocalTime(user.dateOfBirth).getDate() === new Date().getDate() && !$page.url.pathname.startsWith(`/users/${user.id}`)}
+            {#if user.dateOfBirth && toLocalTime(user.dateOfBirth).getMonth() === new Date().getMonth() && toLocalTime(user.dateOfBirth).getDate() === new Date().getDate() && !page.url.pathname.startsWith(`/users/${user.id}`)}
               <img
                 src="https://res.phizone.cn/cDoKFCtSeSUrQwPOCg9KPmEIihjLrQtW/party-hat.png"
                 alt="Birthday Hat"
@@ -181,13 +181,13 @@
         <div class="flex">
           <a
             class="btn btn-ghost btn-md text-base"
-            href="/session/login?redirect={$page.url.pathname + $page.url.search}"
+            href="/session/login?redirect={page.url.pathname + page.url.search}"
           >
             {$t('session.login.login')}
           </a>
           <a
             class="btn btn-outline border-2 btn-secondary btn-md text-base"
-            href="/session/register?redirect={$page.url.pathname + $page.url.search}"
+            href="/session/register?redirect={page.url.pathname + page.url.search}"
           >
             {$t('session.registration.register')}
           </a>

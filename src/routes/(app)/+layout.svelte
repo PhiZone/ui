@@ -1,23 +1,27 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Footer from '$lib/components/Footer.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import { t } from '$lib/translations/config';
 
-  $: message = $page.url.searchParams.get('message');
-  $: translate = $page.url.searchParams.get('t') === 'true';
-  $: level = ['info', 'success', 'warning', 'error'].includes(
-    $page.url.searchParams.get('level') as string,
-  )
-    ? ($page.url.searchParams.get('level') as string)
-    : 'info';
-  $: icon = {
-    info: 'circle-info',
-    success: 'circle-check',
-    warning: 'triangle-exclamation',
-    error: 'circle-xmark',
-  }[level];
-  let closed = false;
+  let { children } = $props();
+
+  let message = $derived(page.url.searchParams.get('message'));
+  let translate = $derived(page.url.searchParams.get('t') === 'true');
+  let level = $derived(
+    ['info', 'success', 'warning', 'error'].includes(page.url.searchParams.get('level') as string)
+      ? (page.url.searchParams.get('level') as string)
+      : 'info',
+  );
+  let icon = $derived(
+    {
+      info: 'circle-info',
+      success: 'circle-check',
+      warning: 'triangle-exclamation',
+      error: 'circle-xmark',
+    }[level],
+  );
+  let closed = $state(false);
 </script>
 
 <Navbar />
@@ -28,7 +32,7 @@
     <span>{translate ? $t(message) : message}</span>
     <button
       class="btn btn-sm btn-circle btn-{level} border-2"
-      on:click={() => {
+      onclick={() => {
         closed = true;
       }}
     >
@@ -38,9 +42,9 @@
 {/if}
 
 <main class="bg-base-300">
-  <slot />
+  {@render children?.()}
 </main>
 
-{#if !$page.url.pathname.startsWith('/studio')}
+{#if !page.url.pathname.startsWith('/studio')}
   <Footer />
 {/if}

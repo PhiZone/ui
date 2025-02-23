@@ -12,24 +12,23 @@
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
+  let { data } = $props();
+  let { searchParams, page, user, api } = $derived(data);
 
   const { enhance, message, errors, submitting, allErrors } = superForm(data.form);
 
-  $: ({ searchParams, page, user, api } = data);
+  let type = $state(0);
+  let editionType = $state(0);
+  let edition = $state('');
+  let strategy = $state(0);
+  let batchModalOpen = $state(false);
+  let batchStatus = $state(Status.OK);
+  let batchError = $state('');
+  let batchTotal = $state(0);
+  let batch: CreateOpts[] | null = $state(null);
 
-  let type = 0;
-  let editionType = 0;
-  let edition = '';
-  let strategy = 0;
-  let batchModalOpen = false;
-  let batchStatus = Status.OK;
-  let batchError = '';
-  let batchTotal = 0;
-  let batch: CreateOpts[] | null = null;
-
-  $: options = api.resourceRecord.list(searchParams);
-  $: query = createQuery({ ...options });
+  let options = $derived(api.resourceRecord.list(searchParams));
+  let query = $derived(createQuery({ ...options }));
 
   const queryClient = useQueryClient();
 
@@ -158,7 +157,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -219,7 +218,7 @@
           {#if editionType !== 0}
             <input
               type="text"
-              on:keydown={(e) => {
+              onkeydown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                 }
@@ -284,7 +283,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -310,7 +309,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -334,7 +333,7 @@
           </span>
           <input
             type="text"
-            on:keydown={(e) => {
+            onkeydown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
@@ -421,7 +420,7 @@
             ? 'input-error file:btn-error'
             : 'input-secondary file:btn-outline file:bg-secondary'
         }`}
-        on:input={resolveBatch}
+        oninput={resolveBatch}
       />
     </div>
     {#if batch !== null}
@@ -437,7 +436,7 @@
         <button
           type="button"
           class="btn btn-sm {batch ? 'border-2 hover:btn-outline' : 'btn-disabled'}"
-          on:click={() => {
+          onclick={() => {
             batch = null;
             batchStatus = Status.OK;
             batchError = '';
@@ -458,27 +457,27 @@
                     class="tooltip tooltip-left tooltip-success absolute top-6 right-6"
                     data-tip={$t('resource_record.strategies.0')}
                   >
-                    <button class="btn btn-xs btn-circle btn-success no-animation">
+                    <div class="btn btn-xs btn-circle btn-success no-animation">
                       <i class="fa-solid fa-check"></i>
-                    </button>
+                    </div>
                   </div>
                 {:else if resourceRecord.strategy === 4}
                   <div
                     class="tooltip tooltip-left tooltip-error absolute top-6 right-6"
                     data-tip={$t('resource_record.strategies.4')}
                   >
-                    <button class="btn btn-xs btn-circle btn-error no-animation">
+                    <div class="btn btn-xs btn-circle btn-error no-animation">
                       <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    </div>
                   </div>
                 {:else}
                   <div
                     class="tooltip tooltip-left tooltip-warning absolute top-6 right-6"
                     data-tip={$t(`resource_record.strategies.${resourceRecord.strategy}`)}
                   >
-                    <button class="btn btn-xs btn-circle btn-warning no-animation">
+                    <div class="btn btn-xs btn-circle btn-warning no-animation">
                       <i class="fa-solid fa-exclamation"></i>
-                    </button>
+                    </div>
                   </div>
                 {/if}
                 <div class="tooltip tooltip-bottom max-w-fit" data-tip={resourceRecord.title}>
@@ -573,7 +572,7 @@
               ? 'btn-ghost'
               : 'btn-outline border-2 normal-border'} w-full"
           disabled={batchStatus === Status.SENDING}
-          on:click={uploadBatch}
+          onclick={uploadBatch}
         >
           {batchStatus === Status.ERROR
             ? $t('common.error')

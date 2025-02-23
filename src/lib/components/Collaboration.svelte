@@ -3,7 +3,7 @@
 
   import type { CollaborationDto } from '$lib/api/collaboration';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import ChartSubmission from '$lib/components/ChartSubmission.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
   import User from '$lib/components/User.svelte';
@@ -11,30 +11,42 @@
 
   import Delete from './Delete.svelte';
 
-  export let collaboration: CollaborationDto;
-  export let kind: 'mini' | 'full' = 'full';
-  export let showInvitee = false;
-  export let editable = false;
+  let { user, api } = $derived(page.data);
 
-  $: ({ user, api } = $page.data);
+  interface Props {
+    collaboration: CollaborationDto;
+    kind?: 'mini' | 'full';
+    showInvitee?: boolean;
+    editable?: boolean;
+  }
+  let {
+    collaboration = $bindable(),
+    kind = 'full',
+    showInvitee = false,
+    editable = false,
+  }: Props = $props();
 
-  $: chartSubmission = createQuery(
-    api.chart.submission.info(
-      { id: collaboration.submissionId },
-      { enabled: kind === 'full', retry: 0 },
+  let chartSubmission = $derived(
+    createQuery(
+      api.chart.submission.info(
+        { id: collaboration.submissionId },
+        { enabled: kind === 'full', retry: 0 },
+      ),
     ),
   );
-  $: songSubmission = createQuery(
-    api.song.submission.info(
-      {
-        id: $chartSubmission.data?.data.songSubmissionId ?? collaboration.submissionId,
-      },
-      { enabled: kind === 'full', retry: 0 },
+  let songSubmission = $derived(
+    createQuery(
+      api.song.submission.info(
+        {
+          id: $chartSubmission.data?.data.songSubmissionId ?? collaboration.submissionId,
+        },
+        { enabled: kind === 'full', retry: 0 },
+      ),
     ),
   );
 
-  let disabled = false;
-  let position = collaboration.position;
+  let disabled = $state(false);
+  let position = $state(collaboration.position);
 
   const updatePosition = async () => {
     if (position != collaboration.position) {
@@ -102,7 +114,7 @@
                 <div class="join w-80">
                   <button
                     class="btn hover:btn-primary border-2 normal-border btn-outline join-item w-1/2"
-                    on:click={() => {
+                    onclick={() => {
                       review(true);
                     }}
                   >
@@ -110,7 +122,7 @@
                   </button>
                   <button
                     class="btn hover:btn-accent border-2 normal-border btn-outline join-item w-1/2"
-                    on:click={() => {
+                    onclick={() => {
                       review(false);
                     }}
                   >
@@ -162,7 +174,7 @@
           class="btn btn-secondary join-item w-1/4"
           class:btn-disabled={(!collaboration.position && !position) ||
             position == collaboration.position}
-          on:click={updatePosition}
+          onclick={updatePosition}
         >
           {$t('common.submit')}
         </button>
@@ -192,7 +204,7 @@
           <div class="join min-w-fit">
             <button
               class="btn hover:btn-primary btn-outline border-2 normal-border join-item"
-              on:click={() => {
+              onclick={() => {
                 review(true);
               }}
             >
@@ -200,7 +212,7 @@
             </button>
             <button
               class="btn hover:btn-accent btn-outline border-2 normal-border join-item"
-              on:click={() => {
+              onclick={() => {
                 review(false);
               }}
             >

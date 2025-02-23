@@ -4,7 +4,7 @@
 
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { t } from '$lib/translations/config';
 
   onMount(async () => {
@@ -12,9 +12,9 @@
       setTimeout(async () => {
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
-          await goto($page.url.searchParams.get('redirect') ?? '/');
+          await goto(page.url.searchParams.get('redirect') ?? '/');
         } catch {
-          window.location.href = $page.url.searchParams.get('redirect') ?? '/';
+          window.location.href = page.url.searchParams.get('redirect') ?? '/';
         }
       }, 1000);
     }

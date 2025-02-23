@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { t } from '$lib/translations/config';
   import { getUserPrivilege } from '$lib/utils';
 
-  export let data;
-  $: ({ user, status } = data);
+  let { data } = $props();
+  let { user, status } = $derived(data);
 </script>
 
 <svelte:head>

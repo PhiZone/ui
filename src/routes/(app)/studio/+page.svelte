@@ -3,18 +3,18 @@
 
   import { t } from '$lib/translations/config';
 
-  export let data;
-  $: ({ api } = data);
+  let { data } = $props();
+  let { api } = $derived(data);
 
-  $: headline = createQuery(api.headline.getStudio());
+  let headlineQuery = $derived(createQuery(api.headline.getStudio()));
 </script>
 
 <svelte:head>
   <title>{$t('common.studio')} | {$t('common.site_name')}</title>
 </svelte:head>
 
-{#if $headline.isSuccess}
-  {@const headline = $headline.data.data.headline}
+{#if $headlineQuery.isSuccess}
+  {@const headline = $headlineQuery.data.data.headline}
   {#if headline}
     <div
       class="alert w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
@@ -23,14 +23,14 @@
       <span class="content">{headline}</span>
     </div>
   {/if}
-{:else if $headline.isError && [400, 401, 403, 404, 500, 502].includes($headline.error.httpStatus)}
+{:else if $headlineQuery.isError && [400, 401, 403, 404, 500, 502].includes($headlineQuery.error.httpStatus)}
   <div
     class="alert alert-error w-fit transition border-2 normal-border hover:shadow-lg top-20 absolute left-1/2 -translate-x-1/2 z-50"
   >
     <i class="fa-solid fa-circle-error fa-xl"></i>
     <span class="content">
-      {$headline.error.httpStatus}
-      {$t(`common.errors.${$headline.error.httpStatus}`)}
+      {$headlineQuery.error.httpStatus}
+      {$t(`common.errors.${$headlineQuery.error.httpStatus}`)}
     </span>
   </div>
 {/if}
