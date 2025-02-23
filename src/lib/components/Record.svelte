@@ -25,7 +25,7 @@
 </script>
 
 <div
-  class="card glass w-[288px] h-40 card-side relative overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+  class="card record-glass w-[288px] h-40 card-side relative overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
   <a class="absolute z-10 top-0 left-0 right-0 bottom-0" href={`/records/${record.id}`}>{''}</a>
   <img
@@ -95,5 +95,23 @@
   }
   .player {
     line-height: 16px;
+  }
+  .record-glass {
+    backdrop-filter: blur(var(--glass-blur, 40px));
+    background-color: transparent;
+    background-image: linear-gradient(
+        135deg,
+        rgb(255 255 255 / var(--glass-opacity, 30%)) 0%,
+        rgb(0 0 0 / 0%) 100%
+      ),
+      linear-gradient(
+        var(--glass-reflex-degree, 100deg),
+        rgb(255 255 255 / var(--glass-reflex-opacity, 10%)) 25%,
+        rgb(0 0 0 / 0%) 25%
+      );
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / var(--glass-border-opacity, 10%)) /* #ffffff */ inset,
+      0 0 0 2px rgb(0 0 0 / 5%);
+    text-shadow: 0 1px rgb(0 0 0 / var(--glass-text-shadow-opacity, 5%)) /* #000000 */;
   }
 </style>
