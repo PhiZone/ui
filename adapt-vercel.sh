@@ -16,9 +16,9 @@ export const config: Config = {
 };
 "
 
-sed -i "6i $EDGE_RUNTIME_CONFIG_INSERTION" src/routes/+layout.ts
-sed -i "5i $NODE_RUNTIME_CONFIG_INSERTION" src/routes/\(app\)/pet/objective/+page.server.ts
-sed -i "11i $NODE_RUNTIME_CONFIG_INSERTION" src/routes/\(app\)/pet/subjective/+page.server.ts
+sed -i "6i $(printf '%s' "$EDGE_RUNTIME_CONFIG_INSERTION" | sed 's/[&/\]/\\&/g' | sed ':a;N;$!ba;s/\n/\\n/g')" src/routes/+layout.ts
+sed -i "5i $(printf '%s' "$NODE_RUNTIME_CONFIG_INSERTION" | sed 's/[&/\]/\\&/g' | sed ':a;N;$!ba;s/\n/\\n/g')" src/routes/\(app\)/pet/objective/+page.server.ts
+sed -i "11i $(printf '%s' "$NODE_RUNTIME_CONFIG_INSERTION" | sed 's/[&/\]/\\&/g' | sed ':a;N;$!ba;s/\n/\\n/g')" src/routes/\(app\)/pet/subjective/+page.server.ts
 
 sed -i 's/adapter-node/adapter-vercel/g' svelte.config.js
 pnpm i -D @sveltejs/adapter-vercel
