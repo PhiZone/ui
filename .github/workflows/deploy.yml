@@ -26,7 +26,7 @@ jobs:
         env:
           PROJECT_JSON: ${{ secrets.VERCEL_PROJECT_JSON }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          DOT_ENV: ${{ secrets.DOT_NEV }}
+          DOT_ENV: ${{ secrets.DOT_ENV }}
         run: |
           mkdir .vercel
           echo -n "$PROJECT_JSON" > .vercel/project.json
