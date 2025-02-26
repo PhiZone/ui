@@ -15,7 +15,7 @@
     id,
     question,
     choices = [],
-    text = '',
+    text = $bindable(),
     textAreaCss = 'text-base h-52',
     answer,
   }: Props = $props();

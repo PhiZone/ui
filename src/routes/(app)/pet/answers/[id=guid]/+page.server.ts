@@ -33,7 +33,7 @@ export const load = async ({ params, locals, fetch }) => {
   answer.question4 = {
     position: 19,
     type: 2,
-    content: t.get('pet.chart_question'),
+    content: renderMarkdown(t.get('pet.chart_question')),
     choices: null,
     language: locale.get(),
   };
