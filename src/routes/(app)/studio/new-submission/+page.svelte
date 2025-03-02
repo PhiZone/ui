@@ -162,7 +162,7 @@
 </svelte:head>
 
 <div class="bg-base-300 min-h-screen">
-  <div class="pt-28 pb-4 flex flex-col justify-center">
+  <div class="pt-28 pb-4 min-h-screen flex flex-col justify-start">
     <ul class="m-4 steps steps-vertical sm:steps-horizontal">
       {#each steps as s, i}
         <li class="step step-neutral {step >= i ? 'step-primary' : ''}">
@@ -171,7 +171,7 @@
       {/each}
     </ul>
     {#if step === 0}
-      <div class="self-center my-8 mx-12 justify-center items-center">
+      <div class="self-center flex-1 my-8 mx-12 flex flex-col gap-4 justify-center items-center">
         {#if !zip}
           <input
             type="file"
@@ -183,6 +183,7 @@
               zip = fileList[0];
             }}
           />
+          <p class="opacity-70 text-center max-w-sm">{$t('studio.choose_chart_description')}</p>
         {:else}
           <span class="loading loading-dots loading-lg"></span>
         {/if}
