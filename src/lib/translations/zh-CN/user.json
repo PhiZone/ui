@@ -58,5 +58,6 @@
   "tag": "头衔",
   "unfollow": "取消关注",
   "user": "用户",
-  "username": "用户名"
+  "username": "用户名",
+  "login_qr_code": "生成登录二维码"
 }

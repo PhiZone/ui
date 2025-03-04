@@ -3,6 +3,30 @@ import { fail, redirect } from '@sveltejs/kit';
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private';
 import API from '$lib/api';
 import { setTokens } from '$lib/utils';
+import { login } from '$lib/utils.server';
+
+export const load = async ({ url, fetch, cookies }) => {
+  if (!url.searchParams.has('token')) return {};
+  const api = new API(fetch);
+  const redirectUri = url.searchParams.get('redirect');
+  const external = redirectUri != null && redirectUri.startsWith('http');
+  let result = await login(api, url.searchParams.get('token') ?? '', cookies);
+  if (result === 'invalid_token') {
+    result = 'error.InvalidToken';
+  } else {
+    result = 'session.login.' + result;
+  }
+  redirect(
+    303,
+    `${redirectUri ?? (result ? '' : '/')}${
+      external
+        ? ''
+        : result
+          ? `?level=error&message=${result}&t=true`
+          : '?level=success&message=session.login.success&t=true'
+    }`,
+  );
+};
 
 export const actions = {
   default: async ({ request, cookies, url, fetch }) => {
