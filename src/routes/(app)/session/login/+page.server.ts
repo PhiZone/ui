@@ -13,7 +13,7 @@ export const load = async ({ url, fetch, cookies }) => {
   let result = await login(api, url.searchParams.get('token') ?? '', cookies);
   if (result === 'invalid_token') {
     result = 'error.InvalidToken';
-  } else {
+  } else if (result !== null) {
     result = 'session.login.' + result;
   }
   redirect(
@@ -21,7 +21,7 @@ export const load = async ({ url, fetch, cookies }) => {
     `${redirectUri ?? (result ? '' : '/')}${
       external
         ? ''
-        : result
+        : result !== null
           ? `?level=error&message=${result}&t=true`
           : '?level=success&message=session.login.success&t=true'
     }`,
