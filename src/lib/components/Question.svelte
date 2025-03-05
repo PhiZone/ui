@@ -14,7 +14,7 @@
   let {
     id,
     question,
-    choices = [],
+    choices = $bindable([]),
     text = $bindable(),
     textAreaCss = 'text-base h-52',
     answer,

@@ -28,7 +28,7 @@
     sec = Math.floor((diff % (1000 * 60)) / 1000);
   }, 100);
 
-  let answers: number[][] = $state([]);
+  let answers: number[][] = $derived(Array(questions.length).fill([]));
 </script>
 
 <svelte:head>
