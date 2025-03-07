@@ -11,6 +11,17 @@
     if (!target) return null;
     let targetUrl = new URL(target);
 
+    if (
+      ![
+        '.phi.zone',
+        '.phizone.cn',
+        'phizone-ui.vercel.app',
+        'phizone-ui.pages.dev',
+        'localhost',
+      ].some((host) => (host[0] === '.' ? targetUrl.host.endsWith(host) : targetUrl.host === host))
+    )
+      return null;
+
     for (let [key, value] of page.url.searchParams.entries()) {
       if (key === 'uri') continue;
       targetUrl.searchParams.append(key, value);
@@ -21,11 +32,12 @@
   onMount(async () => {
     if (browser) {
       setTimeout(async () => {
+        const dest = build(page.url.searchParams.get('uri')) ?? '/';
         try {
           await Promise.allSettled([useQueryClient().invalidateQueries(), invalidateAll()]);
-          await goto(build(page.url.searchParams.get('uri')) ?? '/');
+          await goto(dest);
         } catch {
-          window.location.href = build(page.url.searchParams.get('uri')) ?? '/';
+          window.location.href = dest;
         }
       }, 1000);
     }
