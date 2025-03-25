@@ -1,6 +1,15 @@
 <script lang="ts">
+  import { HubConnectionBuilder } from '@microsoft/signalr';
   import { onMount } from 'svelte';
 
+  import type {
+    ResourceRecordMatchDto,
+    SongMatchDto,
+    SongSubmissionMatchDto,
+  } from '$lib/api/submission';
+
+  import { page } from '$app/state';
+  import { PUBLIC_API_BASE } from '$env/static/public';
   import { t } from '$lib/translations/config';
 
   interface Resources {
@@ -65,6 +74,15 @@
     };
   }
 
+  enum SessionFileStatus {
+    UPLOADING,
+    ANALYZING,
+    FINALIZING,
+    SUCCEEDED,
+    REJECTED,
+    FAILED,
+  }
+
   let steps = [
     'studio.choose_chart',
     'studio.upload_song',
@@ -72,11 +90,25 @@
     'studio.upload_chart',
   ];
 
+  let { api } = $derived(page.data);
+
   let step = $state(0);
   let isAndroidOrIos = $state(false);
   let iframe: HTMLIFrameElement | undefined = $state(undefined);
   let zip: File | null = $state(null);
   let bundle: ChartBundle;
+
+  let sessionId: string | undefined = $state();
+  let status: SessionFileStatus | undefined = $state();
+  let name = $state<string | null>(null);
+  let detail = $state<string | null>(null);
+  let progress = $state(0);
+  let bytesRead = $state(0);
+
+  let songMatches: (SongMatchDto | SongSubmissionMatchDto)[] = $state([]);
+  let resourceRecordMatches: ResourceRecordMatchDto[] = $state([]);
+
+  const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
 
   onMount(() => {
     isAndroidOrIos =
@@ -106,7 +138,7 @@
 
     addEventListener(
       'message',
-      (
+      async (
         e: MessageEvent<
           InputResponseMessage | ChartBundleMessage | FileOutputMessage | EventMessage
         >,
@@ -121,18 +153,40 @@
             confirm($t('studio.multiple_charts'))
           ) {
             step = 1;
-            iframe?.contentWindow?.postMessage(
-              {
-                type: 'play',
-                payload: {
-                  autoplay: true,
-                  adjustOffset: true,
-                  autostart: true,
-                  newTab: false,
-                },
-              },
-              '*',
-            );
+            await tracker.start();
+            const sessionResp = await api.submission.createSession();
+            if (!sessionResp.ok) {
+              alert($t(`error.${(await sessionResp.json()).code}`));
+              return;
+            }
+            sessionId = (await sessionResp.json()).data.id;
+            await tracker.invoke('Register', sessionId);
+            const songResp = await api.submission.uploadSong({
+              id: sessionId,
+              Song: bundle.resources.song,
+              Illustration: bundle.resources.illustration,
+            });
+            if (!songResp.ok) {
+              alert($t(`error.${(await songResp.json()).code}`));
+              return;
+            }
+            const matchResults = (await songResp.json()).data;
+            songMatches = matchResults.songSubmissionMatches;
+            songMatches = songMatches.concat(matchResults.songMatches);
+            songMatches.sort((a, b) => b.score - a.score);
+            resourceRecordMatches = matchResults.resourceRecordMatches;
+            // iframe?.contentWindow?.postMessage(
+            //   {
+            //     type: 'play',
+            //     payload: {
+            //       autoplay: true,
+            //       adjustOffset: true,
+            //       autostart: true,
+            //       newTab: false,
+            //     },
+            //   },
+            //   '*',
+            // );
           }
           return;
         }
@@ -141,7 +195,8 @@
           return;
         }
         if (message.type === 'bundle') {
-          bundle = message.payload;
+          console.log('bundle received', message.payload);
+          if (!bundle) bundle = message.payload;
           return;
         }
         if (message.type === 'fileOutput') {
@@ -152,6 +207,23 @@
           }
           return;
         }
+      },
+    );
+
+    tracker.on(
+      'ReceiveFileProgress',
+      (
+        _status: SessionFileStatus,
+        _name: string | null,
+        _detail: string | null,
+        _progress: number,
+        _bytesRead: number,
+      ) => {
+        status = _status;
+        name = _name;
+        detail = _detail;
+        progress = _progress;
+        bytesRead = _bytesRead;
       },
     );
   });
@@ -188,6 +260,43 @@
           <span class="loading loading-dots loading-lg"></span>
         {/if}
       </div>
+    {:else if step === 1}
+      <div class="flex my-8 mx-12 flex-col gap-4 items-center">
+        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3">
+          <div class="mb-2 flex justify-between items-center">
+            <div class="flex gap-3">
+              {#if name}
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
+                  {name}
+                </h3>
+              {/if}
+            </div>
+            <span class="text-xl text-gray-800 dark:text-white">
+              {progress.toLocaleString(undefined, {
+                style: 'percent',
+                minimumFractionDigits: 0,
+              })}
+            </span>
+          </div>
+          <div
+            class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+            role="progressbar"
+            aria-valuenow={progress * 100}
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <div
+              class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-500 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500"
+              style="width: {progress * 100}%"
+            ></div>
+          </div>
+          {#if detail}
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-white">
+              {detail}
+            </h3>
+          {/if}
+        </div>
+      </div>
     {/if}
     {#if step <= 2}
       <div
@@ -197,7 +306,7 @@
         {#if zip}
           <iframe
             class="w-full h-full rounded-2xl"
-            src="/player"
+            src="http://localhost:9900/"
             title="PhiZone Player"
             bind:this={iframe}
           ></iframe>
