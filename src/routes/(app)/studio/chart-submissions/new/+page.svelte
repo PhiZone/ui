@@ -5,7 +5,7 @@
   import type { SongSubmissionDto } from '$lib/api';
   import type { SongDto } from '$lib/api/song';
 
-  import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
+  // import { PUBLIC_DEDICATED_PLAYER_ENDPOINT } from '$env/static/public';
   import Tag from '$lib/components/Tag.svelte';
   import User from '$lib/components/User.svelte';
   import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
@@ -33,6 +33,7 @@
   let queryCharter = $state(false);
   let chart = $state('');
   let songSwitch = $state(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let parent: SongDto | SongSubmissionDto | undefined = $state();
 
   let querySong = $state(true);
@@ -172,7 +173,7 @@
       <h1 class="text-4xl font-bold mb-6">{$t('studio.upload_chart')}</h1>
       <div class="card w-full bg-base-100 transition border-2 normal-border hover:shadow-lg">
         <div class="card-body">
-          <a
+          <!-- <a
             href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=selfUploadChart&play=1&mode=preview&flag=adjustOffset&song=${encodeURI(
               parent?.file ?? '',
             )}&illustration=${encodeURI(parent?.illustration ?? '')}&name=${
@@ -184,7 +185,7 @@
             class="mb-2 link link-hover"
           >
             {$t('studio.submission.offset_helper')}
-          </a>
+          </a> -->
           <form method="POST" class="w-full form-control" enctype="multipart/form-data" use:enhance>
             <div class="flex items-center my-2">
               <span class="w-32">{$t('common.form.chart')}</span>
