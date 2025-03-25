@@ -697,33 +697,36 @@
               {/if}
               {#if submission.song || submission.songSubmission}
                 {@const song = submission.song ?? submission.songSubmission}
+                {@const assetNames = $assets.data?.data
+                  .map((asset) => encodeURIComponent(asset.name))
+                  .join(',')}
+                {@const assetTypes = $assets.data?.data.map((asset) => asset.type).join(',')}
+                {@const assetUrls = $assets.data?.data
+                  .map((asset) => encodeURI(asset.file))
+                  .join(',')}
                 <a
-                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
+                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?autoplay=1&autostart=1&newTab=1&chart={encodeURI(
                     submission.file,
                   )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
                     song?.illustration ?? '',
-                  )}&name={submission.title ??
-                    song?.title}&level={submission.level}&difficulty={getLevelDisplay(
+                  )}&title={submission.title ??
+                    song?.title}&levelType={submission.levelType}&level={submission.level}&difficulty={getLevelDisplay(
                     submission.difficulty,
-                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assets={$assets.data?.data
-                    .map((asset) => encodeURI(asset.file))
-                    .join(',')}"
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >
                   {$t('common.preview')}
                 </a>
                 <a
-                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&flag=noRequestingFullscreen&chart={encodeURI(
+                  href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?newTab=1&chart={encodeURI(
                     submission.file,
                   )}&song={encodeURI(song?.file ?? '')}&illustration={encodeURI(
                     song?.illustration ?? '',
-                  )}&name={submission.title ??
-                    song?.title}&level={submission.level}&difficulty={getLevelDisplay(
+                  )}&title={submission.title ??
+                    song?.title}&levelType={submission.levelType}&level={submission.level}&difficulty={getLevelDisplay(
                     submission.difficulty,
-                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assets={$assets.data?.data
-                    .map((asset) => encodeURI(asset.file))
-                    .join(',')}"
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >

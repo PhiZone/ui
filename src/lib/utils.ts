@@ -429,3 +429,41 @@ export const snakeToCamel = (input: string) => {
     })
     .join('');
 };
+
+const base72Charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),";
+
+export const guidToBase72 = (guid: string): string => {
+  const hexString = guid.replace(/-/g, '');
+  let bigIntValue = BigInt(`0x${hexString}`);
+
+  let base72String = '';
+  const base = BigInt(72);
+
+  while (bigIntValue > 0) {
+    const remainder = bigIntValue % base;
+    base72String = base72Charset[Number(remainder)] + base72String;
+    bigIntValue = bigIntValue / base;
+  }
+
+  return base72String || '0';
+};
+
+export const base72ToGuid = (base72String: string): string => {
+  const charToValueMap: Record<string, number> = {};
+  for (let i = 0; i < base72Charset.length; i++) {
+    charToValueMap[base72Charset[i]] = i;
+  }
+
+  let bigIntValue = BigInt(0);
+  const base = BigInt(72);
+
+  for (const char of base72String) {
+    const value = BigInt(charToValueMap[char]);
+    bigIntValue = bigIntValue * base + value;
+  }
+
+  const hexString = bigIntValue.toString(16).padStart(32, '0');
+  const guid = `${hexString.slice(0, 8)}-${hexString.slice(8, 12)}-${hexString.slice(12, 16)}-${hexString.slice(16, 20)}-${hexString.slice(20, 32)}`;
+
+  return guid;
+};

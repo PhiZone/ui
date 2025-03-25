@@ -37,6 +37,13 @@
   "latest_date_of_birth": "最晚生日",
   "latest_last_login": "最晚上次登录",
   "linked_accounts": "Linked Accounts",
+  "login_qr_code": {
+    "description": "在其他设备上扫描此二维码登录你的账号。请勿将二维码分享给他人。",
+    "expired": "二维码已过期。请重新获取。",
+    "generate": "生成登录二维码",
+    "title": "登录二维码",
+    "valid_in": "二维码在 {{time}} 秒内有效。"
+  },
   "lowest_exp": "最低经验值",
   "lowest_followee_count": "最低关注数",
   "lowest_follower_count": "最低粉丝数",

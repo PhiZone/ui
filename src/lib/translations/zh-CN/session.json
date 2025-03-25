@@ -22,7 +22,8 @@
     "invalid_token_link": "与该 {{provider}} 账号关联的账号不存在。",
     "login": "登录",
     "login_text": "登录以在 PhiZone 上游玩谱面、参与社区交流！",
-    "not_activated": "还未激活？"
+    "not_activated": "还未激活？",
+    "success": "登录成功！"
   },
   "password": "密码",
   "password_reset": {

@@ -22,7 +22,8 @@
     "invalid_token_link": "與此 {{provider}} 帳號關連的帳號不存在。",
     "login": "登入",
     "login_text": "登入以在 PhiZone 上遊玩譜面、參與社區交流！",
-    "not_activated": "還未啟用？"
+    "not_activated": "還未啟用？",
+    "success": "登录成功！"
   },
   "password": "密碼",
   "password_reset": {

@@ -22,7 +22,8 @@
     "invalid_token_link": "We can't find an account associated with this {{provider}} account.",
     "login": "Log In",
     "login_text": "Log in to participate in player communications and to play charts on PhiZone!",
-    "not_activated": "Not activated?"
+    "not_activated": "Not activated?",
+    "success": "登录成功！"
   },
   "password": "Password",
   "password_reset": {

@@ -21,6 +21,7 @@ import ReplyAPI from './reply';
 import ResourceRecordAPI from './resourceRecord';
 import ServiceScriptAPI from './service';
 import SongAPI from './song';
+import SubmissionAPI from './submission';
 import TagAPI from './tag';
 import UserAPI from './user';
 import VoteAPI from './vote';
@@ -102,6 +103,7 @@ export default class API {
   reply = new ReplyAPI(this);
   resourceRecord = new ResourceRecordAPI(this);
   song = new SongAPI(this);
+  submission = new SubmissionAPI(this);
   service = new ServiceScriptAPI(this);
   tag = new TagAPI(this);
   user = new UserAPI(this);

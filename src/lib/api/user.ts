@@ -95,7 +95,7 @@ export interface RegisterWithProviderOpts {
   DateOfBirth?: Date;
 }
 
-export interface RegisterResult {
+export interface TokenDto {
   token: string;
 }
 
@@ -136,7 +136,7 @@ export default class UserAPI {
     return this.api.POST(`/users/${id}/unfollow`);
   }
 
-  register(opts: RegisterOpts): R<RegisterResult> {
+  register(opts: RegisterOpts): R<TokenDto> {
     return this.api.POST('/users', serialize(opts));
   }
 
@@ -146,11 +146,15 @@ export default class UserAPI {
     code: string,
     state: string,
     redirectUri: string,
-  ): R<RegisterResult> {
+  ): R<TokenDto> {
     return this.api.POST(
       `/users/provider/${provider}?code=${code}&state=${state}&redirectUri=${redirectUri}`,
       opts,
     );
+  }
+
+  token(expiry?: number): R<TokenDto> {
+    return this.api.POST(`/me/loginToken?expiry=${expiry ?? 30}`);
   }
 
   update({ id }: InfoOpts, patch: PatchElement[]): R {

@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import QRCode from 'qrcode';
   import { superForm } from 'sveltekit-superforms';
 
-  import type { PatchElement } from '$lib/api/types';
-
   import { goto, invalidateAll } from '$app/navigation';
+  import { page } from '$app/state';
+  import { type PatchElement } from '$lib/api/types';
   import ApplicationLink from '$lib/components/ApplicationLink.svelte';
   import Cropper from '$lib/components/ImageCropper.svelte';
   import Paginator from '$lib/components/Paginatior.svelte';
@@ -37,6 +38,12 @@
   let dateAvailable: Date | undefined = $state();
   let updateErrors: Map<string, string> | undefined = $state();
   let bindDisabled = $state('');
+
+  let loginQRCodeModal: HTMLDialogElement | undefined = undefined;
+  let loginQRCode: HTMLCanvasElement | undefined = undefined;
+  let loginTokenStatus = $state(Status.WAITING);
+  let loginTokenValidIn: number | undefined = $state(undefined);
+  let loginTokenCountdown: NodeJS.Timeout;
 
   let regionMap = $derived(
     new Map(
@@ -115,6 +122,45 @@
 
   const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
 
+  const handleQRCode = async () => {
+    const expiry = 60;
+    clearInterval(loginTokenCountdown);
+    loginQRCodeModal?.showModal();
+    loginTokenStatus = Status.SENDING;
+    const resp = await api.user.token(expiry);
+    if (!resp.ok) {
+      loginTokenStatus = Status.ERROR;
+      const error = await resp.json();
+      alert($t(error.code ? `error.${error.code}` : 'common.error'));
+      return;
+    }
+    const data = await resp.json();
+    loginTokenStatus = Status.OK;
+    QRCode.toCanvas(
+      loginQRCode,
+      `${page.url.origin}/session/login?token=${data.data.token}`,
+      {
+        width: 255,
+        errorCorrectionLevel: 'L',
+      },
+      (error) => {
+        if (error) {
+          console.error(
+            `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+            error,
+          );
+        }
+      },
+    );
+    loginTokenValidIn = expiry;
+    loginTokenCountdown = setInterval(() => {
+      loginTokenValidIn!--;
+      if (loginTokenValidIn! <= 0) {
+        clearInterval(loginTokenCountdown);
+      }
+    }, 1000);
+  };
+
   const phigrim = {
     name: 'Phigrim',
     avatar: 'https://res.phizone.cn/Ak0lsqsViHdnJ80o2PVYEv0pmbhQTk4z/phigrim.png',
@@ -153,6 +199,55 @@
     }}
   />
 {/if}
+
+<dialog bind:this={loginQRCodeModal} class="modal">
+  <div class="modal-box max-w-xs">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <div class="flex gap-1 items-center mb-3">
+      <h3 class="text-lg font-bold">{$t('user.login_qr_code.title')}</h3>
+      <button
+        class="btn btn-sm btn-circle btn-ghost opacity-0"
+        class:opacity-100={loginTokenValidIn !== undefined && loginTokenValidIn <= 5}
+        disabled={loginTokenValidIn === undefined || loginTokenValidIn > 5}
+        aria-label="Refresh"
+        onclick={handleQRCode}
+      >
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </div>
+    <div class="flex flex-col gap-3 items-center">
+      {#if loginTokenStatus === Status.SENDING}
+        <span class="loading loading-dots"></span>
+      {/if}
+      <div class="rounded-2xl overflow-hidden">
+        <canvas
+          bind:this={loginQRCode}
+          class="blur-0 transition duration-300"
+          class:blur-xl={loginTokenValidIn !== undefined && loginTokenValidIn <= 0}
+          hidden={loginTokenStatus !== Status.OK}
+        ></canvas>
+      </div>
+      <div class="text-center opacity-70">
+        <p>{$t('user.login_qr_code.description')}</p>
+        {#if loginTokenValidIn !== undefined}
+          <p>
+            {#if loginTokenValidIn > 0}
+              {$t('user.login_qr_code.valid_in', {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                time: Math.ceil(loginTokenValidIn),
+              })}
+            {:else}
+              {$t('user.login_qr_code.expired')}
+            {/if}
+          </p>
+        {/if}
+      </div>
+    </div>
+  </div>
+</dialog>
 
 <input type="checkbox" id="new-app-link" class="modal-toggle" />
 <div class="modal" role="dialog">
@@ -837,12 +932,23 @@
 <div class="page">
   <div class="pb-24 flex justify-center">
     <div class="mx-4 lg:w-[60vw] max-w-7xl">
-      <h1 class="text-4xl font-bold mb-6">
-        {$t('common.settings')}
-      </h1>
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-4xl font-bold">
+          {$t('common.settings')}
+        </h1>
+        <div class="tooltip tooltip-top" data-tip={$t('user.login_qr_code.generate')}>
+          <button
+            class="btn btn-square border-2 normal-border btn-outline text-lg"
+            aria-label="Login QR Code"
+            onclick={handleQRCode}
+          >
+            <i class="fa-solid fa-qrcode fa-lg"></i>
+          </button>
+        </div>
+      </div>
       <div class="indicator w-full my-4">
         <span
-          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+          class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit"
           style:--tw-translate-x="0"
         >
           {$t('common.profile')}

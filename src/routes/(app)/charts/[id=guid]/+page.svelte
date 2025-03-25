@@ -535,6 +535,13 @@
                       {$t('common.vote')}
                     </label>
                     {#if chart.file}
+                      {@const assetNames = chart.assets
+                        .map((asset) => encodeURIComponent(asset.name))
+                        .join(',')}
+                      {@const assetTypes = chart.assets.map((asset) => asset.type).join(',')}
+                      {@const assetUrls = chart.assets
+                        .map((asset) => encodeURI(asset.file))
+                        .join(',')}
                       <Download
                         file={chart.file}
                         name={`${chart.title ?? chart.song.title}${
@@ -543,17 +550,16 @@
                         class="btn-md join-item"
                       />
                       <a
-                        href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=noRequestingFullscreen&chart={encodeURI(
+                        href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?autoplay=1&autostart=1&newTab=1&chart={encodeURI(
                           chart.file,
                         )}&song={encodeURI(chart.song.file ?? '')}&illustration={encodeURI(
                           chart.song.illustration ?? '',
-                        )}&name={chart.title ??
-                          chart.song.title}&level={chart.level}&difficulty={getLevelDisplay(
+                        )}&title={chart.title ??
+                          chart.song
+                            .title}&levelType={chart.levelType}&level={chart.level}&difficulty={getLevelDisplay(
                           chart.difficulty,
                         )}&composer={chart.song.authorName}&illustrator={chart.song
-                          .illustrator}&charter={chart.authorName}&assets={chart.assets
-                          .map((asset) => encodeURI(asset.file))
-                          .join(',')}"
+                          .illustrator}&charter={chart.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}"
                         class="btn btn-ghost border-2 hover:btn-outline join-item"
                         target="_target"
                       >
