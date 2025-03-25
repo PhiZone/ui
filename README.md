@@ -9,7 +9,7 @@ A template for `.env` is as follows.
 ```
 PUBLIC_API_BASE = 'http://localhost:33356'
 PUBLIC_AVATAR = 'https://res.phizone.cn/akFOXszKg7n9DQXWDBFA4AEJ39MtdCWo/Transparent_Akkarin.webp'
-PUBLIC_DEDICATED_PLAYER_ENDPOINT = 'https://phitogether.fun/#/playChart'
+PUBLIC_DEDICATED_PLAYER_ENDPOINT = 'https://player.phi.zone/play'
 
 CLIENT_ID = 'regular'
 CLIENT_SECRET = 'c29b1587-80f9-475f-b97b-dca1884eb0e3'
