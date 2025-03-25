@@ -258,15 +258,20 @@
               <ChartLabel {chart} large />
             </div>
             <a
-              href={`${PUBLIC_DEDICATED_PLAYER_ENDPOINT}?type=custom&play=1&mode=preview&flag=adjustOffset,noRequestingFullscreen&chart=${encodeURI(
-                $submission.data?.data.file ?? '',
-              )}&song=${encodeURI(parent?.file ?? '')}&illustration=${encodeURI(
-                parent?.illustration ?? '',
-              )}&name=${parent?.title}&level=${chart.level}&difficulty=${getLevelDisplay(
+              href="{PUBLIC_DEDICATED_PLAYER_ENDPOINT}?autoplay=1&adjustOffset=1&autostart=1&newTab=1&chart={encodeURI(
+                chart.file ?? '',
+              )}&song={encodeURI(parent?.file ?? '')}&illustration={encodeURI(
+                chart.illustration ?? parent?.illustration ?? '',
+              )}&title={chart.title ??
+                parent?.title}&levelType={chart.levelType}&level={chart.level}&difficulty={getLevelDisplay(
                 chart.difficulty,
-              )}&composer=${parent?.authorName}&illustrator=${parent?.illustrator}&charter=${
-                chart.authorName
-              }&assets=${$assets.data?.data.map((asset) => encodeURI(asset.file)).join(',')}`}
+              )}&composer={parent?.authorName}&illustrator={parent?.illustrator}&charter={chart.authorName}&assetNames={$assets.data?.data
+                .map((asset) => encodeURIComponent(asset.name))
+                .join(',')}&assetTypes={$assets.data?.data
+                .map((asset) => asset.type)
+                .join(',')}&assets={$assets.data?.data
+                .map((asset) => encodeURI(asset.file))
+                .join(',')}"
               target="_blank"
               class="mb-2 link link-hover"
             >
