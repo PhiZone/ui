@@ -306,7 +306,7 @@
         {#if zip}
           <iframe
             class="w-full h-full rounded-2xl"
-            src="http://localhost:9900/"
+            src="/player"
             title="PhiZone Player"
             bind:this={iframe}
           ></iframe>
