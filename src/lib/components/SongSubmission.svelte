@@ -13,8 +13,9 @@
 
   interface Props {
     song: SongSubmissionDto;
+    target?: '_self' | '_blank';
   }
-  let { song }: Props = $props();
+  let { song, target = '_self' }: Props = $props();
 
   let composer = $derived(
     song.originalityProof ? richtext(song.authorName ?? '') : readable(song.authorName),
@@ -25,7 +26,7 @@
 <div
   class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
-  <a href={`/studio/song-submissions/${song.id}`}>
+  <a href={`/studio/song-submissions/${song.id}`} {target}>
     <figure class="h-[167px] relative">
       <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
       {#if song.originalityProof}
