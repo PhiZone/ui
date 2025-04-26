@@ -14,8 +14,9 @@
   interface Props {
     song: SongSubmissionDto;
     target?: '_self' | '_blank';
+    showDateUpdated?: boolean;
   }
-  let { song, target = '_self' }: Props = $props();
+  let { song, target = '_self', showDateUpdated = true }: Props = $props();
 
   let composer = $derived(
     song.originalityProof ? richtext(song.authorName ?? '') : readable(song.authorName),
@@ -105,12 +106,14 @@
         </span>
         {parseDateTime(song.dateCreated, true, user?.language)}
       </p>
-      <p class="truncate">
-        <span class="badge mr-1">
-          {$t('common.date_updated')}
-        </span>
-        {parseDateTime(song.dateUpdated, true, user?.language)}
-      </p>
+      {#if showDateUpdated}
+        <p class="truncate">
+          <span class="badge mr-1">
+            {$t('common.date_updated')}
+          </span>
+          {parseDateTime(song.dateUpdated, true, user?.language)}
+        </p>
+      {/if}
     </div>
   </a>
 </div>
