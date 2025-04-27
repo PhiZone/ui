@@ -115,8 +115,63 @@
   let uplWaveformElement = $state<HTMLDivElement | null>(null);
   let exsWaveformElement = $state<HTMLDivElement | null>(null);
   let wsUpl: WaveSurfer | null = $state(null);
+  let wsExs: WaveSurfer | null = $state(null);
 
   const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
+
+  const initWaveSurfer = (element: HTMLDivElement, audio: string) =>
+    WaveSurfer.create({
+      container: element,
+      height: 'auto',
+      waveColor: '#eee',
+      cursorColor: '#bbb',
+      progressColor: '#999',
+      minPxPerSec: 60,
+      cursorWidth: 2,
+      hideScrollbar: false,
+      autoCenter: false,
+      url: audio,
+      plugins: [Timeline.create()],
+    });
+
+  const step2 = (useUploadedSong: boolean) => {
+    uploadSong = useUploadedSong || (!selectedSongId && !selectedSongSubmissionId);
+    if (uploadSong) {
+      play();
+    } else {
+      iframe?.contentWindow?.postMessage(
+        {
+          type: 'fileUrlInput',
+          payload: {
+            input: [
+              songMatches.find(
+                (match) =>
+                  (match.type === 'song' && match.payload.id === selectedSongId) ||
+                  match.payload.id === selectedSongSubmissionId,
+              )!.payload.file,
+            ],
+          },
+        },
+        '*',
+      );
+    }
+    step = 2;
+  };
+
+  const play = () => {
+    iframe?.contentWindow?.postMessage(
+      {
+        type: 'play',
+        payload: {
+          autoplay: true,
+          adjustOffset: true,
+          autostart: true,
+          newTab: false,
+        },
+      },
+      '*',
+    );
+  };
 
   onMount(() => {
     isAndroidOrIos =
@@ -155,7 +210,8 @@
         const message = e.data;
         if (message.type === 'inputResponse') {
           if (message.payload.bundlesResolved < 1) {
-            alert($t('studio.invalid_chart_bundle'));
+            if (step === 0) alert($t('studio.invalid_chart_bundle'));
+            else play();
           } else if (
             message.payload.bundlesResolved === 1 ||
             confirm($t('studio.multiple_charts'))
@@ -199,19 +255,9 @@
             );
             if (resourceRecordMatches.length === 0) {
               resourceRecordMatches = null;
+              if (songMatches.length === 0) {
+              }
             }
-            // iframe?.contentWindow?.postMessage(
-            //   {
-            //     type: 'play',
-            //     payload: {
-            //       autoplay: true,
-            //       adjustOffset: true,
-            //       autostart: true,
-            //       newTab: false,
-            //     },
-            //   },
-            //   '*',
-            // );
           }
           return;
         }
@@ -228,7 +274,7 @@
           const { purpose, file } = message.payload;
           if (purpose === 'adjustedOffset') {
             bundle.resources.chart = file;
-            step = 2;
+            step = uploadSong ? 3 : 4;
           }
           return;
         }
@@ -261,21 +307,18 @@
     );
 
     $effect(() => {
-      if (step === 1 && uplWaveformElement) {
-        const ws = WaveSurfer.create({
-          container: uplWaveformElement,
-          height: 'auto' as const,
-          waveColor: '#eee',
-          cursorColor: '#bbb',
-          progressColor: '#999',
-          minPxPerSec: 60,
-          cursorWidth: 2,
-          hideScrollbar: false,
-          autoCenter: false,
-          url: URL.createObjectURL(bundle.resources.song),
-          plugins: [Timeline.create()],
-        });
-        wsUpl = ws;
+      if (step === 1) {
+        if (uplWaveformElement)
+          wsUpl = initWaveSurfer(uplWaveformElement, URL.createObjectURL(bundle.resources.song));
+        if (exsWaveformElement && (selectedSongId || selectedSongSubmissionId))
+          wsExs = initWaveSurfer(
+            exsWaveformElement,
+            songMatches.find(
+              (match) =>
+                (match.type === 'song' && match.payload.id === selectedSongId) ||
+                match.payload.id === selectedSongSubmissionId,
+            )!.payload.file,
+          );
       }
     });
   });
@@ -435,10 +478,10 @@
             </div>
           </div>
           <div class="my-4 w-full flex flex-col gap-8">
-            <div class="h-24 flex flex-grow gap-2">
+            <div class="h-fit flex flex-grow gap-2 items-center">
               <!-- svelte-ignore a11y_no_static_element_interactions -->
               <div
-                class="w-3/4"
+                class="w-3/4 h-24"
                 bind:this={uplWaveformElement}
                 ondblclick={() => {
                   if (wsUpl) {
@@ -447,31 +490,33 @@
                 }}
               ></div>
               <button
-                class="w-1/4 h-full rounded-2xl btn btn-success btn-outline btn-lg sm:text-lg md:text-xl lg:text-2xl border-2"
+                class="w-1/4 h-full p-1 rounded-2xl btn btn-success btn-outline btn-lg text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl border-2 block"
+                disabled={status !== SessionFileStatus.SUCCEEDED}
                 onclick={() => {
-                  step = 2;
-                  uploadSong = true;
+                  step2(true);
                 }}
               >
                 {$t('studio.session.proceed_with_uploaded_song')}
-                <i class="fa-solid fa-arrow-right fa-lg"></i>
+                <i class="mx-1 fa-solid fa-arrow-right fa-lg"></i>
               </button>
             </div>
             {#if selectedSongId || selectedSongSubmissionId}
-              <div class="h-24 flex flex-grow gap-2">
-                <audio
-                  src={songMatches.find(
-                    (match) =>
-                      (match.type === 'song' && match.payload.id === selectedSongId) ||
-                      match.payload.id === selectedSongSubmissionId,
-                  )?.payload.file}
-                  controls
-                ></audio>
-                <div bind:this={exsWaveformElement}></div>
+              <div class="h-fit flex flex-grow gap-2 items-center">
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div
+                  class="w-3/4 h-24"
+                  bind:this={exsWaveformElement}
+                  ondblclick={() => {
+                    if (wsExs) {
+                      wsExs.playPause();
+                    }
+                  }}
+                ></div>
                 <button
-                  class="w-1/4 btn border-2 normal-border hover:btn-outline"
+                  class="w-1/4 h-full p-1 rounded-2xl btn btn-success btn-outline btn-lg text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl border-2 block"
+                  disabled={status !== SessionFileStatus.SUCCEEDED}
                   onclick={() => {
-                    step = 2;
+                    step2(false);
                   }}
                 >
                   {$t('studio.session.proceed_with', {
@@ -487,20 +532,27 @@
                       return `${song.title} [${song.edition}]`;
                     })(),
                   })}
+                  <i class="mx-1 fa-solid fa-arrow-right fa-lg"></i>
                 </button>
               </div>
             {/if}
           </div>
         </div>
       </div>
-    {:else if step === 2}{:else if step === 3}
-      <SongSubmissionForm
-        form={songForm}
-        audioSrc={URL.createObjectURL(bundle.resources.song)}
-        successCallback={() => {
-          step = 4;
-        }}
-      />
+    {:else if step === 2}
+      <p class="text-base w-fit mx-auto mt-8">
+        {$t('studio.session.chart_confirmation_notice')}
+      </p>
+    {:else if step === 3}
+      <div class="my-8 mx-12">
+        <SongSubmissionForm
+          form={songForm}
+          audioSrc={URL.createObjectURL(bundle.resources.song)}
+          successCallback={() => {
+            step = 4;
+          }}
+        />
+      </div>
     {/if}
     {#if step <= 2}
       <div
