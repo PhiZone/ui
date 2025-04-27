@@ -70,6 +70,7 @@
     "object-to-formdata": "^4.5.1",
     "qrcode": "^1.5.4",
     "query-string": "^9.1.1",
+    "wavesurfer.js": "^7.9.4",
     "zod": "^3.24.1"
   }
 }
