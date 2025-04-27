@@ -11,32 +11,13 @@
   import { page } from '$app/state';
   import { PUBLIC_API_BASE } from '$env/static/public';
   import { t } from '$lib/translations/config';
-
-  interface Resources {
-    song: File;
-    chart: File;
-    illustration: File;
-    assets: {
-      name: string;
-      type: number;
-      file: File;
-    }[];
-  }
-
-  interface Metadata {
-    title: string | null;
-    composer: string | null;
-    charter: string | null;
-    illustrator: string | null;
-    levelType: 0 | 1 | 2 | 3 | 4;
-    level: string | null;
-    difficulty: number | null;
-  }
-
-  interface ChartBundle {
-    resources: Resources;
-    metadata: Metadata;
-  }
+  import Song from '$lib/components/Song.svelte';
+  import SongSubmission from '$lib/components/SongSubmission.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
+  import SongSubmissionForm from '$lib/components/SongSubmissionForm.svelte';
+  import type { ChartBundle } from '$lib/types';
+  import WaveSurfer from 'wavesurfer.js';
+  import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -74,7 +55,20 @@
     };
   }
 
-  enum SessionFileStatus {
+  interface SongMatch {
+    type: 'song';
+    payload: SongMatchDto;
+    audio?: HTMLAudioElement;
+  }
+
+  interface SongSubmissionMatch {
+    type: 'songSubmission';
+    payload: SongSubmissionMatchDto;
+    audio?: HTMLAudioElement;
+  }
+
+  // svelte-ignore non_reactive_update
+  const enum SessionFileStatus {
     UPLOADING,
     ANALYZING,
     FINALIZING,
@@ -83,30 +77,44 @@
     FAILED,
   }
 
+  const MATCH_SCORE_THRESHOLD = 1e4;
+
   let steps = [
     'studio.choose_chart',
-    'studio.upload_song',
+    'studio.confirm_song',
     'studio.confirm_chart',
+    'studio.upload_song',
     'studio.upload_chart',
   ];
 
-  let { api } = $derived(page.data);
+  let { api, songForm } = $derived(page.data);
 
   let step = $state(0);
   let isAndroidOrIos = $state(false);
   let iframe: HTMLIFrameElement | undefined = $state(undefined);
   let zip: File | null = $state(null);
+  // svelte-ignore non_reactive_update
   let bundle: ChartBundle;
 
-  let sessionId: string | undefined = $state();
-  let status: SessionFileStatus | undefined = $state();
-  let name = $state<string | null>(null);
+  let sessionId = $state<string | undefined>();
+  let showProgress = $state(true);
+  let status = $state<SessionFileStatus>(SessionFileStatus.UPLOADING);
+  let name = $derived<string | null>($t(`studio.session.statuses.${status}`));
   let detail = $state<string | null>(null);
-  let progress = $state(0);
+  let progress = $state<number | null>(0);
   let bytesRead = $state(0);
+  let timer = $state<NodeJS.Timeout | null>(null);
 
-  let songMatches: (SongMatchDto | SongSubmissionMatchDto)[] = $state([]);
-  let resourceRecordMatches: ResourceRecordMatchDto[] = $state([]);
+  let songMatches = $state<(SongMatch | SongSubmissionMatch)[]>([]);
+  let resourceRecordMatches = $state<ResourceRecordMatchDto[] | null>([]);
+
+  let selectedSongId = $state<string | null>(null);
+  let selectedSongSubmissionId = $state<string | null>(null);
+  let uploadSong = $state<boolean>(false);
+
+  let uplWaveformElement = $state<HTMLDivElement | null>(null);
+  let exsWaveformElement = $state<HTMLDivElement | null>(null);
+  let wsUpl: WaveSurfer | null = $state(null);
 
   const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
 
@@ -171,10 +179,27 @@
               return;
             }
             const matchResults = (await songResp.json()).data;
-            songMatches = matchResults.songSubmissionMatches;
-            songMatches = songMatches.concat(matchResults.songMatches);
-            songMatches.sort((a, b) => b.score - a.score);
-            resourceRecordMatches = matchResults.resourceRecordMatches;
+            songMatches = matchResults.songSubmissionMatches
+              .filter((match) => match.score >= MATCH_SCORE_THRESHOLD)
+              .map((match) => ({
+                type: 'songSubmission',
+                payload: match,
+              }));
+            songMatches = songMatches.concat(
+              matchResults.songMatches
+                .filter((match) => match.score >= MATCH_SCORE_THRESHOLD)
+                .map((match) => ({
+                  type: 'song',
+                  payload: match,
+                })),
+            );
+            songMatches.sort((a, b) => b.payload.score - a.payload.score);
+            resourceRecordMatches = matchResults.resourceRecordMatches.filter(
+              (match) => match.score >= MATCH_SCORE_THRESHOLD,
+            );
+            if (resourceRecordMatches.length === 0) {
+              resourceRecordMatches = null;
+            }
             // iframe?.contentWindow?.postMessage(
             //   {
             //     type: 'play',
@@ -214,18 +239,45 @@
       'ReceiveFileProgress',
       (
         _status: SessionFileStatus,
-        _name: string | null,
         _detail: string | null,
         _progress: number,
         _bytesRead: number,
       ) => {
+        showProgress = true;
         status = _status;
-        name = _name;
         detail = _detail;
         progress = _progress;
         bytesRead = _bytesRead;
+
+        if (status === SessionFileStatus.SUCCEEDED) {
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => {
+            showProgress = false;
+          }, 1000);
+        }
       },
     );
+
+    $effect(() => {
+      if (step === 1 && uplWaveformElement) {
+        const ws = WaveSurfer.create({
+          container: uplWaveformElement,
+          height: 'auto' as const,
+          waveColor: '#eee',
+          cursorColor: '#bbb',
+          progressColor: '#999',
+          minPxPerSec: 60,
+          cursorWidth: 2,
+          hideScrollbar: false,
+          autoCenter: false,
+          url: URL.createObjectURL(bundle.resources.song),
+          plugins: [Timeline.create()],
+        });
+        wsUpl = ws;
+      }
+    });
   });
 </script>
 
@@ -237,7 +289,7 @@
   <div class="pt-28 pb-4 min-h-screen flex flex-col justify-start">
     <ul class="m-4 steps steps-vertical sm:steps-horizontal">
       {#each steps as s, i}
-        <li class="step step-neutral {step >= i ? 'step-primary' : ''}">
+        <li class="step step-neutral text-lg font-bold {step >= i ? 'step-primary' : ''}">
           {$t(s)}
         </li>
       {/each}
@@ -261,42 +313,194 @@
         {/if}
       </div>
     {:else if step === 1}
-      <div class="flex my-8 mx-12 flex-col gap-4 items-center">
-        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3">
-          <div class="mb-2 flex justify-between items-center">
-            <div class="flex gap-3">
-              {#if name}
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
-                  {name}
-                </h3>
-              {/if}
-            </div>
-            <span class="text-xl text-gray-800 dark:text-white">
-              {progress.toLocaleString(undefined, {
-                style: 'percent',
-                minimumFractionDigits: 0,
-              })}
-            </span>
-          </div>
+      <div class="my-8 mx-12 flex flex-col items-center">
+        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 flex flex-col gap-12 items-center">
           <div
-            class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-            role="progressbar"
-            aria-valuenow={progress * 100}
-            aria-valuemin="0"
-            aria-valuemax="100"
+            class="w-full flex flex-col gap-1 transition opacity-0"
+            class:opacity-100={showProgress}
           >
-            <div
-              class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-500 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500"
-              style="width: {progress * 100}%"
-            ></div>
+            <div class="flex justify-between items-center">
+              <div class="flex gap-3">
+                {#if name}
+                  <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
+                    {name}
+                  </h3>
+                {/if}
+              </div>
+              <span class="text-xl text-gray-800 dark:text-white">
+                {progress?.toLocaleString(undefined, {
+                  style: 'percent',
+                  minimumFractionDigits: 0,
+                })}
+              </span>
+            </div>
+            {#if progress}
+              <progress
+                class="progress progress-primary w-full"
+                value={progress * 100}
+                max="100"
+              ></progress>
+            {:else}
+              <progress class="progress progress-primary w-full" max="100"></progress>
+            {/if}
+            {#if detail}
+              <div
+                class="flex justify-between opacity-70 text-sm font-semibold text-gray-800 dark:text-white"
+              >
+                <p>
+                  {detail}
+                </p>
+                <p>
+                  {status === SessionFileStatus.ANALYZING ? $t('common.be_patient') : ''}
+                </p>
+              </div>
+            {/if}
           </div>
-          {#if detail}
-            <h3 class="text-sm font-semibold text-gray-800 dark:text-white">
-              {detail}
-            </h3>
+          {#if resourceRecordMatches !== null}
+            <div
+              class="w-full flex flex-col gap-4 transition opacity-0"
+              class:opacity-100={resourceRecordMatches.length > 0}
+            >
+              <div class="flex flex-col gap-2">
+                <h2 class="text-2xl font-bold">
+                  {$t('studio.session.potential_copyright_infringements')}
+                </h2>
+                <p class="text-base">{$t('studio.session.pci_description')}</p>
+              </div>
+              <div class="result">
+                {#each resourceRecordMatches as match}
+                  <div class="min-w-fit">
+                    <ResourceRecord resourceRecord={match} target="_blank" />
+                  </div>
+                {/each}
+              </div>
+            </div>
           {/if}
+          <div
+            class="w-full flex flex-col gap-4 transition opacity-0"
+            class:opacity-100={songMatches.length > 0}
+          >
+            <div class="flex flex-col gap-2">
+              <h2 class="text-2xl font-bold">{$t('studio.session.potential_song_duplicates')}</h2>
+              <p class="text-base">{$t('studio.session.psd_description')}</p>
+            </div>
+            <div class="result">
+              {#each songMatches as match}
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div
+                  class="dropdown dropdown-hover dropdown-bottom"
+                  onmouseenter={() => {
+                    if (!match.audio) {
+                      match.audio = new Audio();
+                      match.audio.src = match.payload.file;
+                    }
+                    match.audio.play();
+                  }}
+                  onmouseleave={() => {
+                    if (match.audio) {
+                      match.audio.pause();
+                      match.audio.currentTime = 0;
+                    }
+                  }}
+                >
+                  {#if match.type === 'song'}
+                    <Song song={match.payload} target="_blank" />
+                  {:else}
+                    <SongSubmission song={match.payload} target="_blank" showDateUpdated={false} />
+                  {/if}
+                  <button
+                    tabindex="-1"
+                    class="dropdown-content w-full bg-success border-success bg-opacity-30 border-opacity-30 backdrop-blur z-10 btn btn-outline hover:btn-success border-2 inline-flex gap-2"
+                    class:btn-disabled={selectedSongId === match.payload.id ||
+                      selectedSongSubmissionId === match.payload.id}
+                    onclick={() => {
+                      if (match.type === 'song') {
+                        selectedSongId = match.payload.id;
+                        selectedSongSubmissionId = null;
+                      } else {
+                        selectedSongId = null;
+                        selectedSongSubmissionId = match.payload.id;
+                      }
+                    }}
+                  >
+                    {#if selectedSongId === match.payload.id || selectedSongSubmissionId === match.payload.id}
+                      {$t('studio.session.selected')}
+                    {:else}
+                      <i class="fa-solid fa-plus"></i>
+                      {$t('studio.session.select')}
+                    {/if}
+                  </button>
+                </div>
+              {/each}
+            </div>
+          </div>
+          <div class="my-4 w-full flex flex-col gap-8">
+            <div class="h-24 flex flex-grow gap-2">
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div
+                class="w-3/4"
+                bind:this={uplWaveformElement}
+                ondblclick={() => {
+                  if (wsUpl) {
+                    wsUpl.playPause();
+                  }
+                }}
+              ></div>
+              <button
+                class="w-1/4 h-full rounded-2xl btn btn-success btn-outline btn-lg sm:text-lg md:text-xl lg:text-2xl border-2"
+                onclick={() => {
+                  step = 2;
+                  uploadSong = true;
+                }}
+              >
+                {$t('studio.session.proceed_with_uploaded_song')}
+                <i class="fa-solid fa-arrow-right fa-lg"></i>
+              </button>
+            </div>
+            {#if selectedSongId || selectedSongSubmissionId}
+              <div class="h-24 flex flex-grow gap-2">
+                <audio
+                  src={songMatches.find(
+                    (match) =>
+                      (match.type === 'song' && match.payload.id === selectedSongId) ||
+                      match.payload.id === selectedSongSubmissionId,
+                  )?.payload.file}
+                  controls
+                ></audio>
+                <div bind:this={exsWaveformElement}></div>
+                <button
+                  class="w-1/4 btn border-2 normal-border hover:btn-outline"
+                  onclick={() => {
+                    step = 2;
+                  }}
+                >
+                  {$t('studio.session.proceed_with', {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    song: (() => {
+                      const song = songMatches.find(
+                        (match) =>
+                          (match.type === 'song' && match.payload.id === selectedSongId) ||
+                          match.payload.id === selectedSongSubmissionId,
+                      )?.payload;
+                      if (!song || !song.edition) return song?.title;
+                      return `${song.title} [${song.edition}]`;
+                    })(),
+                  })}
+                </button>
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
+    {:else if step === 2}{:else if step === 3}
+      <SongSubmissionForm
+        form={songForm}
+        audioSrc={URL.createObjectURL(bundle.resources.song)}
+        successCallback={() => {
+          step = 4;
+        }}
+      />
     {/if}
     {#if step <= 2}
       <div

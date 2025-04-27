@@ -11,6 +11,7 @@
   "collaborations": "合作邀请",
   "collection_admission": "合集收录申请",
   "collection_admissions": "合集收录申请",
+  "confirm_song": "确认曲目",
   "confirm_chart": "确认谱面",
   "description": "在这里，为 Phigros 谱面二创社区助力。",
   "drawer": "侧边栏",
@@ -33,6 +34,24 @@
   "song_submission_admission": "曲目稿件收录申请",
   "song_submission_admissions": "曲目稿件收录申请",
   "song_submissions": "曲目稿件",
+  "session": {
+    "statuses": {
+      "0": "上传中",
+      "1": "分析中",
+      "2": "即将完成",
+      "3": "已完成",
+      "4": "已退回",
+      "5": "已失败"
+    },
+    "potential_song_duplicates": "疑似重复的曲目",
+    "psd_description": "以下是从你提交的音频中识别到的已在数据库中存在的曲目。请在以下曲目中选择一项或者上传新曲目作为谱面的选曲。悬浮以试听并进行选择。",
+    "potential_copyright_infringements": "疑似侵权的曲目",
+    "pci_description": "你提交的稿件可能会因版权问题而受到限制或被退回。此处列出了你的稿件可能侵犯其版权的资源记录。",
+    "select": "选择",
+    "selected": "已选择",
+    "proceed_with_uploaded_song": "使用上传的曲目继续",
+    "proceed_with": "使用 {{song}} 继续"
+  },
   "submission": {
     "accessibilities": {
       "0": "公开",

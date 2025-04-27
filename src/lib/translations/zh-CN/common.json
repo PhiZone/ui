@@ -114,6 +114,7 @@
       "unranked": "游玩该谱后，结算时数据不计入玩家 RKS；谱面审核较为宽松"
     }
   },
+  "be_patient": "这可能需要一定时间。请耐心等待。",
   "highest_like_count": "最高点赞数",
   "highest_play_count": "最高游玩次数",
   "highest_score": "最高分数",
