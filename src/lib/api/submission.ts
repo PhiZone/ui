@@ -2,7 +2,6 @@ import { serialize } from 'object-to-formdata';
 
 import type API from '.';
 import type { SongDto } from '.';
-import type { CreateOpts as ChartAssetCreateOpts } from './chart.asset';
 import type { CreateOpts as ChartCreateOpts } from './chart.submission';
 import type { ResourceRecordDto } from './resourceRecord';
 import type { CreateOpts as SongCreateOpts, SongSubmissionDto } from './song.submission';
@@ -35,6 +34,12 @@ export interface SongUploadOpts extends IdDto {
   Illustration: Blob;
 }
 
+export interface ChartAssetCreateOpts {
+  File: Blob;
+  Name: string;
+  Type: number;
+}
+
 export default class SubmissionAPI {
   constructor(private api: API) {}
 
@@ -46,19 +51,16 @@ export default class SubmissionAPI {
     return this.api.POST(`/studio/submissions/${id}/song`, serialize(rest));
   }
 
-  createSong({
-    id,
-    ...rest
-  }: IdDto & Omit<Omit<SongCreateOpts, 'File'>, 'Illustration'>): R<IdDto> {
-    return this.api.POST(`/studio/submissions/${id}/song/new`, serialize(rest));
+  createSong(id: string, opts: Omit<Omit<SongCreateOpts, 'File'>, 'Illustration'>): R<IdDto> {
+    return this.api.POST(`/studio/submissions/${id}/song/new`, serialize(opts));
   }
 
-  uploadChart({ id, ...rest }: IdDto & ChartCreateOpts): R {
-    return this.api.POST(`/studio/submissions/${id}/chart`, serialize(rest));
+  uploadChart(id: string, opts: ChartCreateOpts): R {
+    return this.api.POST(`/studio/submissions/${id}/chart`, serialize(opts));
   }
 
-  createChartAsset({ id, ...rest }: IdDto & ChartAssetCreateOpts): R {
-    return this.api.POST(`/studio/submissions/${id}/chart/assets`, serialize(rest));
+  createChartAsset(id: string, opts: ChartAssetCreateOpts): R {
+    return this.api.POST(`/studio/submissions/${id}/chart/assets`, serialize(opts));
   }
 
   createChart({ id }: IdDto): R<IdDto> {

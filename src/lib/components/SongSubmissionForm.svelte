@@ -11,32 +11,100 @@
   import { t } from '$lib/translations/config';
   import { convertTime, parseTime } from '$lib/utils';
   import { page } from '$app/state';
+  import type { Bpm, ChartBundle, RpeJson } from '$lib/types';
 
   interface Props {
+    id: string;
     form: any;
-    audioSrc: string;
-    successCallback?: () => void;
+    chartBundle: ChartBundle;
+    successCallback?: (id: string) => void;
   }
 
-  let { form: formProp, audioSrc, successCallback }: Props = $props();
+  let { id, form: formProp, chartBundle: bundle, successCallback }: Props = $props();
   let { user, api } = $derived(page.data);
 
   const { form, enhance, message, errors, submitting, allErrors } = superForm(formProp, {
     onResult({ result }) {
       if (result.type === 'success') {
-        if (successCallback) successCallback();
+        if (successCallback) successCallback(result.data?.id ?? '');
       }
     },
   });
 
-  onMount(() => {
-    if (audioSrc) {
-      handleAudio(audioSrc);
+  const toBeats = (time: number[]): number => {
+    if (time[1] == 0 || time[2] == 0) return time[0];
+    return time[0] + time[1] / time[2];
+  };
+
+  const findPredominantBpm = (bpmList: Bpm[], endTimeSec: number) => {
+    const bpmDurations: Map<number, number> = new Map();
+
+    for (let i = 0; i < bpmList.length; i++) {
+      const currentBpm = bpmList[i];
+      const startTime = currentBpm.startTimeSec;
+      const endTime = i + 1 < bpmList.length ? bpmList[i + 1].startTimeSec : endTimeSec;
+
+      bpmDurations.set(
+        currentBpm.bpm,
+        (bpmDurations.get(currentBpm.bpm) || 0) + endTime - startTime,
+      );
     }
+
+    let predominantBpm = { bpm: 0, duration: 0 };
+    for (const [bpm, duration] of bpmDurations) {
+      if (
+        duration > predominantBpm.duration ||
+        (duration === predominantBpm.duration && bpm > predominantBpm.bpm)
+      ) {
+        predominantBpm = { bpm, duration };
+      }
+    }
+
+    return predominantBpm.bpm;
+  };
+
+  onMount(async () => {
+    handleAudio(URL.createObjectURL(bundle.resources.song));
   });
 
   onDestroy(() => {
     pausePreview();
+  });
+
+  $effect(() => {
+    (async () => {
+      const chart = await bundle.resources.chart.text();
+      const { BPMList, META }: RpeJson = JSON.parse(chart);
+
+      $form.Title = bundle.metadata.title;
+      $form.Illustrator = bundle.metadata.illustrator ?? '';
+      $form.Offset = META.offset;
+
+      bpmList = BPMList;
+
+      let lastBpm = 0;
+      let lastBeat = 0;
+      let lastTimeSec = 0;
+      bpmList.forEach((bpm, i) => {
+        bpm.startBeat = toBeats(bpm.startTime);
+        bpm.startTimeSec =
+          i === 0 ? lastTimeSec : lastTimeSec + ((bpm.startBeat - lastBeat) / lastBpm) * 60;
+        lastBpm = bpm.bpm;
+        lastBeat = bpm.startBeat;
+        lastTimeSec = bpm.startTimeSec;
+      });
+
+      const bpmArr = bpmList.map((bpm) => bpm.bpm);
+      $form.MinBpm = Math.min(...bpmArr);
+      $form.MaxBpm = Math.max(...bpmArr);
+      if ($form.MinBpm === $form.MaxBpm) {
+        $form.Bpm = $form.MinBpm;
+      }
+    })();
+  });
+
+  $effect(() => {
+    $form.Bpm = findPredominantBpm(bpmList, audioDuration);
   });
 
   const timePattern = /^(\d{1,2}:)?\d{1,2}:\d{1,2}.\d+$/;
@@ -51,7 +119,7 @@
   let previewTimer: NodeJS.Timeout;
   let previewTimeout: NodeJS.Timeout;
   let previewTime = $state(0);
-  let authorName = $state('');
+  let authorName = $state(bundle.metadata.composer ?? '');
   let editionType = $state(0);
   let edition = $state('');
   let tagsRaw = $state('');
@@ -61,6 +129,7 @@
   let newComposerId: number | null = $state(null);
   let newComposerDisplay = $state('');
   let queryComposer = $state(false);
+  let bpmList = $state<Bpm[]>([]);
 
   let composer = $derived(
     createQuery(
@@ -226,6 +295,7 @@
   action="?/song"
   use:enhance
 >
+  <input type="hidden" id="id" name="Id" value={id} />
   <div class="flex justify-start items-center my-2 w-full">
     <span class="w-32">{$t('song.original')}</span>
     <div class="flex w-1/3">
@@ -598,6 +668,7 @@
         }}
         id="illustrator"
         name="Illustrator"
+        bind:value={$form.Illustrator}
         placeholder={$t('common.form.illustrator')}
         class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
           $errors.Illustrator ? 'hover:input-error' : 'hover:input-secondary'
@@ -617,7 +688,7 @@
       </span>
       <div class="flex w-3/4">
         <input
-          type="text"
+          type="number"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -625,13 +696,21 @@
           }}
           id="min_bpm"
           name="MinBpm"
+          value={$form.MinBpm}
           placeholder={$t('studio.submission.min_bpm')}
           class={`input transition border-2 normal-border join-item w-1/3 ${
             $errors.MinBpm ? 'hover:input-error' : 'hover:input-secondary'
           }`}
+          oninput={(e) => {
+            if (e.currentTarget.value === '') {
+              $form.MinBpm = 0;
+            } else {
+              $form.MinBpm = parseFloat(e.currentTarget.value);
+            }
+          }}
         />
         <input
-          type="text"
+          type="number"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -639,13 +718,21 @@
           }}
           id="bpm"
           name="Bpm"
+          value={$form.Bpm}
           placeholder={$t('studio.submission.main_bpm')}
           class={`input transition border-2 normal-border join-item w-1/3 ${
             $errors.Bpm ? 'hover:input-error' : 'hover:input-secondary'
           }`}
+          oninput={(e) => {
+            if (e.currentTarget.value === '') {
+              $form.Bpm = 0;
+            } else {
+              $form.Bpm = parseFloat(e.currentTarget.value);
+            }
+          }}
         />
         <input
-          type="text"
+          type="number"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -653,10 +740,18 @@
           }}
           id="max_bpm"
           name="MaxBpm"
+          value={$form.MaxBpm}
           placeholder={$t('studio.submission.max_bpm')}
           class={`input transition border-2 normal-border join-item w-1/3 ${
             $errors.MaxBpm ? 'hover:input-error' : 'hover:input-secondary'
           }`}
+          oninput={(e) => {
+            if (e.currentTarget.value === '') {
+              $form.MaxBpm = 0;
+            } else {
+              $form.MaxBpm = parseFloat(e.currentTarget.value);
+            }
+          }}
         />
       </div>
     </label>
@@ -678,10 +773,18 @@
         }}
         id="offset"
         name="Offset"
+        value={$form.Offset}
         placeholder={$t('studio.submission.offset_placeholder')}
         class={`input transition border-2 normal-border join-item w-3/4 min-w-[180px] ${
           $errors.Offset ? 'hover:input-error' : 'hover:input-secondary'
         }`}
+        oninput={(e) => {
+          if (e.currentTarget.value === '') {
+            $form.Offset = 0;
+          } else {
+            $form.Offset = parseFloat(e.currentTarget.value);
+          }
+        }}
       />
     </label>
   </div>

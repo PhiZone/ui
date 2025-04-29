@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HubConnectionBuilder } from '@microsoft/signalr';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
 
   import type {
     ResourceRecordMatchDto,
@@ -18,6 +18,7 @@
   import type { ChartBundle } from '$lib/types';
   import WaveSurfer from 'wavesurfer.js';
   import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
+  import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -77,7 +78,7 @@
     FAILED,
   }
 
-  const MATCH_SCORE_THRESHOLD = 1e4;
+  const MATCH_SCORE_THRESHOLD = 1e1;
 
   let steps = [
     'studio.choose_chart',
@@ -85,9 +86,10 @@
     'studio.confirm_chart',
     'studio.upload_song',
     'studio.upload_chart',
+    'studio.upload_assets',
   ];
 
-  let { api, songForm } = $derived(page.data);
+  let { api, songForm, chartForm } = $derived(page.data);
 
   let step = $state(0);
   let isAndroidOrIos = $state(false);
@@ -110,12 +112,17 @@
 
   let selectedSongId = $state<string | null>(null);
   let selectedSongSubmissionId = $state<string | null>(null);
+  let uploadedSongSubmissionId = $state<string | null>(null);
   let uploadSong = $state<boolean>(false);
 
   let uplWaveformElement = $state<HTMLDivElement | null>(null);
   let exsWaveformElement = $state<HTMLDivElement | null>(null);
   let wsUpl: WaveSurfer | null = $state(null);
   let wsExs: WaveSurfer | null = $state(null);
+
+  let assetsUploading = $state(false);
+  let assetStatuses = $state<number[]>([]);
+  let assetErrors = $state<string[]>([]);
 
   const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
 
@@ -133,6 +140,15 @@
       url: audio,
       plugins: [Timeline.create()],
     });
+
+  const clamp = (num: number, lower: number, upper: number) => {
+    return Math.min(Math.max(num, lower), upper);
+  };
+
+  const humanizeFileSize = (size: number) => {
+    var i = size == 0 ? 0 : clamp(Math.floor(Math.log(size) / Math.log(1024)), 0, 4);
+    return (size / Math.pow(1024, i)).toFixed(2) + ' ' + ['B', 'KiB', 'MiB', 'GiB', 'TiB'][i];
+  };
 
   const step2 = (useUploadedSong: boolean) => {
     uploadSong = useUploadedSong || (!selectedSongId && !selectedSongSubmissionId);
@@ -156,6 +172,15 @@
       );
     }
     step = 2;
+  };
+
+  const step5 = () => {
+    if (bundle.resources.assets.length === 0) {
+    } else {
+      step = 5;
+      assetStatuses = bundle.resources.assets.map(() => 0);
+      assetErrors = bundle.resources.assets.map(() => '');
+    }
   };
 
   const play = () => {
@@ -267,7 +292,20 @@
         }
         if (message.type === 'bundle') {
           console.log('bundle received', message.payload);
-          if (!bundle) bundle = message.payload;
+          if (!bundle) {
+            bundle = message.payload;
+            if (bundle.metadata.difficulty === null && bundle.metadata.level !== null) {
+              const levelParts = bundle.metadata.level.split(' ');
+              if (levelParts.length > 0) {
+                let difficulty = levelParts[levelParts.length - 1].match(/\d+(\.\d+)?/g)?.pop();
+                bundle.metadata.difficulty = difficulty ? parseFloat(difficulty) : 0;
+                bundle.metadata.level = levelParts
+                  .slice(0, levelParts.length - 1)
+                  .join(' ')
+                  .trim();
+              }
+            }
+          }
           return;
         }
         if (message.type === 'fileOutput') {
@@ -307,21 +345,55 @@
     );
 
     $effect(() => {
-      if (step === 1) {
-        if (uplWaveformElement)
+      if (step === 1 || step === 3) {
+        if (uplWaveformElement) {
           wsUpl = initWaveSurfer(uplWaveformElement, URL.createObjectURL(bundle.resources.song));
-        if (exsWaveformElement && (selectedSongId || selectedSongSubmissionId))
-          wsExs = initWaveSurfer(
-            exsWaveformElement,
-            songMatches.find(
-              (match) =>
-                (match.type === 'song' && match.payload.id === selectedSongId) ||
-                match.payload.id === selectedSongSubmissionId,
-            )!.payload.file,
-          );
+        }
+      }
+    });
+
+    $effect(() => {
+      if (step === 1) {
+        if (exsWaveformElement && (selectedSongId || selectedSongSubmissionId)) {
+          untrack(() => {
+            if (wsExs) {
+              wsExs.destroy();
+            }
+            wsExs = initWaveSurfer(
+              exsWaveformElement!,
+              songMatches.find(
+                (match) =>
+                  (match.type === 'song' && match.payload.id === selectedSongId) ||
+                  match.payload.id === selectedSongSubmissionId,
+              )!.payload.file,
+            );
+          });
+        }
       }
     });
   });
+
+  const uploadAssets = async () => {
+    assetsUploading = true;
+    for (let i = 0; i < bundle.resources.assets.length; i++) {
+      const asset = bundle.resources.assets[i];
+      const resp = await api.submission.createChartAsset(sessionId ?? '', {
+        File: asset.file,
+        Name: asset.name,
+        Type: asset.type,
+      });
+      if (!resp.ok) {
+        assetStatuses[i] = 3;
+        assetErrors[i] = $t(`error.${(await resp.json()).code}`);
+        continue;
+      }
+      assetStatuses[i] = 2;
+    }
+    assetsUploading = false;
+    if (assetStatuses.every((status) => status === 2)) {
+      step = 6;
+    }
+  };
 </script>
 
 <svelte:head>
@@ -540,18 +612,180 @@
         </div>
       </div>
     {:else if step === 2}
-      <p class="text-base w-fit mx-auto mt-8">
-        {$t('studio.session.chart_confirmation_notice')}
-      </p>
+      <div class="mt-8 mx-12 flex flex-col items-center">
+        <p class="text-base w-fit">
+          {$t('studio.session.chart_confirmation_notice')}
+        </p>
+      </div>
     {:else if step === 3}
-      <div class="my-8 mx-12">
-        <SongSubmissionForm
-          form={songForm}
-          audioSrc={URL.createObjectURL(bundle.resources.song)}
-          successCallback={() => {
-            step = 4;
-          }}
-        />
+      <div class="my-8 mx-12 flex flex-col items-center">
+        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 flex flex-col gap-12 items-center">
+          <!-- svelte-ignore a11y_no_static_element_interactions -->
+          <div
+            class="w-full h-24"
+            bind:this={uplWaveformElement}
+            ondblclick={() => {
+              if (wsUpl) {
+                wsUpl.playPause();
+              }
+            }}
+          ></div>
+          <SongSubmissionForm
+            id={sessionId ?? ''}
+            form={songForm}
+            chartBundle={bundle}
+            successCallback={(id: string) => {
+              uploadedSongSubmissionId = id;
+              step = 4;
+            }}
+          />
+        </div>
+      </div>
+    {:else if step === 4}
+      <div class="my-8 mx-12 flex flex-col items-center">
+        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 flex flex-col gap-12 items-center">
+          <ChartSubmissionForm
+            id={sessionId ?? ''}
+            form={chartForm}
+            chartBundle={bundle}
+            songId={uploadedSongSubmissionId ? null : selectedSongId}
+            songSubmissionId={uploadedSongSubmissionId ?? selectedSongSubmissionId}
+            successCallback={() => {
+              step5();
+            }}
+          />
+        </div>
+      </div>
+    {:else if step === 5}
+      <div class="my-8 mx-12 flex flex-col items-center">
+        <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 flex flex-col gap-6">
+          <div class="-m-1.5 p-1.5 inline-block align-middle">
+            <table class="table-fixed w-full divide-y divide-gray-200 dark:divide-neutral-700">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-3 py-2 w-1/2 sm:w-1/3 md:w-2/5 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                  >
+                    {$t('chart.asset.name')}
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-2 w-1/4 md:w-1/5 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                  >
+                    {$t('chart.asset.type')}
+                  </th>
+                  <th
+                    scope="col"
+                    class="hidden sm:table-cell px-3 py-2 w-1/6 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                  >
+                    {$t('common.file_size')}
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-2 text-ellipsis overflow-hidden whitespace-nowrap text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                  >
+                    {$t(assetsUploading ? 'common.status' : 'common.actions')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                {#each bundle.resources.assets as asset, i}
+                  <tr>
+                    <td
+                      class="px-3 py-3 text-ellipsis overflow-hidden whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                    >
+                      {asset.file.name}
+                    </td>
+                    <td class="px-2 py-3 md:min-w-fit w-1/6 text-gray-800 dark:text-neutral-200">
+                      <div class="relative">
+                        <select
+                          bind:value={asset.type}
+                          class="form-select py-1 px-2 pe-8 block border-gray-200 rounded-lg text-sm focus:z-10 hover:border-blue-500 hover:ring-blue-500 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-base-100 dark:border-neutral-700 dark:text-neutral-300 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                        >
+                          {#each Array(6) as _, i}
+                            <option value={i} selected={asset.type === i}>
+                              {$t(`chart.asset.types.${i}`)}
+                            </option>
+                          {/each}
+                        </select>
+                      </div>
+                    </td>
+                    <td
+                      class="px-3 py-3 hidden sm:table-cell md:min-w-fit w-1/12 text-ellipsis overflow-hidden whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200 transition"
+                    >
+                      {humanizeFileSize(asset.file.size)}
+                    </td>
+                    <td class="px-3 py-3 min-w-fit text-end text-sm font-medium">
+                      {#if assetsUploading}
+                        {#if assetStatuses[i] === 0}
+                          <i class="fa-solid fa-clock fa-lg"></i>
+                        {:else if assetStatuses[i] === 1}
+                          <span class="loading loading-spinner loading-lg"></span>
+                        {:else if assetStatuses[i] === 2}
+                          <i class="fa-solid fa-check fa-lg text-success"></i>
+                        {:else if assetStatuses[i] === 3}
+                          <div class="tooltip tooltip-open tooltip-left" data-tip={assetErrors[i]}>
+                            <i class="fa-solid fa-xmark fa-lg text-error"></i>
+                          </div>
+                        {/if}
+                      {:else}
+                        <button
+                          type="button"
+                          aria-label="Delete"
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg transition border border-transparent text-blue-500 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                          onclick={() => {
+                            bundle.resources.assets = bundle.resources.assets.filter(
+                              (a) => a !== asset,
+                            );
+                          }}
+                        >
+                          <i class="fa-regular fa-trash-can fa-lg"></i>
+                        </button>
+                      {/if}
+                    </td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
+          <div class="w-full flex gap-2">
+            <button
+              type="button"
+              class="btn {assetStatuses.some((status) => status === 3)
+                ? 'btn-error'
+                : assetsUploading
+                  ? 'btn-ghost'
+                  : 'btn-outline border-2 normal-border'} inline-flex gap-2"
+              disabled={assetsUploading}
+              onclick={() => {
+                uploadAssets();
+              }}
+            >
+              {#if assetStatuses.some((status) => status === 3)}
+                {$t('common.error')}
+              {:else if assetsUploading}
+                <span class="loading loading-spinner loading-md"></span>
+                {$t('common.waiting')}
+              {:else}
+                <i class="fa-solid fa-upload"></i>
+                {$t('studio.upload')}
+              {/if}
+            </button>
+            {#if !assetsUploading && assetStatuses.some((status) => status === 3)}
+              <button
+                type="button"
+                class="btn btn-outline border-2 normal-border inline-flex gap-2"
+                onclick={() => {
+                  step = 6;
+                }}
+              >
+                {$t('common.continue')}
+                <i class="mx-1 fa-solid fa-arrow-right fa-lg"></i>
+              </button>
+            {/if}
+          </div>
+        </div>
       </div>
     {/if}
     {#if step <= 2}

@@ -23,3 +23,29 @@ export interface ChartBundle {
   resources: Resources;
   metadata: Metadata;
 }
+
+export interface RpeMeta {
+  RPEVersion: number;
+  background: string;
+  charter: string;
+  composer: string;
+  duration?: number;
+  id: string;
+  illustration?: string;
+  level: string;
+  name: string;
+  offset: number;
+  song: string;
+}
+
+export interface Bpm {
+  bpm: number;
+  startTime: [number, number, number];
+  startBeat: number;
+  startTimeSec: number;
+}
+
+export interface RpeJson {
+  BPMList: Bpm[];
+  META: RpeMeta;
+}
