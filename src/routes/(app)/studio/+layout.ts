@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import { getUserPrivilege } from '$lib/utils';
 import { PUBLIC_ENV } from '$env/static/public';
 
 export const load = async ({ parent, url }) => {

@@ -5,10 +5,10 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 import API from '$lib/api';
+import { ChartLevel } from '$lib/api/chart';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
 import { t } from '$lib/translations/config';
-import { ChartLevel } from '$lib/api/chart';
 
 const songSchema = z
   .object({
@@ -80,7 +80,7 @@ const parsePreviewTime = (time: string) => {
 };
 
 export const actions = {
-  song: async ({ request, url, locals, fetch }) => {
+  song: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const form = await superValidate(formData, zod(songSchema));
@@ -164,7 +164,7 @@ export const actions = {
       }
     }
   },
-  chart: async ({ request, url, locals, fetch }) => {
+  chart: async ({ request, locals, fetch }) => {
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
     const form = await superValidate(formData, zod(chartSchema));
@@ -172,7 +172,7 @@ export const actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    // eslint-disable-next-line prefer-const
+
     let { Id, File, Illustration, Tags: tagsRaw, ...rest } = form.data;
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;

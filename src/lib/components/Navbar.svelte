@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { t } from '$lib/translations/config';
-  import { getAvatar, getUserColor, getUserPrivilege, toLocalTime } from '$lib/utils';
+  import { getAvatar, getUserColor, toLocalTime } from '$lib/utils';
 </script>
 
 <div

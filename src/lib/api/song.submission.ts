@@ -3,10 +3,10 @@ import { serialize } from 'object-to-formdata';
 import type API from '.';
 import type { CollaborationDto } from './collaboration';
 import type { EventDivisionDto, EventTeamDto } from './event';
+import type { SongRecognitionSummaryDto } from './submission';
 import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
 
 import { createQueryCreator, stringifyFilter } from './common';
-import type { SongRecognitionSummaryDto } from './submission';
 
 export interface SongSubmissionDto {
   accessibility: number;

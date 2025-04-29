@@ -1,27 +1,27 @@
 <script lang="ts">
   import { HubConnectionBuilder } from '@microsoft/signalr';
   import { onMount, untrack } from 'svelte';
+  import WaveSurfer from 'wavesurfer.js';
+  import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
 
   import type {
     ResourceRecordMatchDto,
     SongMatchDto,
     SongSubmissionMatchDto,
   } from '$lib/api/submission';
+  import type { ChartBundle } from '$lib/types';
 
+  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { PUBLIC_API_BASE } from '$env/static/public';
-  import { t } from '$lib/translations/config';
+  import { ResponseDtoStatus } from '$lib/api/types';
+  import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
+  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Song from '$lib/components/Song.svelte';
   import SongSubmission from '$lib/components/SongSubmission.svelte';
-  import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import SongSubmissionForm from '$lib/components/SongSubmissionForm.svelte';
-  import type { ChartBundle } from '$lib/types';
-  import WaveSurfer from 'wavesurfer.js';
-  import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
-  import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
-  import { goto } from '$app/navigation';
-  import { ResponseDtoStatus } from '$lib/api/types';
   import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
+  import { t } from '$lib/translations/config';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -103,7 +103,7 @@
   let name = $derived<string | null>($t(`studio.session.statuses.${status}`));
   let detail = $state<string | null>(null);
   let progress = $state<number | null>(0);
-  let bytesRead = $state(0);
+  // let bytesRead = $state(0);
   let timer = $state<NodeJS.Timeout | null>(null);
 
   let songMatches = $state<(SongMatch | SongSubmissionMatch)[]>([]);
@@ -363,7 +363,7 @@
         status = _status;
         detail = _detail;
         progress = _progress;
-        bytesRead = _bytesRead;
+        // bytesRead = _bytesRead;
 
         if (status === SessionFileStatus.SUCCEEDED) {
           if (timer) {

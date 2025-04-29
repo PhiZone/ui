@@ -4,17 +4,19 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import { superForm } from 'sveltekit-superforms';
 
+  import type { Bpm, ChartBundle, RpeJson } from '$lib/types';
+
+  import { page } from '$app/state';
   import Tag from '$lib/components/Tag.svelte';
   import User from '$lib/components/User.svelte';
   import { TAG_JOINER } from '$lib/constants';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, parseTime } from '$lib/utils';
-  import { page } from '$app/state';
-  import type { Bpm, ChartBundle, RpeJson } from '$lib/types';
 
   interface Props {
     id: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: any;
     chartBundle: ChartBundle;
     successCallback?: (id: string) => void;
@@ -37,7 +39,7 @@
   };
 
   const findPredominantBpm = (bpmList: Bpm[], endTimeSec: number) => {
-    const bpmDurations: Map<number, number> = new Map();
+    const bpmDurations = new Map<number, number>();
 
     for (let i = 0; i < bpmList.length; i++) {
       const currentBpm = bpmList[i];

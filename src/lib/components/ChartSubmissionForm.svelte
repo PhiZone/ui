@@ -2,17 +2,19 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { superForm } from 'sveltekit-superforms';
 
+  import type { ChartBundle } from '$lib/types';
+
+  import { page } from '$app/state';
   import Tag from '$lib/components/Tag.svelte';
   import User from '$lib/components/User.svelte';
   import { LEVEL_TYPES, TAG_JOINER } from '$lib/constants';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getLevelColor, getLevelDisplay } from '$lib/utils';
-  import { page } from '$app/state';
-  import type { ChartBundle } from '$lib/types';
 
   interface Props {
     id: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: any;
     chartBundle: ChartBundle;
     songId: string | null;

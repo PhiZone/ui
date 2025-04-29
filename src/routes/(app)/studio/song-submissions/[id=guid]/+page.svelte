@@ -3,6 +3,8 @@
   import { readable } from 'svelte/store';
   import { superForm } from 'sveltekit-superforms';
 
+  import type { SongMatchDto, SongSubmissionMatchDto } from '$lib/api/submission';
+
   import ChapterAdmission from '$lib/components/ChapterAdmission.svelte';
   import Collaboration from '$lib/components/Collaboration.svelte';
   import Delete from '$lib/components/Delete.svelte';
@@ -12,14 +14,13 @@
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
   import Service from '$lib/components/Service.svelte';
   import Song from '$lib/components/Song.svelte';
+  import SongSubmission from '$lib/components/SongSubmission.svelte';
   import Tag from '$lib/components/Tag.svelte';
   import User from '$lib/components/User.svelte';
+  import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getUserPrivilege, parseDateTime } from '$lib/utils';
-  import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
-  import type { SongMatchDto, SongSubmissionMatchDto } from '$lib/api/submission';
-  import SongSubmission from '$lib/components/SongSubmission.svelte';
 
   let { data } = $props();
   let { id, user, api } = $derived(data);
