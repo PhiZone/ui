@@ -12,6 +12,7 @@
   "collection_admission": "合集收录申请",
   "collection_admissions": "合集收录申请",
   "confirm_chart": "确认谱面",
+  "confirm_song": "确认曲目",
   "description": "在这里，为 Phigros 谱面二创社区助力。",
   "drawer": "侧边栏",
   "edit_chart": "编辑谱面",
@@ -26,6 +27,26 @@
     "reject": "拒绝",
     "rejected": "已拒绝",
     "sent": "发出的请求"
+  },
+  "session": {
+    "chart_confirmation_notice": "请在本步骤使用 PhiZone Player 确认谱面的表现情况与谱面延迟。如完成确认，请点击“导出”按钮。",
+    "pci_description": "你提交的稿件可能会因版权问题而受到限制或被退回。此处列出了你的稿件可能侵犯其版权的资源记录。",
+    "potential_copyright_infringements": "疑似侵权的曲目",
+    "potential_song_duplicates": "疑似重复的曲目",
+    "proceed_with": "使用 {{song}} 继续",
+    "proceed_with_uploaded_song": "使用上传的曲目继续",
+    "psd_description": "以下是从你提交的音频中识别到的已在数据库中存在的曲目。请在以下曲目中选择一项或者上传新曲目作为谱面的选曲。鼠标悬停以进行选择。",
+    "select": "选择",
+    "selected": "已选择",
+    "statuses": {
+      "0": "上传中",
+      "1": "分析中",
+      "2": "即将完成",
+      "3": "已完成",
+      "4": "已退回",
+      "5": "已失败"
+    },
+    "upload_chart_only": "仅上传谱面"
   },
   "song_admission": "曲目收录申请",
   "song_admissions": "曲目收录申请",
@@ -103,6 +124,7 @@
     "your_id": "你的 ID"
   },
   "upload": "上传",
+  "upload_assets": "上传资源",
   "upload_chart": "上传谱面",
   "upload_song": "上传曲目",
   "view_guide": "查看指南"

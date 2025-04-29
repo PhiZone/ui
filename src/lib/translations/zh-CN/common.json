@@ -5,6 +5,7 @@
     "2": "私有"
   },
   "accessibility": "开放度",
+  "actions": "操作",
   "add": "添加",
   "add_in_bulk": "批量添加",
   "all": "查看全部",
@@ -16,6 +17,7 @@
   "auto": "自动",
   "back": "返回",
   "back_to_homepage": "返回主页",
+  "be_patient": "这可能需要一定时间。请耐心等待。",
   "chapters": "章节",
   "charts": "谱面",
   "code": "代码",
@@ -38,7 +40,6 @@
   "descending": "降序",
   "description": "简介",
   "disable_option": "禁用选项",
-  "file_size": "文件大小",
   "download": "下载",
   "earliest_date_created": "最早创建时间",
   "earliest_date_ended": "最早结束时间",
@@ -63,11 +64,9 @@
     "500": "服务器在处理你的请求时出现问题。",
     "502": "无法连接至服务器。"
   },
-  "actions": "操作",
-  "new": "新",
-  "uploading": "上传中",
   "events": "活动",
   "fetch": "获取",
+  "file_size": "文件大小",
   "footer": {
     "about": "关于",
     "contact": "联系我们",
@@ -118,7 +117,6 @@
       "unranked": "游玩该谱后，结算时数据不计入玩家 RKS；谱面审核较为宽松"
     }
   },
-  "be_patient": "这可能需要一定时间。请耐心等待。",
   "highest_like_count": "最高点赞数",
   "highest_play_count": "最高游玩次数",
   "highest_score": "最高分数",
@@ -160,6 +158,7 @@
     "pet": "权限晋升",
     "studio_inaccessible": "请先完成 PhiZone 权限晋升测试以使用该功能！"
   },
+  "new": "新",
   "off": "关",
   "on": "开",
   "optional": "（选填）",
@@ -214,6 +213,7 @@
   "unnamed": "未命名",
   "unset_as_preferred": "取消首选",
   "update_success": "成功更新信息！",
+  "uploading": "上传中",
   "users": "用户",
   "valid_through": "有效期至 {{date}}",
   "view_illustration": "查看插画",

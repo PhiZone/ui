@@ -5,6 +5,7 @@
     "2": "Private"
   },
   "accessibility": "Accessibility",
+  "actions": "操作",
   "add": "Add",
   "add_in_bulk": "Add in bulk",
   "all": "View all",
@@ -16,6 +17,7 @@
   "auto": "Auto",
   "back": "Back",
   "back_to_homepage": "Back to Homepage",
+  "be_patient": "这可能需要一定时间。请耐心等待。",
   "chapters": "Chapters",
   "charts": "Charts",
   "code": "Code",
@@ -64,6 +66,7 @@
   },
   "events": "Events",
   "fetch": "Fetch",
+  "file_size": "文件大小",
   "footer": {
     "about": "About Us",
     "contact": "Contact",
@@ -155,6 +158,7 @@
     "pet": "PET",
     "studio_inaccessible": "Please first take the PET in order to access this feature!"
   },
+  "new": "新",
   "off": "Off",
   "on": "On",
   "optional": " (Optional)",
@@ -209,6 +213,7 @@
   "unnamed": "Unnamed",
   "unset_as_preferred": "Unset as Preferred",
   "update_success": "Information has been successfully updated!",
+  "uploading": "上传中",
   "users": "Users",
   "valid_through": "Valid through {{date}}",
   "view_illustration": "View Illustration",
