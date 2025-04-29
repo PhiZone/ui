@@ -21,6 +21,7 @@
   import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
   import { goto } from '$app/navigation';
   import { ResponseDtoStatus } from '$lib/api/types';
+  import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -77,8 +78,6 @@
     REJECTED,
     FAILED,
   }
-
-  const MATCH_SCORE_THRESHOLD = 1e4;
 
   let steps = [
     'studio.choose_chart',
@@ -291,14 +290,14 @@
             }
             const matchResults = (await songResp.json()).data;
             songMatches = matchResults.songSubmissionMatches
-              .filter((match) => match.score >= MATCH_SCORE_THRESHOLD)
+              .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
               .map((match) => ({
                 type: 'songSubmission',
                 payload: match,
               }));
             songMatches = songMatches.concat(
               matchResults.songMatches
-                .filter((match) => match.score >= MATCH_SCORE_THRESHOLD)
+                .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
                 .map((match) => ({
                   type: 'song',
                   payload: match,
@@ -306,12 +305,10 @@
             );
             songMatches.sort((a, b) => b.payload.score - a.payload.score);
             resourceRecordMatches = matchResults.resourceRecordMatches.filter(
-              (match) => match.score >= MATCH_SCORE_THRESHOLD,
+              (match) => match.score >= SONG_MATCH_SCORE_THRESHOLD,
             );
             if (resourceRecordMatches.length === 0) {
               resourceRecordMatches = null;
-              if (songMatches.length === 0) {
-              }
             }
           }
           return;
@@ -321,7 +318,6 @@
           return;
         }
         if (message.type === 'bundle') {
-          console.log('bundle received', message.payload);
           if (!bundle) {
             bundle = message.payload;
             if (bundle.metadata.difficulty === null && bundle.metadata.level !== null) {
@@ -505,7 +501,7 @@
             {$t('studio.session.upload_chart_only')}
           </a>
         {:else}
-          <span class="loading loading-dots loading-lg"></span>
+          <span class="loading loading-dots w-16"></span>
         {/if}
       </div>
     {:else if step === 1}
@@ -614,7 +610,7 @@
               {/each}
             </div>
           </div>
-          <div class="my-4 w-full flex flex-col gap-8">
+          <div class="my-4 w-full flex flex-col gap-10">
             <div class="h-fit flex flex-grow gap-2 items-center">
               <!-- svelte-ignore a11y_no_static_element_interactions -->
               <div

@@ -8,9 +8,9 @@ export const load = async ({ parent, url }) => {
   if (!user) {
     error(401, 'Unauthorized');
   }
-  if (getUserPrivilege(user.role) < 3) {
-    error(403, 'Forbidden');
-  }
+  // if (getUserPrivilege(user.role) < 3) {
+  //   error(403, 'Forbidden');
+  // }
   if (PUBLIC_ENV === 'vercel') {
     const expiry = 30;
     const resp = await api.user.token(expiry);

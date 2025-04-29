@@ -7,7 +7,7 @@ import type { ResourceRecordDto } from './resourceRecord';
 import type { CreateOpts as SongCreateOpts, SongSubmissionDto } from './song.submission';
 import type { R } from './types';
 
-export interface SubmissionSongDto {
+export interface SongRecognitionSummaryDto {
   resourceRecordMatches: ResourceRecordMatchDto[];
   songMatches: SongMatchDto[];
   songSubmissionMatches: SongSubmissionMatchDto[];
@@ -47,7 +47,7 @@ export default class SubmissionAPI {
     return this.api.POST('/studio/submissions');
   }
 
-  uploadSong({ id, ...rest }: SongUploadOpts): R<SubmissionSongDto> {
+  uploadSong({ id, ...rest }: SongUploadOpts): R<SongRecognitionSummaryDto> {
     return this.api.POST(`/studio/submissions/${id}/song`, serialize(rest));
   }
 

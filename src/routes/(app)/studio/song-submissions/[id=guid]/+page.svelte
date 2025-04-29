@@ -17,9 +17,22 @@
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { convertTime, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
+  import type { SongMatchDto, SongSubmissionMatchDto } from '$lib/api/submission';
+  import SongSubmission from '$lib/components/SongSubmission.svelte';
 
   let { data } = $props();
   let { id, user, api } = $derived(data);
+
+  interface SongMatch {
+    type: 'song';
+    payload: SongMatchDto;
+  }
+
+  interface SongSubmissionMatch {
+    type: 'songSubmission';
+    payload: SongSubmissionMatchDto;
+  }
 
   const {
     enhance: reviewEnhance,
@@ -92,27 +105,6 @@
       api.song.info(
         { id: $submissionQuery.data?.data.representationId ?? '' },
         { enabled: $submissionQuery.isSuccess && !!$submissionQuery.data?.data.representationId },
-      ),
-    ),
-  );
-  let resourceRecords = $derived(
-    createQuery(
-      api.resourceRecord.listAll(
-        {
-          search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
-          rangeStrategy: [1, 2, 3, 4],
-        },
-        { enabled: $submissionQuery.isSuccess },
-      ),
-    ),
-  );
-  let songDuplications = $derived(
-    createQuery(
-      api.song.listAll(
-        {
-          search: `${$submissionQuery.data?.data.title} ${$submissionQuery.data?.data.edition} ${$submissionQuery.data?.data.authorName}`,
-        },
-        { enabled: $submissionQuery.isSuccess },
       ),
     ),
   );
@@ -774,43 +766,61 @@
           </div>
         </div>
       </div>
-      {#if $resourceRecords.isSuccess && $resourceRecords.data.data.length > 0}
-        <div class="indicator w-full my-4">
-          <span
-            class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
-            style:--tw-translate-x="0"
-          >
-            {$t('studio.submission.copyright_alert')}
-          </span>
-          <div
-            class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
-          >
-            <div class="card-body py-10 result">
-              {#each $resourceRecords.data.data as resourceRecord}
-                <ResourceRecord {resourceRecord} />
-              {/each}
-            </div>
-          </div>
-        </div>
-      {/if}
-      {#if $songDuplications.isSuccess}
-        {@const songs = $songDuplications.data.data.filter(
-          (song) => song.id != submission.representationId,
+      {#if submission.recognitionSummary}
+        {@const resourceRecordMatches = submission.recognitionSummary.resourceRecordMatches.filter(
+          (match) => match.score >= SONG_MATCH_SCORE_THRESHOLD,
         )}
-        {#if songs.length > 0}
+        {@const songMatches = (
+          submission.recognitionSummary.songSubmissionMatches.map((match) => ({
+            type: 'songSubmission',
+            payload: match,
+          })) as (SongMatch | SongSubmissionMatch)[]
+        )
+          .concat(
+            submission.recognitionSummary.songMatches.map((match) => ({
+              type: 'song',
+              payload: match,
+            })),
+          )
+          .filter((match) => match.payload.score >= SONG_MATCH_SCORE_THRESHOLD)
+          .sort((a, b) => b.payload.score - a.payload.score)}
+        {#if resourceRecordMatches.length > 0}
           <div class="indicator w-full my-4">
             <span
               class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
               style:--tw-translate-x="0"
             >
-              {$t('studio.submission.song_duplications')}
+              {$t('studio.session.potential_copyright_infringements')}
             </span>
             <div
               class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
             >
               <div class="card-body py-10 result">
-                {#each songs as song}
-                  <Song {song} />
+                {#each resourceRecordMatches as resourceRecord}
+                  <ResourceRecord {resourceRecord} />
+                {/each}
+              </div>
+            </div>
+          </div>
+        {/if}
+        {#if songMatches.length > 0}
+          <div class="indicator w-full my-4">
+            <span
+              class="indicator-item indicator-start badge badge-neutral badge-lg min-w-fit text-lg"
+              style:--tw-translate-x="0"
+            >
+              {$t('studio.session.potential_song_duplicates')}
+            </span>
+            <div
+              class="card flex-shrink-0 w-full border-2 normal-border transition hover:shadow-lg bg-base-100"
+            >
+              <div class="card-body py-10 result">
+                {#each songMatches as match}
+                  {#if match.type === 'song'}
+                    <Song song={match.payload} target="_blank" />
+                  {:else}
+                    <SongSubmission song={match.payload} target="_blank" showDateUpdated={false} />
+                  {/if}
                 {/each}
               </div>
             </div>

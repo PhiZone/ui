@@ -6,6 +6,7 @@ import type { EventDivisionDto, EventTeamDto } from './event';
 import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
 
 import { createQueryCreator, stringifyFilter } from './common';
+import type { SongRecognitionSummaryDto } from './submission';
 
 export interface SongSubmissionDto {
   accessibility: number;
@@ -32,6 +33,7 @@ export interface SongSubmissionDto {
   ownerId: number;
   previewEnd: string;
   previewStart: string;
+  recognitionSummary: SongRecognitionSummaryDto | null;
   representationId: string | null;
   reviewerId: number | null;
   status: number;
