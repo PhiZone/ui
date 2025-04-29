@@ -177,7 +177,6 @@ export const actions = {
     File = formData.get('File') as File;
     Illustration = formData.get('Illustration') as File;
     const Tags = tagsRaw ? tagsRaw.split(TAG_JOINER).map((tag: string) => tag.trim()) : [];
-    console.log(form.data);
     const resp = await api.submission.uploadChart(Id, { File, Illustration, Tags, ...rest });
     if (resp.ok) {
       return;

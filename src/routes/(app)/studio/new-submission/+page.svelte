@@ -19,6 +19,8 @@
   import WaveSurfer from 'wavesurfer.js';
   import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
   import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
+  import { goto } from '$app/navigation';
+  import { ResponseDtoStatus } from '$lib/api/types';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -59,13 +61,11 @@
   interface SongMatch {
     type: 'song';
     payload: SongMatchDto;
-    audio?: HTMLAudioElement;
   }
 
   interface SongSubmissionMatch {
     type: 'songSubmission';
     payload: SongSubmissionMatchDto;
-    audio?: HTMLAudioElement;
   }
 
   // svelte-ignore non_reactive_update
@@ -78,7 +78,7 @@
     FAILED,
   }
 
-  const MATCH_SCORE_THRESHOLD = 1e1;
+  const MATCH_SCORE_THRESHOLD = 1e4;
 
   let steps = [
     'studio.choose_chart',
@@ -89,7 +89,7 @@
     'studio.upload_assets',
   ];
 
-  let { api, songForm, chartForm } = $derived(page.data);
+  let { user, api, songForm, chartForm } = $derived(page.data);
 
   let step = $state(0);
   let isAndroidOrIos = $state(false);
@@ -123,6 +123,8 @@
   let assetsUploading = $state(false);
   let assetStatuses = $state<number[]>([]);
   let assetErrors = $state<string[]>([]);
+
+  let finalizationError = $state<string | null>(null);
 
   const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
 
@@ -176,10 +178,38 @@
 
   const step5 = () => {
     if (bundle.resources.assets.length === 0) {
+      step6();
     } else {
       step = 5;
       assetStatuses = bundle.resources.assets.map(() => 0);
       assetErrors = bundle.resources.assets.map(() => '');
+    }
+  };
+
+  const step6 = async () => {
+    step = 6;
+    const resp = await api.submission.createChart(sessionId ?? '');
+    if (resp.ok) {
+      const data = await resp.json();
+      goto(`/studio/chart-submissions/${data.data.id}`);
+    } else {
+      const respBackup = resp.clone();
+      try {
+        const error = await resp.json();
+        if (error.status === ResponseDtoStatus.ErrorBrief) {
+          finalizationError = $t(`error.${error.code}`);
+        } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
+          finalizationError = error.message;
+        } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
+          finalizationError = $t(`error.${error.code}`);
+        }
+      } catch {
+        const error = await respBackup.text();
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
+      }
     }
   };
 
@@ -305,6 +335,12 @@
                   .trim();
               }
             }
+            if (bundle.metadata.charter !== null && user !== undefined) {
+              bundle.metadata.charter = bundle.metadata.charter.replaceAll(
+                user.userName,
+                `[PZUser:${user.id}:${user.userName}:PZRT]`,
+              );
+            }
           }
           return;
         }
@@ -373,25 +409,60 @@
     });
   });
 
-  const uploadAssets = async () => {
+  const uploadAssets = async (concurrency = 3) => {
     assetsUploading = true;
-    for (let i = 0; i < bundle.resources.assets.length; i++) {
-      const asset = bundle.resources.assets[i];
-      const resp = await api.submission.createChartAsset(sessionId ?? '', {
-        File: asset.file,
-        Name: asset.name,
-        Type: asset.type,
-      });
-      if (!resp.ok) {
-        assetStatuses[i] = 3;
-        assetErrors[i] = $t(`error.${(await resp.json()).code}`);
-        continue;
+    const assetQueue = [...Array(bundle.resources.assets.length).keys()];
+    const activeUploads = new Set();
+
+    const processNext = async () => {
+      if (assetQueue.length === 0) return;
+
+      const index = assetQueue.shift()!;
+      activeUploads.add(index);
+      assetStatuses[index] = 1;
+
+      const asset = bundle.resources.assets[index];
+      try {
+        const resp = await api.submission.createChartAsset(sessionId ?? '', {
+          File: asset.file,
+          Name: asset.name,
+          Type: asset.type,
+        });
+
+        if (!resp.ok) {
+          assetStatuses[index] = 3;
+          const json = await resp.json();
+          assetErrors[index] = $t(`error.${json.code}`);
+        } else {
+          assetStatuses[index] = 2;
+        }
+      } catch (error) {
+        assetStatuses[index] = 3;
+        assetErrors[index] = $t('common.error');
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
+      } finally {
+        activeUploads.delete(index);
+
+        // Start next upload if queue isn't empty
+        if (assetQueue.length > 0) {
+          processNext();
+        } else if (activeUploads.size === 0) {
+          // All uploads completed
+          assetsUploading = false;
+          if (assetStatuses.every((status) => status === 2)) {
+            step6();
+          }
+        }
       }
-      assetStatuses[i] = 2;
-    }
-    assetsUploading = false;
-    if (assetStatuses.every((status) => status === 2)) {
-      step = 6;
+    };
+
+    // Start initial batch of uploads
+    const initialBatch = Math.min(concurrency, assetQueue.length);
+    for (let i = 0; i < initialBatch; i++) {
+      processNext();
     }
   };
 </script>
@@ -402,15 +473,19 @@
 
 <div class="bg-base-300 min-h-screen">
   <div class="pt-28 pb-4 min-h-screen flex flex-col justify-start">
-    <ul class="m-4 steps steps-vertical sm:steps-horizontal">
-      {#each steps as s, i}
-        <li class="step step-neutral text-lg font-bold {step >= i ? 'step-primary' : ''}">
-          {$t(s)}
-        </li>
-      {/each}
-    </ul>
+    {#if step <= 5}
+      <ul class="m-4 steps steps-vertical sm:steps-horizontal">
+        {#each steps as s, i}
+          <li class="step step-neutral text-lg font-bold {step >= i ? 'step-primary' : ''}">
+            {$t(s)}
+          </li>
+        {/each}
+      </ul>
+    {/if}
     {#if step === 0}
-      <div class="self-center flex-1 my-8 mx-12 flex flex-col gap-4 justify-center items-center">
+      <div
+        class="self-center flex-1 my-8 mx-12 flex flex-col gap-4 justify-center items-center relative"
+      >
         {#if !zip}
           <input
             type="file"
@@ -423,6 +498,12 @@
             }}
           />
           <p class="opacity-70 text-center max-w-sm">{$t('studio.choose_chart_description')}</p>
+          <a
+            href="/studio/chart-submissions/new"
+            class="absolute bottom-5 hover:underline opacity-70 hover:opacity-100 transition"
+          >
+            {$t('studio.session.upload_chart_only')}
+          </a>
         {:else}
           <span class="loading loading-dots loading-lg"></span>
         {/if}
@@ -501,23 +582,7 @@
             </div>
             <div class="result">
               {#each songMatches as match}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div
-                  class="dropdown dropdown-hover dropdown-bottom"
-                  onmouseenter={() => {
-                    if (!match.audio) {
-                      match.audio = new Audio();
-                      match.audio.src = match.payload.file;
-                    }
-                    match.audio.play();
-                  }}
-                  onmouseleave={() => {
-                    if (match.audio) {
-                      match.audio.pause();
-                      match.audio.currentTime = 0;
-                    }
-                  }}
-                >
+                <div class="dropdown dropdown-hover dropdown-bottom">
                   {#if match.type === 'song'}
                     <Song song={match.payload} target="_blank" />
                   {:else}
@@ -665,25 +730,25 @@
                 <tr>
                   <th
                     scope="col"
-                    class="px-3 py-2 w-1/2 sm:w-1/3 md:w-2/5 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                    class="px-3 py-2 w-1/2 sm:w-1/3 md:w-2/5 text-ellipsis overflow-hidden whitespace-nowrap text-start font-medium uppercase opacity-70"
                   >
                     {$t('chart.asset.name')}
                   </th>
                   <th
                     scope="col"
-                    class="px-3 py-2 w-1/4 md:w-1/5 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                    class="px-3 py-2 w-1/4 md:w-1/5 text-ellipsis overflow-hidden whitespace-nowrap text-start font-medium uppercase opacity-70"
                   >
                     {$t('chart.asset.type')}
                   </th>
                   <th
                     scope="col"
-                    class="hidden sm:table-cell px-3 py-2 w-1/6 text-ellipsis overflow-hidden whitespace-nowrap text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                    class="hidden sm:table-cell px-3 py-2 w-1/6 text-ellipsis overflow-hidden whitespace-nowrap text-start font-medium uppercase opacity-70"
                   >
                     {$t('common.file_size')}
                   </th>
                   <th
                     scope="col"
-                    class="px-3 py-2 text-ellipsis overflow-hidden whitespace-nowrap text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500"
+                    class="px-3 py-2 text-ellipsis overflow-hidden whitespace-nowrap text-end font-medium uppercase opacity-70"
                   >
                     {$t(assetsUploading ? 'common.status' : 'common.actions')}
                   </th>
@@ -693,7 +758,7 @@
                 {#each bundle.resources.assets as asset, i}
                   <tr>
                     <td
-                      class="px-3 py-3 text-ellipsis overflow-hidden whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200"
+                      class="px-3 py-3 text-ellipsis overflow-hidden whitespace-nowrap text-lg font-medium text-gray-800 dark:text-neutral-200"
                     >
                       {asset.file.name}
                     </td>
@@ -701,7 +766,8 @@
                       <div class="relative">
                         <select
                           bind:value={asset.type}
-                          class="form-select py-1 px-2 pe-8 block border-gray-200 rounded-lg text-sm focus:z-10 hover:border-blue-500 hover:ring-blue-500 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-base-100 dark:border-neutral-700 dark:text-neutral-300 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                          class="select select-sm text-base transition border-2 normal-border hover:select-secondary"
+                          disabled={assetStatuses[i] !== 0}
                         >
                           {#each Array(6) as _, i}
                             <option value={i} selected={asset.type === i}>
@@ -712,16 +778,16 @@
                       </div>
                     </td>
                     <td
-                      class="px-3 py-3 hidden sm:table-cell md:min-w-fit w-1/12 text-ellipsis overflow-hidden whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200 transition"
+                      class="px-3 py-3 hidden sm:table-cell md:min-w-fit w-1/12 text-ellipsis overflow-hidden whitespace-nowrap text-gray-800 dark:text-neutral-200 transition"
                     >
                       {humanizeFileSize(asset.file.size)}
                     </td>
-                    <td class="px-3 py-3 min-w-fit text-end text-sm font-medium">
+                    <td class="px-3 py-3 min-w-fit text-end text-lg font-medium">
                       {#if assetsUploading}
                         {#if assetStatuses[i] === 0}
                           <i class="fa-solid fa-clock fa-lg"></i>
                         {:else if assetStatuses[i] === 1}
-                          <span class="loading loading-spinner loading-lg"></span>
+                          <span class="loading loading-spinner"></span>
                         {:else if assetStatuses[i] === 2}
                           <i class="fa-solid fa-check fa-lg text-success"></i>
                         {:else if assetStatuses[i] === 3}
@@ -733,7 +799,7 @@
                         <button
                           type="button"
                           aria-label="Delete"
-                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg transition border border-transparent text-blue-500 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                          class="btn btn-ghost btn-sm btn-square"
                           onclick={() => {
                             bundle.resources.assets = bundle.resources.assets.filter(
                               (a) => a !== asset,
@@ -752,7 +818,7 @@
           <div class="w-full flex gap-2">
             <button
               type="button"
-              class="btn {assetStatuses.some((status) => status === 3)
+              class="grow btn {assetStatuses.some((status) => status === 3)
                 ? 'btn-error'
                 : assetsUploading
                   ? 'btn-ghost'
@@ -765,8 +831,8 @@
               {#if assetStatuses.some((status) => status === 3)}
                 {$t('common.error')}
               {:else if assetsUploading}
-                <span class="loading loading-spinner loading-md"></span>
-                {$t('common.waiting')}
+                <span class="loading loading-dots loading-md"></span>
+                {$t('common.uploading')}
               {:else}
                 <i class="fa-solid fa-upload"></i>
                 {$t('studio.upload')}
@@ -775,9 +841,9 @@
             {#if !assetsUploading && assetStatuses.some((status) => status === 3)}
               <button
                 type="button"
-                class="btn btn-outline border-2 normal-border inline-flex gap-2"
+                class="grow btn btn-outline border-2 normal-border inline-flex gap-2"
                 onclick={() => {
-                  step = 6;
+                  step6();
                 }}
               >
                 {$t('common.continue')}
@@ -786,6 +852,16 @@
             {/if}
           </div>
         </div>
+      </div>
+    {:else if step === 6}
+      <div class="my-auto flex flex-col items-center gap-4">
+        {#if finalizationError}
+          <p class="text-4xl font-bold">{$t('common.error')}</p>
+          <p class="text-xl">{finalizationError}</p>
+        {:else}
+          <span class="loading loading-dots w-24"></span>
+          <p class="text-4xl font-bold">{$t('studio.session.statuses.2')}</p>
+        {/if}
       </div>
     {/if}
     {#if step <= 2}

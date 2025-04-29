@@ -63,7 +63,7 @@ export default class SubmissionAPI {
     return this.api.POST(`/studio/submissions/${id}/chart/assets`, serialize(opts));
   }
 
-  createChart({ id }: IdDto): R<IdDto> {
+  createChart(id: string): R<IdDto> {
     return this.api.POST(`/studio/submissions/${id}/chart/new`);
   }
 }

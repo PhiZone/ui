@@ -38,6 +38,9 @@
     },
   });
 
+  let fileInput = $state<HTMLInputElement | null>(null);
+  let authorNameInput = $state<HTMLInputElement | null>(null);
+
   let isRanked = $state(false);
   let authorName = $state(bundle.metadata.charter ?? '');
   let levelType = $state(bundle.metadata.levelType);
@@ -68,6 +71,20 @@
       ),
     ),
   );
+
+  $effect(() => {
+    if (
+      $charter.isSuccess &&
+      authorNameInput !== null &&
+      authorNameInput.selectionStart !== null &&
+      authorNameInput.selectionEnd !== null
+    ) {
+      newCharterDisplay = authorName.slice(
+        authorNameInput.selectionStart,
+        authorNameInput.selectionEnd,
+      );
+    }
+  });
 </script>
 
 <input type="checkbox" id="studio-charter" class="modal-toggle" />
@@ -137,7 +154,23 @@
           for="studio-charter"
           class="btn border-2 normal-border btn-outline"
           onclick={() => {
-            authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
+            if (!authorNameInput) return;
+            if (
+              authorNameInput.selectionStart !== null &&
+              authorNameInput.selectionEnd !== null &&
+              authorNameInput.selectionEnd - authorNameInput.selectionStart > 0
+            ) {
+              authorNameInput.setRangeText(
+                ` [PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`,
+                authorNameInput.selectionStart,
+                authorNameInput.selectionEnd,
+                'end',
+              );
+              authorName = authorNameInput.value;
+            } else {
+              authorName += ` [PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
+            }
+            authorName = authorName.trim();
           }}
           onkeyup={null}
         >
@@ -156,9 +189,9 @@
   use:enhance
 >
   <input type="hidden" id="id" name="Id" value={id} />
-  <input type="hidden" id="file" name="File" value={bundle.resources.chart} />
   <input type="hidden" id="song_id" name="SongId" value={songId} />
   <input type="hidden" id="song_submission_id" name="SongSubmissionId" value={songSubmissionId} />
+  <input type="file" id="file" name="File" bind:this={fileInput} class="hidden" />
   <div class="flex justify-start items-center my-2 w-full">
     <span class="w-1/4 place-self-center">{$t('chart.is_ranked')}</span>
     <div class="w-3/4 flex items-center">
@@ -304,6 +337,7 @@
           $errors.AuthorName ? 'hover:input-error' : 'hover:input-secondary'
         }`}
         bind:value={authorName}
+        bind:this={authorNameInput}
       />
       <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
       <label
@@ -448,6 +482,12 @@
             ? 'btn-ghost'
             : 'btn-outline border-2 normal-border'} w-full"
         disabled={$submitting}
+        onclick={() => {
+          if (!fileInput) return;
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(bundle.resources.chart);
+          fileInput.files = dataTransfer.files;
+        }}
       >
         {$allErrors.length > 0
           ? $t('common.error')
