@@ -5,6 +5,7 @@
     "2": "私人"
   },
   "accessibility": "開放狀態",
+  "actions": "操作",
   "add": "新增",
   "add_in_bulk": "批量新增",
   "all": "檢視所有",
@@ -16,6 +17,7 @@
   "auto": "自動",
   "back": "返回",
   "back_to_homepage": "返回首頁",
+  "be_patient": "这可能需要一定时间。请耐心等待。",
   "chapters": "章節",
   "charts": "譜面",
   "code": "程式碼",
@@ -64,6 +66,7 @@
   },
   "events": "活動",
   "fetch": "取得",
+  "file_size": "文件大小",
   "footer": {
     "about": "關於",
     "contact": "聯繫我們",
@@ -155,6 +158,7 @@
     "pet": "權限晉升",
     "studio_inaccessible": "請先完成 PhiZone 權限晉升測驗以使用此功能！"
   },
+  "new": "新",
   "off": "關",
   "on": "開",
   "optional": "（選填）",
@@ -209,6 +213,7 @@
   "unnamed": "未命名",
   "unset_as_preferred": "取消首選",
   "update_success": "成功更新訊息！",
+  "uploading": "上传中",
   "users": "使用者",
   "valid_through": "有效期限至 {{date}}",
   "view_illustration": "查看插圖",

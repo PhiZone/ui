@@ -30,7 +30,7 @@
           </h1>
           <SearchBar name="studio.chart_submissions" {searchParams} />
           <a
-            href="/studio/chart-submissions/new"
+            href="/studio/new-submission"
             class="btn text-lg btn-xl border-2 btn-outline normal-border"
           >
             {$t('studio.upload_chart')}

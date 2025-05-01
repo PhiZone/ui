@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { t } from '$lib/translations/config';
-  import { getAvatar, getUserColor, getUserPrivilege, toLocalTime } from '$lib/utils';
+  import { getAvatar, getUserColor, toLocalTime } from '$lib/utils';
 </script>
 
 <div
@@ -153,7 +153,7 @@
                 <!-- <span class="badge">{userDetail.tag}</span> -->
               </a>
             </li>
-            {#if getUserPrivilege(user.role) < 3}
+            <!-- {#if getUserPrivilege(user.role) < 3}
               <li class="disabled">
                 <div
                   class="tooltip tooltip-left tooltip-warning text-left"
@@ -162,11 +162,11 @@
                   <p>{$t('common.studio')}</p>
                 </div>
               </li>
-            {:else}
-              <li>
-                <a href="/studio">{$t('common.studio')}</a>
-              </li>
-            {/if}
+            {:else} -->
+            <li>
+              <a href="/studio">{$t('common.studio')}</a>
+            </li>
+            <!-- {/if} -->
             <li>
               <a href="/me/settings">{$t('common.settings')}</a>
             </li>

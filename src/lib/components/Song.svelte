@@ -11,10 +11,11 @@
 
   interface Props {
     song: SongDto | SongAdmitteeDto;
+    target?: '_self' | '_blank';
     kind?: 'full' | 'inline';
     showLike?: boolean;
   }
-  let { song, kind = 'full', showLike = true }: Props = $props();
+  let { song, target = '_self', kind = 'full', showLike = true }: Props = $props();
 
   let composer = $derived(
     song.isOriginal && song.authorName
@@ -31,6 +32,7 @@
     <a
       class="card text-left w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
       href={`/songs/${song.id}`}
+      {target}
     >
       <figure class="h-[167px] relative rounded-none">
         <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
@@ -95,6 +97,7 @@
 {:else if kind === 'inline'}
   <a
     href="/songs/{song.id}"
+    {target}
     class="w-full flex items-center px-5 h-16 {'eventDescription' in song && song.eventDescription
       ? 'tooltip tooltip-bottom'
       : ''}"

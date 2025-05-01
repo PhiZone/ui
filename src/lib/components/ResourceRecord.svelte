@@ -5,14 +5,15 @@
 
   interface Props {
     resourceRecord: ResourceRecordDto;
+    target?: '_self' | '_blank';
   }
-  let { resourceRecord }: Props = $props();
+  let { resourceRecord, target = '_self' }: Props = $props();
 </script>
 
 <div
   class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
-  <a href={`/resource-records/${resourceRecord.id}`}>
+  <a href={`/resource-records/${resourceRecord.id}`} {target}>
     <div class="card-body py-6 gap-0.5">
       {#if resourceRecord.strategy === 0}
         <div

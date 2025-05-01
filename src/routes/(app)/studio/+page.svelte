@@ -43,12 +43,15 @@
         {$t('studio.description')}
       </p>
       <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mx-auto">
-        <a
-          href="/studio/chart-submissions/new"
-          class="btn lg:btn-lg btn-outline border-2 normal-border"
-        >
-          {$t('studio.upload_chart')}
-        </a>
+        <div class="indicator">
+          <span class="indicator-item badge badge-success">{$t('common.new')}</span>
+          <a
+            href="/studio/new-submission"
+            class="btn lg:btn-lg btn-success btn-outline border-2 normal-border"
+          >
+            {$t('studio.upload_chart')}
+          </a>
+        </div>
         <a
           href="/studio/song-submissions/new"
           class="btn lg:btn-lg btn-outline border-2 normal-border"

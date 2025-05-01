@@ -13,8 +13,10 @@
 
   interface Props {
     song: SongSubmissionDto;
+    target?: '_self' | '_blank';
+    showDateUpdated?: boolean;
   }
-  let { song }: Props = $props();
+  let { song, target = '_self', showDateUpdated = true }: Props = $props();
 
   let composer = $derived(
     song.originalityProof ? richtext(song.authorName ?? '') : readable(song.authorName),
@@ -23,11 +25,15 @@
 </script>
 
 <div
-  class="card w-80 bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
+  class="card w-80 bg-base-100 transition border-2 normal-border hover:border-primary hover:shadow-lg"
 >
-  <a href={`/studio/song-submissions/${song.id}`}>
+  <a href={`/studio/song-submissions/${song.id}`} {target}>
     <figure class="h-[167px] relative">
-      <img src={getCompressedImage(song.illustration)} alt="Illustration" class="object-fill" />
+      <img
+        src={getCompressedImage(song.illustration)}
+        alt="Illustration"
+        class="object-fill rounded-t-2xl"
+      />
       {#if song.originalityProof}
         <div class="absolute bottom-2 left-2 w-fit h-fit">
           <button class="btn btn-accent btn-sm text-xl no-animation">
@@ -100,12 +106,14 @@
         </span>
         {parseDateTime(song.dateCreated, true, user?.language)}
       </p>
-      <p class="truncate">
-        <span class="badge mr-1">
-          {$t('common.date_updated')}
-        </span>
-        {parseDateTime(song.dateUpdated, true, user?.language)}
-      </p>
+      {#if showDateUpdated}
+        <p class="truncate">
+          <span class="badge mr-1">
+            {$t('common.date_updated')}
+          </span>
+          {parseDateTime(song.dateUpdated, true, user?.language)}
+        </p>
+      {/if}
     </div>
   </a>
 </div>
