@@ -7,6 +7,5 @@ build:
   - echo "CLIENT_ID = 'public'" >> .env
   - echo "CLIENT_SECRET = ''" >> .env
   - echo "PUBLIC_ENV = 'taptap'" >> .env
-  - cat .env
   - npm run build
 run: HOST=0.0.0.0 PORT=$LEANCLOUD_APP_PORT BODY_SIZE_LIMIT=Infinity node build
