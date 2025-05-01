@@ -1,12 +1,12 @@
 runtime: nodejs
 install: npm install
 build:
-  - echo -n "PUBLIC_API_BASE = 'https://api.phizone.cn'" >> .env
-  - echo -n "PUBLIC_AVATAR = 'https://res.phizone.cn/akFOXszKg7n9DQXWDBFA4AEJ39MtdCWo/Transparent_Akkarin.webp'" >> .env
-  - echo -n "PUBLIC_DEDICATED_PLAYER_ENDPOINT = 'https://player.phizone.cn/play'" >> .env
-  - echo -n "CLIENT_ID = 'public'" >> .env
-  - echo -n "CLIENT_SECRET = ''" >> .env
-  - echo -n "PUBLIC_ENV = 'taptap'" >> .env
+  - echo "PUBLIC_API_BASE = 'https://api.phizone.cn'\n" >> .env
+  - echo "PUBLIC_AVATAR = 'https://res.phizone.cn/akFOXszKg7n9DQXWDBFA4AEJ39MtdCWo/Transparent_Akkarin.webp'\n" >> .env
+  - echo "PUBLIC_DEDICATED_PLAYER_ENDPOINT = 'https://player.phizone.cn/play'\n" >> .env
+  - echo "CLIENT_ID = 'public'\n" >> .env
+  - echo "CLIENT_SECRET = ''\n" >> .env
+  - echo "PUBLIC_ENV = 'taptap'\n" >> .env
   - cat .env
   - npm run build
 run: HOST=0.0.0.0 PORT=LEANCLOUD_APP_PORT BODY_SIZE_LIMIT=Infinity node build
