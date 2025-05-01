@@ -4,6 +4,8 @@ build:
   - echo "PUBLIC_API_BASE = 'https://api.phizone.cn'" >> .env
   - echo "PUBLIC_AVATAR = 'https://res.phizone.cn/akFOXszKg7n9DQXWDBFA4AEJ39MtdCWo/Transparent_Akkarin.webp'" >> .env
   - echo "PUBLIC_DEDICATED_PLAYER_ENDPOINT = 'https://player.phizone.cn/play'" >> .env
+  - echo "PUBLIC_ICP_LICENSE = '鲁ICP备2023021149号'" >> .env
+  - echo "PUBLIC_SECURITY_LICENSE = '鲁公网安备37018102000886号'" >> .env
   - echo "CLIENT_ID = 'public'" >> .env
   - echo "CLIENT_SECRET = ''" >> .env
   - echo "PUBLIC_ENV = 'taptap'" >> .env
