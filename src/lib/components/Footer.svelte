@@ -1,5 +1,6 @@
 <script lang="ts">
   import { PUBLIC_ICP_LICENSE, PUBLIC_SECURITY_LICENSE } from '$env/static/public';
+  import { PUBLIC_PLAYER_PATH } from '$env/static/public';
   import { locale, t } from '$lib/translations/config';
 
   const emailAddress = 'contact@phizone.cn';
@@ -11,7 +12,7 @@
     <a href="/" class="link link-hover">
       {$t('common.footer.homepage')}
     </a>
-    <a href="/player" class="link link-hover">
+    <a href={PUBLIC_PLAYER_PATH} class="link link-hover">
       {$t('common.footer.player')}
     </a>
     <a
