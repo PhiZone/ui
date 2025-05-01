@@ -13,7 +13,7 @@
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { PUBLIC_API_BASE } from '$env/static/public';
+  import { PUBLIC_API_BASE, PUBLIC_PLAYER_PATH } from '$env/static/public';
   import { ResponseDtoStatus } from '$lib/api/types';
   import ChartSubmissionForm from '$lib/components/ChartSubmissionForm.svelte';
   import ResourceRecord from '$lib/components/ResourceRecord.svelte';
@@ -868,7 +868,7 @@
         {#if zip}
           <iframe
             class="w-full h-full rounded-2xl"
-            src="/player"
+            src={PUBLIC_PLAYER_PATH}
             title="PhiZone Player"
             bind:this={iframe}
           ></iframe>

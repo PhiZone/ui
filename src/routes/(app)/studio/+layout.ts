@@ -17,7 +17,7 @@ export const load = async ({ parent, url }) => {
       const data = await resp.json();
       redirect(
         307,
-        `https://studio.phi.zone/session/login?token=${data.data.token}&redirect=${url.pathname + url.search}`,
+        `https://www.phi.zone/session/login?token=${data.data.token}&redirect=${url.pathname + url.search}`,
       );
     }
   }
