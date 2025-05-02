@@ -8,7 +8,7 @@
     "asset": "Asset",
     "file": "File",
     "name": "Name",
-    "type": "资源类型",
+    "type": "Asset Type",
     "types": {
       "0": "Image",
       "1": "Audio",
