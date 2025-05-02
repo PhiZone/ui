@@ -135,6 +135,12 @@ body {
   width: unset;
 }
 
+.daisy-ui-2xl .rangeSlider {
+  overflow: visible;
+  width: unset;
+  @apply text-2xl;
+}
+
 .svelecte {
   .is-open {
     z-index: 5 !important;
