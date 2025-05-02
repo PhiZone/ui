@@ -49,7 +49,7 @@
         </h2>
         {#if song.status === 1}
           <div
-            class="tooltip tooltip-right tooltip-success"
+            class="flex items-center tooltip tooltip-right tooltip-success"
             data-tip={$t('studio.submission.statuses.1')}
           >
             <div class="btn btn-xs btn-circle btn-success no-animation">
@@ -58,7 +58,7 @@
           </div>
         {:else if song.status === 2}
           <div
-            class="tooltip tooltip-right tooltip-error"
+            class="flex items-center tooltip tooltip-right tooltip-error"
             data-tip={$t('studio.submission.statuses.2')}
           >
             <div class="btn btn-xs btn-circle btn-error no-animation">
@@ -67,12 +67,17 @@
           </div>
         {:else}
           <div
-            class="tooltip tooltip-right tooltip-warning"
+            class="flex items-center tooltip tooltip-right tooltip-warning"
             data-tip={$t('studio.submission.statuses.0')}
           >
             <div class="btn btn-xs btn-circle btn-warning no-animation">
               <i class="fa-solid fa-exclamation"></i>
             </div>
+          </div>
+        {/if}
+        {#if song.representationId === null}
+          <div class="btn btn-xs btn-success text-base uppercase no-animation">
+            {$t('common.new')}
           </div>
         {/if}
       </div>
