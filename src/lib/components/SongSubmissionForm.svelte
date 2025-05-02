@@ -691,6 +691,7 @@
       <div class="flex w-3/4">
         <input
           type="number"
+          step="any"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -713,6 +714,7 @@
         />
         <input
           type="number"
+          step="any"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -735,6 +737,7 @@
         />
         <input
           type="number"
+          step="any"
           onkeydown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
