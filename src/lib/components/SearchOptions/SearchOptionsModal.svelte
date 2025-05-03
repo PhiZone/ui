@@ -12,7 +12,7 @@
   }
   let { type, params = $bindable(new URLSearchParams()) }: Props = $props();
 
-  let filters = $derived(getFullFilters(type, true));
+  let filters = $state(getFullFilters(type, true));
   let data = $derived(getFilterValue(filters));
 
   $effect(() => {
