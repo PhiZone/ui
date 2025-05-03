@@ -4,10 +4,17 @@
   interface Props {
     tag: TagDto | string;
     full?: boolean;
+    target?: '_self' | '_blank';
     removeFunction?: () => void;
     removeHover?: boolean;
   }
-  let { tag, full = false, removeFunction, removeHover = $bindable(false) }: Props = $props();
+  let {
+    tag,
+    full = false,
+    target = '_self',
+    removeFunction,
+    removeHover = $bindable(false),
+  }: Props = $props();
 </script>
 
 {#if !tag || typeof tag === 'string'}
@@ -38,6 +45,7 @@
   <a
     class="card w-56 h-[127.38px] bg-base-100 overflow-hidden transition border-2 normal-border hover:border-primary hover:shadow-lg"
     href="/tags/{tag.id}"
+    {target}
   >
     <div class="card-body p-4 gap-0.5">
       <div class="flex flex-col mb-2">
@@ -60,6 +68,7 @@
 {:else}
   <a
     href="/tags/{tag.id}"
+    {target}
     class="badge badge-neutral transition {tag.description
       ? 'hover:badge-accent'
       : 'hover:badge-secondary'} {removeHover

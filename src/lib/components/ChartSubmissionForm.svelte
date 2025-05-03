@@ -465,7 +465,7 @@
       </div>
       <div class="w-3/4 result">
         {#each $existingTags.data.data as tag}
-          <Tag {tag} full />
+          <Tag {tag} full target="_blank" />
         {/each}
       </div>
     </div>
