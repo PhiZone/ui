@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HubConnectionBuilder } from '@microsoft/signalr';
-  import { onMount, untrack } from 'svelte';
+  import { onDestroy, onMount, untrack } from 'svelte';
   import WaveSurfer from 'wavesurfer.js';
   import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
 
@@ -403,6 +403,19 @@
         }
       }
     });
+  });
+
+  onDestroy(() => {
+    if (wsUpl) {
+      wsUpl.destroy();
+    }
+    if (wsExs) {
+      wsExs.destroy();
+    }
+    if (timer) {
+      clearTimeout(timer);
+    }
+    tracker.stop();
   });
 
   const uploadAssets = async (concurrency = 3) => {
