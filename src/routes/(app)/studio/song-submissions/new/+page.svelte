@@ -267,6 +267,7 @@
         <label
           for="studio-composer"
           class="btn border-2 normal-border btn-outline"
+          class:btn-disabled={!newComposerDisplay}
           onclick={() => {
             authorName += `[PZUser:${newComposerId}:${newComposerDisplay}:PZRT]`;
           }}

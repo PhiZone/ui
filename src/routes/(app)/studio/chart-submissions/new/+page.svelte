@@ -155,6 +155,7 @@
         <label
           for="studio-charter"
           class="btn border-2 normal-border btn-outline"
+          class:btn-disabled={!newCharterDisplay}
           onclick={() => {
             authorName += `[PZUser:${newCharterId}:${newCharterDisplay}:PZRT]`;
           }}
