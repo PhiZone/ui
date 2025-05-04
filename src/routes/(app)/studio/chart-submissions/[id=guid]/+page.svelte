@@ -165,6 +165,10 @@
       ),
     ),
   );
+
+  $effect(() => {
+    suggestedDifficulty = $submissionQuery.data?.data.difficulty ?? 0;
+  });
 </script>
 
 <svelte:head>
