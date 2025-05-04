@@ -412,7 +412,9 @@
                     {$t('common.form.chart_difficulty_2')}
                   </span>
                   <input
-                    type="text"
+                    type="number"
+                    step="0.1"
+                    min="0"
                     onkeydown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
