@@ -770,7 +770,7 @@
             }`}
             oninput={(e) => {
               const aspectRatio1 = parseInt(e.currentTarget.value);
-              patch = applyPatch(patch, 'replace', '/aspectRatio/0', aspectRatio1);
+              patch = applyPatch(patch, 'replace', '/aspectRatio', [aspectRatio1, aspectRatio2]);
             }}
           >
             <option value={0}>{$t('common.auto')}</option>
@@ -792,7 +792,7 @@
             }`}
             oninput={(e) => {
               const aspectRatio2 = parseInt(e.currentTarget.value);
-              patch = applyPatch(patch, 'replace', '/aspectRatio/1', aspectRatio2);
+              patch = applyPatch(patch, 'replace', '/aspectRatio', [aspectRatio1, aspectRatio2]);
             }}
           >
             {#if aspectRatio1 > 0}
