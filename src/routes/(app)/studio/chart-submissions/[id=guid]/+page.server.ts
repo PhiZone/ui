@@ -32,11 +32,12 @@ type VoteSchema = z.infer<typeof voteSchema>;
 type CollabSchema = z.infer<typeof collabSchema>;
 type CollectionSchema = z.infer<typeof collectionSchema>;
 
-export const load = async () => {
+export const load = async ({ cookies }) => {
   const voteForm = await superValidate(zod(voteSchema));
   const collabForm = await superValidate(zod(collabSchema));
   const collectionForm = await superValidate(zod(collectionSchema));
-  return { voteForm, collabForm, collectionForm };
+  const preferredPlayConfiguration = cookies.get('preferred_play_configuration');
+  return { voteForm, collabForm, collectionForm, preferredPlayConfiguration };
 };
 
 export const actions = {

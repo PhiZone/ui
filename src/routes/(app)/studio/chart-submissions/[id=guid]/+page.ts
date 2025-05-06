@@ -13,6 +13,11 @@ export const load = async ({ params, url, parent, data }) => {
     queryClient.prefetchQuery(api.chart.submission.asset.listAll({ chartId: id })),
     queryClient.prefetchQuery(api.service.list({ rangeTargetType: [1] })),
   ]);
+  if (data.preferredPlayConfiguration) {
+    await queryClient.prefetchQuery(
+      api.playConfiguration.list({ rangeId: [data.preferredPlayConfiguration] }),
+    );
+  }
   return {
     searchParams,
     id,

@@ -26,6 +26,8 @@
   import { richtext } from '$lib/richtext';
   import { t } from '$lib/translations/config';
   import { getLevelDisplay, getUserPrivilege, parseDateTime } from '$lib/utils';
+  import type { PlayConfigurationDto } from '$lib/api/playConfiguration.js';
+  import queryString from 'query-string';
 
   let { data } = $props();
   let { id, user, api } = $derived(data);
@@ -86,6 +88,7 @@
   let voteOpen = $state(false);
   let collabOpen = $state(false);
   let collectionOpen = $state(false);
+  let preferredPlayConfiguration = $state<string | null>(null);
 
   let submissionQuery = $derived(createQuery(api.chart.submission.info({ id })));
   let uploader = $derived(
@@ -132,6 +135,11 @@
   let servicesQuery = $derived(createQuery(api.service.list({ rangeTargetType: [1] })));
   let assets = $derived(createQuery(api.chart.submission.asset.listAll({ chartId: id })));
   let charter = $derived(richtext($submissionQuery.data?.data.authorName ?? ''));
+  let preferredPlayConfigurationQuery = $derived(
+    data.preferredPlayConfiguration
+      ? createQuery(api.playConfiguration.list({ rangeId: [data.preferredPlayConfiguration] }))
+      : null,
+  );
 
   let averageSuggestedDifficulty = $derived(
     $votesQuery.isSuccess && $submissionQuery.isSuccess
@@ -168,6 +176,23 @@
 
   $effect(() => {
     suggestedDifficulty = $submissionQuery.data?.data.difficulty ?? 0;
+  });
+
+  $effect(() => {
+    if ($preferredPlayConfigurationQuery?.isSuccess) {
+      const {
+        id: _,
+        name: __,
+        ownerId: ___,
+        dateCreated: ____,
+        chartMirroring,
+        ...rest
+      } = $preferredPlayConfigurationQuery.data.data[0];
+      preferredPlayConfiguration = queryString.stringify({
+        ...rest,
+        chartFlipping: chartMirroring,
+      });
+    }
   });
 </script>
 
@@ -716,7 +741,9 @@
                   )}&title={submission.title ??
                     song?.title}&levelType={submission.levelType}&level={submission.level}&difficulty={getLevelDisplay(
                     submission.difficulty,
-                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}"
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}{preferredPlayConfiguration
+                    ? `&${preferredPlayConfiguration}`
+                    : ''}"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >
@@ -730,7 +757,9 @@
                   )}&title={submission.title ??
                     song?.title}&levelType={submission.levelType}&level={submission.level}&difficulty={getLevelDisplay(
                     submission.difficulty,
-                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}"
+                  )}&composer={song?.authorName}&illustrator={song?.illustrator}&charter={submission.authorName}&assetNames={assetNames}&assetTypes={assetTypes}&assets={assetUrls}{preferredPlayConfiguration
+                    ? `&${preferredPlayConfiguration}`
+                    : ''}"
                   class="btn border-2 normal-border btn-outline text-lg w-32"
                   target="_target"
                 >
