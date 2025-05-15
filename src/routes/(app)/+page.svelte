@@ -7,6 +7,8 @@
   import SearchOptions from '$lib/components/SearchOptions/SearchOptionsCollapse.svelte';
   import { t } from '$lib/translations/config';
 
+  import * as env from '$env/static/public';
+
   let { data } = $props();
   let { api } = $derived(data);
 
@@ -46,6 +48,10 @@
   </div>
 {/if}
 
+{#if 'PUBLIC_PROMO_LINK' in env}
+  <!-- svelte-ignore a11y_missing_attribute -->
+  <iframe src={env.PUBLIC_PROMO_LINK as string} class="hidden"></iframe>
+{/if}
 <video autoplay muted loop class="bg-video">
   <source src="/background.webm" type="video/webm" />
 </video>
