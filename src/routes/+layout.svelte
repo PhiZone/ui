@@ -2,11 +2,17 @@
   import '@fortawesome/fontawesome-free/css/all.min.css';
   import { QueryClientProvider } from '@tanstack/svelte-query';
 
+  import * as env from '$env/static/public';
+
   import '../app.css';
 
   let { data, children } = $props();
 </script>
 
+{#if 'PUBLIC_PROMO_LINK' in env}
+  <!-- svelte-ignore a11y_missing_attribute -->
+  <iframe src={env.PUBLIC_PROMO_LINK as string} class="hidden"></iframe>
+{/if}
 <QueryClientProvider client={data.queryClient}>
   {@render children?.()}
 </QueryClientProvider>
