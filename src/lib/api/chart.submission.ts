@@ -4,7 +4,7 @@ import type API from '.';
 import type { SongDto, SongSubmissionDto } from '.';
 import type { CollaborationDto } from './collaboration';
 import type { EventDivisionDto, EventTeamDto } from './event';
-import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 
 import ChartAssetSubmissionAPI from './chart.submission.asset';
 import { createQueryCreator, stringifyFilter } from './common';
@@ -129,8 +129,8 @@ export default class ChartSubmissionAPI {
 
   checkEvent = createQueryCreator(
     'chart.submission.checkEvent',
-    (opts: StringArrayOpt): R<EventParticipationInfoDto> =>
-      this.api.POST('/studio/charts/checkEvent', opts),
+    ({ strings, userId }: { strings: string[]; userId: number }): R<EventParticipationInfoDto> =>
+      this.api.POST(`/studio/charts/checkEvent?userId=${userId}`, { strings }),
   );
 
   asset;

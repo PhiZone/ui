@@ -4,7 +4,7 @@ import type API from '.';
 import type { CollaborationDto } from './collaboration';
 import type { EventDivisionDto, EventTeamDto } from './event';
 import type { SongRecognitionSummaryDto } from './submission';
-import type { FileUpdateOpts, FilterBase, PatchElement, R, StringArrayOpt } from './types';
+import type { FileUpdateOpts, FilterBase, PatchElement, R } from './types';
 
 import { createQueryCreator, stringifyFilter } from './common';
 
@@ -148,7 +148,7 @@ export default class SongSubmissionAPI {
 
   checkEvent = createQueryCreator(
     'song.submission.checkEvent',
-    (opts: StringArrayOpt): R<EventParticipationInfoDto> =>
-      this.api.POST('/studio/songs/checkEvent', opts),
+    ({ strings, userId }: { strings: string[]; userId: number }): R<EventParticipationInfoDto> =>
+      this.api.POST(`/studio/songs/checkEvent?userId=${userId}`, { strings }),
   );
 }

@@ -160,7 +160,10 @@
   let eventParticipation = $derived(
     createQuery(
       api.chart.submission.checkEvent(
-        { strings: $submissionQuery.data?.data.tags ?? [] },
+        {
+          strings: $submissionQuery.data?.data.tags ?? [],
+          userId: $submissionQuery.data?.data.ownerId ?? user.id,
+        },
         { enabled: $submissionQuery.isSuccess, retry: 0 },
       ),
     ),
