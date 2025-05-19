@@ -94,7 +94,8 @@
         </button>
       </div>
       <div
-        class="absolute bottom-2 right-2 badge badge-lg badge-outline {division.status == 2
+        class="absolute bottom-2 right-2 badge badge-lg badge-outline backdrop-blur-md {division.status ==
+        2
           ? 'badge-success'
           : division.status == 3
             ? 'badge-error'
