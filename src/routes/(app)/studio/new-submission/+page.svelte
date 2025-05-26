@@ -22,6 +22,7 @@
   import SongSubmissionForm from '$lib/components/SongSubmissionForm.svelte';
   import { SONG_MATCH_SCORE_THRESHOLD } from '$lib/constants';
   import { t } from '$lib/translations/config';
+  import { createQuery } from '@tanstack/svelte-query';
 
   interface InputResponseMessage {
     type: 'inputResponse';
@@ -94,8 +95,7 @@
   let isAndroidOrIos = $state(false);
   let iframe: HTMLIFrameElement | undefined = $state(undefined);
   let zip: File | null = $state(null);
-  // svelte-ignore non_reactive_update
-  let bundle: ChartBundle;
+  let bundle: ChartBundle = $state({} as ChartBundle);
 
   let sessionId = $state<string | undefined>();
   let showProgress = $state(true);
@@ -124,6 +124,16 @@
   let assetErrors = $state<string[]>([]);
 
   let finalizationError = $state<string | null>(null);
+
+  let exactSongMatch = $derived(
+    createQuery(
+      api.song.list({
+        perPage: 1,
+        equalsTitle: bundle?.metadata?.title ?? '',
+        containsAuthorName: bundle?.metadata?.composer ?? '',
+      }),
+    ),
+  );
 
   const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
 
@@ -279,6 +289,7 @@
             }
             sessionId = (await sessionResp.json()).data.id;
             await tracker.invoke('Register', sessionId);
+            console.log(bundle);
             const songResp = await api.submission.uploadSong({
               id: sessionId,
               Song: bundle.resources.song,
@@ -289,15 +300,21 @@
               return;
             }
             const matchResults = (await songResp.json()).data;
-            songMatches = matchResults.songSubmissionMatches
-              .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
-              .map((match) => ({
-                type: 'songSubmission',
-                payload: match,
-              }));
+            songMatches = songMatches.concat(
+              matchResults.songSubmissionMatches
+                .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
+                .map((match) => ({
+                  type: 'songSubmission',
+                  payload: match,
+                })),
+            );
             songMatches = songMatches.concat(
               matchResults.songMatches
-                .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
+                .filter(
+                  (match) =>
+                    match.score >= SONG_MATCH_SCORE_THRESHOLD &&
+                    songMatches.every((m) => m.payload.id !== match.id),
+                )
                 .map((match) => ({
                   type: 'song',
                   payload: match,
@@ -318,7 +335,7 @@
           return;
         }
         if (message.type === 'bundle') {
-          if (!bundle) {
+          if (!bundle || Object.keys(bundle).length === 0) {
             bundle = message.payload;
             if (bundle.metadata.difficulty === null && bundle.metadata.level !== null) {
               const levelParts = bundle.metadata.level.split(' ');
@@ -401,6 +418,22 @@
             );
           });
         }
+      }
+    });
+
+    $effect(() => {
+      if (
+        bundle?.metadata?.title &&
+        bundle?.metadata?.composer &&
+        $exactSongMatch.data &&
+        $exactSongMatch.data.data.length > 0
+      ) {
+        untrack(() => {
+          songMatches.push({
+            type: 'song',
+            payload: { score: Infinity, ...$exactSongMatch.data.data[0] },
+          });
+        });
       }
     });
   });
