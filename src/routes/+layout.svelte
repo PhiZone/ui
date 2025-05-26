@@ -1,12 +1,14 @@
 <script lang="ts">
+  import '../app.css';
   import '@fortawesome/fontawesome-free/css/all.min.css';
   import { QueryClientProvider } from '@tanstack/svelte-query';
-
   import * as env from '$env/static/public';
 
-  import '../app.css';
+  import { injectAnalytics } from '@vercel/analytics/sveltekit';
+  import { dev } from '$app/environment';
 
   let { data, children } = $props();
+  injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 {#if 'PUBLIC_PROMO_LINK' in env}
