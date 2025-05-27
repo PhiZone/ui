@@ -89,8 +89,8 @@
   class="rounded-lg transition border-2 normal-border hover:shadow-lg overflow-hidden bg-cover bg-center bg-no-repeat"
   style:background-image="url({illustration})"
 >
-  <div class="relative">
-    <img src={illustration} class="object-fill" alt="Illustration" />
+  <div class="aspect-video backdrop-blur-3xl relative" style:--tw-backdrop-blur="blur(96px)">
+    <img src={illustration} class="w-full h-full object-fill" alt="Illustration" />
     {#if line}
       <span
         class="absolute left-4 bottom-4 px-2 py-0.5 w-fit bg-black bg-opacity-60 backdrop-blur-lg rounded-full text-lg"
