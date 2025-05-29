@@ -8,7 +8,7 @@
   import { dev } from '$app/environment';
 
   let { data, children } = $props();
-  injectAnalytics({ mode: dev ? 'development' : 'production' });
+  if (env.PUBLIC_ENV === 'vercel') injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 {#if 'PUBLIC_PROMO_LINK' in env}
