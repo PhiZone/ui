@@ -7,6 +7,7 @@
   import type {
     ResourceRecordMatchDto,
     SongMatchDto,
+    SongRecognitionSummaryDto,
     SongSubmissionMatchDto,
   } from '$lib/api/submission';
   import type { ChartBundle } from '$lib/types';
@@ -106,6 +107,7 @@
   // let bytesRead = $state(0);
   let timer = $state<NodeJS.Timeout | null>(null);
 
+  let matchResultsProcessed = $state(false);
   let songMatches = $state<(SongMatch | SongSubmissionMatch)[]>([]);
   let resourceRecordMatches = $state<ResourceRecordMatchDto[] | null>([]);
 
@@ -237,6 +239,38 @@
     );
   };
 
+  const processMatchResults = (matchResults: SongRecognitionSummaryDto) => {
+    if (matchResultsProcessed) return;
+    songMatches = songMatches.concat(
+      matchResults.songSubmissionMatches
+        .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
+        .map((match) => ({
+          type: 'songSubmission',
+          payload: match,
+        })),
+    );
+    songMatches = songMatches.concat(
+      matchResults.songMatches
+        .filter(
+          (match) =>
+            match.score >= SONG_MATCH_SCORE_THRESHOLD &&
+            songMatches.every((m) => m.payload.id !== match.id),
+        )
+        .map((match) => ({
+          type: 'song',
+          payload: match,
+        })),
+    );
+    songMatches.sort((a, b) => b.payload.score - a.payload.score);
+    resourceRecordMatches = matchResults.resourceRecordMatches.filter(
+      (match) => match.score >= SONG_MATCH_SCORE_THRESHOLD,
+    );
+    if (resourceRecordMatches.length === 0) {
+      resourceRecordMatches = null;
+    }
+    matchResultsProcessed = true;
+  };
+
   onMount(() => {
     isAndroidOrIos =
       (() => {
@@ -263,6 +297,8 @@
         return false;
       })();
 
+    tracker.start();
+
     addEventListener(
       'message',
       async (
@@ -281,7 +317,6 @@
             confirm($t('studio.multiple_charts'))
           ) {
             step = 1;
-            await tracker.start();
             const sessionResp = await api.submission.createSession();
             if (!sessionResp.ok) {
               alert($t(`error.${(await sessionResp.json()).code}`));
@@ -299,34 +334,7 @@
               alert($t(`error.${(await songResp.json()).code}`));
               return;
             }
-            const matchResults = (await songResp.json()).data;
-            songMatches = songMatches.concat(
-              matchResults.songSubmissionMatches
-                .filter((match) => match.score >= SONG_MATCH_SCORE_THRESHOLD)
-                .map((match) => ({
-                  type: 'songSubmission',
-                  payload: match,
-                })),
-            );
-            songMatches = songMatches.concat(
-              matchResults.songMatches
-                .filter(
-                  (match) =>
-                    match.score >= SONG_MATCH_SCORE_THRESHOLD &&
-                    songMatches.every((m) => m.payload.id !== match.id),
-                )
-                .map((match) => ({
-                  type: 'song',
-                  payload: match,
-                })),
-            );
-            songMatches.sort((a, b) => b.payload.score - a.payload.score);
-            resourceRecordMatches = matchResults.resourceRecordMatches.filter(
-              (match) => match.score >= SONG_MATCH_SCORE_THRESHOLD,
-            );
-            if (resourceRecordMatches.length === 0) {
-              resourceRecordMatches = null;
-            }
+            processMatchResults((await songResp.json()).data);
           }
           return;
         }
@@ -392,6 +400,8 @@
         }
       },
     );
+
+    tracker.on('ReceiveResult', (dto: SongRecognitionSummaryDto) => processMatchResults(dto));
 
     $effect(() => {
       if (step === 1 || step === 3) {
