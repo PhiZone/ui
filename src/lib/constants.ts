@@ -17,7 +17,7 @@ export const USER_LEVELS = [
 
 export const LEVEL_TYPES = ['EZ', 'HD', 'IN', 'AT', 'SP'];
 
-export const SONG_MATCH_SCORE_THRESHOLD = 5e3;
+export const SONG_MATCH_SCORE_THRESHOLD = 8e3;
 
 export const TAG_JOINER = ':::';
 
