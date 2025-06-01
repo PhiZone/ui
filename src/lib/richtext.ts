@@ -46,13 +46,13 @@ export function transform(content: string): string {
       .replaceAll(
         /\[PZRecord:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
         (_, id: string, display: string) =>
-          `<a href="/records/${id}" class="richtext-link richtext-chart">${display}</a>`,
+          `<a href="/records/${id}" class="richtext-link richtext-record">${display}</a>`,
       )
       // application
       .replaceAll(
         /\[PZApplication:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
         (_, id: string, display: string) =>
-          `<a href="/applications/${id}" class="richtext-link richtext-chart">${display}</a>`,
+          `<a href="/applications/${id}" class="richtext-link richtext-application">${display}</a>`,
       )
       // comment
       .replaceAll(
@@ -94,13 +94,13 @@ export function transform(content: string): string {
       .replaceAll(
         /\[PZSongSubmission:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
         (_, id: string, display: string) =>
-          `<a href="/studio/song-submissions/${id}" class="richtext-link richtext-song-upload">${display}</a>`,
+          `<a href="/studio/song-submissions/${id}" class="richtext-link richtext-song-submission">${display}</a>`,
       )
       // chart submission
       .replaceAll(
         /\[PZChartSubmission:([-0-9a-fA-F]+):(.+?):PZRT\]/gi,
         (_, id: string, display: string) =>
-          `<a href="/studio/chart-submissions/${id}" class="richtext-link richtext-chart-upload">${display}</a>`,
+          `<a href="/studio/chart-submissions/${id}" class="richtext-link richtext-chart-submission">${display}</a>`,
       )
       // collaboration
       .replaceAll(
