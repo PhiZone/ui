@@ -17,8 +17,14 @@
         '.phizone.cn',
         'phizone-ui.vercel.app',
         'phizone-ui.pages.dev',
-        'localhost',
-      ].some((host) => (host[0] === '.' ? targetUrl.host.endsWith(host) : targetUrl.host === host))
+        'localhost:',
+      ].some((host) =>
+        host[0] === '.'
+          ? targetUrl.host.endsWith(host)
+          : host[host.length - 1] === ':'
+            ? targetUrl.host.startsWith(host)
+            : targetUrl.host === host,
+      )
     )
       return null;
 
