@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/player/:path*(/)?", "destination": "https://phizone-player.vercel.app/:path*" },
-    { "source": "/player/", "destination": "https://phizone-player.vercel.app/" }
-  ]
-}
