@@ -6,19 +6,18 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/state';
   import { t } from '$lib/translations/config';
+  import { PUBLIC_DOMAIN_ALLOWLIST } from '$env/static/public';
+
+  const allowedDomains: string[] = JSON.parse(PUBLIC_DOMAIN_ALLOWLIST);
 
   const build = (target: string | null) => {
     if (!target) return null;
     let targetUrl = new URL(target);
 
     if (
-      ![
-        '.phi.zone',
-        '.phizone.cn',
-        'phizone-ui.vercel.app',
-        'phizone-ui.pages.dev',
-        'localhost',
-      ].some((host) => (host[0] === '.' ? targetUrl.host.endsWith(host) : targetUrl.host === host))
+      !allowedDomains.some((host) =>
+        host[0] === '.' ? targetUrl.host.endsWith(host) : targetUrl.host === host,
+      )
     )
       return null;
 
