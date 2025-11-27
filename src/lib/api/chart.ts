@@ -16,6 +16,7 @@ export enum ChartFormat {
   Pec,
   PhiZone,
   Phigrim,
+  Milthm,
   Unsupported,
 }
 
@@ -25,6 +26,10 @@ export enum ChartLevel {
   IN,
   AT,
   SP,
+  DZ,
+  SK,
+  CB,
+  CL,
 }
 
 export interface ChartDto {

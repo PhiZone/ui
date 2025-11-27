@@ -49,3 +49,18 @@ export interface RpeJson {
   BPMList: Bpm[];
   META: RpeMeta;
 }
+
+export interface MilthmMeta {
+  offset: number;
+}
+
+export interface MilthmBpm {
+  bpm: number;
+  time: [number, number, number];
+}
+
+export interface MilthmJson {
+  meta: MilthmMeta;
+  bpms: MilthmBpm[];
+  lines: unknown[];
+}

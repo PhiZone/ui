@@ -33,7 +33,8 @@
     "1": "PhiEditer 谱面",
     "2": "PhiZone 谱面",
     "3": "Phigrim 谱面",
-    "4": "未受支持"
+    "4": "Milthm 谱面",
+    "5": "未受支持"
   },
   "gameplay": "游玩体验",
   "highest_difficulty": "最高定数",
@@ -56,7 +57,11 @@
     "1": "HD",
     "2": "IN",
     "3": "AT",
-    "4": "SP"
+    "4": "SP",
+    "5": "DZ",
+    "6": "SK",
+    "7": "CB",
+    "8": "CL"
   },
   "lowest_difficulty": "最低定数",
   "lowest_note_count": "最低物量",

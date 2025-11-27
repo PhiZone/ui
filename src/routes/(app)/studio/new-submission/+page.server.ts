@@ -1,4 +1,4 @@
-/* eslint-disable prefer-const */
+import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -8,70 +8,75 @@ import API from '$lib/api';
 import { ChartLevel } from '$lib/api/chart';
 import { Accessibility, EditionType, ResponseDtoStatus } from '$lib/api/types';
 import { TAG_JOINER } from '$lib/constants';
-import { t } from '$lib/translations/config';
+import { t, loadTranslations } from '$lib/translations/config';
 
-const songSchema = z
-  .object({
+const createSongSchema = (locale: string) =>
+  z
+    .object({
+      Id: z.string(),
+      Title: z.string().max(100, t.get('error.ValueTooLong', { locale } as any)),
+      EditionType: z.nativeEnum(EditionType),
+      Edition: z.string().optional(),
+      AuthorName: z.string(),
+      Illustrator: z.string(),
+      Description: z.string().optional(),
+      Accessibility: z.nativeEnum(Accessibility),
+      Bpm: z.number(),
+      MinBpm: z.number(),
+      MaxBpm: z.number(),
+      Lyrics: z.string().optional(),
+      License: z.custom<File>().optional(),
+      OriginalityProof: z.custom<File>().optional(),
+      Offset: z.number(),
+      PreviewStart: z.string(),
+      PreviewEnd: z.string(),
+      Tags: z.string(),
+    })
+    .refine(({ EditionType, Edition }) => EditionType === 0 || Edition, {
+      message: t.get('error.FieldEmpty', { locale } as any),
+      path: ['Edition'],
+    })
+    .refine(({ EditionType, License }) => EditionType !== 3 || License, {
+      message: t.get('error.FieldEmpty', { locale } as any),
+      path: ['License'],
+    })
+    .refine(({ MinBpm, Bpm }) => MinBpm <= Bpm, {
+      message: t.get('studio.submission.min_bpm_error', { locale } as any),
+      path: ['MinBpm'],
+    })
+    .refine(({ MaxBpm, Bpm }) => MaxBpm >= Bpm, {
+      message: t.get('studio.submission.max_bpm_error', { locale } as any),
+      path: ['MaxBpm'],
+    });
+
+const createChartSchema = (locale: string) =>
+  z.object({
     Id: z.string(),
-    Title: z.string().max(100, t.get('error.ValueTooLong')),
-    EditionType: z.nativeEnum(EditionType),
-    Edition: z.string().optional(),
+    Title: z.string().max(100, t.get('error.ValueTooLong', { locale } as any)).optional(),
+    LevelType: z.nativeEnum(ChartLevel),
+    Level: z.string(),
+    Difficulty: z.number(),
+    File: z.custom<File>(),
     AuthorName: z.string(),
-    Illustrator: z.string(),
+    Illustration: z.custom<File>().optional(),
+    Illustrator: z.string().optional(),
     Description: z.string().optional(),
     Accessibility: z.nativeEnum(Accessibility),
-    Bpm: z.number(),
-    MinBpm: z.number(),
-    MaxBpm: z.number(),
-    Lyrics: z.string().optional(),
-    License: z.custom<File>().optional(),
-    OriginalityProof: z.custom<File>().optional(),
-    Offset: z.number(),
-    PreviewStart: z.string(),
-    PreviewEnd: z.string(),
+    IsRanked: z.boolean(),
+    SongId: z.string(),
+    SongSubmissionId: z.string(),
     Tags: z.string(),
-  })
-  .refine(({ EditionType, Edition }) => EditionType === 0 || Edition, {
-    message: t.get('error.FieldEmpty'),
-    path: ['Edition'],
-  })
-  .refine(({ EditionType, License }) => EditionType !== 3 || License, {
-    message: t.get('error.FieldEmpty'),
-    path: ['License'],
-  })
-  .refine(({ MinBpm, Bpm }) => MinBpm <= Bpm, {
-    message: t.get('studio.submission.min_bpm_error'),
-    path: ['MinBpm'],
-  })
-  .refine(({ MaxBpm, Bpm }) => MaxBpm >= Bpm, {
-    message: t.get('studio.submission.max_bpm_error'),
-    path: ['MaxBpm'],
   });
 
-const chartSchema = z.object({
-  Id: z.string(),
-  Title: z.string().max(100, t.get('error.ValueTooLong')).optional(),
-  LevelType: z.nativeEnum(ChartLevel),
-  Level: z.string(),
-  Difficulty: z.number(),
-  File: z.custom<File>(),
-  AuthorName: z.string(),
-  Illustration: z.custom<File>().optional(),
-  Illustrator: z.string().optional(),
-  Description: z.string().optional(),
-  Accessibility: z.nativeEnum(Accessibility),
-  IsRanked: z.boolean(),
-  SongId: z.string(),
-  SongSubmissionId: z.string(),
-  Tags: z.string(),
-});
+type SongSchema = z.infer<ReturnType<typeof createSongSchema>>;
+type ChartSchema = z.infer<ReturnType<typeof createChartSchema>>;
 
-type SongSchema = z.infer<typeof songSchema>;
-type ChartSchema = z.infer<typeof chartSchema>;
-
-export const load = async () => {
-  const songForm = await superValidate(zod(songSchema));
-  const chartForm = await superValidate(zod(chartSchema));
+export const load: PageServerLoad = async ({ cookies }) => {
+  const locale = cookies.get('language') || 'zh-CN';
+  await loadTranslations(locale, 'studio');
+  await loadTranslations(locale, 'error');
+  const songForm = await superValidate(zod(createSongSchema(locale)));
+  const chartForm = await superValidate(zod(createChartSchema(locale)));
   return { songForm, chartForm };
 };
 
@@ -79,11 +84,14 @@ const parsePreviewTime = (time: string) => {
   return /^\d{1,2}:\d{1,2}.\d+$/g.test(time) ? `00:${time}` : time;
 };
 
-export const actions = {
-  song: async ({ request, locals, fetch }) => {
+export const actions: Actions = {
+  song: async ({ request, locals, fetch, cookies }) => {
+    const locale = cookies.get('language') || 'zh-CN';
+    await loadTranslations(locale, 'studio');
+    await loadTranslations(locale, 'error');
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, zod(songSchema));
+    const form = await superValidate(formData, zod(createSongSchema(locale)));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -140,15 +148,15 @@ export const actions = {
         );
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
-          form.message = t.get(`error.${error.code}`);
+          form.message = t.get(`error.${error.code}`, { locale } as any);
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           form.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
-          form.message = t.get(`error.${error.code}`);
+          form.message = t.get(`error.${error.code}`, { locale } as any);
           form.errors = {};
           error.errors.forEach(({ field, errors }) => {
             form.errors[field as keyof SongSchema] = errors.map((value) => {
-              return t.get(`error.${value}`);
+              return t.get(`error.${value}`, { locale } as any);
             });
           });
         }
@@ -164,10 +172,13 @@ export const actions = {
       }
     }
   },
-  chart: async ({ request, locals, fetch }) => {
+  chart: async ({ request, locals, fetch, cookies }) => {
+    const locale = cookies.get('language') || 'zh-CN';
+    await loadTranslations(locale, 'studio');
+    await loadTranslations(locale, 'error');
     const api = new API(fetch, locals.accessToken);
     const formData = await request.formData();
-    const form = await superValidate(formData, zod(chartSchema));
+    const form = await superValidate(formData, zod(createChartSchema(locale)));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -189,15 +200,15 @@ export const actions = {
         );
         form.valid = false;
         if (error.status === ResponseDtoStatus.ErrorBrief) {
-          form.message = t.get(`error.${error.code}`);
+          form.message = t.get(`error.${error.code}`, { locale } as any);
         } else if (error.status === ResponseDtoStatus.ErrorWithMessage) {
           form.message = error.message;
         } else if (error.status === ResponseDtoStatus.ErrorDetailed) {
-          form.message = t.get(`error.${error.code}`);
+          form.message = t.get(`error.${error.code}`, { locale } as any);
           form.errors = {};
           error.errors.forEach(({ field, errors }) => {
             form.errors[field as keyof ChartSchema] = errors.map((value) => {
-              return t.get(`error.${value}`);
+              return t.get(`error.${value}`, { locale } as any);
             });
           });
         }

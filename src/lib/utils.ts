@@ -227,6 +227,16 @@ export const getLevelColor = (type: number | undefined) => {
       return 'btn-primary';
     case 3:
       return '';
+    case 4:
+      return 'btn-accent';
+    case 5:
+      return 'btn-success';
+    case 6:
+      return 'btn-info';
+    case 7:
+      return 'btn-error';
+    case 8:
+      return '';
     default:
       return 'btn-accent';
   }

@@ -4,7 +4,7 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import { superForm } from 'sveltekit-superforms';
 
-  import type { Bpm, ChartBundle, RpeJson } from '$lib/types';
+  import type { Bpm, ChartBundle, MilthmJson, RpeJson } from '$lib/types';
 
   import { page } from '$app/state';
   import Tag from '$lib/components/Tag.svelte';
@@ -75,32 +75,65 @@
 
   $effect(() => {
     (async () => {
-      const chart = await bundle.resources.chart.text();
-      const { BPMList, META }: RpeJson = JSON.parse(chart);
+      const chartText = await bundle.resources.chart.text();
+      const chartJson = JSON.parse(chartText);
 
       $form.Title = bundle.metadata.title;
       $form.Illustrator = bundle.metadata.illustrator ?? '';
-      $form.Offset = META.offset;
 
-      bpmList = BPMList;
+      if ('META' in chartJson && 'BPMList' in chartJson) {
+        const { BPMList, META } = chartJson as RpeJson;
+        $form.Offset = META.offset;
 
-      let lastBpm = 0;
-      let lastBeat = 0;
-      let lastTimeSec = 0;
-      bpmList.forEach((bpm, i) => {
-        bpm.startBeat = toBeats(bpm.startTime);
-        bpm.startTimeSec =
-          i === 0 ? lastTimeSec : lastTimeSec + ((bpm.startBeat - lastBeat) / lastBpm) * 60;
-        lastBpm = bpm.bpm;
-        lastBeat = bpm.startBeat;
-        lastTimeSec = bpm.startTimeSec;
-      });
+        bpmList = BPMList;
 
-      const bpmArr = bpmList.map((bpm) => bpm.bpm);
-      $form.MinBpm = Math.min(...bpmArr);
-      $form.MaxBpm = Math.max(...bpmArr);
-      if ($form.MinBpm === $form.MaxBpm) {
-        $form.Bpm = $form.MinBpm;
+        let lastBpm = 0;
+        let lastBeat = 0;
+        let lastTimeSec = 0;
+        bpmList.forEach((bpm, i) => {
+          bpm.startBeat = toBeats(bpm.startTime);
+          bpm.startTimeSec =
+            i === 0 ? lastTimeSec : lastTimeSec + ((bpm.startBeat - lastBeat) / lastBpm) * 60;
+          lastBpm = bpm.bpm;
+          lastBeat = bpm.startBeat;
+          lastTimeSec = bpm.startTimeSec;
+        });
+
+        const bpmArr = bpmList.map((bpm) => bpm.bpm);
+        $form.MinBpm = Math.min(...bpmArr);
+        $form.MaxBpm = Math.max(...bpmArr);
+        if ($form.MinBpm === $form.MaxBpm) {
+          $form.Bpm = $form.MinBpm;
+        }
+      } else if ('lines' in chartJson && 'meta' in chartJson) {
+        const { bpms, meta } = chartJson as MilthmJson;
+        $form.Offset = Math.round(meta.offset * 100);
+
+        bpmList = bpms.map((b) => ({
+          bpm: b.bpm,
+          startTime: b.time,
+          startBeat: 0,
+          startTimeSec: 0,
+        }));
+
+        let lastBpm = 0;
+        let lastBeat = 0;
+        let lastTimeSec = 0;
+        bpmList.forEach((bpm, i) => {
+          bpm.startBeat = toBeats(bpm.startTime);
+          bpm.startTimeSec =
+            i === 0 ? lastTimeSec : lastTimeSec + ((bpm.startBeat - lastBeat) / lastBpm) * 60;
+          lastBpm = bpm.bpm;
+          lastBeat = bpm.startBeat;
+          lastTimeSec = bpm.startTimeSec;
+        });
+
+        const bpmArr = bpmList.map((bpm) => bpm.bpm);
+        $form.MinBpm = Math.min(...bpmArr);
+        $form.MaxBpm = Math.max(...bpmArr);
+        if ($form.MinBpm === $form.MaxBpm) {
+          $form.Bpm = $form.MinBpm;
+        }
       }
     })();
   });

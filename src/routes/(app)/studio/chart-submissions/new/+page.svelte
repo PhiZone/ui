@@ -2,6 +2,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { superForm } from 'sveltekit-superforms';
 
+  import { browser } from '$app/environment';
   import type { SongSubmissionDto } from '$lib/api';
   import type { SongDto } from '$lib/api/song';
 
@@ -52,7 +53,7 @@
     createQuery(
       api.song.submission.listAll(
         { order: ['dateCreated'], desc: [true] },
-        { enabled: !songSwitch },
+        { enabled: browser && !songSwitch },
       ),
     ),
   );
@@ -194,7 +195,7 @@
                 type="file"
                 id="file"
                 name="File"
-                accept=".json, .pec"
+                accept=".json, .pec, .zip"
                 class={`w-1/3 file:mr-4 file:py-2 file:border-0 file:btn ${
                   $errors.File
                     ? 'input-error file:btn-error'
