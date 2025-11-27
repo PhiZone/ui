@@ -435,11 +435,12 @@
   const startSession = async () => {
     step = 1;
     const sessionResp = await api.submission.createSession();
+    const sessionData = await sessionResp.json();
     if (!sessionResp.ok) {
-      alert($t(`error.${(await sessionResp.json()).code}`));
+      alert($t(`error.${sessionData.code}`));
       return;
     }
-    sessionId = (await sessionResp.json()).data.id;
+    sessionId = sessionData.data.id;
     if (tracker) await tracker.invoke('Register', sessionId);
     const songResp = await api.submission.uploadSong({
       id: sessionId,
