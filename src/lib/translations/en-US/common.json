@@ -105,7 +105,7 @@
     "song_preview": "Song Preview",
     "tips": {
       "audio": "MP3 / FLAC / WAV / OGG, no larger than 50 MB",
-      "chart": "Only charts made with PE / RPE are supported, no larger than 50 MB",
+      "chart": "Only charts created by PE / RPE / Rain Editor are supported, no larger than 50 MB",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "illustration": "JPG / JPEG / PNG / WEBP, no larger than 10 MB, 16:9, no smaller than 960×540",
       "image": "JPG / JPEG / PNG / WEBP, no larger than 10 MB",

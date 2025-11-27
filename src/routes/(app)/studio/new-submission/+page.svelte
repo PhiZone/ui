@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { HubConnectionBuilder } from '@microsoft/signalr';
+  import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+  import JSZip from 'jszip';
   import { onDestroy, onMount, untrack } from 'svelte';
   import WaveSurfer from 'wavesurfer.js';
   import Timeline from 'wavesurfer.js/dist/plugins/timeline.esm.js';
@@ -94,6 +95,8 @@
 
   let step = $state(0);
   let isAndroidOrIos = $state(false);
+  let isMilthm = $state(false);
+  let isCheckingZip = $state(false);
   let iframe: HTMLIFrameElement | undefined = $state(undefined);
   let zip: File | null = $state(null);
   let bundle: ChartBundle = $state({} as ChartBundle);
@@ -137,7 +140,161 @@
     ),
   );
 
-  const tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
+  const tryParseMilthmZip = async (file: File): Promise<ChartBundle | null> => {
+    try {
+      const zip = await JSZip.loadAsync(file);
+
+      // Filter out system files and hidden files (e.g. __MACOSX, .DS_Store)
+      const validFiles = Object.values(zip.files).filter(
+        (f) => !f.dir && !f.name.includes('__MACOSX') && !f.name.split('/').pop()?.startsWith('.'),
+      );
+
+      const metaFile = validFiles.find((f) => f.name.toLowerCase().endsWith('meta.json'));
+      let chartFile: JSZip.JSZipObject | undefined;
+      let musicFile: JSZip.JSZipObject | undefined;
+      let imageFile: JSZip.JSZipObject | undefined;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let meta: any = {};
+
+      const getCaseInsensitive = (obj: any, key: string) => {
+        if (!obj) return undefined;
+        const foundKey = Object.keys(obj).find((k) => k.toLowerCase() === key.toLowerCase());
+        return foundKey ? obj[foundKey] : undefined;
+      };
+
+      if (metaFile) {
+        const metaContent = await metaFile.async('string');
+        try {
+          meta = JSON.parse(metaContent);
+        } catch (e) {
+          console.warn('Failed to parse meta.json', e);
+        }
+
+        const getFile = (path: string) => {
+          if (!path) return undefined;
+          const normalizedPath = path.replace(/\\/g, '/');
+          let entry = zip.file(normalizedPath);
+          if (!entry) {
+            const fileName = normalizedPath.split('/').pop();
+            if (fileName) {
+              entry = validFiles.find((f) => f.name.toLowerCase().endsWith(fileName.toLowerCase()));
+            }
+          }
+          return entry;
+        };
+
+        const chartPath = getCaseInsensitive(meta, 'chart');
+        const musicPath =
+          getCaseInsensitive(meta, 'music') || getCaseInsensitive(meta, 'audio');
+        const imagePath =
+          getCaseInsensitive(meta, 'image') ||
+          getCaseInsensitive(meta, 'illustration') ||
+          getCaseInsensitive(meta, 'cover');
+
+        if (chartPath) chartFile = getFile(chartPath);
+        if (musicPath) musicFile = getFile(musicPath);
+        if (imagePath) imageFile = getFile(imagePath);
+      }
+
+      if (!chartFile) {
+        for (const f of validFiles) {
+          if (f.name.toLowerCase().endsWith('.json') && f !== metaFile) {
+            const content = await f.async('string');
+            try {
+              const json = JSON.parse(content);
+              if (json.lines) {
+                chartFile = f;
+                break;
+              }
+            } catch {
+              // ignored
+            }
+          }
+        }
+      }
+
+      if (!chartFile) {
+        console.warn('Milthm parse failed: No chart file found');
+        return null;
+      }
+
+      if (!musicFile) {
+        musicFile = validFiles.find((f) => /\.(mp3|wav|ogg)$/i.test(f.name));
+      }
+      if (!imageFile) {
+        imageFile = validFiles.find((f) => /\.(jpg|jpeg|png)$/i.test(f.name));
+      }
+
+      if (!chartFile || !musicFile || !imageFile) {
+        console.warn('Milthm parse failed: Missing files', {
+          hasChart: !!chartFile,
+          hasMusic: !!musicFile,
+          hasImage: !!imageFile,
+        });
+        return null;
+      }
+
+      let chartJson: any = {};
+      try {
+        const content = await chartFile.async('string');
+        chartJson = JSON.parse(content);
+      } catch {
+        // ignore
+      }
+
+      const chartBlob = await chartFile.async('blob');
+      const musicBlob = await musicFile.async('blob');
+      const imageBlob = await imageFile.async('blob');
+
+      const chartFileObj = new File([chartBlob], chartFile.name);
+      const musicFileObj = new File(
+        [musicBlob],
+        musicFile.name,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { type: 'audio/' + musicFile.name.split('.').pop() },
+      );
+      const imageFileObj = new File(
+        [imageBlob],
+        imageFile.name,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { type: 'image/' + imageFile.name.split('.').pop() },
+      );
+
+      const metadata = {
+        title: getCaseInsensitive(meta, 'name') || getCaseInsensitive(chartJson, 'name') || null,
+        composer:
+          getCaseInsensitive(meta, 'composer') || getCaseInsensitive(chartJson, 'composer') || null,
+        charter:
+          getCaseInsensitive(meta, 'charter') ||
+          getCaseInsensitive(chartJson, 'author') ||
+          getCaseInsensitive(chartJson, 'charter') ||
+          null,
+        illustrator: getCaseInsensitive(chartJson, 'illustrator') || null,
+        levelType: 0,
+        level: getCaseInsensitive(meta, 'level') || null,
+        difficulty: null,
+      };
+
+      return {
+        resources: {
+          song: musicFileObj,
+          chart: chartFileObj,
+          illustration: imageFileObj,
+          assets: [],
+        },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        metadata: metadata,
+      };
+    } catch (e) {
+      console.error('Failed to parse Milthm zip', e);
+      return null;
+    }
+  };
+
+  let tracker: HubConnection | undefined = $state();
 
   const initWaveSurfer = (element: HTMLDivElement, audio: string) =>
     WaveSurfer.create({
@@ -165,6 +322,10 @@
 
   const step2 = (useUploadedSong: boolean) => {
     uploadSong = useUploadedSong || (!selectedSongId && !selectedSongSubmissionId);
+    if (isMilthm) {
+      step = uploadSong ? 3 : 4;
+      return;
+    }
     if (uploadSong) {
       play();
     } else {
@@ -271,6 +432,30 @@
     matchResultsProcessed = true;
   };
 
+  const startSession = async () => {
+    step = 1;
+    const sessionResp = await api.submission.createSession();
+    if (!sessionResp.ok) {
+      alert($t(`error.${(await sessionResp.json()).code}`));
+      return;
+    }
+    sessionId = (await sessionResp.json()).data.id;
+    if (tracker) await tracker.invoke('Register', sessionId);
+    const songResp = await api.submission.uploadSong({
+      id: sessionId,
+      Song: bundle.resources.song,
+      Illustration: bundle.resources.illustration,
+    });
+    if (!songResp.ok) {
+      alert($t(`error.${(await songResp.json()).code}`));
+      return;
+    }
+    processMatchResults((await songResp.json()).data);
+    if (isMilthm) {
+      step2(true);
+    }
+  };
+
   onMount(() => {
     isAndroidOrIos =
       (() => {
@@ -297,6 +482,7 @@
         return false;
       })();
 
+    tracker = new HubConnectionBuilder().withUrl(`${PUBLIC_API_BASE}/hubs/submission`).build();
     tracker.start();
 
     addEventListener(
@@ -310,36 +496,34 @@
         const message = e.data;
         if (message.type === 'inputResponse') {
           if (message.payload.bundlesResolved < 1) {
-            if (step === 0) alert($t('studio.invalid_chart_bundle'));
-            else play();
+            if (step === 0) {
+              if (zip) {
+                const milthmBundle = await tryParseMilthmZip(zip);
+                if (milthmBundle) {
+                  bundle = milthmBundle;
+                  isMilthm = true;
+                  await startSession();
+                  return;
+                }
+              }
+              alert($t('studio.invalid_chart_bundle'));
+              zip = null;
+            } else play();
           } else if (
             message.payload.bundlesResolved === 1 ||
             confirm($t('studio.multiple_charts'))
           ) {
-            step = 1;
-            const sessionResp = await api.submission.createSession();
-            if (!sessionResp.ok) {
-              alert($t(`error.${(await sessionResp.json()).code}`));
-              return;
-            }
-            sessionId = (await sessionResp.json()).data.id;
-            await tracker.invoke('Register', sessionId);
-            console.log(bundle);
-            const songResp = await api.submission.uploadSong({
-              id: sessionId,
-              Song: bundle.resources.song,
-              Illustration: bundle.resources.illustration,
-            });
-            if (!songResp.ok) {
-              alert($t(`error.${(await songResp.json()).code}`));
-              return;
-            }
-            processMatchResults((await songResp.json()).data);
+            await startSession();
           }
           return;
         }
         if (message.type === 'event' && message.payload.name === 'ready') {
-          iframe?.contentWindow?.postMessage({ type: 'zipInput', payload: { input: [zip] } }, '*');
+          if (!isMilthm && zip) {
+            iframe?.contentWindow?.postMessage(
+              { type: 'zipInput', payload: { input: [zip] } },
+              '*',
+            );
+          }
           return;
         }
         if (message.type === 'bundle') {
@@ -361,6 +545,17 @@
                 user.userName,
                 `[PZUser:${user.id}:${user.userName}:PZRT]`,
               );
+            }
+            if (bundle.resources.chart) {
+              try {
+                const text = await bundle.resources.chart.text();
+                const json = JSON.parse(text);
+                if (json.lines) {
+                  isMilthm = true;
+                }
+              } catch {
+                // ignored
+              }
             }
           }
           return;
@@ -458,7 +653,7 @@
     if (timer) {
       clearTimeout(timer);
     }
-    tracker.stop();
+    if (tracker) tracker.stop();
   });
 
   const uploadAssets = async (concurrency = 3) => {
@@ -547,6 +742,19 @@
               const fileList = e.currentTarget.files;
               if (!fileList || fileList.length === 0) return;
               zip = fileList[0];
+              isMilthm = false;
+              isCheckingZip = true;
+
+              try {
+                const milthmBundle = await tryParseMilthmZip(zip);
+                if (milthmBundle) {
+                  bundle = milthmBundle;
+                  isMilthm = true;
+                  await startSession();
+                }
+              } finally {
+                isCheckingZip = false;
+              }
             }}
           />
           <p class="opacity-70 text-center max-w-sm">{$t('studio.choose_chart_description')}</p>
@@ -730,9 +938,23 @@
       </div>
     {:else if step === 2}
       <div class="mt-8 mx-12 flex flex-col items-center">
-        <p class="text-base w-fit">
-          {$t('studio.session.chart_confirmation_notice')}
-        </p>
+        {#if isMilthm}
+          <p class="text-base w-fit mb-4">
+            {$t('studio.session.milthm_preview_not_supported')}
+          </p>
+          <button
+            class="btn btn-primary"
+            onclick={() => {
+              step = uploadSong ? 3 : 4;
+            }}
+          >
+            {$t('common.continue')}
+          </button>
+        {:else}
+          <p class="text-base w-fit">
+            {$t('studio.session.chart_confirmation_notice')}
+          </p>
+        {/if}
       </div>
     {:else if step === 3}
       <div class="my-8 mx-12 flex flex-col items-center">
@@ -919,9 +1141,9 @@
     {#if step <= 2}
       <div
         class="self-center my-8 mx-12 adaptive-width aspect-[3/2] card flex justify-center items-center bg-base-200 transition border-2 normal-border hover:shadow-lg"
-        class:hidden={step <= 1}
+        class:hidden={step <= 1 || isMilthm}
       >
-        {#if zip}
+        {#if zip && !isCheckingZip && !isMilthm}
           <iframe
             class="w-full h-full rounded-2xl"
             src={PUBLIC_PLAYER_PATH}

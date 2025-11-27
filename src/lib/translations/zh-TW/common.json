@@ -105,7 +105,7 @@
     "song_preview": "曲目預覽",
     "tips": {
       "audio": "50 MB 或更小的 MP3 / FLAC / WAV / OGG",
-      "chart": "僅支援 PE / RPE 創作的譜面，不大於 50 MB",
+      "chart": "僅支援 PE / RPE / Rain Editor 創作的譜面，不大於 50 MB",
       "chart_level": "EZ / HD / IN / AT / SP / FM / Custom / ……",
       "illustration": "10 MB 或更小的 JPG / JPEG / PNG / WEBP，長寬比必須為 16:9，解析度不得低於 960×540",
       "image": "10 MB 或更小的 JPG / JPEG / PNG / WEBP",

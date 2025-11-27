@@ -15,7 +15,17 @@ export const USER_LEVELS = [
   { exp: 100000, level: 10 },
 ];
 
-export const LEVEL_TYPES = ['EZ', 'HD', 'IN', 'AT', 'SP'];
+export const LEVEL_TYPES = [
+  'EZ',
+  'HD',
+  'IN',
+  'AT',
+  'SP',
+  'DZ',
+  'SK',
+  'CB',
+  'CL',
+];
 
 export const SONG_MATCH_SCORE_THRESHOLD = 8e3;
 

@@ -6,7 +6,7 @@
   "chart_submission": "谱面稿件",
   "chart_submissions": "谱面稿件",
   "choose_chart": "选择谱面",
-  "choose_chart_description": "请在此处选择包含 RPE 或 PE 谱面的压缩包（.pez 或 .zip），并且须至少包含谱面、曲目、曲绘文件。",
+  "choose_chart_description": "PE / RPE / Rain Editor で作成された譜面のみ対応しています。50MB以下。",
   "collaboration": "合作邀请",
   "collaborations": "合作邀请",
   "collection_admission": "合集收录申请",
