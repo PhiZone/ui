@@ -71,7 +71,7 @@ const createChartSchema = (locale: string) =>
 type SongSchema = z.infer<ReturnType<typeof createSongSchema>>;
 type ChartSchema = z.infer<ReturnType<typeof createChartSchema>>;
 
-export const load = async ({ cookies }: { cookies: import('@sveltejs/kit').Cookies }) => {
+export const load: PageServerLoad = async ({ cookies }) => {
   const locale = cookies.get('language') || 'zh-CN';
   await loadTranslations(locale, 'studio');
   await loadTranslations(locale, 'error');
