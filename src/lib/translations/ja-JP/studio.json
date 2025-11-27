@@ -30,6 +30,7 @@
   },
   "session": {
     "chart_confirmation_notice": "请在本步骤使用 PhiZone Player 确认谱面的表现情况与谱面延迟。如完成确认，请点击“导出”按钮。",
+    "milthm_preview_not_supported": "Milthmの譜面プレビューはまだサポートされていません",
     "pci_description": "你提交的稿件可能会因版权问题而受到限制或被退回。此处列出了你的稿件可能侵犯其版权的资源记录。",
     "potential_copyright_infringements": "疑似侵权的曲目",
     "potential_song_duplicates": "疑似重复的曲目",
