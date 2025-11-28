@@ -262,19 +262,49 @@
         { type: 'image/' + imageFile.name.split('.').pop() },
       );
 
+      const chartMeta = chartJson.meta || {};
+
+      const getDifficulty = (val: any) => {
+        if (typeof val === 'number') return isNaN(val) ? null : val;
+        if (typeof val === 'string') {
+          const parsed = parseFloat(val);
+          return isNaN(parsed) ? null : parsed;
+        }
+        return null;
+      };
+
+      const diff1 = getDifficulty(getCaseInsensitive(meta, 'difficulty'));
+      const diff2 = getDifficulty(getCaseInsensitive(chartMeta, 'difficulty'));
+
       const metadata = {
-        title: getCaseInsensitive(meta, 'name') || getCaseInsensitive(chartJson, 'name') || null,
+        title:
+          getCaseInsensitive(meta, 'song_title') ||
+          getCaseInsensitive(meta, 'name') ||
+          getCaseInsensitive(chartMeta, 'song_title') ||
+          getCaseInsensitive(chartMeta, 'name') ||
+          getCaseInsensitive(chartJson, 'name') ||
+          null,
         composer:
-          getCaseInsensitive(meta, 'composer') || getCaseInsensitive(chartJson, 'composer') || null,
+          getCaseInsensitive(meta, 'music_artist') ||
+          getCaseInsensitive(meta, 'composer') ||
+          getCaseInsensitive(chartMeta, 'music_artist') ||
+          getCaseInsensitive(chartMeta, 'composer') ||
+          getCaseInsensitive(chartJson, 'composer') ||
+          null,
         charter:
           getCaseInsensitive(meta, 'charter') ||
+          getCaseInsensitive(chartMeta, 'charter') ||
           getCaseInsensitive(chartJson, 'author') ||
           getCaseInsensitive(chartJson, 'charter') ||
           null,
-        illustrator: getCaseInsensitive(chartJson, 'illustrator') || null,
+        illustrator:
+          getCaseInsensitive(meta, 'background_artist') ||
+          getCaseInsensitive(chartMeta, 'background_artist') ||
+          getCaseInsensitive(chartJson, 'illustrator') ||
+          null,
         levelType: 0,
-        level: getCaseInsensitive(meta, 'level') || null,
-        difficulty: null,
+        level: getCaseInsensitive(meta, 'level') || getCaseInsensitive(chartMeta, 'level') || null,
+        difficulty: diff1 !== null ? diff1 : diff2 !== null ? diff2 : null,
       };
 
       return {
