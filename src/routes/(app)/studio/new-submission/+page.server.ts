@@ -25,8 +25,8 @@ const createSongSchema = (locale: string) =>
       MinBpm: z.number(),
       MaxBpm: z.number(),
       Lyrics: z.string().optional(),
-      License: z.custom<File>().optional(),
-      OriginalityProof: z.custom<File>().optional(),
+      License: z.any().optional(),
+      OriginalityProof: z.any().optional(),
       Offset: z.number(),
       PreviewStart: z.string(),
       PreviewEnd: z.string(),
@@ -56,9 +56,9 @@ const createChartSchema = (locale: string) =>
     LevelType: z.nativeEnum(ChartLevel),
     Level: z.string(),
     Difficulty: z.number(),
-    File: z.custom<File>(),
+    File: z.any(),
     AuthorName: z.string(),
-    Illustration: z.custom<File>().optional(),
+    Illustration: z.any().optional(),
     Illustrator: z.string().optional(),
     Description: z.string().optional(),
     Accessibility: z.nativeEnum(Accessibility),
@@ -77,7 +77,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
   await loadTranslations(locale, 'error');
   const songForm = await superValidate(zod(createSongSchema(locale)));
   const chartForm = await superValidate(zod(createChartSchema(locale)));
-  return { songForm, chartForm };
+  return { songForm, chartForm } as any;
 };
 
 const parsePreviewTime = (time: string) => {
@@ -181,6 +181,8 @@ export const actions: Actions = {
     const form = await superValidate(formData, zod(createChartSchema(locale)));
 
     if (!form.valid) {
+      form.data.File = undefined as any;
+      form.data.Illustration = undefined as any;
       return fail(400, { form });
     }
 
@@ -192,6 +194,7 @@ export const actions: Actions = {
     if (resp.ok) {
       return;
     } else {
+      const respBackup = resp.clone();
       try {
         const error = await resp.json();
         console.error(
@@ -213,9 +216,18 @@ export const actions: Actions = {
           });
         }
 
+        form.data.File = undefined as any;
+        form.data.Illustration = undefined as any;
         return fail(resp.status, { form });
       } catch {
-        return fail(resp.status);
+        const error = await respBackup.text();
+        console.error(
+          `\x1b[2m${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\x1b[0m`,
+          error,
+        );
+        form.data.File = undefined as any;
+        form.data.Illustration = undefined as any;
+        return fail(resp.status, { form });
       }
     }
   },
